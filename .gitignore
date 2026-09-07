@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.DS_Store
+*.png
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.out
+*.synctex.gz
+build.log
