@@ -20,7 +20,7 @@ B_i (backward, reflex at u_i). "Touching" counts as non-overlapping.
 * Reduction of n=6: octahedron-minus-an-edge ⟸ B(octahedron) by a limit argument (perturb the quad into
   a roof along its diagonal, an equator edge, never cut by the family). Prism-with-one-diagonal ⟸ the
   same statement for type (3,3,4,4,5,5) at a degree-4 vertex (perturb with ridges B'C and CA'), OR a
-  direct chart for that type (probably what DiBiase did).
+  direct chart for that type (NOT in DiBiase: her thesis treats simplicial polytopes only, see notes/dibiase_summary.md).
 * Shared-vertex lemma: faces sharing a net vertex lie in disjoint wedges (angle sum < 2π): never overlap.
   Only 9 face pairs per Z_k need work: local (V_k–V_{k-1}', V_k–W_{k-1}', V_{k-1}'–W_k), opposite petals
   (V_k–V_{k+2}, V_{k+1}–V_{k-1}'), petal vs far fan face (4 pairs).
@@ -55,9 +55,14 @@ B_i (backward, reflex at u_i). "Touching" counts as non-overlapping.
 1. Lemma F: proof architecture found and numerically validated, two gaps left (details below and in
    notes/lemmaF.pdf). 2. Lemma L: not started. 3. Charts for non-simplicial 6-types: not started.
 4. Write-up: notes/lemmaF.tex started (LaTeX + TikZ, figures generated from real nets by tikz_net.py).
-   The FULL DiBiase thesis is now in the top folder ("DiBiase - Polytope Unfolding - Smith 1990.pdf",
-   115 pages, added 2026-09-08 08:10; the old 3-page excerpt is JulieDiBiase_p71-3.pdf). Nobody has read it
-   yet in this project; read it before writing more (it may contain the chart format and the face-pair lemmas).
+   The FULL DiBiase thesis ("DiBiase - Polytope Unfolding - Smith 1990.pdf", top folder, 115 pages, no text
+   layer) was read on 2026-09-08; summary in notes/dibiase_summary.md. Key facts: she treats SIMPLICIAL
+   polytopes only (so nothing about the non-simplicial 6-types — the reductions above are needed); her
+   octahedron unfolding is a spider tree rooted at a face Δ (legs Δ-A-D-G, Δ-B-E, Δ-C-F), with the four
+   far pairs involving the opposite face G handled by a "safe spot" lemma (move G if it overlaps) whose
+   proof is a sketch; Lemmas 4–6 are not rigorous. Chart format to adopt: planar map + unfolding map +
+   21-entry face-pair chart citing lemmas. Her Lemma 3 (half-plane confinement) and Lemma 4 (angle sum at
+   the cut vertex) are the informal ancestors of our D-lemma and c*-argument.
 5. n = 7: not started.
 
 ## Lemma F progress (session 2026-09-08) — full account
