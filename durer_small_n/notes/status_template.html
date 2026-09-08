@@ -1,0 +1,267 @@
+<title>Dürer Six-Vertex Case Explorer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F6F5F0; --bg-2: #EEECE4; --ink: #1E2226; --ink-2: #4A5057; --ink-3: #7B8188; --rule: #D9D6CC;
+  --fan: #2F6F8F; --fan-fill: #9ECAE1; --petal: #D8873A; --petal-fill: #FDD0A2; --hit: #C8321E;
+  --proved: #2C7A4B; --proved-bg: #DDEFE3; --reduced: #2F6F8F; --reduced-bg: #DCEAF2;
+  --numeric: #B07A16; --numeric-bg: #F5E9CC; --open: #B23F2E; --open-bg: #F4DAD4; --info: #6B7079; --info-bg: #E6E5E0;
+  --panel: #FFFFFF; --sel: #E9EEF2; --link: #2F6F8F; --cut: #8A8F96; --M: #7A3E9D; --D: rgba(216,135,58,0.18);
+  --serif: "Fraunces", Georgia, "Times New Roman", serif; --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif; --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #14181C; --bg-2: #1C2126; --ink: #E7E4DC; --ink-2: #B9B6AE; --ink-3: #868B92; --rule: #2E343B;
+  --fan: #7FB6D4; --fan-fill: #2A5A74; --petal: #E6A05C; --petal-fill: #7A4C22; --hit: #F26B57;
+  --proved: #7CCB98; --proved-bg: #1E3A2A; --reduced: #7FB6D4; --reduced-bg: #1E3442;
+  --numeric: #E3B75A; --numeric-bg: #3E3116; --open: #F08A78; --open-bg: #452019; --info: #A3A8AF; --info-bg: #262B31;
+  --panel: #1A1F24; --sel: #252C33; --link: #8FC3E0; --cut: #9AA0A8; --M: #C79BE0; --D: rgba(230,160,92,0.22);
+}}
+:root[data-theme="dark"] {
+  --bg: #14181C; --bg-2: #1C2126; --ink: #E7E4DC; --ink-2: #B9B6AE; --ink-3: #868B92; --rule: #2E343B;
+  --fan: #7FB6D4; --fan-fill: #2A5A74; --petal: #E6A05C; --petal-fill: #7A4C22; --hit: #F26B57;
+  --proved: #7CCB98; --proved-bg: #1E3A2A; --reduced: #7FB6D4; --reduced-bg: #1E3442;
+  --numeric: #E3B75A; --numeric-bg: #3E3116; --open: #F08A78; --open-bg: #452019; --info: #A3A8AF; --info-bg: #262B31;
+  --panel: #1A1F24; --sel: #252C33; --link: #8FC3E0; --cut: #9AA0A8; --M: #C79BE0; --D: rgba(230,160,92,0.22);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15.5px; line-height: 1.55; }
+a { color: var(--link); }
+header { padding: 34px 32px 18px; border-bottom: 1px solid var(--rule); }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin: 6px 0 10px; text-wrap: balance; max-width: 26ch; }
+.lede { max-width: 66ch; color: var(--ink-2); margin: 0; }
+.strip { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: baseline; margin-top: 18px; }
+.strip .stat { display: flex; align-items: baseline; gap: 7px; font-variant-numeric: tabular-nums; }
+.strip .n { font-family: var(--serif); font-size: 26px; font-weight: 600; }
+.strip .lab { font-size: 13px; color: var(--ink-2); }
+.strip .date { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+main { display: grid; grid-template-columns: minmax(260px, 340px) 1fr; min-height: 60vh; }
+nav { border-right: 1px solid var(--rule); padding: 18px 12px 40px 18px; position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; }
+nav .legend { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 12px; color: var(--ink-2); margin-bottom: 14px; padding-left: 4px; }
+nav ul { list-style: none; margin: 0; padding: 0; }
+nav li { margin: 0; }
+nav li > ul { padding-left: 14px; border-left: 1px solid var(--rule); margin-left: 9px; }
+nav button.node { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; background: none; border: 0; padding: 5px 8px; border-radius: 4px; color: var(--ink); font: inherit; font-size: 14px; cursor: pointer; }
+nav button.node:hover { background: var(--bg-2); }
+nav button.node[aria-current="true"] { background: var(--sel); font-weight: 600; }
+nav button.node:focus-visible, .tools button:focus-visible, a:focus-visible { outline: 2px solid var(--fan); outline-offset: 2px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.dot.proved { background: var(--proved); } .dot.reduced { background: var(--reduced); } .dot.numeric { background: var(--numeric); } .dot.open { background: var(--open); } .dot.info { background: var(--info); }
+.chip { display: inline-block; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; }
+.chip.proved { color: var(--proved); background: var(--proved-bg); } .chip.reduced { color: var(--reduced); background: var(--reduced-bg); }
+.chip.numeric { color: var(--numeric); background: var(--numeric-bg); } .chip.open { color: var(--open); background: var(--open-bg); } .chip.info { color: var(--info); background: var(--info-bg); }
+article { padding: 26px 40px 60px; max-width: 900px; }
+article .crumbs { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-bottom: 8px; }
+article .crumbs a { color: var(--ink-3); text-decoration: none; } article .crumbs a:hover { text-decoration: underline; }
+article h2 { font-family: var(--serif); font-weight: 600; font-size: 28px; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+article .head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 18px; }
+article .summary { font-size: 17px; color: var(--ink-2); max-width: 62ch; margin: 0 0 18px; }
+article .body { max-width: 66ch; }
+article .body p { margin: 0 0 12px; }
+article .body h3 { font-family: var(--sans); font-weight: 600; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 8px; }
+article .body ul, article .body ol { padding-left: 20px; margin: 0 0 12px; }
+article .body li { margin-bottom: 5px; }
+.m { font-family: var(--mono); font-size: 0.93em; }
+.why { border-left: 3px solid var(--rule); padding: 8px 14px; margin: 14px 0; background: var(--bg-2); border-radius: 0 4px 4px 0; }
+.why .k { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 4px; }
+figure { margin: 18px 0 20px; max-width: 620px; }
+figure svg.net { width: 100%; height: auto; display: block; background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; }
+figure figcaption { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+svg.net .fan { fill: var(--fan-fill); stroke: var(--ink); stroke-width: 0.6; fill-opacity: 0.85; }
+svg.net .petal { fill: var(--petal-fill); stroke: var(--ink); stroke-width: 0.6; fill-opacity: 0.85; }
+svg.net .hit { fill: var(--hit); stroke: none; }
+svg.net text { font-family: var(--mono); font-size: 11px; fill: var(--ink); }
+svg.net text.face { font-size: 11.5px; } svg.net .sub { font-size: 8.5px; baseline-shift: sub; }
+svg.net text.vtx { fill: var(--fan); } svg.net text.apex { fill: var(--petal); }
+svg.net .cutline { stroke: var(--cut); stroke-width: 1; stroke-dasharray: 4 3; }
+svg.net .Mline { stroke: var(--M); stroke-width: 1.2; }
+svg.net .pstar { fill: var(--ink); } svg.net .cstar { fill: var(--M); } svg.net text.cstar { fill: var(--M); }
+svg.net .Dwedge { fill: var(--D); stroke: none; }
+svg.net .w { fill: var(--ink); }
+.types { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin: 14px 0 20px; }
+.type { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px 12px; background: var(--panel); cursor: pointer; text-align: left; font: inherit; color: var(--ink); display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: center; }
+.type:hover { border-color: var(--fan); }
+.type svg.icon { width: 64px; height: auto; }
+svg.icon line { stroke: var(--ink); stroke-width: 1.4; } svg.icon circle { fill: var(--ink); } svg.icon .quad { fill: var(--fan-fill); fill-opacity: 0.6; stroke: none; }
+.type .t { font-weight: 600; font-size: 14px; line-height: 1.25; } .type .d { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.type .chip { margin-top: 6px; }
+table { border-collapse: collapse; font-size: 13.5px; margin: 10px 0 16px; width: 100%; max-width: 640px; }
+th, td { text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+td.num { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 12.5px; }
+.tools { display: flex; gap: 8px; margin-top: 6px; }
+.tools button { font: inherit; font-size: 13px; padding: 5px 11px; border: 1px solid var(--rule); background: var(--panel); color: var(--ink); border-radius: 4px; cursor: pointer; }
+.tools button:hover { border-color: var(--fan); }
+.children { margin-top: 22px; }
+.children h3 { font-family: var(--sans); font-weight: 600; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px; }
+.children .row { display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--rule); }
+.children .row a { color: var(--ink); text-decoration: none; font-weight: 500; } .children .row a:hover { text-decoration: underline; }
+.children .row .s { font-size: 13px; color: var(--ink-2); }
+.all article { border-bottom: 1px solid var(--rule); }
+footer { padding: 18px 32px 40px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-3); max-width: 80ch; }
+@media (max-width: 820px) { main { grid-template-columns: 1fr; } nav { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--rule); } article { padding: 22px 20px 50px; } header { padding: 26px 20px 16px; } }
+@media (prefers-reduced-motion: no-preference) { nav button.node { transition: background 120ms; } }
+</style>
+
+<header>
+  <div class="eyebrow">Dürer's problem · convex polytopes with at most six vertices · working status</div>
+  <h1>Every polytope with at most six vertices has a net: the case tree</h1>
+  <p class="lede">A net is a non-overlapping edge unfolding (touching counts as non-overlapping). This page shows how the theorem splits into combinatorial types, which cases are settled and why, and exactly what remains open for the octahedron. Every figure is a real unfolding computed from a real polytope.</p>
+  <div class="strip" id="strip"></div>
+</header>
+<main>
+  <nav aria-label="Case tree">
+    <div class="legend"><span><span class="dot proved" style="display:inline-block"></span> proved</span><span><span class="dot reduced" style="display:inline-block"></span> reduced to another case</span><span><span class="dot numeric" style="display:inline-block"></span> verified numerically, proof open</span><span><span class="dot open" style="display:inline-block"></span> open</span><span><span class="dot info" style="display:inline-block"></span> context</span></div>
+    <div class="tools"><button id="expandAll" type="button">Show every case on one page</button></div>
+    <ul id="tree"></ul>
+  </nav>
+  <div id="detail"></div>
+</main>
+<footer>Source: <span class="m">HANDOFF.md</span> and <span class="m">notes/lemmaF.tex</span> in the project repository; DiBiase's 1990 thesis (summarized in <span class="m">notes/dibiase_summary.md</span>) proves the simplicial six-vertex types only by existence arguments and is not relied on. Curvature κ<sub>x</sub> = 2π minus the face angles at x; Σκ = 4π over the six vertices.</footer>
+
+<script>
+const FIGS = __FIGS_JSON__;
+const UPDATED = "__UPDATED__";
+const S = { proved: 'proved', reduced: 'reduced', numeric: 'numerically verified', open: 'open', info: 'context' };
+
+const NODES = [
+{ id: 'root', title: 'Every convex polytope with at most six vertices has a net', status: 'info', summary: 'The claim, the strategy, and how the cases split.',
+  body: `<p>The proof follows the plan of DiBiase's thesis: list the combinatorial types, fix for each a cut tree (or a rule for choosing one), and exclude overlap face pair by face pair with a small stock of lemmas. Two lemmas do almost all the work: <a href="#lemmaA">Lemma A</a> settles every type that has a vertex adjacent to all others, and the remaining types reduce to the octahedron, which is the only genuinely hard case.</p>
+  <h3>How the tree reads</h3><p>Green cases are proved. Blue cases are reduced to another case on this page and inherit its status. Amber cases have been checked on tens of thousands of random polytopes and by adversarial search but have no written proof yet. Red cases are open. Follow the octahedron branch to the bottom to see the live state of the argument.</p>` },
+{ id: 'lemmaA', parent: 'root', title: 'Lemma A: a vertex adjacent to all others', status: 'proved', summary: 'If some vertex is adjacent to every other vertex, cutting exactly its edges gives a net.',
+  body: `<p>Cut the edges at a vertex <i>v</i> that is adjacent to all the others and nothing else. This is the limit of the Aronov–O'Rourke star unfolding as the source point moves to <i>v</i>: for a source in the interior of a face the star unfolding is known to be non-overlapping, and non-overlap is a closed condition, so the limit is non-overlapping too (touching is allowed).</p>
+  <div class="why"><span class="k">Why it settles so much</span>With at most six vertices, a vertex of degree <i>n</i> − 1 exists in every type except the prism, the prism with one diagonal, the octahedron minus an edge, and the octahedron.</div>` },
+{ id: 'n4', parent: 'root', title: 'Four vertices: the tetrahedron', status: 'proved', summary: 'Every vertex is adjacent to all others; Lemma A applies.', body: `<p>Any vertex works. Cutting its three edges gives the classical three-petal net around the opposite face.</p>` },
+{ id: 'n5', parent: 'root', title: 'Five vertices: two types', status: 'proved', summary: 'The square pyramid and the triangular bipyramid both have a vertex adjacent to all others.',
+  body: `<p>The square pyramid's apex has degree 4. In the triangular bipyramid each of the three equatorial vertices has degree 4. Lemma A applies to both.</p>` },
+{ id: 'n6', parent: 'root', title: 'Six vertices: seven types', status: 'info', summary: 'Four types fall to Lemma A, the prism is classical, two types reduce to others, and the octahedron is the crux.', types: true,
+  body: `<p>The seven combinatorial types are listed by degree sequence and face sizes. Click a type for its case.</p>` },
+{ id: 't_pyr5', parent: 'n6', title: 'Pentagonal pyramid', status: 'proved', icon: 'pyr5', deg: '5·3·3·3·3·3, faces 3⁵ 5', summary: 'Apex of degree 5: Lemma A.', body: `<p>Cut the five edges at the apex. The pentagon stays in the middle with five triangular petals.</p>` },
+{ id: 't_simp55', parent: 'n6', title: 'Simplicial type 5·5·4·4·3·3', status: 'proved', icon: 'simp55', deg: '5·5·4·4·3·3, faces 3⁸', summary: 'Either degree-5 vertex: Lemma A.', body: `<p>This is DiBiase's <span class="m">G_a(6)</span>. Cutting the star of a degree-5 vertex leaves the opposite face with five petals attached to it.</p>` },
+{ id: 't_54', parent: 'n6', title: 'One quadrilateral, degrees 5·4·4·3·3·3', status: 'proved', icon: 't54', deg: '5·4·4·3·3·3, faces 3⁶ 4', summary: 'The degree-5 vertex is adjacent to all others: Lemma A.', body: `<p>Lemma A does not care about face shapes, only that the cut vertex sees every other vertex.</p>` },
+{ id: 't_prism', parent: 'n6', title: 'Triangular prism', status: 'proved', icon: 'prism', deg: '3·3·3·3·3·3, faces 3² 4³', summary: 'Prisms have nets (Shephard 1975); also elementary directly.', body: `<p>No vertex is adjacent to all others, but the prism is one of the classes for which Shephard showed a convex, hence simple, net exists for the combinatorial type, and a direct argument for every prism is easy: unfold the three quadrilaterals in a strip and attach the two triangles to the middle one on opposite sides. This case is treated as known.</p>` },
+{ id: 't_prismd', parent: 'n6', title: 'Prism with one diagonal', status: 'reduced', icon: 'prismd', deg: '4·4·3·3·3·3, faces 3⁴ 4²', summary: 'Reduces by a limit argument to a statement about the simplicial type 5·5·4·4·3·3 at a degree-4 vertex.',
+  body: `<p>Perturb the two quadrilaterals into roofs along the ridges <span class="m">B′C</span> and <span class="m">CA′</span>; the result is the simplicial type 5·5·4·4·3·3. If that type has a net whose cut tree is the star of a degree-4 vertex plus one pendant edge, and the family of perturbations never cuts a ridge, the limit is a net of the prism with a diagonal.</p>
+  <div class="why"><span class="k">What is still needed</span>The target statement is about the simplicial type at a <em>degree-4</em> vertex, which Lemma A (degree 5) does not give. It has been checked numerically (<span class="m">nonsimp6.py</span>) but not proved; alternatively a direct 21-entry chart for this type would do. DiBiase's thesis does not contain such a chart: it treats simplicial polytopes only.</div>` },
+{ id: 't_octa_minus', parent: 'n6', title: 'Octahedron minus an edge', status: 'reduced', icon: 'octa_minus', deg: '4·4·4·4·3·3, faces 3⁶ 4', summary: 'Reduces to the octahedron by perturbing the quadrilateral into a roof.',
+  body: `<p>Fold the quadrilateral slightly along its diagonal; the polytope becomes an octahedron in which that diagonal is an equator edge. The octahedron's cut tree (star of an apex plus one edge at the antipode) never cuts an equator edge, so the nets converge to a net of the original polytope. Everything therefore rests on the <a href="#t_octa">octahedron</a>.</p>` },
+{ id: 't_octa', parent: 'n6', title: 'The octahedron', status: 'open', icon: 'octa', deg: '4·4·4·4·4·4, faces 3⁸', summary: 'No fixed cut tree works for every shape; the tree is chosen by curvature, and two lemmas about it remain to be proved.', figure: 'net_typical',
+  body: `<p>Write <i>v</i>, <i>w</i> for a pair of non-adjacent vertices and <i>u</i><sub>0</sub>…<i>u</i><sub>3</sub> for the equator (the four neighbours of <i>w</i>, in cyclic order). The faces are <i>W<sub>i</sub></i> = <i>w u<sub>i</sub> u<sub>i+1</sub></i> (blue, the fan) and <i>V<sub>i</sub></i> = <i>v u<sub>i</sub> u<sub>i+1</sub></i> (orange, the petals). The net <i>Z<sub>k</sub></i> cuts the four edges at <i>v</i> and one edge <i>w u<sub>k</sub></i>: the fan opens along <i>w u<sub>k</sub></i> with an angular gap κ<sub>w</sub>, and each petal hangs from its fan face.</p>
+  <h3>The rule</h3><p>Take <i>v</i> to be the sharpest vertex (largest curvature) and slit at the sharpest neighbour <i>u<sub>k</sub></i> of <i>w</i>. This is the rigorous version of DiBiase's "move the face to a safe spot": a fixed labelled tree fails for some realization in every orbit class.</p>
+  <h3>What must be checked</h3><p>Faces that share a net vertex lie in disjoint wedges there and never overlap (<a href="#octa_shared">shared-vertex lemma</a>). Of the 28 face pairs only nine remain: three local pairs at the slit (<a href="#lemmaL">Lemma L</a>) and six far pairs, two opposite-petal pairs and four petal-versus-far-fan pairs (<a href="#lemmaF">Lemma F</a>).</p>` },
+{ id: 'octa_shared', parent: 't_octa', title: 'Shared-vertex lemma: 19 of 28 pairs', status: 'proved', summary: 'Two faces that meet at a net vertex occupy disjoint angular wedges there, since the face angles at a convex vertex sum to less than 2π.',
+  body: `<p>At every net vertex the faces around it are laid out consecutively with total angle 2π − κ &lt; 2π, so two faces containing the same copy of a vertex lie in disjoint wedges and cannot overlap. In <i>Z<sub>k</sub></i> this disposes of every pair except the nine listed under the octahedron. The same fact, applied at <i>v</i>, is the engine of the rotation argument in Lemma F.</p>` },
+{ id: 'lemmaL', parent: 't_octa', title: 'Lemma L: the three local pairs at the slit', status: 'numeric', summary: 'With v sharpest and the slit at the sharpest neighbour of w, the pairs V_k–V_{k−1}′, V_k–W_{k−1}′ and V_{k−1}′–W_k never overlap.',
+  body: `<p>The two copies of <i>u<sub>k</sub></i> sit at distance 2 <i>r<sub>k</sub></i> sin(κ<sub>w</sub>/2) apart across the gap, and the two flank petals point away from each other by the angle κ<sub>u<sub>k</sub></sub> + κ<sub>w</sub>. When κ<sub>u<sub>k</sub></sub> + κ<sub>w</sub> ≥ π the wedge argument closes the case (98.9% of random octahedra). The remaining cases are barely reflex quadrilaterals leaning by less than 0.18 rad over a tiny gap; a bounded-geometry inequality in (<i>r<sub>u</sub></i>, ℓ<sub>u</sub>, <i>e<sub>u</sub></i>, <i>f<sub>u</sub></i>, κ<sub>w</sub>) is needed.</p>
+  <div class="why"><span class="k">Evidence</span>0 failures in 11,000 random octahedra and under adversarial hill-climbing (<span class="m">local.py</span>, <span class="m">rules3.py</span>). Two other slit rules also work numerically: the neighbour farthest from <i>v</i>, or the longest edge <i>w u</i>.</div>
+  <div class="why"><span class="k">Status</span>Not started in the current write-up. Next after Lemma F.</div>` },
+{ id: 'lemmaF', parent: 't_octa', title: 'Lemma F: the six far pairs', status: 'numeric', summary: 'Under hypothesis (H), v is the sharpest of all six vertices, no far pair overlaps in any Z_k.',
+  body: `<p><b>Hypothesis (H).</b> κ<sub>v</sub> ≥ κ<sub>x</sub> for every vertex <i>x</i>. Since Σκ = 4π over six vertices this gives κ<sub>v</sub> ≥ 2π/3, hence the four face angles ν<sub>i</sub> at <i>v</i> sum to at most 4π/3, and by the cone inequality (a face angle at a convex vertex is at most the sum of the other three) each ν<sub>j</sub> ≤ π − κ<sub>v</sub>/2 ≤ 2π/3.</p>
+  <p>The argument has three layers: a <a href="#F_hinge">reduction</a> from six pairs to two opposite-petal pairs, an exact description of <a href="#F_D">where two opposite petals could meet</a>, and a <a href="#F_above">rotation argument</a> that excludes the meeting. The weaker hypothesis of the original plan, κ<sub>v</sub> ≥ κ<sub>u</sub> for the equator only, is numerically overlap-free too but does <em>not</em> suffice for the rotation argument: the bound κ<sub>w</sub> ≤ κ<sub>v</sub> is what provides the margin.</p>
+  <div class="why"><span class="k">Evidence</span>0 far overlaps under (H) in 72,000 random nets. Without any hypothesis 44 opposite-petal overlaps occur in 72,000 nets, every one with two equator vertices sharper than <i>v</i>. Adversarial search with non-degeneracy guards brings opposite petals to within 0.4% of the diameter under (H) but never into overlap, and the closest configurations sit at the guard boundary.</div>` },
+{ id: 'F_hinge', parent: 'lemmaF', title: 'Petal-versus-fan pairs reduce to petal-versus-petal', status: 'proved', summary: 'A petal cannot cross an interior hinge, so it can only enter a far fan face through the edge it shares with that face’s own petal.',
+  body: `<p>The hinge segment <i>w u<sub>j</sub></i> is shared by <i>W<sub>j−1</sub></i> and <i>W<sub>j</sub></i>; a petal crossing it would enter both. Every petal shares a net vertex with one of these two fan faces, so this is impossible. Hence a petal <i>V<sub>i</sub></i> overlapping a far fan face <i>W<sub>j</sub></i> enters it through the outer edge <i>u<sub>j</sub>u<sub>j+1</sub></i>, which is also an edge of <i>V<sub>j</sub></i>, and overlaps <i>V<sub>j</sub></i>.</p>
+  <div class="why"><span class="k">Consequence</span>Lemma F follows from the <a href="#F_triple">Triple Lemma</a> applied to the two contiguous triples of <i>Z<sub>k</sub></i>: (<i>V<sub>k</sub></i>, <i>V<sub>k+1</sub></i>, <i>V<sub>k+2</sub></i>) and (<i>V<sub>k+1</sub></i>, <i>V<sub>k+2</sub></i>, <i>V<sub>k−1</sub></i>′). There is no separate "gap side" case: the wedge argument below covers every common point.</div>` },
+{ id: 'F_triple', parent: 'lemmaF', title: 'Triple Lemma: two petals around a third never meet', status: 'numeric', summary: 'For three consecutive fan faces W_i, W_j, W_{j+1} with petals V_i, V_j, V_{j+1}, under (H) the outer petals V_i and V_{j+1} are disjoint.',
+  body: `<p>Fix the middle petal <i>V<sub>j</sub></i> with base <i>u</i> = <i>u<sub>j</sub></i>, <i>u</i>′ = <i>u<sub>j+1</sub></i>, base angles φ, ψ and apex angle ν<sub>j</sub>. At <i>u</i> the two copies of the cut edge <i>uv</i> are separated by the gap κ<sub>u</sub>; likewise at <i>u</i>′. Write κ = κ<sub>u</sub> + κ<sub>u′</sub>. The statement splits by the sign of ν<sub>j</sub> − κ, which decides on which side of the base a meeting could occur (<a href="#F_D">D-lemma</a>).</p>
+  <div class="why"><span class="k">Evidence</span>Opposite-petal overlaps come in pairs (the same two petals in <i>Z<sub>k</sub></i> and <i>Z<sub>k−1</sub></i>), so the 44 observed overlaps are 22 geometric events; 26 nets above the base and 18 below, exactly as the D-lemma predicts.</div>` },
+{ id: 'F_D', parent: 'F_triple', title: 'D-lemma: where a meeting can be', status: 'proved', summary: 'Any common point of the outer petals lies in the wedge D opposite the base at the crossing of the two cut-edge lines; D is above the base iff κ < ν_j.', figure: 'overlap_above',
+  body: `<p>Each outer petal lies in the closed half-plane of its own cut-edge line on the side away from <i>V<sub>j</sub></i>. So a common point lies in the intersection of the two half-planes, which is the wedge at the crossing point <i>p</i>* of the lines, opposite to the base. The rays from <i>u</i> and <i>u</i>′ along the cut edges make angles φ + κ<sub>u</sub> and ψ + κ<sub>u′</sub> with the base, so they converge on <i>v</i>'s side exactly when φ + ψ + κ &lt; π, that is κ &lt; ν<sub>j</sub>; otherwise on <i>w</i>'s side. This replaces the earlier vertical-wedge step and its gap-side mirror with a single case split.</p>
+  <p>The figure shows a real above-base overlap with no hypothesis (κ<sub>v</sub> = 0.001, two equator vertices with κ 5.48 and 0.66): the dashed cut-edge lines, the wedge D shaded beyond <i>p</i>*, the overlap in red, and the rotation centre <i>c</i>* with the line <i>M</i> of the <a href="#F_above">rotation argument</a>.</p>` },
+{ id: 'F_nocross', parent: 'F_triple', title: 'The two cut edges never cross', status: 'proved', summary: 'A crossing point would lie in the vertical wedge of V_j, forcing |u p| + |u′ p| > |u v| + |u′ v| against |u p| ≤ |u v|, |u′ p| ≤ |u′ v|.',
+  body: `<p>If the segments <i>u v<sub>i</sub></i> and <i>u′ v<sub>j+1</sub></i> crossed at <i>p</i>, then <i>p</i> would be above the base with base angles larger than φ and ψ, so <i>v<sub>j</sub></i> lies inside the triangle <i>u u′ p</i>. A point inside a triangle has a smaller sum of distances to two vertices than the third vertex, giving |<i>u p</i>| + |<i>u′ p</i>| &gt; |<i>u v</i>| + |<i>u′ v</i>|, while both cut edges have exactly these lengths. No hypothesis is needed.</p>
+  <div class="why"><span class="k">Consequence</span>An above-base meeting needs a petal whose base is longer than its cut edge, the handoff's earlier condition, now without any assumption on ν<sub>j</sub>.</div>` },
+{ id: 'F_above', parent: 'F_triple', title: 'Above the base (κ < ν_j): the rotation argument', status: 'numeric', summary: 'Glue the three petals flat around v, then the net is obtained by one rotation about a point c* below the base; the line through c* and v separates the petals unless one wraps across it, which (H) forbids numerically.', figure: 'triple_H3',
+  body: `<p>Glue <i>V<sub>i</sub></i>, <i>V<sub>j</sub></i>, <i>V<sub>j+1</sub></i> flat around <i>v</i> with no gaps (possible since ν<sub>i</sub> + ν<sub>j</sub> + ν<sub>j+1</sub> &lt; 2π); there the three petals occupy disjoint wedges at <i>v</i>. The net position of <i>V<sub>i</sub></i> is its flat position rotated about <i>u</i> by κ<sub>u</sub>, and that of <i>V<sub>j+1</sub></i> is rotated about <i>u</i>′ by κ<sub>u′</sub>, both in the same sense. Composing the two rotations gives a single rotation <i>R</i> by κ about the point <i>c</i>* on <i>w</i>'s side of the base with base angles κ<sub>u</sub>/2 at <i>u</i> and κ<sub>u′</sub>/2 at <i>u</i>′. The petals meet in the net exactly when <i>R</i> carries the flat <i>V<sub>i</sub></i> onto the flat <i>V<sub>j+1</sub></i>.</p>
+  <p>Let <i>M</i> be the line through <i>c</i>* and <i>v</i>. Measured around <i>c</i>*, <i>R</i> adds κ to every angle, moving points from <i>u</i>′'s side of <i>M</i> to <i>u</i>'s side. If the above-base parts of the flat petals stay on their own sides of <i>M</i>, a meeting is impossible, because the image of a point on <i>u</i>'s side lands even further on that side. The sub-cases are listed below.</p>
+  <p>The figure is a triple under (H): <i>c</i>*, the line <i>M</i> (purple), the dashed cut-edge lines and the wedge D beyond <i>p</i>*; both outer petals stay on their own side of <i>M</i>.</p>` },
+{ id: 'F_rot', parent: 'F_above', title: 'Rotation reformulation', status: 'proved', summary: 'Net meeting ⇔ R(V_i^flat) meets V_{j+1}^flat, with R the rotation by κ about c*.',
+  body: `<p>Checked exactly on 3,267 triples: the composed rotation has the predicted centre and sense, and the reformulated overlap test agrees with the direct net test in every case (<span class="m">cstar.py</span>).</p>` },
+{ id: 'F_angular', parent: 'F_above', title: 'Angular criterion', status: 'proved', summary: 'If ε_i + ε_{j+1} < κ, where ε are the angular excursions of the flat petals across M seen from c*, there is no meeting.',
+  body: `<p>A meeting point <i>p</i> above the base has pre-images <i>x</i> in the flat <i>V<sub>i</sub></i> and <i>y</i> in the flat <i>V<sub>j+1</sub></i> with <i>y</i> = <i>R</i>(<i>x</i>); both are above the base because rotating <i>V<sub>i</sub></i> about <i>u</i> sends below-base points to below-base points (the wedge of <i>V<sub>i</sub></i> at <i>u</i> ends at the fan edge, before the base direction). Their angles from <i>M</i> satisfy θ<sub>y</sub> = θ<sub>x</sub> + κ, with θ<sub>x</sub> ≥ −ε<sub>i</sub> and θ<sub>y</sub> ≤ ε<sub>j+1</sub>, so κ ≤ ε<sub>i</sub> + ε<sub>j+1</sub>; no wrap-around since κ &lt; ν<sub>j</sub> &lt; π.</p>` },
+{ id: 'F_notboth', parent: 'F_above', title: 'Both petals cannot cross M through their wedges at v', status: 'proved', summary: 'That would need ν_i + ν_j + ν_{j+1} > 2π, impossible under (H).',
+  body: `<p>Write μ<sub>u</sub> = ∠<i>u v c</i>* and μ<sub>u′</sub> = ∠<i>c</i>* <i>v u</i>′, so μ<sub>u</sub> + μ<sub>u′</sub> = ν<sub>j</sub>. The wedge of <i>V<sub>i</sub></i> at <i>v</i> reaches the ray of <i>M</i> beyond <i>v</i> only if ν<sub>i</sub> &gt; π − μ<sub>u</sub>, and symmetrically for <i>V<sub>j+1</sub></i>. Both together give ν<sub>i</sub> + ν<sub>j</sub> + ν<sub>j+1</sub> &gt; 2π, but under (H) the sum is at most 4π/3.</p>` },
+{ id: 'F_sharp', parent: 'F_above', title: 'The above-base case needs κ_v > 6π/7', status: 'proved', summary: 'Under (H), κ < ν_j forces κ_v > 6π/7, so every face angle at v is below 4π/7.',
+  body: `<p>4π = Σκ ≤ 4κ<sub>v</sub> + κ and κ &lt; ν<sub>j</sub> ≤ π − κ<sub>v</sub>/2, hence 3π &lt; 3.5 κ<sub>v</sub>. So the above-base case can only arise for a very sharp <i>v</i>, with Σν &lt; 8π/7.</p>` },
+{ id: 'F_side', parent: 'F_above', title: 'Side conditions: no petal crosses M above the base', status: 'open', summary: 'The one missing step for the above-base case. Numerically robust under (H); the proof is not written.',
+  body: `<p>To be shown: under (H) and κ &lt; ν<sub>j</sub>, the above-base part of the flat <i>V<sub>i</sub></i> stays on <i>u</i>'s side of <i>M</i>, and that of <i>V<sub>j+1</sub></i> on <i>u</i>′'s side. Three crossing mechanisms have to be excluded:</p>
+  <ol><li>the wedge of <i>V<sub>i</sub></i> at <i>v</i> passes the ray of <i>M</i> beyond <i>v</i>, which needs ν<sub>i</sub> &gt; π − μ<sub>u</sub> and hence ν<sub>i</sub> + ν<sub>j</sub> &gt; π and κ<sub>v</sub> &lt; π; combined with κ<sub>v</sub> &gt; 6π/7 this is a narrow regime;</li>
+  <li>the far vertex <i>u<sub>i</sub></i> lies above the base on <i>u</i>′'s side of <i>M</i>;</li>
+  <li>an edge of <i>V<sub>i</sub></i> crosses the base line outside the segment <i>u u</i>′ on <i>u</i>′'s side of <i>M</i> (through <i>v u<sub>i</sub></i> this needs ν<sub>i</sub> + ν<sub>j</sub> &gt; π + ψ).</li></ol>
+  <div class="why"><span class="k">Live status</span>Under (H) neither petal ever crosses <i>M</i>: 0 crossings in 224 triples including degenerate ones, and adversarial search cannot make an excursion positive (<span class="m">adv_eps.py</span>, <span class="m">adv_cstar.py</span>). For mechanism 1 the adversarial maximum of ν<sub>i</sub> + μ<sub>u</sub> − π under (H) is −0.50 rad (<span class="m">adv_mu.py</span>); dropping κ<sub>w</sub> ≤ κ<sub>v</sub> from the hypothesis raises it to −0.06, and dropping the equator bounds as well makes it positive. Every one of the 26 observed above-base overlaps (no hypothesis) has a petal crossing <i>M</i>. A weaker target that would also suffice is ε<sub>i</sub> + ε<sub>j+1</sub> &lt; κ.</div>` },
+{ id: 'F_below', parent: 'F_triple', title: 'Below the base (κ ≥ ν_j)', status: 'open', summary: 'The wedge D lies on w’s side of the base. Necessary conditions for a meeting are known; no contradiction with (H) is written yet.', figure: 'overlap_below',
+  body: `<p>When the gaps are large, κ ≥ ν<sub>j</sub>, the cut-edge lines cross on <i>w</i>'s side of the base and D opens downward. A meeting then requires: the outer-edge lines of <i>W<sub>i</sub></i> and <i>W<sub>j+1</sub></i> to converge on <i>w</i>'s side (the four fan angles at <i>u</i> and <i>u</i>′ sum to less than π); exactly one of the two fan faces to reach past their crossing point (both cannot, as fan faces are disjoint); and the opposite petal to pass over the far vertex of that fan face.</p>
+  <p>The figure is a real below-base overlap with no hypothesis: two equator vertices have curvature above 6 and <i>v</i> is nearly flat (κ<sub>v</sub> = 0.094). Under (H) the gaps are bounded by κ<sub>v</sub> and ν<sub>j</sub> &lt; κ ≤ 2κ<sub>v</sub>, which should make this case easy, but the argument is not written.</p>
+  <div class="why"><span class="k">Evidence</span>All 18 observed below-base overlaps satisfy the three necessary conditions above (14 with <i>W<sub>i</sub></i> reaching past the crossing, 4 with <i>W<sub>j+1</sub></i>). None occurs under (H).</div>` },
+{ id: 'octa_false', parent: 't_octa', title: 'Approaches that fail (do not retry)', status: 'info', summary: 'Recorded so nobody repeats them.',
+  body: `<ul><li>Any fixed labelled cut tree for the octahedron: every orbit class fails on some realization.</li>
+  <li>"Some antipodal pair has all four quadrilaterals convex": false in 72% of octahedra.</li>
+  <li>"The star unfolding along a non-shortest geodesic is simple": fails with frequency about 4·10⁻⁵.</li>
+  <li>"One of the two slits at the shortest-geodesic edge always works": fails in about 0.7% of cases.</li>
+  <li>The six wedge–lean inequalities of the earlier plan: hold for some slit in 98.3% of cases only, and fail in 0.5% of nets even under (H) (needle-like <i>w</i>).</li>
+  <li>Separating opposite petals inside D by a fixed line (the bisector at <i>p</i>*, lines through <i>v<sub>j</sub></i>): fails in about a third of non-degenerate cases even under (H). The separation is a rotation phenomenon, not a half-plane one.</li>
+  <li>The Aronov–O'Rourke star unfolding as a shortcut: for the two slits adjacent to the geodesic quadrilateral it only removes the three pairs not involving that quadrilateral.</li></ul>` },
+{ id: 'evidence', parent: 'root', title: 'Numerical evidence at a glance', status: 'info', summary: 'What has been tested, on how many polytopes, with which script.', table: true,
+  body: `<p>Random polytopes come from four generators (Gaussian, spherical, uniform in a cube, one far point) with log-uniform anisotropic scaling, so flat and needle-like shapes are common. Adversarial searches are random-restart hill climbs with guards: every edge at least 5% of the diameter and every curvature at least 0.05, because unguarded searches converge to degenerate touching (a collapsed edge or a flat vertex).</p>` },
+{ id: 'n7', parent: 'root', title: 'Seven vertices: outlook', status: 'info', summary: '34 combinatorial types (5 simplicial). Not started.',
+  body: `<p>The plan is to enumerate the types with plantri, tag them by maximum degree, dome and prism structure, apply Lemma A where a vertex of degree 6 exists, and reuse Lemma F and Lemma L for the octahedron-like ones. DiBiase drew unfolding maps for the five simplicial types by her nearness principle but proved nothing about them.</p>` },
+];
+
+const EVIDENCE = [
+  ['Opposite-petal overlaps under (H)', '72,000 nets', '0', 'farcond.py, oppcases.py'],
+  ['Opposite-petal overlaps, no hypothesis', '72,000 nets', '44 (22 events; 26 above, 18 below the base)', 'oppcases.py'],
+  ['Closest approach of opposite petals under (H), guarded', '30 restarts × 3,000 steps', '0.4% of the diameter, never overlapping', 'adv_opp.py'],
+  ['Rotation reformulation agrees with the net test', '3,267 triples', 'all', 'cstar.py'],
+  ['Petal crossing M above the base under (H)', '224 triples + adversarial', '0 crossings, excursion never positive', 'cstar.py, adv_eps.py'],
+  ['ν_i + μ_u − π under (H) (mechanism 1)', 'adversarial, 20 restarts', 'max −0.50 rad', 'adv_mu.py'],
+  ['Same without κ_w ≤ κ_v', 'adversarial', 'max −0.06 rad', 'adv_mu.py H2'],
+  ['Lemma L, three local pairs', '11,000 octahedra + adversarial', '0 failures', 'local.py, rules3.py'],
+  ['Six wedge–lean inequalities for all k under (H)', '17,036 nets', 'fail in 0.5%', 'oppwedge.py'],
+  ['Cone inequality at every vertex', '240,000 angles', 'holds', 'check'],
+];
+
+const byId = Object.fromEntries(NODES.map(n => [n.id, n]));
+const children = id => NODES.filter(n => n.parent === id);
+function counts() { const c = { proved: 0, reduced: 0, numeric: 0, open: 0 }; NODES.forEach(n => { if (c[n.status] !== undefined) c[n.status]++; }); return c; }
+function renderStrip() {
+  const c = counts(); const el = document.getElementById('strip');
+  el.innerHTML = [['proved', c.proved, 'cases proved'], ['reduced', c.reduced, 'reduced'], ['numeric', c.numeric, 'verified, proof open'], ['open', c.open, 'open']]
+    .map(([s, n, l]) => `<div class="stat"><span class="dot ${s}"></span><span class="n">${n}</span><span class="lab">${l}</span></div>`).join('') + `<div class="date">status as of ${UPDATED}</div>`;
+}
+function renderTree() {
+  const ul = document.getElementById('tree');
+  const build = (id) => { const li = document.createElement('li'); const n = byId[id];
+    const b = document.createElement('button'); b.className = 'node'; b.type = 'button'; b.innerHTML = `<span class="dot ${n.status}"></span><span>${n.title}</span>`; b.onclick = () => { location.hash = id; }; b.dataset.id = id; li.appendChild(b);
+    const kids = children(id); if (kids.length) { const sub = document.createElement('ul'); kids.forEach(k => sub.appendChild(build(k.id))); li.appendChild(sub); } return li; };
+  ul.appendChild(build('root'));
+}
+function crumbs(n) { const path = []; let c = n; while (c) { path.unshift(c); c = byId[c.parent]; } return path.map((p, i) => i < path.length - 1 ? `<a href="#${p.id}">${p.title}</a> › ` : `<span>${p.title}</span>`).join(''); }
+function figure(key, caption) { if (!FIGS[key]) return ''; return `<figure>${FIGS[key]}<figcaption>${caption}</figcaption></figure>`; }
+const CAPTIONS = {
+  net_typical: m => `A net Z<sub>${m.k}</sub> with v the sharpest vertex (κ<sub>v</sub> = ${m.kv}) and the slit at the sharpest neighbour of w. Fan faces blue, petals orange; the gap at w is κ<sub>w</sub> = ${m.kw}.`,
+  overlap_above: m => `Above-base overlap, no hypothesis: κ<sub>v</sub> = ${m.kv}, equator curvatures ${m.ku.join(', ')}. Red: the overlap; dashed: cut-edge lines meeting at p*; shaded: the wedge D; purple: c* and the line M.`,
+  overlap_below: m => `Below-base overlap, no hypothesis: κ<sub>v</sub> = ${m.kv}, equator curvatures ${m.ku.join(', ')}. The cut-edge lines cross on w's side and D opens downward.`,
+  triple_H3: m => `A triple under (H): κ<sub>v</sub> = ${m.kv}, κ<sub>w</sub> = ${m.kw}, equator ${m.ku.join(', ')}. Both outer petals stay on their own side of M.`,
+};
+function article(n, standalone) {
+  let h = `<article id="a-${n.id}"><div class="crumbs">${crumbs(n)}</div><div class="head"><h2>${n.title}</h2><span class="chip ${n.status}">${S[n.status]}</span></div><p class="summary">${n.summary}</p>`;
+  if (n.figure) h += figure(n.figure, CAPTIONS[n.figure](FIGS[n.figure + '_meta']));
+  h += `<div class="body">${n.body}</div>`;
+  if (n.types) { h += `<div class="types">` + children('n6').map(t => `<button class="type" type="button" onclick="location.hash='${t.id}'">${FIGS.icons[t.icon]}<div><div class="t">${t.title}</div><div class="d">${t.deg}</div><span class="chip ${t.status}">${S[t.status]}</span></div></button>`).join('') + `</div>`; }
+  if (n.table) { h += `<table><thead><tr><th>Test</th><th>Sample</th><th>Result</th><th>Script</th></tr></thead><tbody>` + EVIDENCE.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td>${r[2]}</td><td class="num">${r[3]}</td></tr>`).join('') + `</tbody></table>`; }
+  const kids = children(n.id);
+  if (kids.length && !n.types && !standalone) { h += `<div class="children"><h3>Sub-cases</h3>` + kids.map(k => `<div class="row"><span class="chip ${k.status}">${S[k.status]}</span><div><a href="#${k.id}">${k.title}</a><div class="s">${k.summary}</div></div></div>`).join('') + `</div>`; }
+  return h + `</article>`;
+}
+let showAll = false;
+function render() {
+  const id = (location.hash || '#root').slice(1); const n = byId[id] || byId.root;
+  const d = document.getElementById('detail');
+  if (showAll) { d.className = 'all'; d.innerHTML = NODES.map(x => article(x, true)).join(''); const t = document.getElementById('a-' + n.id); if (t) t.scrollIntoView(); }
+  else { d.className = ''; d.innerHTML = article(n, false); window.scrollTo({ top: 0 }); }
+  document.querySelectorAll('nav button.node').forEach(b => b.setAttribute('aria-current', b.dataset.id === n.id ? 'true' : 'false'));
+}
+document.getElementById('expandAll').onclick = function () { showAll = !showAll; this.textContent = showAll ? 'Show one case at a time' : 'Show every case on one page'; render(); };
+window.addEventListener('hashchange', render);
+renderStrip(); renderTree(); render();
+</script>
