@@ -218,3 +218,56 @@ presets['Flat'] = params(np.array([(0, 0, 0.25), (0.1, 0, -0.2), (1.2, 0, 0), (0
 figs['presets'] = presets
 json.dump(figs, open('notes/status_figs.json', 'w'))
 print("presets:", list(presets))
+
+# ---------------------------------------------------------------- figures for the Definitions page
+def sector(c, a0, a1, rad, n=24):
+    ang = np.linspace(a0, a1, n); return [c] + [c + rad * np.array([np.cos(t), np.sin(t)]) for t in ang]
+def ang_of(p, c): return np.arctan2(p[1] - c[1], p[0] - c[0])
+def ccw_span(a0, a1):  # angles from a0 ccw to a1
+    d = (a1 - a0) % (2 * np.pi); return a0, a0 + d
+def svg_net_ex(o, k, extras, **kw):
+    return svg_net(o, k, extras=extras, **kw)
+
+Pn = np.load('notes/figs/net_typical.npy'); stn = octa_structure(Pn); on = sharpest_apex(Pn, stn[0], stn[1]); kn = int(np.argmax(on.ku)); netn = on.Z(kn)
+# Definition 2: the gap at the equator vertex u_{k+2} (shared copy) and at w
+j = (kn + 2) % 4; Wj, Wjm, Vj, Vjm = netn[('W', j)], netn[('W', (j - 1) % 4)], netn[('V', j)], netn[('V', (j - 1) % 4)]
+uj = Wj[1]; rad = 0.09 * on.scale
+a_vj = ang_of(Vj[0], uj); a_vjm = ang_of(Vjm[0], uj)
+# the gap is the sector at u_j not covered by the four faces: between the two v copies, on the side away from w
+a0, a1 = ccw_span(a_vj, a_vjm)
+if (a1 - a0) > np.pi: a0, a1 = ccw_span(a_vjm, a_vj)
+ex = [dict(kind='poly', cls='gapwedge', pts=sector(uj, a0, a1, rad)), dict(kind='point', cls='pstar', pts=uj, label='κ at u' + '₀₁₂₃'[(j - kn) % 4])]
+# gap at w between ray w u_k and ray w u_k'
+uk = netn[('W', kn)][1]; ukp = netn[('W', (kn + 3) % 4)][2]; w0 = np.zeros(2)
+b0, b1 = ccw_span(ang_of(ukp, w0), ang_of(uk, w0))
+if (b1 - b0) > np.pi: b0, b1 = ccw_span(ang_of(uk, w0), ang_of(ukp, w0))
+ex += [dict(kind='poly', cls='gapwedge', pts=sector(w0, b0, b1, 0.12 * on.scale)), dict(kind='point', cls='pstar', pts=w0 + 0.13 * on.scale * np.array([np.cos((b0 + b1) / 2), np.sin((b0 + b1) / 2)]), label='κ_w')]
+figs['def_gap'] = svg_net(on, kn, extras=ex)
+figs['def_Zk'] = svg_net(on, kn, extras=[dict(kind='poly', cls='gapwedge', pts=sector(w0, b0, b1, 0.5 * on.scale)), dict(kind='line', cls='cutline', pts=(w0, uk)), dict(kind='line', cls='cutline', pts=(w0, ukp))])
+# Definition 6: annotated triple (triple_H3, i=1)
+Pt = np.load('notes/figs/triple_H3.npy'); ot = Octa(Pt, 0); i = 1; kt = (i - 1) % 4; nt = ot.Z(kt); jj = (i + 2) % 4; j = (i + 1) % 4
+Vi, Vj, Vjj = nt[('V', i)], nt[('V', j)], nt[('V', jj)]; u, up, vj = Vj[2], Vj[1], Vj[0]; vi, vjj = Vi[0], Vjj[0]
+r0 = 0.07 * ot.scale
+phi0, phi1 = ccw_span(ang_of(up, u), ang_of(vj, u)); psi0, psi1 = ccw_span(ang_of(vj, up), ang_of(u, up)); nu0, nu1 = ccw_span(ang_of(u, vj), ang_of(up, vj))
+for (a, b), c in (((phi0, phi1), u), ((psi0, psi1), up), ((nu0, nu1), vj)):
+    pass
+def fix(span, c, other):  # choose the span containing the interior of V_j (the direction to the third vertex)
+    a0, a1 = span; m = ang_of(other, c); d = (m - a0) % (2 * np.pi); return span if d < (a1 - a0) else ccw_span(a1, a0)
+phi = fix((phi0, phi1), u, (up + vj) / 2); psi = fix((psi0, psi1), up, (u + vj) / 2); nu = fix((nu0, nu1), vj, (u + up) / 2)
+d1 = (vi - u) / np.linalg.norm(vi - u); d2 = (vjj - up) / np.linalg.norm(vjj - up); L = 0.9 * ot.scale
+ex = [dict(kind='poly', cls='anglearc', pts=sector(u, *phi, r0)), dict(kind='poly', cls='anglearc', pts=sector(up, *psi, r0)), dict(kind='poly', cls='anglearc', pts=sector(vj, *nu, r0)),
+      dict(kind='line', cls='cutline', pts=(u - L * d1, u + L * d1)), dict(kind='line', cls='cutline', pts=(up - L * d2, up + L * d2)),
+      dict(kind='point', cls='pstar', pts=u, label='u'), dict(kind='point', cls='pstar', pts=up, label='u′'),
+      dict(kind='point', cls='cstar', pts=vj, label='v_j'), dict(kind='point', cls='cstar', pts=vi, label='v_i'), dict(kind='point', cls='cstar', pts=vjj, label='v_j+1'),
+      dict(kind='point', cls='none', pts=u + 1.6 * r0 * np.array([np.cos(np.mean(phi)), np.sin(np.mean(phi))]), label='φ'),
+      dict(kind='point', cls='none', pts=up + 1.6 * r0 * np.array([np.cos(np.mean(psi)), np.sin(np.mean(psi))]), label='ψ'),
+      dict(kind='point', cls='none', pts=vj + 1.6 * r0 * np.array([np.cos(np.mean(nu)), np.sin(np.mean(nu))]), label='ν_j')]
+figs['def_triple'] = svg_net(ot, kt, extras=ex, labels=False)
+# 3D models for definitions: the typical octahedron (already 'net_typical'), the flat and the regular preset shapes
+def preset_model(name):
+    p = figs['presets'][name]; pts = [[0, 0, p['zv']], [0, 0, -p['zw']]] + [[d['r'] * np.cos(np.radians(d['phi'])), d['r'] * np.sin(np.radians(d['phi'])), d['z']] for d in p['u']]
+    P = np.array(pts); o = Octa(P, 0); return octa_model(o, int(np.argmax(o.ku)))
+MODELS['def_flat'] = preset_model('Flat'); MODELS['def_regular'] = preset_model('Regular octahedron')
+figs['models'] = MODELS
+json.dump(figs, open('notes/status_figs.json', 'w'))
+print("definition figures added")

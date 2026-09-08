@@ -78,6 +78,10 @@ svg.net .Mline { stroke: var(--M); stroke-width: 1.2; }
 svg.net .pstar { fill: var(--ink); } svg.net .cstar { fill: var(--M); } svg.net text.cstar { fill: var(--M); }
 svg.net .Dwedge { fill: var(--D); stroke: none; }
 svg.net .w { fill: var(--ink); }
+svg.net .gapwedge { fill: var(--hit); fill-opacity: 0.35; stroke: var(--hit); stroke-width: 0.8; }
+svg.net .anglearc { fill: var(--M); fill-opacity: 0.35; stroke: var(--M); stroke-width: 0.8; }
+svg.net circle.none { display: none; } svg.net text.none { fill: var(--ink); font-size: 12px; }
+.thm.def .figrow { margin: 10px 0 4px; } .thm.def figure svg.net { max-width: 520px; } .thm.def .vcap, .thm.def figcaption { font-style: normal; }
 svg.net .outline { fill: none; stroke-width: 2.2; } svg.net .outline.o1 { stroke: var(--hit); } svg.net .outline.o2 { stroke: var(--M); } svg.net .outline.o3 { stroke: var(--fan); stroke-dasharray: 5 3; }
 svg.net .flat { fill: none; stroke: var(--petal); stroke-width: 1.2; stroke-dasharray: 3 3; }
 svg.net .hl { stroke-width: 2; stroke: var(--hit); }
@@ -300,7 +304,15 @@ function notationBar(n) {
 }
 function thmHead(n) { const [word, cls] = KINDS[n.kind]; const num = n.kname ? ' ' + n.kname : (NUM[n.id] ? ' ' + NUM[n.id] : ''); const title = n.kind === 'case' ? ' ' + n.ktitle : (n.ktitle && !n.kname ? ' (' + n.ktitle + ')' : ''); return [`${word}${num}${title}.`, cls]; }
 function thmBox(n) { const [head, cls] = thmHead(n); return `<div class="thm ${cls}"><span class="thm-head">${head}</span> <span class="thm-body">${n.statement}</span></div>`; }
-function defsBlock() { return DEFS.map(([id, name, text], i) => `<div class="thm def" id="${id}"><span class="thm-head">Definition ${i + 1} (${name}).</span> <span class="thm-body">${text}</span></div>`).join(''); }
+const DEFFIG = {
+  'defs-net': () => `<div class="figrow"><figure>${FIGS.n4}<figcaption>A tetrahedron cut at the vertex <i>v</i> and unfolded: the three cut edges each appear twice, and the three faces hinge on the edges of the fourth.</figcaption></figure><div><div class="viewer" data-model="n4"></div><div class="vcap">The same tetrahedron; red edges are the cut tree. Drag to rotate.</div></div></div>`,
+  'defs-kappa': () => `<figure>${FIGS.def_gap}<figcaption>Gaps in a net: at the shared copy of an equator vertex the four faces around it leave a red sector of angle κ, bounded by the two copies of the cut edge to <i>v</i>; at <i>w</i> the fan leaves the sector κ<sub>w</sub> between <i>w u<sub>0</sub></i> and <i>w u<sub>0</sub></i>′.</figcaption></figure>`,
+  'defs-octa': () => `<div class="figrow"><figure>${FIGS.net_typical}<figcaption>Fan faces <i>W<sub>i</sub></i> (blue) around <i>w</i>, petals <i>V<sub>i</sub></i> (orange) hanging from them; the labels are relative to the slit, so <i>u</i><sub>0</sub> is <i>u<sub>k</sub></i>.</figcaption></figure><div><div class="viewer" data-model="net_typical"></div><div class="vcap">The octahedron itself with <i>v</i>, <i>w</i> and the equator; red edges are cut.</div></div></div>`,
+  'defs-Zk': () => `<figure>${FIGS.def_Zk}<figcaption>The net <i>Z<sub>k</sub></i>: the fan opens along the slit <i>w u<sub>k</sub></i> (dashed rays to <i>u</i><sub>0</sub> and <i>u</i><sub>0</sub>′), leaving the red gap of angle κ<sub>w</sub>; the local pairs are the faces on either side of it.</figcaption></figure>`,
+  'defs-triple': () => `<figure>${FIGS.def_triple}<figcaption>A triple: the middle petal <i>V<sub>j</sub></i> with base <i>u u</i>′, base angles φ, ψ and apex angle ν<sub>j</sub> (purple arcs); the outer petals with their apexes <i>v<sub>i</sub></i>, <i>v<sub>j+1</sub></i>, and the dashed cut-edge lines through <i>u v<sub>i</sub></i> and <i>u</i>′<i>v<sub>j+1</sub></i>.</figcaption></figure>`,
+  'defs-thickness': () => `<div class="figrow"><div><div class="viewer" data-model="def_flat"></div><div class="vcap">Thickness 0.2: the "Flat" preset of the widget.</div></div><div><div class="viewer" data-model="def_regular"></div><div class="vcap">Thickness 1: the regular octahedron.</div></div></div>`,
+};
+function defsBlock() { return DEFS.map(([id, name, text], i) => `<div class="thm def" id="${id}"><span class="thm-head">Definition ${i + 1} (${name}).</span> <span class="thm-body">${text}</span>${DEFFIG[id] ? DEFFIG[id]() : ''}</div>`).join(''); }
 
 const byId = Object.fromEntries(NODES.map(n => [n.id, n]));
 const children = id => NODES.filter(n => n.parent === id);
