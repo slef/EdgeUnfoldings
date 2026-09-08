@@ -214,6 +214,9 @@ const NODES = [
   body: `<p>Write μ<sub>u</sub> = ∠<i>u v c</i>* and μ<sub>u′</sub> = ∠<i>c</i>* <i>v u</i>′, so μ<sub>u</sub> + μ<sub>u′</sub> = ν<sub>j</sub>. The wedge of <i>V<sub>i</sub></i> at <i>v</i> reaches the ray of <i>M</i> beyond <i>v</i> only if ν<sub>i</sub> &gt; π − μ<sub>u</sub>, and symmetrically for <i>V<sub>j+1</sub></i>. Both together give ν<sub>i</sub> + ν<sub>j</sub> + ν<sub>j+1</sub> &gt; 2π, but under (H) the sum is at most 4π/3.</p>` },
 { id: 'F_sharp', parent: 'F_above', title: 'The above-base case needs κ_v > 6π/7', status: 'proved', summary: 'Under (H), κ < ν_j forces κ_v > 6π/7, so every face angle at v is below 4π/7.',
   body: `<p>4π = Σκ ≤ 4κ<sub>v</sub> + κ and κ &lt; ν<sub>j</sub> ≤ π − κ<sub>v</sub>/2, hence 3π &lt; 3.5 κ<sub>v</sub>. So the above-base case can only arise for a very sharp <i>v</i>, with Σν &lt; 8π/7.</p>` },
+{ id: 'F_tight', parent: 'F_above', title: 'What the tight cases look like under (H)', status: 'info', summary: 'Not flatness of the polytope: the far-pair margin is governed by the smallest curvature, that is by a vertex about to flatten out, and fat polytopes get just as tight.', figure: 'fat_nearmiss', figure2: 'fat_round_nearmiss',
+  body: `<p>The overlapping examples on the neighbouring pages are nearly flat polytopes, so one might expect flatness to be the difficulty and fat polytopes to be easy. Measured on 4,000 random octahedra with the rule applied, thin ones are indeed tighter on average: the closest far pair is at 0.02% of the diameter for thickness below 0.02 and at 18% for thickness 0.2–0.35 (chart on the <a href="#evidence">evidence page</a>). But adversarial search shows this is a sampling effect, not the mechanism. Restricted to polytopes of thickness at least 0.3, the search still brings a far pair to within 0.17% of the diameter (first figure), and in every such near-miss one vertex sits at the curvature guard, κ = 0.05. Raising the curvature guard to 0.3 as well raises the closest approach to 0.73% (second figure), again with a vertex exactly at the guard.</p>
+  <p>So the tight regime is a vertex whose curvature tends to zero: the octahedron is degenerating into a five-vertex polytope, or into the octahedron minus an edge, and at that boundary faces of the net genuinely touch. The margin must therefore vanish there, whatever the thickness, and no continuity or perturbation argument can bridge it. This is why the lemmas are stated exactly, with touching allowed, and why the proofs work with the gaps κ<sub>u</sub> themselves rather than with a margin.</p>` },
 { id: 'F_side', parent: 'F_above', title: 'Side conditions: no petal crosses M above the base', status: 'open', summary: 'The one missing step for the above-base case. Numerically robust under (H); the proof is not written.',
   body: `<p>To be shown: under (H) and κ &lt; ν<sub>j</sub>, the above-base part of the flat <i>V<sub>i</sub></i> stays on <i>u</i>'s side of <i>M</i>, and that of <i>V<sub>j+1</sub></i> on <i>u</i>′'s side. Three crossing mechanisms have to be excluded:</p>
   <ol><li>the wedge of <i>V<sub>i</sub></i> at <i>v</i> passes the ray of <i>M</i> beyond <i>v</i>, which needs ν<sub>i</sub> &gt; π − μ<sub>u</sub> and hence ν<sub>i</sub> + ν<sub>j</sub> &gt; π and κ<sub>v</sub> &lt; π; combined with κ<sub>v</sub> &gt; 6π/7 this is a narrow regime;</li>
@@ -248,6 +251,8 @@ const EVIDENCE = [
   ['Petal crossing M above the base under (H)', '224 triples + adversarial', '0 crossings, excursion never positive', 'cstar.py, adv_eps.py'],
   ['ν_i + μ_u − π under (H) (mechanism 1)', 'adversarial, 20 restarts', 'max −0.50 rad', 'adv_mu.py'],
   ['Same without κ_w ≤ κ_v', 'adversarial', 'max −0.06 rad', 'adv_mu.py H2'],
+  ['Closest far pair under (H), thickness ≥ 0.3', 'adversarial, 20 restarts', '0.17% of the diameter, a vertex at κ = 0.05', 'adv_fat.py'],
+  ['Closest far pair under (H), thickness ≥ 0.3 and all κ ≥ 0.3', 'adversarial, 20 restarts', '0.73% of the diameter, a vertex at κ = 0.3', 'adv_fat.py'],
   ['Lemma L, three local pairs', '11,000 octahedra + adversarial', '0 failures', 'local.py, rules3.py'],
   ['Six wedge–lean inequalities for all k under (H)', '17,036 nets', 'fail in 0.5%', 'oppwedge.py'],
   ['Cone inequality at every vertex', '240,000 angles', 'holds', 'check'],
@@ -269,7 +274,7 @@ function renderTree() {
   ul.appendChild(build('root'));
 }
 function crumbs(n) { const path = []; let c = n; while (c) { path.unshift(c); c = byId[c.parent]; } return path.map((p, i) => i < path.length - 1 ? `<a href="#${p.id}">${p.title}</a> › ` : `<span>${p.title}</span>`).join(''); }
-const MODEL = { net_typical: 'net_typical', root: 'net_typical', lemmaA: 't_pyr5', n4: 'n4', n5_pyr: 'n5_pyr', n5_bipyr: 'n5_bipyr', t_pyr5: 't_pyr5', t_simp55: 't_simp55', t_54: 't_54', t_prism: 't_prism', t_prismd: 't_prismd', t_octa_minus: 't_octa_minus', n7: 'n7',
+const MODEL = { fat_nearmiss: 'fat_nearmiss', fat_round_nearmiss: 'fat_round_nearmiss', net_typical: 'net_typical', root: 'net_typical', lemmaA: 't_pyr5', n4: 'n4', n5_pyr: 'n5_pyr', n5_bipyr: 'n5_bipyr', t_pyr5: 't_pyr5', t_simp55: 't_simp55', t_54: 't_54', t_prism: 't_prism', t_prismd: 't_prismd', t_octa_minus: 't_octa_minus', n7: 'n7',
   overlap_above: 'overlap_above', overlap_below: 'overlap_below', triple_H3: 'triple_H3', F_rot: 'triple_H3', F_triple: 'triple_H3', lemmaF: 'net_typical', lemmaL: 'net_typical', octa_shared: 'net_typical', F_hinge: 'net_typical', octa_false: 'octa_false', evidence: 'evidence' };
 function figure(key, caption) { if (!FIGS[key]) return ''; const mk = MODEL[key]; const v = mk && FIGS.models[mk] ? `<div><div class="viewer" data-model="${mk}"></div><div class="vcap">The polytope. Drag to rotate; red edges are cut, dashed edges are on the far side.</div></div>` : '';
   return `<div class="figrow"><figure>${FIGS[key]}<figcaption>${caption}</figcaption></figure>${v}</div>`; }
@@ -293,12 +298,14 @@ const NODEFIG = {
   F_rot: ['F_rot', 'Dashed outlines: the outer petals in the flat development around v (no gaps). Filled: their net positions, rotated about u and u′ by the gaps. The composition is the rotation about c*.'],
   F_angular: ['F_rot', 'Angles are measured around c*; the rotation adds κ to every angle, moving points across M from u′’s side to u’s side.'],
   F_notboth: ['F_rot', 'Both outer petals would have to wrap past the ray of M beyond v, which needs the three face angles at v to exceed 2π.'],
-  F_side: ['overlap_above', 'How the open step fails without (H): here ν_i + ν_j > π and the petal V_i crosses M through its wedge at v (mechanism 1).'],
+  F_side: ['overlap_above', 'What the open step must exclude, shown where it fails without (H): a nearly flat polytope (κ_v = 0.001) with two sharp equator vertices; here ν_i + ν_j > π and V_i crosses M through its wedge at v. Under (H) no such crossing has ever been produced.'],
   octa_false: ['octa_false', 'A fixed labelled tree fails: this net uses the same polytope as the typical net with a different apex, and overlaps (red).'],
   evidence: ['evidence', 'Closest approach found by adversarial search under (H) with non-degeneracy guards (separation 0.4% of the diameter, no overlap).'],
   n7: ['n7', 'Seven vertices: a hexagonal pyramid, settled by Lemma A; the simplicial types need Lemma F and Lemma L.'],
 };
 const CAPTIONS = {
+  fat_nearmiss: m => `Closest approach under (H) among polytopes of thickness ≥ 0.3 (here ${m.thick}): the pair ${m.pair.replace(/_k/g,'<sub>k</sub>').replace(/\+/g,'+')} comes within ${(100*-m.sep).toFixed(2)}% of the diameter. κ<sub>v</sub> = ${m.kv}, κ<sub>w</sub> = ${m.kw} (at the guard), equator ${m.ku.join(', ')}.`,
+  fat_round_nearmiss: m => `Same search with every curvature ≥ 0.3 as well (thickness ${m.thick}): closest approach ${(100*-m.sep).toFixed(2)}% of the diameter, with an equator vertex at the curvature guard. κ<sub>v</sub> = ${m.kv}, κ<sub>w</sub> = ${m.kw}, equator ${m.ku.join(', ')}.`,
   net_typical: m => `A net Z<sub>${m.k}</sub> with v the sharpest vertex (κ<sub>v</sub> = ${m.kv}) and the slit at the sharpest neighbour of w. Fan faces blue, petals orange; the gap at w is κ<sub>w</sub> = ${m.kw}.`,
   overlap_above: m => `Above-base overlap, no hypothesis: κ<sub>v</sub> = ${m.kv}, equator curvatures ${m.ku.join(', ')}. Red: the overlap; dashed: cut-edge lines meeting at p*; shaded: the wedge D; purple: c* and the line M.`,
   overlap_below: m => `Below-base overlap, no hypothesis: κ<sub>v</sub> = ${m.kv}, equator curvatures ${m.ku.join(', ')}. The cut-edge lines cross on w's side and D opens downward.`,
@@ -307,9 +314,11 @@ const CAPTIONS = {
 function article(n, standalone) {
   let h = `<article id="a-${n.id}"><div class="crumbs">${crumbs(n)}</div><div class="head"><h2>${n.title}</h2><span class="chip ${n.status}">${S[n.status]}</span></div><p class="summary">${n.summary}</p>`;
   if (n.figure) h += figure(n.figure, CAPTIONS[n.figure](FIGS[n.figure + '_meta']));
+  if (n.figure2) h += figure(n.figure2, CAPTIONS[n.figure2] ? CAPTIONS[n.figure2](FIGS[n.figure2 + '_meta']) : NODEFIG.evidence[1]);
   else if (NODEFIG[n.id]) h += figure(NODEFIG[n.id][0], NODEFIG[n.id][1]);
   if (n.id === 'n5') h += figure(NODEFIG.n5b[0], NODEFIG.n5b[1]);
   if (n.id === 'F_sharp') h += sharpAxis();
+  if (n.id === 'evidence') h += thicknessChart();
   if (n.id === 'play') h += widgetShell();
   h += `<div class="body">${n.body}</div>`;
   if (n.types) { h += `<div class="types">` + children('n6').map(t => `<button class="type" type="button" onclick="location.hash='${t.id}'">${FIGS.icons[t.icon]}<div><div class="t">${t.title}</div><div class="d">${t.deg}</div><span class="chip ${t.status}">${S[t.status]}</span></div></button>`).join('') + `</div>`; }

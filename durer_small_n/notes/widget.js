@@ -161,3 +161,16 @@ function widgetModel(P, v, k) {
   const w = ANTI[v]; const ring = NBR[w]; const cut = ring.map(u => [v, u]); cut.push([w, ring[k]]);
   return { P, faces: FACES, cut, names: Object.fromEntries(VNAME.map((n, i) => [i, n])) };
 }
+
+// ---------- thickness chart (evidence page) --------------------------------------------------------------
+function thicknessChart() {
+  const D = FIGS.thickness; if (!D) return '';
+  const W = 620, H = 230, x0 = 60, x1 = 600, y0 = 30, y1 = 180;
+  const X = i => x0 + (i + 0.5) * (x1 - x0) / D.length; const Y = v => y1 - (Math.min(0.7, -v)) / 0.7 * (y1 - y0);
+  let s = `<div class="axis"><svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  for (const t of [0, 0.2, 0.4, 0.6]) s += `<line x1="${x0}" y1="${Y(-t)}" x2="${x1}" y2="${Y(-t)}" style="stroke:var(--rule)"/><text x="${x0 - 6}" y="${Y(-t) + 4}" text-anchor="end">${t.toFixed(1)}</text>`;
+  D.forEach((d, i) => { const x = X(i); s += `<line x1="${x}" y1="${Y(d.far_min)}" x2="${x}" y2="${Y(d.far_med)}" style="stroke:var(--fan);stroke-width:2"/><circle cx="${x}" cy="${Y(d.far_min)}" r="4" style="fill:var(--hit)"/><circle cx="${x}" cy="${Y(d.far_med)}" r="3" style="fill:var(--fan)"/><circle cx="${x}" cy="${Y(d.loc_min)}" r="3" style="fill:var(--petal)"/><text x="${x}" y="${y1 + 16}" text-anchor="middle">${d.lo}–${d.hi >= 1 ? 1 : d.hi}</text><text x="${x}" y="${y1 + 30}" text-anchor="middle" style="fill:var(--ink-3)">n=${d.n}</text>`; });
+  s += `<text x="${x0}" y="${y0 - 12}">separation of the closest pair, in units of the diameter (higher = closer)</text><text x="${(x0 + x1) / 2}" y="${H - 4}" text-anchor="middle">thickness = smallest extent / diameter</text>`;
+  s += `<text x="${x1}" y="${y0 + 4}" text-anchor="end"><tspan style="fill:var(--hit)">●</tspan> far pairs, closest in bin  <tspan style="fill:var(--fan)">●</tspan> far pairs, median  <tspan style="fill:var(--petal)">●</tspan> local pairs, closest</text></svg></div>`;
+  return s;
+}
