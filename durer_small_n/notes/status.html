@@ -469,7 +469,7 @@ function viewer3d(el, model, opts) {
   }
   let drag = null;
   el.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, st.yaw, st.pitch]; el.setPointerCapture(e.pointerId); });
-  el.addEventListener('pointermove', e => { if (!drag) return; st.yaw = drag[2] + (e.clientX - drag[0]) * 0.012; st.pitch = Math.max(-1.55, Math.min(1.55, drag[3] - (e.clientY - drag[1]) * 0.012)); draw(); });
+  el.addEventListener('pointermove', e => { if (!drag) return; st.yaw = drag[2] + (e.clientX - drag[0]) * 0.012; st.pitch = Math.max(-1.55, Math.min(1.55, drag[3] + (e.clientY - drag[1]) * 0.012)); draw(); });
   el.addEventListener('pointerup', () => { drag = null; }); el.addEventListener('pointercancel', () => { drag = null; });
   el.style.touchAction = 'none'; el.style.cursor = 'grab';
   draw(); return { draw, set(m) { Object.assign(model, m); draw(); } };
