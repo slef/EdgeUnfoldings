@@ -120,6 +120,9 @@ a.term:hover { text-decoration-style: solid; }
 .thm.def { border-left-color: var(--petal); background: transparent; padding-left: 14px; margin-bottom: 14px; }
 .thm.def .thm-head { color: var(--ink); }
 .thm.open { border-left-color: var(--open); } .thm.conj { border-left-color: var(--numeric); }
+.notation { font-size: 13px; color: var(--ink-2); border: 1px solid var(--rule); border-radius: 4px; padding: 7px 11px; margin: 0 0 16px; max-width: 68ch; line-height: 1.6; background: var(--panel); }
+.notation b { font-family: "STIX Two Text", serif; font-size: 14.5px; color: var(--ink); font-weight: 600; } .notation a { white-space: nowrap; }
+.notation .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin-right: 6px; }
 dl.defs { max-width: 66ch; } dl.defs dt { font-weight: 600; margin-top: 14px; scroll-margin-top: 12px; } dl.defs dd { margin: 4px 0 0; }
 .types { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin: 14px 0 20px; }
 .type { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px 12px; background: var(--panel); cursor: pointer; text-align: left; font: inherit; color: var(--ink); display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: center; }
@@ -286,6 +289,15 @@ const DEFS = [
 ];
 const KINDS = { lemma: ['Lemma', ''], conj: ['Conjecture', 'conj'], open: ['Open problem', 'open'], red: ['Reduction', ''], thm: ['Theorem to prove', ''], case: ['Case', ''] };
 const NUM = {}; NODES.forEach(n => { if (n.kind && !n.kname && n.kind !== 'case' && n.kind !== 'thm') { NUM[n.id] = (NUM['_' + n.kind] = (NUM['_' + n.kind] || 0) + 1); } });
+
+function isUnder(n, anc) { let c = n; while (c) { if (c.id === anc) return true; c = byId[c.parent]; } return false; }
+function notationBar(n) {
+  if (n.id === 'defs' || n.id === 'play' || !isUnder(n, 't_octa')) return '';
+  let h = `<div class="notation"><span class="k">Notation</span><b><i>v</i></b> apex, <b><i>w</i></b> its antipode, <b><i>u</i><sub>0</sub>…<i>u</i><sub>3</sub></b> equator (neighbours of <i>w</i>, cyclic), <b><i>W<sub>i</sub></i></b> = <i>w u<sub>i</sub> u<sub>i+1</sub></i> fan faces, <b><i>V<sub>i</sub></i></b> = <i>v u<sub>i</sub> u<sub>i+1</sub></i> petals, <b>κ<sub>x</sub></b> curvature at <i>x</i>, <b>ν<sub>i</sub></b> angle of <i>V<sub>i</sub></i> at <i>v</i>, <b>ω<sub>i</sub></b> angle of <i>W<sub>i</sub></i> at <i>w</i> (<a href="#defs-octa">Definition 4</a>); <b><i>k</i></b> the slit: <i>Z<sub>k</sub></i> cuts the four edges at <i>v</i> and <i>w u<sub>k</sub></i> (<a href="#defs-Zk">Definition 5</a>).`;
+  if (isUnder(n, 'F_triple') || n.id === 'F_triple') h += ` For a triple <i>W<sub>i</sub></i>, <i>W<sub>j</sub></i>, <i>W<sub>j+1</sub></i>: <b><i>u</i></b> = <i>u<sub>j</sub></i>, <b><i>u</i>′</b> = <i>u<sub>j+1</sub></i> base of the middle petal <i>V<sub>j</sub></i>, <b>φ, ψ</b> its base angles, <b>ν<sub>j</sub></b> its apex angle, <b>κ</b> = κ<sub>u</sub> + κ<sub>u′</sub>, <b><i>v<sub>i</sub></i>, <i>v<sub>j</sub></i>, <i>v<sub>j+1</sub></i></b> the copies of <i>v</i> (<a href="#defs-triple">Definition 6</a>).`;
+  if (isUnder(n, 'F_above')) h += ` <b><i>c</i>*</b> centre of the composed rotation, <b><i>M</i></b> the line <i>c</i>*<i>v</i> (<a href="#F_above">Case A</a>).`;
+  return h + `</div>`;
+}
 function thmHead(n) { const [word, cls] = KINDS[n.kind]; const num = n.kname ? ' ' + n.kname : (NUM[n.id] ? ' ' + NUM[n.id] : ''); const title = n.kind === 'case' ? ' ' + n.ktitle : (n.ktitle && !n.kname ? ' (' + n.ktitle + ')' : ''); return [`${word}${num}${title}.`, cls]; }
 function thmBox(n) { const [head, cls] = thmHead(n); return `<div class="thm ${cls}"><span class="thm-head">${head}</span> <span class="thm-body">${n.statement}</span></div>`; }
 function defsBlock() { return DEFS.map(([id, name, text], i) => `<div class="thm def" id="${id}"><span class="thm-head">Definition ${i + 1} (${name}).</span> <span class="thm-body">${text}</span></div>`).join(''); }
@@ -345,6 +357,7 @@ const CAPTIONS = {
 };
 function article(n, standalone) {
   let h = `<article id="a-${n.id}"><div class="crumbs">${crumbs(n)}</div><div class="head"><h2>${n.title}</h2><span class="chip ${n.status}">${S[n.status]}</span></div><p class="summary">${n.summary}</p>`;
+  h += notationBar(n);
   if (n.statement) h += thmBox(n);
   if (n.defs) h += defsBlock();
   if (n.figure) h += figure(n.figure, CAPTIONS[n.figure](FIGS[n.figure + '_meta']));
@@ -392,7 +405,7 @@ const GLOSS = {
 const SKIP = new Set(['A', 'H2', 'H3', 'FIGURE', 'SVG', 'FIGCAPTION', 'BUTTON', 'SELECT', 'OUTPUT', 'LABEL', 'TABLE', 'STYLE', 'SCRIPT']);
 function linkTerms(root, selfId) {
   const counts = {}; const keys = Object.keys(GLOSS).filter(k => { const l = GLOSS[k].link; if (!selfId) return true; if (l === '#' + selfId) return false; if (selfId === 'defs' && l.startsWith('#defs-')) return false; return true; });
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode(n) { let p = n.parentNode; while (p && p !== root) { if (SKIP.has(p.tagName) || (p.classList && (p.classList.contains('term') || p.classList.contains('chip') || p.classList.contains('crumbs') || p.classList.contains('thm-head')))) return NodeFilter.FILTER_REJECT; p = p.parentNode; } return NodeFilter.FILTER_ACCEPT; } });
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode(n) { let p = n.parentNode; while (p && p !== root) { if (SKIP.has(p.tagName) || (p.classList && (p.classList.contains('term') || p.classList.contains('chip') || p.classList.contains('crumbs') || p.classList.contains('thm-head') || p.classList.contains('notation')))) return NodeFilter.FILTER_REJECT; p = p.parentNode; } return NodeFilter.FILTER_ACCEPT; } });
   const nodes = []; let n; while ((n = walker.nextNode())) nodes.push(n);
   for (const node of nodes) {
     const text = node.nodeValue; const hits = []; const art = node.parentNode && node.parentNode.closest ? node.parentNode.closest('article') : null; const artId = art ? art.id.slice(2) : null;

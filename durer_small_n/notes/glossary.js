@@ -29,7 +29,7 @@ const GLOSS = {
 const SKIP = new Set(['A', 'H2', 'H3', 'FIGURE', 'SVG', 'FIGCAPTION', 'BUTTON', 'SELECT', 'OUTPUT', 'LABEL', 'TABLE', 'STYLE', 'SCRIPT']);
 function linkTerms(root, selfId) {
   const counts = {}; const keys = Object.keys(GLOSS).filter(k => { const l = GLOSS[k].link; if (!selfId) return true; if (l === '#' + selfId) return false; if (selfId === 'defs' && l.startsWith('#defs-')) return false; return true; });
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode(n) { let p = n.parentNode; while (p && p !== root) { if (SKIP.has(p.tagName) || (p.classList && (p.classList.contains('term') || p.classList.contains('chip') || p.classList.contains('crumbs') || p.classList.contains('thm-head')))) return NodeFilter.FILTER_REJECT; p = p.parentNode; } return NodeFilter.FILTER_ACCEPT; } });
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode(n) { let p = n.parentNode; while (p && p !== root) { if (SKIP.has(p.tagName) || (p.classList && (p.classList.contains('term') || p.classList.contains('chip') || p.classList.contains('crumbs') || p.classList.contains('thm-head') || p.classList.contains('notation')))) return NodeFilter.FILTER_REJECT; p = p.parentNode; } return NodeFilter.FILTER_ACCEPT; } });
   const nodes = []; let n; while ((n = walker.nextNode())) nodes.push(n);
   for (const node of nodes) {
     const text = node.nodeValue; const hits = []; const art = node.parentNode && node.parentNode.closest ? node.parentNode.closest('article') : null; const artId = art ? art.id.slice(2) : null;
