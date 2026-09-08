@@ -107,11 +107,14 @@ svg.net .hl { stroke-width: 2; stroke: var(--hit); }
 .figrow { display: grid; grid-template-columns: minmax(0, 620px) 300px; gap: 14px; align-items: start; margin: 18px 0 20px; max-width: 940px; }
 .figrow figure { margin: 0; }
 .viewer { width: 300px; } .viewer svg.v3d { width: 100%; height: auto; display: block; background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; }
+.viewer:focus-visible { outline: 2px solid var(--fan); outline-offset: 3px; border-radius: 4px; }
 .viewer + .vcap, .vcap { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; max-width: 300px; }
 svg.v3d .tri { fill: var(--petal-fill); fill-opacity: 0.55; stroke: none; } svg.v3d .quad { fill: var(--fan-fill); fill-opacity: 0.55; stroke: none; }
 svg.v3d line.vis { stroke: var(--ink); stroke-width: 1.3; } svg.v3d line.hid { stroke: var(--ink-3); stroke-width: 0.9; stroke-dasharray: 3 3; }
 svg.v3d line.cut { stroke: var(--hit); stroke-width: 3; } svg.v3d line.hid.cut { stroke-width: 2; }
 svg.v3d .vtx { fill: var(--ink); } svg.v3d .vtx.hid { fill: var(--ink-3); } svg.v3d text { font-family: var(--mono); font-size: 11px; fill: var(--ink); } svg.v3d text.hid { fill: var(--ink-3); }
+svg.v3d text.face-label { font-weight: 700; font-size: 14px; paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-linejoin: round; }
+.witness-details { margin-top: 18px; } .witness-details summary { cursor: pointer; font-weight: 600; }
 @media (max-width: 1000px) { .figrow { grid-template-columns: 1fr; } }
 a.term { color: inherit; text-decoration: underline dotted; text-decoration-color: var(--fan); text-decoration-thickness: 1.5px; text-underline-offset: 3px; cursor: help; }
 a.term:hover { text-decoration-style: solid; }
@@ -180,7 +183,7 @@ const NODES = [
   body: `<p>The strategy follows the plan of DiBiase's thesis: list the combinatorial types, fix for each a cut tree (or a rule for choosing one), and exclude overlap face pair by face pair. <a href="#lemmaA">Lemma A</a> settles every type that has a vertex adjacent to all others. At six vertices, three types follow from Lemma A and the triangular prism follows from the dome theorem. The octahedron and two nonsimplicial types remain unresolved in this repository.</p>
   <h3>How the tree reads</h3><p>Green cases are proved. Blue cases are reduced to another case on this page and inherit its status. Amber cases have been checked on tens of thousands of random polytopes and by adversarial search but have no written proof yet. Red cases are open. Follow the octahedron branch to the bottom to see the live state of the argument.</p>` },
 { id: 'defs', parent: 'root', title: 'Definitions and notation', status: 'info', summary: 'Everything the other pages assume. Underlined terms anywhere on the site show these definitions on hover and link here.', defs: true, body: `` },
-{ id: 'thesis_audit', parent: 'root', title: 'DiBiase thesis: direct audit and exact chart failure', status: 'info', figure: 'thesis_df', summary: 'The DF entry in the displayed octahedron chart fails on a strictly convex integer-coordinate example.',
+{ id: 'thesis_audit', parent: 'root', title: 'DiBiase counterexample: the DF chart entry', status: 'info', figure: 'thesis_df', summary: 'A strictly convex octahedron whose D and F faces overlap in the displayed unfolding. Explore the exact example below in 2D and 3D.',
   body: `<p>Chapter 3 and the complete octahedron discussion were checked against the supplied scan. Figure 3.29 marks DF as excluded by Lemma 2. For the displayed tree, an exact checker verifies a convex octahedron whose D and F interiors overlap. Moving G alone leaves this overlap unchanged. This refutes that chart entry, not edge unfoldability of the octahedron.</p><p>The useful ideas are a finite family of leaf-face reattachments, shallow three-arm trees, and a complete pair chart for each resulting tree. Every repair must be checked against all affected pairs. See <a href="../../n6/THESIS_AUDIT.md">the audit and vertex-label correspondence</a> and <a href="../../n6/results/thesis-chart-DF.certificate.json">the exact witness</a>.</p>` },
 { id: 'certification', parent: 'root', title: 'Exact computational certificates', status: 'info', summary: 'Explicit parameter regions are certified; complete metric-space coverage remains open.',
   body: `<p>The independent checker uses rational arithmetic with outward bounds. It checks supporting planes, original polygonal facets, the cut tree, and every face pair. Coplanarity is checked as a polynomial identity, so quadrilaterals remain original facets.</p><p>Independent replay verifies a complete nine-parameter prism box: 443 closed subregions, three trees, and all shared boundaries included. A ten-parameter octahedron-minus-edge box is also certified. The wider searches finished with 94 unresolved prism regions and 11 unresolved minus-edge regions; neither is a complete cover. All universal nonlinear solver queries remain unresolved. The 53 current tests pass.</p><p>See <a href="../../n6/REGION_COVER.md">exact bounds and final search outcomes</a>, <a href="../../n6/README.md">reproduction instructions</a>, and <a href="../../n6/CURVATURE_ENCODING.md">exact curvature comparisons</a>.</p>` },
@@ -338,10 +341,16 @@ function renderTree() {
   ul.appendChild(build('root'));
 }
 function crumbs(n) { const path = []; let c = n; while (c) { path.unshift(c); c = byId[c.parent]; } return path.map((p, i) => i < path.length - 1 ? `<a href="#${p.id}">${p.title}</a> › ` : `<span>${p.title}</span>`).join(''); }
-const MODEL = { fat_nearmiss: 'fat_nearmiss', fat_round_nearmiss: 'fat_round_nearmiss', net_typical: 'net_typical', root: 'net_typical', lemmaA: 't_pyr5', n4: 'n4', n5_pyr: 'n5_pyr', n5_bipyr: 'n5_bipyr', t_pyr5: 't_pyr5', t_simp55: 't_simp55', t_54: 't_54', t_prism: 't_prism', t_prismd: 't_prismd', t_octa_minus: 't_octa_minus', n7: 'n7',
+const MODEL = { thesis_df: 'thesis_df', fat_nearmiss: 'fat_nearmiss', fat_round_nearmiss: 'fat_round_nearmiss', net_typical: 'net_typical', root: 'net_typical', lemmaA: 't_pyr5', n4: 'n4', n5_pyr: 'n5_pyr', n5_bipyr: 'n5_bipyr', t_pyr5: 't_pyr5', t_simp55: 't_simp55', t_54: 't_54', t_prism: 't_prism', t_prismd: 't_prismd', t_octa_minus: 't_octa_minus', n7: 'n7',
   overlap_above: 'overlap_above', overlap_below: 'overlap_below', caseB_aa: 'caseB_aa', triple_H3: 'triple_H3', F_rot: 'triple_H3', F_triple: 'triple_H3', lemmaF: 'net_typical', lemmaL: 'net_typical', octa_shared: 'net_typical', F_hinge: 'net_typical', octa_false: 'octa_false', evidence: 'evidence' };
-function figure(key, caption) { if (!FIGS[key]) return ''; const mk = MODEL[key]; const v = mk && FIGS.models[mk] ? `<div><div class="viewer" data-model="${mk}"></div><div class="vcap">The polytope. Drag to rotate; red edges are cut, dashed edges are on the far side.</div></div>` : '';
+function figure(key, caption) { if (!FIGS[key]) return ''; const mk = MODEL[key]; const v = mk && FIGS.models[mk] ? `<div><div class="viewer" data-model="${mk}"></div><div class="vcap">${FIGS.models[mk].caption || 'The polytope. Drag to rotate; red edges are cut, dashed edges are on the far side.'}</div></div>` : '';
   return `<div class="figrow"><figure>${FIGS[key]}<figcaption>${caption}</figcaption></figure>${v}</div>`; }
+function thesisWitnessDetails() {
+  const m = FIGS.models.thesis_df;
+  const rows = m.P.map((p, i) => [m.names[i], p]).sort((a, b) => a[0] - b[0]);
+  const cuts = m.cut.map(([a, b]) => [m.names[a], m.names[b]].sort((a, b) => a - b).join('–')).join(', ');
+  return `<details class="witness-details"><summary>Exact coordinates and the cut tree</summary><table><thead><tr><th>Thesis vertex</th><th>Coordinates (x, y, z)</th></tr></thead><tbody>${rows.map(([label, p]) => `<tr><td>${label}</td><td class="num">(${p.join(', ')})</td></tr>`).join('')}</tbody></table><p>Cut edges: <b>${cuts}</b>. The overlapping faces are <b>D = 245</b> and <b>F = 146</b>. Both pictures use these coordinates; the positive-area overlap is established by the exact certificate.</p></details>`;
+}
 const NODEFIG = {
   root: ['net_typical', 'The kind of object the whole page is about: a net of an octahedron, the hard case. Fan faces blue, petals orange.'],
   lemmaA: ['lemmaA', 'Lemma A on a pentagonal pyramid: the five edges at the apex v are cut, the base stays whole and the triangles open like petals.'],
@@ -391,6 +400,7 @@ function article(n, standalone) {
   if (n.id === 'evidence') h += thicknessChart();
   if (n.id === 'play') h += widgetShell();
   h += `<div class="body">${n.body}</div>`;
+  if (n.id === 'thesis_audit') h += thesisWitnessDetails();
   if (n.types) { h += `<div class="types">` + children('n6').map(t => `<button class="type" type="button" onclick="location.hash='${t.id}'">${FIGS.icons[t.icon]}<div><div class="t">${t.title}</div><div class="d">${t.deg}</div><span class="chip ${t.status}">${S[t.status]}</span></div></button>`).join('') + `</div>`; }
   if (n.table) { h += `<table><thead><tr><th>Test</th><th>Sample</th><th>Result</th><th>Script</th></tr></thead><tbody>` + EVIDENCE.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td>${r[2]}</td><td class="num">${r[3]}</td></tr>`).join('') + `</tbody></table>`; }
   const kids = children(n.id);
