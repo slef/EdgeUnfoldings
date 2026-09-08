@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-09",
+  "tests_passed": 17,
+  "exact_checks": [
+    "Explicit 18-dimensional octahedron box",
+    "Integer-coordinate counterexample to unqualified D half-plane claim"
+  ],
+  "numerical_checks": {
+    "six_vertex_types": 7,
+    "cut_trees": 1479,
+    "octahedron_implementations_compared_on_nets": 24,
+    "original_tetrahedron_nets": 32
+  },
+  "universal_nearstar_query": "unknown: timeout",
+  "complete_n6_proof": false,
+  "document_checks": "LaTeX compiled without overfull boxes or undefined references; all nine pages visually checked; generated browser script parses."
+}

@@ -1,0 +1,14 @@
+{
+  "graph6": "Fhf~o",
+  "n": 7,
+  "selected_trees": 1805,
+  "all_trees": 1805,
+  "full_tree_family": true,
+  "shared_paths": 1270,
+  "essential_real_variables": 24,
+  "arithmetic_dag_nodes": 206743,
+  "smt2_bytes": 13171588,
+  "result": "interrupted_without_answer",
+  "configured_solver_timeout_ms": 15000,
+  "scope": "The complete query was exported. The subsequent solver stage was manually interrupted without SAT or UNSAT; this is not a proof or counterexample. The configured solver timeout does not reliably bound all native preprocessing."
+}

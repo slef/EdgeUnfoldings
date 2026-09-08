@@ -1,6 +1,8 @@
 """LP over the 24 face angles of an octahedron-type polytope: face sums = pi, positivity, cone inequalities at each vertex
 (each face angle <= sum of the other three), curvature bounds, and the slit rule / (H) as linear constraints.
-Maximise a linear objective; if the max is <= 0 the inequality follows from these linear facts alone (certificate = dual)."""
+Maximise a linear objective numerically. A nonpositive floating optimum is only a
+candidate bound: an exact dual certificate must be extracted and checked before
+claiming an implication from these linear facts. This script does not do that."""
 import numpy as np, sys
 from scipy.optimize import linprog
 # variables: nu[t], aV[t], aVp[t], om[t], bW[t], bWp[t] for t=0..3  -> 24 vars

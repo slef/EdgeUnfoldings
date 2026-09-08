@@ -4,6 +4,8 @@
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{graphicx}
+\setlength{\emergencystretch}{2em}
 \definecolor{fanblue}{HTML}{9ECAE1}
 \definecolor{petalorange}{HTML}{FDD0A2}
 \newtheorem{lemma}{Lemma}
@@ -23,6 +25,16 @@
 
 \begin{document}
 \maketitle
+
+\paragraph{Audit correction, 9 September 2026.}
+The unrestricted double-outward half-plane claim in the previous draft is false;
+an integer-coordinate counterexample is checked by rational intervals in
+\texttt{n6/audit\_witness.py}. Lemma~\ref{D} below is now restricted to the
+angle range used in Case A. Case B needs a separate treatment of larger angles;
+its historical reductions below are conditional on that restriction, not a
+complete partition of all configurations. The hinge reduction also needs the
+local nonoverlap hypothesis. Neither these notes nor the numerical experiments
+prove the full six-vertex theorem. See \texttt{n6/REVIEW.md} for the full audit.
 
 \section*{Setting and conventions}
 
@@ -45,7 +57,7 @@ is weaker; the numerics below show that the weaker hypothesis is \emph{not} enou
 \S\ref{sec:cstar}, although no counterexample to the weaker statement itself is known.)
 
 \begin{figure}[h]\centering
-\input{figs/net_typical.tex}
+\resizebox{0.9\linewidth}{!}{\input{figs/net_typical.tex}}
 \caption{A typical net $Z_k$ (fan faces blue, petals orange), $v$ the sharpest vertex, slit at the sharpest
 neighbour $u_0$ of $w$.}
 \end{figure}
@@ -61,17 +73,20 @@ face angles (the spherical polygon inequality for the tangent cone), so $\nu_j\l
 \section{Reduction to three consecutive petals}
 
 \begin{lemma}[petals do not cross interior hinges]\label{hinge}
-In $Z_k$ no petal meets the relative interior of a hinge segment $wu_j$, $j\ne k$.
+Assume the three local pairs at the slit do not overlap. In $Z_k$ no petal
+properly crosses the relative interior of a hinge segment $wu_j$, $j\ne k$.
 \end{lemma}
 \begin{proof}
 The two fan faces adjacent to $wu_j$ are $W_{j-1}$ and $W_j$; a petal crossing the segment would enter both.
-Every petal shares a net vertex with $W_{j-1}$ or $W_j$ ($V_{j-1},V_j$ share $u_j$; $V_{j+1}$ shares $u_{j+1}$
-with $W_j$; $V_{j-2}$ shares $u_{j-1}$ with $W_{j-1}$), and faces sharing a net vertex lie in disjoint
-wedges there.
+Away from the slit, a petal shares a net vertex with $W_{j-1}$ or $W_j$,
+and the corresponding wedges are disjoint. There are two exceptions to this
+shared-copy argument: $V_{k-1}'$ at $wu_{k+1}$ and $V_k$ at $wu_{k-1}$.
+In these cases a crossing would enter a local fan face, excluded by the hypothesis.
 \end{proof}
 
 \begin{lemma}[petal versus far fan face]\label{farfan}
-If a petal $V_i$ overlaps a fan face $W_j$ with $j\notin\{i-1,i,i+1\}$ then $V_i$ overlaps $V_j$.
+Assume the local pairs do not overlap. If a petal $V_i$ overlaps a fan face
+$W_j$ with $j\notin\{i-1,i,i+1\}$ then $V_i$ overlaps $V_j$.
 \end{lemma}
 \begin{proof}
 $V_i$ contains no vertex of $W_j$ ($w$ and the equator vertices of $W_j$ lie in fan faces or petals that share
@@ -80,7 +95,7 @@ By Lemma~\ref{hinge} the boundary of $V_i$ cannot enter $W_j$ through its hinges
 outer edge $u_ju_{j+1}$, which is the common edge of $W_j$ and $V_j$; near that crossing $V_i$ meets $V_j$.
 \end{proof}
 
-Hence Lemma F follows from the following statement about three consecutive petals, applied to the triples
+Subject to Lemma L, Lemma F follows from the following statement about three consecutive petals, applied to the triples
 $(V_k,V_{k+1},V_{k+2})$ and $(V_{k+1},V_{k+2},V_{k-1}')$ of $Z_k$.
 
 \begin{conjecture}[Triple Lemma]\label{triple}
@@ -103,7 +118,8 @@ In the net, $V_i$ and $V_j$ meet at $u$ only, separated there by the angular gap
 copies $uv_j$ and $uv_i$ of the cut edge $uv$; likewise at $u'$.
 Let $L$ be the line through $uv_i$ and $L'$ the line through $u'v_{j+1}$.
 
-\begin{lemma}[double-outward wedge]\label{D}
+\begin{lemma}[double-outward wedge, restricted angle range]\label{D}
+Assume $0<\phi+\kappa_u<\pi$ and $0<\psi+\kappa_{u'}<\pi$.
 $V_i$ lies in the closed half-plane of $L$ not containing $V_j$, and $V_{j+1}$ in the closed half-plane of
 $L'$ not containing $V_j$. Hence every common point of $V_i$ and $V_{j+1}$ lies in
 $\D:=$ the intersection of these two half-planes, which is the wedge at the point $p^*=L\cap L'$ opposite
@@ -116,8 +132,16 @@ converge above the base iff $\phi+\psi+\kappa<\pi$, i.e. $\kappa<\nu_j$; the res
 four wedges at $p^*$.
 \end{proof}
 
+\begin{remark}
+The range assumptions are automatic in Case A, since their sum is
+$\pi-\nu_j+\kappa<\pi$. They do not follow from (H) in general.
+Without them even the assertion that $V_j$ is on the opposite side of $L$
+from $V_i$ can fail. The rational counterexample in \texttt{n6/results/}
+refutes this unrestricted assertion, not the Case-A proposition.
+\end{remark}
+
 \begin{lemma}[the two cut edges never cross]\label{nocross}
-The segments $uv_i$ and $u'v_{j+1}$ are disjoint.
+In Case A ($\kappa<\nu_j$), the segments $uv_i$ and $u'v_{j+1}$ are disjoint.
 \end{lemma}
 \begin{proof}
 If they crossed at $p$ then $p$ would be above the base with base angles larger than $\phi,\psi$, so $v_j$
@@ -134,8 +158,8 @@ extends past the crossing point; both cannot, since fan faces are disjoint.
 \end{claim}
 
 \begin{figure}[h]\centering
-\input{figs/overlap_above_triple.tex}
-\caption{An above-base overlap (no hypothesis): the region $\D$ beyond $p^*$, the point $c^*$ and the line $M$
+\resizebox{0.9\linewidth}{!}{\input{figs/overlap_above_triple.tex}}
+\caption{A thin above-base overlap (no hypothesis): the dashed cut-edge lines, the point $c^*$ and the line $M$
 of \S\ref{sec:cstar}. Here $\nu_i+\nu_j>\pi$ and $V_i$ crosses $M$.}
 \end{figure}
 
@@ -206,7 +230,7 @@ overlaps violates $\varepsilon_i=\varepsilon_{j+1}=0$ (20 through $V_i$, 6 throu
 \end{numerics}
 
 \begin{figure}[h]\centering
-\input{figs/triple_H3.tex}
+\resizebox{0.9\linewidth}{!}{\input{figs/triple_H3.tex}}
 \caption{A triple under (H) with $\kappa<\nu_j$: $c^*$, the line $M$ and the two dashed cut-edge lines; both
 petals stay on their own side of $M$.}
 \end{figure}
@@ -276,12 +300,19 @@ can be non-empty, so the cones alone do not suffice; the next section gives the 
 
 \section{The below-base case (Case B)}\label{sec:caseB}
 
-Throughout $\kappa=\kappa_u+\kappa_{u'}\ge\nu_j$, so by Lemma~\ref{D} a meeting lies on $w$'s side of the base.
+Throughout this historical reduction, assume $\kappa=\kappa_u+\kappa_{u'}\ge\nu_j$
+\emph{and the restricted angle hypotheses of Lemma~\ref{D}}. Only then does
+that lemma put a meeting on $w$'s side of the base. The complementary large-angle
+regimes remain unhandled here.
 Write $u_k=u_{j+2}$ for the far vertex of $W_{j+1}$ (in $Z_k$ this is the slit copy, $k=i-1$), $A$ for the line
 through the outer edge $uu_i$ of $W_i$, $C$ for the line through $u'u_k$, $\alpha=\angle_uW_i+\angle_uW_j$,
 $\beta=\angle_{u'}W_j+\angle_{u'}W_{j+1}$ and $\Sigma_W=\alpha+\beta$ (the four fan angles at $u,u'$).
 Let $\kappa_{\rm back}=\kappa_{u_i}+\kappa_{u_k}+\kappa_w$ be the total gap on the slit side, so that
 $\kappa_v+\kappa+\kappa_{\rm back}=4\pi$, and let $V_m=V_{i-1}$ be the fourth petal, glued to $W_m=W_k$.
+Within the restricted range above, if $\alpha\ge\pi$ then $V_i$ lies above
+the base (its angular interval at $u$ ends at $2\pi-\alpha\le\pi$), so it
+cannot have a Case-B meeting. The mirror argument applies to $\beta\ge\pi$.
+In the remaining wedge analysis assume $0<\alpha,\beta<\pi$.
 
 \begin{lemma}[the wedge $\Omega$]\label{Omega}
 $V_i$ lies in the closed half-plane $H_A$ of $A$ not containing $w$, and $V_{j+1}$ in the half-plane $H_C$ of $C$
@@ -300,7 +331,7 @@ while $\D$ is below in Case B. $w$ is on $u'$'s side of $A$, on $u$'s side of $C
 
 \begin{lemma}[how a petal reaches $\Omega$]\label{reach}
 Let $\Sigma_W<\pi$. $V_i$ meets the interior of $\Omega$ iff $u_i$ lies past $X$ on $A$ (\emph{far vertex}, f)
-or $v_i\in\Omega$ (\emph{apex}, a); likewise $V_{j+1}$ with $u_k$ and $v_{j+1}$. The far vertices $u_i$, $u_k$ are
+or $v_i\in\operatorname{int}\Omega$ (\emph{apex}, a); likewise $V_{j+1}$ with $u_k$ and $v_{j+1}$. The far vertices $u_i$, $u_k$ are
 never both past $X$.
 \end{lemma}
 \begin{proof}
@@ -318,8 +349,10 @@ For every triple,
  \angle_{u_k}V_{j+1}-\Sigma_W=\nu_i+\nu_m+\angle_uV_i-\kappa_{\rm back},\qquad
  \angle_{u_i}V_i-\Sigma_W=\nu_{j+1}+\nu_m+\angle_{u'}V_{j+1}-\kappa_{\rm back}.
 \]
-If $\Sigma_W<\pi$ and $v_{j+1}\in\Omega$ then $\angle_{u_k}V_{j+1}>\Sigma_W$; if $v_i\in\Omega$ then
-$\angle_{u_i}V_i>\Sigma_W$.
+If $\Sigma_W<\pi$, $u_k$ is strictly before $X$, and $v_{j+1}$ is in the
+interior of $\Omega$, then $\angle_{u_k}V_{j+1}>\Sigma_W$. The mirror statement
+requires $u_i$ strictly before $X$. No such direction conclusion is asserted
+here when the respective far vertex is already past $X$.
 \end{lemma}
 \begin{proof}
 $\alpha=2\pi-\kappa_u-\phi-\angle_uV_i$, $\beta=2\pi-\kappa_{u'}-\psi-\angle_{u'}V_{j+1}$, $\phi+\psi=\pi-\nu_j$ and
@@ -356,7 +389,7 @@ at $u_k'$ and $2\pi-\nu_m$ at $v_m$; their sum is $4\pi$, and $2\pi-\angle_{u_k}
 \end{proof}
 
 \begin{figure}[h]\centering
-\input{figs/caseB_aa.tex}
+\resizebox{0.9\linewidth}{!}{\input{figs/caseB_aa.tex}}
 \caption{The tightest sub-case (a,a) configuration under (H) (\texttt{caseB\_sub.py}): $w$, $u_i$, $u_k$ nearly flat,
 $u$, $u'$ needles, $\Sigma_W=1.74$, the far vertex $u_k$ at $X$. The two petal parts inside $\Omega$ (red) are
 separated by the thin fourth petal $V_m$; closest approach $3.5\%$ of the diameter.}
@@ -383,7 +416,11 @@ An earlier count ``15\% of Case-B triples have both petals reaching the cone int
 for the position of $X$ and is withdrawn.
 \end{numerics}
 
-\paragraph{The slit rule closes Case B numerically.} Lemma F is used with the slit at the sharpest neighbour
+\paragraph{Historical numerical evidence for the slit rule.}
+The old \texttt{adv\_angle.py} mode \texttt{i} used the wrong base vertex;
+its saved margins are withdrawn for the intended far-angle claim. The code
+is corrected, but the original searches have not all been rerun. The direct
+half-plane probes below are different experiments. Lemma F is used with the slit at the sharpest neighbour
 $u_k$ of $w$ ($\kappa_{u_k}\ge\kappa_{u_t}$ for all $t$; Lemma L needs this rule: without it the local pairs
 overlap under (H) in $3.4\%$ of nets). Under (H) and the rule, in $641$ Case-B triples with $\Sigma_W<\pi$ the petal
 $V_i$ never reaches $\Omega$ and $V_{j+1}$ reaches it only through its far vertex; adversarially
@@ -392,9 +429,11 @@ $\Sigma_W\le\pi-0.3$), $v_{j+1}$ stays $0.12$ diameters short of $A$, $u_i$ stay
 under the rule alone $\angle_{u_k}V_{j+1}\le\Sigma_W-0.35$. By Lemma~\ref{reach} it therefore suffices to prove,
 under (H) and the rule, that neither apex lies in $\Omega$: \textbf{(P1)} $v_{j+1}\notin\Omega$, \textbf{(P2)}
 $v_i\notin\Omega$. Linear programming over the 24 face angles (face sums, cone inequalities, curvature bounds, the
-rule and (H)) allows $\angle_{u_k}V_{j+1}-\Sigma_W$ up to $\pi/2$, so (P1) and (P2) need the edge lengths, not only
-the angles; the tight configurations are needle-shaped (Figure above). This is the recommended route: it replaces the
-five sub-cases and the two gaps above by two apex statements with comfortable margins.
+rule and (H)) numerically allows $\angle_{u_k}V_{j+1}-\Sigma_W$ up to $\pi/2$.
+This suggests that these linear constraints alone are insufficient; additional metric or angle-realizability
+constraints may be needed. The tight sampled configurations are needle-shaped (Figure above). This is the recommended route: it replaces the
+five sub-cases by two apex statements within the stated angle regime. It does
+not settle the large-angle regimes or Lemma L.
 
 \section{Known false / do not retry}
 Simple separating lines for the two petals inside $\D$ (bisector of $\D$ at $p^*$, lines through $v_j$) fail

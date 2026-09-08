@@ -1,0 +1,7 @@
+{
+  "scope": "Numerical only; corrected angle check, 500 sampled octahedra",
+  "seed": 60909,
+  "eligible_triples": 47,
+  "max_i": -1.4403695980380666,
+  "max_jj": -0.4552402237723976
+}

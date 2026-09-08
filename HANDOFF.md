@@ -1,5 +1,33 @@
 # Dürer's problem for n ≤ 7 vertices — proof state and work plan
 
+## Current audit: 9 September 2026, codex/n6-unfolding
+
+**The full n=6 case remains unproved. Read [n6/REVIEW.md](n6/REVIEW.md)
+before relying on the historical proof status below.**
+
+- The unqualified double-outward D-lemma is false. An integer-coordinate
+  counterexample is verified by rational intervals. The working notes now
+  restrict it to an angle range automatic in Case A; additional Case-B ranges remain.
+- The hinge/far-fan reduction needs Lemma L at the two hinges nearest the slit.
+  Nonsimplicial limit reductions additionally need successful trees that never
+  cut the introduced diagonals. These conditions were missing from earlier summaries.
+- Corrected the far-vertex angle index in `adv_angle.py` and rejected Qhull's
+  triangulated flat quadrilaterals in `octa_structure`. Historical mode-i angle
+  searches are not evidence for the intended angle and have not all been rerun.
+- Integrated both attached Codex archives once in `n6/`. Their 24-tree family
+  duplicates the existing Z_k family; their exact formulation and sector probe
+  are complementary tools, not completed proofs.
+- A new replayable certificate proves nonoverlap throughout one explicit
+  18-coordinate octahedron box of half-width 1/1000. It does not cover all octahedra.
+- The reduced 24-tree SMT query has 120 shared paths and returns unknown/timeout.
+  Neither random searches nor solver timeouts certify the universal theorem.
+
+Reproduction and exact scopes: [n6/README.md](n6/README.md).
+The account below preserves Claude's prior work and chronology; where it says
+“proved” without these qualifications, this audit and the corrected notes take precedence.
+
+---
+
 Owner: Stefan Langerman. Goal: a human-readable proof that every convex polytope with ≤ 6 vertices
 (then 7) has a non-overlapping edge unfolding, reconstructed along the lines of J. DiBiase's 1990
 Smith College thesis (fixed rooted dual tree per combinatorial type + face-pair lemmas + shape case split).

@@ -34,7 +34,7 @@ def tikz_net(o, k, scale=None, highlight=(), labels=True, extra=""):
     return "\n".join(out)
 
 def tikz_triple(o, i, scale=None, show_cstar=True):
-    """The three petals V_i, V_j, V_jj in the net (W_i W_j W_jj contiguous), the cut-edge lines, D, and c*."""
+    """Three petals, cut-edge lines, and c*. Construction lines are clipped to the figure."""
     from cstar import rotate_about, signed_side
     k = (i - 1) % 4; net = o.Z(k); j, jj = (i + 1) % 4, (i + 2) % 4
     Vi, Vj, Vjj = net[('V', i)], net[('V', j)], net[('V', jj)]
@@ -43,6 +43,8 @@ def tikz_triple(o, i, scale=None, show_cstar=True):
     pts = np.vstack([Vi, Vj, Vjj, Wi, Wj, Wjj])
     if scale is None: scale = 6.0 / np.ptp(pts, 0).max()
     out = ["\\begin{tikzpicture}[scale=%.4f, every node/.style={font=\\tiny}]" % scale]
+    pad = 0.1 * np.ptp(pts, 0).max()
+    out.append("  \\clip %s rectangle %s;" % (_fmt(pts.min(0)-pad), _fmt(pts.max(0)+pad)))
     for T, lab in ((Wi, "W_i"), (Wj, "W_j"), (Wjj, "W_{j+1}")):
         out.append("  \\draw[fill=fanblue!50, draw=black, line width=0.3pt] %s -- %s -- %s -- cycle;" % tuple(_fmt(q) for q in T))
         out.append("  \\node at %s {$%s$};" % (_fmt(T.mean(0)), lab))
@@ -64,7 +66,7 @@ def tikz_triple(o, i, scale=None, show_cstar=True):
             A = rot(sgn * kap); b = R(np.zeros((1, 2)))[0]; cs = np.linalg.solve(np.eye(2) - A, b)
             out.append("  \\fill[purple] %s circle (0.8pt) node[anchor=north] {$c^*$};" % _fmt(cs))
             m = (vj - cs) / np.linalg.norm(vj - cs)
-            out.append("  \\draw[purple, thin] %s -- %s node[anchor=south] {$M$};" % (_fmt(cs - 0.2 * L * m), _fmt(cs + 0.6 * L * m)))
+            out.append("  \\draw[purple, thin] %s -- %s node[pos=0.125,anchor=south] {$M$};" % (_fmt(cs - 0.2 * L * m), _fmt(cs + 0.6 * L * m)))
     out.append("\\end{tikzpicture}")
     return "\n".join(out)
 

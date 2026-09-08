@@ -1,0 +1,18 @@
+{
+  "sector_max_failures": 0,
+  "worst": null,
+  "sector_failures": 0,
+  "samples": 100,
+  "attempts": 401,
+  "minimum_good": 18,
+  "strategy_failures": {
+    "any": 0,
+    "max_curvature_center": 0,
+    "max_curvature_opposite": 0
+  },
+  "seconds": 1.5645757499733008,
+  "seed": 60907,
+  "requested_samples": 100,
+  "status": "complete",
+  "scope": "Floating-point exploration only; no proof or certificate."
+}
