@@ -24,6 +24,8 @@ def violation(o, i, hyp):
     if hyp == 'H1': return max(0.0, o.ku[j] - o.kv, o.ku[jj] - o.kv)
     if hyp == 'H2': return max(0.0, o.ku.max() - o.kv)
     if hyp == 'H3': return max(0.0, o.ku.max() - o.kv, o.kw - o.kv)
+    if hyp == 'R': return max(0.0, o.ku.max() - o.ku[(i - 1) % 4])   # slit rule only
+    if hyp == 'H3R': return max(0.0, o.ku.max() - o.kv, o.kw - o.kv, o.ku.max() - o.ku[(i - 1) % 4])   # (H) + slit rule: u_k (k=i-1) sharpest neighbour of w
     return 0.0   # 'none': no hypothesis
 
 DELTA = 0.05   # degeneracy guard: every edge at least DELTA * diameter

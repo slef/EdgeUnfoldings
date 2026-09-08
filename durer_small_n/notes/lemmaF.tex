@@ -271,20 +271,130 @@ $-0.0007$ diameters at the curvature guard, \texttt{adv\_cones.py}). Without hyp
 meet (depth $+0.006$), as it must, since 26 above-base overlaps exist.
 \end{numerics}
 
-\paragraph{Case B in this language.} Any meeting lies in $C_i\cap C_{j+1}$; in Case B this intersection is often
-non-empty (15\% of Case-B triples under (H) have both petals reaching it), so the cones alone do not suffice. The tight
-Case-B configurations are meetings around the fourth petal $V_m$ at the slit; the D-lemma applied there shows the
-meeting must lie beyond the crossing $X$ of the outer-edge lines of $W_i$ and $W_{j+1}$ (which requires the four fan
-angles at $u,u'$ to sum to less than $\pi$), and adversarially the petals stay $3.4\%$ of the diameter apart inside that
-wedge under (H). Open.
+\paragraph{Case B in this language.} Any meeting lies in $C_i\cap C_{j+1}$, and in Case B this intersection
+can be non-empty, so the cones alone do not suffice; the next section gives the exact structure of Case B.
 
-\section{The below-base case}
+\section{The below-base case (Case B)}\label{sec:caseB}
 
-When $\kappa>\nu_j$ the wedge $\D$ lies on $w$'s side of the base. Then (Claim above) a meeting requires the
-outer-edge lines of $W_i$ and $W_{j+1}$ to converge on $w$'s side, one of the two fan faces to reach past
-their crossing point $X$, and the opposite petal to pass over the far vertex of that fan face. In the observed
-below-base overlaps two equator vertices have curvature close to $2\pi$ and $v$ is nearly flat. Under (H),
-$\kappa_u,\kappa_{u'}\le\kappa_v$ and $\nu_j<\kappa\le 2\kappa_v$; no proof yet.
+Throughout $\kappa=\kappa_u+\kappa_{u'}\ge\nu_j$, so by Lemma~\ref{D} a meeting lies on $w$'s side of the base.
+Write $u_k=u_{j+2}$ for the far vertex of $W_{j+1}$ (in $Z_k$ this is the slit copy, $k=i-1$), $A$ for the line
+through the outer edge $uu_i$ of $W_i$, $C$ for the line through $u'u_k$, $\alpha=\angle_uW_i+\angle_uW_j$,
+$\beta=\angle_{u'}W_j+\angle_{u'}W_{j+1}$ and $\Sigma_W=\alpha+\beta$ (the four fan angles at $u,u'$).
+Let $\kappa_{\rm back}=\kappa_{u_i}+\kappa_{u_k}+\kappa_w$ be the total gap on the slit side, so that
+$\kappa_v+\kappa+\kappa_{\rm back}=4\pi$, and let $V_m=V_{i-1}$ be the fourth petal, glued to $W_m=W_k$.
+
+\begin{lemma}[the wedge $\Omega$]\label{Omega}
+$V_i$ lies in the closed half-plane $H_A$ of $A$ not containing $w$, and $V_{j+1}$ in the half-plane $H_C$ of $C$
+not containing $w$; every common point lies in $\Omega:=H_A\cap H_C$. If $\Sigma_W\ge\pi$ then $\Omega$ lies strictly
+above the base line, so $\Omega\cap\D=\emptyset$ and there is no Case-B meeting. If $\Sigma_W<\pi$ the lines cross at a
+point $X$ on $w$'s side of the base, $w$ lies in the triangle $uu'X$, and $\Omega$ is the wedge at $X$ opposite to
+that triangle, of angle $\theta_X=\pi-\Sigma_W$.
+\end{lemma}
+\begin{proof}
+$V_i$ and $W_i$ lie on opposite sides of their common edge line $A$. On the base line, $H_A$ is the ray beyond $u$
+away from $u'$ and $H_C$ the ray beyond $u'$ away from $u$, so $\Omega$ misses the base line and lies on one side
+of it. The rays $u\to u_i$ and $u'\to u_k$ make the angles $\alpha,\beta$ with the base on $w$'s side; they converge
+there iff $\Sigma_W<\pi$, and then $X$ and $\Omega$ are below the base; otherwise $\Omega$ is above (or empty),
+while $\D$ is below in Case B. $w$ is on $u'$'s side of $A$, on $u$'s side of $C$ and below the base.
+\end{proof}
+
+\begin{lemma}[how a petal reaches $\Omega$]\label{reach}
+Let $\Sigma_W<\pi$. $V_i$ meets the interior of $\Omega$ iff $u_i$ lies past $X$ on $A$ (\emph{far vertex}, f)
+or $v_i\in\Omega$ (\emph{apex}, a); likewise $V_{j+1}$ with $u_k$ and $v_{j+1}$. The far vertices $u_i$, $u_k$ are
+never both past $X$.
+\end{lemma}
+\begin{proof}
+$V_i\subset H_A$ meets the open half-plane of $C$ iff one of its vertices does; $u$ is on $w$'s side of $C$, and
+$u_i\in A$ is beyond $C$ iff it is past $X$. If both far vertices were past $X$, then $X\in uu_i\cap u'u_k\subset
+W_i\cap W_{j+1}=\{w\}$, but $w\notin A$.
+\end{proof}
+
+So a meeting needs $\Sigma_W<\pi$ and one of the sub-cases $(\mathrm a,\mathrm a)$, $(\mathrm{fa},\mathrm a)$,
+$(\mathrm a,\mathrm{fa})$, $(\mathrm f,\mathrm a)$, $(\mathrm a,\mathrm f)$: at least one apex lies in $\Omega$.
+
+\begin{lemma}[direction condition]\label{dircond}
+For every triple,
+\[
+ \angle_{u_k}V_{j+1}-\Sigma_W=\nu_i+\nu_m+\angle_uV_i-\kappa_{\rm back},\qquad
+ \angle_{u_i}V_i-\Sigma_W=\nu_{j+1}+\nu_m+\angle_{u'}V_{j+1}-\kappa_{\rm back}.
+\]
+If $\Sigma_W<\pi$ and $v_{j+1}\in\Omega$ then $\angle_{u_k}V_{j+1}>\Sigma_W$; if $v_i\in\Omega$ then
+$\angle_{u_i}V_i>\Sigma_W$.
+\end{lemma}
+\begin{proof}
+$\alpha=2\pi-\kappa_u-\phi-\angle_uV_i$, $\beta=2\pi-\kappa_{u'}-\psi-\angle_{u'}V_{j+1}$, $\phi+\psi=\pi-\nu_j$ and
+$\angle_{u_k}V_{j+1}=\pi-\angle_{u'}V_{j+1}-\nu_{j+1}$ give
+$\angle_{u_k}V_{j+1}-\Sigma_W=\kappa+\angle_uV_i-\nu_j-\nu_{j+1}-2\pi$, and $\kappa=2\pi+\sum\nu-\kappa_{\rm back}$.
+For the direction: $u_k\in C$ lies on $w$'s side of $A$ and $v_{j+1}\in\Omega$, so the direction $u_k\to v_{j+1}$
+points to the far side of $C$ (the open half-circle of directions on $V_{j+1}$'s side of $C$) and across $A$; the
+direction of $A$ towards $u_i$ makes the angle $\Sigma_W$ with $u_k\to u'$ (exterior angle at $X$), so the
+admissible directions are those making an angle in $(\Sigma_W,\pi)$ with $u_k\to u'$, and $u_k\to v_{j+1}$ makes
+the angle $\angle_{u_k}V_{j+1}$.
+\end{proof}
+
+\begin{lemma}[sub-case (a,a): the hexagon identity]\label{hexagon}
+Let $\Sigma_W<\pi$, neither far vertex past $X$, $v_i,v_{j+1}\in\Omega$, and assume the three local pairs at the
+slit do not overlap (Lemma L). If $p$ is a common point of $V_i$ and $V_{j+1}$, then
+\[
+ \nu_m=\kappa_{\rm back}+\gamma_p+\angle(p\,u_i\,v_i)+\angle(p\,u_k\,v_{j+1}),\qquad \gamma_p>0,
+\]
+where $\gamma_p$ is the angle at $p$ of the hexagon $u_i\,p\,u_k\,w\,u_k'\,v_m$. In particular a meeting needs
+$\nu_m>\kappa_{\rm back}$.
+\end{lemma}
+\begin{proof}
+The closed curve $\Gamma=u_i\to p\to u_k\to w\to u_i$ (segments in $V_i$, $V_{j+1}$, $W_{j+1}$, $W_i$) is simple:
+$[w,u_k]$ lies on $w$'s side of $A$ and meets $V_i\subset H_A$ at most at $X$, symmetrically for $[w,u_i]$. It lies
+in the triangle $\Delta=uu'p$, which is on $w$'s side of the base line because $p\in\Omega$. Let $Q$ be the region
+bounded by $\Gamma$. Its angle at $w$ is $\omega_m+\kappa_w$ or $\omega_i+\omega_j+\omega_{j+1}$; in the second
+case $W_j$, hence $V_j$ (which meets $\Gamma$ nowhere, by the shared-vertex lemma), lie in $Q\subset\Delta$, but
+$v_j$ is above the base. So $Q$ contains $W_m$ near $w$, hence $W_m$ and $V_m$ (their boundaries do not cross
+$\Gamma$: shared vertices with $V_i,W_i,W_{j+1}$, and Lemma L for the pairs with $V_{j+1}$, $W_{j+1}$). The hexagon
+$R=Q\setminus(W_m\cup V_m)$ has interior angles $\angle_{u_i}V_i-\angle(p\,u_i\,u)+\kappa_{u_i}$ at $u_i$, $\gamma_p$
+at $p$, $2\pi-\angle_{u_k}W_{j+1}-\angle(p\,u_k\,u')$ at $u_k$, $\kappa_w$ at $w$, $2\pi-\angle_{u_k'}W_m-\angle_{u_k'}V_m$
+at $u_k'$ and $2\pi-\nu_m$ at $v_m$; their sum is $4\pi$, and $2\pi-\angle_{u_k}W_{j+1}-\angle_{u_k'}W_m-\angle_{u_k'}V_m
+=\kappa_{u_k}+\angle_{u_k}V_{j+1}$.
+\end{proof}
+
+\begin{figure}[h]\centering
+\input{figs/caseB_aa.tex}
+\caption{The tightest sub-case (a,a) configuration under (H) (\texttt{caseB\_sub.py}): $w$, $u_i$, $u_k$ nearly flat,
+$u$, $u'$ needles, $\Sigma_W=1.74$, the far vertex $u_k$ at $X$. The two petal parts inside $\Omega$ (red) are
+separated by the thin fourth petal $V_m$; closest approach $3.5\%$ of the diameter.}
+\end{figure}
+
+\paragraph{Regime split for (a,a).} If $\nu_m\le\kappa_{\rm back}$ Lemma~\ref{hexagon} excludes a meeting.
+If $\nu_m>\kappa_{\rm back}$, the two outer cut edges $u_iv_i$ and $u_kv_{j+1}$ make the angles
+$\angle_{u_i}V_m+\kappa_{u_i}$ and $\angle_{u_k'}V_m+\kappa_{u_k}+\kappa_w$ with the segment $u_iu_k$, so their lines
+converge on $V_m$'s side with angle $\nu_m-\kappa_{\rm back}$, and Lemma~\ref{cones} applies verbatim with the
+base $uu'$ replaced by $u_iu_k$ (no-wrap $\nu_i,\nu_{j+1}\le\pi-\nu_m+\kappa_{\rm back}$ follows from (H) as in
+Lemma~\ref{nowrap}): the cones $C_i$, $C_{j+1}$ have disjoint interiors unless the two outer cut edges cross.
+Two gaps remain here: (i) a no-cross lemma for the outer cut edges across the slit ($u_k\ne u_k'$; the argument of
+Lemma~\ref{nocross} needs $|u_kv_m|\ge|u_k'v_m|$); (ii) the sub-cases with a far vertex past $X$.
+
+\begin{numerics}
+Under (H), in $23{,}578$ Case-B triples, $19{,}858$ have $\Sigma_W\ge\pi$ and only $27$ have both petals reaching
+$\Omega$ (sub-cases (a,a) 22, (fa,a) 4, (a,fa) 1); no (f,f), as it must be. Seeded adversarial closest approach inside
+$\Omega$ (\texttt{caseB\_sub.py adv}): (a,a) $3.5\%$, (fa,a) $3.2\%$, (a,fa) $1.9\%$ of the diameter (the last slightly
+past the guard). Without hypothesis (a,fa) overlaps ($+1.6\%$) and (a,a) stays $0.7\%$ apart. In every (a,a) triple with
+$\nu_m>\kappa_{\rm back}$ (109 found, with and without (H)) the apex cones have disjoint interiors, and the outer cut
+edges never cross when $\nu_m>\kappa_{\rm back}$ (adversarial best $-0.003$ diameters, \texttt{adv\_crossA.py});
+$\nu_m>\kappa_{\rm back}$ does occur under (H) in (a,a) (excess up to $0.30$ rad), so both regimes are needed.
+An earlier count ``15\% of Case-B triples have both petals reaching the cone intersection'' used a vacuous test
+for the position of $X$ and is withdrawn.
+\end{numerics}
+
+\paragraph{The slit rule closes Case B numerically.} Lemma F is used with the slit at the sharpest neighbour
+$u_k$ of $w$ ($\kappa_{u_k}\ge\kappa_{u_t}$ for all $t$; Lemma L needs this rule: without it the local pairs
+overlap under (H) in $3.4\%$ of nets). Under (H) and the rule, in $641$ Case-B triples with $\Sigma_W<\pi$ the petal
+$V_i$ never reaches $\Omega$ and $V_{j+1}$ reaches it only through its far vertex; adversarially
+(\texttt{adv\_reach.py}, \texttt{adv\_angle.py}): $v_i$ stays $0.35$ diameters short of $C$ (with
+$\Sigma_W\le\pi-0.3$), $v_{j+1}$ stays $0.12$ diameters short of $A$, $u_i$ stays $0.026$ short of $X$, and
+under the rule alone $\angle_{u_k}V_{j+1}\le\Sigma_W-0.35$. By Lemma~\ref{reach} it therefore suffices to prove,
+under (H) and the rule, that neither apex lies in $\Omega$: \textbf{(P1)} $v_{j+1}\notin\Omega$, \textbf{(P2)}
+$v_i\notin\Omega$. Linear programming over the 24 face angles (face sums, cone inequalities, curvature bounds, the
+rule and (H)) allows $\angle_{u_k}V_{j+1}-\Sigma_W$ up to $\pi/2$, so (P1) and (P2) need the edge lengths, not only
+the angles; the tight configurations are needle-shaped (Figure above). This is the recommended route: it replaces the
+five sub-cases and the two gaps above by two apex statements with comfortable margins.
 
 \section{Known false / do not retry}
 Simple separating lines for the two petals inside $\D$ (bisector of $\D$ at $p^*$, lines through $v_j$) fail
@@ -297,5 +407,5 @@ $w$), so they cannot replace the argument above.
 \texttt{vwedge.py}, \texttt{oppcases.py} (collect/classify/draw overlaps), \texttt{adv\_opp.py} (adversarial
 separation), \texttt{cstar.py} (checks of \S\ref{sec:cstar}), \texttt{adv\_eps.py}, \texttt{adv\_mu.py},
 \texttt{adv\_cstar.py} (adversarial tests of \eqref{epscrit} and of the crossing conditions),
-\texttt{tikz\_net.py} (figures), \texttt{draw.py} (PNG).
+\texttt{tikz\_net.py} (figures), \texttt{draw.py} (PNG); Case B: \texttt{caseB\_sub.py} (sub-cases, seeded adversary), \texttt{caseB\_draw.py}, \texttt{adv\_crossA.py}, \texttt{adv\_reach.py}, \texttt{adv\_angle.py}, \texttt{adv\_rule.py}, \texttt{lp\_angles.py}.
 \end{document}

@@ -283,3 +283,23 @@ add_nearmiss('fat_nearmiss', 'adv_fat_0.30.pkl'); add_nearmiss('fat_round_nearmi
 figs['models'] = MODELS
 json.dump(figs, open('notes/status_figs.json', 'w'))
 print("near-miss figures:", [k for k in ('fat_nearmiss', 'fat_round_nearmiss') if k in figs])
+
+# ---------------------------------------------------------------- Case B, sub-case (a,a): tightest configuration under (H)
+def add_caseB(key, pkl, idx=0):
+    if not os.path.exists(pkl): return
+    from caseB_sub import geom
+    res = pickle.load(open(pkl, 'rb')); b, P = res[idx]; o = Octa(P, b[1]); i = b[2]; k = (i - 1) % 4; g = geom(o, i)
+    if g is None: return
+    L = 1.2 * o.scale; dA = g['dA'] / np.linalg.norm(g['dA']); dC = g['dC'] / np.linalg.norm(g['dC'])
+    ex = [dict(kind='line', cls='cutline', pts=(g['u'] - L * dA, g['u'] + L * dA)), dict(kind='line', cls='cutline', pts=(g['up'] - L * dC, g['up'] + L * dC)),
+          dict(kind='point', cls='pstar', pts=g['X'], label='X')]
+    for T in (g['Xi'], g['Xjj']):
+        if len(T) >= 3: ex.append(dict(kind='poly', cls='flat', pts=list(T)))
+    figs[key] = svg_net(o, k, extras=ex); MODELS[key] = octa_model(o, k)
+    j, jj, m = (i + 1) % 4, (i + 2) % 4, (i - 1) % 4
+    figs[key + '_meta'] = dict(sep=round(float(b[3]), 4), kv=round(float(o.kv), 3), kw=round(float(o.kw), 3), ku=[round(float(x), 3) for x in o.ku],
+                               kappa=round(float(o.ku[j] + o.ku[jj]), 3), nu_m=round(float(o.nu[m]), 3), kback=round(float(o.ku[i] + o.ku[m] + o.kw), 3), SW=round(float(g['SW']), 3))
+add_caseB('caseB_aa', 'caseB_sub_H3_a_a.pkl')
+figs['models'] = MODELS
+json.dump(figs, open('notes/status_figs.json', 'w'))
+print("caseB figure:", 'caseB_aa' in figs)

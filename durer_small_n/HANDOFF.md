@@ -52,8 +52,8 @@ B_i (backward, reflex at u_i). "Touching" counts as non-overlapping.
 
 
 ## Status of the work plan (updated 2026-09-08)
-1. Lemma F: proof architecture found and numerically validated, two gaps left (details below and in
-   notes/lemmaF.pdf). 2. Lemma L: not started. 3. Charts for non-simplicial 6-types: not started.
+1. Lemma F: Case A proved; Case B reduced (2026-09-08) to two apex statements under the slit rule (details
+   below and in notes/lemmaF.pdf). 2. Lemma L: not started. 3. Charts for non-simplicial 6-types: not started.
 4. Write-up: notes/lemmaF.tex started (LaTeX + TikZ, figures generated from real nets by tikz_net.py).
    The FULL DiBiase thesis ("DiBiase - Polytope Unfolding - Smith 1990.pdf", top folder, 115 pages, no text
    layer) was read on 2026-09-08; summary in notes/dibiase_summary.md. Key facts: she treats SIMPLICIAL
@@ -171,16 +171,34 @@ Convention trap: several helpers use a "signed side" test; cstar.signed_side is 
   c*-rotation argument (Open problem 1) is superseded and kept only as a second view.
 * Numerics: cones' intersection has empty interior in every Case-A triple under (H) (adversarial depth −0.0007
   at the guard; without (H) the adversary reaches +0.006); no-wrap margin 1.3 rad (adv_wrap.py, adv_cones.py).
-* Case B (κ ≥ ν_j) remains open. Findings: every tight Case-B configuration under (H) has a needle middle
-  petal between two sharp equator vertices (gaps > π − base angle, "sub-case B2"), and the outer petals approach
-  each other on the BACK side, around the fourth petal V_m at the slit (V_{j+1} leaning over the slit, V_i glued
-  to V_m at u_i). Exact: a Case-B meeting lies beyond both outer-edge lines of W_i, W_{j+1} (away from w), which
-  forces the four fan angles at u, u' to sum to < π and the meeting to lie in the wedge beyond their crossing X;
-  at most one far vertex lies past X. Adversarial closest approach inside that wedge under (H): 3.4% of the
-  diameter (adv_caseB5.py); inside the apex-cone intersection: 0.6% (caseB_four.py). The fan-edge line is NOT a
-  separator in general (adv_caseB4.py). All 18 observed below-base overlaps (no hypothesis) have κ_u+κ_{u'} > 2π.
-  Idea to pursue: treat the back side as a triple around V_m with total gap κ_back = κ_{u_i} + κ_{u_m} + κ_w
-  (Σ of all gaps = 4π − κ_v), and use the apex cones together with the four-line region.
+* Case B (κ ≥ ν_j) remains open; exact structure established 2026-09-08 (notes/lemmaF.pdf §"The below-base
+  case"). Let A = line(u, u_i), C = line(u', u_k) (outer fan edges; u_k = far vertex of W_{j+1} = slit copy),
+  Σ_W = the four fan angles at u, u'. Proved: V_i lies beyond A and V_{j+1} beyond C, so a meeting lies in the
+  wedge Ω beyond both lines; Σ_W ≥ π ⟹ Ω is above the base, disjoint from D ⟹ no meeting; Σ_W < π ⟹ Ω is the
+  wedge at X = A∩C opposite the triangle u u' X (w inside it). V_i reaches Ω only via its far vertex u_i past X
+  (f) or its apex v_i ∈ Ω (a); not both far vertices past X. Direction identity: ∠_{u_k}V_{j+1} − Σ_W =
+  ν_i + ν_m + ∠_uV_i − κ_back, κ_back = κ_{u_i} + κ_{u_k} + κ_w (and the mirror one); an apex in Ω needs the
+  left side > 0. Sub-case (a,a) [both apexes in Ω]: a meeting point p closes the hexagon u_i p u_k w u_k' v_m
+  around V_m, and the angle sum gives ν_m = κ_back + γ_p + (two non-negative angles) (uses Lemma L for the slit
+  pairs); so ν_m ≤ κ_back excludes (a,a), and for ν_m > κ_back the outer cut-edge lines converge on V_m's side
+  and the apex-cone lemma applies with base u_i u_k (gap: no-cross of the outer cut edges across the slit).
+  BUG FIXED: the old test "X on w's side" (caseB_sub.py) compared the sign of a point ON the line and was
+  vacuous; the "15% both reach" figure is withdrawn. Correct numbers under (H): 23,578 Case-B triples, 19,858
+  with Σ_W ≥ π, 27 both-reach ((a,a) 22, (fa,a) 4, (a,fa) 1); adversarial closest approach in Ω: (a,a) 3.5%,
+  (fa,a) 3.2%, (a,fa) 1.9%. Tight (a,a) configs: w, u_i, u_k flat, u, u' needles, u_k at X, the thin V_m
+  between the petals. Outer cut edges never cross when ν_m > κ_back (adv_crossA.py, best −0.003), and the apex
+  cones are disjoint in every (a,a) triple with ν_m > κ_back.
+* SLIT RULE (recommended route, 2026-09-08). With the slit at the sharpest neighbour u_k of w (the rule Lemma L
+  needs anyway: without it local pairs overlap under (H) in 134+61+73 of 8000 nets), Case B is numerically dead:
+  in 641 Case-B triples with Σ_W < π, V_i never reaches Ω and V_{j+1} only via its far vertex; adversarially
+  (adv_reach.py, adv_angle.py, hyp H3R = (H)+rule, R = rule alone): v_i beyond C −0.35 diam (Σ_W ≤ π−0.3),
+  v_{j+1} beyond A −0.12, u_i past X −0.026, ∠_{u_k}V_{j+1} − Σ_W ≤ −0.35 under R alone. Since a meeting needs
+  an apex in Ω, it suffices to prove under (H)+rule: (P1) v_{j+1} ∉ Ω, (P2) v_i ∉ Ω. lp_angles.py: linear angle
+  facts alone (face sums, cone inequalities, rule, (H)) allow ∠_{u_k}V_{j+1} − Σ_W up to π/2, so edge lengths
+  must enter. Pure curvature counting also fails: both-reach configurations exist with
+  κ_u + κ_u' + 2max + κ_{u_i} + κ_w − 4π = −1.9 (adv_rule.py), i.e. the rule acts through the geometry.
+  Under (H) alone (no rule) the route is: (a,a) via hexagon identity + cones (+ no-cross across the slit),
+  then the four far-vertex sub-cases — heavier.
 
 ## Known false (do not retry)
 * "Star unfolding along a non-shortest geodesic is simple": fails ~4e-5.
@@ -189,8 +207,9 @@ Convention trap: several helpers use a "signed side" test; cstar.signed_side is 
 * Any fixed labelled tree for the octahedron: every orbit class fails on some realization.
 
 ## Work plan
-1. Lemma F: prove the mirror (gap-side) version of the vertical-wedge step; combine with Σκ = 4π and
-   κ_v ≥ max κ_u. Test every intermediate inequality with lemmaF.py-style scripts before writing it.
+1. Lemma F, Case B: prove (P1) v_{j+1} ∉ Ω and (P2) v_i ∉ Ω under (H) + slit rule (metric argument; tight
+   configurations are needles, see notes/lemmaF.pdf figure in §Case B). Then Lemma F holds under the rule
+   modulo Lemma L. Test every intermediate inequality with adv_*.py-style scripts before writing it.
 2. Lemma L: derive the exact overlap condition for the flank pair at the slit (two triangles with apexes
    u, u' at distance 2 r_u sin(κ_w/2), direction gaps κ_u + κ_w outer and e_u + f_u − ... inner),
    then show the sharpest-neighbour choice violates it. Use local.py cases as the test bed.
