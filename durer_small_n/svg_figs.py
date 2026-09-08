@@ -103,7 +103,7 @@ icons['t54'] = icon(nd, [e for e in E6 if e != (1, 3)], quad_faces=[(1, 4, 3, 2)
 # octahedron minus an edge (4,4,4,4,3,3): remove edge 0-3 -> quad 0,4,3,5
 icons['octa_minus'] = icon(nd, [e for e in E6 if e != (0, 3)], quad_faces=[(0, 4, 3, 5)])
 # octahedron
-nd = reg(3, 50, cy=62) + reg(3, 22, cy=62, rot=np.pi / 2)
+nd = reg(3, 50, cy=62) + reg(3, 16, cy=62, rot=np.pi / 2)   # inner triangle small enough that the side triangles are visible
 icons['octa'] = icon(nd, [(0, 1), (1, 2), (2, 0), (3, 4), (4, 5), (5, 3), (0, 4), (0, 5), (1, 5), (1, 3), (2, 4), (2, 3)])   # planar: each outer vertex joins the two nearest inner ones
 
 figs = {'icons': icons}
