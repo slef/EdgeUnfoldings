@@ -1,0 +1,149 @@
+{
+  "scope": "Numerical audit candidates only; label reconstruction and exact verification are separate obligations.",
+  "samples": 10000,
+  "attempts": 38876,
+  "seed": 6090902,
+  "seconds": 36.785057459026575,
+  "core_failures": 6,
+  "all_move_failures": 0,
+  "found": {
+    "core_overlap": {
+      "points": [
+        [
+          2,
+          -1,
+          -7
+        ],
+        [
+          -7,
+          -4,
+          5
+        ],
+        [
+          1,
+          9,
+          5
+        ],
+        [
+          -1,
+          -3,
+          -2
+        ],
+        [
+          6,
+          0,
+          -9
+        ],
+        [
+          7,
+          0,
+          -2
+        ]
+      ],
+      "core_overlaps": [
+        [
+          4,
+          6,
+          0.017852099429984742
+        ]
+      ],
+      "move_overlaps": {
+        "4": [
+          [
+            6,
+            7,
+            0.15439679193823475
+          ]
+        ],
+        "5": [],
+        "6": [
+          [
+            4,
+            7,
+            0.017852099429984742
+          ]
+        ]
+      },
+      "alpha4_acute": true,
+      "alpha4_dot": 65
+    }
+  },
+  "faces": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      0,
+      3,
+      1
+    ],
+    [
+      1,
+      5,
+      2
+    ],
+    [
+      0,
+      2,
+      4
+    ],
+    [
+      1,
+      3,
+      5
+    ],
+    [
+      2,
+      5,
+      4
+    ],
+    [
+      0,
+      4,
+      3
+    ],
+    [
+      3,
+      4,
+      5
+    ]
+  ],
+  "face_names": [
+    "root",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "core_hinges": [
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      3,
+      6
+    ]
+  ]
+}

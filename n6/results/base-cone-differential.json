@@ -1,0 +1,16 @@
+{
+  "scope": "Numerical differential check of formulas only; proof is in CASE_PARTITION.md",
+  "counts": {
+    "triples": 42168,
+    "small_SW": 7919,
+    "small_SW_large_D": 7625,
+    "base_cone_excluded": 32406,
+    "base_cone_large_D": 25026,
+    "H3R_small_SW": 184,
+    "H3R_small_SW_large_D": 90
+  },
+  "maximum_direction_error": 2.156510209774751e-09,
+  "violations": [],
+  "seconds": 7.977968958031852,
+  "seed": 6090906
+}

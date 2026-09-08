@@ -3,6 +3,16 @@
 The full six-vertex theorem is **not proved or computationally certified here**.
 Read [REVIEW.md](REVIEW.md) before using the older handoff or proof notes.
 
+The continuing thesis audit and four workstreams are recorded in
+[OVERNIGHT.md](OVERNIGHT.md). New rigorous results are the
+[complete opposite-petal partition](CASE_PARTITION.md), an
+[exact failure of DiBiase's fixed DF chart entry](THESIS_AUDIT.md), and original-
+facet certificates for the two remaining nonsimplicial types. [LEMMA_L.md](LEMMA_L.md)
+records the local gap and an exactly refuted bisector shortcut.
+The final overnight coverage results are in [REGION_COVER.md](REGION_COVER.md).
+[GEODESIC_SECTOR.md](GEODESIC_SECTOR.md) develops the archive's shortest-path
+route and records an exact obstruction to fixing its sector vertex globally.
+
 This directory integrates the two supplied Codex archives with Claude's
 `durer_small_n` work. It adds a smaller exact counterexample query, bounded solver
 execution, and a rational interval checker for explicit regions of octahedra.
@@ -16,6 +26,14 @@ execution, and a rational interval checker for explicit regions of octahedra.
 | [24-tree query](results/nearstar.result.json) | Z3 returned `unknown` / `timeout`. The full octahedron question remains unresolved. |
 | [Differential validation](results/differential-validation.json) | The two implementations agree on all 1,479 cut trees of seven fixed six-vertex realizations. Numerical validation only. |
 | [Corrected angle check](results/corrected-angle-smoke.json) | A fresh, small numerical check after fixing the far-vertex index. It does not rehabilitate the historical saved searches. |
+| [Base-cone lemma](CASE_PARTITION.md) | Under the sharpest-apex hypothesis, only the opposite-petal regime `Sigma_W<pi` remains; large D angles and both partition equality boundaries are included. |
+| [Thesis DF witness](results/thesis-chart-DF.certificate.json) | A specified chart entry fails exactly. Reattaching only G cannot repair this core overlap. |
+| [Direct prism chart](PRISM_DIAGONAL.md) | Complete nine-parameter coordinate chart; exact failure of the two-pair tree and successful alternative regional certificates. |
+| [Wider prism box](results/prism-expanded-affine.certificate.json) | An explicit nine-parameter box, with every original quadrilateral retained; rational affine bounds verify all 15 pairs. |
+| [Complete prism subdivision](results/prism-affine-cover.verification.json) | Independent replay verifies all 443 leaves of a larger nine-parameter box, using three trees. This is complete coverage of that box only. |
+| [Minus-edge box](results/minus-wide-affine.certificate.json) | All ten chart parameters vary by `1/100` about the specified center; all 21 original-facet pairs are verified. |
+| [Bisector failure](results/local-bisector-failure.certificate.json) | The proposed slit bisector fails under both curvature rules; a separate all-pairs check proves that same net simple. |
+| [Thin-candidate audit](results/local-directed-audit.verification.json) | The directed numerical search's apparent local overlap is certified nonoverlapping at 320 fractional bits, with the selection rules checked exactly. |
 
 The box is centered at
 
@@ -36,6 +54,12 @@ standard library; they use no floating-point arithmetic, NumPy, or SMT solver.
 ```
 python3 -m n6.certify verify n6/results/octahedron-box.certificate.json
 python3 -m n6.audit_witness
+python3 -m n6.polycert verify-overlap n6/results/thesis-chart-DF.certificate.json
+python3 -m n6.polycert verify n6/results/prism-expanded-affine.certificate.json
+python3 -m n6.polycert verify n6/results/minus-wide-affine.certificate.json
+python3 -m n6.cover verify n6/results/prism-affine-cover.certificate.json.gz
+python3 -m n6.bisector n6/results/local-bisector-failure.certificate.json --bits 80
+python3 -m n6.polycert verify n6/results/local-directed-audit.selected.certificate.json --bits 320
 python3 -m unittest discover -s n6/tests -p test_certificates.py -v
 ```
 
@@ -72,6 +96,24 @@ so SAT for it would not refute Dürer's conjecture.
   import-safe and configurable; rejects flat facet mergers.
 - `intervals.py`, `certify.py`, `audit_witness.py`: new small rational checker,
   certificate generator, and proof-audit witness checker.
+- `polynomials.py`, `polycert.py`, `families.py`: exact parameterized coordinates,
+  original polygonal facets, and all-pairs region/fixed-tree-failure checking.
+- `affine.py`: rational linear correlations with outward nonlinear remainders.
+  It improves decisiveness without replacing exact sign checks by tolerances.
+- `cover.py`: binary closed-box subdivision and independent all-leaf replay.
+  Files with unresolved leaves are partial searches, regardless of their name.
+- `curvature.py`, `regimes.py`: exact angle-product predicates and verification
+  of curvature rankings, large-angle branches, and equality cases.
+- `bisector.py`, `point_audit.py`: exact follow-up of proposed local obstructions.
+- `sector_audit.py`, `angle_relaxation.py`: exact checks of a geometric obstruction
+  to one sector strategy and an abstract angle countermodel, respectively. The
+  latter is not a claimed geometric realization.
+- `lemma_query.py`, `direct_query.py`, `lift.py`: focused nonlinear searches,
+  including an explicit-triangle formulation and degree-reducing auxiliary
+  equations. All current runs remain unresolved; no solver proof is claimed.
+- `trees.py`: all original-edge cut trees and the thesis's 48 three-arm trees.
+  This latter family is distinct from the 24 near-star trees, but already lies
+  within the full 384-tree octahedron enumeration.
 - `validate.py`: cross-check against Claude's rigid-motion development and
   polygon clipping, covering all seven six-vertex graph types.
 - `archive_validation.py`: the archive's original tetrahedron validation helper.

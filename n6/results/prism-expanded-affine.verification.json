@@ -1,0 +1,22 @@
+{
+  "result": "verified",
+  "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+  "parameter_dimension": 9,
+  "facet_sizes": [
+    3,
+    4,
+    3,
+    4,
+    3,
+    3
+  ],
+  "pairs": {
+    "vertex_fan": 9,
+    "separating_edge": 6
+  },
+  "strict_facet_supports": 16,
+  "planarity_identities": 20,
+  "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+  "linear_correlations": true,
+  "fractional_bits": 80
+}

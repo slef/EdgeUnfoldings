@@ -1,0 +1,43 @@
+{
+  "prism": {
+    "generation": {
+      "seconds": 191.39056045899633,
+      "attempts": 1404,
+      "successes": 687,
+      "splits": 717,
+      "failures": {
+        "Pair (0, 1) unresolved; no certificate produced": 328,
+        "Pair (0, 5) unresolved; no certificate produced": 24,
+        "Pair (1, 2) unresolved; no certificate produced": 365
+      },
+      "summary": {
+        "certified": 687,
+        "unresolved": 31,
+        "maximum_depth": 37
+      }
+    },
+    "result": "interrupted_incomplete",
+    "reason": "Replaced projection formulas to reduce interval overestimation; no complete-cover verdict."
+  },
+  "minus": {
+    "generation": {
+      "seconds": 191.27880166698014,
+      "attempts": 883,
+      "successes": 438,
+      "splits": 445,
+      "failures": {
+        "Pair (3, 5) unresolved; no certificate produced": 4,
+        "Pair (4, 5) unresolved; no certificate produced": 27,
+        "Pair (2, 6) unresolved; no certificate produced": 383,
+        "Pair (5, 6) unresolved; no certificate produced": 31
+      },
+      "summary": {
+        "certified": 438,
+        "unresolved": 8,
+        "maximum_depth": 19
+      }
+    },
+    "result": "interrupted_incomplete",
+    "reason": "Replaced projection formulas to reduce interval overestimation; no complete-cover verdict."
+  }
+}

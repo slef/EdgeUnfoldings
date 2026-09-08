@@ -30,9 +30,9 @@
 The unrestricted double-outward half-plane claim in the previous draft is false;
 an integer-coordinate counterexample is checked by rational intervals in
 \texttt{n6/audit\_witness.py}. Lemma~\ref{D} below is now restricted to the
-angle range used in Case A. Case B needs a separate treatment of larger angles;
-its historical reductions below are conditional on that restriction, not a
-complete partition of all configurations. The hinge reduction also needs the
+angle range used in Case A. The new base-cone lemma below supplies an exhaustive
+partition, including the larger angles and equality boundaries: only
+$\Sigma_W<\pi$ remains after Case A and the base-cone exclusion. The hinge reduction also needs the
 local nonoverlap hypothesis. Neither these notes nor the numerical experiments
 prove the full six-vertex theorem. See \texttt{n6/REVIEW.md} for the full audit.
 
@@ -296,28 +296,119 @@ meet (depth $+0.006$), as it must, since 26 above-base overlaps exist.
 \end{numerics}
 
 \paragraph{Case B in this language.} Any meeting lies in $C_i\cap C_{j+1}$, and in Case B this intersection
-can be non-empty, so the cones alone do not suffice; the next section gives the exact structure of Case B.
+can be non-empty. Cones at the two base vertices, rather than at the apexes,
+give the additional exclusion below.
+
+\section{An exhaustive partition: the base cones}\label{sec:basecones}
+
+Put $u=(0,0)$, $u'=(\ell,0)$, with the middle petal above the base and the
+middle fan face below it. Write
+\[
+ \alpha=\phi+\kappa_u,\quad \beta=\psi+\kappa_{u'},\quad
+ \sigma=\angle_uW_i+\angle_uW_j,\quad
+ \tau=\angle_{u'}W_j+\angle_{u'}W_{j+1},
+\]
+and $a=\angle_uV_i$, $b=\angle_{u'}V_{j+1}$. Vertex angle sums give
+\[
+ \alpha+\sigma+a=2\pi,\qquad \beta+\tau+b=2\pi,
+ \qquad \alpha+\beta=\pi-\nu_j+\kappa.
+\]
+All four angles $\alpha,\beta,\sigma,\tau$ are in $(0,2\pi)$, and $a,b\in(0,\pi)$.
+The actual base cones of the outer petals have direction intervals
+$I=[\alpha,2\pi-\sigma]$ at $u$ and
+$J=[\pi+\tau,3\pi-\beta]$ at $u'$. These are unwrapped intervals of widths
+$a,b<\pi$, valid even if $\alpha$ or $\beta$ reaches or exceeds $\pi$.
+
+\begin{lemma}[base cones]\label{basecones}
+If $\alpha+\beta\ge\pi$ and $\sigma+\tau\ge\pi$, the two base cones are
+disjoint. No curvature-ranking hypothesis is required.
+\end{lemma}
+\begin{proof}
+The left cone and the reversed right cone have their directions in
+$[\alpha,2\pi-\sigma]$ and $[\tau,2\pi-\beta]$, respectively. Both are
+contained in $S=[m,2\pi-n]$, where
+$m=\min(\alpha,\tau)>0$ and $n=\min(\sigma,\beta)>0$. Since $a,b<\pi$,
+\[
+ m+n=\min(\alpha+\sigma,\alpha+\beta,\tau+\sigma,\tau+\beta)\ge\pi.
+\]
+Thus $S$ is a closed convex sector of width at most $\pi$, excluding the
+positive base direction. A meeting of the two translated cones would express
+$u'-u=(\ell,0)$ as a vector in the left cone minus one in the right cone.
+That difference belongs to $S$, a contradiction. Equality is included.
+\end{proof}
+
+\begin{proposition}[complete partition]\label{partition}
+Under (H), only $\Sigma_W:=\sigma+\tau<\pi$ remains to prove for the
+opposite-petal statement. This regime automatically has $\kappa>\nu_j$.
+Neither $\kappa=\nu_j$ nor $\Sigma_W=\pi$ leaves a boundary case open.
+\end{proposition}
+\begin{proof}
+If $\kappa<\nu_j$, Case A applies. Otherwise $\alpha+\beta\ge\pi$, so
+Lemma~\ref{basecones} excludes a meeting when $\Sigma_W\ge\pi$.
+Finally $\alpha+\beta+\Sigma_W=4\pi-a-b>2\pi$, so
+$\Sigma_W<\pi$ implies $\alpha+\beta>\pi$, hence $\kappa>\nu_j$.
+When $\kappa=\nu_j$, the same identity gives $\Sigma_W>\pi$.
+\end{proof}
+
+\begin{remark}
+An exact integer-coordinate example in \texttt{n6/CASE\_PARTITION.md} has
+(H), the sharpest-neighbour slit rule, and $\alpha>\pi$. Rational interval
+checks certify its curvature ordering and angular regime. Its fan-angle sum
+is above $\pi$, so Lemma~\ref{basecones} handles it. The unrestricted D-lemma
+remains false; it is not needed for the remaining outer-wedge argument.
+\end{remark}
+
+\begin{lemma}[remaining apex test]\label{apextest}
+In the remaining region $\Sigma_W=\sigma+\tau<\pi$, set
+$s=|vu|$, $s'=|vu'|$, and $\ell=|uu'|$. The left apex is strictly beyond
+the right outer fan-edge line, on the side away from $w$, if and only if
+\[
+ \Sigma_W+a<\pi\quad\hbox{and}\quad
+ s\sin(\Sigma_W+a)>\ell\sin\tau.
+\]
+The corresponding right-apex test is
+\[
+ \Sigma_W+b<\pi\quad\hbox{and}\quad
+ s'\sin(\Sigma_W+b)>\ell\sin\sigma.
+\]
+\end{lemma}
+\begin{proof}
+The left apex is $s(\cos\alpha,\sin\alpha)$, while the right outer
+ray has direction $\pi+\tau$ from $(\ell,0)$. The signed determinant,
+positive on the side away from $w$, is
+$s\sin(\tau-\alpha)-\ell\sin\tau$.
+The angle sums give $\alpha-\tau=2\pi-\Sigma_W-a\in(0,2\pi)$,
+so $\sin(\tau-\alpha)=\sin(\Sigma_W+a)$; positivity requires
+$\Sigma_W+a<\pi$. Reflection gives the right test.
+\end{proof}
+\begin{remark}
+The sine rule gives $s/\ell=\sin\psi/\sin\nu_j$ and
+$s'/\ell=\sin\phi/\sin\nu_j$. These are exact reformulations, not
+proofs of non-entry under the selection rules. The stronger candidate bounds
+$\Sigma_W+a\ge\pi$, $\Sigma_W+b\ge\pi$ have only numerical support.
+An exact abstract angle countermodel in \texttt{n6/CASE\_PARTITION.md}
+shows that triangle sums, cone inequalities, and curvature rankings alone
+cannot prove these stronger bounds; metric realizability information is needed.
+\end{remark}
 
 \section{The below-base case (Case B)}\label{sec:caseB}
 
-Throughout this historical reduction, assume $\kappa=\kappa_u+\kappa_{u'}\ge\nu_j$
-\emph{and the restricted angle hypotheses of Lemma~\ref{D}}. Only then does
-that lemma put a meeting on $w$'s side of the base. The complementary large-angle
-regimes remain unhandled here.
+By Proposition~\ref{partition}, it remains to consider $\Sigma_W<\pi$.
+This implies strict Case B and places both individual fan-angle sums below
+$\pi$. No restriction on $\phi+\kappa_u$ or $\psi+\kappa_{u'}$ is imposed here.
+For consistency with the historical formulas in this section, rename the
+two fan-angle sums $\alpha,\beta$ (they were $\sigma,\tau$ above).
 Write $u_k=u_{j+2}$ for the far vertex of $W_{j+1}$ (in $Z_k$ this is the slit copy, $k=i-1$), $A$ for the line
 through the outer edge $uu_i$ of $W_i$, $C$ for the line through $u'u_k$, $\alpha=\angle_uW_i+\angle_uW_j$,
 $\beta=\angle_{u'}W_j+\angle_{u'}W_{j+1}$ and $\Sigma_W=\alpha+\beta$ (the four fan angles at $u,u'$).
 Let $\kappa_{\rm back}=\kappa_{u_i}+\kappa_{u_k}+\kappa_w$ be the total gap on the slit side, so that
 $\kappa_v+\kappa+\kappa_{\rm back}=4\pi$, and let $V_m=V_{i-1}$ be the fourth petal, glued to $W_m=W_k$.
-Within the restricted range above, if $\alpha\ge\pi$ then $V_i$ lies above
-the base (its angular interval at $u$ ends at $2\pi-\alpha\le\pi$), so it
-cannot have a Case-B meeting. The mirror argument applies to $\beta\ge\pi$.
-In the remaining wedge analysis assume $0<\alpha,\beta<\pi$.
+Throughout the remaining wedge analysis, $0<\alpha,\beta$ and
+$\alpha+\beta=\Sigma_W<\pi$.
 
 \begin{lemma}[the wedge $\Omega$]\label{Omega}
 $V_i$ lies in the closed half-plane $H_A$ of $A$ not containing $w$, and $V_{j+1}$ in the half-plane $H_C$ of $C$
-not containing $w$; every common point lies in $\Omega:=H_A\cap H_C$. If $\Sigma_W\ge\pi$ then $\Omega$ lies strictly
-above the base line, so $\Omega\cap\D=\emptyset$ and there is no Case-B meeting. If $\Sigma_W<\pi$ the lines cross at a
+not containing $w$; every common point lies in $\Omega:=H_A\cap H_C$. The lines cross at a
 point $X$ on $w$'s side of the base, $w$ lies in the triangle $uu'X$, and $\Omega$ is the wedge at $X$ opposite to
 that triangle, of angle $\theta_X=\pi-\Sigma_W$.
 \end{lemma}
@@ -325,8 +416,8 @@ that triangle, of angle $\theta_X=\pi-\Sigma_W$.
 $V_i$ and $W_i$ lie on opposite sides of their common edge line $A$. On the base line, $H_A$ is the ray beyond $u$
 away from $u'$ and $H_C$ the ray beyond $u'$ away from $u$, so $\Omega$ misses the base line and lies on one side
 of it. The rays $u\to u_i$ and $u'\to u_k$ make the angles $\alpha,\beta$ with the base on $w$'s side; they converge
-there iff $\Sigma_W<\pi$, and then $X$ and $\Omega$ are below the base; otherwise $\Omega$ is above (or empty),
-while $\D$ is below in Case B. $w$ is on $u'$'s side of $A$, on $u$'s side of $C$ and below the base.
+there since $\Sigma_W<\pi$, and $X$ and $\Omega$ are below the base.
+$w$ is on $u'$'s side of $A$, on $u$'s side of $C$ and below the base.
 \end{proof}
 
 \begin{lemma}[how a petal reaches $\Omega$]\label{reach}
@@ -404,6 +495,24 @@ Lemma~\ref{nowrap}): the cones $C_i$, $C_{j+1}$ have disjoint interiors unless t
 Two gaps remain here: (i) a no-cross lemma for the outer cut edges across the slit ($u_k\ne u_k'$; the argument of
 Lemma~\ref{nocross} needs $|u_kv_m|\ge|u_k'v_m|$); (ii) the sub-cases with a far vertex past $X$.
 
+\begin{lemma}[the slit rule excludes the large-back-angle alternative]\label{backbound}
+If $u_k$ has maximum curvature among the four equator vertices, then for
+every face angle $\nu_t$ at $v$,
+\[
+ \kappa_{u_k}+\kappa_w-\nu_t
+ \ \ge\ \tfrac14\kappa_v+\tfrac34\kappa_w\ >0.
+\]
+In particular $\kappa_{\rm back}>\nu_m$. Thus the (a,a) sub-case is excluded
+by Lemma~\ref{hexagon}, conditional on Lemma L. No sharpest-apex assumption
+is needed for this bound.
+\end{lemma}
+\begin{proof}
+Gauss--Bonnet and the slit rule give
+$4\pi\le\kappa_v+4\kappa_{u_k}+\kappa_w$, while the convex-vertex cone
+inequality gives $\nu_t\le\pi-\kappa_v/2$. Subtract these bounds, and use
+strict positivity of both curvatures.
+\end{proof}
+
 \begin{numerics}
 Under (H), in $23{,}578$ Case-B triples, $19{,}858$ have $\Sigma_W\ge\pi$ and only $27$ have both petals reaching
 $\Omega$ (sub-cases (a,a) 22, (fa,a) 4, (a,fa) 1); no (f,f), as it must be. Seeded adversarial closest approach inside
@@ -432,8 +541,11 @@ $v_i\notin\Omega$. Linear programming over the 24 face angles (face sums, cone i
 rule and (H)) numerically allows $\angle_{u_k}V_{j+1}-\Sigma_W$ up to $\pi/2$.
 This suggests that these linear constraints alone are insufficient; additional metric or angle-realizability
 constraints may be needed. The tight sampled configurations are needle-shaped (Figure above). This is the recommended route: it replaces the
-five sub-cases by two apex statements within the stated angle regime. It does
-not settle the large-angle regimes or Lemma L.
+five sub-cases by two apex statements within the stated angle regime. It
+now applies to the complete remaining region $\Sigma_W<\pi$ by
+Proposition~\ref{partition}. It does not settle those two apex statements or
+Lemma L. Lemma~\ref{backbound} separately removes the (a,a) branch under the
+slit rule, conditional on the local nonoverlap required by the hexagon lemma.
 
 \section{Known false / do not retry}
 Simple separating lines for the two petals inside $\D$ (bisector of $\D$ at $p^*$, lines through $v_j$) fail

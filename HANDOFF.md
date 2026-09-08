@@ -7,7 +7,9 @@ before relying on the historical proof status below.**
 
 - The unqualified double-outward D-lemma is false. An integer-coordinate
   counterexample is verified by rational intervals. The working notes now
-  restrict it to an angle range automatic in Case A; additional Case-B ranges remain.
+  restrict it to an angle range automatic in Case A. The new base-cone proof
+  handles the complementary large-angle partition: under (H), only Sigma_W<pi
+  remains. See [n6/CASE_PARTITION.md](n6/CASE_PARTITION.md).
 - The hinge/far-fan reduction needs Lemma L at the two hinges nearest the slit.
   Nonsimplicial limit reductions additionally need successful trees that never
   cut the introduced diagonals. These conditions were missing from earlier summaries.
@@ -21,6 +23,17 @@ before relying on the historical proof status below.**
   18-coordinate octahedron box of half-width 1/1000. It does not cover all octahedra.
 - The reduced 24-tree SMT query has 120 shared paths and returns unknown/timeout.
   Neither random searches nor solver timeouts certify the universal theorem.
+- The direct thesis review now has an exact counterexample to the fixed DF chart
+  entry; see [n6/THESIS_AUDIT.md](n6/THESIS_AUDIT.md). The useful leaf-reattachment
+  strategy is represented by 48 distinct three-arm trees.
+- New original-facet certificates cover nine-parameter prism and ten-parameter
+  octahedron-minus-edge regions. Lemma L and universal region coverage remain
+  open. [n6/LEMMA_L.md](n6/LEMMA_L.md) records an exact bisector-shortcut failure
+  and the nonoverlapping resolution of a thin numerical candidate.
+- Morning verification: the larger prism box has a complete independently
+  replayed cover of 443 leaves using three trees. Wider prism and minus-edge
+  searches ended with 94 and 11 unresolved leaves, respectively. All 53 tests
+  pass; no universal solver query succeeded. See [n6/REGION_COVER.md](n6/REGION_COVER.md).
 
 Reproduction and exact scopes: [n6/README.md](n6/README.md).
 The account below preserves Claude's prior work and chronology; where it says

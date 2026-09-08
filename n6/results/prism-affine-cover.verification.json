@@ -1,0 +1,13 @@
+{
+  "result": "verified_complete_region_cover",
+  "parameter_dimension": 9,
+  "leaves": 443,
+  "distinct_cut_trees": 3,
+  "maximum_depth": 9,
+  "checked_face_pairs": {
+    "vertex_fan": 3991,
+    "separating_edge": 2654
+  },
+  "scope": "Every tuple in this explicit closed root box; no claim of global metric-space coverage",
+  "coverage_argument": "Every split has exactly two closed children [lo,split] and [split,hi]; every leaf is verified."
+}

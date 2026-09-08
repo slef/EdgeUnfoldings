@@ -11,6 +11,14 @@ BITS = 80
 SCALE = 1 << BITS
 
 
+def set_precision(bits):
+    """Set an absolute dyadic grid. More bits affect decisiveness, not validity."""
+    if not isinstance(bits,int) or not 32<=bits<=4096:
+        raise ValueError('Fractional precision must be an integer from 32 to 4096')
+    global BITS,SCALE
+    BITS=bits;SCALE=1<<bits
+
+
 def floor_grid(x):
     return F((x.numerator * SCALE) // x.denominator, SCALE)
 
@@ -39,6 +47,7 @@ class I:
         return x if isinstance(x, I) else I(x)
 
     def __add__(self, other):
+        if not isinstance(other,(I,int,str,F)):return NotImplemented
         b = I.of(other)
         return I(self.lo + b.lo, self.hi + b.hi)
 
@@ -48,12 +57,14 @@ class I:
         return I(-self.hi, -self.lo)
 
     def __sub__(self, other):
+        if not isinstance(other,(I,int,str,F)):return NotImplemented
         return self + -I.of(other)
 
     def __rsub__(self, other):
         return I.of(other) + -self
 
     def __mul__(self, other):
+        if not isinstance(other,(I,int,str,F)):return NotImplemented
         b = I.of(other)
         vals = [a * c for a in (self.lo, self.hi) for c in (b.lo, b.hi)]
         return I(min(vals), max(vals))
@@ -61,6 +72,7 @@ class I:
     __rmul__ = __mul__
 
     def __truediv__(self, other):
+        if not isinstance(other,(I,int,str,F)):return NotImplemented
         b = I.of(other)
         if b.lo <= 0 <= b.hi:
             raise ValueError('Division interval includes zero')

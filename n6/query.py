@@ -87,7 +87,7 @@ def worker(job):
     write_report(result_path,report)
 
 
-def run_bounded(job):
+def run_bounded(job,worker_module='n6.query'):
     path = Path(job['output']).resolve()
     path.parent.mkdir(parents=True,exist_ok=True)
     job = {**job, 'output':str(path)}
@@ -97,7 +97,7 @@ def run_bounded(job):
     write_report(resultpath, {**job,'result':'building','independent_proof_certificate':False})
     start = time.monotonic()
     with path.with_suffix('.worker.log').open('w') as log:
-        proc = subprocess.Popen([sys.executable,'-m','n6.query','--worker',str(jobpath)],stdout=log,stderr=subprocess.STDOUT)
+        proc = subprocess.Popen([sys.executable,'-m',worker_module,'--worker',str(jobpath)],stdout=log,stderr=subprocess.STDOUT)
         timed_out = False
         try:
             proc.wait(timeout=job['wall_seconds'])

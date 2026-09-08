@@ -7,6 +7,21 @@ There is new rigorous partial coverage of a full coordinate box, an exactly
 checked counterexample to a supporting lemma, and a reproducible reduced SMT
 attempt that reports a timeout.
 
+**Continuation:** the subsequent direct thesis audit found an exact fixed-tree
+DF chart failure. A new base-cone proof closes the missing large-angle partition,
+including its equality boundaries; under (H), only `Sigma_W<pi` remains for
+opposite petals. The slit rule also excludes the historical `(a,a)` branch
+conditional on L. See [THESIS_AUDIT.md](THESIS_AUDIT.md),
+[CASE_PARTITION.md](CASE_PARTITION.md), [LEMMA_L.md](LEMMA_L.md), and the expanded
+[certificate inventory](README.md). These results supersede the corresponding
+initial-audit limitations below; the complete theorem remains open here.
+
+**Morning results:** independent replay verifies a nine-parameter prism box
+with 443 leaves and three trees. The larger searches remain incomplete, with
+94 prism and 11 minus-edge unresolved leaves. The final focused apex query
+timed out; all 53 current tests pass. [REGION_COVER.md](REGION_COVER.md) states
+the exact domains and which results have received independent replay.
+
 ## What was reviewed and reconciled
 
 The review covers the repository structure, both handoffs, the 73 existing
@@ -24,10 +39,15 @@ general library. The reusable geometry modules receive focused regression checks
 
 The thesis excerpt (printed pp. 71–73) and full-thesis octahedron discussion
 (printed pp. 72–76, including Lemma 3.6 and Figure 3.28) were visually inspected.
-The full thesis was not independently reread page by page during this audit.
+The full thesis was not independently reread page by page during this initial audit.
 The pages support the existing observation that the octahedron argument relies
 on a figure-specific reassignment of its last face; they do not fill the missing
 general proof. The scanned PDFs remain user-supplied, untracked files.
+
+In the continuation, all Chapter 3 pages were rendered and reviewed with OCR
+alongside the scans, and the complete octahedron argument and relevant figures
+were inspected visually. The exact chart counterexample is described in the
+separate thesis audit. No claim is made to have reread every page of the thesis.
 
 Both archives contain exactly the same `unfolding.py` (hashes in
 `archive_notes/manifest.json`). It is integrated once as `encoding.py`. Their
@@ -65,11 +85,10 @@ Reproduction: `python3 -m n6.audit_witness`. See the coordinate certificate and
 `d-lemma-verification.json`. This is an exact refutation of the unqualified
 supporting assertion, not a numerical counterexample to unfoldability.
 
-For context only, numerical curvatures are approximately `kappa_3=3.917`,
-`kappa_0=3.514`, and all other curvatures are smaller. Thus even the sharpest-apex
-hypothesis does not appear to repair it. The exact checker does **not** certify
-this curvature ranking; the original lemma was unconditional, so no ranking is
-needed to refute its statement.
+The continuation's exact angle-product checker now also certifies that vertex 3
+has maximum curvature: see `d-lemma-curvature.verification.json` and
+`python3 -m n6.curvature n6/results/d-lemma-counterexample.json --sharpest 3`.
+Thus the sharpest-apex hypothesis does not repair the unrestricted assertion.
 
 The valid D-lemma range is explicitly restricted to
 `0 < phi+kappa_u < pi`, `0 < psi+kappa_u' < pi`. It is automatic in Case A
@@ -78,11 +97,10 @@ argument therefore still proves the Case-A opposite-petal statement: its proof
 uses only this restricted geometry. The noncrossing-cut-edges lemma is now stated
 only in the Case-A range actually covered by its proof.
 
-Case B cannot be called a complete two-apex reduction until the complementary
-large-angle ranges are handled. Its outer-fan wedge construction also needs the
-fan-angle range to be stated. Within the restricted D range, a fan angle at least
-pi puts the corresponding petal above the base and rules out a below-base meeting;
-the remaining wedge analysis can assume both fan angles are below pi.
+The continuation handles the complementary ranges through the base cones,
+without an unrestricted D-lemma. Under (H), the entire remaining region is
+`Sigma_W<pi`; there the outer-fan half-planes directly define the relevant wedge.
+The two individual apex non-entry statements still require proof.
 
 ### 2. The hinge reduction uses Lemma L
 

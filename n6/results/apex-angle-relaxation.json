@@ -1,0 +1,44 @@
+{
+  "scope": "Exact abstract angle model, not an asserted convex-polyhedron realization.",
+  "angles": {
+    "nu": [
+      "1/19",
+      "1/19",
+      "7/38",
+      "5/38"
+    ],
+    "aV": [
+      "17/19",
+      "39/76",
+      "29/38",
+      "37/76"
+    ],
+    "aVp": [
+      "1/19",
+      "33/76",
+      "1/19",
+      "29/76"
+    ],
+    "om": [
+      "25/76",
+      "37/76",
+      "47/76",
+      "39/76"
+    ],
+    "bW": [
+      "47/76",
+      "35/76",
+      "25/76",
+      "33/76"
+    ],
+    "bWp": [
+      "1/19",
+      "1/19",
+      "1/19",
+      "1/19"
+    ]
+  },
+  "slit_index": 3,
+  "triple_index": 0,
+  "violated_condition": "Sigma_W+angle_u V_i >= pi"
+}

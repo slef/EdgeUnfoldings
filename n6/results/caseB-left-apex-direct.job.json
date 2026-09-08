@@ -1,0 +1,11 @@
+{
+  "target": "left_apex",
+  "hypothesis": "H3R",
+  "hard_local": false,
+  "lifted": true,
+  "solver_ms": 1200000,
+  "wall_seconds": 1260.0,
+  "memory_mb": 1536,
+  "export_only": false,
+  "output": "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/n6/results/caseB-left-apex-direct"
+}

@@ -1,0 +1,265 @@
+{
+  "schema": "n6-polyhedron-region-v1",
+  "parameter_box": [],
+  "coordinate_polynomials": [
+    [
+      [
+        [
+          "1",
+          []
+        ]
+      ],
+      [
+        [
+          "-1",
+          []
+        ]
+      ],
+      [
+        [
+          "-4",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "-3",
+          []
+        ]
+      ],
+      [
+        [
+          "-4",
+          []
+        ]
+      ],
+      [
+        [
+          "3",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "0",
+          []
+        ]
+      ],
+      [
+        [
+          "0",
+          []
+        ]
+      ],
+      [
+        [
+          "0",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "-1",
+          []
+        ]
+      ],
+      [
+        [
+          "-3",
+          []
+        ]
+      ],
+      [
+        [
+          "0",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "3",
+          []
+        ]
+      ],
+      [
+        [
+          "0",
+          []
+        ]
+      ],
+      [
+        [
+          "-6",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "1",
+          []
+        ]
+      ],
+      [
+        [
+          "0",
+          []
+        ]
+      ],
+      [
+        [
+          "0",
+          []
+        ]
+      ]
+    ]
+  ],
+  "faces": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      0,
+      3,
+      1
+    ],
+    [
+      1,
+      5,
+      2
+    ],
+    [
+      0,
+      2,
+      4
+    ],
+    [
+      1,
+      3,
+      5
+    ],
+    [
+      2,
+      5,
+      4
+    ],
+    [
+      0,
+      4,
+      3
+    ],
+    [
+      3,
+      4,
+      5
+    ]
+  ],
+  "cut_edges": [
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      5
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      5
+    ]
+  ],
+  "overlap_witness": {
+    "faces": [
+      4,
+      6
+    ],
+    "edge_witnesses": [
+      {
+        "owner": 4,
+        "edge": [
+          1,
+          3
+        ],
+        "other_vertex": 3
+      },
+      {
+        "owner": 4,
+        "edge": [
+          3,
+          5
+        ],
+        "other_vertex": 3
+      },
+      {
+        "owner": 4,
+        "edge": [
+          5,
+          1
+        ],
+        "other_vertex": 0
+      },
+      {
+        "owner": 6,
+        "edge": [
+          0,
+          4
+        ],
+        "other_vertex": 5
+      },
+      {
+        "owner": 6,
+        "edge": [
+          4,
+          3
+        ],
+        "other_vertex": 1
+      },
+      {
+        "owner": 6,
+        "edge": [
+          3,
+          0
+        ],
+        "other_vertex": 5
+      }
+    ]
+  },
+  "thesis_vertex_labels": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    5
+  ],
+  "face_names": [
+    "root",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "source_note": "Vertex labels follow Figure 3.27; face attachments follow Figure 3.17(d)/3.29. Zero-based checker vertex 4 is thesis vertex 6; checker vertex 5 is thesis vertex 5."
+}
