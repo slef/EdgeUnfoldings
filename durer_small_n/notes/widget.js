@@ -163,10 +163,20 @@ function viewer3d(el, model, opts) {
     draw();
   });
   el.style.touchAction = 'none'; el.style.cursor = 'grab';
-  draw(); return { draw, set(m) { model = m; draw(); } };
+  draw(); return { draw, set(m) { model = m; draw(); }, turn(yaw) { st.yaw += yaw; draw(); }, reset() { Object.assign(st, initial); draw(); } };
 }
 function mountViewers(root) {
-  (root || document).querySelectorAll('.viewer[data-model]').forEach(el => { if (el.dataset.ready) return; el.dataset.ready = '1'; const m = FIGS.models[el.dataset.model]; if (m) viewer3d(el, JSON.parse(JSON.stringify(m))); });
+  (root || document).querySelectorAll('.viewer[data-model]').forEach(el => {
+    if (el.dataset.ready) return;
+    const m = FIGS.models[el.dataset.model]; if (!m) return;
+    const view = viewer3d(el, JSON.parse(JSON.stringify(m)), { size: Number(el.dataset.size) || 300 });
+    el.dataset.ready = '1';
+    const panel = el.closest('.viewer-panel');
+    if (panel) {
+      panel.querySelectorAll('[data-view-turn]').forEach(button => button.addEventListener('click', () => view.turn(Number(button.dataset.viewTurn))));
+      panel.querySelectorAll('[data-view-reset]').forEach(button => button.addEventListener('click', () => view.reset()));
+    }
+  });
 }
 function widgetModel(P, v, k) {
   const w = ANTI[v]; const ring = NBR[w]; const cut = ring.map(u => [v, u]); cut.push([w, ring[k]]);

@@ -54,6 +54,6 @@ figs['models']['prism_failure'] = witness_model(
             'failing cut tree. Both quadrilaterals remain whole. Drag or use arrow keys to rotate; Home resets the view.',
 )
 t = (notes / 'status_template.html').read_text()
-t = t.replace('__FIGS_JSON__', json.dumps(figs)).replace('__GLOSS_JS__', (notes / 'glossary.js').read_text()).replace('__WIDGET_JS__', (notes / 'widget.js').read_text()).replace('__UPDATED__', datetime.date.today().isoformat())
+t = t.replace('__FIGS_JSON__', json.dumps(figs)).replace('__GLOSS_JS__', (notes / 'glossary.js').read_text()).replace('__WIDGET_JS__', (notes / 'widget.js').read_text()).replace('__UPDATED__', datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z'))
 (notes / 'status.html').write_text(t)
 print(len(t), "bytes")
