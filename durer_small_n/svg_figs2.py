@@ -8,7 +8,8 @@ from unfold2 import Polytope as PolyP, unfold as unfold2, sat_pen as sat2
 figs = json.load(open('notes/status_figs.json'))
 
 # ---------------------------------------------------------------- generic net renderer for any small polytope
-def svg_poly(p, cut, W=520, H=380, pad=22, labels=None, hl=(), title_face=None):
+def svg_poly(p, cut, W=520, H=380, pad=22, labels=None, hl=(), title_face=None, key=None):
+    if key: MODELS[key] = mk_model(p.P, p.faces, cut, VN)
     hinge_index = {(a, b): ei for ei, (f, g, a, b) in enumerate(p.E)}
     cut = {tuple(sorted(e)) for e in cut}
     tree = [hinge_index[q] for q in p.edges if q not in cut]
@@ -46,6 +47,14 @@ def svg_poly(p, cut, W=520, H=380, pad=22, labels=None, hl=(), title_face=None):
     out.append('</svg>')
     return "\n".join(out), bool(bad)
 
+MODELS = {}
+def mk_model(P, faces, cut, names):
+    return dict(P=[[round(float(x), 5) for x in q] for q in P], faces=[list(map(int, f)) for f in faces],
+                cut=[list(map(int, sorted(e))) for e in cut], names={int(k): v for k, v in names.items()})
+def octa_model(o, k):
+    st = octa_structure(o.P); cut = [(o.v, u) for u in o.u] + [(o.w, o.u[k])]
+    names = {o.v: 'v', o.w: 'w'}; names.update({o.u[i]: 'u' + '₀₁₂₃'[i] for i in range(4)})
+    return mk_model(o.P, st[0], cut, names)
 VN = {}
 def with_names(names):
     global VN; VN = names
@@ -58,20 +67,20 @@ def reg(n, r, z=0.0, rot=0.0): return [(r * np.cos(rot + 2 * np.pi * i / n), r *
 
 # tetrahedron
 P = np.array([(0, 0, 1.1), (1, 0, 0), (-0.4, 0.9, 0), (-0.5, -0.8, -0.1)], float); p = PolyP(P)
-with_names({0: 'v'}); figs['n4'], _ = svg_poly(p, apex_star(p, 0), labels=lambda f: '')
+with_names({0: 'v'}); figs['n4'], _ = svg_poly(p, apex_star(p, 0), key='n4', labels=lambda f: '')
 # square pyramid and triangular bipyramid
 P = np.array([(0, 0, 1.0)] + reg(4, 1.0, 0, 0.3), float); P[1:, 0] *= 1.3; p = PolyP(P)
-with_names({0: 'v'}); figs['n5_pyr'], _ = svg_poly(p, apex_star(p, 0), labels=lambda f: '')
+with_names({0: 'v'}); figs['n5_pyr'], _ = svg_poly(p, apex_star(p, 0), key='n5_pyr', labels=lambda f: '')
 P = np.array([(0, 0, 1.2), (0, 0, -0.9)] + reg(3, 1.0, 0, 0.2), float); p = PolyP(P)
 deg = {v: sum(v in e for e in p.edges) for v in range(5)}; v4 = [v for v in range(5) if deg[v] == 4][0]
-with_names({v4: 'v'}); figs['n5_bipyr'], _ = svg_poly(p, apex_star(p, v4), labels=lambda f: '')
+with_names({v4: 'v'}); figs['n5_bipyr'], _ = svg_poly(p, apex_star(p, v4), key='n5_bipyr', labels=lambda f: '')
 # pentagonal pyramid
 P = np.array([(0.1, 0, 1.0)] + reg(5, 1.0, 0, 0.1), float); P[1:, 1] *= 0.8; p = PolyP(P)
-with_names({0: 'v'}); figs['t_pyr5'], _ = svg_poly(p, apex_star(p, 0), labels=lambda f: '')
+with_names({0: 'v'}); figs['t_pyr5'], _ = svg_poly(p, apex_star(p, 0), key='t_pyr5', labels=lambda f: '')
 figs['lemmaA'] = figs['t_pyr5']
 # hexagonal pyramid (n=7 illustration)
 P = np.array([(0.05, 0.1, 1.0)] + reg(6, 1.0, 0, 0.05), float); P[1:, 0] *= 1.2; p = PolyP(P)
-with_names({0: 'v'}); figs['n7'], _ = svg_poly(p, apex_star(p, 0), labels=lambda f: '')
+with_names({0: 'v'}); figs['n7'], _ = svg_poly(p, apex_star(p, 0), key='n7', labels=lambda f: '')
 # simplicial 5,5,4,4,3,3 : tetrahedron 0,1,2,3 + bumps 4 (over face 0,1,3) and 5 (over face 0,2,3)
 T = np.array([(1, 1, 1), (1, -1, -1), (-1, 1, -1), (-1, -1, 1)], float)
 b4 = (T[0] + T[1] + T[3]) / 3; n4 = np.cross(T[1] - T[0], T[3] - T[0]); n4 /= np.linalg.norm(n4)
@@ -81,18 +90,18 @@ if np.dot(n5, b5 - T.mean(0)) < 0: n5 = -n5
 P = np.vstack([T, b4 + 0.45 * n4, b5 + 0.45 * n5]); p = PolyP(P)
 deg = {v: sum(v in e for e in p.edges) for v in range(6)}; assert sorted(deg.values()) == [3, 3, 4, 4, 5, 5], deg
 v5 = [v for v in range(6) if deg[v] == 5][0]
-with_names({v5: 'v'}); figs['t_simp55'], _ = svg_poly(p, apex_star(p, v5), labels=lambda f: '')
+with_names({v5: 'v'}); figs['t_simp55'], _ = svg_poly(p, apex_star(p, v5), key='t_simp55', labels=lambda f: '')
 # type 5,4,4,3,3,3: apex over a base made of a planar quad + a lower triangle
 B = [(1, 0, 0), (0.3, 1, 0), (-0.8, 0.6, 0), (-0.8, -0.6, 0), (0.3, -1, 0)]   # b0..b4 ; quad b1 b2 b3 b4 planar, b0 lowered
 P = np.array([(0, 0.1, 1.2)] + B, float); P[1, 2] = 0.15; P[1, 0] = 1.3; p = PolyP(P)
 fs = sorted(len(f) for f in p.faces); deg = {v: sum(v in e for e in p.edges) for v in range(6)}
 assert fs == [3, 3, 3, 3, 3, 3, 4] and sorted(deg.values()) == [3, 3, 3, 4, 4, 5], (fs, deg)
-with_names({0: 'v'}); figs['t_54'], _ = svg_poly(p, apex_star(p, 0), labels=lambda f: '')
+with_names({0: 'v'}); figs['t_54'], _ = svg_poly(p, apex_star(p, 0), key='t_54', labels=lambda f: '')
 # prism: strip of quads, triangles on the middle quad
 A, Bq, C = np.array([(0, 0, 0), (1.3, 0, 0), (0.4, 1.0, 0)], float); up = np.array([0.15, 0.1, 1.1])
 P = np.vstack([A, Bq, C, A + up, Bq + up, C + up]); p = PolyP(P)
 with_names({0: 'A', 1: 'B', 2: 'C', 3: "A′", 4: "B′", 5: "C′"})
-figs['t_prism'], bad = svg_poly(p, [(0, 3), (0, 1), (0, 2), (3, 4), (3, 5)], labels=lambda f: ''); assert not bad
+figs['t_prism'], bad = svg_poly(p, [(0, 3), (0, 1), (0, 2), (3, 4), (3, 5)], key='t_prism', labels=lambda f: ''); assert not bad
 # prism with one diagonal (nonsimp6 construction) : cut tree containing the star of a degree-4 vertex, chosen simple
 def prism_diag():
     A_, B_, C_ = np.array([(0, 0, 0), (1.3, 0.1, 0), (0.5, 1.1, 0)], float); Cp = np.array([0.6, 0.9, 1.2])
@@ -103,7 +112,7 @@ deg = {v: sum(v in e for e in p.edges) for v in range(6)}; v4 = [v for v in rang
 star = set(tuple(sorted(e)) for e in apex_star(p, v4))
 pen = p.penetrations(); good = [t for t, pe in zip(p.trees(), pen) if pe <= 0 and star <= set(p.cut_set(t))]
 with_names({0: 'A', 1: 'B', 2: 'C', 3: "A′", 4: "B′", 5: "C′"})
-figs['t_prismd'], bad = svg_poly(p, p.cut_set(good[0]), labels=lambda f: ''); assert not bad
+figs['t_prismd'], bad = svg_poly(p, p.cut_set(good[0]), key='t_prismd', labels=lambda f: ''); assert not bad
 # octahedron minus an edge: octahedron with v, u_i, w, u_{i+1} coplanar (quad v u_i w u_{i+1})
 def octa_minus():
     # quad = V_0 ∪ W_0 merged: v, u_0, w, u_1 coplanar (y = 0), the other two equator vertices on the y > 0 side
@@ -114,7 +123,7 @@ P, p = octa_minus()
 with_names({0: 'v', 1: 'w', 2: 'u₀', 3: 'u₁', 4: 'u₂', 5: 'u₃'})
 star = set(tuple(sorted(e)) for e in apex_star(p, 0))
 pen = p.penetrations(); good = [t for t, pe in zip(p.trees(), pen) if pe <= 0 and star <= set(p.cut_set(t))]
-figs['t_octa_minus'], bad = svg_poly(p, p.cut_set(good[0]), labels=lambda f: ''); assert not bad
+figs['t_octa_minus'], bad = svg_poly(p, p.cut_set(good[0]), key='t_octa_minus', labels=lambda f: ''); assert not bad
 
 # ---------------------------------------------------------------- octahedron figures
 Pn = np.load('notes/figs/net_typical.npy'); o = Octa(Pn, 0); k = int(np.argmax(o.ku))
@@ -131,6 +140,7 @@ def svg_net_hl(o, k, faces, **kw):
 net = o.Z(k)
 far = [(net[('V', k)], 'o1'), (net[('V', (k + 2) % 4)], 'o1'), (net[('V', (k + 1) % 4)], 'o2'), (net[('V', (k + 3) % 4)], 'o2'),
        (net[('W', (k + 2) % 4)], 'o3'), (net[('W', (k + 3) % 4)], 'o3'), (net[('W', (k + 1) % 4)], 'o3'), (net[('W', k)], 'o3')]
+MODELS['net_typical'] = octa_model(o, k)
 figs['lemmaF'] = svg_net_hl(o, k, far)
 loc = [(net[('V', k)], 'o1'), (net[('V', (k + 3) % 4)], 'o1'), (net[('W', k)], 'o3'), (net[('W', (k + 3) % 4)], 'o3')]
 figs['lemmaL'] = svg_net_hl(o, k, loc)
@@ -146,14 +156,15 @@ for oo in all_apexes(Pn, st[0], st[1]):
 if found is None:
     d = cases[8]; oo = Octa(d['P'], d['v']); kk = d['k']; found = (oo, kk)
 oo, kk = found; hits = list(oo.overlaps(kk))
-figs['octa_false'] = svg_net(oo, kk, highlight=hits)
+figs['octa_false'] = svg_net(oo, kk, highlight=hits); MODELS['octa_false'] = octa_model(oo, kk)
 figs['octa_false_meta'] = dict(v=oo.v, k=kk, kv=round(float(oo.kv), 3), pairs=hits, sharpest=int(max(range(6), key=lambda x: oo.kappa[x])))
 # closest approach under (H) (evidence figure)
 res = pickle.load(open('adv_opp_H3_d.pkl', 'rb')); b, Pb = res[0]; ob = Octa(Pb, b[1])
-figs['evidence'] = svg_net(ob, b[2], highlight=[b[3]])
+figs['evidence'] = svg_net(ob, b[2], highlight=[b[3]]); MODELS['evidence'] = octa_model(ob, b[2])
 figs['evidence_meta'] = dict(sep=round(float(b[4]), 4), kv=round(float(ob.kv), 3), ku=[round(float(x), 3) for x in ob.ku])
 # triple without extras (F_triple) and rotation overlay (F_rot), angular (F_angular), notboth (F_notboth)
 Pt = np.load('notes/figs/triple_H3.npy'); ot = Octa(Pt, 0); i = 1; kt = (i - 1) % 4
+MODELS['triple_H3'] = octa_model(ot, kt)
 figs['F_triple'] = svg_net_hl(ot, kt, [(ot.Z(kt)[('V', i)], 'o1'), (ot.Z(kt)[('V', (i + 2) % 4)], 'o1'), (ot.Z(kt)[('V', (i + 1) % 4)], 'o2')])
 def flat_overlay(o, i):
     k = (i - 1) % 4; net = o.Z(k); j, jj = (i + 1) % 4, (i + 2) % 4
@@ -171,5 +182,39 @@ figs['F_nocross'] = figs['overlap_above']
 figs['F_hinge'] = svg_net_hl(o, k, [(net[('W', (k + 1) % 4)], 'o3'), (net[('W', (k + 2) % 4)], 'o3')])
 figs['F_sharp'] = ''   # drawn inline in the page (axis diagram)
 figs['root'] = figs['net_typical']; figs['n6'] = ''
+for idx, key in ((0, 'overlap_above'), (4, 'overlap_below')):
+    d = cases[idx]; oc = Octa(d['P'], d['v']); kc = d['k']; nmc = d['pair']; ic = kc if nmc == 'V_k-V_k+2' else (kc + 1) % 4
+    MODELS[key] = octa_model(oc, (ic - 1) % 4)
+figs['models'] = MODELS
 json.dump(figs, open('notes/status_figs.json', 'w'))
 print(sorted(k for k in figs if not k.endswith('_meta')))
+
+# ---------------------------------------------------------------- widget presets (cylindrical parameters)
+def params(P, v):
+    o = Octa(P, v); w = o.w; ring = o.u
+    c = (P[v] + P[w]) / 2; ez = P[v] - c; ez /= np.linalg.norm(ez)
+    x0 = P[ring[0]] - c; ex = x0 - np.dot(x0, ez) * ez; ex /= np.linalg.norm(ex); ey = np.cross(ez, ex)
+    Q = lambda q: np.array([np.dot(q - c, ex), np.dot(q - c, ey), np.dot(q - c, ez)])
+    scale = max(np.linalg.norm(P[v] - c), np.linalg.norm(P[w] - c), *[np.linalg.norm(Q(P[u])[:2]) for u in ring])
+    pr = dict(zv=float(np.linalg.norm(P[v] - c) / scale), zw=float(np.linalg.norm(P[w] - c) / scale), u=[])
+    for u in ring:
+        q = Q(P[u]) / scale; r = float(np.hypot(q[0], q[1])); phi = float(np.degrees(np.arctan2(q[1], q[0])) % 360)
+        pr['u'].append(dict(r=round(r, 4), phi=round(phi, 2), z=round(float(q[2]), 4)))
+    order = sorted(range(4), key=lambda i: pr['u'][i]['phi'])
+    if order in ([3, 2, 1, 0], [0, 3, 2, 1], [1, 0, 3, 2], [2, 1, 0, 3]):
+        pr['u'] = [dict(d, phi=(360 - d['phi']) % 360) for d in pr['u']]; order = sorted(range(4), key=lambda i: pr['u'][i]['phi'])
+    assert order in ([0, 1, 2, 3], [1, 2, 3, 0], [2, 3, 0, 1], [3, 0, 1, 2]), order
+    pts = [np.array([0, 0, pr['zv']]), np.array([0, 0, -pr['zw']])] + [np.array([d['r'] * np.cos(np.radians(d['phi'])), d['r'] * np.sin(np.radians(d['phi'])), d['z']]) for d in pr['u']]
+    assert octa_structure(np.array(pts)) is not None; o2 = Octa(np.array(pts), 0); assert abs(o2.kv - o.kv) < 1e-4
+    return pr
+presets = {}
+Pn = np.load('notes/figs/net_typical.npy'); stn = octa_structure(Pn); presets['Typical (v sharpest)'] = params(Pn, sharpest_apex(Pn, stn[0], stn[1]).v)
+presets['Above-base overlap (no hypothesis)'] = params(cases[0]['P'], cases[0]['v'])
+presets['Below-base overlap (no hypothesis)'] = params(cases[4]['P'], cases[4]['v'])
+presets['Triple under (H)'] = params(np.load('notes/figs/triple_H3.npy'), 0)
+presets['Regular octahedron'] = params(np.array([(0, 0, 1), (0, 0, -1), (1, 0, 0), (0, 1, 0), (-1, 0, 0), (0, -1, 0)], float), 0)
+presets['Needle'] = params(np.array([(0, 0, 3.0), (0, 0, -3.0), (0.5, 0, 0.1), (0, 0.4, -0.1), (-0.45, 0, 0.05), (0, -0.5, 0)], float), 0)
+presets['Flat'] = params(np.array([(0, 0, 0.25), (0.1, 0, -0.2), (1.2, 0, 0), (0, 1, 0.05), (-1, 0.1, 0), (0.1, -1.1, 0)], float), 0)
+figs['presets'] = presets
+json.dump(figs, open('notes/status_figs.json', 'w'))
+print("presets:", list(presets))
