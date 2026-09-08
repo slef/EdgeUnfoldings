@@ -271,3 +271,15 @@ MODELS['def_flat'] = preset_model('Flat'); MODELS['def_regular'] = preset_model(
 figs['models'] = MODELS
 json.dump(figs, open('notes/status_figs.json', 'w'))
 print("definition figures added")
+
+# ---------------------------------------------------------------- fat near-misses (adv_fat.py results)
+def add_nearmiss(key, pkl):
+    if not os.path.exists(pkl): return
+    res = pickle.load(open(pkl, 'rb')); b, P = res[0]; o = Octa(P, b[1]); k = b[2]
+    figs[key] = svg_net(o, k, highlight=[b[3]]); MODELS[key] = octa_model(o, k)
+    figs[key + '_meta'] = dict(sep=round(float(b[4]), 4), thick=round(float(b[5]), 3), kv=round(float(o.kv), 3), kw=round(float(o.kw), 3), ku=[round(float(x), 3) for x in o.ku], pair=b[3])
+import os
+add_nearmiss('fat_nearmiss', 'adv_fat_0.30.pkl'); add_nearmiss('fat_round_nearmiss', 'adv_fat_0.30_k0.30.pkl')
+figs['models'] = MODELS
+json.dump(figs, open('notes/status_figs.json', 'w'))
+print("near-miss figures:", [k for k in ('fat_nearmiss', 'fat_round_nearmiss') if k in figs])

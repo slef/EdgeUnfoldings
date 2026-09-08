@@ -160,6 +160,28 @@ Convention trap: several helpers use a "signed side" test; cstar.signed_side is 
   test (fixed 2026-09-08 after a sign bug made the side checks vacuous — always re-verify a new check on the
   44 stored overlaps, which must all be flagged).
 
+## Case A of the Triple Lemma is PROVED (2026-09-08, later session) — see notes/lemmaF.tex §"Case A is closed"
+* No-wrap lemma: under (H), ν_i + ν_j ≤ π + κ_u + κ_{u'} for every triple. Proof: Σκ = 4π and (H) give
+  κ_u + κ_{u'} ≥ 4π − 4κ_v = 4Σν − 4π; if Σν ≥ π then π + κ ≥ 4Σν − 3π ≥ Σν ≥ ν_i + ν_j, else ν_i + ν_j < π.
+* Apex-cone lemma: each petal lies in the cone at its apex spanned by its two cut edges. If κ < ν_j and
+  ν_i, ν_{j+1} ≤ π − ν_j + κ, the two apex cones have disjoint interiors: the cones meet iff the direction
+  v_i → v_{j+1} lies in the sector between the direction v_i → u and the direction u' → v_{j+1} (width
+  π − ν_j + κ < π), and a coordinate computation shows this happens iff both cut edges reach their crossing
+  point p*, i.e. iff they cross — excluded by the cut-edges lemma. So Case A needs NO side condition; the
+  c*-rotation argument (Open problem 1) is superseded and kept only as a second view.
+* Numerics: cones' intersection has empty interior in every Case-A triple under (H) (adversarial depth −0.0007
+  at the guard; without (H) the adversary reaches +0.006); no-wrap margin 1.3 rad (adv_wrap.py, adv_cones.py).
+* Case B (κ ≥ ν_j) remains open. Findings: every tight Case-B configuration under (H) has a needle middle
+  petal between two sharp equator vertices (gaps > π − base angle, "sub-case B2"), and the outer petals approach
+  each other on the BACK side, around the fourth petal V_m at the slit (V_{j+1} leaning over the slit, V_i glued
+  to V_m at u_i). Exact: a Case-B meeting lies beyond both outer-edge lines of W_i, W_{j+1} (away from w), which
+  forces the four fan angles at u, u' to sum to < π and the meeting to lie in the wedge beyond their crossing X;
+  at most one far vertex lies past X. Adversarial closest approach inside that wedge under (H): 3.4% of the
+  diameter (adv_caseB5.py); inside the apex-cone intersection: 0.6% (caseB_four.py). The fan-edge line is NOT a
+  separator in general (adv_caseB4.py). All 18 observed below-base overlaps (no hypothesis) have κ_u+κ_{u'} > 2π.
+  Idea to pursue: treat the back side as a triple around V_m with total gap κ_back = κ_{u_i} + κ_{u_m} + κ_w
+  (Σ of all gaps = 4π − κ_v), and use the apex cones together with the four-line region.
+
 ## Known false (do not retry)
 * "Star unfolding along a non-shortest geodesic is simple": fails ~4e-5.
 * "One of the two slits at the shortest-geodesic edge always works": fails ~0.7%.

@@ -24,6 +24,7 @@ def violation(o, i, hyp):
     if hyp == 'H1': return max(0.0, o.ku[j] - o.kv, o.ku[jj] - o.kv)
     if hyp == 'H2': return max(0.0, o.ku.max() - o.kv)
     if hyp == 'H3': return max(0.0, o.ku.max() - o.kv, o.kw - o.kv)
+    return 0.0   # 'none': no hypothesis
 
 DELTA = 0.05   # degeneracy guard: every edge at least DELTA * diameter
 def best_config(P, hyp):
