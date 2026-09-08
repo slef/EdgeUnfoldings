@@ -21,7 +21,8 @@ function widgetShell() {
     <div class="row"><label>slit k</label><select id="wg-slit"><option value="rule">rule: sharpest neighbour</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select><span></span></div>
     <div id="wg-sliders"></div>
     <div class="row"><label></label><button type="button" id="wg-random">Random shape</button><span></span></div>
-  </div><div class="stage"><div class="figrow"><div id="wg-svg"></div><div><div class="viewer" id="wg-3d"></div><div class="vcap">Drag to rotate. Red: the cut tree, star(v) plus one edge at w.</div></div></div><div class="readout" id="wg-read"></div><div class="grid24" id="wg-grid"></div></div></div>`;
+  <div class="viewer" id="wg-3d"></div><div class="vcap">Drag to rotate. Red: the cut tree, star(v) plus one edge at w.</div>
+    </div><div class="stage"><div id="wg-svg"></div><div class="readout" id="wg-read"></div><div class="grid24" id="wg-grid"></div></div></div>`;
 }
 
 const WG = { params: null };
@@ -124,35 +125,33 @@ function update() {
 // ---------- 3D viewer (orthographic, drag to rotate, cut edges highlighted) --------------------------------
 function viewer3d(el, model, opts) {
   opts = opts || {}; const W = opts.size || 300, H = W;
-  const P = model.P, names = model.names || {};
-  const c0 = [0, 1, 2].map(k => P.reduce((s, p) => s + p[k], 0) / P.length);
-  const faces = model.faces.map(f => { const a = P[f[0]], b = P[f[1]], d = P[f[2]]; const n = cross(sub(b, a), sub(d, a)); return dot(n, sub(c0, a)) > 0 ? [...f].reverse() : [...f]; });  // CCW seen from outside
-  const cutSet = new Set((model.cut || []).map(e => e[0] < e[1] ? e[0] + '-' + e[1] : e[1] + '-' + e[0]));
-  const c = [0, 1, 2].map(k => P.reduce((s, p) => s + p[k], 0) / P.length);
-  const R = Math.max(...P.map(p => Math.hypot(p[0] - c[0], p[1] - c[1], p[2] - c[2]))) || 1;
   const st = { yaw: opts.yaw ?? 0.7, pitch: opts.pitch ?? -0.55 };
-  const edges = {}; faces.forEach((f, fi) => f.forEach((a, t) => { const b = f[(t + 1) % f.length]; const key = a < b ? a + '-' + b : b + '-' + a; (edges[key] = edges[key] || { a, b, faces: [] }).faces.push(fi); }));
-  function rot(p) { const x = (p[0] - c[0]) / R, y = (p[1] - c[1]) / R, z = (p[2] - c[2]) / R;
-    const cy = Math.cos(st.yaw), sy = Math.sin(st.yaw); const x1 = cy * x - sy * y, y1 = sy * x + cy * y;
-    const cp = Math.cos(st.pitch), sp = Math.sin(st.pitch); const y2 = cp * y1 - sp * z, z2 = sp * y1 + cp * z; return [x1, y2, z2]; }
   function draw() {
-    const Q = P.map(rot); const s = W * 0.38; const X = q => [W / 2 + q[0] * s, H / 2 - q[2] * s];   // screen x from x, screen y from z; depth = y (toward viewer = -y)
+    const P = model.P, names = model.names || {};
+    const c0 = [0, 1, 2].map(k => P.reduce((s, p) => s + p[k], 0) / P.length);
+    const faces = model.faces.map(f => { const a = P[f[0]], b = P[f[1]], d = P[f[2]]; const n = cross(sub(b, a), sub(d, a)); return dot(n, sub(c0, a)) > 0 ? [...f].reverse() : [...f]; });
+    const cutSet = new Set((model.cut || []).map(e => e[0] < e[1] ? e[0] + '-' + e[1] : e[1] + '-' + e[0]));
+    const R = Math.max(...P.map(p => Math.hypot(p[0] - c0[0], p[1] - c0[1], p[2] - c0[2]))) || 1;
+    const edges = {}; faces.forEach((f, fi) => f.forEach((a, t) => { const b = f[(t + 1) % f.length]; const key = a < b ? a + '-' + b : b + '-' + a; (edges[key] = edges[key] || { a, b, faces: [] }).faces.push(fi); }));
+    const rot = p => { const x = (p[0] - c0[0]) / R, y = (p[1] - c0[1]) / R, z = (p[2] - c0[2]) / R;
+      const cy = Math.cos(st.yaw), sy = Math.sin(st.yaw); const x1 = cy * x - sy * y, y1 = sy * x + cy * y;
+      const cp = Math.cos(st.pitch), sp = Math.sin(st.pitch); const y2 = cp * y1 - sp * z, z2 = sp * y1 + cp * z; return [x1, y2, z2]; };
+    const Q = P.map(rot); const s = W * 0.38; const X = q => [W / 2 + q[0] * s, H / 2 - q[2] * s];
     const front = faces.map(f => { const a = Q[f[0]], b = Q[f[1]], d = Q[f[2]]; const n = [(b[1]-a[1])*(d[2]-a[2])-(b[2]-a[2])*(d[1]-a[1]), (b[2]-a[2])*(d[0]-a[0])-(b[0]-a[0])*(d[2]-a[2]), (b[0]-a[0])*(d[1]-a[1])-(b[1]-a[1])*(d[0]-a[0])]; return n[1] < 0; });
     let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="v3d">`;
-    // hidden edges first (dashed), then back faces are not drawn, front faces, then visible edges, then labels
-    const ed = Object.values(edges);
-    for (const e of ed) { const vis = e.faces.some(fi => front[fi]); if (vis) continue; const [x1, y1] = X(Q[e.a]), [x2, y2] = X(Q[e.b]); svg += `<line class="hid ${cutSet.has(e.a < e.b ? e.a + '-' + e.b : e.b + '-' + e.a) ? 'cut' : ''}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
-    faces.forEach((f, fi) => { if (!front[fi]) return; const cls = f.length === 3 ? 'tri' : 'quad'; svg += `<polygon class="${cls}" points="${f.map(i => X(Q[i]).map(v => v.toFixed(1)).join(',')).join(' ')}"/>`; });
-    for (const e of ed) { const vis = e.faces.some(fi => front[fi]); if (!vis) continue; const [x1, y1] = X(Q[e.a]), [x2, y2] = X(Q[e.b]); svg += `<line class="vis ${cutSet.has(e.a < e.b ? e.a + '-' + e.b : e.b + '-' + e.a) ? 'cut' : ''}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
+    const ed = Object.values(edges); const ck = e => cutSet.has(e.a < e.b ? e.a + '-' + e.b : e.b + '-' + e.a) ? 'cut' : '';
+    for (const e of ed) { if (e.faces.some(fi => front[fi])) continue; const [x1, y1] = X(Q[e.a]), [x2, y2] = X(Q[e.b]); svg += `<line class="hid ${ck(e)}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
+    faces.forEach((f, fi) => { if (!front[fi]) return; svg += `<polygon class="${f.length === 3 ? 'tri' : 'quad'}" points="${f.map(i => X(Q[i]).map(v => v.toFixed(1)).join(',')).join(' ')}"/>`; });
+    for (const e of ed) { if (!e.faces.some(fi => front[fi])) continue; const [x1, y1] = X(Q[e.a]), [x2, y2] = X(Q[e.b]); svg += `<line class="vis ${ck(e)}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
     P.forEach((p, i) => { const [x, y] = X(Q[i]); const onFront = faces.some((f, fi) => front[fi] && f.includes(i)); svg += `<circle class="${onFront ? 'vtx' : 'vtx hid'}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6"/><text class="${onFront ? '' : 'hid'}" x="${(x + 4).toFixed(1)}" y="${(y - 4).toFixed(1)}">${names[i] ?? i}</text>`; });
-    svg += `</svg>`; el.innerHTML = svg;
+    el.innerHTML = svg + `</svg>`;
   }
   let drag = null;
   el.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, st.yaw, st.pitch]; el.setPointerCapture(e.pointerId); });
   el.addEventListener('pointermove', e => { if (!drag) return; st.yaw = drag[2] + (e.clientX - drag[0]) * 0.012; st.pitch = Math.max(-1.55, Math.min(1.55, drag[3] + (e.clientY - drag[1]) * 0.012)); draw(); });
   el.addEventListener('pointerup', () => { drag = null; }); el.addEventListener('pointercancel', () => { drag = null; });
   el.style.touchAction = 'none'; el.style.cursor = 'grab';
-  draw(); return { draw, set(m) { Object.assign(model, m); draw(); } };
+  draw(); return { draw, set(m) { model = m; draw(); } };
 }
 function mountViewers(root) {
   (root || document).querySelectorAll('.viewer[data-model]').forEach(el => { if (el.dataset.ready) return; el.dataset.ready = '1'; const m = FIGS.models[el.dataset.model]; if (m) viewer3d(el, JSON.parse(JSON.stringify(m))); });
