@@ -74,6 +74,23 @@ The regional certificate keeps the two quadrilateral facets exactly planar.
 It verifies all 15 face pairs: nine by common uncut vertex fans and six by
 separating edges. It is partial coverage, not a proof for the entire chart.
 
+## Relation to Reduction 1 in the overview
+
+The fixed-tree failure does **not** disprove the conditional limit reduction.
+That statement assumes a sequence of convex simplicial refinements approaching
+the original polytope, each admitting a nonoverlapping cut tree using only
+original edges. A constant-tree subsequence has convergent developments, and
+positive-area overlap of limiting faces would persist nearby. Uncut diagonals
+therefore merge back into the original polygonal facets without overlap.
+
+The example disproves only universal success of the displayed two-pair tree.
+The same polyhedron has the independently verified alternative tree above:
+in vertex names its cuts are `ca, ab, bb', cc', c'a'`. The existence of suitable
+refinements and successful trees avoiding every artificial diagonal remains
+unproved for arbitrary shapes. The earlier unconditional claim that the prism
+case was already settled by this reduction was unsupported, but this witness
+does not establish that the required existence statement is false.
+
 ## Next obligation
 
 Independent replay now verifies a larger nine-parameter box using 443 closed
