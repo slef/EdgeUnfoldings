@@ -104,10 +104,12 @@ case, its successful source may be the less sharp pole. It is therefore not
 an additional whole class excluded from the 49-class analysis that fixes the
 sharpest source. That count is now 2 excluded and 47 open after the independent hinge audit.
 
-The all-convex-patch proof remains valid. The one-nonconvex-patch whole-net
-claim has been reopened after the independent far-fan audit. One, two adjacent, two opposite,
-and three nonconvex patches are still open in full; the curvature test can
-cover additional members of those regimes. The sufficient conditions should
+The all-convex-patch proof remains valid. Subsequent independent
+[patch-budget proofs](OCTA_PATCH_BUDGET.md) settle existence under H for
+all configurations with at most two bad patches and for three with mixed
+directions, allowing the four-cut source to move between poles. Three bad
+patches with a common direction remain open in general. The fixed-source
+one-patch claim is still unproved after the far-fan audit. The sufficient conditions should
 be checked directly, without treating sample frequencies as coverage of the
 whole realization space.
 

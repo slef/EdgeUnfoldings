@@ -114,6 +114,10 @@ reduction and fixed-source one-patch whole-net claim are withdrawn.
 A subsequent [two-pole proof](OCTA_ONE_PATCH.md) establishes existence for
 the one-patch family under H. It can exchange the four-cut source, so it
 does not restore that fixed-source claim or change the 47-class count.
+The later [patch-budget theorem](OCTA_PATCH_BUDGET.md) extends existence
+to every two-patch configuration and to three with mixed directions under
+H. Only the common-direction three-patch pattern remains open in this
+patch approach. The fixed-source count remains unchanged.
 
 The following interior-hinge observation remains valid.
 

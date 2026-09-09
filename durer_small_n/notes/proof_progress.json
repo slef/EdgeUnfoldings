@@ -76,21 +76,21 @@
       },
       {
         "label": "Two adjacent nonconvex patches",
-        "status": "open",
-        "link": "octa_half_fan",
-        "condition": "Proved subfamily: either pole has curvature at least 180 degrees"
+        "status": "proved",
+        "link": "octa_budget",
+        "condition": "Existence under H using two pole choices; no 180-degree restriction"
       },
       {
         "label": "Two opposite nonconvex patches",
-        "status": "open",
-        "link": "octa_patches",
-        "condition": "Open in full"
+        "status": "proved",
+        "link": "octa_budget",
+        "condition": "Existence under H for both direction patterns"
       },
       {
         "label": "Three nonconvex patches",
         "status": "open",
-        "link": "octa_patches",
-        "condition": "Open in full"
+        "link": "octa_three_same",
+        "condition": "Mixed directions proved; all three leaning the same way remain open"
       }
     ]
   },

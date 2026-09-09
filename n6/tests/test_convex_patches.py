@@ -35,6 +35,7 @@ class ConvexPatchTests(unittest.TestCase):
                         self.assertEqual(verify(make_certificate(alternate))['result'], 'verified')
                 else:
                     self.assertEqual(result['candidate_slit_indices'], [])
+                    self.assertIn('proves existence using prescribed trees', result['conclusion'])
 
     def test_false_sharpest_apex_hypothesis_is_rejected(self):
         cert = json.loads((self.root/'octa-patches-one.certificate.json').read_text())

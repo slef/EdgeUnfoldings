@@ -107,9 +107,9 @@ relevant to the user's proposed strategy.
 - The zero-patch family retains its stronger result: every opening works.
 - The one-patch family under H now has a complete **two-pole existence
   proof**. Its **fixed sharpest-source** four-choice statement is still open.
-- The half-fan theorem also treats two adjacent bad patches when either
-  pole has curvature at least 180 degrees, but does not close that regime
-  in full. Two opposite bad patches and three bad patches remain open.
+- The later [patch-budget theorem](OCTA_PATCH_BUDGET.md) now treats all
+  two-patch arrangements and mixed directions with three bad patches
+  under H. Three bad patches sharing a common direction remain open.
 - The conservative original fixed-source target is unchanged: **49
   classes, 2 excluded, 47 open**. A theorem allowed to exchange the cut
   source cannot be counted as excluding one of those classes.

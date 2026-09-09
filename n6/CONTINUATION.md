@@ -1,3 +1,46 @@
+# Current continuation: a shared lean budget closes the two-patch cases
+
+10 September 2026 JST / 9 September UTC. [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md)
+proves existence under H for both two-patch arrangements and three bad
+patches with mixed directions. Together with the earlier cases, four of
+five coarse patch regimes are proved, with the fifth partly settled.
+**The remaining pattern is three consecutive bad patches all leaning in
+the same direction.** The original fixed-source count is unchanged:
+2 excluded, 47 open; the new proofs can exchange the four-cut pole.
+
+For each bad patch, the extensions seen from the two poles add to its
+reflex excess. When all curvatures are below pi, the total extensions at
+both poles are smaller than the combined fan gaps, so one pole supplies
+an adequate total gap. A pole of curvature at least pi supplies the
+complementary case. Identities across intervening convex patches finish
+the opposite-patch and mixed-three-patch cases. All proofs use direct
+whole-patch cone separation, not the refuted far-fan lemma.
+
+The new `n6.patch_budget` checker computes all six sufficient angular tests
+for the eight two-pole trees and distinguishes prescribed theorem choices.
+Exact examples cover the new direction cases, and an 18-coordinate region
+has both poles below pi with one fixed net certified throughout. The
+common-direction three-patch example is explicitly classified as an open
+regime despite its independently certified individual net.
+
+Next target: the all-forward (or reflected all-backward) three-patch chain.
+The total budget alone does not stop an extension entering a later patch
+inside the fan. The identity rho_i - (omega_(i+1)+nu_(i+1)) =
+f_(i+1)-pi-kappa_(u_(i+1)) now carries another reflex excess when the next
+patch is bad. Coordinate the resulting chain across both pole views; a
+new geometric step is needed. A [20,000-shape exploratory survey](results/patch-budget-survey.json)
+classified every sample and checked angular choices for the 4,351 samples
+with opposite bad patches or three bad patches. All of those had a successful
+choice, including 28 common-direction three-patch shapes; this is numerical
+evidence only and proves no further case. The written proofs above do not
+depend on that survey. Reproduce it with:
+
+```sh
+durer_small_n/.venv/bin/python -m n6.patch_budget_probe --samples 20000 --seed 6091002 --output /tmp/patch-budget-survey.json
+```
+
+The earlier entries below preserve the successive proof states.
+
 # Continuation: the one-patch family has a two-pole proof
 
 9 September 2026 UTC / 10 September JST. [OCTA_ONE_PATCH.md](OCTA_ONE_PATCH.md)

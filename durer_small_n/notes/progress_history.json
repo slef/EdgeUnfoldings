@@ -1,5 +1,20 @@
 [
   {
+    "date": "10 September 2026 JST · shared lean budget",
+    "title": "Both two-patch arrangements proved; three mixed directions are covered too",
+    "results": [
+      "octa_budget",
+      "octa_three_same",
+      "octa_patches",
+      "octa_half_fan",
+      "octa_one_patch",
+      "t_octa",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#octa_budget\">new geometric proof</a> uses an exact identity: a patch’s extensions viewed from the two poles sum to its reflex excess. Summing over the bad patches gives a shared angle budget when all vertex curvatures are below 180°. A larger-curvature pole supplies the complementary case.</p><p>This settles adjacent and opposite two-patch configurations under H. It also settles three bad patches with mixed directions. The <a href=\"#octa_three_same\">three patches all leaning the same way</a> are the remaining pattern.</p><p>The coarse existence count changes from 2 of 5 regimes to 4 of 5, with the fifth partly settled. This is not a coverage percentage. The four-cut source may change, so the original fixed-source target remains 2 excluded and 47 open. The full octahedron remains open.</p><p>Exact coordinates and an 18-coordinate region independently verify the hypotheses and every face pair of the saved nets. The universal claims come from the written identities and case proofs, not numerical surveys.</p>"
+  },
+  {
     "date": "10 September 2026 JST · 9 September UTC",
     "title": "One bad patch: a complete existence proof by exchanging the poles",
     "results": [

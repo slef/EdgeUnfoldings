@@ -160,6 +160,13 @@ does not settle those regimes in full; the two-pole argument now closes the
 one-patch existence family under H. Neither excludes another entire original fixed-source
 failure class: the conservative count remains **2 excluded, 47 open**.
 
+**Subsequent extension:** [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md)
+removes the half-turn restriction for adjacent bad patches under H,
+using the sum of the extensions seen from both poles. It also proves
+opposite two-patch configurations and mixed directions with three bad
+patches. Three with a common direction remain open. The present half-fan
+theorem retains the benefit of requiring no globally sharpest pole.
+
 ```sh
 python3 -m n6.half_fan n6/results/half-fan-adjacent-family.certificate.json
 python3 -m n6.polycert verify n6/results/half-fan-adjacent-family.certificate.json --bits 240

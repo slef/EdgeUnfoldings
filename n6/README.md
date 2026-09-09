@@ -8,7 +8,15 @@ original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
 case and the convex-patch existence theorem remain proved; the proposed
 fixed-source one-nonconvex-patch argument has a remaining far-fan step.
 
-**Latest proof:** [one bad patch under H](OCTA_ONE_PATCH.md) now has a complete
+**Latest result:** [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md) proves every
+configuration with at most two nonconvex patches, and three with mixed
+directions, under H. It uses the identity that a patch’s two pole extensions
+sum to its reflex excess, plus a total angle budget. **Three bad patches
+with a common direction remain open.** Four of five coarse existence regimes
+are settled, with the fifth partly settled. The fixed-source count is
+unchanged; no percentage of shape space is inferred.
+
+**Previous proof:** [one bad patch under H](OCTA_ONE_PATCH.md) now has a complete
 existence proof using two prescribed trees with different four-cut poles.
 The fixed sharpest-source statement remains open. The independent
 [half-fan argument](OCTA_HALF_FAN.md) handles all three adjacent-two-patch

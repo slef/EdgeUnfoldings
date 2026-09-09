@@ -49,7 +49,11 @@ def classify(spec):
         theorem = 'The two stated fixed-source slits make local pairs safe, and one makes both opposite-petal pairs safe under H. Fixed sharpest-source whole-net success remains open. OCTA_ONE_PATCH.md proves existence using two prescribed trees with different four-cut poles.'
     else:
         regime = 'three' if len(nonconvex) == 3 else 'two-adjacent' if (nonconvex[1]-nonconvex[0])%4 in (1,3) else 'two-opposite'
-        choices = []; theorem = 'This geometric regime remains open in general'
+        choices = []
+        directions = {'B' if patches[i]['corner_relations_to_pi'][0] == '>' else 'F' for i in nonconvex}
+        theorem = ('OCTA_PATCH_BUDGET.md proves existence using prescribed trees with either four-cut pole.'
+                   if len(nonconvex) == 2 or len(directions) == 2 else
+                   'The common-direction three-patch family remains open in general.')
     return dict(result='verified_patch_hypotheses', regime=regime, patches=patches,
                 nonconvex_patches=nonconvex, curvature_order=ranking, sharpest_apex_required=bool(nonconvex),
                 candidate_slit_indices=choices, candidate_slit_vertices=[ring[k] for k in choices],

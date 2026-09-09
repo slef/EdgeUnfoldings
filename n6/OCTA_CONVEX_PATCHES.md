@@ -2,7 +2,10 @@
 
 Timed session, 9 September 2026. **The whole octahedron case remains open.**
 The convex-patch existence and all-convex-case results below are geometric proofs.
-**Latest repair:** [OCTA_ONE_PATCH.md](OCTA_ONE_PATCH.md) proves the
+**Latest result:** [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md) proves both
+two-patch arrangements and the mixed-direction three-patch case under H.
+Only three bad patches with a common direction remain open in this approach.
+The earlier [OCTA_ONE_PATCH.md](OCTA_ONE_PATCH.md) proves the
 one-nonconvex-patch existence family under H using two prescribed trees,
 one at each pole. The old fixed sharpest-source claim remains unproved
 after [HINGE_AUDIT.md](HINGE_AUDIT.md). The new proof does not use that lemma.
@@ -150,9 +153,9 @@ up to cyclic symmetry, are:
 | --- | --- |
 | None | Proved: every opening works |
 | One | Proved existence using two pole choices; fixed sharpest-source rule open |
-| Two, adjacent | Proved if either pole has curvature >=180 degrees; open in full |
-| Two, opposite | Open |
-| Three | Open |
+| Two, adjacent | Proved existence under H, with either four-cut pole |
+| Two, opposite | Proved existence under H for both direction patterns |
+| Three | Mixed directions proved; common direction remains open |
 
 These are five geometric regimes, not five equal amounts of effort or five
 equal fractions of shape space. They are a different view of the problem
