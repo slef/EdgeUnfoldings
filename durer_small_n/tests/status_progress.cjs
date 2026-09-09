@@ -133,3 +133,21 @@ assert(chain.includes('4 of 5 entire patch regimes'));
 assert(chain.includes('2 excluded, 47 open'));
 assert(chain.includes('The full octahedron theorem remains open'));
 assert.notDeepEqual(models.chain_switch.P,models.chain_uncovered.P);
+
+// Local subfamilies must not silently become a proof of the full Lemma L.
+assert.equal(score.octahedron.local_curvature_branches.length,3);
+assert.equal(score.octahedron.local_curvature_branches.filter(g=>g.status==='proved').length,1);
+assert.equal(score.octahedron.pair_groups.find(g=>g.link==='lemmaL').status,'open');
+assert.equal(vm.runInContext('byId.lemmaL.status',ctx),'numeric');
+assert.equal(vm.runInContext('byId.L_gate.status',ctx),'proved');
+const localGate=vm.runInContext('article(byId.L_gate,false)',ctx);
+assert(localGate.includes('the two strict halves remain open in general'));
+assert(localGate.includes('0 of 3 universal local pair obligations complete'));
+assert(localGate.includes('all 18 coordinates independently by ±0.0001'));
+assert(localGate.includes('6/5 as far'));
+assert(localGate.includes('data-model="local_gate_chain"'));
+assert(overview.includes('New partial proof for Lemma L'));
+assert(detailed.includes('Through-fan route proved impossible'));
+assert(detailed.includes('Across-slit route proved impossible'));
+assert.deepEqual(models.local_gate_chain.P,models.chain_uncovered.P);
+assert.notDeepEqual(models.local_gate_chain.cut,models.chain_uncovered.cut);

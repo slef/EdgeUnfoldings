@@ -8,7 +8,16 @@ original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
 case and the convex-patch existence theorem remain proved; the proposed
 fixed-source one-nonconvex-patch argument has a remaining far-fan step.
 
-**Latest result:** [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md) proves
+**Latest result:** [LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md)
+directly advances Lemma L. The slit and opposite-pole curvatures determine
+which of two local overlap routes is impossible; at sum pi, all three local
+pairs are safe. Additional corner subfamilies follow. In the small-sum
+half only one slit-inward petal can cause the remaining two local pairs.
+The general lemma remains open. Exact examples include an 18-coordinate
+box with radial separation ratio 6/5 and independent whole-net certificates.
+Replay with `python3 -m n6.local_gate_examples`.
+
+**Previous result:** [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md) proves
 common-direction three-patch subfamilies with a four-tree rule. The middle
 patch controls a safe pole switch. A simple inward-excess threshold and
 a stronger two-view condition have geometric proofs and exact point/box

@@ -188,3 +188,17 @@ net reports, and the exact audit of the older weighted-curvature criterion.
 It does not run the numerical search that suggested the examples. Decimal
 angles in figures are illustrations; the certificates use outward rational
 bounds at 240 fractional bits.
+
+## Subsequent connection to Lemma L
+
+[LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md) proves a complementary
+local result. In a three-common-direction chain, slit at the equator vertex
+with no inward corner. If its curvature plus the fan pole curvature is at
+most pi, the first and last patches have disjoint angular cones. All three
+local pairs are then safe, even when the middle-patch conditions above fail.
+
+The exact `three-chain-uncovered` solid satisfies this at its maximum-curvature
+equator vertex u3. See `local-gate-three-chain.certificate.json` for this
+alternative cut and its separate whole-net certificate. The local theorem
+alone does not settle the opposite-petal and far-fan pairs, so neither of
+the two general remaining branches above has been closed.

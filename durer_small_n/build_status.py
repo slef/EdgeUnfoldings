@@ -134,6 +134,14 @@ for key, filename, title in [
         view={'yaw': -0.7, 'pitch': 0.3}, title=title,
         caption='The exact convex solid. The two highlighted faces form the middle patch; red edges give a separately certified successful net. Drag to rotate.',
     )
+figs['models']['local_gate_chain'] = witness_model(
+    'local-gate-three-chain.certificate.json', names=['v','w','u₀','u₁','u₂','u₃'],
+    face_names=['W'+str(i) for i in range(4)]+['V'+str(i) for i in range(4)],
+    highlight_faces=[2,3,6,7], faceColors={i:'#8fc1dd' if i<4 else '#e6af78' for i in range(8)},
+    view={'yaw': -0.7, 'pitch': 0.3},
+    title='Lemma L at the maximum-curvature equator slit',
+    caption='Same solid as the earlier uncovered middle-patch example, with a different fifth cut: w–u₃. The highlighted faces are the two flank patches. This selected net has an independent all-pairs certificate. Drag to rotate.',
+)
 t = t.replace('__PROGRESS_CSS__', (notes / 'progress_dashboard.css').read_text())
 t = t.replace('__PROGRESS_DASHBOARD_JS__', (notes / 'progress_dashboard.js').read_text())
 t = t.replace('__SCORE_JSON__', json.dumps(load_progress(notes, research)))

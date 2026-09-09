@@ -1,4 +1,44 @@
-# Current continuation: a middle-patch switch proves three-chain subfamilies
+# Current continuation: direct progress on Lemma L
+
+10 September 2026 JST / 9 September UTC.
+[LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md) proves a new local
+case split without either curvature ranking. Set sigma=kappa_u+kappa_w
+at the slit. If sigma<=pi, the first and last patch cones cannot meet
+through the intervening fan. If sigma>=pi they cannot meet across the slit.
+At equality all three local pairs are safe. The proof adds the two pole
+views of each flank patch, using their shared reflex excess; it includes
+straight patch corners and the equality boundary.
+
+Further local families follow: no inward slit corner in the small-sum
+half; no extension toward the fan interior in the large-sum half; or both
+flanks inward away from the slit with sigma<=2*pi. If sigma<pi and a slit
+corner is inward, only its petal against the other petal and other fan face
+remain. The other mixed pair is proved safe. This narrows the distance
+problem to one petal against the opposite patch, but does not solve it.
+
+The old three-chain-uncovered shape has all three local pairs proved at
+the maximum-curvature equator slit; this is a different fifth cut from its
+previous illustration. The saved point also passes an independent all-pairs
+certificate. A second point illustrates the both-away family with pi<sigma<2*pi.
+
+The exact radial example now has an 18-coordinate box: independently vary
+every coordinate by ±1/10000. Both maximum-curvature selections and angular
+intrusion persist. Radial clipping proves a distance ratio of at least 6/5
+against the opposite fan edge on every shared ray, and separate certificates
+prove all 28 face pairs safe. This is a certified coordinate family, not a
+universal radial inequality. Rebuild with `python3 -m n6.local_gate_examples`.
+
+Next: in sigma<pi, prove simultaneous distance separation of the offending
+petal from both faces of the other patch, using H and the slit ranking.
+Treat the through-fan route separately for sigma>pi. The gate does not use
+those rankings, so they remain extra information for this next step.
+
+The full Lemma L, octahedron, and n=6 remain open. Counts stay 0/3 universal
+local obligations, 4/5 complete patch regimes, and 2 excluded / 47 open
+fixed-source classes. The proof is geometric; numerical searches and linear
+angle relaxations are not used as proofs or as geometric counterexamples.
+
+# Previous continuation: a middle-patch switch proves three-chain subfamilies
 
 10 September 2026 JST / 9 September UTC. [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md)
 proves an original-edge unfolding under H for three bad patches with a

@@ -92,6 +92,26 @@
         "link": "octa_three_same",
         "condition": "Mixed directions and middle-patch common-direction subfamilies proved; two branches remain outside the latter conditions"
       }
+    ],
+    "local_curvature_branches": [
+      {
+        "label": "Lemma L: curvature sum below 180°",
+        "condition": "Through-fan route proved impossible; the across-slit distance problem remains",
+        "status": "open",
+        "link": "L_gate"
+      },
+      {
+        "label": "Lemma L: curvature sum exactly 180°",
+        "condition": "All three local pairs proved safe, including equality",
+        "status": "proved",
+        "link": "L_gate"
+      },
+      {
+        "label": "Lemma L: curvature sum above 180°",
+        "condition": "Across-slit route proved impossible; the through-fan distance problem remains",
+        "status": "open",
+        "link": "L_gate"
+      }
     ]
   },
   "coverage_obligations": [

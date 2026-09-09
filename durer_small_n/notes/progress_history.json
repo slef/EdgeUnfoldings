@@ -1,5 +1,17 @@
 [
   {
+    "date": "10 September 2026 JST · Lemma L curvature split",
+    "title": "A direct partial proof for Lemma L: separate the two possible overlap routes",
+    "results": [
+      "L_gate",
+      "lemmaL",
+      "octa_three_same",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#L_gate\">new geometric proof</a> compares the slit vertex’s curvature plus the fan center’s curvature with 180°. At or below this value it excludes meeting through the intervening fan; at or above it excludes meeting across the slit. At equality all three local pairs are safe. Explicit corner conditions prove additional local families.</p><p>Below 180°, a remaining overlap must involve the unique petal inward at the slit. Its two targets are the other petal and the other fan face; the third local pair is already safe in that subcase. An exact 18-coordinate box around the earlier angular counterexample retains both selection rules and proves a 6/5 radial separation ratio. All 28 face pairs pass independent certificates throughout the box.</p><p>Both strict halves remain open in general. The count stays 0 of 3 universal local obligations, 4 of 5 entire patch regimes, and 2 excluded / 47 open fixed-source classes. The displayed three-patch solid is the earlier uncovered example with a different fifth cut, not a proof of its entire family. Earlier progress entries remain below.</p>"
+  },
+  {
     "date": "10 September 2026 JST · middle-patch switch",
     "title": "A proved four-tree rule inside the last three-patch pattern",
     "results": [

@@ -5,8 +5,29 @@ let `w` be its antipode, and slit at an equator vertex `u` of maximum equator
 curvature. The three pairs to exclude are the first and last petals, and each
 of those petals against the fan face at the opposite side of the slit.
 
-The hinge reduction in Lemma F assumes these local pairs do not overlap. It
-cannot be used to prove L without an independent argument.
+The surviving interior-fan reduction in Lemma F assumes these local pairs
+do not overlap. It cannot be used to prove L without an independent argument;
+the older full far-fan reduction was refuted in [HINGE_AUDIT.md](HINGE_AUDIT.md).
+
+## New partial proof: curvature separates the two possible routes
+
+[LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md) proves that, with
+sigma=kappa_u+kappa_w, a local angular intersection can only occur across
+the slit when sigma<pi, and only through the intervening fan when sigma>pi.
+At sigma=pi all three local pairs are safe. Neither curvature ranking is
+needed for this theorem. Explicit corner conditions close additional local
+families; both strict halves remain open in general.
+
+In the small-sum half, any remaining overlap must involve the petal of the
+unique patch inward at the slit. One mixed pair is then already safe;
+that petal against the other petal and the other fan face are the two targets.
+The radial example below lies in this branch. A new exact certificate varies
+all its 18 coordinates independently by ±1/10000 and proves a distance ratio
+of at least 6/5 on every shared ray, while retaining both curvature rankings.
+All 28 face pairs have separate certificates throughout this box.
+
+The original count stays **0/3 universal local obligations proved**; the
+new boundary and local families are genuine partial results within them.
 
 ## Angular separation about w is also too strong
 

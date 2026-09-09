@@ -7,7 +7,16 @@ There is new rigorous partial coverage of a full coordinate box, an exactly
 checked counterexample to a supporting lemma, and a reproducible reduced SMT
 attempt that reports a timeout.
 
-**Latest continuation, 10 September JST:** [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md)
+**Latest continuation, 10 September JST:**
+[LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md) proves a curvature
+split for the local angular-overlap routes. At slit-plus-fan curvature pi,
+all three local pairs are safe; explicit corner families are also covered.
+Both strict halves remain open in general. A new exact radial coordinate
+box proves a 6/5 distance ratio and whole-net separation, with both selection
+rankings checked. No universal pair obligation or fixed-source failure class
+is newly closed; numerical explorations are not proof premises.
+
+**Previous continuation, 10 September JST:** [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md)
 proves common-direction three-patch subfamilies under H with four prescribed
 trees. Exact hypotheses and all-pairs checks cover points and an 18-coordinate
 box. Two branches outside the sufficient conditions remain open, with an
