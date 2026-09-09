@@ -45,6 +45,16 @@ reports state their coordinate bounds and guards. The best local near-contact
 candidate was rechecked exactly; its selected net is simple. No search absence
 is treated as a theorem, and no numerical lower margin is claimed uniform.
 
+The best joint-reach candidates are limited by the imposed support guard:
+their minimum normalized supporting-plane clearance is approximately 1e-5.
+Their fan-angle sums approach pi from below (gaps about 1.27e-4 and 2.88e-5
+radians). In both, the far vertices approach the wedge crossing, while the
+apex reach scores stay substantially negative. Thus these two optimizations
+point toward nearly flat shapes near the already-proved cone boundary, not
+toward both apices entering together. This is diagnostic numerical evidence
+only; it suggests treating this boundary separately in a future proof and
+explains why the observed negative score cannot be taken as a uniform bound.
+
 The symbolic intrinsic search now supports axis closure. Two versions returned
 `unknown` because of the 1 GB memory limit, after about 159 and 44 seconds.
 The second version uses lower-degree opposite-arc equations and a shorter
