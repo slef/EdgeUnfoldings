@@ -1,6 +1,12 @@
 # Octahedron priority: a four-choice unfolding rule
 
-9 September 2026. **The rule is conjectural.** This note gives a finite
+9 September 2026. **The rule is conjectural.** The [overlap case analysis](OCTA_CASE_ANALYSIS.md)
+now proves two switching implications: moving the opening repairs the old
+local pairs, and opposite petals cannot overlap along both routes under H.
+The sufficient class list reduces from 49 to 24; original class 49 is then
+excluded, leaving 23. The initial enumeration and pilot below are retained.
+
+This note gives a finite
 combinatorial reduction and a numerical comparison, not a proof of the
 octahedron case. The existing two gaps in the sharper H/R rule remain open.
 
@@ -92,13 +98,13 @@ representatives with orbit sizes. An independent test also starts from the
 
 This is a valid combinatorial reduction of the conjecture: excluding all 49
 classes for convex realizations with v of maximum curvature would prove it.
-**No class in this new list has yet been excluded geometrically.** Some could
-be impossible under existing lemmas; that application still needs to be
-checked. These are alternative obligations, not 49 additional gaps appended
+**Initially no class in this list had been excluded geometrically.** The
+[follow-up proof](OCTA_CASE_ANALYSIS.md) now excludes class 49 and explains
+why 24 classes suffice, leaving 23 open. These are alternative obligations, not 49 additional gaps appended
 to the two gaps in the earlier single-choice strategy. There is no justified
 percentage of the octahedron theorem completed.
 
-The first focused target should be the **four classes requiring only two bad
+The initial focused target was the **four classes requiring only two bad
 placements**. They have the fewest simultaneous inequalities. If feasible
 candidates appear, validate the original convex geometry and audit the
 claimed overlaps exactly before drawing a conclusion. An exact failure of
@@ -118,8 +124,8 @@ and the right event obstructs slits u_1 and u_2.
 
 For example, class 49 asks whether the same two opposite petals can overlap
 both when connected around one side of the fan and when connected around the
-other. Excluding that simultaneous event is a concrete candidate lemma. By
-itself it would settle just that class, not the complete four-choice rule.
+other. That simultaneous event is now excluded by the complementary angle
+sums. This settles just that class, not the complete four-choice rule.
 
 ## Initial comparison
 

@@ -5,6 +5,12 @@
 **The full n=6 case remains unproved. Read [n6/REVIEW.md](n6/REVIEW.md)
 before relying on the historical proof status below.**
 
+- Current priority: the octahedron. [n6/OCTA_CASE_ANALYSIS.md](n6/OCTA_CASE_ANALYSIS.md)
+  proves that moving the opening repairs the old local pairs, and under H the
+  same opposite petals cannot overlap along both routes, since the route sums
+  add to 2*pi+curvature(w). The conditional hinge step reduces the sufficient
+  failure list from 49 to 24 classes; the new angle identity excludes original
+  class 49, leaving 23 open. The full four-choice rule, L, and F remain open.
 - Latest proof step: [n6/MINUS_NEIGHBORHOOD.md](n6/MINUS_NEIGHBORHOOD.md)
   applies Pinciu’s Theorem 1, excluding seven of the original 28 minus-edge
   failure classes globally. Twenty-one classes remain open.

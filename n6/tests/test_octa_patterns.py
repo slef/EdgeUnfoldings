@@ -3,7 +3,7 @@ from itertools import product
 from pathlib import Path
 import unittest
 import numpy as np
-from n6.octa_patterns import FACES, canonical_points, four_slit_obligations, selection_rules
+from n6.octa_patterns import FACES, canonical_points, four_slit_obligations, selection_rules, failure_case_analysis
 from n6.minus_patterns import TreeBatch
 from n6.original_star_probe import apex_curvature
 from n6.prism_diagonal import develop, pair_score
@@ -59,6 +59,40 @@ class OctaPatternTests(unittest.TestCase):
         choices = sector_choices(p, FACES, plans, 2*np.pi-curvature)
         self.assertEqual(len(choices), 12)
         self.assertEqual(len(selection_rules(p, trees, curvature)['sharpest_apex_geodesic_endpoints']), 2)
+
+    def test_local_repair_and_reduced_failure_classes(self):
+        report = failure_case_analysis()
+        self.assertEqual(len(report['local_pair_repairs']), 12)
+        for repair in report['local_pair_repairs']:
+            self.assertEqual(len(repair['alternatives']), 3)
+            self.assertEqual({a['slit_vertex'] for a in repair['alternatives']}, set(range(2,6))-{repair['old_slit']})
+            for alternative in repair['alternatives']:
+                self.assertTrue(all(repair['old_slit'] in FACES[f] for f in alternative['hinge_path']))
+        reduced = report['reduced']
+        self.assertEqual((reduced['raw_pair_checks'], reduced['distinct_placements']), (20,16))
+        by_slit = [[e['id'] for e in reduced['events'] if k in e['bad_slits']] for k in range(2,6)]
+        self.assertEqual(list(map(len, by_slit)), [5]*4)
+        minimal = []
+        for c in sorted({frozenset(c) for c in product(*by_slit)}, key=lambda s: (len(s), sorted(s))):
+            if not any(t <= c for t in minimal):
+                minimal.append(c)
+        self.assertEqual(len(minimal), 131)
+        self.assertEqual(sum(c['size'] for c in reduced['classes']), 131)
+        self.assertEqual((reduced['symmetry_classes'], report['geometric_classes_excluded'], report['remaining_classes']), (24,1,23))
+        excluded = [c for c in reduced['classes'] if c['status'] != 'open']
+        self.assertEqual([c['original_class_id'] for c in excluded], [49])
+
+    def test_angle_identity_and_existence_of_adjacent_large_sums(self):
+        report = failure_case_analysis()
+        for identity in report['opposite_route_identities']:
+            self.assertEqual(set(map(tuple, identity['base_angle_terms'])), {(i,s) for i in range(4) for s in ('left','right')})
+            self.assertEqual(len(identity['base_angle_terms']), 8)
+        # Each opposite pair of sums has total > 2*pi, so it cannot contain
+        # two small sums. Every such Boolean pattern has adjacent large sums.
+        for large in product((False,True), repeat=4):
+            if not (large[0] or large[2]) or not (large[1] or large[3]):
+                continue
+            self.assertTrue(any(large[k] and large[(k+1)%4] for k in range(4)))
 
     def test_exact_radial_obstruction_is_not_lost_by_numeric_sector_probe(self):
         filename = Path(__file__).resolve().parents[1]/'results/sector-sharpest-radial-failure.certificate.json'

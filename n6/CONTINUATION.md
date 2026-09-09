@@ -1,4 +1,31 @@
-# Current priority: the octahedron four-slit rule
+# Latest octahedron step: assume overlap and switch
+
+9 September 2026. The [case analysis](OCTA_CASE_ANALYSIS.md) implements the
+user's suggested contradiction/repair approach and explains its relation to
+L and F. Two universal implications are proved:
+
+- Moving the opening repairs all three old local pairs, by the shared-vertex
+  fan lemma. It can introduce different overlaps elsewhere.
+- Under H, the same opposite petals cannot overlap along both fan routes.
+  The necessary overlap conditions S_j<pi and S_{j+2}<pi contradict the exact
+  identity S_j+S_{j+2}=2*pi+curvature(w). This invokes the existing Case A and
+  base-cone exclusions and includes equality boundaries.
+
+Using the conditional hinge lemma inside the no-local-overlap branch reduces
+the sufficient failure list from 49 to 24 classes. The new angle identity
+excludes original class 49, leaving **23 classes** (8 mixed, 15 local-only).
+The 49-to-24 change is removal of redundant obligations, not 25 exclusions.
+The 24-to-23 change is a geometric exclusion. The full rule remains open.
+
+The identity guarantees some opening with both opposite-petal pairs safe.
+Local pairs need not be safe there: a numerical follow-up found 11 apparent
+failures of that stronger restricted selector on the same 3,000 shapes.
+Those candidates are not exactly audited, so the notes identify them only as
+numerical failures. Continue studying mixed/local failure cycles, retaining
+all four choices. The report checks 36 local repairs and the symbolic angle
+identities and preserves original class IDs.
+
+# Earlier priority change: the octahedron four-slit rule
 
 9 September 2026. At the user's request, prioritize the octahedron. The new
 [four-choice proposal](OCTA_FOUR_SLITS.md) retains the sharpest apex and tries

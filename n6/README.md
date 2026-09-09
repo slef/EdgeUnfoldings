@@ -3,9 +3,10 @@
 The full six-vertex theorem is **not proved or computationally certified here**.
 Read [REVIEW.md](REVIEW.md) before using the older handoff or proof notes.
 The current priority is the **octahedron**: [try four slit positions and prove
-one works](OCTA_FOUR_SLITS.md). The simultaneous-failure target has 49 symmetry
-classes, none yet excluded geometrically; a 3,000-shape pilot is numerical
-evidence only. This is an alternative route to the existing two proof gaps.
+one works](OCTA_FOUR_SLITS.md). The [overlap case analysis](OCTA_CASE_ANALYSIS.md)
+proves two switching implications and reduces the sufficient target from 49
+classes to 24. Original class 49 is excluded, leaving 23 open. The 3,000-shape
+pilot is numerical evidence only. This is an alternative to the old two gaps.
 
 A [universal partial lemma](MINUS_NEIGHBORHOOD.md) now excludes seven of the
 28 failure classes of the two-tree conjecture; 21 classes remain open.

@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 import time
 import numpy as np
-from durer_small_n.octa import rand_points, octa_structure
+from durer_small_n.octa import Octa, rand_points, octa_structure
 from n6.minus_patterns import TreeBatch
 from n6.original_star_probe import apex_curvature
 from n6.sector_probe import sector_choices, two_face_paths
@@ -19,6 +19,7 @@ from n6.trees import degree_four_stars, tree_path
 
 FACES = [(1, 2+i, 2+(i+1)%4) for i in range(4)] + [
     (0, 2+(i+1)%4, 2+i) for i in range(4)]
+ADJ = {v: set().union(*(set(f)-{v} for f in FACES if v in f)) for v in range(6)}
 
 
 def canonical_points(raw):
@@ -41,7 +42,7 @@ def canonical_points(raw):
     return (p-p[0])/np.max(np.linalg.norm(p[:, None]-p[None], axis=-1))
 
 
-def four_slit_obligations():
+def four_slit_obligations(local_opposite=False):
     """Minimal sets of bad relative face placements covering all four slits.
 
     Face positions relative to one another depend only on their unique hinge
@@ -50,6 +51,7 @@ def four_slit_obligations():
     which covers can occur geometrically.
     """
     events = {}
+    raw_checks = 0
     for t in degree_four_stars(FACES):
         if t['apex'] != 0:
             continue
@@ -58,6 +60,12 @@ def four_slit_obligations():
             adj[a].append(b)
             adj[b].append(a)
         for a, b in t['pairs']:
+            # A far-fan failure forces a local or opposite-petal failure by
+            # the conditional hinge lemma. This option invokes that geometric
+            # implication; the default enumeration remains independent of it.
+            if local_opposite and a < 4 <= b and (b-4-a)%4 == 2:
+                continue
+            raw_checks += 1
             path = tuple(tree_path(adj, a, b))
             key = min(path, path[::-1])
             events.setdefault(key, set()).add(t['slit_vertex'])
@@ -91,12 +99,80 @@ def four_slit_obligations():
             raise AssertionError('Symmetry left the cover family')
         remaining -= orbit
         orbits.append(dict(representative=list(representative), size=len(orbit)))
-    return dict(scope='Exact combinatorial enumeration; no geometric class excluded.',
+    return dict(scope=('Combinatorial reduction using the conditional hinge lemma; no whole geometric failure class excluded.'
+                       if local_opposite else 'Exact combinatorial enumeration; no geometric class excluded.'),
                 apex=0, antipode=1, slits=[2, 3, 4, 5],
-                raw_pair_checks=36, distinct_placements=len(paths),
+                raw_pair_checks=raw_checks, distinct_placements=len(paths),
                 events=[dict(id=i, hinge_path=list(p), bad_slits=sorted(events[p])) for i, p in enumerate(paths)],
                 minimal_covers=len(covers), cover_sizes=dict(sorted(Counter(map(len, covers)).items())),
                 symmetry_classes=len(orbits), classes=orbits)
+
+
+def failure_case_analysis():
+    """Check slit repairs and retain only local/opposite failure witnesses.
+
+    This applies existing geometric lemmas to verified hinge paths; it is not
+    a formal proof of those lemmas or an exclusion of the remaining classes.
+    """
+    full = four_slit_obligations()
+    reduced = four_slit_obligations(local_opposite=True)
+    path_to_id = {tuple(e['hinge_path']): e['id'] for e in full['events']}
+    original_ids = {tuple(c['representative']): i for i, c in enumerate(full['classes'], 1)}
+    for c in reduced['classes']:
+        original_events = [path_to_id[tuple(reduced['events'][i]['hinge_path'])] for i in c['representative']]
+        c['original_class_id'] = original_ids[tuple(original_events)]
+        paths = [reduced['events'][i]['hinge_path'] for i in c['representative']]
+        # The sole two-event class is the same opposite-petal pair around both
+        # routes. Its two middle fan-angle sums add to 2*pi + curvature(w),
+        # whereas both overlaps would require each sum < pi under (H).
+        opposite_routes = (len(paths) == 2 and all(len(p) == 5 and min(p[0], p[-1]) >= 4 for p in paths)
+                           and {paths[0][0], paths[0][-1]} == {paths[1][0], paths[1][-1]}
+                           and (paths[0][2]-paths[1][2])%4 == 2)
+        c['status'] = 'excluded_by_opposite_route_angle_sum' if opposite_routes else 'open'
+    trees = {t['slit_vertex']: t for t in degree_four_stars(FACES) if t['apex'] == 0}
+    repairs = []
+    for event in full['events']:
+        if len(event['bad_slits']) != 1:
+            continue
+        old_slit = event['bad_slits'][0]
+        a, b = event['hinge_path'][0], event['hinge_path'][-1]
+        alternatives = []
+        for slit, t in trees.items():
+            if slit == old_slit:
+                continue
+            adj = {i: [] for i in range(8)}
+            for f, g in t['hinges']:
+                adj[f].append(g)
+                adj[g].append(f)
+            path = tree_path(adj, a, b)
+            common = set.intersection(*(set(FACES[f]) for f in path))
+            if common != {old_slit} or (a, b) in t['pairs']:
+                raise AssertionError('Local pair did not regain the common uncut vertex')
+            alternatives.append(dict(slit_vertex=slit, hinge_path=path, shared_vertex=old_slit))
+        repairs.append(dict(original_event=event['id'], old_slit=old_slit,
+                            face_pair=[a, b], alternatives=alternatives))
+    # Check the symbolic angle identity: each route uses the four base angles
+    # beside its middle edge; opposite routes use all eight exactly once.
+    route_terms = lambda j: [((j-1)%4, 'right'), (j, 'left'), (j, 'right'), ((j+1)%4, 'left')]
+    all_terms = Counter((i, side) for i in range(4) for side in ('left', 'right'))
+    identities = []
+    for j in range(2):
+        if Counter(route_terms(j)+route_terms(j+2)) != all_terms:
+            raise AssertionError('Opposite routes do not exhaust the fan base angles')
+        identities.append(dict(middle_faces=[j,j+2], sum='2*pi + curvature(w)',
+                               base_angle_terms=route_terms(j)+route_terms(j+2)))
+    closed = sum(c['status'] != 'open' for c in reduced['classes'])
+    reduced['scope'] = 'Using the conditional hinge reduction, 24 classes suffice. The opposite-route angle identity excludes one; 23 remain open.'
+    return dict(schema='n6-octa-failure-analysis-v1',
+                scope='A local pair is repaired by any other slit, using the shared-vertex theorem. The reduced global target uses the conditional hinge lemma. Neither establishes a universally successful slit.',
+                dependencies=['Shared-vertex fan lemma for convex polyhedra',
+                              'Conditional hinge/far-fan lemma: if the three local pairs are disjoint in this net, a far-fan overlap forces an opposite-petal overlap',
+                              'Case A opposite-petal exclusion under maximum apex curvature and the base-cone lemma',
+                              'Triangle angle sums and strictly positive curvature at w'],
+                original_classes=full['symmetry_classes'], reduced=reduced,
+                local_pair_repairs=repairs, opposite_route_identities=identities,
+                geometric_classes_excluded=closed, remaining_classes=reduced['symmetry_classes']-closed,
+                original_classes_retained=[c['original_class_id'] for c in reduced['classes']])
 
 
 def selection_rules(p, trees, curvature):
@@ -114,6 +190,10 @@ def selection_rules(p, trees, curvature):
         result['sharpest_apex_geodesic_endpoints'] = [i for i in at(sharp) if trees[i]['slit_vertex'] in (a, b)]
     else:
         result['sharpest_apex_geodesic_endpoints'] = []
+    o = Octa(p, sharp, FACES, ADJ)
+    sums = np.roll(o.bWp, 1)+o.bW+o.bWp+np.roll(o.bW, -1)
+    allowed = [o.u[k] for k in range(4) if min(sums[(k+1)%4], sums[(k+2)%4]) >= np.pi-1e-12]
+    result['sharpest_apex_large_fan_sums'] = [i for i in at(sharp) if trees[i]['slit_vertex'] in allowed]
     return result
 
 
@@ -179,10 +259,14 @@ def main():
     ap.add_argument('--max-attempts', type=int, default=100000)
     ap.add_argument('--output', type=Path, default=Path('n6/results/octa-patterns.json'))
     ap.add_argument('--obligations', action='store_true')
+    ap.add_argument('--case-analysis', action='store_true')
     args = ap.parse_args()
     if args.samples <= 0 or args.max_attempts <= 0:
         ap.error('Counts must be positive')
-    report = four_slit_obligations() if args.obligations else run(args.samples, args.seed, args.max_attempts)
+    if args.case_analysis:
+        report = failure_case_analysis()
+    else:
+        report = four_slit_obligations() if args.obligations else run(args.samples, args.seed, args.max_attempts)
     args.output.write_text(json.dumps(report, indent=2)+'\n')
     print(json.dumps({k: v for k, v in report.items() if k not in ('first_numerical_failures', 'events', 'classes')}, indent=2))
 
