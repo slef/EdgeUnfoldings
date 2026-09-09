@@ -117,3 +117,31 @@ Even successful verification of either larger box would still leave the rest
 of the unbounded metric domain, near-degenerate limits, and any missing charts
 to be covered. A universal certificate needs an exhaustive domain reduction
 and certified handling of every resulting region.
+
+
+## Progress measurement added to the overview
+
+The partial prism search `prism-balanced-cover.partial.json.gz` has 1,649
+cells labelled certified by the generator and 94 unresolved cells. Exact
+structural volume accounting gives
+
+```
+candidate-covered fraction = 437/4194304  ≈ 0.0104198%
+unresolved fraction        = 4193867/4194304 ≈ 99.9895802%.
+```
+
+Counting leaves equally would suggest about 94.6% coverage, which is incorrect:
+the candidate-covered cells are much smaller. These fractions measure volume
+in the nine chart parameters, not a fraction of all convex prism shapes.
+A complete independent geometric replay of the partial cover has not finished;
+the dashboard therefore labels this measurement **provisional**. The new
+`n6.progress` command can perform that replay; it rejects any false certified
+label and leaves unresolved cells explicit. A slow replay started during this
+update was stopped without a proof conclusion.
+
+This is **box B**, centered at `(0,1,0,0,1,5/2,1/2,9/10,9/10)` with half-widths
+`(1/4,1/5,1/4,1/4,1/5,1/2,1/10,1/10,1/10)`. It is a different box from the
+independently verified 443-leaf **box A** above; it is not a nested enlargement
+of A. The two percentages must not be added. Future comparisons should keep
+the same root box, coordinate chart, and verification status, or explicitly
+start a new series.

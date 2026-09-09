@@ -1,5 +1,20 @@
 [
   {
+    "date": "9 September 2026 · progress dashboard added",
+    "title": "Counts now distinguish proof gaps, local extent, and search coverage",
+    "results": [
+      "progress",
+      "t_octa",
+      "t_octa_minus",
+      "t_prismd",
+      "lemmaL",
+      "F_triple",
+      "research_plan",
+      "certification"
+    ],
+    "body": "<p>The <a href=\"#progress\">new dashboard</a> records 4 of 7 types proved, 2 of 3 opposite-petal angle branches proved, and the two remaining octahedron proof obligations. The 19 directly settled face pairs are separated from the four conditional ones.</p><p>Minus-edge progress is shown as certified half-widths ±0.01 → ±0.05 in the same ten-coordinate box. The two prism boxes are identified separately: box A is fully certified; box B has only 437/4194304 of its parameter volume marked covered by the search, with full independent replay pending.</p><p>A retained before-and-after table makes explicit that the latest research hour closed no universal proof gap. Its exact counterexamples and neighborhood results remain useful, separately recorded progress.</p>"
+  },
+  {
     "date": "9 September 2026 · 02:57 UTC",
     "title": "Apex-entry failure extends to a certified neighborhood",
     "results": [

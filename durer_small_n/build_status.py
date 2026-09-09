@@ -2,6 +2,7 @@
 import json, datetime
 from fractions import Fraction
 from pathlib import Path
+from progress_data import load_progress
 notes = Path(__file__).resolve().parent / 'notes'
 research = notes.parent.parent / 'n6'
 figs = json.loads((notes / 'status_figs.json').read_text())
@@ -70,6 +71,9 @@ figs['models']['apex_entry'] = witness_model(
     caption='The same convex polyhedron. The two tested petals are orange and purple; red edges are cut. Drag or use arrow keys to rotate.',
 )
 t = (notes / 'status_template.html').read_text()
+t = t.replace('__PROGRESS_CSS__', (notes / 'progress_dashboard.css').read_text())
+t = t.replace('__PROGRESS_DASHBOARD_JS__', (notes / 'progress_dashboard.js').read_text())
+t = t.replace('__SCORE_JSON__', json.dumps(load_progress(notes, research)))
 # Preserve earlier progress entries; append a new dated snapshot when results change.
 t = t.replace('__PROGRESS_JSON__', json.dumps(json.loads((notes / 'progress_history.json').read_text())))
 t = t.replace('__FIGS_JSON__', json.dumps(figs)).replace('__GLOSS_JS__', (notes / 'glossary.js').read_text()).replace('__WIDGET_JS__', (notes / 'widget.js').read_text()).replace('__UPDATED__', datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z'))

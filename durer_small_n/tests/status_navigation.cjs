@@ -9,7 +9,7 @@ function element(id) {
   return {id, innerHTML:'', style:{}, setAttribute(){}, appendChild(){},
     focus(){visits.push(['focus',id]);}, scrollIntoView(){visits.push(['scroll',id]);}};
 }
-for (const id of ['detail','strip','tree','expandAll','progress-history']) elements.set(id,element(id));
+for (const id of ['detail','strip','tree','expandAll','progress-history','progress-dashboard']) elements.set(id,element(id));
 const document = {
   addEventListener(name, f){ (handlers[name] ||= []).push(f); },
   getElementById(id){
@@ -54,7 +54,7 @@ assert.deepEqual(visits.at(-1),['scroll','defs-H']);
 assert(!click('F_basecones',{ctrlKey:true}).defaultPrevented);
 assert(!click('unrecognized-id').defaultPrevented);
 const ids = vm.runInContext('new Set([...NODES.map(n=>n.id),...DEFS.map(d=>d[0])])',ctx);
-const rendered = vm.runInContext("NODES.map(n=>article(n,true)).join('') + progressHistory()",ctx);
+const rendered = vm.runInContext("NODES.map(n=>article(n,true)).join('') + progressHistory() + progressDashboard()",ctx);
 for (const m of rendered.matchAll(/<a\b[^>]*href="#([^"]+)"/g)) assert(ids.has(m[1]),`Broken result link: ${m[1]}`);
 assert(!/__\w+__/.test(html),'No unresolved build tokens');
 console.log('Navigation: changed/same hash, history, definitions, show-all, modified clicks, and all result links pass.');
