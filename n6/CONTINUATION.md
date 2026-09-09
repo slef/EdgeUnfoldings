@@ -8,6 +8,8 @@ classes, 2 excluded and 47 open**. Reopen the one-nonconvex-patch whole-net
 claim. Its local and opposite-petal repair steps survive, as do all-convex
 patches and the two independent switching implications.
 
+The restricted interior-fan lemma is now also proved in the audit note: once local and opposite-petal pairs are safe, only the two slit-side far-fan pairs remain. This leaves the conservative original 49-class count unchanged.
+
 The strongest new positive result is unchanged: **every centrally symmetric
 octahedron unfolds**, by the opposite-pair curvature theorem. The new
 [local radial-cover theorem](OCTA_RADIAL_COVER.md) combines exact chord and

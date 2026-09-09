@@ -98,3 +98,20 @@ local bounds separately. This is a proof target, not yet an unfolding rule
 proved for the remaining family.
 The full octahedron theorem, the global four-choice rule, and the general
 forms of L and F remain open.
+
+
+## A related literature result, with an extra geometric hypothesis
+
+Radons, *Edge-unfolding nested prismatoids*, Theorem1.1, proves unfoldability
+when the solid is the convex hull of polygons in two parallel planes and
+one polygon's orthogonal projection is properly contained in the other.
+Thus octahedra with two opposite parallel triangular faces and strict
+projection containment are already covered by that theorem. Its construction
+splits the lateral band into two pieces and uses radial monotonicity.
+
+The curvature-face reduction above does not imply parallel planes or
+projection containment. This literature result therefore supplies a known
+special family and a possible geometric tool, not a proof of the remaining
+curvature branches or of the sharpest-source four-choice algorithm.
+
+Primary source: [Radons, Theorem 1.1 and Section 1.2](https://arxiv.org/html/2105.00555v3).

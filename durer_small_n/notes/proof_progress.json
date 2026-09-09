@@ -21,7 +21,7 @@
         "link": "F_below"
       },
       {
-        "label": "Petal\u2013far-fan pairs",
+        "label": "Petal–far-fan pairs",
         "count": 4,
         "status": "open",
         "link": "F_hinge"
@@ -30,19 +30,19 @@
     "angle_branches": [
       {
         "label": "Case A",
-        "condition": "\u03ba < \u03bd",
+        "condition": "κ < ν",
         "status": "proved",
         "link": "F_above"
       },
       {
-        "label": "Case B, fan sum \u2265 \u03c0",
-        "condition": "\u03ba \u2265 \u03bd and \u03a3W \u2265 \u03c0; equality included",
+        "label": "Case B, fan sum ≥ π",
+        "condition": "κ ≥ ν and ΣW ≥ π; equality included",
         "status": "proved",
         "link": "F_basecones"
       },
       {
-        "label": "Case B, fan sum < \u03c0",
-        "condition": "\u03a3W < \u03c0",
+        "label": "Case B, fan sum < π",
+        "condition": "ΣW < π",
         "status": "open",
         "link": "F_below"
       }
@@ -57,7 +57,7 @@
         "link": "F_below"
       },
       {
-        "label": "Prove far-fan separation under H, including entry at the cut boundary",
+        "label": "Prove the two slit-side far-fan pairs after local and opposite-petal safety",
         "link": "F_hinge"
       }
     ]
@@ -68,7 +68,7 @@
   ],
   "snapshots": [
     {
-      "label": "Before the latest research hour \u00b7 02:05 UTC",
+      "label": "Before the latest research hour · 02:05 UTC",
       "date": "2026-09-09T02:05:00Z",
       "proved_types": 4,
       "octahedron_angle_branches": 2,
@@ -80,7 +80,7 @@
       "minus_cells": 409
     },
     {
-      "label": "After that hour \u00b7 03:05 UTC",
+      "label": "After that hour · 03:05 UTC",
       "date": "2026-09-09T03:05:00Z",
       "proved_types": 4,
       "octahedron_angle_branches": 2,

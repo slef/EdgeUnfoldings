@@ -121,8 +121,20 @@ inside $V_2$. Strict supporting facets, overlap, and all 27 safe pairs have
 rational interval certificates. Vertex $u_2$ is sharper than $v$.
 A different original-edge tree gives a certified successful net.
 
-Even after local and opposite-petal safety are established under H, the
-far-fan step needs an H-specific proof. The following Triple Lemma concerns
+\paragraph{Restricted surviving lemma.}
+Assume local nonoverlap. If a petal $P$ meets a different fan triangle $W$
+whose two radial edges are uncut, then $P$ also meets $W$'s petal $V$.
+Indeed, if $P$ avoids $V$, its interior cannot meet $W$'s equator edge;
+Lemma~\ref{hinge} excludes its two open radial edges. There are interior
+points of $P$ outside $W$, near the midpoint of $P$'s own base, which lies
+in a different fan wedge. A generic segment from one of those points to a
+supposed interior point of $P\cap W$ would cross one of $W$'s open edges,
+a contradiction. The segment can be chosen to avoid the three vertices.
+Thus, after local and opposite-petal safety, only the two slit-side far-fan
+pairs remain: $V_2/W_0$ and $V_1/W_3$ when the slit is $wu_0$.
+
+Even after local and opposite-petal safety are established under H, these
+two slit-side pairs need a further proof. The following Triple Lemma concerns
 the opposite petals only.
 
 \begin{conjecture}[Triple Lemma]\label{triple}
@@ -615,9 +627,11 @@ half-plane one. The six wedge--lean inequalities of the handoff fail in $0.5\%$ 
 $w$), so they cannot replace the argument above.
 
 \section*{Code}
+\begingroup\small
 \texttt{octa.py} (module: all quantities, nets $Z_k$, nine pairs, intersection polygons),
 \texttt{vwedge.py}, \texttt{oppcases.py} (collect/classify/draw overlaps), \texttt{adv\_opp.py} (adversarial
 separation), \texttt{cstar.py} (checks of \S\ref{sec:cstar}), \texttt{adv\_eps.py}, \texttt{adv\_mu.py},
 \texttt{adv\_cstar.py} (adversarial tests of \eqref{epscrit} and of the crossing conditions),
 \texttt{tikz\_net.py} (figures), \texttt{draw.py} (PNG); Case B: \texttt{caseB\_sub.py} (sub-cases, seeded adversary), \texttt{caseB\_draw.py}, \texttt{adv\_crossA.py}, \texttt{adv\_reach.py}, \texttt{adv\_angle.py}, \texttt{adv\_rule.py}, \texttt{lp\_angles.py}.
+\endgroup
 \end{document}

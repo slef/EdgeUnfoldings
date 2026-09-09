@@ -73,6 +73,40 @@ The numerical audit first found this example. Its verdict comes from the
 independent rational replay, not the sample. Two earlier optimization runs
 failed to find it, illustrating why unsuccessful searches are not proofs.
 
+## What survives: the two interior fan triangles
+
+**Restricted lemma.** Assume the three local pairs are nonoverlapping.
+If a petal overlaps a different, interior fan triangle (one with both radial
+edges uncut), it also overlaps the petal attached to that triangle. No
+curvature ranking is required.
+
+**Proof.** Write P for the entering petal, W for the interior fan triangle,
+and V for W's own petal. Suppose P and V have disjoint interiors. The interior
+of P cannot meet either open radial edge of W: a small disk about such a
+point would enter both adjacent fan faces, contrary to the surviving
+interior-hinge lemma. Nor can the interior of P meet the relative interior
+of W's equator edge, since that would enter V on its other side.
+
+P has interior points outside W. Indeed, its own equator edge belongs to a
+different fan triangle; the midpoint of that edge lies strictly inside that
+triangle's angular wedge, disjoint from W's wedge. Nearby interior points of
+P remain outside W. If P also had an interior point inside W, a generic
+segment between the two points, lying entirely inside P, would cross the
+relative interior of one of W's three edges. Choose the segment to avoid
+the three vertices of W. Every such crossing was just excluded, a
+contradiction. Thus P and W cannot overlap without P and V overlapping.
+
+For a slit at w-u0, the interior fan triangles are W1 and W2. Of the four
+residual petal/far-fan pairs, the lemma treats V3/W1 and V0/W2; their
+corresponding opposite-petal pairs are V3/V1 and V0/V2. The other two pairs,
+V2/W0 and V1/W3, target the slit-side triangles. The exact counterexample
+uses the first of these and therefore respects the restricted lemma.
+
+Consequently, after local and opposite-petal safety are known, **only the
+two slit-side far-fan pairs remain**. This is a conditional geometric
+reduction. It neither proves those last two pairs nor changes the current
+conservative count of 47 open original failure classes.
+
 The audit also caught a numerical replay bug: saved tree pairs become lists
 in JSON, whereas the batch mask expected tuples. The mask now normalizes
 them. Exact certificate checkers were unaffected; a regression reproduces

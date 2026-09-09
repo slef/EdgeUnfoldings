@@ -206,3 +206,27 @@ rerun current build+tests+deployment after staging all intended changes.
 The new hinge figure was rendered and visually checked. Corrected lemmaF.pdf
 was compiled twice and changed pages visually checked, then copied to repo.
 Do not add the two user PDFs. Do not merge or push. Finish at11:11:09UTC.
+
+
+## Final validation checkpoint, around11:06UTC
+
+Commit68bc005 saved the exact hinge audit, mixed sector proof, certificates,
+web changes and regression fixes. All128Python tests and all3webtests pass;
+the packaged-site check resolved82evidence links. The remaining changes are
+written refinements plus the corresponding overview/PDF updates:
+
+- Restricted interior-fan lemma rigorously recovers2of4far-fan implications
+  after local/opposite-petal safety; only the2slit-side targets remain.
+  Full proof by generic boundary-crossing is in HINGE_AUDIT.md and lemmaF.tex.
+  The conservative current49class target/47open remains unchanged.
+- Explicit all-nonobtuse-face corollary: every source/every opposite opening
+  succeeds, by all-convex patches. Includes equality and asymmetric shapes.
+- Primary Radons Theorem1.1 gives a known additional nested-prismatoid slice;
+  its parallel-plane/strict-projection-containment assumptions are explicit.
+  The curvature-face reduction does not supply either extra assumption.
+- Re-read Aronov–O'Rourke Section8.1 and Theorem9.1 directly from the primary
+  paper: the sector radius and exterior nonoverlap input are as stated.
+
+No numerical research computation remains running. Finish latestPDF/web
+validation and local checkpoint by11:11:09UTC, then stop the timed session.
+User PDFs remain untracked; nothing merged or pushed.

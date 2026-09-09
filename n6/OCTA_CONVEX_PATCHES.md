@@ -111,6 +111,15 @@ interiors because their total angle at w is below 2*pi. Within each patch,
 the two triangles lie on opposite sides of their shared edge. All face pairs
 are therefore safe. This conclusion does not need H.
 
+**Recognizable corollary.** Every convex octahedron whose eight triangular
+faces are nonobtuse has such an unfolding at every source and every opening.
+Each equator corner of a two-face patch is then a sum of two angles at most
+90 degrees, hence is at most 180 degrees. All four patches are convex and
+the theorem applies. Right angles are included. This gives a simple rule
+for that complete family: choose any vertex, cut its four edges, and cut
+any edge from its opposite vertex. It is not restricted to regular or
+centrally symmetric shapes.
+
 ## The one-nonconvex-patch argument has a remaining step
 
 Assume H and let Q_i be the only nonconvex patch. The proposed choices are
