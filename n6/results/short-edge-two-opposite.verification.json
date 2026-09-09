@@ -1,0 +1,130 @@
+{
+  "hypotheses": {
+    "result": "verified_short_edge_cover_hypotheses",
+    "source": 1,
+    "sector_vertex": 0,
+    "curvature_threshold": "2*pi/3 (120 degrees)",
+    "angle_sum_product": [
+      [
+        "298706628670418784365209836947709938013399389156116440315743496473569521/6277101735386680763835789423207666416102355444464034512896",
+        "298706628670418784365209836947709938013399389156116440315743709598113001/6277101735386680763835789423207666416102355444464034512896"
+      ],
+      [
+        "1411331127332778557623975035832052401015809263370045229785522072039442315/6277101735386680763835789423207666416102355444464034512896",
+        "352832781833194639405993758958013100253952315842511307446380577467941695/1569275433846670190958947355801916604025588861116008628224"
+      ]
+    ],
+    "diagonal_squared": [
+      "10034",
+      "10034"
+    ],
+    "short_vertices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "squared_length_gaps": {
+      "2": [
+        "5438",
+        "5438"
+      ],
+      "3": [
+        "7242",
+        "7242"
+      ],
+      "4": [
+        "6793",
+        "6793"
+      ],
+      "5": [
+        "4508",
+        "4508"
+      ]
+    },
+    "routes": [
+      {
+        "patch": 0,
+        "possible_shortest_path": false,
+        "short_endpoints": [
+          2,
+          3
+        ],
+        "corner_relations": [
+          "<",
+          ">"
+        ]
+      },
+      {
+        "patch": 1,
+        "possible_shortest_path": true,
+        "short_endpoints": [
+          3,
+          4
+        ],
+        "corner_relations": [
+          "<",
+          "<"
+        ]
+      },
+      {
+        "patch": 2,
+        "possible_shortest_path": false,
+        "short_endpoints": [
+          4,
+          5
+        ],
+        "corner_relations": [
+          "<",
+          ">"
+        ]
+      },
+      {
+        "patch": 3,
+        "possible_shortest_path": true,
+        "short_endpoints": [
+          5,
+          2
+        ],
+        "corner_relations": [
+          "<",
+          "<"
+        ]
+      }
+    ],
+    "candidate_slit_vertices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "conclusion": "At least one tree star(source) plus sector_vertex--u, for a listed u, is nonoverlapping. Choose a shortest two-face pole-to-pole path and a short endpoint of its crossed edge.",
+    "scope": "Exact hypotheses on the specified point or parameter region, invoking the written sufficient theorem and its exterior-sector dependency. This does not prove the criterion always holds or verify an individual selected net."
+  },
+  "net": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 19,
+      "separating_edge": 9
+    },
+    "strict_facet_supports": 24,
+    "planarity_identities": 24,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 192
+  },
+  "patch_regime": "two-opposite",
+  "scope": "One exact instance of the sufficient theorem; no claim that this entire patch regime passes the test."
+}

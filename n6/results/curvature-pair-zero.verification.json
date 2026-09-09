@@ -1,0 +1,64 @@
+{
+  "hypotheses": {
+    "result": "verified_curvature_pair_hypotheses",
+    "sector_vertex": 0,
+    "source": 1,
+    "source_curvature_band": ">",
+    "weighted_comparison": "Source curvature at least pi already supplies 2*J >= 2*pi",
+    "incident_angle_products": {
+      "0": [
+        [
+          "157065136031176963711669642021931734540313007109853431689486890497737187/3138550867693340381917894711603833208051177722232017256448",
+          "314130272062353927423339284043863469080626014219706863378973870383128403/6277101735386680763835789423207666416102355444464034512896"
+        ],
+        [
+          "239636755706316977705004331447129931874242184984580035641422225610541413/3138550867693340381917894711603833208051177722232017256448",
+          "479273511412633955410008662894259863748484369969160071282844574040657547/6277101735386680763835789423207666416102355444464034512896"
+        ]
+      ],
+      "1": [
+        [
+          "-2246835268345644950390253624681929889049429843958033342153498772279583/6277101735386680763835789423207666416102355444464034512896",
+          "-1123417634172822475195126812340964944524714921979016671076741796254227/3138550867693340381917894711603833208051177722232017256448"
+        ],
+        [
+          "7955047341162625327282857465362708262712043024069454103468940616708017/1569275433846670190958947355801916604025588861116008628224",
+          "7955047341162625327282857465362708262712043024069454103468944190234265/1569275433846670190958947355801916604025588861116008628224"
+        ]
+      ]
+    },
+    "candidate_slit_vertices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "conclusion": "A shortest two-face source-to-sector path has an endpoint u with |sector--u| no greater than its length. Cutting star(source) plus sector--u gives a nonoverlapping net.",
+    "scope": "Exact hypotheses on this point or region, invoking the written curvature-pair and exterior-sector theorems. No universal coverage claim and no certification of an arbitrarily selected net."
+  },
+  "net": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 19,
+      "separating_edge": 9
+    },
+    "strict_facet_supports": 24,
+    "planarity_identities": 24,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 192
+  },
+  "patch_regime": "zero"
+}

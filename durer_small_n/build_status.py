@@ -7,7 +7,7 @@ notes = Path(__file__).resolve().parent / 'notes'
 research = notes.parent.parent / 'n6'
 figs = json.loads((notes / 'status_figs.json').read_text())
 figs['thickness'] = json.loads((notes / 'thickness.json').read_text())
-for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg')]:
+for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg')]:
     svg = (research / 'figures' / filename).read_text()
     figs[key] = svg[svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 # Keep each 3D picture, its labels, and its cuts tied to the exact witness.
@@ -80,6 +80,13 @@ for apex,fan in [('P',{0,1,6}),('Q',{0,3,4})]:
         caption='The same exact polyhedron, with the cuts for T_'+apex+'. Drag or use arrow keys to rotate.',
     )
 t = (notes / 'status_template.html').read_text()
+figs['models']['octa_patches'] = witness_model(
+    'octa-patches-one.certificate.json', names=['v','w','u₀','u₁','u₂','u₃'],
+    face_names=['W'+str(i) for i in range(4)]+['V'+str(i) for i in range(4)],
+    highlight_faces=[1,5], view={'yaw': -0.7, 'pitch': 0.3},
+    title='Exact octahedron with one nonconvex flattened patch',
+    caption='The same convex octahedron. The two colored faces form Q₁ when flattened. Red edges give the certified successful opening at u₃. Drag to rotate.',
+)
 t = t.replace('__PROGRESS_CSS__', (notes / 'progress_dashboard.css').read_text())
 t = t.replace('__PROGRESS_DASHBOARD_JS__', (notes / 'progress_dashboard.js').read_text())
 t = t.replace('__SCORE_JSON__', json.dumps(load_progress(notes, research)))

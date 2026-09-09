@@ -1,0 +1,54 @@
+[
+  {
+    "regime": "zero",
+    "short_vertices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "successful_slit": 2,
+    "certificate": "short-edge-zero.certificate.json"
+  },
+  {
+    "regime": "one",
+    "short_vertices": [
+      2,
+      4,
+      5
+    ],
+    "successful_slit": 2,
+    "certificate": "short-edge-one.certificate.json"
+  },
+  {
+    "regime": "two-adjacent",
+    "short_vertices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "successful_slit": 2,
+    "certificate": "short-edge-two-adjacent.certificate.json"
+  },
+  {
+    "regime": "two-opposite",
+    "short_vertices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "successful_slit": 2,
+    "certificate": "short-edge-two-opposite.certificate.json"
+  },
+  {
+    "regime": "three",
+    "short_vertices": [
+      4,
+      5
+    ],
+    "successful_slit": 4,
+    "certificate": "short-edge-three.certificate.json"
+  }
+]

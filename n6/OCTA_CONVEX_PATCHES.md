@@ -70,8 +70,14 @@ the two cyclic orientations. The associated strict inequalities would be
 d_0<d_1<d_2<d_3<d_0, or the reverse. The checked case report enumerates these
 assignments; the distance lemma explains why neither is geometrically possible.
 
+The conclusion can be strengthened to at least one **strictly convex** patch.
+If a corner is exactly pi, its vertex lies on the segment from w to v_i,
+so d_i=|wv_i|<d_{i+1} still holds. Two corners at least pi at the same
+equator vertex are still forbidden by positive curvature. The same argument
+therefore rules out four patches each having a corner at least pi.
+
 A constructive refinement: at least one of the two patches next to a vertex
-minimizing d_i is convex. Otherwise both would have to be reflex at that same
+minimizing d_i is strictly convex. Otherwise both would have to be reflex at that same
 minimum vertex, contradicting its positive curvature.
 
 ### Original failure class 20 is impossible
@@ -145,7 +151,7 @@ combined into a completion percentage.
 ## Exact examples and the numerical survey
 
 The checker in `n6.convex_patches` uses outward rational bounds to establish
-the convex original facets, maximum apex curvature, and the two corner sums
+the convex original facets, maximum apex curvature when required, and the two corner sums
 of every patch. Five saved integer-coordinate examples establish that all
 five listed regimes are nonempty; their displayed successful nets also have
 independent all-pairs certificates. The examples in the three open regimes
@@ -165,3 +171,27 @@ python3 -m n6.polycert verify n6/results/octa-patches-one.certificate.json --bit
 The two exact replay commands need only the standard library. Their reports
 check the explicit examples' hypotheses and nets; the universal lemmas above
 are written mathematical proofs with the stated dependencies.
+
+## A three-patch sector shortcut is exactly false
+
+The shortest-path theorem in GEODESIC_SECTOR.md implies that with three
+nonconvex patches, the remaining patch carries the unique two-face route
+between the poles. This does not make the sector radial inequality automatic,
+even when its sector vertex is globally sharpest. The exact integer example
+in `results/sector-three-patch-radial-failure.certificate.json` has three
+nonconvex patches, but all four edges from its sharpest vertex are longer
+than the valid two-face path through the remaining patch. The sector test
+fails. A separate all-pairs certificate proves its original four-choice net
+successful. This rules out the proposed sufficient-condition shortcut, not
+edge unfoldability or the three-patch geometric regime.
+
+```sh
+python3 -m n6.convex_patches --verify n6/results/sector-three-patch-radial-failure.certificate.json
+python3 -m n6.sector_audit n6/results/sector-three-patch-radial-failure.certificate.json
+python3 -m n6.polycert verify n6/results/sector-three-patch-radial-failure.certificate.json --bits 240
+```
+
+A separate sufficient result in [OCTA_SHORT_EDGES.md](OCTA_SHORT_EDGES.md)
+covers further families in all three open regimes, by checking short original
+edges against the pole-to-pole chord length. It does not settle an entire
+remaining regime or exclude another whole failure class.

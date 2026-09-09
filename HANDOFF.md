@@ -5,6 +5,12 @@
 **The full n=6 case remains unproved. Read [n6/REVIEW.md](n6/REVIEW.md)
 before relying on the historical proof status below.**
 
+- New complete families: [curvature-pair theorem](n6/OCTA_TWO_SHARP_POLES.md)
+  proves a net when the sharper pole curvature K and opposite curvature J
+  satisfy K+2J>=2*pi; every centrally symmetric octahedron follows. The
+  [short-edge test](n6/OCTA_SHORT_EDGES.md) gives a separate sufficient family.
+  These conditions are not universal and do not alter the 22 fixed-source
+  open classes.
 - Current priority: the octahedron. [n6/OCTA_CASE_ANALYSIS.md](n6/OCTA_CASE_ANALYSIS.md)
   proves that moving the opening repairs the old local pairs, and under H the
   same opposite petals cannot overlap along both routes, since the route sums

@@ -92,3 +92,8 @@ w. There is still no proof that some oriented antipodal pair always passes both
 sector tests. The archive's finite searches and `sector_probe.py` must retain
 this distinction. The universal obligation is existence of a choice, not
 further verification of the sufficient implication itself.
+
+A later exact witness has **three nonconvex patches**, so even a unique valid
+two-face patch does not remove the radial obstruction. See
+[OCTA_CONVEX_PATCHES.md](OCTA_CONVEX_PATCHES.md) and
+`results/sector-three-patch-radial-failure.verification.json`.

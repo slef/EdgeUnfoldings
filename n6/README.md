@@ -8,6 +8,12 @@ proves two switching implications and reduces the sufficient target from 49
 classes to 24. Original classes 20 and 49 are excluded, leaving 22 open. The new [convex-patch proofs](OCTA_CONVEX_PATCHES.md) settle every shape with zero or one nonconvex patch (under H for one); three geometric regimes remain open. The 3,000-shape
 pilot is numerical evidence only. This is an alternative to the old two gaps.
 
+The new [curvature-pair theorem](OCTA_TWO_SHARP_POLES.md) proves unfoldability
+when the sharper pole has curvature K, its opposite J, and K+2J>=2*pi.
+Every centrally symmetric octahedron follows. A separate
+[short-edge test](OCTA_SHORT_EDGES.md) proves further families, including some
+three-patch shapes. Neither sufficient condition is universal.
+
 A [universal partial lemma](MINUS_NEIGHBORHOOD.md) now excludes seven of the
 28 failure classes of the two-tree conjecture; 21 classes remain open.
 

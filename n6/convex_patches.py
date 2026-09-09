@@ -12,9 +12,8 @@ from n6.curvature import face_angle, verify_order
 from n6.regimes import positive_angles_pi
 
 
-def classify(spec):
-    g = Geometry(spec)
-    selection = spec['selection']
+def geometry_patches(g, selection):
+    """Check the octahedral labels and classify four flattened patches."""
     v, w, ring = selection['apex'], selection['antipode'], selection['equator']
     require(v != w and len(ring) == len(set(ring)) == 4 and set(ring)|{v,w} == set(range(6)), 'Invalid poles or equator')
     required = {frozenset((pole, ring[i], ring[(i+1)%4])) for pole in (v,w) for i in range(4)}
@@ -29,6 +28,14 @@ def classify(spec):
         require(relations != ['>','>'], 'A simple two-triangle patch cannot have two reflex corners')
         patches.append(dict(index=i, equator_edge=[a,b], corner_relations_to_pi=relations,
                             convex=all(r in ('<','=') for r in relations)))
+    return patches
+
+
+def classify(spec):
+    g = Geometry(spec)
+    selection = spec['selection']
+    v, w, ring = selection['apex'], selection['antipode'], selection['equator']
+    patches = geometry_patches(g, selection)
     nonconvex = [p['index'] for p in patches if not p['convex']]
     require(len(nonconvex) <= 3, 'Contradicts the convex-patch existence lemma')
     # The all-convex theorem does not need H. In particular, do not reject a

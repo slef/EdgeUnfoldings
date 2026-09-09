@@ -53,3 +53,103 @@ classes,100 starts, output results/octa-targeted-session.json. Started08:59UTC,
 should finish about09:43UTC. Do not duplicate; failures to find overlaps exclude
 no class. Exact-audit any positive feasible candidate. New files uncommitted;
 web and tests are being integrated and need validation/checkpoint.
+
+## Checkpoint around 09:31 UTC
+
+Commit803d1a6 saved the two patch regime proofs and class20 exclusion, with104
+tests passing and68 deployed evidence links checked. Further uncommitted work:
+- Actual four-patch SVG, successful net SVG, and rotating3D exact model on page.
+- Exact three-nonconvex-patch radial failure, source1/sector0, all four spokes
+  longer than valid two-face path; original H-star net independently verified.
+- OCTA_SHORT_EDGES.md and sector_cover.py prove a separate sufficient metric
+  family: sector vertex curvature>=120deg and every strictly convex patch has
+  an endpoint with spoke<=Euclidean pole chord. Star cuts are at the opposite
+  source vertex. Proof invokes Aronov–O'Rourke exterior-sector Theorem9.1,
+  re-read from primary PDF this turn. Five exact instances incl3patches pass;
+  six new tests pass (including length equality and nonmax high curvature).
+  Not yet on overview/logs or committed; no new whole class/regime closed.
+- Strengthened existence lemma: at least one strictly convex patch, since a
+  straight corner also forces strict broken-path increase. Boundary included.
+
+Targeted search session50965 still active, about14of22 classes complete;
+all best scores negative, mostly rounding-scale. Exclude no classes.
+Temporary central-symmetry pilot session69189:10k affine cross polytopes,
+classify patches at sharpest apex; no result yet. Need inspect before claiming.
+Temporary metric-cover all-high-vertex probe:16of10k fail even the patch-aware
+chord criterion numerically; no universal criterion claim. Results in/tmp.
+
+## Checkpoint around 09:50 UTC — strong new theorem
+
+OCTA_TWO_SHARP_POLES.md now proves the stronger curvature-pair criterion:
+sector pole K>=120degrees and K+2J>=360degrees implies a successful
+star(other pole)+one edge net. In particular if K>=J the weighted bound
+implies K>=120 automatically. Proof: both sector spokes>L would force
+omega+2nu>2pi by adding two triangle side/angle comparisons. The cone angle
+bounds instead give omega+2nu<=3pi-K/2-J<=2pi. Angular sector condition is
+automatic. Hence **every centrally symmetric octahedron** is proved: the two
+sharpest opposite vertices tie and each has curvature>=120. Original H-source
+four-choice rule is proved for that symmetric family. No historical novelty
+claim and no extra whole fixed-source failure class excluded.
+
+curvature_pair.py checks actual interval hypotheses; verify_central checks
+central symmetry by polynomial identities. Four exact point examples and a
+nine-variable central affine box have independent successful-net certificates.
+Six new curvature tests pass, including phase wrapping/equalities, rejection
+of a low-opposite-curvature case, and central midpoint tampering. Six sector
+cover tests also pass. Full suite expected116; run before checkpoint.
+
+Overview now has nodes octa_curvature and octa_short_edges, readable proof,
+central corollary, exact links, and retained history. Patch page has actual
+SVG+3D examples. All are uncommitted after803d1a6.
+
+Targeted numerical search FINISHED:22 classes,3,109,962 objective evaluations,
+7,140 optimizer runs; all best overlap scores negative. Excludes no class.
+File n6/results/octa-targeted-session.json and module octa_targeted.py need
+checkpoint. All earlier exec sessions are complete.
+
+New combined numerical pilot /private/tmp/octa-combined-probe.json (seed6090948):
+20,000 shapes;10,386 pass zero/one patch condition;17,487 pass weighted pair;
+19,978 pass some high-vertex short-edge cover;16 pass none of these three
+simple criteria. Counts overlap and are NOT global coverage. The first
+uncovered example has three high-curvature vertices forming a face, their
+opposites low, and two nonconvex patches at the sharpest apex. Next exact-audit
+that residual and investigate this pattern. The whole octahedron remains open.
+
+## Checkpoint around 10:00 UTC
+
+Exact uncovered representative now saved, small integer points, in
+results/octa-new-criteria-uncovered.certificate.json. proof_family_audit.py
+proves every eligible sector vertex fails the weighted pair and chord-cover
+criteria, and H-source has two nonconvex patches. Independent net is successful.
+OCTA_REMAINING_FAMILIES.md records scope and completed22-class search counts.
+Two tests added; full expected118. Overview links the exact remaining example.
+
+Dependency audit underway: reread actual Case-A no-wrap/apex-cone/nocross
+proofs in durer_small_n/notes/lemmaF.tex; algebra is consistent. Far-fan hinge
+proof wording needs careful review at the exterior radial cut boundary.
+Temporary numerical dependency audit session85525 tests10k shapes ×24nets
+for far-fan overlap with all local and opposite pairs clear; poll it. No
+claim of a flaw yet. This dependency affects the earlier switching reduction
+and one-patch proof, not the new independent curvature/sector results.
+
+Other exploratory leads: face-angle criterion omega+2nu<=2pi at all patches
+of a >=120-degree sector vertex is sufficient by the new radial lemma, but
+not universal (207 numerical failures/20k); angular relaxation SAT is not a
+polyhedron. A convex-boundary-net shortcut has no qualifying cut tree on the
+exact uncovered example (numerical best largest corner204.57degrees). Do not
+promote these exploratory results to proofs or add redundant page criteria.
+
+## Checkpoint around 10:06 UTC
+
+All 118 Python tests pass, along with navigation, progress, minus-edge, and
+deployment checks (78 evidence links resolve). New proofs, certificates, and
+illustrations are staged for a local checkpoint. No merge or push.
+
+Both temporary hinge audits completed without a counterexample. The 10,000
+shape audit found 23 nets with far overlap and local pairs clear; all had an
+opposite-petal overlap. The targeted two-orbit search (session74089) made
+224 optimizer runs and299,060 objective evaluations over240 seconds; neither
+target achieved a positive feasible overlap with local and opposite pairs
+clear. Numerical failure is not proof. The wording at a radial cut boundary
+is still being examined; no flaw in the implication has been established.
+No computations remain running as of this checkpoint.

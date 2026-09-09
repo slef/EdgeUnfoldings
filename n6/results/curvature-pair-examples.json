@@ -1,0 +1,22 @@
+[
+  {
+    "regime": "zero",
+    "successful_slit": 2,
+    "certificate": "curvature-pair-zero.certificate.json"
+  },
+  {
+    "regime": "one",
+    "successful_slit": 2,
+    "certificate": "curvature-pair-one.certificate.json"
+  },
+  {
+    "regime": "two-adjacent",
+    "successful_slit": 2,
+    "certificate": "curvature-pair-two-adjacent.certificate.json"
+  },
+  {
+    "regime": "two-opposite",
+    "successful_slit": 2,
+    "certificate": "curvature-pair-two-opposite.certificate.json"
+  }
+]

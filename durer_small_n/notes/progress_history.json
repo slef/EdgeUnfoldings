@@ -1,5 +1,18 @@
 [
   {
+    "date": "9 September 2026 \u00b7 curvature and length theorems",
+    "title": "An opposite-pair curvature test; every centrally symmetric octahedron follows",
+    "results": [
+      "octa_curvature",
+      "octa_short_edges",
+      "octa_patches",
+      "t_octa",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#octa_curvature\">curvature-pair proof</a> guarantees a net if the sharper pole\u2019s curvature plus twice its opposite\u2019s is at least 360\u00b0. The required short edge follows by adding two elementary triangle-angle comparisons. This proves every centrally symmetric octahedron.</p><p>A separate <a href=\"#octa_short_edges\">short-edge condition</a> proves further geometric families, including some shapes with three nonconvex patches. Both arguments use the exterior-sector star-unfolding theorem. Their conditions are not universal. The fixed-source class count remains 2 excluded and 22 open, and no additional whole six-vertex type has been settled.</p>"
+  },
+  {
     "date": "9 September 2026 \u00b7 convex-patch proofs",
     "title": "Two geometric regimes proved; a second failure class excluded",
     "results": [

@@ -1,0 +1,64 @@
+{
+  "hypotheses": {
+    "result": "verified_curvature_pair_hypotheses",
+    "sector_vertex": 0,
+    "source": 1,
+    "source_curvature_band": "<",
+    "weighted_comparison": "K >= 2*pi-2*J by exact angle-product ordering",
+    "incident_angle_products": {
+      "0": [
+        [
+          "54131234813736554090192357841827874001204815470485364257650634372542024082574804525715853193514431/6277101735386680763835789423207666416102355444464034512896",
+          "54131234813736554090192357841827874001204815470485364257650634372542351812539927718401700198414177/6277101735386680763835789423207666416102355444464034512896"
+        ],
+        [
+          "6632423649087467452321697637366106541284458497117799410841350021055404196832751596910259353659807/6277101735386680763835789423207666416102355444464034512896",
+          "1658105912271866863080424409341526635321114624279449852710337505264750880000390231282147037457777/1569275433846670190958947355801916604025588861116008628224"
+        ]
+      ],
+      "1": [
+        [
+          "-14467252697762142817956022606333117708628695167695252858293765824779396739088790512577/6277101735386680763835789423207666416102355444464034512896",
+          "-14467252697762142817956022606333117708628695167695252858293765823081245520896562168243/6277101735386680763835789423207666416102355444464034512896"
+        ],
+        [
+          "-2388141448288652610024833248711763252178488703297665116797761531278292277464502664069/784637716923335095479473677900958302012794430558004314112",
+          "-9552565793154610440099332994847053008713954813190660467191046124047081489427212777967/3138550867693340381917894711603833208051177722232017256448"
+        ]
+      ]
+    },
+    "candidate_slit_vertices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "conclusion": "A shortest two-face source-to-sector path has an endpoint u with |sector--u| no greater than its length. Cutting star(source) plus sector--u gives a nonoverlapping net.",
+    "scope": "Exact hypotheses on this point or region, invoking the written curvature-pair and exterior-sector theorems. No universal coverage claim and no certification of an arbitrarily selected net."
+  },
+  "net": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 19,
+      "separating_edge": 9
+    },
+    "strict_facet_supports": 24,
+    "planarity_identities": 24,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 192
+  },
+  "patch_regime": "two-adjacent"
+}
