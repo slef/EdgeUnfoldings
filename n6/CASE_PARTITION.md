@@ -164,6 +164,14 @@ The checked assignment is an abstract angle countermodel, not a claimed convex
 octahedron. It must not be described as a counterexample to the candidate
 geometric lemma.
 
+The continuation adds a precise metric compatibility test in
+[INTRINSIC_METRIC.md](INTRINSIC_METRIC.md). The older angle countermodel forces
+both sets of spokes to increase strictly around a closed cycle, so it cannot
+share consistent edge lengths. Conversely, a new exact intrinsic metric shows
+that matching edge lengths and the rankings do not suffice if the convex-vertex
+cone conditions are dropped. A smaller algebraic query now retains both
+ingredients; the first 900-second run timed out without settling the bound.
+
 ## The slit rule closes the two-apex branch, conditional on L
 
 Let `s` be the slit vertex. Its maximum equator curvature gives

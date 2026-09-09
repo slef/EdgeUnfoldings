@@ -8,6 +8,49 @@ of those petals against the fan face at the opposite side of the slit.
 The hinge reduction in Lemma F assumes these local pairs do not overlap. It
 cannot be used to prove L without an independent argument.
 
+## Angular separation about w is also too strong
+
+The one-hour continuation produced a stronger obstruction than the earlier
+bisector example: **no line through w separates one flank petal from the
+opposite fan face**, even under both curvature selection rules. Their angular
+cones overlap, but their distances from w keep the actual faces disjoint.
+
+![A ray through both face interiors, at different distances](figures/local-radial-failure.svg)
+
+The exact integer points are
+
+```
+0=(-100,  0,-3)   1=( 62,14,-1)   2=(57,-22, 0)
+3=( -80, -1, 2)   4=( -8, 4, 4)   5=(69,  5,-1).
+```
+
+Here `v=0`, `w=4`, the slit is at `u=2`, and the slit-based equator is
+`(2,5,1,3)`. The first petal is `V_0=(0,2,5)` and the opposite fan face is
+`W_3=(4,3,2)`. The cuts are `01,02,03,05,24`.
+
+Develop this pair in one common net frame. The checker proves that the ray
+from w to the petal apex lies strictly inside the fan face's angular cone.
+It also checks a ray through the petal's interior point with barycentric
+weights `(3/4,1/8,1/8)`. This ray therefore passes through both face interiors,
+at different distances. No line through w can put the whole fan face on one
+side and that interior petal point on the other. These assertions follow from
+strict rational determinant bounds, with the hull and both curvature rankings
+checked first.
+
+Independently, the full-net certificate verifies all 28 pairs: 19 uncut
+vertex-fan checks and nine separating-edge checks. Thus **Lemma L is not
+refuted**. What fails is the stronger proposal to prove it entirely by disjoint
+angular sectors centered at w. A complete proof must include distance or other
+information beyond that proposed angular separation. In particular, replacing
+the bisector by a better-chosen line through w does not repair this approach.
+
+```
+python3 -m n6.local_radial n6/results/local-radial-failure.certificate.json
+python3 -m n6.polycert verify n6/results/local-radial-failure.certificate.json
+```
+
+The drawing is illustrative; both proof verdicts come from the exact checker.
+
 ## Exact rejection of a proposed bisector shortcut
 
 Let the two copies of `u` be `u+` and `u-`. They have equal distance from `w`,

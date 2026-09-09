@@ -10,8 +10,9 @@ from n6.intervals import sub,norm2
 from n6.curvature import verify_order
 
 
-def verify(cert):
-    g=Geometry(cert);claim=cert['bisector_failure'];v=claim['apex'];u=claim['slit_vertex']
+def selected_flanks(cert,claim):
+    """Validate the hull, cut tree, rankings, and slit-based ring once."""
+    g=Geometry(cert);v=claim['apex'];u=claim['slit_vertex']
     require(len(g.faces)==8 and all(len(f)==3 for f in g.faces),'Expected triangular octahedron')
     adj={x:set() for x in range(6)}
     for f in g.faces:
@@ -27,13 +28,23 @@ def verify(cert):
             i=f.index(w);nxt[f[(i+1)%3]]=f[(i+2)%3]
     ring=[u]
     while len(ring)<4:ring.append(nxt[ring[-1]])
+    return g,v,w,u,ring,ranking
+
+
+def opposite_flank_development(g,v,w,ring,side):
     lookup={frozenset(f):i for i,f in enumerate(g.faces)}
-    side=claim['petal'];require(side in ('first','last'),'Unknown flank petal')
+    require(side in ('first','last'),'Unknown flank petal')
     i,j=(0,3) if side=='last' else (3,0)
     root=lookup[frozenset((w,ring[i],ring[(i+1)%4]))]
     target=lookup[frozenset((v,ring[j],ring[(j+1)%4]))]
     path=tree_path(g.adj,root,target)
     A=g.develop(path[:1]);B=g.develop(path)
+    return A,B,(ring[i],ring[(i+1)%4])
+
+
+def verify(cert):
+    claim=cert['bisector_failure'];g,v,w,u,ring,ranking=selected_flanks(cert,claim)
+    side=claim['petal'];A,B,_=opposite_flank_development(g,v,w,ring,side)
     difference=norm2(sub(B[v],A[u]))-norm2(g.vector(u,v))
     require(difference.hi<0,'Bisector failure not certified')
     return dict(result='verified_failure_of_bisector_separator',petal=side,apex=v,antipode=w,slit_vertex=u,

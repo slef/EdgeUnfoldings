@@ -15,7 +15,7 @@ import gzip
 from pathlib import Path
 import time
 from n6.certify import require
-from n6.polycert import Geometry,propose_pairs,verify as verify_leaf
+from n6.polycert import Geometry,PairUnresolved,propose_pairs,verify as verify_leaf
 
 
 def read_cover(path):
@@ -79,9 +79,70 @@ def verify(cover):
 
 
 def summary(cover):
-    counts=Counter();depth=0
-    for node,_,d in leaves(cover):counts[node['kind']]+=1;depth=max(depth,d)
-    return dict(counts,maximum_depth=depth)
+    counts=Counter();depth=0;volumes=Counter()
+    widths=[F(b)-F(a) for a,b in cover['geometry']['parameter_box']]
+    for node,box,d in leaves(cover):
+        counts[node['kind']]+=1;depth=max(depth,d);fraction=F(1)
+        for (a,b),width in zip(box,widths):
+            if width:fraction*=(F(b)-F(a))/width
+        volumes[node['kind']]+=fraction
+    require(sum(volumes.values())==1,'Subdivision volume does not equal the root')
+    return dict(counts,maximum_depth=depth,
+                parameter_volume_fractions={k:str(v) for k,v in volumes.items()},
+                scope='Structural bookkeeping only; certified labels are not independently replayed here. Volume is in these chart parameters.')
+
+
+def merge_covers(covers):
+    """Overlay closed subdivisions, using any certificate that covers a cell.
+
+    The output is a candidate cover requiring independent replay. Restricting
+    a certified leaf preserves its mathematical witness, but interval replay
+    may still be inconclusive and must never be skipped.
+    """
+    require(bool(covers),'No input covers')
+    base=covers[0]['geometry']
+    for cover in covers:
+        require(cover['geometry']==base,'Cannot merge different root geometries')
+        list(leaves(cover))  # Validate all split positions before using them.
+    def trim(node,box):
+        while node['kind']=='split':
+            lo,hi=map(F,box[node['axis']]);mid=F(node['value'])
+            if hi<=mid:node=node['children'][0]
+            elif lo>=mid:node=node['children'][1]
+            else:break
+        return node
+    def combine(nodes,box):
+        nodes=[trim(n,box) for n in nodes]
+        certified=next((n for n in nodes if n['kind']=='certified'),None)
+        if certified is not None:return deepcopy(certified)
+        split=next((n for n in nodes if n['kind']=='split'),None)
+        if split is None:return dict(kind='unresolved',reason='Unresolved in every input cover')
+        children=children_boxes(box,split['axis'],split['value'])
+        return dict(kind='split',axis=split['axis'],value=split['value'],
+                    children=[combine(nodes,b) for b in children])
+    return dict(schema='n6-binary-region-cover-v1',geometry=deepcopy(base),
+                tree=combine([c['tree'] for c in covers],base['parameter_box']),
+                merging=dict(inputs=len(covers),scope='Candidate union; every resulting leaf still requires independent geometric replay.'))
+
+
+def affine_split_hint(g,pair):
+    """Heuristic only: split a parameter contributing to a failed separator.
+
+    Score the closest separating-edge enclosure by its relative excess above
+    zero, then use the largest retained affine coefficient. Nonlinear error can
+    defeat this heuristic; every proposed child still needs exact verification.
+    """
+    a,b=pair;best=None
+    for owner in (a,b):
+        f=g.faces[owner]
+        for edge in zip(f,f[1:]+f[:1]):
+            bounds=g.separating_bounds(a,b,owner,edge)
+            scored=[(q.hi/(q.hi-q.lo),q) for q in bounds if q.hi>0 and q.hi>q.lo and getattr(q,'a',{})]
+            if not scored:continue
+            score,q=max(scored,key=lambda x:x[0])
+            axis=max(q.a,key=lambda j:abs(q.a[j]))
+            if best is None or score<best[0]:best=(score,axis)
+    return best
 
 
 def rank_trees(base,box,trees):
@@ -99,7 +160,7 @@ def rank_trees(base,box,trees):
     return [trees[i] for _,i in sorted(ranking,reverse=True)]
 
 
-def generate(base,output,max_seconds=300,max_leaves=10000,max_depth=40,candidates=3,resume=None):
+def generate(base,output,max_seconds=300,max_leaves=10000,max_depth=40,candidates=3,resume=None,split_strategy='width'):
     from n6.trees import all_trees
     start=time.monotonic();trees=all_trees([tuple(f) for f in base['faces']])
     cover=deepcopy(resume) if resume is not None else dict(schema='n6-binary-region-cover-v1',geometry=base,tree=dict(kind='unresolved',reason='pending'))
@@ -108,7 +169,7 @@ def generate(base,output,max_seconds=300,max_leaves=10000,max_depth=40,candidate
     pending=[x for x in leaves(cover) if x[0]['kind']=='unresolved'];leaf_count=sum(1 for _ in leaves(cover))
     attempts=successes=splits=0;failures=Counter();saved=start
     while pending and time.monotonic()-start<max_seconds:
-        node,box,depth=pending.pop();attempts+=1;cert=None;reason='no candidate tree'
+        node,box,depth=pending.pop();attempts+=1;cert=None;reason='no candidate tree';hint=None
         # A failed interval estimate is never accepted as proof of infeasibility.
         try:
             # Facet checks, polynomial projections, and path developments can
@@ -121,7 +182,11 @@ def generate(base,output,max_seconds=300,max_leaves=10000,max_depth=40,candidate
                     pairs=propose_pairs(g)
                     cert={**base,'parameter_box':box,'cut_edges':t['cuts'],'pair_witnesses':pairs}
                     break
-                except ValueError as error:reason=str(error)
+                except ValueError as error:
+                    reason=str(error)
+                    if split_strategy=='affine' and isinstance(error,PairUnresolved):
+                        suggestion=affine_split_hint(g,error.faces)
+                        if suggestion is not None and (hint is None or suggestion[0]<hint[0]):hint=suggestion
         except ValueError as error:reason=str(error)
         if cert is not None:
             node.clear();node.update(kind='certified',cuts=cert['cut_edges'],pairs=cert['pair_witnesses']);successes+=1
@@ -130,6 +195,7 @@ def generate(base,output,max_seconds=300,max_leaves=10000,max_depth=40,candidate
             if depth<max_depth and leaf_count<max_leaves:
                 ratios=[(F(b)-F(a))/width if width else F(0) for (a,b),width in zip(box,initial_widths)]
                 axis=max(range(len(box)),key=ratios.__getitem__) if box else None
+                if hint is not None and ratios[hint[1]]>0:axis=hint[1]
                 if axis is not None and ratios[axis]>0:
                     mid=(F(box[axis][0])+F(box[axis][1]))/2
                     boxes=children_boxes(box,axis,mid);kids=[dict(kind='unresolved',reason='pending') for _ in range(2)]
@@ -141,22 +207,30 @@ def generate(base,output,max_seconds=300,max_leaves=10000,max_depth=40,candidate
             write_cover(output,cover);saved=time.monotonic()
             print(json.dumps(cover['generation']),flush=True)
     cover['generation']=dict(seconds=time.monotonic()-start,attempts=attempts,successes=successes,splits=splits,failures=dict(failures),summary=summary(cover),
+                             split_strategy=split_strategy,
                              scope='Generation statistics only; replay the cover verifier for a proof verdict')
     write_cover(output,cover)
     return cover
 
 
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('action',choices=['generate','verify'])
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('action',choices=['generate','verify','summary','merge'])
     ap.add_argument('input',type=Path);ap.add_argument('--output',type=Path)
     ap.add_argument('--seconds',type=float,default=300);ap.add_argument('--max-leaves',type=int,default=10000)
     ap.add_argument('--max-depth',type=int,default=40);ap.add_argument('--candidates',type=int,default=3);ap.add_argument('--resume',action='store_true')
+    ap.add_argument('--split-strategy',choices=['width','affine'],default='width')
+    ap.add_argument('--with-cover',action='append',type=Path,default=[])
     args=ap.parse_args();data=read_cover(args.input)
     if args.action=='verify':print(json.dumps(verify(data),indent=2));return
+    if args.action=='summary':print(json.dumps(summary(data),indent=2));return
     if args.output is None:ap.error('--output required')
+    if args.action=='merge':
+        if not args.with_cover:ap.error('--with-cover required for merge')
+        result=merge_covers([data]+[read_cover(p) for p in args.with_cover]);write_cover(args.output,result)
+        print(json.dumps(summary(result),indent=2));return
     if min(args.seconds,args.max_leaves,args.max_depth,args.candidates)<=0:ap.error('Limits must be positive')
     resume=read_cover(args.output) if args.resume else None
-    result=generate(data,args.output,args.seconds,args.max_leaves,args.max_depth,args.candidates,resume)
+    result=generate(data,args.output,args.seconds,args.max_leaves,args.max_depth,args.candidates,resume,args.split_strategy)
     print(json.dumps(result['generation'],indent=2))
 
 

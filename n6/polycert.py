@@ -17,6 +17,20 @@ from n6.polynomials import Poly
 def pdot(a,b):return sum(x*y for x,y in zip(a,b))
 
 
+def axis_length(polynomials,bounds):
+    """Exact norm shortcut when only one coordinate is identically nonzero.
+
+    Its certified sign turns sqrt(q*q) into +/-q and retains correlations.
+    Return None if a sign is unresolved or more than one coordinate is needed.
+    """
+    nonzero=[i for i,p in enumerate(polynomials) if not p.is_zero()]
+    if len(nonzero)!=1:return None
+    value=bounds[nonzero[0]]
+    if value.lo>=0:return value
+    if value.hi<=0:return -value
+    return None
+
+
 def point_spec(points,faces,cuts):
     return dict(schema='n6-polyhedron-region-v1',parameter_box=[],
                 coordinate_polynomials=[[[[str(x),[]]] for x in p] for p in points],
@@ -65,7 +79,9 @@ class Geometry(TriangleGeometry):
             N=tuple(q.evaluate(self.box) for q in Npoly)
             h2=norm2(N)
             require(h2.lo>0,'Cannot certify positive facet area')
-            self.N.append(N);self.h.append(h2.sqrt())
+            self.N.append(N)
+            length=axis_length(Npoly,N)
+            self.h.append(h2.sqrt() if length is None else length)
             for v in range(6):
                 support=pdot(Npoly,sub(P[v],P[a]))
                 if v in f:
@@ -114,8 +130,10 @@ class Geometry(TriangleGeometry):
         if key not in self.projection_cache:
             P=self.polynomial_points;e=sub(P[b],P[a]);t=sub(P[v],P[a])
             d=pdot(e,t).evaluate(self.box)
-            cross_bounds=tuple(q.evaluate(self.box) for q in cross(e,t))
-            height=norm2(cross_bounds).sqrt()
+            cross_polynomials=cross(e,t)
+            cross_bounds=tuple(q.evaluate(self.box) for q in cross_polynomials)
+            height=axis_length(cross_polynomials,cross_bounds)
+            if height is None:height=norm2(cross_bounds).sqrt()
             self.projection_cache[key]=(d,height)
         return self.projection_cache[key]
 
@@ -143,6 +161,12 @@ class Geometry(TriangleGeometry):
         return q
 
 
+class PairUnresolved(ValueError):
+    def __init__(self,a,b):
+        self.faces=(a,b)
+        super().__init__(f'Pair {(a,b)} unresolved; no certificate produced')
+
+
 def propose_pairs(g):
     """Propose all pair witnesses for an already checked geometry and hinge tree.
 
@@ -163,7 +187,7 @@ def propose_pairs(g):
                 if all(q.hi<=0 for q in g.separating_bounds(a,b,owner,e)):
                     found=dict(faces=[a,b],kind='separating_edge',owner=owner,edge=list(e));break
             if found:break
-        require(found is not None,f'Pair {(a,b)} unresolved; no certificate produced')
+        if found is None:raise PairUnresolved(a,b)
         witnesses.append(found)
     return witnesses
 

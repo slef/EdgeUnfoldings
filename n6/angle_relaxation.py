@@ -32,8 +32,18 @@ def verify(data):
     SW=angles['bWp'][i]+angles['bW'][j]+angles['bWp'][j]+angles['bW'][jj]
     require(SW<1,'Not in the remaining small fan-angle regime')
     require(SW+angles['aVp'][i]<1,'Does not refute the proposed angle implication')
+    cycles=[]
+    for spokes,near,far in [('s','aV','aVp'),('r','bW','bWp')]:
+        differences=[a-b for a,b in zip(angles[near],angles[far])]
+        if all(x>=0 for x in differences) and any(x>0 for x in differences):direction='nondecreasing'
+        elif all(x<=0 for x in differences) and any(x<0 for x in differences):direction='nonincreasing'
+        else:continue
+        cycles.append(dict(spokes=spokes,forced_cyclic_order=direction,
+                           strict_steps=[i for i,x in enumerate(differences) if x!=0]))
     return dict(result='verified_abstract_angle_countermodel',curvatures_in_pi_units={str(k):str(v) for k,v in curvatures.items()},
                 fan_angle_sum_in_pi_units=str(SW),left_near_angle_plus_fan_sum_in_pi_units=str(SW+angles['aVp'][i]),
+                metric_obstruction=dict(impossible_spoke_order_cycles=cycles,
+                    reason='In each Euclidean triangle, the larger angle has the longer opposite side. A cyclic sequence cannot be monotone with a strict step.'),
                 scope='The listed linear face-angle facts, even strictly, do not imply this apex-direction bound. No geometric realization or overlap is asserted.')
 
 

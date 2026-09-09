@@ -1,0 +1,27 @@
+{
+  "schema": "n6-intrinsic-octahedron-metric-v1",
+  "squared_edge_lengths": {
+    "s": [
+      "1",
+      "5636127646809/1000000000000",
+      "1626362033521/62500000000",
+      "32676851678689/1000000000000"
+    ],
+    "r": [
+      "17733982561/10000000000",
+      "18362689081/250000000000",
+      "23444295808761/1000000000000",
+      "17865170411841/1000000000000"
+    ],
+    "l": [
+      "2215278001161/1000000000000",
+      "24986211901641/1000000000000",
+      "133056423361/250000000000",
+      "5833901130409/250000000000"
+    ]
+  },
+  "slit_index": 3,
+  "triple_index": 0,
+  "require_cone": false,
+  "scope": "Exact rational intrinsic metric; convex original-facet realization is not asserted. The cone condition is deliberately omitted."
+}

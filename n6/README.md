@@ -2,16 +2,22 @@
 
 The full six-vertex theorem is **not proved or computationally certified here**.
 Read [REVIEW.md](REVIEW.md) before using the older handoff or proof notes.
+The latest verified results and remaining obligations are in
+[CONTINUATION.md](CONTINUATION.md).
 
 The continuing thesis audit and four workstreams are recorded in
 [OVERNIGHT.md](OVERNIGHT.md). New rigorous results are the
 [complete opposite-petal partition](CASE_PARTITION.md), an
 [exact failure of DiBiase's fixed DF chart entry](THESIS_AUDIT.md), and original-
 facet certificates for the two remaining nonsimplicial types. [LEMMA_L.md](LEMMA_L.md)
-records the local gap and an exactly refuted bisector shortcut.
+records the local gap, an exactly refuted bisector shortcut, and an exact
+failure of every separating line through w for one local pair. The latter
+net is nevertheless exactly certified simple; a diagram explains the distinction.
 The final overnight coverage results are in [REGION_COVER.md](REGION_COVER.md).
 [GEODESIC_SECTOR.md](GEODESIC_SECTOR.md) develops the archive's shortest-path
 route and records an exact obstruction to fixing its sector vertex globally.
+[INTRINSIC_METRIC.md](INTRINSIC_METRIC.md) gives the shared-edge compatibility
+equations and distinguishes the abstract angle and intrinsic metric relaxations.
 
 This directory integrates the two supplied Codex archives with Claude's
 `durer_small_n` work. It adds a smaller exact counterexample query, bounded solver
@@ -31,8 +37,10 @@ execution, and a rational interval checker for explicit regions of octahedra.
 | [Direct prism chart](PRISM_DIAGONAL.md) | Complete nine-parameter coordinate chart; exact failure of the two-pair tree and successful alternative regional certificates. |
 | [Wider prism box](results/prism-expanded-affine.certificate.json) | An explicit nine-parameter box, with every original quadrilateral retained; rational affine bounds verify all 15 pairs. |
 | [Complete prism subdivision](results/prism-affine-cover.verification.json) | Independent replay verifies all 443 leaves of a larger nine-parameter box, using three trees. This is complete coverage of that box only. |
-| [Minus-edge box](results/minus-wide-affine.certificate.json) | All ten chart parameters vary by `1/100` about the specified center; all 21 original-facet pairs are verified. |
+| [Larger minus-edge box](results/minus-merged-cover.verification.json) | All ten chart parameters vary by `1/20` about the specified center. Independent replay verifies 409 closed subregions, nine trees, and all 21 original-facet pairs in each. |
 | [Bisector failure](results/local-bisector-failure.certificate.json) | The proposed slit bisector fails under both curvature rules; a separate all-pairs check proves that same net simple. |
+| [Local radial-separator failure](results/local-radial-failure.certificate.json) | No line through w separates a first petal from the opposite fan face, under H and R; all 28 pairs of the same net are certified nonoverlapping. |
+| [Intrinsic metric audit](INTRINSIC_METRIC.md) | Exact shared-edge compatibility equations; the old angle model has impossible spoke cycles, while a new shared-length countermodel fails the necessary cone inequalities. Neither is a convex-octahedron counterexample. |
 | [Thin-candidate audit](results/local-directed-audit.verification.json) | The directed numerical search's apparent local overlap is certified nonoverlapping at 320 fractional bits, with the selection rules checked exactly. |
 
 The box is centered at
@@ -58,7 +66,10 @@ python3 -m n6.polycert verify-overlap n6/results/thesis-chart-DF.certificate.jso
 python3 -m n6.polycert verify n6/results/prism-expanded-affine.certificate.json
 python3 -m n6.polycert verify n6/results/minus-wide-affine.certificate.json
 python3 -m n6.cover verify n6/results/prism-affine-cover.certificate.json.gz
+python3 -m n6.cover verify n6/results/minus-merged-cover.certificate.json.gz
 python3 -m n6.bisector n6/results/local-bisector-failure.certificate.json --bits 80
+python3 -m n6.local_radial n6/results/local-radial-failure.certificate.json
+python3 -m n6.intrinsic verify n6/results/intrinsic-without-cone.certificate.json
 python3 -m n6.polycert verify n6/results/local-directed-audit.selected.certificate.json --bits 320
 python3 -m unittest discover -s n6/tests -p test_certificates.py -v
 ```
@@ -101,10 +112,15 @@ so SAT for it would not refute Dürer's conjecture.
 - `affine.py`: rational linear correlations with outward nonlinear remainders.
   It improves decisiveness without replacing exact sign checks by tolerances.
 - `cover.py`: binary closed-box subdivision and independent all-leaf replay.
-  Files with unresolved leaves are partial searches, regardless of their name.
+  Partial covers can be overlaid before resuming their remaining cells. Exact
+  parameter-volume bookkeeping is distinct from geometric verification. Files
+  with unresolved leaves are partial searches, regardless of their name.
 - `curvature.py`, `regimes.py`: exact angle-product predicates and verification
   of curvature rankings, large-angle branches, and equality cases.
-- `bisector.py`, `point_audit.py`: exact follow-up of proposed local obstructions.
+- `bisector.py`, `local_radial.py`, `point_audit.py`: exact follow-up of proposed
+  local obstructions, sharing the same validated slit and flank construction.
+- `intrinsic.py`: a rational checker for shared triangle metrics and a separate
+  nonlinear query retaining positive curvature, cone conditions, and H/R.
 - `sector_audit.py`, `angle_relaxation.py`: exact checks of a geometric obstruction
   to one sector strategy and an abstract angle countermodel, respectively. The
   latter is not a claimed geometric realization.

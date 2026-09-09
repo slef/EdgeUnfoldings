@@ -49,13 +49,23 @@ P4=(r,s,-h), P5=(t,k,-l).
 ```
 
 The parameter order is `(x,y,u,v,r,s,h,t,k,l)`, center
-`(1,1,0,1,3/4,1/4,1,1/4,3/4,1)`, and every parameter varies independently by
-`1/100`. The original quadrilateral is retained. One tree verifies all 21 face
-pairs throughout this box, with 20 strict facet supports and 22 coplanarity
-identities checked.
+`(1,1,0,1,3/4,1/4,1,1/4,3/4,1)`. The continuation expanded the verified box:
+
+| Independent half-width in every parameter | Verified leaves | Trees |
+|---|---:|---:|
+| `1/100`, earlier box | 1 | 1 |
+| `1/50` | 1 | 1 |
+| `3/100` | 2 | 2 |
+| `1/25` | 46 | 5 |
+| `1/20` | 409 | 9 |
+
+The `1/25` box is four times as wide in each of ten parameters. Independent
+replay checks all 966 face pairs across its 46 leaves: 609 vertex-fan checks
+and 357 separating-edge checks. Maximum depth is eight. Every leaf preserves
+the original quadrilateral, with 20 strict supports and 22 coplanarity identities.
 
 ```
-python3 -m n6.polycert verify n6/results/minus-wide-affine.certificate.json
+python3 -m n6.cover verify n6/results/minus-quadrupled-cover.certificate.json.gz
 ```
 
 ## Wider overnight searches remain incomplete
@@ -65,9 +75,43 @@ python3 -m n6.polycert verify n6/results/minus-wide-affine.certificate.json
 | `prism-balanced-cover.partial.json.gz` | 1,649 | 94 | Partial; no complete-cover proof |
 | `minus-expanded-cover.partial.json.gz` | 1,219 | 11 | Partial; no complete-cover proof |
 
-These counts do not measure the fraction of parameter volume covered. Their
-leaf certificates have not received an independent full replay. The saved
-subdivisions can be resumed; unresolved leaves must never be counted as covered.
+These historical counts do not measure parameter volume. The continuation now
+reports the exact fraction from each implied leaf box, explicitly separating
+structural bookkeeping from independent geometric verification.
+
+| New search on the half-width `1/20` root | Candidate-certified leaves | Unresolved | Candidate-covered parameter fraction |
+|---|---:|---:|---:|
+| Resumed overnight subdivision | 1,459 | 13 | `7185/16384` |
+| Fresh search, 32 candidate trees per cell | 231 | 3 | `21/32` |
+| Experimental affine-coefficient split heuristic | 191 | 10 | `7/32` |
+
+The heuristic performed worse on this root and is not the default. These three
+partial results complement one another. Their overlay covers `477/512` of the
+root's parameter volume, with 400 candidate-certified cells and seven unresolved
+cells. Resuming only those cells fills the remaining volume in about 29 seconds,
+producing a **409-leaf cover that subsequently passed full independent replay**.
+The verified half-width is `1/20` in every parameter, with nine trees and maximum
+depth 13. The checker verified 5,498 vertex-fan pairs and 3,091 separating-edge
+pairs: all 8,589 required face-pair checks. Its saved verdict is
+`results/minus-merged-cover.verification.json`. This certifies every tuple in
+the explicit closed root box, including all subdivision boundaries; it does
+not cover the entire metric domain.
+
+The merge routine overlays only covers with identical root geometry, uses a
+certificate only on a contained cell, and retains every unresolved intersection.
+Every split still has two closed children, so shared boundaries are included.
+The independent checker reconstructs and verifies every resulting leaf.
+
+```
+python3 -m n6.cover summary n6/results/minus-merged-cover.certificate.json.gz
+python3 -m n6.cover verify n6/results/minus-merged-cover.certificate.json.gz
+```
+
+An additional search tried all 224 original-edge trees on the unsplit wider
+root. None was certified by the current bounds; this is inconclusive interval
+arithmetic, not evidence that the trees overlap. Exact one-axis norm identities
+now preserve planar projection correlations instead of unnecessarily estimating
+`sqrt(q*q)` as a nonlinear expression.
 
 Even successful verification of either larger box would still leave the rest
 of the unbounded metric domain, near-degenerate limits, and any missing charts
