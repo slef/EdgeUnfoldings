@@ -4,7 +4,9 @@ Timed session, 9 September 2026. **The whole octahedron case remains open.**
 The convex-patch existence and all-convex-case results below are geometric proofs.
 **Latest result:** [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md) proves both
 two-patch arrangements and the mixed-direction three-patch case under H.
-Only three bad patches with a common direction remain open in this approach.
+Only three bad patches with a common direction remain open in general.
+[OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md) now proves explicit middle-patch
+subfamilies inside that last pattern, using four prescribed trees.
 The earlier [OCTA_ONE_PATCH.md](OCTA_ONE_PATCH.md) proves the
 one-nonconvex-patch existence family under H using two prescribed trees,
 one at each pole. The old fixed sharpest-source claim remains unproved

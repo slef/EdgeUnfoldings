@@ -1,11 +1,12 @@
 # Dürer's problem for n ≤ 7 vertices — proof state and work plan
 
-## Current audit: 9 September 2026, codex/n6-unfolding
+## Current proof state: 10 September 2026 JST, codex/minus-edge-patterns
 
 **The full n=6 case remains unproved. Read [n6/REVIEW.md](n6/REVIEW.md)
 before relying on the historical proof status below.**
 
-- **Latest result:** [the shared patch-angle budget](n6/OCTA_PATCH_BUDGET.md) proves all cases with at most two bad patches, plus three with mixed directions, when a pole is globally sharpest. The four-cut source may change. **Only three bad patches with a common cyclic direction remain open in this patch approach.** The 49-class fixed-source count stays 2 excluded and 47 open. The overview now shows 4 of 5 coarse existence regimes proved, with the fifth partly settled; this is not a coverage percentage.
+- **Latest result:** [the middle-patch switch](n6/OCTA_THREE_CHAIN.md) proves explicit common-direction three-patch subfamilies under H using four prescribed trees. A simple excess threshold and a stronger two-view condition have written proofs, point certificates, and an 18-coordinate region. Two branches outside the stronger hypotheses remain open; one has an exact example. Four of five entire patch regimes and the 2-excluded/47-open fixed-source count are unchanged.
+- **Previous result:** [the shared patch-angle budget](n6/OCTA_PATCH_BUDGET.md) proves all cases with at most two bad patches, plus three with mixed directions, when a pole is globally sharpest. The four-cut source may change. **Only three bad patches with a common cyclic direction remain open in this patch approach.** The 49-class fixed-source count stays 2 excluded and 47 open. The overview now shows 4 of 5 coarse existence regimes proved, with the fifth partly settled; this is not a coverage percentage.
 - **Previous proof:** [one nonconvex patch under H](n6/OCTA_ONE_PATCH.md) now has a complete existence proof using two prescribed trees, one at each pole. If both cone tests failed, an equator vertex would be sharper than both poles. The fixed sharpest-source rule remains open. [The half-fan proof](n6/OCTA_HALF_FAN.md) additionally handles all three adjacent-two-patch directions when either pole has curvature at least 180 degrees. Neither changes the 2-excluded/47-open fixed-source count.
 - **Earlier correction:** [the hinge audit](n6/HINGE_AUDIT.md) refutes the old
   conditional far-fan reduction with an exact convex counterexample. Its

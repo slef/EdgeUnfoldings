@@ -7,7 +7,7 @@ notes = Path(__file__).resolve().parent / 'notes'
 research = notes.parent.parent / 'n6'
 figs = json.loads((notes / 'status_figs.json').read_text())
 figs['thickness'] = json.loads((notes / 'thickness.json').read_text())
-for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg'),('patch_budget','octa-patch-budget.svg'),('three_same','octa-three-same.svg')]:
+for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg'),('patch_budget','octa-patch-budget.svg'),('three_same','octa-three-same.svg'),('chain_switch','octa-three-chain.svg')]:
     svg = (research / 'figures' / filename).read_text()
     figs[key] = svg[svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 # Keep each 3D picture, its labels, and its cuts tied to the exact witness.
@@ -122,6 +122,17 @@ for key, filename in [('patch_budget','patch-budget-adjacent-below-pi.certificat
         view={'yaw': -0.7, 'pitch': 0.3},
         title='Exact '+('two-adjacent-patch example below the half-turn threshold' if key=='patch_budget' else 'three-patch example with a common lean direction'),
         caption='The same exact convex solid. Red edges give an independently certified successful net on this example; blue faces meet at w. Drag to rotate.',
+    )
+for key, filename, title in [
+    ('chain_switch', 'three-chain-switch.certificate.json', 'A three-patch shape covered by the stronger switch theorem'),
+    ('chain_uncovered', 'three-chain-uncovered.certificate.json', 'An exact shape outside the new middle-patch conditions'),
+]:
+    figs['models'][key] = witness_model(
+        filename, names=['v','w','u₀','u₁','u₂','u₃'],
+        face_names=['W'+str(i) for i in range(4)]+['V'+str(i) for i in range(4)],
+        highlight_faces=[1,5], faceColors={i:'#8fc1dd' if i<4 else '#e6af78' for i in range(8)},
+        view={'yaw': -0.7, 'pitch': 0.3}, title=title,
+        caption='The exact convex solid. The two highlighted faces form the middle patch; red edges give a separately certified successful net. Drag to rotate.',
     )
 t = t.replace('__PROGRESS_CSS__', (notes / 'progress_dashboard.css').read_text())
 t = t.replace('__PROGRESS_DASHBOARD_JS__', (notes / 'progress_dashboard.js').read_text())

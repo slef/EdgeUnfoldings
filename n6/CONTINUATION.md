@@ -1,4 +1,49 @@
-# Current continuation: a shared lean budget closes the two-patch cases
+# Current continuation: a middle-patch switch proves three-chain subfamilies
+
+10 September 2026 JST / 9 September UTC. [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md)
+proves an original-edge unfolding under H for three bad patches with a
+common direction when the middle patch satisfies explicit angle bounds.
+For forward Q0,Q1,Q2, try both four-cut poles and fifth endpoints u2,u3.
+
+The simple condition is rho_1<=min(kappa_v,kappa_w). The stronger version
+requires the middle extension at each pole to fit that pole's gap, and
+rho_1<=kappa_(u1)+min(kappa_v,kappa_w). Start at a pole whose individual
+extensions fit its gap. If the two selected openings both fail their
+sufficient tests there, the shared-excess identities force the u2 opening
+to pass at the other pole. This checks whole patches including slit-side
+fan triangles, without the refuted far-fan lemma.
+
+The `three-chain-switch` example strictly fails the simple threshold but
+passes the stronger theorem. `three-chain-family` varies all 18 coordinates
+independently by ±1/100 and certifies one fixed net throughout. Both point
+examples and the box fail the old weighted-curvature test for all three
+opposite pairs. The old illustrated `patch-budget-three-same` example is
+now covered even by the simple threshold.
+
+The rest splits into two disjoint branches: a middle extension exceeds a
+pole gap, or both fit but the combined excess bound fails. The former is
+nonempty: the exact `three-chain-uncovered` example (reusing the old sector
+radial-failure coordinates) has that behavior and a separately certified
+successful net. No actual octahedron in the second branch was established.
+
+Next: exploit radial separation when the middle cone crosses its gap, or
+prove an alternative opposite pair enters a covered regime. The temporary
+linear relaxations permit the obstruction but do not impose full metric
+realization. Numerical optimizations of the second branch approached its
+boundary without furnishing a geometric example; this is not an exclusion
+proof. Another exploratory search found three common directions with both
+poles below pi without H; retaining H did not find such a shape. Neither
+search establishes a universal curvature threshold.
+
+The full octahedron remains open. Counts stay 4 of 5 complete patch regimes
+(the fifth is partly proved), and 2 excluded / 47 open fixed-source classes.
+Use `python3 -m n6.three_chain_examples` to rebuild the exact evidence and
+`python3 -m n6.three_chain ... --analyze` for a condition audit. The main
+proof is written mathematics, not a numerical or solver conclusion.
+
+The earlier entries below preserve the successive proof states.
+
+# Previous continuation: a shared lean budget closes the two-patch cases
 
 10 September 2026 JST / 9 September UTC. [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md)
 proves existence under H for both two-patch arrangements and three bad

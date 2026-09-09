@@ -1,5 +1,18 @@
 [
   {
+    "date": "10 September 2026 JST · middle-patch switch",
+    "title": "A proved four-tree rule inside the last three-patch pattern",
+    "results": [
+      "octa_three_chain",
+      "octa_three_same",
+      "octa_budget",
+      "octa_patches",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#octa_three_chain\">middle-patch theorem</a> proves common-direction three-patch subfamilies. A simple condition compares the middle inward-angle excess with the smaller pole curvature. A stronger version separately bounds the two middle extensions and uses curvature at the first inward vertex. Both give four prescribed trees and a written pole-switching proof.</p><p>Exact point examples and an 18-coordinate region pass the hypotheses and all 28 independent face-pair checks. They fail the older weighted-curvature criterion for all three opposite pairs. An exact uncovered example fails a middle-gap condition but still unfolds.</p><p>The <a href=\"#octa_three_same\">remaining hypotheses split into two precise branches</a>. The whole three-patch pattern is not settled, so the coarse count stays 4 of 5 entire regimes, with the fifth partly proved. The original fixed-source count stays 2 excluded and 47 open. No numerical survey is used as a proof.</p>"
+  },
+  {
     "date": "10 September 2026 JST · shared lean budget",
     "title": "Both two-patch arrangements proved; three mixed directions are covered too",
     "results": [

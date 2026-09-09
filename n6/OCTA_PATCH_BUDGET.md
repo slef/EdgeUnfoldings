@@ -26,6 +26,11 @@ all-backward. This is a real geometric family, not an empty formal case:
 `sector-three-patch-radial-failure.certificate.json` is an exact example.
 Its particular net is separately certified, but the whole family is open.
 
+**Subsequent partial result:** [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md)
+proves subfamilies of that remaining pattern using a condition on the middle
+patch. Four prescribed trees suffice there. The common-direction family
+as a whole remains open; the coarse count below is unchanged.
+
 ## One patch shares its reflex excess between the two poles
 
 For a nonconvex Q_i let l_i^w be its angular extension beyond its W_i

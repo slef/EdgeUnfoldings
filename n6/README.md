@@ -8,7 +8,14 @@ original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
 case and the convex-patch existence theorem remain proved; the proposed
 fixed-source one-nonconvex-patch argument has a remaining far-fan step.
 
-**Latest result:** [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md) proves every
+**Latest result:** [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md) proves
+common-direction three-patch subfamilies with a four-tree rule. The middle
+patch controls a safe pole switch. A simple inward-excess threshold and
+a stronger two-view condition have geometric proofs and exact point/box
+illustrations. Two branches outside those conditions remain open. The
+full three-patch regime remains unproved, so the coarse count stays 4 of 5.
+
+**Previous result:** [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md) proves every
 configuration with at most two nonconvex patches, and three with mixed
 directions, under H. It uses the identity that a patch’s two pole extensions
 sum to its reflex excess, plus a total angle budget. **Three bad patches

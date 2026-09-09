@@ -82,22 +82,8 @@ def wedge_tests(angles, gap, directions, leans, k):
     return [sum_le(left, right) for left, right in rows]
 
 
-def analyze(spec):
-    g = Geometry(spec)
-    claim = spec['patch_budget']
-    v, w, ring = claim['source'], claim['opposite'], claim['equator']
-    patches, directions, lookup = setup(g, v, w, ring)
-    regime = pattern(directions)
-    sharp = claim.get('sharpest_pole')
-    ranking_required = regime not in ('zero', 'two-opposite-facing')
-    require(sharp in (v, w) or (sharp is None and not ranking_required), 'A globally sharpest pole is required')
-    order = verify_order(g, [(sharp, x) for x in range(6) if x != sharp]) if sharp is not None else None
-    prescribed = [ring[i] for i in prescribed_openings(directions)]
-    # All eight candidate trees retain every equator edge. Development of a
-    # patch uses that uncut edge, independently of where the fan is opened.
-    expected = [{edge(source, u) for u in ring} | {edge(fan, q)}
-                for source, fan in ((v, w), (w, v)) for q in ring]
-    require({edge(*e) for e in spec['cut_edges']} in expected, 'Expected a two-pole star-plus-one-edge tree')
+def pole_angles_and_leans(g, v, w, ring, directions, lookup):
+    """Original physical patch indices, with extensions viewed from either pole."""
     angles = {p: [] for p in (v, w)}
     leans = {p: [] for p in (v, w)}
     for i in range(4):
@@ -114,6 +100,26 @@ def analyze(spec):
         for pole, other in ((w, v), (v, w)):
             cone = triangle_angle(sub(points[c], points[pole]), sub(points[other], points[pole]))
             leans[pole].append(cmul(cone, conjugate(angles[pole][i])))
+    return angles, leans
+
+
+def analyze(spec):
+    g = Geometry(spec)
+    claim = spec['patch_budget']
+    v, w, ring = claim['source'], claim['opposite'], claim['equator']
+    patches, directions, lookup = setup(g, v, w, ring)
+    regime = pattern(directions)
+    sharp = claim.get('sharpest_pole')
+    ranking_required = regime not in ('zero', 'two-opposite-facing')
+    require(sharp in (v, w) or (sharp is None and not ranking_required), 'A globally sharpest pole is required')
+    order = verify_order(g, [(sharp, x) for x in range(6) if x != sharp]) if sharp is not None else None
+    prescribed = [ring[i] for i in prescribed_openings(directions)]
+    # All eight candidate trees retain every equator edge. Development of a
+    # patch uses that uncut edge, independently of where the fan is opened.
+    expected = [{edge(source, u) for u in ring} | {edge(fan, q)}
+                for source, fan in ((v, w), (w, v)) for q in ring]
+    require({edge(*e) for e in spec['cut_edges']} in expected, 'Expected a two-pole star-plus-one-edge tree')
+    angles, leans = pole_angles_and_leans(g, v, w, ring, directions, lookup)
     totals = {p: angle_product(g.p, g.faces, g.h, p) for p in (v, w)}
     candidates = []
     for source, fan in ((v, w), (w, v)):

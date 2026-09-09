@@ -7,6 +7,14 @@ There is new rigorous partial coverage of a full coordinate box, an exactly
 checked counterexample to a supporting lemma, and a reproducible reduced SMT
 attempt that reports a timeout.
 
+**Latest continuation, 10 September JST:** [OCTA_THREE_CHAIN.md](OCTA_THREE_CHAIN.md)
+proves common-direction three-patch subfamilies under H with four prescribed
+trees. Exact hypotheses and all-pairs checks cover points and an 18-coordinate
+box. Two branches outside the sufficient conditions remain open, with an
+exact example for the middle-gap failure branch. The full common-direction
+regime is still unproved; the coarse 4-of-5 and fixed-source 2/47 counts do
+not change. The earlier entries below retain their historical scopes.
+
 **Continuation:** the subsequent direct thesis audit found an exact fixed-tree
 DF chart failure. A new base-cone proof closes the missing large-angle partition,
 including its equality boundaries; under (H), only `Sigma_W<pi` remains for

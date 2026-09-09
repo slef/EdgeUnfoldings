@@ -90,7 +90,7 @@
         "label": "Three nonconvex patches",
         "status": "open",
         "link": "octa_three_same",
-        "condition": "Mixed directions proved; all three leaning the same way remain open"
+        "condition": "Mixed directions and middle-patch common-direction subfamilies proved; two branches remain outside the latter conditions"
       }
     ]
   },
