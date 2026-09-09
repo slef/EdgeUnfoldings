@@ -1,3 +1,34 @@
+# Continuation: the one-patch family has a two-pole proof
+
+9 September 2026 UTC / 10 September JST. [OCTA_ONE_PATCH.md](OCTA_ONE_PATCH.md)
+proves existence for the entire one-nonconvex-patch family when either pole
+is globally sharpest. Choose the equator vertex opposite the bad patch's
+convex corner; use it for the fifth edge in two trees, with the four cuts
+at either pole. If both whole-patch cone tests failed, both poles would
+have curvature below pi, while the equator vertex opposite the reflex
+corner would have curvature above pi. This contradicts sharpness.
+
+The old fixed sharpest-source rule remains open. This proof can change
+which pole carries the four cuts, so the original failure-class count
+stays **2 excluded, 47 open**. The proof bypasses the refuted far-fan lemma.
+
+[OCTA_HALF_FAN.md](OCTA_HALF_FAN.md) also gives a direct rule for two adjacent
+bad patches when either pole has curvature at least pi. All three possible
+lean patterns are proved. Exact examples and an 18-coordinate neighborhood
+have separate hypothesis and all-28-pair net certificates. These families
+may overlap the previous curvature and sector criteria; no global coverage
+fraction is asserted.
+
+The next three full regimes are two adjacent bad patches (especially both
+poles below pi), two opposite bad patches, and three bad patches. The new
+one-patch argument suggests looking for a similar contradiction coordinating
+more than one pole choice. Preserve the distinction between this existence
+strategy and the stronger fixed-source four-choice conjecture.
+
+The overview has new proof pages, paired nets and 3D cut models, and a
+retained progress entry. The following audit remains valid; its older
+one-patch wording refers to the withdrawn fixed-source proof.
+
 # Current timed-session audit, 9 September 2026
 
 **Read [HINGE_AUDIT.md](HINGE_AUDIT.md) before the earlier entries below.**

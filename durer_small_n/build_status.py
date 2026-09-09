@@ -7,7 +7,7 @@ notes = Path(__file__).resolve().parent / 'notes'
 research = notes.parent.parent / 'n6'
 figs = json.loads((notes / 'status_figs.json').read_text())
 figs['thickness'] = json.loads((notes / 'thickness.json').read_text())
-for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg')]:
+for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg')]:
     svg = (research / 'figures' / filename).read_text()
     figs[key] = svg[svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 # Keep each 3D picture, its labels, and its cuts tied to the exact witness.
@@ -95,6 +95,24 @@ figs['models']['hinge_boundary'] = witness_model(
     title='Exact counterexample to the conditional far-fan reduction',
     caption='The actual thin convex octahedron. Blue W₀ and orange V₂ overlap only in the specified net. Red edges are cut. The four-cut source v is not sharpest. Drag to rotate.',
 )
+figs['models']['half_fan'] = witness_model(
+    'half-fan-bf.certificate.json', names=['v','w','u₀','u₁','u₂','u₃'],
+    face_names=['W'+str(i) for i in range(4)]+['V'+str(i) for i in range(4)],
+    highlight_faces=[2,6], faceColors={i:'#8fc1dd' if i<4 else '#e6af78' for i in range(8)},
+    view={'yaw': -0.7, 'pitch': 0.3},
+    title='Two adjacent bad patches: theorem-selected cuts',
+    caption='The same exact convex octahedron. The blue faces form the fan at w; red edges are the four cuts at v and w–u₁. Drag to rotate.',
+)
+for letter, fan in [('A',1),('B',0)]:
+    figs['models']['one_patch_'+letter] = witness_model(
+        'one-patch-'+letter+'.certificate.json', names=['v','w','u₀','u₁','u₂','u₃'],
+        face_names=['W'+str(i) for i in range(4)]+['V'+str(i) for i in range(4)],
+        highlight_faces=[1,5],
+        faceColors={i:'#8fc1dd' if (i<4)==(fan==1) else '#e6af78' for i in range(8)},
+        view={'yaw': -0.7, 'pitch': 0.3},
+        title='One bad patch: cut choice '+letter,
+        caption='The same exact solid, with original vertex labels. Red edges are cut; blue triangles form the remaining fan. Drag to rotate.',
+    )
 t = t.replace('__PROGRESS_CSS__', (notes / 'progress_dashboard.css').read_text())
 t = t.replace('__PROGRESS_DASHBOARD_JS__', (notes / 'progress_dashboard.js').read_text())
 t = t.replace('__SCORE_JSON__', json.dumps(load_progress(notes, research)))

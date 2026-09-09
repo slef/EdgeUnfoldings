@@ -1,5 +1,5 @@
 {
-  "as_of": "9 September 2026",
+  "as_of": "10 September 2026 JST",
   "octahedron": {
     "pair_groups": [
       {
@@ -59,6 +59,38 @@
       {
         "label": "Prove the two slit-side far-fan pairs after local and opposite-petal safety",
         "link": "F_hinge"
+      }
+    ],
+    "patch_regimes": [
+      {
+        "label": "No nonconvex patches",
+        "status": "proved",
+        "link": "octa_patches",
+        "condition": "Every opening works"
+      },
+      {
+        "label": "One nonconvex patch",
+        "status": "proved",
+        "link": "octa_one_patch",
+        "condition": "Existence under H using two pole choices; fixed source remains open"
+      },
+      {
+        "label": "Two adjacent nonconvex patches",
+        "status": "open",
+        "link": "octa_half_fan",
+        "condition": "Proved subfamily: either pole has curvature at least 180 degrees"
+      },
+      {
+        "label": "Two opposite nonconvex patches",
+        "status": "open",
+        "link": "octa_patches",
+        "condition": "Open in full"
+      },
+      {
+        "label": "Three nonconvex patches",
+        "status": "open",
+        "link": "octa_patches",
+        "condition": "Open in full"
       }
     ]
   },

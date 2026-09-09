@@ -6,7 +6,15 @@ The current priority is the **octahedron**. The [hinge audit](HINGE_AUDIT.md)
 exactly refutes the older conditional fan-to-petal reduction. Restore the
 original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
 case and the convex-patch existence theorem remain proved; the proposed
-one-nonconvex-patch whole-net argument has a remaining far-fan step.
+fixed-source one-nonconvex-patch argument has a remaining far-fan step.
+
+**Latest proof:** [one bad patch under H](OCTA_ONE_PATCH.md) now has a complete
+existence proof using two prescribed trees with different four-cut poles.
+The fixed sharpest-source statement remains open. The independent
+[half-fan argument](OCTA_HALF_FAN.md) handles all three adjacent-two-patch
+directions when either pole has curvature at least 180 degrees. Exact
+examples and an 18-coordinate region have independent all-pairs checks.
+These results do not change the original fixed-source class count.
 
 The independent [curvature-pair theorem](OCTA_TWO_SHARP_POLES.md) proves
 unfoldability when the sharper pole has curvature K, its opposite J, and

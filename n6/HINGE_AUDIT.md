@@ -3,6 +3,9 @@
 9 September 2026, timed-session audit. **This is an exact counterexample to
 an older supporting lemma, not to the sharpest-source unfolding rule.**
 The new curvature, central-symmetry, and sector-family proofs do not use it.
+A subsequent [two-pole proof](OCTA_ONE_PATCH.md) now settles the one-patch
+existence family under H; it allows the four cuts to move to the other
+pole and does not restore the older fixed-source claim.
 
 ## What the old argument claimed
 

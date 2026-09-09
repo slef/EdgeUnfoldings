@@ -2,10 +2,10 @@
 
 Timed session, 9 September 2026. **The whole octahedron case remains open.**
 The convex-patch existence and all-convex-case results below are geometric proofs.
-**Audit correction:** the proposed one-nonconvex-patch whole-net proof is
-withdrawn pending a replacement for the false far-fan reduction; see
-[HINGE_AUDIT.md](HINGE_AUDIT.md).
-They use the same four cuts at v and one cut at its opposite vertex w.
+**Latest repair:** [OCTA_ONE_PATCH.md](OCTA_ONE_PATCH.md) proves the
+one-nonconvex-patch existence family under H using two prescribed trees,
+one at each pole. The old fixed sharpest-source claim remains unproved
+after [HINGE_AUDIT.md](HINGE_AUDIT.md). The new proof does not use that lemma.
 
 ## What a convex patch means
 
@@ -120,7 +120,7 @@ for that complete family: choose any vertex, cut its four edges, and cut
 any edge from its opposite vertex. It is not restricted to regular or
 centrally symmetric shapes.
 
-## The one-nonconvex-patch argument has a remaining step
+## The old fixed-source argument has a remaining step; exchanging poles repairs existence
 
 Assume H and let Q_i be the only nonconvex patch. The proposed choices are
 Z_(i+2) and Z_(i+3). Both have convex flanks, so all three local pairs are safe.
@@ -128,12 +128,18 @@ One opposite-petal pair consists of convex patches and is safe. The other
 pair uses the two different routes; the opposite-route switching proof makes
 it safe in at least one of the two choices.
 
-This establishes **local and opposite-petal safety in one common net**.
+This establishes **local and opposite-petal safety in one common fixed-source net**.
 The last step previously invoked the conditional far-fan reduction. That
 lemma is now exactly refuted without H; its H-specific replacement remains
-unproved. Therefore whole-net safety in this regime is **open**, rather than
-a complete theorem. The displayed one-patch example retains its independent
-all-28-pairs certificate. Its success is not a proof of the entire regime.
+unproved. Therefore the **fixed sharpest-source claim remains open**.
+
+The replacement proof in [OCTA_ONE_PATCH.md](OCTA_ONE_PATCH.md) allows the
+four cuts to move to the other pole. Use the same fifth-edge equator
+endpoint in the two nets: the vertex opposite the bad patch's convex
+equator corner. If both whole-patch cone tests failed, an angle-sum identity
+would make the equator vertex opposite its inward corner sharper than
+both poles. This contradicts H. Thus the one-patch family now has a complete
+**two-pole existence proof**, with no use of the failed fan-to-petal reduction.
 
 ## A five-part geometric division
 
@@ -143,8 +149,8 @@ up to cyclic symmetry, are:
 | Nonconvex patches | Status for a sharpest apex |
 | --- | --- |
 | None | Proved: every opening works |
-| One | Partial: local and opposite-petal pairs can be made safe; far-fan step open |
-| Two, adjacent | Open |
+| One | Proved existence using two pole choices; fixed sharpest-source rule open |
+| Two, adjacent | Proved if either pole has curvature >=180 degrees; open in full |
 | Two, opposite | Open |
 | Three | Open |
 
@@ -159,13 +165,16 @@ The checker in `n6.convex_patches` uses outward rational bounds to establish
 the convex original facets, maximum apex curvature when required, and the two corner sums
 of every patch. Five saved integer-coordinate examples establish that all
 five listed regimes are nonempty; their displayed successful nets also have
-independent all-pairs certificates. The examples in the four open regimes
-do not establish their universal unfoldability.
+independent all-pairs certificates. The examples alone do not establish
+universal unfoldability. The new two-pole proof supplies the one-patch
+result independently of them.
 
 The separate seed-6090942 survey classified 5,000 numerical shapes: 676 had
 zero nonconvex patches, 1,906 one, 1,348 two adjacent, 976 two opposite, and
 94 three. The all-convex theorem is a proof for all shapes satisfying
-its hypotheses. The one-patch whole-net claim is no longer counted as proved. These sample frequencies are not global coverage estimates.
+its hypotheses. The new one-patch existence theorem allows exchanging
+poles; it does not restore the old fixed-source claim. These sample
+frequencies are not global coverage estimates.
 
 ```sh
 durer_small_n/.venv/bin/python -m n6.convex_patches --samples 5000 --examples

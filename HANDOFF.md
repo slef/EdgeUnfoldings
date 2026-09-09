@@ -5,7 +5,8 @@
 **The full n=6 case remains unproved. Read [n6/REVIEW.md](n6/REVIEW.md)
 before relying on the historical proof status below.**
 
-- **Latest correction:** [the hinge audit](n6/HINGE_AUDIT.md) refutes the old
+- **Latest proof:** [one nonconvex patch under H](n6/OCTA_ONE_PATCH.md) now has a complete existence proof using two prescribed trees, one at each pole. If both cone tests failed, an equator vertex would be sharper than both poles. The fixed sharpest-source rule remains open. [The half-fan proof](n6/OCTA_HALF_FAN.md) additionally handles all three adjacent-two-patch directions when either pole has curvature at least 180 degrees. Neither changes the 2-excluded/47-open fixed-source count.
+- **Earlier correction:** [the hinge audit](n6/HINGE_AUDIT.md) refutes the old
   conditional far-fan reduction with an exact convex counterexample. Its
   source is not sharpest. Restore **49 original classes, 2 excluded and 47
   open**; the 24-class reduction and the one-nonconvex-patch whole-net proof

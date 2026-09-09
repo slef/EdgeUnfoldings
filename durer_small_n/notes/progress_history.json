@@ -1,5 +1,18 @@
 [
   {
+    "date": "10 September 2026 JST · 9 September UTC",
+    "title": "One bad patch: a complete existence proof by exchanging the poles",
+    "results": [
+      "octa_one_patch",
+      "octa_half_fan",
+      "octa_patches",
+      "t_octa",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#octa_one_patch\">two-pole proof</a> settles existence for the entire one-nonconvex-patch family when a pole is globally sharpest. Both prescribed trees use the same equator endpoint for the fifth cut. If both whole-patch cone tests failed, an equator vertex would have curvature above 180° while both poles had curvature below 180°, contradicting sharpness.</p><p>The <a href=\"#octa_half_fan\">half-turn fan proof</a> also handles all three possible direction patterns of two adjacent bad patches when either pole has curvature at least 180°. Exact examples and an 18-coordinate region have independent all-pairs checks.</p><p>The old fixed sharpest-source claim remains open, and the 49-class count stays 2 excluded and 47 open. The new existence theorem does not rely on the refuted far-fan reduction. These families can overlap older sufficient criteria; no coverage percentage is inferred.</p>"
+  },
+  {
     "date": "9 September 2026 · exact boundary audit",
     "title": "A supporting lemma fails; independent curvature and sector proofs survive",
     "results": [

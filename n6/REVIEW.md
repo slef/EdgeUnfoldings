@@ -110,7 +110,10 @@ The first and last fan faces have a cut radial boundary, not two interior
 hinges. A certified example has one far-fan overlap and all other 27 pairs
 safe. Its source is not sharpest; an H-specific replacement remains open.
 The original 49-class target (2 excluded,47 open) is current; the 24-class
-reduction and one-patch whole-net claim are withdrawn.
+reduction and fixed-source one-patch whole-net claim are withdrawn.
+A subsequent [two-pole proof](OCTA_ONE_PATCH.md) establishes existence for
+the one-patch family under H. It can exchange the four-cut source, so it
+does not restore that fixed-source claim or change the 47-class count.
 
 The following interior-hinge observation remains valid.
 
