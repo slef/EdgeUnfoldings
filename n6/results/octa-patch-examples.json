@@ -1,0 +1,204 @@
+[
+  {
+    "regime": "one",
+    "points": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        600,
+        -44,
+        577
+      ],
+      [
+        402,
+        76,
+        344
+      ],
+      [
+        665,
+        -203,
+        719
+      ],
+      [
+        346,
+        -136,
+        333
+      ],
+      [
+        230,
+        96,
+        160
+      ]
+    ],
+    "nonconvex_patches": [
+      1
+    ],
+    "successful_slit_vertex": 5,
+    "certificate": "octa-patches-one.certificate.json"
+  },
+  {
+    "regime": "three",
+    "points": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        -705,
+        -131,
+        -483
+      ],
+      [
+        -752,
+        -125,
+        -556
+      ],
+      [
+        -825,
+        -167,
+        -539
+      ],
+      [
+        -669,
+        -128,
+        -448
+      ],
+      [
+        -479,
+        -81,
+        -343
+      ]
+    ],
+    "nonconvex_patches": [
+      0,
+      1,
+      3
+    ],
+    "successful_slit_vertex": 2,
+    "certificate": "octa-patches-three.certificate.json"
+  },
+  {
+    "regime": "two-adjacent",
+    "points": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        26386,
+        -95960,
+        -9770
+      ],
+      [
+        24948,
+        -93700,
+        -6093
+      ],
+      [
+        25661,
+        -95871,
+        -7009
+      ],
+      [
+        26005,
+        -95690,
+        -8668
+      ],
+      [
+        26021,
+        -92565,
+        -11802
+      ]
+    ],
+    "nonconvex_patches": [
+      0,
+      1
+    ],
+    "successful_slit_vertex": 2,
+    "certificate": "octa-patches-two-adjacent.certificate.json"
+  },
+  {
+    "regime": "two-opposite",
+    "points": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        -39,
+        -7,
+        92
+      ],
+      [
+        -20,
+        10,
+        64
+      ],
+      [
+        -22,
+        -2,
+        48
+      ],
+      [
+        -24,
+        -27,
+        44
+      ],
+      [
+        -26,
+        -19,
+        67
+      ]
+    ],
+    "nonconvex_patches": [
+      0,
+      2
+    ],
+    "successful_slit_vertex": 2,
+    "certificate": "octa-patches-two-opposite.certificate.json"
+  },
+  {
+    "regime": "zero",
+    "points": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        -98,
+        -14,
+        -11
+      ],
+      [
+        -29,
+        3,
+        -5
+      ],
+      [
+        -71,
+        -16,
+        -18
+      ],
+      [
+        -75,
+        -16,
+        -2
+      ],
+      [
+        -56,
+        -3,
+        3
+      ]
+    ],
+    "nonconvex_patches": [],
+    "successful_slit_vertex": 2,
+    "certificate": "octa-patches-zero.certificate.json"
+  }
+]

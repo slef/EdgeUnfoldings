@@ -1,5 +1,11 @@
 # Latest octahedron step: assume overlap and switch
 
+## Timed session: convex-patch proofs (9 September 2026)
+
+[OCTA_CONVEX_PATCHES.md](OCTA_CONVEX_PATCHES.md) proves every four-slit net works when all four flattened patches are convex, and at least one of two specified slits works when exactly one is nonconvex and H holds. Four nonconvex patches are impossible: reflex corners force strict increases of |wu|+|vu|. This also excludes original class 20. With class 49, **2 of 24 sufficient classes are excluded, 22 remain** (8 mixed, 14 local-only). Two adjacent, two opposite, and three nonconvex patches remain open. Five integer examples have exact patch and all-pairs net checks; the 5,000-shape survey is numerical only. The full octahedron theorem, L, and F remain open.
+
+Earlier entries below retain their then-current counts.
+
 9 September 2026. The [case analysis](OCTA_CASE_ANALYSIS.md) implements the
 user's suggested contradiction/repair approach and explains its relation to
 L and F. Two universal implications are proved:

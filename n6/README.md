@@ -5,7 +5,7 @@ Read [REVIEW.md](REVIEW.md) before using the older handoff or proof notes.
 The current priority is the **octahedron**: [try four slit positions and prove
 one works](OCTA_FOUR_SLITS.md). The [overlap case analysis](OCTA_CASE_ANALYSIS.md)
 proves two switching implications and reduces the sufficient target from 49
-classes to 24. Original class 49 is excluded, leaving 23 open. The 3,000-shape
+classes to 24. Original classes 20 and 49 are excluded, leaving 22 open. The new [convex-patch proofs](OCTA_CONVEX_PATCHES.md) settle every shape with zero or one nonconvex patch (under H for one); three geometric regimes remain open. The 3,000-shape
 pilot is numerical evidence only. This is an alternative to the old two gaps.
 
 A [universal partial lemma](MINUS_NEIGHBORHOOD.md) now excludes seven of the

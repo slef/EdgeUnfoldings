@@ -10,7 +10,7 @@ before relying on the historical proof status below.**
   same opposite petals cannot overlap along both routes, since the route sums
   add to 2*pi+curvature(w). The conditional hinge step reduces the sufficient
   failure list from 49 to 24 classes; the new angle identity excludes original
-  class 49, leaving 23 open. The full four-choice rule, L, and F remain open.
+  class 49; the new [convex-patch proof](n6/OCTA_CONVEX_PATCHES.md) excludes class 20, leaving 22 open. It also settles the zero- and one-nonconvex-patch regimes (under H for one). The full four-choice rule, L, and F remain open.
 - Latest proof step: [n6/MINUS_NEIGHBORHOOD.md](n6/MINUS_NEIGHBORHOOD.md)
   applies Pinciu’s Theorem 1, excluding seven of the original 28 minus-edge
   failure classes globally. Twenty-one classes remain open.

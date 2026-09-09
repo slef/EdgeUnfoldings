@@ -1,0 +1,99 @@
+{
+  "classification": {
+    "result": "verified_patch_hypotheses",
+    "regime": "zero",
+    "patches": [
+      {
+        "index": 0,
+        "equator_edge": [
+          2,
+          3
+        ],
+        "corner_relations_to_pi": [
+          "<",
+          "<"
+        ],
+        "convex": true
+      },
+      {
+        "index": 1,
+        "equator_edge": [
+          3,
+          4
+        ],
+        "corner_relations_to_pi": [
+          "<",
+          "<"
+        ],
+        "convex": true
+      },
+      {
+        "index": 2,
+        "equator_edge": [
+          4,
+          5
+        ],
+        "corner_relations_to_pi": [
+          "<",
+          "<"
+        ],
+        "convex": true
+      },
+      {
+        "index": 3,
+        "equator_edge": [
+          5,
+          2
+        ],
+        "corner_relations_to_pi": [
+          "<",
+          "<"
+        ],
+        "convex": true
+      }
+    ],
+    "nonconvex_patches": [],
+    "curvature_order": null,
+    "sharpest_apex_required": false,
+    "candidate_slit_indices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "candidate_slit_vertices": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "conclusion": "Every slit succeeds by disjoint angular wedges",
+    "scope": "These exact coordinates or this parameter region satisfy the checked hypotheses. The stated general conclusion invokes the written geometric lemmas; an individual net requires its own all-pairs certificate."
+  },
+  "net": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 19,
+      "separating_edge": 9
+    },
+    "strict_facet_supports": 24,
+    "planarity_identities": 24,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 192
+  },
+  "fractional_bits": 192,
+  "scope": "One exact example. The open regimes are not settled by their successful examples."
+}

@@ -1,5 +1,7 @@
 # Assume an overlap, then change the opening
 
+**Follow-up:** [Convex-patch proofs](OCTA_CONVEX_PATCHES.md) additionally exclude original class 20. The current total is **2 excluded, 22 open out of 24 sufficient classes**. The discussion below records the earlier switching step and its then-current count.
+
 9 September 2026. This develops the user's proposed case analysis. It proves
 two switching statements, using the existing shared-vertex, Case A, and
 base-cone lemmas. **The four-choice unfolding rule and the octahedron case

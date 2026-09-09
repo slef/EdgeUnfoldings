@@ -6,7 +6,7 @@ sampling is floating-point exploration, never a certificate of nonoverlap.
 from __future__ import annotations
 import argparse
 from collections import Counter
-from itertools import combinations
+from itertools import combinations, product
 import json
 from pathlib import Path
 import time
@@ -128,7 +128,10 @@ def failure_case_analysis():
         opposite_routes = (len(paths) == 2 and all(len(p) == 5 and min(p[0], p[-1]) >= 4 for p in paths)
                            and {paths[0][0], paths[0][-1]} == {paths[1][0], paths[1][-1]}
                            and (paths[0][2]-paths[1][2])%4 == 2)
-        c['status'] = 'excluded_by_opposite_route_angle_sum' if opposite_routes else 'open'
+        forced_nonconvex = {max(p[0],p[-1])-4 for p in paths if min(p[0],p[-1])<4<=max(p[0],p[-1])}
+        c['status'] = ('excluded_by_opposite_route_angle_sum' if opposite_routes else
+                       'excluded_by_convex_patch_existence' if forced_nonconvex == set(range(4)) else 'open')
+        c['forced_nonconvex_patches'] = sorted(forced_nonconvex)
     trees = {t['slit_vertex']: t for t in degree_four_stars(FACES) if t['apex'] == 0}
     repairs = []
     for event in full['events']:
@@ -162,15 +165,20 @@ def failure_case_analysis():
         identities.append(dict(middle_faces=[j,j+2], sum='2*pi + curvature(w)',
                                base_angle_terms=route_terms(j)+route_terms(j+2)))
     closed = sum(c['status'] != 'open' for c in reduced['classes'])
-    reduced['scope'] = 'Using the conditional hinge reduction, 24 classes suffice. The opposite-route angle identity excludes one; 23 remain open.'
+    reduced['scope'] = f'Using the conditional hinge reduction, 24 classes suffice. Geometric lemmas exclude {closed}; {24-closed} remain open.'
+    corner_assignments = [list(c) for c in product(*[(i,(i+1)%4) for i in range(4)]) if len(set(c))==4]
+    if sorted(corner_assignments) != [[0,1,2,3],[1,2,3,0]]:
+        raise AssertionError('Unexpected reflex-corner assignment')
     return dict(schema='n6-octa-failure-analysis-v1',
                 scope='A local pair is repaired by any other slit, using the shared-vertex theorem. The reduced global target uses the conditional hinge lemma. Neither establishes a universally successful slit.',
                 dependencies=['Shared-vertex fan lemma for convex polyhedra',
                               'Conditional hinge/far-fan lemma: if the three local pairs are disjoint in this net, a far-fan overlap forces an opposite-petal overlap',
                               'Case A opposite-petal exclusion under maximum apex curvature and the base-cone lemma',
-                              'Triangle angle sums and strictly positive curvature at w'],
+                              'Triangle angle sums and strictly positive curvature at w',
+                              'At least one convex two-triangle patch: reflex corners force strict increases of |wu|+|vu|, and adjacent patches cannot both be reflex at their shared equator vertex'],
                 original_classes=full['symmetry_classes'], reduced=reduced,
                 local_pair_repairs=repairs, opposite_route_identities=identities,
+                impossible_all_reflex_assignments=corner_assignments,
                 geometric_classes_excluded=closed, remaining_classes=reduced['symmetry_classes']-closed,
                 original_classes_retained=[c['original_class_id'] for c in reduced['classes']])
 

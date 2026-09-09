@@ -78,9 +78,15 @@ class OctaPatternTests(unittest.TestCase):
                 minimal.append(c)
         self.assertEqual(len(minimal), 131)
         self.assertEqual(sum(c['size'] for c in reduced['classes']), 131)
-        self.assertEqual((reduced['symmetry_classes'], report['geometric_classes_excluded'], report['remaining_classes']), (24,1,23))
+        self.assertEqual((reduced['symmetry_classes'], report['geometric_classes_excluded'], report['remaining_classes']), (24,2,22))
         excluded = [c for c in reduced['classes'] if c['status'] != 'open']
-        self.assertEqual([c['original_class_id'] for c in excluded], [49])
+        self.assertEqual([c['original_class_id'] for c in excluded], [20,49])
+        self.assertEqual(excluded[0]['forced_nonconvex_patches'], [0,1,2,3])
+        # Independently enumerate assignments of four reflex corners. Positive
+        # curvature forbids two at the same equator vertex; either remaining
+        # assignment imposes a strict cycle of broken-path increases.
+        assignments = [a for a in product(*[(i,(i+1)%4) for i in range(4)]) if len(set(a))==4]
+        self.assertEqual(assignments, [(0,1,2,3),(1,2,3,0)])
 
     def test_angle_identity_and_existence_of_adjacent_large_sums(self):
         report = failure_case_analysis()

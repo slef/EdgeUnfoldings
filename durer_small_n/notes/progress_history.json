@@ -1,5 +1,18 @@
 [
   {
+    "date": "9 September 2026 \u00b7 convex-patch proofs",
+    "title": "Two geometric regimes proved; a second failure class excluded",
+    "results": [
+      "octa_patches",
+      "octa_four_slits",
+      "octa_switch",
+      "t_octa",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#octa_patches\">new patch analysis</a> proves unfoldability for all shapes with zero or one nonconvex blue\u2013orange patch, with the sharpest-apex hypothesis in the one-patch case. It also proves that four nonconvex patches are impossible, excluding original class 20.</p><p>Two of the 24 sufficient failure classes are now excluded; 22 remain. The two-adjacent, two-opposite, and three-patch regimes remain open. Five exact examples check that the regimes occur, independently of the universal written proofs. No additional whole six-vertex type is settled.</p>"
+  },
+  {
     "date": "9 September 2026 \u00b7 overlap case analysis",
     "title": "Two switching implications proved; 23 sufficient failure classes remain",
     "results": [
