@@ -230,3 +230,13 @@ written refinements plus the corresponding overview/PDF updates:
 No numerical research computation remains running. Finish latestPDF/web
 validation and local checkpoint by11:11:09UTC, then stop the timed session.
 User PDFs remain untracked; nothing merged or pushed.
+
+
+Final research checkpoint8f71f58 contains the surviving interior-fan lemma,
+nonobtuse-face corollary, literature scope, and updated proofPDF. The final
+PDF has12pages and was visually checked after eliminating an orphaned code
+list. All scientific work requested for this timed interval is checkpointed.
+Final status: fulln6andgeneral octahedron open;49originalfailureclasses,
+2excludedand47open; independent central/curvature/sector/nonobtuse families
+proved as described above. No merge or push. There are no active searches.
+The heartbeat is to be paused at the11:11UTC deadline.
