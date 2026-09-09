@@ -1,5 +1,16 @@
 [
   {
+    "date": "9 September 2026 \u00b7 octahedron priority",
+    "title": "Four opening positions; 49 simultaneous-failure classes to study",
+    "results": [
+      "octa_four_slits",
+      "t_octa",
+      "research_plan",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#octa_four_slits\">new octahedron proposal</a> keeps the sharpest apex but allows four positions for the opening at the opposite vertex. An exhaustive combinatorial enumeration reduces simultaneous failure to 49 symmetry classes; none of these new geometric classes is yet excluded.</p><p>A comparison on 3,000 sampled shapes found a successful choice throughout. This is numerical evidence only. The earlier single-choice proof still has two gaps, and the seven excluded minus-edge classes remain recorded below.</p>"
+  },
+  {
     "date": "9 September 2026 \u00b7 face-neighborhood proof",
     "title": "Seven universal failure classes excluded; 21 remain",
     "results": [

@@ -1,0 +1,86 @@
+{
+  "scope": "Numerical evidence only. No universal rule is proved; even clear sample results are not exact certificates.",
+  "seed": 6090931,
+  "requested_samples": 3000,
+  "samples": 3000,
+  "attempts": 11450,
+  "status": "complete",
+  "distribution": "Claude octa.rand_points: Gaussian, sphere, cube, or one distant point; anisotropic scales exp[-4,4], then strict octahedral facet screen.",
+  "separation_tolerance": 1e-10,
+  "normalization": "diameter one",
+  "elapsed_seconds": 9.524150958983228,
+  "rules": {
+    "all_nearstars": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 15
+    },
+    "fixed_apex_four": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 2
+    },
+    "fixed_opposite_pair_eight": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 4
+    },
+    "sharpest_apex_four": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 2
+    },
+    "sharpest_opposite_four": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 1
+    },
+    "sharpest_pair_eight": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 3
+    },
+    "sharpest_apex_sharpest_slit": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 1
+    },
+    "sharpest_apex_top_two_slits": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 1
+    },
+    "sharpest_apex_geodesic_endpoints": {
+      "clear": 3000,
+      "borderline": 0,
+      "failed": 0,
+      "minimum_clear_choices": 1
+    }
+  },
+  "clear_nearstars_histogram": {
+    "15": 2,
+    "16": 27,
+    "17": 8,
+    "18": 64,
+    "19": 27,
+    "20": 249,
+    "21": 358,
+    "22": 385,
+    "23": 510,
+    "24": 1370
+  },
+  "numerical_sector_condition": {
+    "any_choice": 3000,
+    "at_sharpest_apex": 2688,
+    "at_sharpest_opposite": 3000
+  },
+  "first_numerical_failures": {}
+}

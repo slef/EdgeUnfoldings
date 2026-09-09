@@ -1,4 +1,28 @@
-# Latest continuation: a universal seven-class exclusion
+# Current priority: the octahedron four-slit rule
+
+9 September 2026. At the user's request, prioritize the octahedron. The new
+[four-choice proposal](OCTA_FOUR_SLITS.md) retains the sharpest apex and tries
+all four openings at its opposite vertex. It is a weaker target than the
+existing H/R single-choice rule, using the same near-star constructions.
+
+- Exact combinatorial reduction: 36 residual checks become 24 distinct
+  relative placements, with 315 minimal simultaneous-failure covers and 49
+  symmetry classes. **No new geometric class is excluded yet.**
+- First target: classes 37, 40, 44, 49, each with only two bad placements.
+  Class 49 is the same opposite-petal pair overlapping along both fan routes.
+- Numerical pilot: 3,000 shapes, all 24 near-stars tested; every sharpest-apex
+  four-tree family has a numerically clear choice. This is not a proof.
+- Secondary route: the archived geodesic-sector sufficient theorem, with
+  an open existence step. Retain its exact sharpest-sector radial obstruction.
+- Reused the minus-edge batch development and archive two-face path routines;
+  compared all 384 octahedral trees on two fixtures with independent geometry.
+- The overview now puts this priority first, links the full proposal and
+  saved enumeration, and preserves earlier notes and proof counts.
+
+The old single-choice proof still has Lemma L and the small-angle
+opposite-petal gap. The full octahedron and n=6 theorem remain open.
+
+# Earlier continuation: a universal seven-class exclusion
 
 9 September 2026. [MINUS_NEIGHBORHOOD.md](MINUS_NEIGHBORHOOD.md) applies
 Pinciu's face-neighborhood theorem to one previously residual pair in each

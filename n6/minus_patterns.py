@@ -19,22 +19,24 @@ from n6.original_star_probe import apex_curvature
 
 class TreeBatch:
     """Develop all trees in batches; preserve full original polygonal faces."""
-    def __init__(self, trees=None):
-        self.trees = all_trees(FACES) if trees is None else trees
-        self.padded = np.array([list(f)+[f[0]]*(4-len(f)) for f in FACES])
-        self.pairs = [(a,b) for a in range(7) for b in range(a+1,7)]
+    def __init__(self, trees=None, faces=FACES):
+        self.faces = faces
+        self.width = max(map(len, faces))
+        self.trees = all_trees(faces) if trees is None else trees
+        self.padded = np.array([list(f)+[f[0]]*(self.width-len(f)) for f in faces])
+        self.pairs = [(a,b) for a in range(len(faces)) for b in range(a+1,len(faces))]
         self.pair_mask = np.array([[p in t['pairs'] for p in self.pairs] for t in self.trees])
         transitions = []
-        for faces in incidence(FACES).values():
-            for par,ch in (faces,faces[::-1]):
-                f = FACES[ch]
-                a,b = next((a,b) for a,b in zip(f,f[1:]+f[:1]) if a in FACES[par] and b in FACES[par])
-                transitions.append((par,ch,a,b,FACES[par].index(a),FACES[par].index(b)))
+        for owners in incidence(faces).values():
+            for par,ch in (owners,owners[::-1]):
+                f = faces[ch]
+                a,b = next((a,b) for a,b in zip(f,f[1:]+f[:1]) if a in faces[par] and b in faces[par])
+                transitions.append((par,ch,a,b,faces[par].index(a),faces[par].index(b)))
         self.transitions = transitions
         lookup = {(p,c):i for i,(p,c,*_) in enumerate(transitions)}
-        levels = [[] for _ in range(6)]
+        levels = [[] for _ in range(len(faces)-1)]
         for ti,t in enumerate(self.trees):
-            adj = {i:[] for i in range(7)}
+            adj = {i:[] for i in range(len(faces))}
             for a,b in t['hinges']: adj[a].append(b); adj[b].append(a)
             seen = {0}; todo = [(0,0)]
             for par,depth in todo:
@@ -46,15 +48,15 @@ class TreeBatch:
 
     def nets(self, points):
         p = np.asarray(points,dtype=float)
-        normals = np.array([np.cross(p[f[1]]-p[f[0]],p[f[2]]-p[f[0]]) for f in FACES])
+        normals = np.array([np.cross(p[f[1]]-p[f[0]],p[f[2]]-p[f[0]]) for f in self.faces])
         normals /= np.linalg.norm(normals,axis=1)[:,None]
         coefficients = []
         for par,ch,a,b,pa,pb in self.transitions:
             e=p[b]-p[a]; v=p[self.padded[ch]]-p[a]; s=e@e
             coefficients.append(np.stack((v@e,np.cross(e,v)@normals[ch]),axis=1)/s)
         coefficients=np.array(coefficients)
-        out=np.zeros((len(self.trees),7,4,2))
-        a,b=FACES[0][:2]; ex=p[b]-p[a]; ex/=np.linalg.norm(ex)
+        out=np.zeros((len(self.trees),len(self.faces),self.width,2))
+        a,b=self.faces[0][:2]; ex=p[b]-p[a]; ex/=np.linalg.norm(ex)
         ey=np.cross(normals[0],ex)
         out[:,0]=np.stack(((p[self.padded[0]]-p[a])@ex,(p[self.padded[0]]-p[a])@ey),axis=1)
         trans=np.array(self.transitions)

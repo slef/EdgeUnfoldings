@@ -36,11 +36,11 @@ function caseProgress(id,compact=false) {
   const localProved=octa.pair_groups.filter(g=>g.link==='lemmaL' && g.status==='proved').reduce((n,g)=>n+g.count,0);
   let title,body;
   if (id==='t_octa') {
-    title='Octahedron · two main proof obligations remain';
+    title='Octahedron · current research priority';
     body=`<div class="progress-key"><strong>${octa.remaining.length}</strong><span>remaining universal proof obligations</span></div><p><b>${proofTally(octa.angle_branches)} angle branches proved</b> for opposite petals. These branches partition the possibilities; they need not be equally difficult.</p>${proofSteps(octa.angle_branches)}`;
     if (compact) body+=`<p><b>${directlyProved} / ${pairTotal} face pairs directly settled.</b> The local slit obligations are ${localProved} / ${localTotal} proved; four other pairs depend on the open results.</p>`;
     if (!compact) body+=`<h4>Where the 28 face pairs stand</h4>${pairAccounting()}<p>The four conditional pairs follow once Lemma L and opposite-petal separation are proved. They are not four additional independent proof tasks, and are not counted as already solved.</p><h4>What must close next</h4><ol>${octa.remaining.map(g=>`<li><a href="#${g.link}">${g.label}</a>.</li>`).join('')}</ol><p><b>Lemma L: ${localProved} / ${localTotal} local pair obligations proved for all selected shapes.</b> Individual examples and neighborhoods have certificates, but these three general statements remain open.</p>`;
-    body+=`<p class="progress-change">Earlier research hour: <b>no remaining universal gap closed</b>. The new apex-entry family rules out a stronger shortcut; joint-petal separation is still needed.</p>`;
+    body+=`<p><b>New route:</b> <a href="#octa_four_slits">try four positions of the fan opening</a>, then prove one works. Its simultaneous failures reduce to 49 symmetry classes; 0 are yet excluded geometrically. This is an alternative to the two obligations above. The 3,000-shape pilot is numerical evidence only.</p><p class="progress-change">Earlier research hour: <b>no remaining universal gap closed</b>. The new apex-entry family rules out a stronger shortcut; joint-petal separation is still needed.</p>`;
   } else if (id==='t_octa_minus') {
     const d=SCORE.minus, first=progressNumber(d.history[0].half_width),last=progressNumber(d.history.at(-1).half_width);
     title='Octahedron minus an edge · two-choice rule to prove';

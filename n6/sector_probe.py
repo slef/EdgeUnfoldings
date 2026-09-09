@@ -52,22 +52,28 @@ def overlap(q):
  ov=one&one.T
  return bool(np.any(np.triu(ov,1)))
 
+def two_face_paths(p,faces,v,w):
+ """Numerical straight antipodal paths crossing the interior of one edge."""
+ candidates=[]
+ for f in faces:
+  if v not in f:continue
+  a,b=[x for x in f if x!=v]
+  if not any(set(ff)=={w,a,b} for ff in faces):continue
+  ell=np.linalg.norm(p[b]-p[a]);e=(p[b]-p[a])/ell
+  xv=(p[v]-p[a])@e;xw=(p[w]-p[a])@e
+  yv=np.linalg.norm(np.cross(e,p[v]-p[a]));yw=np.linalg.norm(np.cross(e,p[w]-p[a]))
+  q=(xv*yw+xw*yv)/(yv+yw)
+  if not 0<q<ell:continue
+  vv=np.array([xv,yv]);ww=np.array([xw,-yw]);L=np.linalg.norm(vv-ww)
+  candidates.append((L,a,b,vv,ww,ell))
+ return candidates
+
+
 def sector_choices(p,faces,plans,angles):
  good=[]
  for v in range(6):
   w=next(t[1] for t in plans if t[0]==v)
-  candidates=[]
-  for f in faces:
-   if v not in f:continue
-   a,b=[x for x in f if x!=v]
-   if not any(set(ff)=={w,a,b} for ff in faces):continue
-   ell=np.linalg.norm(p[b]-p[a]);e=(p[b]-p[a])/ell
-   xv=(p[v]-p[a])@e;xw=(p[w]-p[a])@e
-   yv=np.linalg.norm(np.cross(e,p[v]-p[a]));yw=np.linalg.norm(np.cross(e,p[w]-p[a]))
-   q=(xv*yw+xw*yv)/(yv+yw)
-   if not 0<q<ell:continue
-   vv=np.array([xv,yv]);ww=np.array([xw,-yw]);L=np.linalg.norm(vv-ww)
-   candidates.append((L,a,b,vv,ww,ell))
+  candidates=two_face_paths(p,faces,v,w)
   if not candidates:continue  # Numerically unresolved path is not a sufficient-condition witness.
   L,a,b,vv,ww,ell=min(candidates,key=lambda t:t[0])
   for u,uu in ((a,np.array([0.,0.])),(b,np.array([ell,0.]))):
