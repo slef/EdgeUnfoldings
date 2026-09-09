@@ -23,7 +23,7 @@
       {
         "label": "Petal\u2013far-fan pairs",
         "count": 4,
-        "status": "conditional",
+        "status": "open",
         "link": "F_hinge"
       }
     ],
@@ -55,6 +55,10 @@
       {
         "label": "Prove joint-petal separation in the small-fan-angle branch",
         "link": "F_below"
+      },
+      {
+        "label": "Prove far-fan separation under H, including entry at the cut boundary",
+        "link": "F_hinge"
       }
     ]
   },

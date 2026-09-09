@@ -1,7 +1,10 @@
-# Two geometric octahedron cases and a second class exclusion
+# Convex patches: a complete case and a class exclusion
 
 Timed session, 9 September 2026. **The whole octahedron case remains open.**
-The results below are geometric proofs, not conclusions from a sample.
+The convex-patch existence and all-convex-case results below are geometric proofs.
+**Audit correction:** the proposed one-nonconvex-patch whole-net proof is
+withdrawn pending a replacement for the false far-fan reduction; see
+[HINGE_AUDIT.md](HINGE_AUDIT.md).
 They use the same four cuts at v and one cut at its opposite vertex w.
 
 ## What a convex patch means
@@ -97,8 +100,8 @@ this. The reflected pattern is the other labeled member of the same class.
 This exclusion is valid even without H.
 
 Together with the earlier opposite-route exclusion of class 49, this leaves
-**22 open classes out of the 24 sufficient classes**. The earlier 49-to-24
-change was removal of redundant obligations, not geometric exclusions.
+**47 open classes out of the original 49 sufficient classes**. The earlier
+49-to-24 reduction depended on the now-refuted far-fan lemma and is withdrawn.
 
 ## A complete proof when all four patches are convex
 
@@ -108,27 +111,20 @@ interiors because their total angle at w is below 2*pi. Within each patch,
 the two triangles lie on opposite sides of their shared edge. All face pairs
 are therefore safe. This conclusion does not need H.
 
-## A complete proof when just one patch is nonconvex
+## The one-nonconvex-patch argument has a remaining step
 
-**Assume H: v has maximum curvature. If only Q_i is nonconvex, at least one
-of the two openings Z_{i+2}, Z_{i+3} is nonoverlapping.**
+Assume H and let Q_i be the only nonconvex patch. The proposed choices are
+Z_(i+2) and Z_(i+3). Both have convex flanks, so all three local pairs are safe.
+One opposite-petal pair consists of convex patches and is safe. The other
+pair uses the two different routes; the opposite-route switching proof makes
+it safe in at least one of the two choices.
 
-1. In both openings, the two flank patches are convex: the exceptional Q_i
-   is in the interior of the opened fan. Thus all three local pairs are
-   disjoint, by their fan wedges. This establishes the local premise
-   directly; it does not assume the universal Lemma L.
-2. One opposite-petal pair consists of two convex patches and is disjoint.
-   The only possible opposite-petal failure is V_i with V_{i+2}.
-3. The two proposed openings place this pair along its two different fan
-   routes. Under H the [opposite-route switching lemma](OCTA_CASE_ANALYSIS.md)
-   says they cannot both overlap. Choose the route where they are disjoint.
-4. The local pairs and both opposite-petal pairs are now safe in the same
-   net. The existing conditional hinge/far-fan lemma excludes the remaining
-   four pairs. The other 19 pairs share an uncut vertex. The whole net is safe.
-
-This includes straight corners in the three convex patches. The H assumption
-is retained where the opposite-route lemma invokes Case A. No ranking of the
-slit vertex is required.
+This establishes **local and opposite-petal safety in one common net**.
+The last step previously invoked the conditional far-fan reduction. That
+lemma is now exactly refuted without H; its H-specific replacement remains
+unproved. Therefore whole-net safety in this regime is **open**, rather than
+a complete theorem. The displayed one-patch example retains its independent
+all-28-pairs certificate. Its success is not a proof of the entire regime.
 
 ## A five-part geometric division
 
@@ -138,14 +134,14 @@ up to cyclic symmetry, are:
 | Nonconvex patches | Status for a sharpest apex |
 | --- | --- |
 | None | Proved: every opening works |
-| One | Proved: one of the two specified openings works |
+| One | Partial: local and opposite-petal pairs can be made safe; far-fan step open |
 | Two, adjacent | Open |
 | Two, opposite | Open |
 | Three | Open |
 
 These are five geometric regimes, not five equal amounts of effort or five
 equal fractions of shape space. They are a different view of the problem
-from the 24 simultaneous-failure classes. The two denominators must not be
+from the 49 original simultaneous-failure classes. The two denominators must not be
 combined into a completion percentage.
 
 ## Exact examples and the numerical survey
@@ -154,13 +150,13 @@ The checker in `n6.convex_patches` uses outward rational bounds to establish
 the convex original facets, maximum apex curvature when required, and the two corner sums
 of every patch. Five saved integer-coordinate examples establish that all
 five listed regimes are nonempty; their displayed successful nets also have
-independent all-pairs certificates. The examples in the three open regimes
+independent all-pairs certificates. The examples in the four open regimes
 do not establish their universal unfoldability.
 
 The separate seed-6090942 survey classified 5,000 numerical shapes: 676 had
 zero nonconvex patches, 1,906 one, 1,348 two adjacent, 976 two opposite, and
-94 three. The theorem for zero/one patches is a proof for all shapes satisfying
-its hypotheses. These sample frequencies are not global coverage estimates.
+94 three. The all-convex theorem is a proof for all shapes satisfying
+its hypotheses. The one-patch whole-net claim is no longer counted as proved. These sample frequencies are not global coverage estimates.
 
 ```sh
 durer_small_n/.venv/bin/python -m n6.convex_patches --samples 5000 --examples
@@ -192,6 +188,6 @@ python3 -m n6.polycert verify n6/results/sector-three-patch-radial-failure.certi
 ```
 
 A separate sufficient result in [OCTA_SHORT_EDGES.md](OCTA_SHORT_EDGES.md)
-covers further families in all three open regimes, by checking short original
+covers further families in the open regimes, by checking short original
 edges against the pole-to-pole chord length. It does not settle an entire
 remaining regime or exclude another whole failure class.

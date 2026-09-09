@@ -5,6 +5,8 @@ Prioritize simple universal octahedron exclusions, written proofs, and exact
 checks. Keep the web overview and collapsed history current. Do not merge or
 push. Work on the existing `codex/minus-edge-patterns` branch.
 
+**Latest authoritative checkpoint: 10:55 UTC.** The older far-fan reduction is now exactly refuted. Use 49 original classes, 2 excluded and 47 open; the one-patch whole-net claim is reopened. The curvature-pair, central-symmetry, short-edge and mixed radial-cover theorems survive independently. See the final checkpoint below before interpreting historical entries.
+
 Starting commit: `6b2b24d`. Starting status: 23 sufficient switching classes
 open (8 mixed, 15 local-only). The full octahedron theorem, L, and F are open.
 Original class 49 is excluded by the opposite-route angle-sum identity.
@@ -153,3 +155,54 @@ target achieved a positive feasible overlap with local and opposite pairs
 clear. Numerical failure is not proof. The wording at a radial cut boundary
 is still being examined; no flaw in the implication has been established.
 No computations remain running as of this checkpoint.
+
+
+## Checkpoint around 10:55 UTC — exact correction and stronger local theorem
+
+Commit4210095 saved the curvature/short-edge results. Subsequent work is not
+committed yet. No computations are running except validation when explicitly
+started. All temporary numerical research runs completed.
+
+**Critical:** n6/HINGE_AUDIT.md and hinge_audit.py certify an exact convex
+counterexample to the old unrestricted conditional far-fan reduction. The
+source is NOT sharpest. Only V2/W0 overlap; all other27 pairs are exactly
+nonoverlapping. Point12/25 along the radial cut lies strictly inside V2.
+A second cut tree on the same solid is exactly successful. Thus H-specific
+F and the sharpest-source four-choice conjecture are NOT refuted. The old
+proof fails at a CUT radial boundary, not at an interior hinge.
+
+Restore original49classes,2excluded(20,49),47open. Withdraw smaller24class
+sufficient reduction; retain it explicitly as history. One-nonconvex-patch
+argument proves a common locally/opposite-petal-safe choice, but whole-net
+safety remains open. All-convex patches and both switching implications
+survive. Corrected analysis/current vs historical metadata, future targeted
+search, overview, dashboard, PDF/LaTeX and current research notes accordingly.
+TreeBatch JSON replay had list/tuple mismatch giving false clear masks;
+normalized pairs and added regression using the actual overlapping net.
+Exact certificate tools were unaffected.
+
+**New positive:** OCTA_RADIAL_COVER.md proves mixed local sufficient cover:
+at every strictly convex two-face patch of a >=120degree sector vertex,
+either an endpoint spoke <=3Dpolechord OR omega+2nu<=360degrees. This forces
+a spoke <= shortestpath length, and the sector theorem gives an edge net.
+A15parameter asymmetric box now qualifies where earlier criteria failed;
+independent all28pair net certificate covers the box. A second integer
+example exactly fails the mixed criterion at every eligible vertex but has
+a successful net. Six new radial tests include both positive and negative
+checks. Four hinge tests include exact overlap/safe pairs and JSON replay.
+
+**New structural reduction:** outside the curvature-pair theorem, choose the
+larger-curvature endpoint of each opposite pair. These endpoints form a face,
+its curvature total exceeds360degrees, and all vertices outside it have
+curvature below120degrees. Hence the >=120degree vertices form exactly one
+of: one vertex, one edge, or a full face. These are three open branches,
+not three solved cases and not additional fixed-source class exclusions.
+Proof in OCTA_REMAINING_FAMILIES.md; overview node octa_curvature_remainder.
+
+The full suite passed126 before two added radial tests; the six radial tests
+then passed. Expect128 full tests on final validation. Node navigation,
+progress, and minus-pair tests passed before the new structural node. Need
+rerun current build+tests+deployment after staging all intended changes.
+The new hinge figure was rendered and visually checked. Corrected lemmaF.pdf
+was compiled twice and changed pages visually checked, then copied to repo.
+Do not add the two user PDFs. Do not merge or push. Finish at11:11:09UTC.

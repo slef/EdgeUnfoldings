@@ -7,7 +7,7 @@ notes = Path(__file__).resolve().parent / 'notes'
 research = notes.parent.parent / 'n6'
 figs = json.loads((notes / 'status_figs.json').read_text())
 figs['thickness'] = json.loads((notes / 'thickness.json').read_text())
-for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg')]:
+for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg')]:
     svg = (research / 'figures' / filename).read_text()
     figs[key] = svg[svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 # Keep each 3D picture, its labels, and its cuts tied to the exact witness.
@@ -86,6 +86,14 @@ figs['models']['octa_patches'] = witness_model(
     highlight_faces=[1,5], view={'yaw': -0.7, 'pitch': 0.3},
     title='Exact octahedron with one nonconvex flattened patch',
     caption='The same convex octahedron. The two colored faces form Q₁ when flattened. Red edges give the certified successful opening at u₃. Drag to rotate.',
+)
+figs['models']['hinge_boundary'] = witness_model(
+    'hinge-boundary-counterexample.certificate.json', names=['v','w','u₀','u₁','u₂','u₃'],
+    face_names=['W'+str(i) for i in range(4)]+['V'+str(i) for i in range(4)],
+    highlight_faces=[0,6], faceColors={i:'#61a9d3' if i==0 else '#e89a52' if i==6 else '#dce5eb' for i in range(8)},
+    view={'yaw': -0.7, 'pitch': 0.3},
+    title='Exact counterexample to the conditional far-fan reduction',
+    caption='The actual thin convex octahedron. Blue W₀ and orange V₂ overlap only in the specified net. Red edges are cut. The four-cut source v is not sharpest. Drag to rotate.',
 )
 t = t.replace('__PROGRESS_CSS__', (notes / 'progress_dashboard.css').read_text())
 t = t.replace('__PROGRESS_DASHBOARD_JS__', (notes / 'progress_dashboard.js').read_text())

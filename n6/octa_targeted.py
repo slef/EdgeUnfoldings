@@ -22,7 +22,7 @@ def run(seconds_per_class, seed, output, classes=None, starts=100, guard=1e-7):
     initial = [pack(sharpest_apex(p, faces, adj), 0)
                for p, faces, adj in random_octahedra(rng, starts)]
     analysis = failure_case_analysis()
-    rows = [c for c in analysis['reduced']['classes'] if c['status'] == 'open' and c['original_class_id'] != 20]
+    rows = [c for c in analysis['current']['classes'] if c['status'] == 'open' and c['original_class_id'] != 20]
     if classes:
         rows = [c for c in rows if c['original_class_id'] in classes]
     trees = [t for t in degree_four_stars(FACES) if t['apex'] == 0]
@@ -30,13 +30,14 @@ def run(seconds_per_class, seed, output, classes=None, starts=100, guard=1e-7):
     tree_by_slit = {t['slit_vertex']: i for i, t in enumerate(trees)}
     report = dict(scope=__doc__, seed=seed, seconds_per_class=seconds_per_class,
                   guard=guard, starts=starts,
+                  target='Current original 49-class list, with two excluded classes omitted',
                   coordinate_bounds='log radii [-6,6], axial heights [-50,50], three azimuth turns (0,pi); fourth turn closes the axis',
                   proof_classes_excluded_here=0, status='running', classes=[])
     for case in rows:
         start = time.monotonic()
         wanted = []
         for event_id in case['representative']:
-            event = analysis['reduced']['events'][event_id]
+            event = analysis['current']['events'][event_id]
             p = event['hinge_path']
             wanted.append((tree_by_slit[event['bad_slits'][0]], batch.pairs.index((p[0], p[-1]))))
         best = None

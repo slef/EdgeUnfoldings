@@ -78,7 +78,10 @@ class OctaPatternTests(unittest.TestCase):
                 minimal.append(c)
         self.assertEqual(len(minimal), 131)
         self.assertEqual(sum(c['size'] for c in reduced['classes']), 131)
-        self.assertEqual((reduced['symmetry_classes'], report['geometric_classes_excluded'], report['remaining_classes']), (24,2,22))
+        self.assertEqual((reduced['symmetry_classes'], report['geometric_classes_excluded'], report['remaining_classes']), (24,2,47))
+        self.assertFalse(reduced['sufficient_reduction_valid'])
+        self.assertEqual(len(report['current']['classes']),49)
+        self.assertEqual(sum(c['status']=='open' for c in report['current']['classes']),47)
         excluded = [c for c in reduced['classes'] if c['status'] != 'open']
         self.assertEqual([c['original_class_id'] for c in excluded], [20,49])
         self.assertEqual(excluded[0]['forced_nonconvex_patches'], [0,1,2,3])

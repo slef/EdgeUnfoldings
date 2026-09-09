@@ -101,10 +101,11 @@ No claim of historical novelty is made for this special family.
 
 This settles another explicitly defined geometric family. In the asymmetric
 case, its successful source may be the less sharp pole. It is therefore not
-an additional whole class excluded from the 24-class analysis that fixes the
-sharpest source. That count remains 2 excluded and 22 open.
+an additional whole class excluded from the 49-class analysis that fixes the
+sharpest source. That count is now 2 excluded and 47 open after the independent hinge audit.
 
-The zero/one-nonconvex-patch proofs remain valid. Two adjacent, two opposite,
+The all-convex-patch proof remains valid. The one-nonconvex-patch whole-net
+claim has been reopened after the independent far-fan audit. One, two adjacent, two opposite,
 and three nonconvex patches are still open in full; the curvature test can
 cover additional members of those regimes. The sufficient conditions should
 be checked directly, without treating sample frequencies as coverage of the

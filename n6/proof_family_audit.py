@@ -15,7 +15,7 @@ from n6.certify import require
 
 def verify(spec):
     g=Geometry(spec);patch=classify(spec)
-    require(len(patch['nonconvex_patches'])>=2,'The zero/one-patch theorem already applies')
+    require(len(patch['nonconvex_patches'])>=2,'The earlier zero/one-patch filter is not excluded')
     products={v:angle_product(g.p,g.faces,g.h,v) for v in range(6)}
     records=[]
     for w in range(6):
@@ -48,7 +48,7 @@ def verify(spec):
         records.append(row)
     return dict(result='verified_outside_three_new_simple_criteria',sharpest_apex=spec['selection']['apex'],
                 sharpest_patch_classification=patch,vertices=records,
-                scope='These exact coordinates satisfy none of the zero/one-patch, curvature-pair, or chord-based short-edge-cover criteria. The chosen unfolding is checked separately and can be successful. This is not an unfolding counterexample or a proof that a broader sector criterion fails.')
+                scope='These exact coordinates satisfy none of the earlier zero/one-patch filter, curvature-pair, or chord-based short-edge-cover criteria. The one-patch whole-net proof has since been withdrawn, and the stronger local radial-cover theorem covers this example. The chosen unfolding is checked separately. This is not an unfolding counterexample or a proof that a broader sector criterion fails.')
 
 
 if __name__=='__main__':

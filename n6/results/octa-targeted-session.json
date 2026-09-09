@@ -998,5 +998,6 @@
       },
       "verdict": "No positive candidate found; class remains open"
     }
-  ]
+  ],
+  "later_audit": "This search covered the then-listed 22 classes. The 24-class reduction was later refuted, so this is not coverage of the current 47 open original classes. No class was excluded by this numerical run."
 }

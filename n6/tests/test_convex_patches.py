@@ -21,6 +21,7 @@ class ConvexPatchTests(unittest.TestCase):
                 self.assertEqual(result['regime'], regime)
                 self.assertEqual(verify(cert)['result'], 'verified')
                 if regime == 'one':
+                    self.assertIn('Whole-net success remains open',result['conclusion'])
                     i, = result['nonconvex_patches']
                     self.assertEqual(result['candidate_slit_indices'], [(i+2)%4,(i+3)%4])
                     self.assertIn(next(u for w,u in cert['cut_edges'] if w==1), result['candidate_slit_vertices'])

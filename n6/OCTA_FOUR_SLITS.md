@@ -99,8 +99,9 @@ representatives with orbit sizes. An independent test also starts from the
 This is a valid combinatorial reduction of the conjecture: excluding all 49
 classes for convex realizations with v of maximum curvature would prove it.
 **Initially no class in this list had been excluded geometrically.** The
-[follow-up proof](OCTA_CASE_ANALYSIS.md) now excludes class 49 and explains
-why 24 classes suffice, leaving 23 open. These are alternative obligations, not 49 additional gaps appended
+[follow-up proof](OCTA_CASE_ANALYSIS.md) excludes class 49, and convex-patch
+existence excludes class 20, leaving **47 open out of 49**. The former
+24-class reduction is withdrawn after [HINGE_AUDIT.md](HINGE_AUDIT.md). These are alternative obligations, not 49 additional gaps appended
 to the two gaps in the earlier single-choice strategy. There is no justified
 percentage of the octahedron theorem completed.
 

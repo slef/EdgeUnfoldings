@@ -25,7 +25,10 @@ class TreeBatch:
         self.trees = all_trees(faces) if trees is None else trees
         self.padded = np.array([list(f)+[f[0]]*(self.width-len(f)) for f in faces])
         self.pairs = [(a,b) for a in range(len(faces)) for b in range(a+1,len(faces))]
-        self.pair_mask = np.array([[p in t['pairs'] for p in self.pairs] for t in self.trees])
+        # JSON restores face pairs as lists. Normalize before membership tests;
+        # otherwise every pair silently looks exempt after a saved-tree replay.
+        pair_sets = [{tuple(p) for p in t['pairs']} for t in self.trees]
+        self.pair_mask = np.array([[p in pairs for p in self.pairs] for pairs in pair_sets])
         transitions = []
         for owners in incidence(faces).values():
             for par,ch in (owners,owners[::-1]):

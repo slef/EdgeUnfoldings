@@ -317,7 +317,7 @@
         }
       }
     ],
-    "scope": "These exact coordinates satisfy none of the zero/one-patch, curvature-pair, or chord-based short-edge-cover criteria. The chosen unfolding is checked separately and can be successful. This is not an unfolding counterexample or a proof that a broader sector criterion fails."
+    "scope": "These exact coordinates satisfy none of the earlier zero/one-patch filter, curvature-pair, or chord-based short-edge-cover criteria. The one-patch whole-net proof has since been withdrawn, and the stronger local radial-cover theorem covers this example. The chosen unfolding is checked separately. This is not an unfolding counterexample or a proof that a broader sector criterion fails."
   },
   "net": {
     "result": "verified",

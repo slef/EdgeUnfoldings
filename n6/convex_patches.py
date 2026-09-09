@@ -46,7 +46,7 @@ def classify(spec):
         regime = 'zero'; choices = list(range(4)); theorem = 'Every slit succeeds by disjoint angular wedges'
     elif len(nonconvex) == 1:
         regime = 'one'; j = nonconvex[0]; choices = [(j+2)%4,(j+3)%4]
-        theorem = 'At least one of the two stated slits succeeds by the one-nonconvex-patch theorem under H'
+        theorem = 'The two stated slits make local pairs safe, and one makes both opposite-petal pairs safe under H. Whole-net success remains open after the far-fan reduction audit.'
     else:
         regime = 'three' if len(nonconvex) == 3 else 'two-adjacent' if (nonconvex[1]-nonconvex[0])%4 in (1,3) else 'two-opposite'
         choices = []; theorem = 'This geometric regime remains open in general'

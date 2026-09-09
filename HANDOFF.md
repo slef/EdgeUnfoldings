@@ -5,18 +5,18 @@
 **The full n=6 case remains unproved. Read [n6/REVIEW.md](n6/REVIEW.md)
 before relying on the historical proof status below.**
 
-- New complete families: [curvature-pair theorem](n6/OCTA_TWO_SHARP_POLES.md)
-  proves a net when the sharper pole curvature K and opposite curvature J
-  satisfy K+2J>=2*pi; every centrally symmetric octahedron follows. The
-  [short-edge test](n6/OCTA_SHORT_EDGES.md) gives a separate sufficient family.
-  These conditions are not universal and do not alter the 22 fixed-source
-  open classes.
-- Current priority: the octahedron. [n6/OCTA_CASE_ANALYSIS.md](n6/OCTA_CASE_ANALYSIS.md)
-  proves that moving the opening repairs the old local pairs, and under H the
-  same opposite petals cannot overlap along both routes, since the route sums
-  add to 2*pi+curvature(w). The conditional hinge step reduces the sufficient
-  failure list from 49 to 24 classes; the new angle identity excludes original
-  class 49; the new [convex-patch proof](n6/OCTA_CONVEX_PATCHES.md) excludes class 20, leaving 22 open. It also settles the zero- and one-nonconvex-patch regimes (under H for one). The full four-choice rule, L, and F remain open.
+- **Latest correction:** [the hinge audit](n6/HINGE_AUDIT.md) refutes the old
+  conditional far-fan reduction with an exact convex counterexample. Its
+  source is not sharpest. Restore **49 original classes, 2 excluded and 47
+  open**; the 24-class reduction and the one-nonconvex-patch whole-net proof
+  are withdrawn pending an H-specific repair. All-convex patches and the
+  two switching implications remain proved.
+- New independent complete families: the [curvature-pair theorem](n6/OCTA_TWO_SHARP_POLES.md)
+  proves a net when sharper pole curvature K and opposite curvature J satisfy
+  K+2J>=2*pi; **every centrally symmetric octahedron follows**. The
+  [local radial-cover theorem](n6/OCTA_RADIAL_COVER.md) extends the short-edge
+  test with a face-angle test and certifies further asymmetric families.
+  None of these independent results uses the refuted reduction.
 - Latest proof step: [n6/MINUS_NEIGHBORHOOD.md](n6/MINUS_NEIGHBORHOOD.md)
   applies Pinciu’s Theorem 1, excluding seven of the original 28 minus-edge
   failure classes globally. Twenty-one classes remain open.
@@ -29,7 +29,8 @@ before relying on the historical proof status below.**
   restrict it to an angle range automatic in Case A. The new base-cone proof
   handles the complementary large-angle partition: under (H), only Sigma_W<pi
   remains. See [n6/CASE_PARTITION.md](n6/CASE_PARTITION.md).
-- The hinge/far-fan reduction needs Lemma L at the two hinges nearest the slit.
+- Interior-hinge noncrossing uses local nonoverlap. The further far-fan
+  reduction is false as stated, even with those local pairs clear.
   Nonsimplicial limit reductions additionally need successful trees that never
   cut the introduced diagonals. These conditions were missing from earlier summaries.
 - Corrected the far-vertex angle index in `adv_angle.py` and rejected Qhull's

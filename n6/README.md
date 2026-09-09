@@ -2,17 +2,19 @@
 
 The full six-vertex theorem is **not proved or computationally certified here**.
 Read [REVIEW.md](REVIEW.md) before using the older handoff or proof notes.
-The current priority is the **octahedron**: [try four slit positions and prove
-one works](OCTA_FOUR_SLITS.md). The [overlap case analysis](OCTA_CASE_ANALYSIS.md)
-proves two switching implications and reduces the sufficient target from 49
-classes to 24. Original classes 20 and 49 are excluded, leaving 22 open. The new [convex-patch proofs](OCTA_CONVEX_PATCHES.md) settle every shape with zero or one nonconvex patch (under H for one); three geometric regimes remain open. The 3,000-shape
-pilot is numerical evidence only. This is an alternative to the old two gaps.
+The current priority is the **octahedron**. The [hinge audit](HINGE_AUDIT.md)
+exactly refutes the older conditional fan-to-petal reduction. Restore the
+original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
+case and the convex-patch existence theorem remain proved; the proposed
+one-nonconvex-patch whole-net argument has a remaining far-fan step.
 
-The new [curvature-pair theorem](OCTA_TWO_SHARP_POLES.md) proves unfoldability
-when the sharper pole has curvature K, its opposite J, and K+2J>=2*pi.
-Every centrally symmetric octahedron follows. A separate
-[short-edge test](OCTA_SHORT_EDGES.md) proves further families, including some
-three-patch shapes. Neither sufficient condition is universal.
+The independent [curvature-pair theorem](OCTA_TWO_SHARP_POLES.md) proves
+unfoldability when the sharper pole has curvature K, its opposite J, and
+K+2J>=2*pi. **Every centrally symmetric octahedron follows.** The
+[short-edge test](OCTA_SHORT_EDGES.md) and stronger
+[local radial-cover theorem](OCTA_RADIAL_COVER.md) prove further asymmetric
+families. Their hypotheses are not universal. Exact certificates check
+both covered regions and exceptions to the sufficient tests.
 
 A [universal partial lemma](MINUS_NEIGHBORHOOD.md) now excludes seven of the
 28 failure classes of the two-tree conjecture; 21 classes remain open.

@@ -1,3 +1,25 @@
+# Current timed-session audit, 9 September 2026
+
+**Read [HINGE_AUDIT.md](HINGE_AUDIT.md) before the earlier entries below.**
+An exact convex octahedron has one far-fan overlap and all other 27 pairs
+safe. The source is not sharpest, so H-specific claims remain open; the
+old unrestricted conditional reduction is refuted. Restore **49 original
+classes, 2 excluded and 47 open**. Reopen the one-nonconvex-patch whole-net
+claim. Its local and opposite-petal repair steps survive, as do all-convex
+patches and the two independent switching implications.
+
+The strongest new positive result is unchanged: **every centrally symmetric
+octahedron unfolds**, by the opposite-pair curvature theorem. The new
+[local radial-cover theorem](OCTA_RADIAL_COVER.md) combines exact chord and
+face-angle bounds. It certifies a fifteen-parameter asymmetric family that
+failed the earlier criteria. A second integer example exactly fails the
+stronger criterion while its chosen net succeeds.
+
+A further elementary reduction in [OCTA_REMAINING_FAMILIES.md](OCTA_REMAINING_FAMILIES.md) proves that, outside the curvature-pair family, all vertices of curvature at least 120 degrees lie on one triangular face. That face carries more than 360 degrees of total curvature. The three possible threshold patterns (one vertex, one edge, the whole face) are all open in full. This is a proved necessary condition, not another unfolding theorem.
+
+Earlier entries retain their then-current conclusions and counts; the audit
+above supersedes the former 24-class and one-patch claims.
+
 # Latest octahedron step: assume overlap and switch
 
 ## Further timed-session proofs: curvature pair and short edges

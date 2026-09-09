@@ -26,6 +26,16 @@
 \begin{document}
 \maketitle
 
+\paragraph{Latest audit correction, 9 September 2026.}
+\textbf{The conditional far-fan reduction is false as stated.}
+An exactly checked convex octahedron has $V_2$ overlapping $W_0$, while all
+other 27 face pairs are disjoint. The petal enters through the cut radial
+boundary $wu_0$, not an interior hinge. Its source is not sharpest; a new
+H-specific proof remains possible. See \texttt{n6/HINGE\_AUDIT.md}.
+The 24-class reduction and the one-nonconvex-patch whole-net proof are
+withdrawn: use 49 original classes, with 2 excluded and 47 open.
+The independent curvature-pair and central-symmetry proofs are unaffected.
+
 \paragraph{Second continuation, 9 September 2026.}
 The proposed strategy that neither outer petal apex enters $\Omega$ is now
 refuted by a strictly convex integer-coordinate octahedron satisfying both
@@ -39,8 +49,8 @@ an integer-coordinate counterexample is checked by rational intervals in
 \texttt{n6/audit\_witness.py}. Lemma~\ref{D} below is now restricted to the
 angle range used in Case A. The new base-cone lemma below supplies an exhaustive
 partition, including the larger angles and equality boundaries: only
-$\Sigma_W<\pi$ remains after Case A and the base-cone exclusion. The hinge reduction also needs the
-local nonoverlap hypothesis. Neither these notes nor the numerical experiments
+$\Sigma_W<\pi$ remains after Case A and the base-cone exclusion. The later audit
+above supersedes the former far-fan reduction. Neither these notes nor the numerical experiments
 prove the full six-vertex theorem. See \texttt{n6/REVIEW.md} for the full audit.
 
 \section*{Setting and conventions}
@@ -77,7 +87,7 @@ face angles (the spherical polygon inequality for the tangent cone), so $\nu_j\l
  \nu_j\ \le\ \pi-\tfrac12\kappa_v\ \le\ \tfrac{2\pi}{3}\qquad\text{for every } j .
 \end{equation}
 
-\section{Reduction to three consecutive petals}
+\section{Interior hinges and the unresolved far-fan pairs}
 
 \begin{lemma}[petals do not cross interior hinges]\label{hinge}
 Assume the three local pairs at the slit do not overlap. In $Z_k$ no petal
@@ -91,19 +101,29 @@ shared-copy argument: $V_{k-1}'$ at $wu_{k+1}$ and $V_k$ at $wu_{k-1}$.
 In these cases a crossing would enter a local fan face, excluded by the hypothesis.
 \end{proof}
 
-\begin{lemma}[petal versus far fan face]\label{farfan}
-Assume the local pairs do not overlap. If a petal $V_i$ overlaps a fan face
-$W_j$ with $j\notin\{i-1,i,i+1\}$ then $V_i$ overlaps $V_j$.
-\end{lemma}
-\begin{proof}
-$V_i$ contains no vertex of $W_j$ ($w$ and the equator vertices of $W_j$ lie in fan faces or petals that share
-a vertex with $V_i$, except possibly the local face $W_{k-1}'$, whose treatment is part of Lemma L).
-By Lemma~\ref{hinge} the boundary of $V_i$ cannot enter $W_j$ through its hinges, so it enters through the
-outer edge $u_ju_{j+1}$, which is the common edge of $W_j$ and $V_j$; near that crossing $V_i$ meets $V_j$.
-\end{proof}
+\begin{remark}[Withdrawn far-fan implication]\label{farfan}
+The previous draft claimed that local nonoverlap implies a petal meeting
+a far fan face also meets that face's petal. The first and last fan triangles
+each have a radial cut boundary. Lemma~\ref{hinge} does not exclude entry
+there, and the claimed implication is false.
+\end{remark}
 
-Subject to Lemma L, Lemma F follows from the following statement about three consecutive petals, applied to the triples
-$(V_k,V_{k+1},V_{k+2})$ and $(V_{k+1},V_{k+2},V_{k-1}')$ of $Z_k$.
+An exact witness uses $v=0,w=1$ and $u_0=2,u_1=3,u_2=4,u_3=5$:
+\[
+\begin{array}{lll}
+v=(0,0,0),&w=(-89,-179,150),&u_0=(-595,494,-131),\\
+u_1=(295,-283,90),&u_2=(-7440,5883,-1376),&u_3=(-1166,992,-271).
+\end{array}
+\]
+Cut $\operatorname{star}(v)$ and $wu_0$. Only $V_2$ and $W_0$ overlap.
+The point $w+\tfrac{12}{25}(u_0-w)$ in the developed cut edge lies strictly
+inside $V_2$. Strict supporting facets, overlap, and all 27 safe pairs have
+rational interval certificates. Vertex $u_2$ is sharper than $v$.
+A different original-edge tree gives a certified successful net.
+
+Even after local and opposite-petal safety are established under H, the
+far-fan step needs an H-specific proof. The following Triple Lemma concerns
+the opposite petals only.
 
 \begin{conjecture}[Triple Lemma]\label{triple}
 Let $W_i,W_j,W_{j+1}$ ($j=i+1$) be three consecutive fan faces of a net and $V_i,V_j,V_{j+1}$ their petals.

@@ -102,7 +102,17 @@ without an unrestricted D-lemma. Under (H), the entire remaining region is
 `Sigma_W<pi`; there the outer-fan half-planes directly define the relevant wedge.
 The two individual apex non-entry statements still require proof.
 
-### 2. The hinge reduction uses Lemma L
+### 2. Updated: the conditional far-fan reduction is refuted
+
+The exact [hinge boundary audit](HINGE_AUDIT.md) supersedes the earlier
+assessment below: local nonoverlap does not suffice for the far-fan step.
+The first and last fan faces have a cut radial boundary, not two interior
+hinges. A certified example has one far-fan overlap and all other 27 pairs
+safe. Its source is not sharpest; an H-specific replacement remains open.
+The original 49-class target (2 excluded,47 open) is current; the 24-class
+reduction and one-patch whole-net claim are withdrawn.
+
+The following interior-hinge observation remains valid.
 
 At `w u_{k+1}`, the petal `V_{k-1}'` has no uncut vertex copy in common with
 either adjacent fan face. The mirror exception is `V_k` at `w u_{k-1}`.
@@ -111,9 +121,8 @@ A crossing in either exceptional case would cause a local overlap, so the
 argument works **assuming Lemma L**. This dependence is now stated explicitly.
 Also, the proof excludes proper crossings, not every possible boundary contact.
 
-Consequently the intended order is: prove L, prove the opposite-petal statement,
-then apply the conditional far-fan reduction. One must not use the far-fan
-reduction to prove L in return without an independent argument.
+The former intended order was L, then opposite petals, then far-fan reduction.
+The last step now needs its own proof even after the first two are established.
 
 The direction-condition proof in Case B also assumes its far vertex lies on the
 near side of the other outer-edge line. That excludes the corresponding `f`
