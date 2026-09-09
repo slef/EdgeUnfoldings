@@ -1,0 +1,7 @@
+{
+  "result": "no_single_root_certificate_found",
+  "scope": "Inconclusive interval bounds, not proof that any tree overlaps.",
+  "tried": 224,
+  "total_trees": 224,
+  "seconds": 8.6087616669829
+}

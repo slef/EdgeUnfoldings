@@ -1,0 +1,15 @@
+{
+  "graph6": "Fhf~o",
+  "n": 7,
+  "selected_trees": 1,
+  "all_trees": 1805,
+  "full_tree_family": false,
+  "shared_paths": 36,
+  "essential_real_variables": 24,
+  "result": "unknown",
+  "seconds": 30.287417742999878,
+  "reason_unknown": "timeout",
+  "smt2_bytes": 387895,
+  "z3_version": "5.1.0",
+  "scope": "Unresolved; timeout/unknown is not evidence of universal unfoldability."
+}

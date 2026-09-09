@@ -1,0 +1,168 @@
+{
+  "scope": "Numerical implementation validation only; not universal coverage.",
+  "six_vertex_types": 7,
+  "trees": 1479,
+  "predicate_evaluation": "Remove positive homogeneous factors before floating-point sign tests; raw expanded floating evaluation is unstable at contacts.",
+  "archive_vs_claude_octahedron_nets": 24,
+  "cases": [
+    {
+      "case": "prism",
+      "graph6": "E{Sw",
+      "degrees": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "facet_sizes": [
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "trees": 75,
+      "overlapping": 0
+    },
+    {
+      "case": "pentagonal pyramid",
+      "graph6": "E|fG",
+      "degrees": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        5
+      ],
+      "facet_sizes": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        5
+      ],
+      "trees": 121,
+      "overlapping": 0
+    },
+    {
+      "case": "prism with diagonal",
+      "graph6": "E}Sw",
+      "degrees": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "facet_sizes": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "trees": 130,
+      "overlapping": 0
+    },
+    {
+      "case": "degree 5,4,4,3,3,3",
+      "graph6": "E|fg",
+      "degrees": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        5
+      ],
+      "facet_sizes": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4
+      ],
+      "trees": 209,
+      "overlapping": 0
+    },
+    {
+      "case": "octahedron minus edge",
+      "graph6": "E]zW",
+      "degrees": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "facet_sizes": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4
+      ],
+      "trees": 224,
+      "overlapping": 0
+    },
+    {
+      "case": "stacked simplicial",
+      "graph6": "E~uo",
+      "degrees": [
+        3,
+        3,
+        4,
+        4,
+        5,
+        5
+      ],
+      "facet_sizes": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "trees": 336,
+      "overlapping": 0
+    },
+    {
+      "case": "octahedron",
+      "graph6": "Evxw",
+      "degrees": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "facet_sizes": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "trees": 384,
+      "overlapping": 3
+    }
+  ]
+}

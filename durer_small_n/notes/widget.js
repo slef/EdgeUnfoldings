@@ -125,7 +125,8 @@ function update() {
 // ---------- 3D viewer (orthographic, drag to rotate, cut edges highlighted) --------------------------------
 function viewer3d(el, model, opts) {
   opts = opts || {}; const W = opts.size || 300, H = W;
-  const st = { yaw: opts.yaw ?? 0.7, pitch: opts.pitch ?? -0.55 };
+  const initial = { yaw: opts.yaw ?? model.view?.yaw ?? 0.7, pitch: opts.pitch ?? model.view?.pitch ?? -0.55 };
+  const st = { ...initial };
   function draw() {
     const P = model.P, names = model.names || {};
     const c0 = [0, 1, 2].map(k => P.reduce((s, p) => s + p[k], 0) / P.length);
@@ -138,23 +139,44 @@ function viewer3d(el, model, opts) {
       const cp = Math.cos(st.pitch), sp = Math.sin(st.pitch); const y2 = cp * y1 - sp * z, z2 = sp * y1 + cp * z; return [x1, y2, z2]; };
     const Q = P.map(rot); const s = W * 0.38; const X = q => [W / 2 + q[0] * s, H / 2 - q[2] * s];
     const front = faces.map(f => { const a = Q[f[0]], b = Q[f[1]], d = Q[f[2]]; const n = [(b[1]-a[1])*(d[2]-a[2])-(b[2]-a[2])*(d[1]-a[1]), (b[2]-a[2])*(d[0]-a[0])-(b[0]-a[0])*(d[2]-a[2]), (b[0]-a[0])*(d[1]-a[1])-(b[1]-a[1])*(d[0]-a[0])]; return n[1] < 0; });
-    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="v3d">`;
+    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="v3d" role="img" aria-label="${model.title || 'Convex polytope with its cut edges highlighted'}">`;
     const ed = Object.values(edges); const ck = e => cutSet.has(e.a < e.b ? e.a + '-' + e.b : e.b + '-' + e.a) ? 'cut' : '';
     for (const e of ed) { if (e.faces.some(fi => front[fi])) continue; const [x1, y1] = X(Q[e.a]), [x2, y2] = X(Q[e.b]); svg += `<line class="hid ${ck(e)}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
-    faces.forEach((f, fi) => { if (!front[fi]) return; svg += `<polygon class="${f.length === 3 ? 'tri' : 'quad'}" points="${f.map(i => X(Q[i]).map(v => v.toFixed(1)).join(',')).join(' ')}"/>`; });
+    faces.forEach((f, fi) => { if (!front[fi]) return; const color = model.faceColors?.[fi]; svg += `<polygon class="${f.length === 3 ? 'tri' : 'quad'}"${color ? ` style="fill:${color}"` : ''} points="${f.map(i => X(Q[i]).map(v => v.toFixed(1)).join(',')).join(' ')}"/>`; });
     for (const e of ed) { if (!e.faces.some(fi => front[fi])) continue; const [x1, y1] = X(Q[e.a]), [x2, y2] = X(Q[e.b]); svg += `<line class="vis ${ck(e)}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
-    P.forEach((p, i) => { const [x, y] = X(Q[i]); const onFront = faces.some((f, fi) => front[fi] && f.includes(i)); svg += `<circle class="${onFront ? 'vtx' : 'vtx hid'}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6"/><text class="${onFront ? '' : 'hid'}" x="${(x + 4).toFixed(1)}" y="${(y - 4).toFixed(1)}">${names[i] ?? i}</text>`; });
+    faces.forEach((f, fi) => { const name = model.faceNames?.[fi]; if (!front[fi] || !name) return; const center = [0, 1, 2].map(k => f.reduce((sum, i) => sum + Q[i][k], 0) / f.length); const [x, y] = X(center); svg += `<text class="face-label" x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle">${name}</text>`; });
+    P.forEach((p, i) => { const [x, y] = X(Q[i]); const onFront = faces.some((f, fi) => front[fi] && f.includes(i)); const dx = model.radialLabels ? (x < W / 2 ? -8 : 8) : 4, dy = model.radialLabels ? (y < H / 2 ? -8 : 12) : -4; svg += `<circle class="${onFront ? 'vtx' : 'vtx hid'}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6"/><text class="${onFront ? '' : 'hid'}" text-anchor="${dx < 0 ? 'end' : 'start'}" x="${(x + dx).toFixed(1)}" y="${(y + dy).toFixed(1)}">${names[i] ?? i}</text>`; });
     el.innerHTML = svg + `</svg>`;
   }
   let drag = null;
   el.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY, st.yaw, st.pitch]; el.setPointerCapture(e.pointerId); });
   el.addEventListener('pointermove', e => { if (!drag) return; st.yaw = drag[2] + (e.clientX - drag[0]) * 0.012; st.pitch = Math.max(-1.55, Math.min(1.55, drag[3] + (e.clientY - drag[1]) * 0.012)); draw(); });
   el.addEventListener('pointerup', () => { drag = null; }); el.addEventListener('pointercancel', () => { drag = null; });
+  el.tabIndex = 0;
+  el.setAttribute('aria-label', (model.title || 'Polytope viewer') + '. Use arrow keys to rotate; Home resets the view.');
+  el.addEventListener('keydown', e => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(e.key)) return;
+    e.preventDefault();
+    if (e.key === 'Home') Object.assign(st, initial);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') st.yaw += e.key === 'ArrowLeft' ? -0.15 : 0.15;
+    else st.pitch = Math.max(-1.55, Math.min(1.55, st.pitch + (e.key === 'ArrowUp' ? -0.15 : 0.15)));
+    draw();
+  });
   el.style.touchAction = 'none'; el.style.cursor = 'grab';
-  draw(); return { draw, set(m) { model = m; draw(); } };
+  draw(); return { draw, set(m) { model = m; draw(); }, turn(yaw) { st.yaw += yaw; draw(); }, reset() { Object.assign(st, initial); draw(); } };
 }
 function mountViewers(root) {
-  (root || document).querySelectorAll('.viewer[data-model]').forEach(el => { if (el.dataset.ready) return; el.dataset.ready = '1'; const m = FIGS.models[el.dataset.model]; if (m) viewer3d(el, JSON.parse(JSON.stringify(m))); });
+  (root || document).querySelectorAll('.viewer[data-model]').forEach(el => {
+    if (el.dataset.ready) return;
+    const m = FIGS.models[el.dataset.model]; if (!m) return;
+    const view = viewer3d(el, JSON.parse(JSON.stringify(m)), { size: Number(el.dataset.size) || 300 });
+    el.dataset.ready = '1';
+    const panel = el.closest('.viewer-panel');
+    if (panel) {
+      panel.querySelectorAll('[data-view-turn]').forEach(button => button.addEventListener('click', () => view.turn(Number(button.dataset.viewTurn))));
+      panel.querySelectorAll('[data-view-reset]').forEach(button => button.addEventListener('click', () => view.reset()));
+    }
+  });
 }
 function widgetModel(P, v, k) {
   const w = ANTI[v]; const ring = NBR[w]; const cut = ring.map(u => [v, u]); cut.push([w, ring[k]]);

@@ -1,0 +1,96 @@
+import sys,itertools,json,time
+import numpy as np
+from scipy.spatial import ConvexHull
+import networkx as nx
+rng=np.random.default_rng(60907)
+
+def setup(p):
+ h=ConvexHull(p)
+ if len(h.vertices)!=6:return None
+ faces=[];g=nx.Graph();g.add_nodes_from(range(6))
+ for f,eq in zip(h.simplices,h.equations):
+  f=list(map(int,f))
+  if np.dot(np.cross(p[f[1]]-p[f[0]],p[f[2]]-p[f[0]]),eq[:3])<0:f.reverse()
+  faces.append(f);g.add_edges_from(itertools.combinations(f,2))
+ if sorted(dict(g.degree()).values())!=[4]*6:return None
+ d=nx.Graph();d.add_nodes_from(range(8))
+ for i,j in itertools.combinations(range(8),2):
+  e=set(faces[i])&set(faces[j])
+  if len(e)==2:d.add_edge(i,j,primal=tuple(e))
+ plans=[]
+ for v in range(6):
+  w=next(x for x in range(6) if x!=v and not g.has_edge(v,x))
+  for u in g[w]:
+   cut={frozenset((v,x)) for x in g[v]}|{frozenset((u,w))}
+   t=d.copy();t.remove_edges_from([(i,j) for i,j,e in d.edges(data='primal') if frozenset(e) in cut])
+   plans.append((v,w,u,list(nx.bfs_edges(t,0))))
+ return faces,plans
+
+def net(p,faces,plan):
+ q=np.zeros((8,3,2));f=faces[0];a,b,c=f;ell=np.linalg.norm(p[b]-p[a]);q[0,1]=[ell,0]
+ q[0,2]=[np.dot(p[b]-p[a],p[c]-p[a])/ell,np.linalg.norm(np.cross(p[b]-p[a],p[c]-p[a]))/ell]
+ for par,ch in plan:
+  f=faces[ch];old={v:q[par,k] for k,v in enumerate(faces[par])}
+  a,b=next((a,b) for a,b in zip(f,f[1:]+f[:1]) if a in old and b in old)
+  e=p[b]-p[a];s=e@e;u=old[b]-old[a];ju=np.array([-u[1],u[0]])
+  for k,v in enumerate(f):q[ch,k]=old[a]+(e@(p[v]-p[a]))/s*u+np.linalg.norm(np.cross(e,p[v]-p[a]))/s*ju
+ return q
+
+def overlap(q):
+ e=np.roll(q,-1,axis=1)-q
+ v=q[None,:,None,:,:]-q[:,None,:,None,:]
+ signs=e[:,None,:,None,0]*v[:,:,:,:,1]-e[:,None,:,None,1]*v[:,:,:,:,0]
+ one=np.all(np.max(signs,axis=3)>1e-10,axis=2)
+ ov=one&one.T
+ return bool(np.any(np.triu(ov,1)))
+
+def sector_choices(p,faces,plans,angles):
+ good=[]
+ for v in range(6):
+  w=next(t[1] for t in plans if t[0]==v)
+  candidates=[]
+  for f in faces:
+   if v not in f:continue
+   a,b=[x for x in f if x!=v]
+   if not any(set(ff)=={w,a,b} for ff in faces):continue
+   ell=np.linalg.norm(p[b]-p[a]);e=(p[b]-p[a])/ell
+   xv=(p[v]-p[a])@e;xw=(p[w]-p[a])@e
+   yv=np.linalg.norm(np.cross(e,p[v]-p[a]));yw=np.linalg.norm(np.cross(e,p[w]-p[a]))
+   q=(xv*yw+xw*yv)/(yv+yw)
+   if not 0<q<ell:continue
+   vv=np.array([xv,yv]);ww=np.array([xw,-yw]);L=np.linalg.norm(vv-ww)
+   candidates.append((L,a,b,vv,ww,ell))
+  L,a,b,vv,ww,ell=min(candidates,key=lambda t:t[0])
+  for u,uu in ((a,np.array([0.,0.])),(b,np.array([ell,0.]))):
+   gamma=np.arccos(np.clip((vv-ww)@(uu-ww)/L/np.linalg.norm(uu-ww),-1,1))
+   if gamma<=2*np.pi-angles[w]+1e-10 and np.linalg.norm(uu-ww)<=L+1e-10:good.append((v,w,u))
+ return good
+
+sector_failures=0;sector_max_failures=0;worst=None
+count=0;tries=0;minimum=24;strategies={'any':0,'max_curvature_center':0,'max_curvature_opposite':0};t0=time.monotonic()
+while count<5000:
+ tries+=1;p=rng.normal(size=(6,3))
+ # Anisotropic affine maps retain convexity but change intrinsic metric.
+ p=p@np.diag(10**rng.uniform(-1.5,1.5,size=3));p/=np.max(np.linalg.norm(p[:,None]-p[None,:],axis=2))
+ z=setup(p)
+ if z is None:continue
+ faces,plans=z;angles=np.zeros(6)
+ for f in faces:
+  for k,v in enumerate(f):
+   a=p[f[(k+1)%3]]-p[v];b=p[f[(k+2)%3]]-p[v];angles[v]+=np.arccos(np.clip(a@b/np.linalg.norm(a)/np.linalg.norm(b),-1,1))
+ mc=int(np.argmin(angles));good=[]
+ for v,w,u,plan in plans:
+  if not overlap(net(p,faces,plan)):good.append((v,w,u))
+ sector=sector_choices(p,faces,plans,angles)
+ assert all(t in good for t in sector),(sector,good)
+ sector_failures+=not bool(sector)
+ sector_max_failures+=not any(w==mc for v,w,u in sector)
+ if not any(w==mc for v,w,u in sector) and worst is None:worst=p.tolist()
+ count+=1;minimum=min(minimum,len(good))
+ strategies['any']+=not bool(good)
+ strategies['max_curvature_center']+=not any(v==mc for v,w,u in good)
+ strategies['max_curvature_opposite']+=not any(w==mc for v,w,u in good)
+ if not good:
+  print('COUNTEREXAMPLE TO NEARSTAR FAMILY',p.tolist(),flush=True);break
+ if count%100==0:print(count,'min good',minimum,'strategy failures',strategies,'seconds',time.monotonic()-t0,flush=True)
+print(json.dumps({'sector_max_failures':sector_max_failures,'worst':worst,'sector_failures':sector_failures,'samples':count,'attempts':tries,'minimum_good':minimum,'strategy_failures':strategies,'seconds':time.monotonic()-t0}),flush=True)

@@ -1,0 +1,11 @@
+{
+  "graph6": "EzNG",
+  "family": "all",
+  "trees": 0,
+  "solver_ms": 600000,
+  "wall_seconds": 660.0,
+  "memory_mb": 2048,
+  "output": "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/n6/results/prism-all-long",
+  "no_prune": false,
+  "export_only": false
+}

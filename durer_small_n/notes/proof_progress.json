@@ -1,0 +1,87 @@
+{
+  "as_of": "9 September 2026",
+  "octahedron": {
+    "pair_groups": [
+      {
+        "label": "Shared-vertex pairs",
+        "count": 19,
+        "status": "proved",
+        "link": "octa_shared"
+      },
+      {
+        "label": "Local slit pairs",
+        "count": 3,
+        "status": "open",
+        "link": "lemmaL"
+      },
+      {
+        "label": "Opposite-petal pairs",
+        "count": 2,
+        "status": "open",
+        "link": "F_below"
+      },
+      {
+        "label": "Petal–far-fan pairs",
+        "count": 4,
+        "status": "conditional",
+        "link": "F_hinge"
+      }
+    ],
+    "angle_branches": [
+      {
+        "label": "Case A",
+        "condition": "κ < ν",
+        "status": "proved",
+        "link": "F_above"
+      },
+      {
+        "label": "Case B, fan sum ≥ π",
+        "condition": "κ ≥ ν and ΣW ≥ π; equality included",
+        "status": "proved",
+        "link": "F_basecones"
+      },
+      {
+        "label": "Case B, fan sum < π",
+        "condition": "ΣW < π",
+        "status": "open",
+        "link": "F_below"
+      }
+    ],
+    "remaining": [
+      {
+        "label": "Prove all three local slit pairs (Lemma L)",
+        "link": "lemmaL"
+      },
+      {
+        "label": "Prove joint-petal separation in the small-fan-angle branch",
+        "link": "F_below"
+      }
+    ]
+  },
+  "coverage_obligations": [
+    "Reduce the full, unbounded shape space to finitely many domains the checker can handle, plus explicit limiting cases.",
+    "Certify every resulting domain, including boundary and near-degenerate configurations."
+  ],
+  "snapshots": [
+    {
+      "label": "Before the latest research hour · 02:05 UTC",
+      "date": "2026-09-09T02:05:00Z",
+      "proved_types": 4,
+      "octahedron_angle_branches": 2,
+      "octahedron_local_pairs": 0,
+      "minus_half_width": "1/20",
+      "prism_box_A_fraction": "1",
+      "source": "../../n6/CONTINUATION.md"
+    },
+    {
+      "label": "After that hour · 03:05 UTC",
+      "date": "2026-09-09T03:05:00Z",
+      "proved_types": 4,
+      "octahedron_angle_branches": 2,
+      "octahedron_local_pairs": 0,
+      "minus_half_width": "1/20",
+      "prism_box_A_fraction": "1",
+      "source": "../../n6/CONTINUATION.md"
+    }
+  ]
+}

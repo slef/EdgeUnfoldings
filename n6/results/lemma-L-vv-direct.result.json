@@ -1,0 +1,102 @@
+{
+  "target": "local_vv",
+  "hypothesis": "H3R",
+  "hard_local": true,
+  "lifted": true,
+  "solver_ms": 600000,
+  "wall_seconds": 660.0,
+  "memory_mb": 1024,
+  "export_only": false,
+  "output": "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/n6/results/lemma-L-vv-direct",
+  "result": "unknown",
+  "geometry": {
+    "apex": 0,
+    "antipode": 5,
+    "slit_vertex": 1,
+    "equator": [
+      1,
+      2,
+      4,
+      3
+    ],
+    "cuts": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        5
+      ]
+    ],
+    "pair": [
+      0,
+      3
+    ],
+    "faces": [
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        4,
+        2
+      ],
+      [
+        0,
+        3,
+        4
+      ],
+      [
+        0,
+        1,
+        3
+      ],
+      [
+        1,
+        2,
+        5
+      ],
+      [
+        1,
+        5,
+        3
+      ],
+      [
+        2,
+        4,
+        5
+      ],
+      [
+        3,
+        5,
+        4
+      ]
+    ],
+    "auxiliary_variables": 767
+  },
+  "assertions": 823,
+  "dag_nodes": 2462,
+  "smt2_bytes": 127513,
+  "independent_proof_certificate": false,
+  "z3_version": "5.1.0",
+  "solver_seconds": 106.08902870799648,
+  "reason_unknown": "out of memory",
+  "scope": "Unresolved; no mathematical conclusion.",
+  "wall_seconds_observed": 106.74323737499071,
+  "process_returncode": 0
+}

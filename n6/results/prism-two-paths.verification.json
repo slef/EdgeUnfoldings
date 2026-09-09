@@ -1,0 +1,135 @@
+{
+  "scope": "The two quadrilateral-boundary near-stars at apex 1 both fail, but an original-edge net at apex 3 succeeds. Not a failure of the four-tree family.",
+  "parameters": [
+    "-23/100",
+    "1/5",
+    "-59/50",
+    "11/20",
+    "1/100",
+    "27/50",
+    "13/4",
+    "6/25",
+    "1"
+  ],
+  "integer_scale": 10000,
+  "trees": [
+    {
+      "apex": 1,
+      "via": 2,
+      "file": "prism-path-apex1-via2.certificate.json",
+      "report": {
+        "result": "verified_positive_area_overlap",
+        "faces": [
+          0,
+          3
+        ],
+        "strict_signs": 7,
+        "lower_bounds": [
+          "805644114926276667924628236875/75557863725914323419136",
+          "2855946821493839015123826246047/1208925819614629174706176",
+          "18222149833821332335093954142935/1208925819614629174706176",
+          "10580453072460815417574599873689/604462909807314587353088",
+          "544765061654596092811445520195/75557863725914323419136",
+          "1711272378741043753293770745461/604462909807314587353088",
+          "126907344114493906749814394209569/1208925819614629174706176"
+        ],
+        "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "strict_facet_supports": 16
+      }
+    },
+    {
+      "apex": 1,
+      "via": 4,
+      "file": "prism-path-apex1-via4.certificate.json",
+      "report": {
+        "result": "verified_positive_area_overlap",
+        "faces": [
+          3,
+          4
+        ],
+        "strict_signs": 7,
+        "lower_bounds": [
+          "46141443229736435558915484273501/1208925819614629174706176",
+          "42453393257011027902907684093623/1208925819614629174706176",
+          "2337495664911530292284579795105/604462909807314587353088",
+          "880399951906473231087272297903/75557863725914323419136",
+          "403909451951427600487898811987/302231454903657293676544",
+          "1878016084829055993597591766861/604462909807314587353088",
+          "4914340582907506498032764028643/75557863725914323419136"
+        ],
+        "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "strict_facet_supports": 16
+      }
+    },
+    {
+      "apex": 3,
+      "via": 0,
+      "file": "prism-path-apex3-via0.certificate.json",
+      "report": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 4
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 80
+      }
+    },
+    {
+      "apex": 3,
+      "via": 5,
+      "file": "prism-path-apex3-via5.certificate.json",
+      "report": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 4
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 80
+      }
+    }
+  ]
+}

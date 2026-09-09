@@ -15,7 +15,10 @@ def score(o, i, mode, caseB):
         Vjj = net[('V', jj)]; return ang(Vjj[1], Vjj[2], Vjj[0]) - (o.bWp[j] + o.bW[jj])   # f - beta
     if mode == 'jjh':
         return o.aVp[jj] - (o.bWp[j] + o.bW[jj]) / 2 - (o.bWp[i] + o.bW[j])   # f - beta/2 - alpha
-    Vi = net[('V', i)]; return ang(Vi[1], Vi[2], Vi[0]) - SW               # angle at u_i = Vi[1]
+    if mode != 'i': raise ValueError('unknown angle mode: ' + mode)
+    # Z stores V_i as [v_i, u_{i+1}, u_i].  Historical *_i_* results
+    # measured the other base angle and must not be reused for this claim.
+    Vi = net[('V', i)]; return ang(Vi[2], Vi[1], Vi[0]) - SW
 def best_config(P, hyp, mode, caseB):
     st = octa_structure(P)
     if st is None: return None
@@ -37,7 +40,8 @@ if __name__ == '__main__':
         f = lambda P: (lambda b: None if b is None else b[0])(best_config(P, hyp, mode, caseB))
         P, sc = hill_climb(f, P0, rng, steps=S, step=0.2)
         b = best_config(P, hyp, mode, caseB); res.append((b, P)); print("restart %d: score %.5f v=%d i=%d val=%.5f deg=%.3f" % ((r,) + b), flush=True)
-    res.sort(key=lambda t: -t[0][0]); pickle.dump(res, open('adv_angle_%s_%s_%d.pkl' % (hyp, mode, caseB), 'wb'))
+    suffix = '_far_vertex_v2' if mode == 'i' else ''
+    res.sort(key=lambda t: -t[0][0]); pickle.dump(res, open('adv_angle_%s_%s_%d%s.pkl' % (hyp, mode, caseB, suffix), 'wb'))
     for b, P in res[:3]:
         o = Octa(P, b[1]); i = b[2]; j, jj, m = (i + 1) % 4, (i + 2) % 4, (i - 1) % 4
         print("BEST", hyp, mode, caseB, b); print("kv=%.3f kw=%.3f ku=%s nu=%s om=%s SW=%.3f" % (o.kv, o.kw, np.round(o.ku, 3), np.round(o.nu, 3), np.round(o.omega, 3), o.bW[j] + o.bWp[i] + o.bWp[j] + o.bW[jj]))

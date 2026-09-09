@@ -1,0 +1,2738 @@
+[
+  {
+    "graph6": "C~",
+    "vertices": 4,
+    "edges": 6,
+    "faces": [
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        2
+      ],
+      [
+        0,
+        1,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3
+    ],
+    "cut_trees": 16,
+    "distinct_nondirect_dual_paths": 24,
+    "simplicial": true,
+    "universal_vertices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "dome_bases": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "graph6": "Dl{",
+    "vertices": 5,
+    "edges": 8,
+    "faces": [
+      [
+        0,
+        3,
+        2,
+        1
+      ],
+      [
+        0,
+        4,
+        3
+      ],
+      [
+        0,
+        1,
+        4
+      ],
+      [
+        1,
+        2,
+        4
+      ],
+      [
+        2,
+        3,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4
+    ],
+    "cut_trees": 45,
+    "distinct_nondirect_dual_paths": 70,
+    "simplicial": false,
+    "universal_vertices": [
+      4
+    ],
+    "dome_bases": [
+      0
+    ]
+  },
+  {
+    "graph6": "Dn{",
+    "vertices": 5,
+    "edges": 9,
+    "faces": [
+      [
+        0,
+        4,
+        1
+      ],
+      [
+        0,
+        3,
+        4
+      ],
+      [
+        0,
+        1,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        4,
+        2
+      ],
+      [
+        2,
+        4,
+        3
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 75,
+    "distinct_nondirect_dual_paths": 120,
+    "simplicial": true,
+    "universal_vertices": [
+      1,
+      3,
+      4
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "EtTg",
+    "vertices": 6,
+    "edges": 9,
+    "faces": [
+      [
+        0,
+        3,
+        4,
+        1
+      ],
+      [
+        0,
+        2,
+        3
+      ],
+      [
+        0,
+        1,
+        5,
+        2
+      ],
+      [
+        1,
+        4,
+        5
+      ],
+      [
+        2,
+        5,
+        4,
+        3
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "cut_trees": 75,
+    "distinct_nondirect_dual_paths": 102,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": [
+      0,
+      2,
+      4
+    ]
+  },
+  {
+    "graph6": "Ehfw",
+    "vertices": 6,
+    "edges": 10,
+    "faces": [
+      [
+        0,
+        4,
+        3,
+        2,
+        1
+      ],
+      [
+        0,
+        5,
+        4
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        2,
+        5
+      ],
+      [
+        2,
+        3,
+        5
+      ],
+      [
+        3,
+        4,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      5
+    ],
+    "cut_trees": 121,
+    "distinct_nondirect_dual_paths": 165,
+    "simplicial": false,
+    "universal_vertices": [
+      5
+    ],
+    "dome_bases": [
+      0
+    ]
+  },
+  {
+    "graph6": "EzNG",
+    "vertices": 6,
+    "edges": 10,
+    "faces": [
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        5,
+        4,
+        2
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        3,
+        4,
+        5
+      ],
+      [
+        2,
+        4,
+        3
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      4
+    ],
+    "cut_trees": 130,
+    "distinct_nondirect_dual_paths": 176,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "ER~g",
+    "vertices": 6,
+    "edges": 11,
+    "faces": [
+      [
+        0,
+        5,
+        2
+      ],
+      [
+        0,
+        4,
+        5
+      ],
+      [
+        0,
+        2,
+        4
+      ],
+      [
+        1,
+        4,
+        3
+      ],
+      [
+        1,
+        5,
+        4
+      ],
+      [
+        1,
+        3,
+        2,
+        5
+      ],
+      [
+        2,
+        3,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      4,
+      5
+    ],
+    "cut_trees": 209,
+    "distinct_nondirect_dual_paths": 272,
+    "simplicial": false,
+    "universal_vertices": [
+      4
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Ep~o",
+    "vertices": 6,
+    "edges": 11,
+    "faces": [
+      [
+        0,
+        4,
+        1
+      ],
+      [
+        0,
+        2,
+        4
+      ],
+      [
+        0,
+        5,
+        2
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        4,
+        3,
+        5
+      ],
+      [
+        2,
+        3,
+        4
+      ],
+      [
+        2,
+        5,
+        3
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 224,
+    "distinct_nondirect_dual_paths": 282,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Ep~w",
+    "vertices": 6,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        4,
+        1
+      ],
+      [
+        0,
+        2,
+        4
+      ],
+      [
+        0,
+        5,
+        2
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        4,
+        5
+      ],
+      [
+        2,
+        3,
+        4
+      ],
+      [
+        2,
+        5,
+        3
+      ],
+      [
+        3,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      5,
+      5
+    ],
+    "cut_trees": 336,
+    "distinct_nondirect_dual_paths": 406,
+    "simplicial": true,
+    "universal_vertices": [
+      4,
+      5
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "EznW",
+    "vertices": 6,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        4,
+        2
+      ],
+      [
+        0,
+        5,
+        4
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        3,
+        5
+      ],
+      [
+        2,
+        4,
+        3
+      ],
+      [
+        3,
+        4,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 384,
+    "distinct_nondirect_dual_paths": 432,
+    "simplicial": true,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FBjN_",
+    "vertices": 7,
+    "edges": 11,
+    "faces": [
+      [
+        0,
+        5,
+        4
+      ],
+      [
+        0,
+        6,
+        1,
+        5
+      ],
+      [
+        0,
+        4,
+        2,
+        6
+      ],
+      [
+        1,
+        6,
+        3
+      ],
+      [
+        1,
+        3,
+        2,
+        4,
+        5
+      ],
+      [
+        2,
+        3,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      4
+    ],
+    "cut_trees": 209,
+    "distinct_nondirect_dual_paths": 244,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": [
+      4
+    ]
+  },
+  {
+    "graph6": "Frq_w",
+    "vertices": 7,
+    "edges": 11,
+    "faces": [
+      [
+        0,
+        2,
+        3,
+        1
+      ],
+      [
+        0,
+        5,
+        2
+      ],
+      [
+        0,
+        4,
+        6,
+        5
+      ],
+      [
+        0,
+        1,
+        4
+      ],
+      [
+        1,
+        3,
+        6,
+        4
+      ],
+      [
+        2,
+        5,
+        6,
+        3
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      4
+    ],
+    "cut_trees": 224,
+    "distinct_nondirect_dual_paths": 259,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FFhuo",
+    "vertices": 7,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        6,
+        3
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        0,
+        3,
+        2,
+        4
+      ],
+      [
+        1,
+        5,
+        3
+      ],
+      [
+        1,
+        6,
+        4,
+        2,
+        5
+      ],
+      [
+        1,
+        3,
+        6
+      ],
+      [
+        2,
+        3,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      4,
+      5
+    ],
+    "cut_trees": 353,
+    "distinct_nondirect_dual_paths": 381,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FBjew",
+    "vertices": 7,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        5,
+        6
+      ],
+      [
+        0,
+        4,
+        2,
+        5
+      ],
+      [
+        1,
+        5,
+        2,
+        3
+      ],
+      [
+        1,
+        6,
+        5
+      ],
+      [
+        1,
+        3,
+        6
+      ],
+      [
+        2,
+        4,
+        6,
+        3
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      4,
+      5
+    ],
+    "cut_trees": 368,
+    "distinct_nondirect_dual_paths": 404,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FFhmo",
+    "vertices": 7,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        6,
+        3
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        0,
+        3,
+        2,
+        4
+      ],
+      [
+        1,
+        5,
+        2,
+        3
+      ],
+      [
+        1,
+        6,
+        4,
+        5
+      ],
+      [
+        1,
+        3,
+        6
+      ],
+      [
+        2,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 386,
+    "distinct_nondirect_dual_paths": 409,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FL~Cg",
+    "vertices": 7,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        4,
+        3
+      ],
+      [
+        0,
+        5,
+        1,
+        4
+      ],
+      [
+        0,
+        6,
+        5
+      ],
+      [
+        0,
+        3,
+        6
+      ],
+      [
+        1,
+        5,
+        6,
+        3,
+        2
+      ],
+      [
+        1,
+        2,
+        4
+      ],
+      [
+        2,
+        3,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 368,
+    "distinct_nondirect_dual_paths": 389,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FKN^O",
+    "vertices": 7,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        5,
+        3
+      ],
+      [
+        0,
+        6,
+        1,
+        5
+      ],
+      [
+        0,
+        3,
+        4,
+        6
+      ],
+      [
+        1,
+        6,
+        2
+      ],
+      [
+        1,
+        2,
+        4,
+        5
+      ],
+      [
+        2,
+        6,
+        4
+      ],
+      [
+        3,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 377,
+    "distinct_nondirect_dual_paths": 402,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FEl~?",
+    "vertices": 7,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        6,
+        1,
+        3
+      ],
+      [
+        0,
+        4,
+        2,
+        6
+      ],
+      [
+        0,
+        3,
+        4
+      ],
+      [
+        1,
+        5,
+        3
+      ],
+      [
+        1,
+        6,
+        2,
+        5
+      ],
+      [
+        2,
+        4,
+        5
+      ],
+      [
+        3,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 392,
+    "distinct_nondirect_dual_paths": 417,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "F`urg",
+    "vertices": 7,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        4,
+        1
+      ],
+      [
+        0,
+        5,
+        3,
+        4
+      ],
+      [
+        0,
+        1,
+        6,
+        5
+      ],
+      [
+        1,
+        4,
+        3,
+        6
+      ],
+      [
+        2,
+        5,
+        6
+      ],
+      [
+        2,
+        6,
+        3
+      ],
+      [
+        2,
+        3,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 361,
+    "distinct_nondirect_dual_paths": 393,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FhENw",
+    "vertices": 7,
+    "edges": 12,
+    "faces": [
+      [
+        0,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      [
+        0,
+        6,
+        5
+      ],
+      [
+        0,
+        1,
+        6
+      ],
+      [
+        1,
+        2,
+        6
+      ],
+      [
+        2,
+        3,
+        6
+      ],
+      [
+        3,
+        4,
+        6
+      ],
+      [
+        4,
+        5,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      6
+    ],
+    "cut_trees": 320,
+    "distinct_nondirect_dual_paths": 339,
+    "simplicial": false,
+    "universal_vertices": [
+      6
+    ],
+    "dome_bases": [
+      0
+    ]
+  },
+  {
+    "graph6": "Fhfww",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        4,
+        3,
+        2,
+        1
+      ],
+      [
+        0,
+        5,
+        4
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        2,
+        5
+      ],
+      [
+        2,
+        3,
+        5
+      ],
+      [
+        3,
+        4,
+        6
+      ],
+      [
+        3,
+        6,
+        5
+      ],
+      [
+        4,
+        5,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      6
+    ],
+    "cut_trees": 560,
+    "distinct_nondirect_dual_paths": 549,
+    "simplicial": false,
+    "universal_vertices": [
+      5
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "F}qtO",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        5,
+        3
+      ],
+      [
+        0,
+        2,
+        5
+      ],
+      [
+        0,
+        6,
+        2
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        0,
+        1,
+        4
+      ],
+      [
+        1,
+        2,
+        6,
+        4
+      ],
+      [
+        1,
+        3,
+        5,
+        2
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      6
+    ],
+    "cut_trees": 576,
+    "distinct_nondirect_dual_paths": 581,
+    "simplicial": false,
+    "universal_vertices": [
+      0
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Fls{o",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        3,
+        2,
+        1
+      ],
+      [
+        0,
+        6,
+        3
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        0,
+        1,
+        4
+      ],
+      [
+        1,
+        2,
+        5,
+        4
+      ],
+      [
+        2,
+        3,
+        5
+      ],
+      [
+        3,
+        4,
+        5
+      ],
+      [
+        3,
+        6,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      5,
+      5
+    ],
+    "cut_trees": 593,
+    "distinct_nondirect_dual_paths": 592,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Fh`}w",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        6,
+        1
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        0,
+        1,
+        5,
+        4
+      ],
+      [
+        1,
+        2,
+        5
+      ],
+      [
+        1,
+        6,
+        3,
+        2
+      ],
+      [
+        2,
+        3,
+        5
+      ],
+      [
+        3,
+        6,
+        5
+      ],
+      [
+        4,
+        5,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      3,
+      4,
+      5,
+      5
+    ],
+    "cut_trees": 585,
+    "distinct_nondirect_dual_paths": 578,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FHf^o",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        5,
+        4
+      ],
+      [
+        0,
+        6,
+        1,
+        5
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        1,
+        6,
+        2
+      ],
+      [
+        1,
+        2,
+        3,
+        5
+      ],
+      [
+        2,
+        6,
+        3
+      ],
+      [
+        3,
+        6,
+        4
+      ],
+      [
+        3,
+        4,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5
+    ],
+    "cut_trees": 633,
+    "distinct_nondirect_dual_paths": 609,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FltjG",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        3,
+        2,
+        1
+      ],
+      [
+        0,
+        4,
+        3
+      ],
+      [
+        0,
+        1,
+        4
+      ],
+      [
+        1,
+        2,
+        6
+      ],
+      [
+        1,
+        5,
+        4
+      ],
+      [
+        1,
+        6,
+        5
+      ],
+      [
+        2,
+        3,
+        4,
+        5
+      ],
+      [
+        2,
+        5,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5
+    ],
+    "cut_trees": 608,
+    "distinct_nondirect_dual_paths": 589,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FFh}o",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        6,
+        3
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        0,
+        3,
+        2,
+        4
+      ],
+      [
+        1,
+        5,
+        3
+      ],
+      [
+        1,
+        6,
+        4,
+        5
+      ],
+      [
+        1,
+        3,
+        6
+      ],
+      [
+        2,
+        3,
+        5
+      ],
+      [
+        2,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5
+    ],
+    "cut_trees": 638,
+    "distinct_nondirect_dual_paths": 606,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FBnew",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        5,
+        2,
+        4
+      ],
+      [
+        0,
+        6,
+        5
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        1,
+        5,
+        6
+      ],
+      [
+        1,
+        6,
+        3
+      ],
+      [
+        1,
+        3,
+        2,
+        5
+      ],
+      [
+        2,
+        3,
+        4
+      ],
+      [
+        3,
+        6,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5
+    ],
+    "cut_trees": 644,
+    "distinct_nondirect_dual_paths": 616,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FhNvO",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        6,
+        1
+      ],
+      [
+        0,
+        5,
+        3,
+        4,
+        6
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        2,
+        5
+      ],
+      [
+        1,
+        6,
+        2
+      ],
+      [
+        2,
+        3,
+        5
+      ],
+      [
+        2,
+        4,
+        3
+      ],
+      [
+        2,
+        6,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5
+    ],
+    "cut_trees": 615,
+    "distinct_nondirect_dual_paths": 577,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FJe~O",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        5,
+        2,
+        6
+      ],
+      [
+        0,
+        4,
+        5
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        6,
+        2
+      ],
+      [
+        1,
+        3,
+        4,
+        6
+      ],
+      [
+        2,
+        5,
+        3
+      ],
+      [
+        3,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 663,
+    "distinct_nondirect_dual_paths": 612,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Fb]lg",
+    "vertices": 7,
+    "edges": 13,
+    "faces": [
+      [
+        0,
+        6,
+        3,
+        1
+      ],
+      [
+        0,
+        5,
+        6
+      ],
+      [
+        0,
+        1,
+        4,
+        5
+      ],
+      [
+        1,
+        3,
+        4
+      ],
+      [
+        2,
+        4,
+        3
+      ],
+      [
+        2,
+        5,
+        4
+      ],
+      [
+        2,
+        6,
+        5
+      ],
+      [
+        2,
+        3,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "cut_trees": 672,
+    "distinct_nondirect_dual_paths": 627,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FEynw",
+    "vertices": 7,
+    "edges": 14,
+    "faces": [
+      [
+        0,
+        4,
+        1,
+        3
+      ],
+      [
+        0,
+        5,
+        4
+      ],
+      [
+        0,
+        6,
+        5
+      ],
+      [
+        0,
+        3,
+        6
+      ],
+      [
+        1,
+        4,
+        6
+      ],
+      [
+        1,
+        6,
+        3
+      ],
+      [
+        2,
+        5,
+        6
+      ],
+      [
+        2,
+        6,
+        4
+      ],
+      [
+        2,
+        4,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      4,
+      5,
+      6
+    ],
+    "cut_trees": 928,
+    "distinct_nondirect_dual_paths": 832,
+    "simplicial": false,
+    "universal_vertices": [
+      6
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FnzM_",
+    "vertices": 7,
+    "edges": 14,
+    "faces": [
+      [
+        0,
+        6,
+        1
+      ],
+      [
+        0,
+        3,
+        6
+      ],
+      [
+        0,
+        4,
+        2,
+        3
+      ],
+      [
+        0,
+        5,
+        4
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        2,
+        4
+      ],
+      [
+        1,
+        3,
+        2
+      ],
+      [
+        1,
+        6,
+        3
+      ],
+      [
+        1,
+        4,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      4,
+      5,
+      6
+    ],
+    "cut_trees": 935,
+    "distinct_nondirect_dual_paths": 830,
+    "simplicial": false,
+    "universal_vertices": [
+      1
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Fbk}w",
+    "vertices": 7,
+    "edges": 14,
+    "faces": [
+      [
+        0,
+        6,
+        1
+      ],
+      [
+        0,
+        4,
+        6
+      ],
+      [
+        0,
+        1,
+        3,
+        4
+      ],
+      [
+        1,
+        6,
+        3
+      ],
+      [
+        2,
+        4,
+        3
+      ],
+      [
+        2,
+        5,
+        4
+      ],
+      [
+        2,
+        3,
+        5
+      ],
+      [
+        3,
+        6,
+        5
+      ],
+      [
+        4,
+        5,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      5,
+      5,
+      5
+    ],
+    "cut_trees": 943,
+    "distinct_nondirect_dual_paths": 828,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FBn^W",
+    "vertices": 7,
+    "edges": 14,
+    "faces": [
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        5,
+        6
+      ],
+      [
+        0,
+        4,
+        5
+      ],
+      [
+        1,
+        5,
+        3
+      ],
+      [
+        1,
+        6,
+        5
+      ],
+      [
+        1,
+        3,
+        2,
+        6
+      ],
+      [
+        2,
+        3,
+        4
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        3,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      4,
+      5,
+      5,
+      5
+    ],
+    "cut_trees": 986,
+    "distinct_nondirect_dual_paths": 862,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Feg~w",
+    "vertices": 7,
+    "edges": 14,
+    "faces": [
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        5,
+        3
+      ],
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        1,
+        6
+      ],
+      [
+        1,
+        3,
+        6
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        2,
+        6,
+        5
+      ],
+      [
+        2,
+        5,
+        4
+      ],
+      [
+        3,
+        5,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      4,
+      4,
+      6
+    ],
+    "cut_trees": 960,
+    "distinct_nondirect_dual_paths": 828,
+    "simplicial": false,
+    "universal_vertices": [
+      6
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Ffk}W",
+    "vertices": 7,
+    "edges": 14,
+    "faces": [
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        3
+      ],
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        1,
+        6
+      ],
+      [
+        1,
+        3,
+        5,
+        6
+      ],
+      [
+        2,
+        4,
+        5
+      ],
+      [
+        2,
+        5,
+        3
+      ],
+      [
+        2,
+        3,
+        4
+      ],
+      [
+        4,
+        6,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5
+    ],
+    "cut_trees": 1015,
+    "distinct_nondirect_dual_paths": 858,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FFy}o",
+    "vertices": 7,
+    "edges": 14,
+    "faces": [
+      [
+        0,
+        5,
+        3
+      ],
+      [
+        0,
+        4,
+        5
+      ],
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        3,
+        6
+      ],
+      [
+        1,
+        4,
+        6
+      ],
+      [
+        1,
+        6,
+        3
+      ],
+      [
+        1,
+        3,
+        2,
+        4
+      ],
+      [
+        2,
+        5,
+        4
+      ],
+      [
+        2,
+        3,
+        5
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5
+    ],
+    "cut_trees": 1045,
+    "distinct_nondirect_dual_paths": 882,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FJnVW",
+    "vertices": 7,
+    "edges": 14,
+    "faces": [
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        5,
+        6
+      ],
+      [
+        0,
+        4,
+        3,
+        5
+      ],
+      [
+        1,
+        3,
+        2
+      ],
+      [
+        1,
+        5,
+        3
+      ],
+      [
+        1,
+        6,
+        5
+      ],
+      [
+        1,
+        2,
+        6
+      ],
+      [
+        2,
+        3,
+        4
+      ],
+      [
+        2,
+        4,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      4,
+      4,
+      4,
+      4,
+      4,
+      5
+    ],
+    "cut_trees": 1102,
+    "distinct_nondirect_dual_paths": 898,
+    "simplicial": false,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "F~nR_",
+    "vertices": 7,
+    "edges": 15,
+    "faces": [
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        4,
+        2
+      ],
+      [
+        0,
+        3,
+        4
+      ],
+      [
+        0,
+        5,
+        3
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        1,
+        2,
+        6
+      ],
+      [
+        1,
+        3,
+        5
+      ],
+      [
+        1,
+        6,
+        3
+      ],
+      [
+        2,
+        3,
+        6
+      ],
+      [
+        2,
+        4,
+        3
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      3,
+      5,
+      5,
+      5,
+      6
+    ],
+    "cut_trees": 1445,
+    "distinct_nondirect_dual_paths": 1158,
+    "simplicial": true,
+    "universal_vertices": [
+      3
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Fv|Xo",
+    "vertices": 7,
+    "edges": 15,
+    "faces": [
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        2,
+        3
+      ],
+      [
+        0,
+        4,
+        2
+      ],
+      [
+        0,
+        1,
+        4
+      ],
+      [
+        1,
+        3,
+        5
+      ],
+      [
+        1,
+        5,
+        4
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        2,
+        6,
+        3
+      ],
+      [
+        3,
+        4,
+        5
+      ],
+      [
+        3,
+        6,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      4,
+      6,
+      6
+    ],
+    "cut_trees": 1463,
+    "distinct_nondirect_dual_paths": 1160,
+    "simplicial": true,
+    "universal_vertices": [
+      3,
+      4
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Fek~w",
+    "vertices": 7,
+    "edges": 15,
+    "faces": [
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        3
+      ],
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        1,
+        6
+      ],
+      [
+        1,
+        3,
+        6
+      ],
+      [
+        2,
+        5,
+        4
+      ],
+      [
+        2,
+        6,
+        5
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        3,
+        4,
+        5
+      ],
+      [
+        3,
+        5,
+        6
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      3,
+      4,
+      4,
+      5,
+      5,
+      6
+    ],
+    "cut_trees": 1488,
+    "distinct_nondirect_dual_paths": 1156,
+    "simplicial": true,
+    "universal_vertices": [
+      6
+    ],
+    "dome_bases": []
+  },
+  {
+    "graph6": "FJn^W",
+    "vertices": 7,
+    "edges": 15,
+    "faces": [
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        5,
+        6
+      ],
+      [
+        0,
+        4,
+        5
+      ],
+      [
+        1,
+        3,
+        2
+      ],
+      [
+        1,
+        5,
+        3
+      ],
+      [
+        1,
+        6,
+        5
+      ],
+      [
+        1,
+        2,
+        6
+      ],
+      [
+        2,
+        3,
+        4
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        3,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5
+    ],
+    "cut_trees": 1682,
+    "distinct_nondirect_dual_paths": 1230,
+    "simplicial": true,
+    "universal_vertices": [],
+    "dome_bases": []
+  },
+  {
+    "graph6": "Fhf~o",
+    "vertices": 7,
+    "edges": 15,
+    "faces": [
+      [
+        0,
+        5,
+        1
+      ],
+      [
+        0,
+        4,
+        5
+      ],
+      [
+        0,
+        6,
+        4
+      ],
+      [
+        0,
+        1,
+        6
+      ],
+      [
+        1,
+        2,
+        6
+      ],
+      [
+        1,
+        5,
+        2
+      ],
+      [
+        2,
+        3,
+        6
+      ],
+      [
+        2,
+        5,
+        3
+      ],
+      [
+        3,
+        4,
+        6
+      ],
+      [
+        3,
+        5,
+        4
+      ]
+    ],
+    "degree_sequence": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      5,
+      5
+    ],
+    "cut_trees": 1805,
+    "distinct_nondirect_dual_paths": 1270,
+    "simplicial": true,
+    "universal_vertices": [],
+    "dome_bases": []
+  }
+]

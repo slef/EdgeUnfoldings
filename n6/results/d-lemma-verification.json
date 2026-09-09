@@ -1,0 +1,12 @@
+{
+  "result": "verified_counterexample_to_unqualified_halfplane_claim",
+  "side_far": [
+    "-89739842863148628342840807/604462909807314587353088",
+    "-89739842863148628342838383/604462909807314587353088"
+  ],
+  "side_middle_apex": [
+    "-28006758254708716485274273/151115727451828646838272",
+    "-224054066037669731880872007/1208925819614629174706176"
+  ],
+  "scope": "Exact convex integer-coordinate octahedron; no curvature ranking is asserted by this checker. Not a counterexample to Durer."
+}

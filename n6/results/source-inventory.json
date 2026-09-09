@@ -1,0 +1,734 @@
+[
+  {
+    "file": "durer_small_n/adv6.py",
+    "lines": 35,
+    "definitions": [
+      "pendant_score"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/adv_angle.py",
+    "lines": 47,
+    "definitions": [
+      "score",
+      "best_config"
+    ],
+    "doc": "Maximise (angle of V_jj at u_k) - SigmaW  [mode jj]  or (angle of V_i at u_i) - SigmaW [mode i] under HYP, Case B or not (CASEB=1/0).\nThe apex v_jj can only be in Omega if angle_{u_k} V_jj > SigmaW.   usage: adv_angle.py HYP mode CASEB seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_caseB.py",
+    "lines": 65,
+    "definitions": [
+      "halfplane_poly",
+      "parts_below",
+      "caseB_score",
+      "best_config"
+    ],
+    "doc": "Case B (kappa_u + kappa_u' >= nu_j): adversarial closeness of the BELOW-BASE parts of the outer petals under HYP.\nscore = separation(V_i \u2229 {w side of base}, V_jj \u2229 {w side of base}) / diam  (-1 if a part is empty); guards as usual.\nusage: adv_caseB.py HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_caseB2.py",
+    "lines": 49,
+    "definitions": [
+      "sep_poly",
+      "score",
+      "best_config"
+    ],
+    "doc": "Case B (kappa_u + kappa_u' >= nu_j) under HYP: adversarial closeness of the parts of the outer petals INSIDE D\n(the double-outward wedge of the cut-edge lines), each required to have area >= AMIN * diam^2.\nusage: adv_caseB2.py HYP seed restarts steps [AMIN]",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_caseB3.py",
+    "lines": 46,
+    "definitions": [
+      "cond",
+      "best_config"
+    ],
+    "doc": "Case B necessary condition (N): u_i beyond L' = line(u', v_{j+1}) AND u_{jj+1} beyond L = line(u, v_i), where\n'beyond' = the open side not containing V_j.  score = min(dist_beyond(u_i, L'), dist_beyond(u_jj1, L)) / diam,\nmaximised under HYP and kappa_u + kappa_u' >= nu_j.   usage: adv_caseB3.py HYP seed restarts steps | check",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_caseB4.py",
+    "lines": 42,
+    "definitions": [
+      "score",
+      "best_config"
+    ],
+    "doc": "Case B separator test: does the line A = (u, u_i) [outer edge of W_i] separate V_i from V_jj, or C = (u', u_jj1)\n[outer edge of W_jj] separate V_jj from V_i?  score = min over the two candidates of the max penetration of the\nother petal across the line (in units of diam); <= 0 means one of them separates.  Maximised under HYP, Case B only.\nusage: adv_caseB4.py HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_caseB5.py",
+    "lines": 49,
+    "definitions": [
+      "score",
+      "best_config"
+    ],
+    "doc": "Case B sharpest region: the wedge at X = A \u2229 C (A = line(u,u_i) of W_i, C = line(u',u_jj1) of W_jj) on the side\naway from w, which exists only if SigmaW < pi.  score = separation of V_i \u2229 wedge and V_jj \u2229 wedge (both with area\n>= AMIN diam^2), maximised under HYP and Case B.  Configurations with SigmaW >= pi get score -1 - (SigmaW - pi).\nusage: adv_caseB5.py HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_cond.py",
+    "lines": 53,
+    "definitions": [
+      "margin_R",
+      "cond_value",
+      "best_config"
+    ],
+    "doc": "Adversarial search on the necessary conditions for an opposite-petal meeting, under a hypothesis.\nusage: adv_cond.py COND HYP seed restarts steps\nCOND:  Ri   = max_tau [sin nu_i sin(nu_j-k_j-tau) - sin nu_j sin(nu_i+tau)]   (V_i reaches vertical wedge of V_j)\n       ang  = nu_j - k_j - k_jj                                              (rays from u_j,u_jj converge above)\n       SW   = pi - SigmaW                                                    (below-base meeting possible)\n       Ri2  = min(margin Ri, margin Rjj)                                     (both petals reach)\nHYP as in adv_opp.py (H1,H2,H3).  Guards: edges >= 0.05 diam, curvatures >= 0.05.",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_cones.py",
+    "lines": 57,
+    "definitions": [
+      "cone_lines",
+      "depth",
+      "score",
+      "best_config"
+    ],
+    "doc": "Apex-cone test: F = cone(v_i; u, u_i) \u2229 cone(v_jj; u', u_m').  depth(F) = max t s.t. a point x has signed distance\n>= t to all four boundary lines (LP), in units of diam; F nonempty (with interior) iff depth > 0.\nMaximised adversarially in CASE (A: kappa < nu_j, B: kappa >= nu_j) under HYP.  usage: adv_cones.py A|B HYP seed restarts steps | check",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_crossA.py",
+    "lines": 42,
+    "definitions": [
+      "score",
+      "best_config"
+    ],
+    "doc": "Can the outer cut edges u_i v_i and u_k v_jj (V_i and V_jj across the slit, k = i-1) cross when nu_m > kappa_back\n(the cut-edge lines converge on V_m's side)?  score = min(r_i - |u_i Y|, r_k - |u_k Y|)/scale, Y = crossing of the lines\n(positive = both segments reach Y = crossing).  Configurations with nu_m <= kappa_back are invalid (score None).\nusage: adv_crossA.py HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_cstar.py",
+    "lines": 58,
+    "definitions": [
+      "excursion",
+      "best_config"
+    ],
+    "doc": "Adversarial test of the side conditions (i'),(ii') of the c*-argument under hypothesis HYP.\nscore = max signed excursion (in units of diameter) of V_i^fan\u2229{above} into u_jj's side of M, or of V_jj^fan\u2229{above}\ninto u_j's side of M.  Positive = condition fails.   usage: adv_cstar.py HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_eps.py",
+    "lines": 31,
+    "definitions": [
+      "best_config"
+    ],
+    "doc": "Adversarial search on the exact angular criterion of the c*-argument: score = eps_i + eps_jj - kappa (must be < 0).\nusage: adv_eps.py HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_fat.py",
+    "lines": 28,
+    "definitions": [
+      "thickness",
+      "best_config"
+    ],
+    "doc": "Adversarial closeness of the far pairs under (H) restricted to fat polytopes: thickness >= TMIN.\nusage: adv_fat.py TMIN seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_kappa.py",
+    "lines": 47,
+    "definitions": [
+      "score",
+      "best_config"
+    ],
+    "doc": "How small can kappa = k_u + k_u' be in an actual Case-B (below-base) overlap of opposite petals?  No hypothesis.\nscore = -kappa if the petals overlap by >= PEN*diam (penetration measured on V_i \u2229 Omega, V_jj \u2229 Omega), else -20 + sep.\nusage: adv_kappa.py seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_mu.py",
+    "lines": 42,
+    "definitions": [
+      "value",
+      "best_config"
+    ],
+    "doc": "Adversarial: maximise nu_i + mu_j - pi (mu_j = angle(u_j, v, c*)) under HYP and Case A (kappa_j+kappa_jj < nu_j).\nPositive value = the wedge of V_i at v reaches past the 'up' direction of M (necessary for (i') to fail near v).\nusage: adv_mu.py HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_opp.py",
+    "lines": 66,
+    "definitions": [
+      "seg_dist",
+      "separation",
+      "violation",
+      "best_config"
+    ],
+    "doc": "Adversarial search: how close can opposite petals V_i, V_{i+2} come under a curvature hypothesis?\nScore = penetration depth (>0) or minus the distance between the two triangles (<0), maximised over\noctahedra by random-restart hill climbing; hypothesis violation is penalised.\nusage: adv_opp.py HYP seed restarts steps      HYP in {H1, H2, H3}\n  H1: \u03ba_v \u2265 \u03ba_{u_{i+1}} and \u03ba_v \u2265 \u03ba_{u_{i+2}} (the two vertices of the petal between, W side)\n  H2: \u03ba_v \u2265 \u03ba_u for all four equator vertices\n  H3: v sharpest of all six vertices",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_reach.py",
+    "lines": 44,
+    "definitions": [
+      "score",
+      "best_config"
+    ],
+    "doc": "Under HYP (e.g. H3R = (H)+slit rule), in Case B with SigmaW < pi, how far can a single petal reach into Omega?\nmode i_a : score = (v_i beyond C)/scale         mode i_f : score = (u_i past X)/scale\nmode jj_a: score = (v_jj beyond A)/scale        mode jj_f: score = (u_k past X)/scale\nusage: adv_reach.py HYP mode seed restarts steps [SWMAX]",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_rule.py",
+    "lines": 47,
+    "definitions": [
+      "F_of",
+      "score",
+      "best_config"
+    ],
+    "doc": "Curvature counting for Case B under (H)+slit rule.  If both petals reach the wedge Omega (Case B, SigmaW<pi), how small can\nF = k_u + k_u' + 2 max(k_u,k_u') + k_{u_i} + k_w - 4 pi   be?   (Under (H) + rule, k_v, k_{u_k} >= max(k_u,k_u'), so F <= 0 must hold\nin any polytope; F > 0 in every both-reach configuration means Case B is impossible under (H)+rule.)  No hypothesis imposed.\nscore = -F (maximised) with area penalties as in caseB_sub.  usage: adv_rule.py seed restarts steps [seeded]",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_sep.py",
+    "lines": 121,
+    "definitions": [
+      "triple_frame",
+      "unit",
+      "geometry",
+      "candidate_line",
+      "halfplane_poly",
+      "clipped_parts",
+      "penetration",
+      "best_config"
+    ],
+    "doc": "Candidate separating lines for opposite petals V_i, V_jj (between petal V_j), above-base case.\nFor each triple (i, j=i+1, jj=i+2) in the v-fan-consistent frame (net with W_i W_j W_jj contiguous), let\n  L1' = line(u_j, v_i), L2' = line(u_jj, v_jj), p* their intersection (if kappa_j + kappa_jj < nu_j).\nCandidates:\n  S1: line through p* with direction d1+d2 (bisector of the wedge D)\n  S2: line through v_j with direction d1+d2\n  S3: line through v_j and p*\nScore for a candidate = max penetration of V_i into the V_jj side or V_jj into the V_i side (signed; <0 = separated\nwith margin), maximised adversarially under hypothesis HYP.  Also usable for statistics (mode 'stat').\nusage: adv_sep.py S1|S2|S3 HYP seed restarts steps      or   adv_sep.py stat HYP seed N",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/adv_wrap.py",
+    "lines": 33,
+    "definitions": [
+      "val",
+      "best_config"
+    ],
+    "doc": "Case A under HYP: adversarial max of  max(nu_i, nu_jj) - (pi - nu_j + kappa)   ('no wrap' condition; must stay < 0).\nusage: adv_wrap.py HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/allconvex.py",
+    "lines": 39,
+    "definitions": [
+      "ang"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/angles.py",
+    "lines": 59,
+    "definitions": [
+      "ang"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/bothfail.py",
+    "lines": 56,
+    "definitions": [
+      "curv",
+      "ang"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/bothstats.py",
+    "lines": 57,
+    "definitions": [
+      "ang"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/bprime.py",
+    "lines": 30,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/bstar.py",
+    "lines": 46,
+    "definitions": [
+      "ang",
+      "angle3"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/build_status.py",
+    "lines": 8,
+    "definitions": [],
+    "doc": "Build notes/status.html from the template and status_figs.json.",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/caseB_back.py",
+    "lines": 21,
+    "definitions": [],
+    "doc": "Test: in sub-case (a,a) (both apexes beyond the other base line, no far vertex past X), does nu_m <= kappa_back hold?\nkappa_back = k_{u_i} + k_{u_k} + k_w.  Runs over stat seeds and adversarial pickles.",
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/caseB_draw.py",
+    "lines": 41,
+    "definitions": [
+      "closest"
+    ],
+    "doc": "draw the top configurations of a caseB_sub pickle: caseB_draw.py PKL [n]",
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/caseB_four.py",
+    "lines": 72,
+    "definitions": [
+      "four_region_parts",
+      "score"
+    ],
+    "doc": "Four-cut-edge region for the pair (V_i, V_jj) in Z_k (k = i-1): V_i lies on its side of BOTH cut-edge lines\n(u v_i) and (u_i v_i); V_jj on its side of (u' v_jj) and (u_m' v_jj).  Any meeting lies in F = intersection of the\nfour half-planes.  Statistics under HYP for Case B triples: F empty?  V_i \u2229 F and V_jj \u2229 F both of positive area?\nAnd adversarial closeness of V_i \u2229 F, V_jj \u2229 F.   usage: caseB_four.py stat HYP seed N   |   caseB_four.py adv HYP seed restarts steps",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/caseB_sub.py",
+    "lines": 99,
+    "definitions": [
+      "geom",
+      "sub_of",
+      "score",
+      "best_config",
+      "describe"
+    ],
+    "doc": "Case B sub-cases.  A = line(u,u_i) (outer edge of W_i), C = line(u',u_k) (outer edge of W_jj, u_k = slit copy); V_i lies beyond A\nand V_jj beyond C (away from w), so a meeting lies in the wedge Omega = H_A \u2229 H_C.  A Case-B meeting needs SigmaW < pi (the four fan\nangles at u, u'); then Omega is the wedge at X = A \u2229 C opposite the triangle u u' X.  V_i reaches Omega iff u_i is past X on A ('f')\nor v_i is in Omega ('a'); same for V_jj.  (Old versions tested \"X on w's side\" with the sign of a point ON the line: vacuous.)\n  stat HYP seed N                            -> counts of sub-cases; seeds saved to caseB_sub_stat_HYP.pkl\n  adv HYP SUB seed restarts steps [seeded]   -> adversarial closeness of V_i\u2229Omega and V_jj\u2229Omega inside sub-case SUB = ri_rjj,\n                                                ri, rjj in {a, f, fa} (exactly that mechanism); 'seeded' starts from the stat seeds.",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/classify.py",
+    "lines": 55,
+    "definitions": [
+      "automorphisms",
+      "canon"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/classify5.py",
+    "lines": 30,
+    "definitions": [
+      "sig"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/conjC.py",
+    "lines": 24,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/cstar.py",
+    "lines": 103,
+    "definitions": [
+      "rotate_about",
+      "signed_side",
+      "analyse"
+    ],
+    "doc": "Numerical check of the c*-rotation proof strategy for the above-base case of the Triple Lemma.\n\nv-fan frame: V_j fixed as in the net; V_i^fan = Rot(u_j, -kappa_j) V_i ; V_jj^fan = Rot(u_jj, +kappa_jj) V_jj\n(so that the three petals are glued flat around v).  R = Rot(u_jj, kappa_jj) o Rot(u_j, kappa_j) = Rot(c*, kappa).\nChecks:\n  C1: R is a rotation by kappa about c* with base angles kappa_j/2, kappa_jj/2 on w's side of the base.\n  C2: V_i^fan and V_jj^fan are disjoint (touch only at v).\n  C3: net meeting  <=>  R(V_i^fan) \u2229 V_jj^fan  (sanity)\n  (i') V_i^fan \u2229 {above base} \u2282 closed ccw side of M = line(c*, v)  [i.e. u_j's side]\n  (ii') V_jj^fan \u2229 {above base} \u2282 closed cw side of M\n  both fail never under H3;  when one fails, angular excess eps beyond M (seen from c*) versus kappa.\nusage: cstar.py seed N",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/draw.py",
+    "lines": 37,
+    "definitions": [
+      "draw_net"
+    ],
+    "doc": "Draw a net Z_k of an Octa to PNG (matplotlib).  draw_net(o, k, fname, highlight=[pair names])",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/farcond.py",
+    "lines": 45,
+    "definitions": [
+      "ang"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/finer.py",
+    "lines": 31,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/flatness.py",
+    "lines": 29,
+    "definitions": [
+      "thickness"
+    ],
+    "doc": "Is flatness what makes the far pairs tight?  For random octahedra with v the sharpest vertex (H) and the rule slit,\nmeasure thickness t = (smallest extent / diameter) via SVD and the minimum separation of the six far pairs and of the\nthree local pairs.  Report by thickness bin, and the thickness of the adversarial near-misses.",
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/gen.py",
+    "lines": 18,
+    "definitions": [
+      "rand_points"
+    ],
+    "doc": null,
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/geodesic.py",
+    "lines": 57,
+    "definitions": [
+      "seg_cross",
+      "shortest_vw"
+    ],
+    "doc": null,
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/geostar.py",
+    "lines": 97,
+    "definitions": [
+      "rot",
+      "place",
+      "cross",
+      "main"
+    ],
+    "doc": null,
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/inspect_adv.py",
+    "lines": 22,
+    "definitions": [],
+    "doc": "Inspect adversarial results: inspect_adv.py adv_opp_H2.pkl [n_best] [outdir]",
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/lemma2.py",
+    "lines": 35,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/lemmaF.py",
+    "lines": 52,
+    "definitions": [
+      "ang",
+      "angle3"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/local.py",
+    "lines": 47,
+    "definitions": [
+      "ang",
+      "angle3"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/look.py",
+    "lines": 32,
+    "definitions": [
+      "curv",
+      "name"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/lp_angles.py",
+    "lines": 61,
+    "definitions": [
+      "vec",
+      "vertex_angles",
+      "curvature",
+      "solve"
+    ],
+    "doc": "LP over the 24 face angles of an octahedron-type polytope: face sums = pi, positivity, cone inequalities at each vertex\n(each face angle <= sum of the other three), curvature bounds, and the slit rule / (H) as linear constraints.\nMaximise a linear objective numerically. A nonpositive floating optimum is only a\ncandidate bound: an exact dual certificate must be extracted and checked before\nclaiming an implication from these linear facts. This script does not do that.",
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/n7.py",
+    "lines": 29,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/nonsimp6.py",
+    "lines": 45,
+    "definitions": [
+      "rand_prism_diag",
+      "rand_octa_minus_edge"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/octa.py",
+    "lines": 261,
+    "definitions": [
+      "angle_at",
+      "rot",
+      "third_point",
+      "clip_convex",
+      "poly_area",
+      "sat_pen",
+      "ccw",
+      "octa_structure",
+      "Octa",
+      "rand_points",
+      "random_octahedra",
+      "all_apexes",
+      "sharpest_apex",
+      "hill_climb"
+    ],
+    "doc": "Octahedron-type polytopes: named quantities of HANDOFF.md, the nets Z_k, the nine face pairs.\n\nConventions (HANDOFF.md): antipodal pair (v, w), equator u_0..u_3 = neighbours of w, cyclic and CCW\naround w seen from outside.  W_i = w u_i u_{i+1},  V_i = v u_i u_{i+1},  Q_i = W_i \u222a V_i.\nZ_k = net of cut tree star(v) \u222a {w u_k}: fan W_k, W_{k+1}, W_{k+2}, W_{k-1}' around w, opened along w u_k,\npetal V_i glued to W_i.  In Z_k, w is at the origin and the ray w u_k (first copy) is the +x axis; the fan\nruns counter-clockwise, the gap of angle \u03ba_w comes last.\n\nAll indices i are ring indices mod 4.  Angles in radians.",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/oppcases.py",
+    "lines": 55,
+    "definitions": [
+      "region",
+      "describe"
+    ],
+    "doc": "Collect all opposite-petal overlaps, classify in detail, save cases and draw them.\nusage: oppcases.py seed N [outdir]\nClassification of the intersection region X of V_i and V_{i+2} in Z_k (i = k or k+1):\n  W side between-petal V_j (j = i+1), gap side between-petal V_m (m = i-1).\n  For apex a of a petal T = [a, x, y]: region of a point p \u2208 {tri, vert, sideX, sideY} by the two lines a x, a y.\n  Also: polar arc of X's centroid; whether X is on w's side of the base of V_j / V_m; crossing flags.",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/oppwedge.py",
+    "lines": 35,
+    "definitions": [],
+    "doc": "Do the four opposite-quad wedge inequalities of the Proposition hold for ALL k when \u03ba_v \u2265 max \u03ba_u ?\n    F_k+B_{k+2} < \u03c9_{k+1};  B_k+F_{k+2} < \u03c9_{k-1}+\u03ba_w;  F_{k+1}+B_{k-1} < \u03c9_{k+2};  B_{k+1}+F_{k-1} < \u03ba_w+\u03c9_k\nAlso: the actual opposite-petal overlaps vs these inequalities, and lean statistics under the hypothesis.\nusage: oppwedge.py seed N",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/pairpos.py",
+    "lines": 39,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/pairpos2.py",
+    "lines": 47,
+    "definitions": [
+      "ang"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/pairtypes.py",
+    "lines": 50,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/patch2.py",
+    "lines": 106,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/patch3.py",
+    "lines": 73,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/patch_template.py",
+    "lines": 68,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/pattern6.py",
+    "lines": 45,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/rules.py",
+    "lines": 62,
+    "definitions": [
+      "curv"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/rules2.py",
+    "lines": 51,
+    "definitions": [
+      "ang"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/rules3.py",
+    "lines": 60,
+    "definitions": [
+      "ang",
+      "pen_of",
+      "evaluate"
+    ],
+    "doc": null,
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/sample.py",
+    "lines": 42,
+    "definitions": [
+      "rand_points"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/svg_figs.py",
+    "lines": 125,
+    "definitions": [
+      "svg_net",
+      "triple_extras",
+      "icon",
+      "reg"
+    ],
+    "doc": "Generate SVG figures for the status page (notes/status_figs.json): real nets from octa.py and schematic\nplanar maps of the seven 6-vertex types.  Colors are CSS variables so the page can theme them.",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/svg_figs2.py",
+    "lines": 305,
+    "definitions": [
+      "svg_poly",
+      "mk_model",
+      "octa_model",
+      "with_names",
+      "apex_star",
+      "reg",
+      "prism_diag",
+      "octa_minus",
+      "svg_net_hl",
+      "flat_overlay",
+      "params",
+      "sector",
+      "ang_of",
+      "ccw_span",
+      "svg_net_ex",
+      "fix",
+      "preset_model",
+      "add_nearmiss",
+      "add_caseB"
+    ],
+    "doc": "Additional SVG figures for the status page (one per case).  Merges into notes/status_figs.json.",
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/test1.py",
+    "lines": 20,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/tikz_net.py",
+    "lines": 75,
+    "definitions": [
+      "_fmt",
+      "tikz_net",
+      "tikz_triple"
+    ],
+    "doc": "Emit TikZ code for a net Z_k (or for the three-petal v-fan picture) of an Octa.\nusage as module: tikz_net(o, k, scale=..., highlight=[...]) -> str ;  tikz_triple(o, i) -> str\nCLI: tikz_net.py case.npy v k out.tex   (P saved with np.save)",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/types6.py",
+    "lines": 24,
+    "definitions": [],
+    "doc": null,
+    "top_level_experiment": true
+  },
+  {
+    "file": "durer_small_n/unfold.py",
+    "lines": 133,
+    "definitions": [
+      "hull_faces",
+      "local_coords",
+      "dual_edges",
+      "spanning_trees",
+      "unfold",
+      "overlaps",
+      "Polytope"
+    ],
+    "doc": null,
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/unfold2.py",
+    "lines": 102,
+    "definitions": [
+      "poly_faces",
+      "local_coords",
+      "face_edges",
+      "dual_edges",
+      "spanning_trees",
+      "unfold",
+      "sat_pen",
+      "overlaps",
+      "Polytope"
+    ],
+    "doc": "Edge unfoldings of convex polytopes with (possibly) non-triangular faces.",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/vwedge.py",
+    "lines": 82,
+    "definitions": [
+      "side",
+      "in_vertical_wedge",
+      "in_wedge"
+    ],
+    "doc": "Baseline check of the vertical-wedge step (HANDOFF.md) on observed opposite-petal overlaps.\n\nFor every random octahedron, apex v, slit k: find overlaps of the two opposite-petal pairs\nV_i\u2013V_{i+2} (i = k: W side through W_{k+1}; i = k+1: W side through W_{k+2}).  For each overlap\nclassify where the intersection region lies (vertical wedge of the petal between them on the W side,\nvertical wedge of the petal on the gap side, other), and test the claimed necessary conditions\n    \u03ba_{u_{i+1}} < \u03bd_{i+1},  \u03ba_{u_{i+2}} < \u03bd_{i+1}     (W-side meeting)\nplus the non-crossing conditions \u03ba_{u_{i+1}} + \u2220V_i(u_{i+1}) \u2264 \u03c0,  \u03ba_{u_{i+2}} + \u2220V_{i+2}(u_{i+2}) \u2264 \u03c0.\nusage: vwedge.py seed N",
+    "top_level_experiment": false
+  },
+  {
+    "file": "durer_small_n/wedge.py",
+    "lines": 49,
+    "definitions": [
+      "ang"
+    ],
+    "doc": null,
+    "top_level_experiment": true
+  }
+]

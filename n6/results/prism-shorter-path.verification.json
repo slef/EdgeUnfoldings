@@ -1,0 +1,76 @@
+{
+  "result": "verified_sharper_apex_shorter_path_failure",
+  "apex": 3,
+  "via": 5,
+  "strictly_sharper_than": 1,
+  "shorter_length": [
+    "85126816418558663562058725/1208925819614629174706176",
+    "85126816418558663562058727/1208925819614629174706176"
+  ],
+  "longer_length": [
+    "131885521922557204220888169/1208925819614629174706176",
+    "65942760961278602110444085/604462909807314587353088"
+  ],
+  "overlap": {
+    "result": "verified_positive_area_overlap",
+    "faces": [
+      1,
+      5
+    ],
+    "strict_signs": 7,
+    "lower_bounds": [
+      "93762889268431797320978391/1208925819614629174706176",
+      "18116410319099121678509445/75557863725914323419136",
+      "986463436207579957432724171/1208925819614629174706176",
+      "105267099232194654815751139/75557863725914323419136",
+      "3068254922787896066461974431/1208925819614629174706176",
+      "40090508687712030590457783/604462909807314587353088",
+      "184422378811710059938526863/1208925819614629174706176"
+    ],
+    "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+    "facet_sizes": [
+      3,
+      4,
+      3,
+      4,
+      3,
+      3
+    ],
+    "strict_facet_supports": 16
+  },
+  "scope": "This tree-selection rule fails. This does not refute success of the two-path family or edge unfoldability.",
+  "longer_path_net": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      4,
+      3,
+      4,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 11,
+      "separating_edge": 4
+    },
+    "strict_facet_supports": 16,
+    "planarity_identities": 20,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 80
+  },
+  "parameters": [
+    "-1/10",
+    "1/5",
+    "-7/10",
+    "0",
+    "1/5",
+    "8/5",
+    "12/5",
+    "1/10",
+    "11/10"
+  ],
+  "integer_scale": 50
+}

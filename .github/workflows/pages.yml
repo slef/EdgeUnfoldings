@@ -20,12 +20,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Assemble site
         run: |
-          mkdir -p site
-          cp durer_small_n/notes/status.html site/index.html
-          cp durer_small_n/notes/lemmaF.pdf site/lemmaF.pdf
-          cp durer_small_n/notes/dibiase_summary.md site/dibiase_summary.md
-          cp HANDOFF.md site/HANDOFF.md
-          touch site/.nojekyll
+          python3 durer_small_n/build_pages.py site
+          node durer_small_n/tests/status_deployment.cjs site
       - uses: actions/configure-pages@v5
         with:
           enablement: true

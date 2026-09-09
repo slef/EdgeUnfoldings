@@ -1,0 +1,12 @@
+{
+  "output": "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/n6/results/intrinsic-remote-axis-query.json",
+  "seconds": 600,
+  "without_cone": false,
+  "without_H": false,
+  "unlifted": false,
+  "axis_closure": true,
+  "slit_index": 3,
+  "wall_seconds": 630.0,
+  "memory_mb": 1024,
+  "solver_ms": 600000
+}

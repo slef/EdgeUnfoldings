@@ -1,0 +1,22 @@
+{
+  "output": "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/n6/results/intrinsic-axis-query.json",
+  "seconds": 159.11977887502871,
+  "without_cone": false,
+  "without_H": false,
+  "unlifted": false,
+  "axis_closure": true,
+  "slit_index": 0,
+  "wall_seconds": 630.0,
+  "memory_mb": 1024,
+  "solver_ms": 600000,
+  "result": "unknown",
+  "auxiliaries": 284,
+  "cone": true,
+  "H": true,
+  "R": true,
+  "triple_index": 0,
+  "scope": "Solver exploration of an intrinsic relaxation, without an independent proof certificate. SAT values require exact replay and do not establish convex realization.",
+  "reason": "out of memory",
+  "wall_seconds_observed": 159.22899795800913,
+  "process_returncode": 0
+}

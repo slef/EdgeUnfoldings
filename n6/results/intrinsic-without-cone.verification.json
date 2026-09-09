@@ -1,0 +1,34 @@
+{
+  "result": "verified_intrinsic_angle_countermodel",
+  "triangles": 8,
+  "positive_curvature_vertices": 6,
+  "strict_cone_inequalities_by_vertex": [
+    false,
+    true,
+    true,
+    true,
+    false,
+    false
+  ],
+  "strict_H_and_R": true,
+  "proved_cone_violations_by_vertex": [
+    true,
+    false,
+    false,
+    false,
+    true,
+    true
+  ],
+  "target": "Sigma_W+a < pi",
+  "target_product": [
+    [
+      "-5562611979631522772511197033/1208925819614629174706176",
+      "-5562611979631522772510931305/1208925819614629174706176"
+    ],
+    [
+      "3137247008355451715123419237/1208925819614629174706176",
+      "784311752088862928780915285/302231454903657293676544"
+    ]
+  ],
+  "scope": "Shared Euclidean triangle lengths and the stated checks only. No convex original-facet realization or unfolding overlap is asserted."
+}

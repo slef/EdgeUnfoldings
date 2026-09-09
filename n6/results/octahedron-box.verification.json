@@ -1,0 +1,10 @@
+{
+  "result": "verified",
+  "scope": "Every coordinate tuple in the explicit box; not all octahedra",
+  "arithmetic": "outward dyadic rational intervals, 80 fractional bits",
+  "pairs": {
+    "vertex_fan": 19,
+    "separating_edge": 9
+  },
+  "strict_facet_supports": 24
+}

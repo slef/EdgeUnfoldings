@@ -1,0 +1,10 @@
+{
+  "result": "unknown",
+  "seconds": 903.8361090829712,
+  "auxiliaries": 244,
+  "cone": true,
+  "H": true,
+  "R": true,
+  "scope": "Solver exploration of an intrinsic relaxation, without an independent proof certificate. SAT values require exact replay and do not establish convex realization.",
+  "reason": "timeout"
+}

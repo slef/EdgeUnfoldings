@@ -1,0 +1,18 @@
+[
+  {
+    "case": "right",
+    "trees": 16,
+    "overlapping": 0,
+    "comparison": "independent polygon clipping; floating-point validation only"
+  },
+  {
+    "case": "skew",
+    "trees": 16,
+    "overlapping": 2,
+    "comparison": "independent polygon clipping; floating-point validation only"
+  },
+  {
+    "case": "SMT2 exporter",
+    "result": "round-trip SAT for positive square root of 2"
+  }
+]

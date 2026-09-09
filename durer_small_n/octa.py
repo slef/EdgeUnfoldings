@@ -82,6 +82,14 @@ def octa_structure(P):
     try: h = ConvexHull(P)
     except Exception: return None
     if len(h.vertices) != 6 or len(h.simplices) != 8: return None
+    # Qhull triangulates flat polygonal facets. Degree four in that
+    # triangulation does not establish the octahedral combinatorial type.
+    # Reject coplanar facet mergers (and numerically unresolved near-mergers).
+    scale = np.max(np.linalg.norm(P[:, None] - P[None], axis=-1))
+    tol = 64 * np.finfo(float).eps * scale
+    for s, eq in zip(h.simplices, h.equations):
+        other = [v for v in range(6) if v not in s]
+        if np.any((P[other] - P[s[0]]) @ eq[:3] >= -tol): return None
     faces = []
     for s, eq in zip(h.simplices, h.equations):
         a, b, c = P[s]

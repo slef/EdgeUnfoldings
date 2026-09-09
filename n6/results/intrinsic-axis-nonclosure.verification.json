@@ -1,0 +1,75 @@
+{
+  "result": "verified_no_convex_octahedron_with_prescribed_edges",
+  "scope": "These twelve lengths cannot be the original edges of a strictly convex octahedron. This is not a counterexample to edge unfolding.",
+  "axis_squared_domain": [
+    "185986050121/10000000000",
+    "189431246169/10000000000"
+  ],
+  "closed_intervals": 5,
+  "checks": {
+    "tetrahedron_square_nonpositive": 4,
+    "closure_imag_positive": 1
+  },
+  "leaves": [
+    {
+      "axis_squared_interval": [
+        "185986050121/10000000000",
+        "186847349133/10000000000"
+      ],
+      "kind": "tetrahedron_square_nonpositive",
+      "bound": [
+        "-58923528897920459900247601/604462909807314587353088",
+        "-48269748418423746616564381/1208925819614629174706176"
+      ],
+      "depth": 2
+    },
+    {
+      "axis_squared_interval": [
+        "186847349133/10000000000",
+        "37541729629/2000000000"
+      ],
+      "kind": "tetrahedron_square_nonpositive",
+      "bound": [
+        "-27100093684619339567689707/604462909807314587353088",
+        "-8316679030500532985567697/1208925819614629174706176"
+      ],
+      "depth": 2
+    },
+    {
+      "axis_squared_interval": [
+        "37541729629/2000000000",
+        "188139297651/10000000000"
+      ],
+      "kind": "tetrahedron_square_nonpositive",
+      "bound": [
+        "-14318752065553517047297613/1208925819614629174706176",
+        "-472449591163802316447805/302231454903657293676544"
+      ],
+      "depth": 3
+    },
+    {
+      "axis_squared_interval": [
+        "188139297651/10000000000",
+        "188569947157/10000000000"
+      ],
+      "kind": "closure_imag_positive",
+      "bound": [
+        "9011216378996287812195433/1208925819614629174706176",
+        "192203025464210045310871373/604462909807314587353088"
+      ],
+      "depth": 3
+    },
+    {
+      "axis_squared_interval": [
+        "188569947157/10000000000",
+        "189431246169/10000000000"
+      ],
+      "kind": "tetrahedron_square_nonpositive",
+      "bound": [
+        "-102491676348999505299621473/604462909807314587353088",
+        "-14133468134868135856564349/1208925819614629174706176"
+      ],
+      "depth": 2
+    }
+  ]
+}

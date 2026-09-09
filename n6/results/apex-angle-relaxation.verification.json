@@ -1,0 +1,39 @@
+{
+  "result": "verified_abstract_angle_countermodel",
+  "curvatures_in_pi_units": {
+    "v": "30/19",
+    "w": "1/19",
+    "0": "1/19",
+    "1": "35/38",
+    "2": "8/19",
+    "3": "37/38"
+  },
+  "fan_angle_sum_in_pi_units": "17/19",
+  "left_near_angle_plus_fan_sum_in_pi_units": "18/19",
+  "metric_obstruction": {
+    "impossible_spoke_order_cycles": [
+      {
+        "spokes": "s",
+        "forced_cyclic_order": "nondecreasing",
+        "strict_steps": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "spokes": "r",
+        "forced_cyclic_order": "nondecreasing",
+        "strict_steps": [
+          0,
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "reason": "In each Euclidean triangle, the larger angle has the longer opposite side. A cyclic sequence cannot be monotone with a strict step."
+  },
+  "scope": "The listed linear face-angle facts, even strictly, do not imply this apex-direction bound. No geometric realization or overlap is asserted."
+}

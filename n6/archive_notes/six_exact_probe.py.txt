@@ -1,0 +1,21 @@
+import sys,time,json
+import networkx as nx
+import z3
+from unfolding import Counterexample,export_smt2
+
+g=nx.octahedral_graph();ce=Counterexample(g)
+class Assertions:
+ def __init__(self):self.items=[]
+ def add(self,*items):self.items.extend(items)
+a=Assertions();a.add(*ce.constraints)
+for v in g:
+ w=next(x for x in g if x!=v and not g.has_edge(v,x))
+ for u in g[w]:
+  cut={frozenset((v,x)) for x in g[v]}|{frozenset((u,w))}
+  t=ce.dual.copy();t.remove_edges_from([(i,j) for i,j,e in t.edges(data='primal') if frozenset(e) in cut]);assert nx.is_tree(t)
+  ce.add_tree(a,t)
+print('built',len(a.items),'assertions;',len(ce.overlap_cache),'shared paths',flush=True)
+print('exported',export_smt2(a.items,'six-nearstar.smt2'),'DAG nodes',flush=True)
+s=z3.Solver();s.set(timeout=60000);s.add(*a.items)
+t0=time.monotonic();print('solver started',flush=True);r=s.check()
+print('result',r,'seconds',time.monotonic()-t0,'reason',s.reason_unknown(),flush=True)

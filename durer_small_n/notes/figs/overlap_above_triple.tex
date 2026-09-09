@@ -1,20 +1,24 @@
+% Labels offset by hand for this very thin numerical example.
 \begin{tikzpicture}[scale=0.2645, every node/.style={font=\tiny}]
+  \clip (-2.2683,-2.2683) rectangle (24.9509,8.9249);
   \draw[fill=fanblue!50, draw=black, line width=0.3pt] (0.0000,0.0000) -- (20.9062,0.8161) -- (6.9374,0.8902) -- cycle;
-  \node at (9.2812,0.5688) {$W_i$};
+
   \draw[fill=fanblue!50, draw=black, line width=0.3pt] (0.0000,0.0000) -- (6.9374,0.8902) -- (12.0354,2.2168) -- cycle;
-  \node at (6.3243,1.0357) {$W_j$};
+
   \draw[fill=fanblue!50, draw=black, line width=0.3pt] (0.0000,0.0000) -- (12.0354,2.2168) -- (22.6826,6.6566) -- cycle;
-  \node at (11.5727,2.9578) {$W_{j+1}$};
+
   \draw[fill=petalorange, draw=black, line width=0.3pt] (11.0451,1.4611) -- (6.9374,0.8902) -- (20.9062,0.8161) -- cycle;
-  \node at (12.9629,1.0558) {$V_i$};
+  \draw[gray,thin] (12.9629,1.0558) -- (19,-0.8) node[black,anchor=north] {$V_i$};
   \draw[fill=petalorange, draw=black, line width=0.3pt] (11.0443,1.4667) -- (12.0354,2.2168) -- (6.9374,0.8902) -- cycle;
-  \node at (10.0057,1.5246) {$V_j$};
+  \draw[gray,thin] (10.0057,1.5246) -- (8,4) node[black,anchor=south] {$V_j$};
   \draw[fill=petalorange, draw=black, line width=0.3pt] (11.4415,1.1249) -- (22.6826,6.6566) -- (12.0354,2.2168) -- cycle;
-  \node at (15.3865,3.3328) {$V_{j+1}$};
+  \node at (19,4) {$V_{j+1}$};
   \draw[dashed, gray] (-60.4627,-8.4762) -- (74.3374,10.2566);
   \draw[dashed, gray] (44.5479,61.9951) -- (-20.4771,-57.5614);
-  \node[blue, anchor=north] at (6.9374,0.8902) {$u_j$};  \node[blue, anchor=north] at (12.0354,2.2168) {$u_{j+1}$};
-  \node[red!70!black, anchor=south] at (11.0443,1.4667) {$v_j$};
-  \fill[purple] (12.0185,2.2161) circle (0.8pt) node[anchor=north] {$c^*$};
-  \draw[purple, thin] (22.8053,10.5147) -- (-20.3417,-22.6795) node[anchor=south] {$M$};
+  \draw[blue,thin] (6.9374,0.8902) -- (5,-0.6) node[anchor=north] {$u_j$};
+  \draw[blue,thin] (12.0354,2.2168) -- (15,0) node[anchor=north] {$u_{j+1}$};
+  \draw[red!70!black,thin] (11.0443,1.4667) -- (10,-1.2) node[anchor=north] {$v_j$};
+  \fill[purple] (12.0185,2.2161) circle (0.8pt);
+  \draw[purple,thin] (12.0185,2.2161) -- (14,4.6) node[anchor=south] {$c^*$};
+  \draw[purple, thin] (22.8053,10.5147) -- (-20.3417,-22.6795) node[pos=0.125,anchor=south] {$M$};
 \end{tikzpicture}

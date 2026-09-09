@@ -1,0 +1,19 @@
+{
+  "scope": "Numerical differential check only; no universal conclusion from sampling.",
+  "samples": 2000,
+  "seed": 6090906,
+  "counts": {
+    "triples": 42168,
+    "small_SW": 7919,
+    "base_cone_excluded": 32406,
+    "H3R_small_SW": 356,
+    "H3R_left_angle_allows_entry": 0,
+    "H3R_right_angle_allows_entry": 0
+  },
+  "errors": {
+    "maximum_direction_error": 2.156510209774751e-09,
+    "maximum_apex_distance_error": 1.675830655699681e-11
+  },
+  "candidates": [],
+  "seconds": 9.318592291965615
+}

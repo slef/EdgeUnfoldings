@@ -1,0 +1,119 @@
+[
+  {
+    "archive": "edge-unfolding-computation.zip",
+    "sha256": "cb02250f0158130f1b65b1a56578337e6ed9a80d375edd51136c46eb4f766c19",
+    "members": [
+      {
+        "path": "edge-unfolding-study/README.md",
+        "bytes": 1991,
+        "sha256": "219823605624ddef772b9b19aba94fccc8e2bb5d48ab44f6ba7414517689dbd2"
+      },
+      {
+        "path": "edge-unfolding-study/edge-unfolding-notes.md",
+        "bytes": 15085,
+        "sha256": "92510124d52a9219cc91eae71167d77cc43ff85872b138b10ae773616f3b4798"
+      },
+      {
+        "path": "edge-unfolding-study/requirements.txt",
+        "bytes": 61,
+        "sha256": "8881936edaa3b5372f8b06abb118205c892454560f3e0fcc9443ec660dffd266"
+      },
+      {
+        "path": "edge-unfolding-study/unfolding.py",
+        "bytes": 13180,
+        "sha256": "2e9f0fb0e192741f07abe5a8702a21fb4516986deb1106b2a576e6b39599f855"
+      },
+      {
+        "path": "edge-unfolding-study/validation.py",
+        "bytes": 4253,
+        "sha256": "5f7aaebe0188d1a3b2aa0e171276ef6d018cc4fbc252e08931a5205604462eec"
+      },
+      {
+        "path": "edge-unfolding-study/census.json",
+        "bytes": 31902,
+        "sha256": "b1fe027eefc74805118699c6025962bc4b4a9f5836152c544a3965768abe5800"
+      },
+      {
+        "path": "edge-unfolding-study/validation-results.json",
+        "bytes": 401,
+        "sha256": "fac5275e0bbf4501d56a84b7f3e115b7e2a7ef8944ecfc306f964c199d758834"
+      },
+      {
+        "path": "edge-unfolding-study/validation-query.smt2",
+        "bytes": 242,
+        "sha256": "778448e467cbbc7c3c8962efb66ed11a5c62f6ddafbea637a001431eb7430d7c"
+      },
+      {
+        "path": "edge-unfolding-study/tetrahedron.smt2",
+        "bytes": 30390,
+        "sha256": "b5ebbacde8852563bd8b6e170ec88c75f86fc2e2cd484d3a22a17e1f8a5f1808"
+      },
+      {
+        "path": "edge-unfolding-study/tetrahedron.result.json",
+        "bytes": 377,
+        "sha256": "7f15cf13d4e60d57c249411e5d5cb7bab138acd6145b26e90231cb67cc7a80a6"
+      },
+      {
+        "path": "edge-unfolding-study/tetrahedron-reduced.smt2",
+        "bytes": 22338,
+        "sha256": "af9a2a0c091671b1b656747b2b0b6952023f91daa9603bf1663ce696d656bd98"
+      },
+      {
+        "path": "edge-unfolding-study/tetrahedron-reduced.result.json",
+        "bytes": 377,
+        "sha256": "e5b94cf895576fe1842a9ecf5693c30bfcfa2df608ae55d2059c473c8edcc6f6"
+      },
+      {
+        "path": "edge-unfolding-study/pentagonal-bipyramid-one-tree.smt2",
+        "bytes": 387895,
+        "sha256": "4f14243301046dcfb70f189f49fc9f8aa1576b8ef23b839d2acd03d6ed1df3aa"
+      },
+      {
+        "path": "edge-unfolding-study/pentagonal-bipyramid-one-tree.result.json",
+        "bytes": 385,
+        "sha256": "054a952f0b44525abf124c85ae8f343caa833366b15f2834fe84c8d515596c21"
+      },
+      {
+        "path": "edge-unfolding-study/pentagonal-bipyramid-all-trees.smt2",
+        "bytes": 13171588,
+        "sha256": "bedf4c8d22b8ae6ebb7ef01923bd07bfe899e2cdd9ba03c56eaf93d9f967d0ba"
+      },
+      {
+        "path": "edge-unfolding-study/pentagonal-bipyramid-all-trees.result.json",
+        "bytes": 551,
+        "sha256": "ad4b116861645818409e5c643c57b41465a07c1fbaa9233d50146a50542bbd58"
+      }
+    ]
+  },
+  {
+    "archive": "six-vertex-attempt.zip",
+    "sha256": "d7dff1e83397242b7300300b316acae7edc21782fac8cd7f94abe108f56dc121",
+    "members": [
+      {
+        "path": "RESULTS.md",
+        "bytes": 4083,
+        "sha256": "7c25204ca22015f153cdf2f0572da61f4d0b58d0c7862b38c0fb7357f97387fc"
+      },
+      {
+        "path": "sector_probe_large.py",
+        "bytes": 4385,
+        "sha256": "154c16a3f443921eb35b398434223c3cda0ff8582f12559928c2d4011432917b"
+      },
+      {
+        "path": "six_exact_probe.py",
+        "bytes": 949,
+        "sha256": "b4333dd3ecd12e7e9236f27d4dad7ded9915aa922ae9d7ae98d5250404d7aea7"
+      },
+      {
+        "path": "unfolding.py",
+        "bytes": 13180,
+        "sha256": "2e9f0fb0e192741f07abe5a8702a21fb4516986deb1106b2a576e6b39599f855"
+      },
+      {
+        "path": "six-nearstar.smt2",
+        "bytes": 1567207,
+        "sha256": "de284da913ec79bd5d84a7b20bdf8582ca5e70cd4a05a6531c54772684f2dcc9"
+      }
+    ]
+  }
+]
