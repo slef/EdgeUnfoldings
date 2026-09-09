@@ -21,7 +21,7 @@
         "link": "F_below"
       },
       {
-        "label": "Petal–far-fan pairs",
+        "label": "Petal\u2013far-fan pairs",
         "count": 4,
         "status": "conditional",
         "link": "F_hinge"
@@ -30,19 +30,19 @@
     "angle_branches": [
       {
         "label": "Case A",
-        "condition": "κ < ν",
+        "condition": "\u03ba < \u03bd",
         "status": "proved",
         "link": "F_above"
       },
       {
-        "label": "Case B, fan sum ≥ π",
-        "condition": "κ ≥ ν and ΣW ≥ π; equality included",
+        "label": "Case B, fan sum \u2265 \u03c0",
+        "condition": "\u03ba \u2265 \u03bd and \u03a3W \u2265 \u03c0; equality included",
         "status": "proved",
         "link": "F_basecones"
       },
       {
-        "label": "Case B, fan sum < π",
-        "condition": "ΣW < π",
+        "label": "Case B, fan sum < \u03c0",
+        "condition": "\u03a3W < \u03c0",
         "status": "open",
         "link": "F_below"
       }
@@ -64,7 +64,7 @@
   ],
   "snapshots": [
     {
-      "label": "Before the latest research hour · 02:05 UTC",
+      "label": "Before the latest research hour \u00b7 02:05 UTC",
       "date": "2026-09-09T02:05:00Z",
       "proved_types": 4,
       "octahedron_angle_branches": 2,
@@ -76,7 +76,7 @@
       "minus_cells": 409
     },
     {
-      "label": "After that hour · 03:05 UTC",
+      "label": "After that hour \u00b7 03:05 UTC",
       "date": "2026-09-09T03:05:00Z",
       "proved_types": 4,
       "octahedron_angle_branches": 2,
@@ -97,7 +97,21 @@
       "prism_box_A_fraction": "1",
       "source": "../../n6/MINUS_PAIR.md",
       "minus_trees": 1,
-      "minus_cells": 16
+      "minus_cells": 16,
+      "minus_classes_excluded": 0
+    },
+    {
+      "label": "After the face-neighborhood proof",
+      "date": "2026-09-09T07:25:16.415303+00:00",
+      "proved_types": 4,
+      "octahedron_angle_branches": 2,
+      "octahedron_local_pairs": 0,
+      "minus_half_width": "1/20",
+      "prism_box_A_fraction": "1",
+      "source": "../../n6/MINUS_NEIGHBORHOOD.md",
+      "minus_trees": 1,
+      "minus_cells": 16,
+      "minus_classes_excluded": 7
     }
   ]
 }

@@ -4,6 +4,9 @@
 changes the research target from enlarging one box to proving a small,
 explicit tree family sufficient for every convex realization.
 
+**Follow-up:** a [face-neighborhood theorem now excludes seven of the 28
+failure classes](MINUS_NEIGHBORHOOD.md). Twenty-one classes remain open.
+
 ## The proposed algorithm
 
 Label the quadrilateral **A–C–B–D**, in boundary order. A and B have degree
@@ -165,7 +168,9 @@ orientation without changing lengths or overlaps. Therefore excluding these
 28 classes for all convex realizations would prove the conjecture.
 
 This is an exhaustive combinatorial reduction, **not 28 solved geometric
-cases**. No whole class has been eliminated here. Several classes may be
+cases**. The initial investigation eliminated no whole class. The follow-up
+[face-neighborhood argument](MINUS_NEIGHBORHOOD.md) now excludes seven, leaving
+21. Several classes may be
 settled together by one fan-boundary lemma; their number is not an estimate
 of effort remaining. The next proof attempt should exploit the shared
 quadrilateral and convexity to show that the two different fan arrangements

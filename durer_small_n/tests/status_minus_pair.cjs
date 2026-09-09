@@ -6,7 +6,7 @@ const script=html.match(/<script>([\s\S]*?)<\/script>/)[1];
 const ctx=vm.createContext({document:{addEventListener(){}},console});
 vm.runInContext(script.slice(0,script.indexOf('let showAll = false;')),ctx);
 const article=vm.runInContext('article(byId.minus_pair,false)',ctx);
-assert(article.includes('0 of those 28 whole geometric classes'));
+assert(article.includes('7 of those 28 whole geometric classes'));
 assert(article.includes('fan at C') && article.includes('fan at D'));
 assert(article.includes('16 closed cells, one tree, and 336 pair checks'));
 const models=[];
@@ -44,4 +44,12 @@ for(const apex of ['P','Q']) {
 }
 assert.equal(JSON.stringify(models[0].P),JSON.stringify(models[1].P));
 assert.notEqual(JSON.stringify(models[0].cut),JSON.stringify(models[1].cut));
+const proof=vm.runInContext('article(byId.minus_neighborhood,false)',ctx);
+assert.equal((proof.match(/data-minus-class=/g)||[]).length,28);
+assert.equal((proof.match(/>Excluded<\/span>/g)||[]).length,7);
+assert.equal((proof.match(/>Open<\/span>/g)||[]).length,21);
+assert(proof.includes('Pinciu paper, Theorem 1'));
+assert(proof.includes('The two-tree algorithm remains open'));
+assert.equal(vm.runInContext('byId.minus_pair.status',ctx),'open');
+assert.equal(vm.runInContext('byId.minus_neighborhood.status',ctx),'proved');
 console.log('Minus-edge: both exact cut choices, 3D controls, and open proof scope pass.');

@@ -1,3 +1,14 @@
+# Latest continuation: a universal seven-class exclusion
+
+9 September 2026. [MINUS_NEIGHBORHOOD.md](MINUS_NEIGHBORHOOD.md) applies
+Pinciu's face-neighborhood theorem to one previously residual pair in each
+minus-edge tree. It excludes original classes 7, 13, 18, 19, 20, 21, 22
+for every convex realization. The remaining 21 classes, two-tree conjecture,
+and full n=6 case remain open. The checker now validates this theorem
+application, with an explicit literature dependency. Earlier notes follow.
+
+---
+
 # Latest continuation: minus-edge patterns
 
 9 September 2026. [MINUS_PAIR.md](MINUS_PAIR.md) records a new two-tree

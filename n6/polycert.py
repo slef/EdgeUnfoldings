@@ -180,6 +180,12 @@ def propose_pairs(g):
         if common:
             witnesses.append(dict(faces=[a,b],kind='vertex_fan',vertex=min(common)))
             continue
+        if len(path)==3:
+            # Pinciu (CCCG 2007), Theorem 1: the edge-neighborhood of a
+            # face unfolds without overlap with every neighbor hinged to it.
+            # The relative placement of these two faces is exactly that net.
+            witnesses.append(dict(faces=[a,b],kind='face_neighborhood',base=path[1]))
+            continue
         found=None
         for owner in (a,b):
             f=g.faces[owner]
@@ -208,14 +214,23 @@ def verify(cert):
             require(all(w['vertex'] in g.faces[f] for f in path),'Not the same uncut vertex copy')
         elif w['kind']=='separating_edge':
             require(all(q.hi<=0 for q in g.separating_bounds(a,b,w['owner'],w['edge'])),'Invalid separator')
+        elif w['kind']=='face_neighborhood':
+            path=tree_path(g.adj,a,b)
+            require(len(path)==3 and path[1]==w['base'],'Not two direct neighbors of the stated base face')
+            counts.setdefault('face_neighborhood',0)
         else:raise ValueError('Unknown witness kind')
         counts[w['kind']]+=1
     require(not remaining,'Missing face pairs')
-    return dict(result='verified',scope='Every parameter tuple in the explicit region, not a universal n=6 theorem',
+    report=dict(result='verified',scope='Every parameter tuple in the explicit region, not a universal n=6 theorem',
                 parameter_dimension=len(g.box),facet_sizes=list(map(len,g.faces)),
                 pairs=counts,strict_facet_supports=len(g.support_bounds),
                 planarity_identities=g.planarity_identities,arithmetic='Exact rational polynomials and outward dyadic intervals',
                 linear_correlations=g.arithmetic_mode=='affine',fractional_bits=BITS)
+    if counts.get('face_neighborhood'):
+        report['theorem_dependencies']=[dict(author='Val Pinciu',year=2007,theorem=1,
+            title='On the Fewest Nets Problem for Convex Polyhedra',
+            url='https://cccg.ca/proceedings/2007/01a4.pdf')]
+    return report
 
 
 def make_overlap(spec,a,b):

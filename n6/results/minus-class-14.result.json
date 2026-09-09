@@ -1,0 +1,107 @@
+{
+  "class_id": 14,
+  "simultaneous_pairs": [
+    [
+      1,
+      3
+    ],
+    [
+      1,
+      3
+    ]
+  ],
+  "point_chart": "A=0, B=(1,0,0), C.y<0, D.y>0, P.z<0, Q.z<0; no coordinate bounds",
+  "faces": [
+    [
+      0,
+      2,
+      1,
+      3
+    ],
+    [
+      0,
+      4,
+      2
+    ],
+    [
+      0,
+      5,
+      4
+    ],
+    [
+      0,
+      3,
+      5
+    ],
+    [
+      1,
+      5,
+      3
+    ],
+    [
+      1,
+      4,
+      5
+    ],
+    [
+      1,
+      2,
+      4
+    ]
+  ],
+  "cut_trees": [
+    [
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        5
+      ]
+    ],
+    [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ]
+    ]
+  ],
+  "result": "unknown",
+  "assertions": 64,
+  "z3_version": "5.1.0",
+  "independent_proof_certificate": false,
+  "scope": "Unresolved until a model or proof is independently checked.",
+  "solver_seconds": 20.268849749991205,
+  "reason_unknown": "timeout",
+  "wall_seconds_observed": 20.460116417030804,
+  "process_returncode": 0
+}

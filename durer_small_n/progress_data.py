@@ -10,6 +10,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from n6.cover import read_cover,summary,leaves
+from n6.minus_pair import proof_progress
 
 
 def load_progress(notes,research):
@@ -46,8 +47,11 @@ def load_progress(notes,research):
     assert obligations['symmetry_classes']==len(obligations['orbits'])==28
     assert sum(map(len,obligations['orbits']))==49
     assert holdout['worst']['off_quad_pair_via_0']['margin']>holdout['thresholds']['success']
+    proved=json.loads((results/'minus-pair-proof-progress.json').read_text())
+    assert proved==json.loads(json.dumps(proof_progress()))
     result['minus']['pattern']=dict(candidate_trees=len(obligations['trees']),
-                                  proof_classes=len(obligations['orbits']),proved_classes=0,
+                                  proof_classes=len(obligations['orbits']),proved_classes=proved['excluded_classes'],
+                                  remaining_classes=proved['remaining_classes'],classes=proved['classes'],
                                   holdout_samples=holdout['samples'],status='conjecture')
     path=results/'prism-balanced-cover.partial.json.gz'
     partial=read_cover(path);s=summary(partial)

@@ -1,6 +1,19 @@
 [
   {
-    "date": "9 September 2026 · local pattern investigation",
+    "date": "9 September 2026 \u00b7 face-neighborhood proof",
+    "title": "Seven universal failure classes excluded; 21 remain",
+    "results": [
+      "minus_neighborhood",
+      "minus_pair",
+      "t_octa_minus",
+      "progress",
+      "research_plan",
+      "certification"
+    ],
+    "body": "<p>The <a href=\"#minus_neighborhood\">new proof step</a> applies Pinciu\u2019s face-neighborhood theorem to one previously residual pair in each tree. It excludes seven of the original 28 simultaneous-failure classes throughout the full convex realization space.</p><p>The remaining 21 classes and two-tree conjecture are open. The coordinate-box certificate is unchanged. Targeted numerical searches and exact checks of eight near-flat candidates did not close further classes.</p>"
+  },
+  {
+    "date": "9 September 2026 \u00b7 local pattern investigation",
     "title": "Two candidate trees; one now certifies the entire old box",
     "results": [
       "minus_pair",
@@ -9,10 +22,10 @@
       "research_plan",
       "certification"
     ],
-    "body": "<p>The <a href=\"#minus_pair\">new two-choice rule</a> switches between two off-quadrilateral stars. Each net consists of two vertex fans. It survived 23,000 discovery shapes and a separate 10,000-shape holdout; its universal validity remains conjectural.</p><p><b>Exact simplification:</b> one of the two trees now covers the whole previously certified ±0.05 box, with 16 closed cells and 336 face-pair checks. The earlier proof used 409 cells and nine trees. The domain has not changed.</p><p>Exact examples show that each of the two individual trees can fail, and that all four quadrilateral-only routes can fail together. There is now an exhaustive target of 28 symmetry classes of simultaneous failure; no whole geometric class has yet been excluded. Numerical tests are not proofs.</p>"
+    "body": "<p>The <a href=\"#minus_pair\">new two-choice rule</a> switches between two off-quadrilateral stars. Each net consists of two vertex fans. It survived 23,000 discovery shapes and a separate 10,000-shape holdout; its universal validity remains conjectural.</p><p><b>Exact simplification:</b> one of the two trees now covers the whole previously certified \u00b10.05 box, with 16 closed cells and 336 face-pair checks. The earlier proof used 409 cells and nine trees. The domain has not changed.</p><p>Exact examples show that each of the two individual trees can fail, and that all four quadrilateral-only routes can fail together. There is now an exhaustive target of 28 symmetry classes of simultaneous failure; no whole geometric class has yet been excluded. Numerical tests are not proofs.</p>"
   },
   {
-    "date": "9 September 2026 · progress dashboard added",
+    "date": "9 September 2026 \u00b7 progress dashboard added",
     "title": "Counts now distinguish proof gaps, local extent, and search coverage",
     "results": [
       "progress",
@@ -24,10 +37,10 @@
       "research_plan",
       "certification"
     ],
-    "body": "<p>The <a href=\"#progress\">new dashboard</a> records 4 of 7 types proved, 2 of 3 opposite-petal angle branches proved, and the two remaining octahedron proof obligations. The 19 directly settled face pairs are separated from the four conditional ones.</p><p>Minus-edge progress is shown as certified half-widths ±0.01 → ±0.05 in the same ten-coordinate box. The two prism boxes are identified separately: box A is fully certified; box B has only 437/4194304 of its parameter volume marked covered by the search, with full independent replay pending.</p><p>A retained before-and-after table makes explicit that the latest research hour closed no universal proof gap. Its exact counterexamples and neighborhood results remain useful, separately recorded progress.</p>"
+    "body": "<p>The <a href=\"#progress\">new dashboard</a> records 4 of 7 types proved, 2 of 3 opposite-petal angle branches proved, and the two remaining octahedron proof obligations. The 19 directly settled face pairs are separated from the four conditional ones.</p><p>Minus-edge progress is shown as certified half-widths \u00b10.01 \u2192 \u00b10.05 in the same ten-coordinate box. The two prism boxes are identified separately: box A is fully certified; box B has only 437/4194304 of its parameter volume marked covered by the search, with full independent replay pending.</p><p>A retained before-and-after table makes explicit that the latest research hour closed no universal proof gap. Its exact counterexamples and neighborhood results remain useful, separately recorded progress.</p>"
   },
   {
-    "date": "9 September 2026 · 02:57 UTC",
+    "date": "9 September 2026 \u00b7 02:57 UTC",
     "title": "Apex-entry failure extends to a certified neighborhood",
     "results": [
       "F_apexfailure",
@@ -35,20 +48,20 @@
       "certification",
       "research_plan"
     ],
-    "body": "<p><b>New exact region:</b> the <a href=\"#F_apexfailure\">apex-entry example</a> persists when all eleven free shape coordinates vary independently by ±0.001. Every polyhedron in this closed box satisfies the selection rules, has the apex inside Ω, and still has a certified nonoverlapping net.</p><p>This strengthens the counterexample to the individual-apex shortcut. It does not prove the remaining joint-petal claim or Lemma L. The snapshots below retain the earlier discoveries and the prism investigation.</p>"
+    "body": "<p><b>New exact region:</b> the <a href=\"#F_apexfailure\">apex-entry example</a> persists when all eleven free shape coordinates vary independently by \u00b10.001. Every polyhedron in this closed box satisfies the selection rules, has the apex inside \u03a9, and still has a certified nonoverlapping net.</p><p>This strengthens the counterexample to the individual-apex shortcut. It does not prove the remaining joint-petal claim or Lemma L. The snapshots below retain the earlier discoveries and the prism investigation.</p>"
   },
   {
-    "date": "9 September 2026 · 02:05–03:05 UTC session",
+    "date": "9 September 2026 \u00b7 02:05\u201303:05 UTC session",
     "title": "Prism route choices narrowed; general theorem still open",
     "results": [
       "t_prismd",
       "research_plan",
       "certification"
     ],
-    "body": "<p><b>Exact negative results:</b> both quadrilateral routes from one fixed degree-four apex can fail. Even at the sharper degree-four apex, the shorter route can fail while the longer one succeeds. The <a href=\"#t_prismd\">prism section</a> explains these checks.</p><p><b>Numerical lead only:</b> retaining both routes at the sharper degree-four apex survived 60,000 sampled shapes. This does not prove the selection rule. The full n=6 theorem, Lemma L, and the small-fan-angle opposite-petal branch remain open.</p><p>The earlier snapshot below records this session’s exact apex-entry counterexample, radial clearance, and axis-nonclosure certificate. The original cone proof and bounded-region certificates remain valid.</p>"
+    "body": "<p><b>Exact negative results:</b> both quadrilateral routes from one fixed degree-four apex can fail. Even at the sharper degree-four apex, the shorter route can fail while the longer one succeeds. The <a href=\"#t_prismd\">prism section</a> explains these checks.</p><p><b>Numerical lead only:</b> retaining both routes at the sharper degree-four apex survived 60,000 sampled shapes. This does not prove the selection rule. The full n=6 theorem, Lemma L, and the small-fan-angle opposite-petal branch remain open.</p><p>The earlier snapshot below records this session\u2019s exact apex-entry counterexample, radial clearance, and axis-nonclosure certificate. The original cone proof and bounded-region certificates remain valid.</p>"
   },
   {
-    "date": "9 September 2026 · continuing session",
+    "date": "9 September 2026 \u00b7 continuing session",
     "title": "An individual apex can enter; distances and closure matter",
     "results": [
       "F_apexfailure",
@@ -59,11 +72,11 @@
       "certification",
       "research_plan"
     ],
-    "body": "<p><b>Exactly refuted shortcut:</b> a <a href=\"#F_apexfailure\">convex six-vertex example</a> satisfies both selection rules but lets one outer apex enter Ω. All 28 pairs of its net remain nonoverlapping. The full theorem and the joint-petal problem remain open.</p><p><b>New exact checks:</b> the <a href=\"#lemmaL\">local angular counterexample</a> has a certified radial distance factor of at least 1.217 on every shared direction. A separate <a href=\"#intrinsic_metric\">five-interval certificate</a> proves that a proposed intrinsic metric cannot close into the prescribed convex octahedron, despite passing all local checks.</p><p>The earlier cone proof and 409-region minus-edge cover remain valid. Work continues on distance-sensitive local separation and the joint behavior of the opposite petals.</p>"
+    "body": "<p><b>Exactly refuted shortcut:</b> a <a href=\"#F_apexfailure\">convex six-vertex example</a> satisfies both selection rules but lets one outer apex enter \u03a9. All 28 pairs of its net remain nonoverlapping. The full theorem and the joint-petal problem remain open.</p><p><b>New exact checks:</b> the <a href=\"#lemmaL\">local angular counterexample</a> has a certified radial distance factor of at least 1.217 on every shared direction. A separate <a href=\"#intrinsic_metric\">five-interval certificate</a> proves that a proposed intrinsic metric cannot close into the prescribed convex octahedron, despite passing all local checks.</p><p>The earlier cone proof and 409-region minus-edge cover remain valid. Work continues on distance-sensitive local separation and the joint behavior of the opposite petals.</p>"
   },
   {
     "date": "9 September 2026",
-    "title": "Morning research results · retained snapshot",
+    "title": "Morning research results \u00b7 retained snapshot",
     "results": [
       "F_basecones",
       "t_octa_minus",
@@ -73,6 +86,6 @@
       "certification",
       "research_plan"
     ],
-    "body": "<p><b>The full n=6 case remains unproved here.</b> Direct review found an <a href=\"#thesis_audit\">exact counterexample to the DF entry of DiBiase’s displayed octahedron chart</a>. A <a href=\"#F_basecones\">base-cone proof</a> handles the large-angle and equality branches. Lemma L and the remaining fan-angle sum below π are open.</p><p>Independent replay verified a complete 443-region prism-with-one-diagonal certificate and a larger <a href=\"#t_octa_minus\">409-region octahedron-minus-edge certificate</a>. These cover their stated parameter boxes, not whole combinatorial types. A new <a href=\"#lemmaL\">exact example rules out angular separation around w</a> as a complete proof of Lemma L. Shared-length constraints also ruled out an earlier angle-only candidate. Global coverage remains open.</p>"
+    "body": "<p><b>The full n=6 case remains unproved here.</b> Direct review found an <a href=\"#thesis_audit\">exact counterexample to the DF entry of DiBiase\u2019s displayed octahedron chart</a>. A <a href=\"#F_basecones\">base-cone proof</a> handles the large-angle and equality branches. Lemma L and the remaining fan-angle sum below \u03c0 are open.</p><p>Independent replay verified a complete 443-region prism-with-one-diagonal certificate and a larger <a href=\"#t_octa_minus\">409-region octahedron-minus-edge certificate</a>. These cover their stated parameter boxes, not whole combinatorial types. A new <a href=\"#lemmaL\">exact example rules out angular separation around w</a> as a complete proof of Lemma L. Shared-length constraints also ruled out an earlier angle-only candidate. Global coverage remains open.</p>"
   }
 ]

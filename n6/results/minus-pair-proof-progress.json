@@ -1,0 +1,710 @@
+{
+  "schema": "n6-minus-pair-proof-progress-v1",
+  "result": "checked_theorem_application",
+  "theorem": {
+    "author": "Val Pinciu",
+    "year": 2007,
+    "number": 1,
+    "title": "On the Fewest Nets Problem for Convex Polyhedra",
+    "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+  },
+  "pair_exclusions": [
+    [
+      {
+        "faces": [
+          1,
+          4
+        ],
+        "base": 0,
+        "path": [
+          1,
+          0,
+          4
+        ]
+      }
+    ],
+    [
+      {
+        "faces": [
+          3,
+          6
+        ],
+        "base": 0,
+        "path": [
+          3,
+          0,
+          6
+        ]
+      }
+    ]
+  ],
+  "original_symmetry_classes": 28,
+  "excluded_classes": 7,
+  "remaining_classes": 21,
+  "remaining_failure_combinations": 36,
+  "remaining_pairs_per_tree": [
+    6,
+    6
+  ],
+  "classes": [
+    {
+      "id": 1,
+      "orbit": [
+        [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 2,
+      "orbit": [
+        [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        [
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 3,
+      "orbit": [
+        [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          [
+            3,
+            6
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 4,
+      "orbit": [
+        [
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        [
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 5,
+      "orbit": [
+        [
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            2,
+            6
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 6,
+      "orbit": [
+        [
+          [
+            0,
+            2
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        [
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 7,
+      "orbit": [
+        [
+          [
+            0,
+            2
+          ],
+          [
+            3,
+            6
+          ]
+        ],
+        [
+          [
+            1,
+            4
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "status": "excluded_by_face_neighborhood"
+    },
+    {
+      "id": 8,
+      "orbit": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        [
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 9,
+      "orbit": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          [
+            3,
+            6
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 10,
+      "orbit": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 11,
+      "orbit": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 12,
+      "orbit": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 13,
+      "orbit": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            6
+          ]
+        ],
+        [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "status": "excluded_by_face_neighborhood"
+    },
+    {
+      "id": 14,
+      "orbit": [
+        [
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 15,
+      "orbit": [
+        [
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 16,
+      "orbit": [
+        [
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            2,
+            6
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 17,
+      "orbit": [
+        [
+          [
+            1,
+            3
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        [
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 18,
+      "orbit": [
+        [
+          [
+            1,
+            3
+          ],
+          [
+            3,
+            6
+          ]
+        ],
+        [
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "status": "excluded_by_face_neighborhood"
+    },
+    {
+      "id": 19,
+      "orbit": [
+        [
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            6
+          ]
+        ]
+      ],
+      "status": "excluded_by_face_neighborhood"
+    },
+    {
+      "id": 20,
+      "orbit": [
+        [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ]
+        ]
+      ],
+      "status": "excluded_by_face_neighborhood"
+    },
+    {
+      "id": 21,
+      "orbit": [
+        [
+          [
+            1,
+            4
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        [
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            6
+          ]
+        ]
+      ],
+      "status": "excluded_by_face_neighborhood"
+    },
+    {
+      "id": 22,
+      "orbit": [
+        [
+          [
+            1,
+            4
+          ],
+          [
+            3,
+            6
+          ]
+        ]
+      ],
+      "status": "excluded_by_face_neighborhood"
+    },
+    {
+      "id": 23,
+      "orbit": [
+        [
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 24,
+      "orbit": [
+        [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 25,
+      "orbit": [
+        [
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 26,
+      "orbit": [
+        [
+          [
+            2,
+            6
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          [
+            3,
+            6
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 27,
+      "orbit": [
+        [
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      ],
+      "status": "open"
+    },
+    {
+      "id": 28,
+      "orbit": [
+        [
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            4
+          ]
+        ]
+      ],
+      "status": "open"
+    }
+  ],
+  "scope": "Universal exclusions for convex realizations with the stated original facets, by the cited theorem. The remaining classes and the two-tree conjecture are open."
+}

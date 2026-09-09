@@ -7,7 +7,7 @@ unfolds without positive-area overlap. No routine here proves that claim.
 from itertools import product
 import json
 from pathlib import Path
-from n6.certify import require
+from n6.certify import require,tree_path
 from n6.families import MINUS_FACES as FACES
 from n6.polycert import point_spec,make_certificate,make_overlap,verify,verify_overlap
 from n6.trees import degree_four_stars,quadrilateral_path_stars
@@ -59,6 +59,38 @@ def obligations():
             'shared_vertex_pairs_per_tree':14,'residual_pairs_per_tree':7,
             'simultaneous_failure_cases':49,'symmetry_classes':len(orbits),'orbits':orbits,
             'scope':'If all 28 classes are impossible for every convex realization, the two-tree conjecture follows. No class is proved impossible here.'}
+
+
+def proof_progress():
+    """Apply Pinciu's face-neighborhood theorem to the original 28 classes.
+
+    This checks the combinatorial hypotheses of a cited mathematical theorem;
+    it is not a formal proof of that theorem or of the two-tree conjecture.
+    """
+    original=obligations();exclusions=[]
+    for tree in paired_trees():
+        adj={i:[] for i in range(len(FACES))}
+        for a,b in tree['hinges']:adj[a].append(b);adj[b].append(a)
+        exclusions.append([dict(faces=pair,base=path[1],path=path)
+                           for pair in tree['pairs'] if len(path:=tree_path(adj,*pair))==3])
+    excluded=[{tuple(item['faces']) for item in items} for items in exclusions]
+    classes=[]
+    for number,orbit in enumerate(original['orbits'],1):
+        statuses=[a in excluded[0] or b in excluded[1] for a,b in orbit]
+        require(len(set(statuses))==1,'Theorem exclusions must respect the symmetry')
+        classes.append(dict(id=number,orbit=orbit,
+                            status='excluded_by_face_neighborhood' if statuses[0] else 'open'))
+    closed=sum(c['status']!='open' for c in classes)
+    return dict(schema='n6-minus-pair-proof-progress-v1',result='checked_theorem_application',
+                theorem=dict(author='Val Pinciu',year=2007,number=1,
+                             title='On the Fewest Nets Problem for Convex Polyhedra',
+                             url='https://cccg.ca/proceedings/2007/01a4.pdf'),
+                pair_exclusions=exclusions,original_symmetry_classes=len(classes),
+                excluded_classes=closed,remaining_classes=len(classes)-closed,
+                remaining_failure_combinations=sum(len(c['orbit']) for c in classes if c['status']=='open'),
+                remaining_pairs_per_tree=[len(t['pairs'])-len(e) for t,e in zip(paired_trees(),exclusions)],
+                classes=classes,
+                scope='Universal exclusions for convex realizations with the stated original facets, by the cited theorem. The remaining classes and the two-tree conjecture are open.')
 
 
 def verify_bundle(bundle):
@@ -124,7 +156,7 @@ def generate():
 if __name__=='__main__':
     import argparse
     ap=argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('action',choices=('generate','verify','obligations','unfold','cover'))
+    ap.add_argument('action',choices=('generate','verify','obligations','progress','unfold','cover'))
     ap.add_argument('input',type=Path,nargs='?');ap.add_argument('--bits',type=int,default=80)
     args=ap.parse_args()
     if args.action in ('verify','unfold') and args.input is None:ap.error('An input file is required')
@@ -132,6 +164,7 @@ if __name__=='__main__':
     set_precision(args.bits)
     if args.action=='generate':generate();print('Generated and independently replayed three exact examples.')
     elif args.action=='obligations':print(json.dumps(obligations(),indent=2))
+    elif args.action=='progress':print(json.dumps(proof_progress(),indent=2))
     elif args.action=='unfold':print(json.dumps(select_certificate(json.loads(args.input.read_text())),indent=2))
     elif args.action=='cover':
         from n6.cover import read_cover,generate as generate_cover,verify as verify_cover,summary

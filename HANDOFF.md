@@ -5,10 +5,13 @@
 **The full n=6 case remains unproved. Read [n6/REVIEW.md](n6/REVIEW.md)
 before relying on the historical proof status below.**
 
-- Latest minus-edge work: [n6/MINUS_PAIR.md](n6/MINUS_PAIR.md) gives a
+- Latest proof step: [n6/MINUS_NEIGHBORHOOD.md](n6/MINUS_NEIGHBORHOOD.md)
+  applies Pinciu’s Theorem 1, excluding seven of the original 28 minus-edge
+  failure classes globally. Twenty-one classes remain open.
+- Earlier minus-edge pattern work: [n6/MINUS_PAIR.md](n6/MINUS_PAIR.md) gives a
   two-tree conjecture and a two-fan proof target. A new exact cover uses one
   of those trees on the entire existing ±0.05 box, with 16 cells instead of
-  409. The 28 simultaneous-failure classes remain geometrically open.
+  409. This initially left all 28 simultaneous-failure classes open.
 - The unqualified double-outward D-lemma is false. An integer-coordinate
   counterexample is verified by rational intervals. The working notes now
   restrict it to an angle range automatic in Case A. The new base-cone proof

@@ -1,0 +1,974 @@
+{
+  "result": "replayed_individual_audits",
+  "fractional_bits": 240,
+  "outcomes": [
+    {
+      "class_id": 1,
+      "result": "verified_mixed_example",
+      "family": "off_quad_pair_via_0",
+      "verified_failures": 1,
+      "verified_successes": 1,
+      "outcomes": [
+        {
+          "cuts": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified_positive_area_overlap",
+            "faces": [
+              0,
+              2
+            ],
+            "strict_signs": 7,
+            "lower_bounds": [
+              "3027500875605196210996381143056971743571474256271375050409907/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "3912589571903457474257088388401798966018204730961614710414041958287/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "1160731674691352428005838822245204229970336872746727359955371324525/55213970774324510299478046898216203619608871777363092441300193790394368",
+              "27764966052780738015420178479107110464871878477042682246080567208178805/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "110864238540053976654637625335876148521683539047081640995831/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "1891458905134052762103682087301613651030864921099394320343303175799237/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "61079784621686064255835591866538701648644861502536999123879/883423532389192164791648750371459257913741948437809479060803100646309888"
+            ],
+            "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "strict_facet_supports": 20
+          }
+        },
+        {
+          "cuts": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+    },
+    {
+      "class_id": 2,
+      "result": "verified_mixed_example",
+      "family": "off_quad_pair_via_0",
+      "verified_failures": 1,
+      "verified_successes": 1,
+      "outcomes": [
+        {
+          "cuts": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified_positive_area_overlap",
+            "faces": [
+              0,
+              2
+            ],
+            "strict_signs": 7,
+            "lower_bounds": [
+              "399347583292297533476556744344677363397200730540130907528938667/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "42032830446797717528349890483699440097299365483681878626441413671921/110427941548649020598956093796432407239217743554726184882600387580788736",
+              "41589299221854966081681700397885305984831571791832845802219918466947/441711766194596082395824375185729628956870974218904739530401550323154944",
+              "34684061463904104761539589382056275612171574816711884940323565792411693/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "1022371131606273264833450814345097208079132626058042868451663281/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "61540964436967513997966271921392933986603923182331381368315818616616175/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "8029980359201016130195837430914644113826116885334756445330535/220855883097298041197912187592864814478435487109452369765200775161577472"
+            ],
+            "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "strict_facet_supports": 20
+          }
+        },
+        {
+          "cuts": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+    },
+    {
+      "class_id": 4,
+      "result": "verified_mixed_example",
+      "family": "off_quad_pair_via_0",
+      "verified_failures": 1,
+      "verified_successes": 1,
+      "outcomes": [
+        {
+          "cuts": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified_positive_area_overlap",
+            "faces": [
+              0,
+              2
+            ],
+            "strict_signs": 7,
+            "lower_bounds": [
+              "749852371726479176064956161498445777354597701256843193072993/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "4586725527381381931202915729022196529365826691032963369865822364467/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "1818891842251867421147092302746209893468591550795756548000803540674757/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "3683631372150865056787637771565164654312682239661601656866066072893227/220855883097298041197912187592864814478435487109452369765200775161577472",
+              "6053998743994471675923837998680818116128223550267314778851/441711766194596082395824375185729628956870974218904739530401550323154944",
+              "29059838659289095962786657319284565632522679606284948057515220907215/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "15098381383776905379212651555098653145442636798149166479297/1766847064778384329583297500742918515827483896875618958121606201292619776"
+            ],
+            "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "strict_facet_supports": 20
+          }
+        },
+        {
+          "cuts": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+    },
+    {
+      "class_id": 6,
+      "result": "verified_successful_example",
+      "family": "off_quad_pair_via_0",
+      "verified_failures": 0,
+      "verified_successes": 2,
+      "outcomes": [
+        {
+          "cuts": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        },
+        {
+          "cuts": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+    },
+    {
+      "class_id": 8,
+      "result": "verified_mixed_example",
+      "family": "off_quad_pair_via_0",
+      "verified_failures": 1,
+      "verified_successes": 1,
+      "outcomes": [
+        {
+          "cuts": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified_positive_area_overlap",
+            "faces": [
+              0,
+              2
+            ],
+            "strict_signs": 7,
+            "lower_bounds": [
+              "399347583292297533476556744344677363397200730540130907528938667/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "42032830446797717528349890483699440097299365483681878626441413671921/110427941548649020598956093796432407239217743554726184882600387580788736",
+              "41589299221854966081681700397885305984831571791832845802219918466947/441711766194596082395824375185729628956870974218904739530401550323154944",
+              "34684061463904104761539589382056275612171574816711884940323565792411693/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "1022371131606273264833450814345097208079132626058042868451663281/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "61540964436967513997966271921392933986603923182331381368315818616616175/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "8029980359201016130195837430914644113826116885334756445330535/220855883097298041197912187592864814478435487109452369765200775161577472"
+            ],
+            "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "strict_facet_supports": 20
+          }
+        },
+        {
+          "cuts": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+    },
+    {
+      "class_id": 10,
+      "result": "verified_mixed_example",
+      "family": "off_quad_pair_via_0",
+      "verified_failures": 1,
+      "verified_successes": 1,
+      "outcomes": [
+        {
+          "cuts": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified_positive_area_overlap",
+            "faces": [
+              0,
+              2
+            ],
+            "strict_signs": 7,
+            "lower_bounds": [
+              "749852371726479176064956161498445777354597701256843193072993/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "4586725527381381931202915729022196529365826691032963369865822364467/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "1818891842251867421147092302746209893468591550795756548000803540674757/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "3683631372150865056787637771565164654312682239661601656866066072893227/220855883097298041197912187592864814478435487109452369765200775161577472",
+              "6053998743994471675923837998680818116128223550267314778851/441711766194596082395824375185729628956870974218904739530401550323154944",
+              "29059838659289095962786657319284565632522679606284948057515220907215/883423532389192164791648750371459257913741948437809479060803100646309888",
+              "15098381383776905379212651555098653145442636798149166479297/1766847064778384329583297500742918515827483896875618958121606201292619776"
+            ],
+            "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "strict_facet_supports": 20
+          }
+        },
+        {
+          "cuts": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+    },
+    {
+      "class_id": 12,
+      "result": "verified_successful_example",
+      "family": "off_quad_pair_via_0",
+      "verified_failures": 0,
+      "verified_successes": 2,
+      "outcomes": [
+        {
+          "cuts": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        },
+        {
+          "cuts": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+    },
+    {
+      "class_id": 17,
+      "result": "verified_successful_example",
+      "family": "off_quad_pair_via_0",
+      "verified_failures": 0,
+      "verified_successes": 2,
+      "outcomes": [
+        {
+          "cuts": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        },
+        {
+          "cuts": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "report": {
+            "result": "verified",
+            "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+            "parameter_dimension": 0,
+            "facet_sizes": [
+              4,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "pairs": {
+              "vertex_fan": 14,
+              "separating_edge": 6,
+              "face_neighborhood": 1
+            },
+            "strict_facet_supports": 20,
+            "planarity_identities": 22,
+            "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+            "linear_correlations": false,
+            "fractional_bits": 240,
+            "theorem_dependencies": [
+              {
+                "author": "Val Pinciu",
+                "year": 2007,
+                "theorem": 1,
+                "title": "On the Fewest Nets Problem for Convex Polyhedra",
+                "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+    }
+  ],
+  "scope": "Exact outcomes at the supplied shapes only. No universal class exclusion follows."
+}

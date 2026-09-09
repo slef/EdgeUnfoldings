@@ -1,0 +1,33 @@
+{
+  "result": "verified",
+  "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+  "parameter_dimension": 0,
+  "facet_sizes": [
+    4,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "pairs": {
+    "vertex_fan": 14,
+    "separating_edge": 6,
+    "face_neighborhood": 1
+  },
+  "strict_facet_supports": 20,
+  "planarity_identities": 22,
+  "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+  "linear_correlations": false,
+  "fractional_bits": 80,
+  "theorem_dependencies": [
+    {
+      "author": "Val Pinciu",
+      "year": 2007,
+      "theorem": 1,
+      "title": "On the Fewest Nets Problem for Convex Polyhedra",
+      "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+    }
+  ]
+}
