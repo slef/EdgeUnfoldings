@@ -145,3 +145,20 @@ independently verified 443-leaf **box A** above; it is not a nested enlargement
 of A. The two percentages must not be added. Future comparisons should keep
 the same root box, coordinate chart, and verification status, or explicitly
 start a new series.
+
+
+## Same minus-edge box, one fixed tree
+
+The later pattern investigation gives a new independently replayed cover of
+exactly the same ten-parameter ±1/20 box. It uses **16 closed cells and one
+fixed tree**, with cuts `{0–3, 0–4, 1–4, 2–4, 4–5}`. All 336 pair checks pass:
+224 vertex-fan checks and 112 separating-edge checks. Maximum depth is four.
+The root geometry is identical to the earlier 409-cell cover, so this is a
+simplification of the proof, not an enlargement of the certified domain.
+
+```
+python3 -m n6.cover verify n6/results/minus-pair-cover.certificate.json.gz
+```
+
+See [MINUS_PAIR.md](MINUS_PAIR.md) for the candidate two-tree universal
+algorithm that motivated this check. The full type remains open.

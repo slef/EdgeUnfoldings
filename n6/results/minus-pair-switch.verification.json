@@ -1,0 +1,107 @@
+{
+  "result": "verified_mixed_example",
+  "family": "off_quad_pair_via_0",
+  "verified_failures": 1,
+  "verified_successes": 1,
+  "outcomes": [
+    {
+      "cuts": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "report": {
+        "result": "verified_positive_area_overlap",
+        "faces": [
+          1,
+          2
+        ],
+        "strict_signs": 6,
+        "lower_bounds": [
+          "1508787357601686462606968683/1208925819614629174706176",
+          "2173559055654685469656937/2361183241434822606848",
+          "476834396824800044115045827/1208925819614629174706176",
+          "879476593224487374975409589/604462909807314587353088",
+          "3098242237781946824616337697/1208925819614629174706176",
+          "1871802925672489618264210191/1208925819614629174706176"
+        ],
+        "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+        "facet_sizes": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "strict_facet_supports": 20
+      }
+    },
+    {
+      "cuts": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "report": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 14,
+          "separating_edge": 7
+        },
+        "strict_facet_supports": 20,
+        "planarity_identities": 22,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 80
+      }
+    }
+  ],
+  "scope": "This exact shape and these specified trees only; the universal two-tree conjecture remains open."
+}

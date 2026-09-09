@@ -7,7 +7,7 @@ notes = Path(__file__).resolve().parent / 'notes'
 research = notes.parent.parent / 'n6'
 figs = json.loads((notes / 'status_figs.json').read_text())
 figs['thickness'] = json.loads((notes / 'thickness.json').read_text())
-for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg')]:
+for key, filename in [('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg')]:
     svg = (research / 'figures' / filename).read_text()
     figs[key] = svg[svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 # Keep each 3D picture, its labels, and its cuts tied to the exact witness.
@@ -70,6 +70,15 @@ figs['models']['apex_entry'] = witness_model(
     title='Exact convex octahedron refuting the individual-apex exclusion',
     caption='The same convex polyhedron. The two tested petals are orange and purple; red edges are cut. Drag or use arrow keys to rotate.',
 )
+for apex,fan in [('P',{0,1,6}),('Q',{0,3,4})]:
+    figs['models']['minus_pair_'+apex] = witness_model(
+        'minus-pair-'+apex+'.certificate.json', names=['A','B','C','D','P','Q'],
+        face_names=['ACBD','ACP','APQ','ADQ','BDQ','BPQ','BCP'],highlight_faces=[0,2],
+        faceColors={i:'#8fc1dd' if i in fan else '#e6af78' for i in range(7)},
+        view={'yaw':-0.8,'pitch':0.45},
+        title='Minus-edge two-choice example: cuts at '+apex,
+        caption='The same exact polyhedron, with the cuts for T_'+apex+'. Drag or use arrow keys to rotate.',
+    )
 t = (notes / 'status_template.html').read_text()
 t = t.replace('__PROGRESS_CSS__', (notes / 'progress_dashboard.css').read_text())
 t = t.replace('__PROGRESS_DASHBOARD_JS__', (notes / 'progress_dashboard.js').read_text())

@@ -1,5 +1,17 @@
 [
   {
+    "date": "9 September 2026 · local pattern investigation",
+    "title": "Two candidate trees; one now certifies the entire old box",
+    "results": [
+      "minus_pair",
+      "t_octa_minus",
+      "progress",
+      "research_plan",
+      "certification"
+    ],
+    "body": "<p>The <a href=\"#minus_pair\">new two-choice rule</a> switches between two off-quadrilateral stars. Each net consists of two vertex fans. It survived 23,000 discovery shapes and a separate 10,000-shape holdout; its universal validity remains conjectural.</p><p><b>Exact simplification:</b> one of the two trees now covers the whole previously certified ±0.05 box, with 16 closed cells and 336 face-pair checks. The earlier proof used 409 cells and nine trees. The domain has not changed.</p><p>Exact examples show that each of the two individual trees can fail, and that all four quadrilateral-only routes can fail together. There is now an exhaustive target of 28 symmetry classes of simultaneous failure; no whole geometric class has yet been excluded. Numerical tests are not proofs.</p>"
+  },
+  {
     "date": "9 September 2026 · progress dashboard added",
     "title": "Counts now distinguish proof gaps, local extent, and search coverage",
     "results": [

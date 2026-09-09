@@ -29,18 +29,26 @@ def load_progress(notes,research):
         return dict(parameter_names=g['parameter_names'],
                     center=[str(F(c)+(F(a)+F(b))/2) for c,(a,b) in zip(origin,g['parameter_box'])],
                     half_widths=[str((F(b)-F(a))/2) for a,b in g['parameter_box']])
-    result['minus']=cover('minus-merged-cover.certificate.json.gz','minus-merged-cover.verification.json')
+    result['minus']=cover('minus-pair-cover.certificate.json.gz','minus-pair-cover.verification.json')
     result['prism']=cover('prism-affine-cover.certificate.json.gz','prism-affine-cover.verification.json')
     history=[]
     first=read_cover(results/'minus-wide-affine.certificate.json')
     assert json.loads((results/'minus-wide-affine.verification.json').read_text())['result']=='verified'
     assert domain(first)['center']==result['minus']['center'] and len(set(domain(first)['half_widths']))==1
     history.append(dict(half_width=domain(first)['half_widths'][0],leaves=1,trees=1,report='minus-wide-affine.verification.json'))
-    for stem in ['minus-doubled-cover','minus-tripled-cover','minus-quadrupled-cover','minus-merged-cover']:
+    for stem in ['minus-doubled-cover','minus-tripled-cover','minus-quadrupled-cover','minus-merged-cover','minus-pair-cover']:
         data=cover(stem+'.certificate.json.gz',stem+'.verification.json')
         assert len(set(data['half_widths']))==1 and data['center']==result['minus']['center']
         history.append(dict(half_width=data['half_widths'][0],leaves=data['leaves'],trees=data['distinct_cut_trees'],report=data['report']))
     result['minus']['history']=history
+    obligations=json.loads((results/'minus-pair-obligations.json').read_text())
+    holdout=json.loads((results/'minus-pattern-pair-holdout.json').read_text())
+    assert obligations['symmetry_classes']==len(obligations['orbits'])==28
+    assert sum(map(len,obligations['orbits']))==49
+    assert holdout['worst']['off_quad_pair_via_0']['margin']>holdout['thresholds']['success']
+    result['minus']['pattern']=dict(candidate_trees=len(obligations['trees']),
+                                  proof_classes=len(obligations['orbits']),proved_classes=0,
+                                  holdout_samples=holdout['samples'],status='conjecture')
     path=results/'prism-balanced-cover.partial.json.gz'
     partial=read_cover(path);s=summary(partial)
     result['prism_partial']={

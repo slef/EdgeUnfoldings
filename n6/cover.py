@@ -160,9 +160,10 @@ def rank_trees(base,box,trees):
     return [trees[i] for _,i in sorted(ranking,reverse=True)]
 
 
-def generate(base,output,max_seconds=300,max_leaves=10000,max_depth=40,candidates=3,resume=None,split_strategy='width'):
+def generate(base,output,max_seconds=300,max_leaves=10000,max_depth=40,candidates=3,resume=None,split_strategy='width',candidate_trees=None):
     from n6.trees import all_trees
-    start=time.monotonic();trees=all_trees([tuple(f) for f in base['faces']])
+    start=time.monotonic();trees=all_trees([tuple(f) for f in base['faces']]) if candidate_trees is None else candidate_trees
+    require(bool(trees),'Empty candidate tree family')
     cover=deepcopy(resume) if resume is not None else dict(schema='n6-binary-region-cover-v1',geometry=base,tree=dict(kind='unresolved',reason='pending'))
     require(cover['geometry']==base,'Resume geometry differs from input')
     initial_widths=[F(b)-F(a) for a,b in base['parameter_box']]

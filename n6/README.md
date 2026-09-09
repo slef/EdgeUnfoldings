@@ -2,6 +2,9 @@
 
 The full six-vertex theorem is **not proved or computationally certified here**.
 Read [REVIEW.md](REVIEW.md) before using the older handoff or proof notes.
+The latest minus-edge investigation proposes a [two-choice algorithm](MINUS_PAIR.md):
+one of its trees is independently certified on the entire earlier ±0.05 box
+using 16 cells, but the universal two-tree claim remains open.
 The latest verified results and remaining obligations are in
 [CONTINUATION.md](CONTINUATION.md).
 

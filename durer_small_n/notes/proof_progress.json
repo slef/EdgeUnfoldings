@@ -71,7 +71,9 @@
       "octahedron_local_pairs": 0,
       "minus_half_width": "1/20",
       "prism_box_A_fraction": "1",
-      "source": "../../n6/CONTINUATION.md"
+      "source": "../../n6/CONTINUATION.md",
+      "minus_trees": 9,
+      "minus_cells": 409
     },
     {
       "label": "After that hour · 03:05 UTC",
@@ -81,7 +83,21 @@
       "octahedron_local_pairs": 0,
       "minus_half_width": "1/20",
       "prism_box_A_fraction": "1",
-      "source": "../../n6/CONTINUATION.md"
+      "source": "../../n6/CONTINUATION.md",
+      "minus_trees": 9,
+      "minus_cells": 409
+    },
+    {
+      "label": "After the pattern investigation",
+      "date": "2026-09-09T07:00:34.807870+00:00",
+      "proved_types": 4,
+      "octahedron_angle_branches": 2,
+      "octahedron_local_pairs": 0,
+      "minus_half_width": "1/20",
+      "prism_box_A_fraction": "1",
+      "source": "../../n6/MINUS_PAIR.md",
+      "minus_trees": 1,
+      "minus_cells": 16
     }
   ]
 }

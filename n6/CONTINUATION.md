@@ -1,3 +1,17 @@
+# Latest continuation: minus-edge patterns
+
+9 September 2026. [MINUS_PAIR.md](MINUS_PAIR.md) records a new two-tree
+conjecture, a two-fan interpretation, exact switching examples, and a complete
+16-cell certificate using one fixed tree on the same ±0.05 box. The earlier
+certificate used nine trees and 409 cells. The domain is unchanged. The
+universal two-tree statement remains open; 33,000 samples and 150 directed
+starts are numerical evidence only. Its simultaneous-failure cases reduce
+combinatorially to 28 symmetry classes, none yet excluded as a whole.
+
+The earlier sessions are retained below.
+
+---
+
 # Second continuation on 9 September 2026
 
 The overview was updated first, and the additional research hour began at
