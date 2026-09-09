@@ -1,0 +1,64 @@
+{
+  "schema": "n6-axis-nonclosure-v1",
+  "metric": {
+    "schema": "n6-intrinsic-octahedron-metric-v1",
+    "slit_index": 0,
+    "triple_index": 0,
+    "require_cone": true,
+    "squared_edge_lengths": {
+      "s": [
+        "1",
+        "188589564361/10000000000",
+        "1835522649/100000000",
+        "187704696001/10000000000"
+      ],
+      "r": [
+        "181952580481/10000000000",
+        "8743849/100000000",
+        "370601001/2500000000",
+        "247009/625000000"
+      ],
+      "l": [
+        "11744707129/625000000",
+        "182979729/400000000",
+        "1365228601/10000000000",
+        "7238095929/400000000"
+      ]
+    }
+  },
+  "axis_squared_domain": [
+    "185986050121/10000000000",
+    "189431246169/10000000000"
+  ],
+  "tree": {
+    "split": "37541729629/2000000000",
+    "left": {
+      "split": "186847349133/10000000000",
+      "left": {
+        "kind": "tetrahedron_square_nonpositive",
+        "index": 3
+      },
+      "right": {
+        "kind": "tetrahedron_square_nonpositive",
+        "index": 3
+      }
+    },
+    "right": {
+      "split": "188569947157/10000000000",
+      "left": {
+        "split": "188139297651/10000000000",
+        "left": {
+          "kind": "tetrahedron_square_nonpositive",
+          "index": 3
+        },
+        "right": {
+          "kind": "closure_imag_positive"
+        }
+      },
+      "right": {
+        "kind": "tetrahedron_square_nonpositive",
+        "index": 0
+      }
+    }
+  }
+}

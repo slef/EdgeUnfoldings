@@ -77,3 +77,18 @@ def degree_four_stars(faces):
             data=tree_data(faces,{edge(v,x) for x in adj[v]}|{edge(w,u)})
             result.append({**data,'apex':v,'antipode':w,'slit_vertex':u})
     return result
+
+
+def quadrilateral_path_stars(faces):
+    """Near-stars whose missing edge is replaced around a common quadrilateral.
+
+    The source and its nonneighbor are opposite corners of an original
+    quadrilateral; the slit goes through either of its other two corners.
+    This is a candidate list, with no claim that its union always succeeds.
+    """
+    result=[]
+    for tree in degree_four_stars(faces):
+        v,w,u=(tree[k] for k in ('apex','antipode','slit_vertex'))
+        quads=[i for i,f in enumerate(faces) if len(f)==4 and {v,w,u}<=set(f)]
+        if quads:result.append({**tree,'common_quadrilateral':quads[0]})
+    return result

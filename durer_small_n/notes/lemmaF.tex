@@ -26,7 +26,14 @@
 \begin{document}
 \maketitle
 
-\paragraph{Audit correction, 9 September 2026.}
+\paragraph{Second continuation, 9 September 2026.}
+The proposed strategy that neither outer petal apex enters $\Omega$ is now
+refuted by a strictly convex integer-coordinate octahedron satisfying both
+selection rules. Its entire selected net is nevertheless nonoverlapping.
+See the counterexample near the end of the Case B discussion. The base-cone
+partition remains valid; the joint-petal problem and Lemma L remain open.
+
+\paragraph{Earlier audit correction, 9 September 2026.}
 The unrestricted double-outward half-plane claim in the previous draft is false;
 an integer-coordinate counterexample is checked by rational intervals in
 \texttt{n6/audit\_witness.py}. Lemma~\ref{D} below is now restricted to the
@@ -525,29 +532,63 @@ An earlier count ``15\% of Case-B triples have both petals reaching the cone int
 for the position of $X$ and is withdrawn.
 \end{numerics}
 
-\paragraph{Historical numerical evidence for the slit rule.}
+\paragraph{Historical numerical evidence for the slit rule: superseded target.}
 The old \texttt{adv\_angle.py} mode \texttt{i} used the wrong base vertex;
-its saved margins are withdrawn for the intended far-angle claim. The code
-is corrected, but the original searches have not all been rerun. The direct
-half-plane probes below are different experiments. Lemma F is used with the slit at the sharpest neighbour
-$u_k$ of $w$ ($\kappa_{u_k}\ge\kappa_{u_t}$ for all $t$; Lemma L needs this rule: without it the local pairs
-overlap under (H) in $3.4\%$ of nets). Under (H) and the rule, in $641$ Case-B triples with $\Sigma_W<\pi$ the petal
-$V_i$ never reaches $\Omega$ and $V_{j+1}$ reaches it only through its far vertex; adversarially
-(\texttt{adv\_reach.py}, \texttt{adv\_angle.py}): $v_i$ stays $0.35$ diameters short of $C$ (with
-$\Sigma_W\le\pi-0.3$), $v_{j+1}$ stays $0.12$ diameters short of $A$, $u_i$ stays $0.026$ short of $X$, and
-under the rule alone $\angle_{u_k}V_{j+1}\le\Sigma_W-0.35$. By Lemma~\ref{reach} it therefore suffices to prove,
-under (H) and the rule, that neither apex lies in $\Omega$: \textbf{(P1)} $v_{j+1}\notin\Omega$, \textbf{(P2)}
-$v_i\notin\Omega$. Linear programming over the 24 face angles (face sums, cone inequalities, curvature bounds, the
-rule and (H)) numerically allows $\angle_{u_k}V_{j+1}-\Sigma_W$ up to $\pi/2$.
-This suggests that these linear constraints alone are insufficient; additional metric or angle-realizability
-constraints may be needed. The tight sampled configurations are needle-shaped (Figure above). This is the recommended route: it replaces the
-five sub-cases by two apex statements within the stated angle regime. It
-now applies to the complete remaining region $\Sigma_W<\pi$ by
-Proposition~\ref{partition}. It does not settle those two apex statements or
-Lemma L. Lemma~\ref{backbound} separately removes the (a,a) branch under the
-slit rule, conditional on the local nonoverlap required by the hexagon lemma.
+its saved margins remain withdrawn. The direct half-plane samples were a
+different experiment: 641 selected-rule Case-B triples suggested that neither
+outer apex enters $\Omega$. This was numerical evidence only. The following
+exact counterexample refutes that stronger sufficient condition, so it is
+no longer a recommended route to the proof.
+
+\paragraph{Exact counterexample to the individual-apex exclusion.}
+Use
+\[
+\begin{array}{lll}
+v=(0,0,0),&w=(0,0,100),&u_0=(81,0,65),\\
+u_1=(-8,6,112),&u_2=(-10,0,37),&u_3=(9,-4,86).
+\end{array}
+\]
+The equator is $(u_0,u_1,u_2,u_3)$, and the cuts are the four edges at $v$
+and $wu_0$. Exact rational bounds verify the eight strict supporting faces,
+maximum curvature at $v$, and maximum equator curvature at $u_0$.
+For the triple $W_0,W_1,W_2$, they verify strict Case B, $\Sigma_W<\pi$,
+$\Sigma_W+a<\pi$, and $v_0\in\operatorname{int}\Omega$.
+The far vertex $u_0$ is also past $X$. However, the entire other petal $V_2$
+stays outside the left outer half-plane, so the petals do not overlap.
+All 28 pairs of the same net are independently certified nonoverlapping.
+
+This is a failure of the individual-apex exclusion, not of the Triple Lemma
+or edge unfolding. Here the slit is at the first far vertex of the triple;
+the separate remote-apex bound in the opposite slit orientation must not be
+conflated with this assertion. The five reach sub-cases remain useful;
+Lemma~\ref{backbound} still removes (a,a), conditional on Lemma L and the
+hypotheses of the hexagon lemma. The cases with a far vertex beyond $X$
+need joint control of the two petals.
+
+The independent checkers are \texttt{n6/apex\_entry.py} and
+\texttt{n6/polycert.py}, with the saved certificate
+\texttt{n6/results/caseB-apex-entry.certificate.json}. The interactive overview
+includes the figure and the exact six-vertex model.
+
+\paragraph{What the intrinsic relaxations establish.}
+The older rational angle model cannot close its spoke-length cycles. A newer
+metric model matches all twelve edge lengths, satisfies positive curvatures,
+all strict convex-vertex angle inequalities, and both strict rankings, yet
+still fails to close around the axis $vw$. A five-interval rational certificate
+excludes every possible value of $|vw|^2$ for that model. Thus local metric
+checks do not enforce original-facet realization. The closing condition is
+necessary, not asserted sufficient; the actual convex example above already
+shows that stronger realization tests cannot rescue the individual-apex claim.
+See \texttt{n6/AXIS\_CLOSURE.md} for the equations and complete certificate.
 
 \section{Known false / do not retry}
+The individual-apex exclusion in Case B is false even under both selection
+rules, as shown above. Angular separation around $w$ is also too strong for
+Lemma L: an exactly checked local pair shares rays but occupies different
+distances along them. For that example, a three-inequality radial calculation
+certifies a distance factor of at least $1217/1000$ beyond the opposite fan
+edge. This is an example-specific separation, not a proof of Lemma L.
+
 Simple separating lines for the two petals inside $\D$ (bisector of $\D$ at $p^*$, lines through $v_j$) fail
 in about a third of the non-degenerate cases even under (H): the separation is a rotation phenomenon, not a
 half-plane one. The six wedge--lean inequalities of the handoff fail in $0.5\%$ of nets under (H) (needle-like

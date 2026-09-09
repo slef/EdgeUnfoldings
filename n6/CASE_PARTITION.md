@@ -4,6 +4,10 @@ Continuation, 9 September 2026. This supplies a missing reduction in the
 octahedron argument. It does **not** prove the remaining small-fan-angle case
 or Lemma L.
 
+**Latest correction:** the proposed exclusion of each individual apex is false
+even for a strictly convex octahedron under H and R. The exact witness and
+its successful net are described below. The base-cone partition remains valid.
+
 The unqualified D-lemma is false, including for a sharpest apex. Nevertheless,
 the large-angle regimes can be treated without it. The elementary base-cone
 lemma below gives a complete partition, including equality boundaries.
@@ -111,7 +115,8 @@ This is the existing apex/far-vertex reach classification, now with a complete
 domain of applicability. The later direction lemma still needs its stated
 near-X assumption; that separate qualification has not been removed.
 
-The two-apex exclusion under (H) and the sharpest-neighbour slit rule remains
+The proposed individual-apex exclusion under (H) and the sharpest-neighbour
+slit rule is now refuted by the witness below. The joint-petal problem remains
 unproved. An argument using the fourth petal must also state any dependence
 on Lemma L. These are the remaining obligations, rather than a missing
 large-angle partition.
@@ -150,7 +155,8 @@ vertex is before X.
 A new 2,000-octahedron numerical check tested the formulas on 42,168 triples.
 All 356 sampled selected-rule triples in the remaining regime even satisfied
 the stronger angle-only exclusions `Sigma+a>=pi` and `Sigma+b>=pi`. This
-motivates a simpler candidate lemma, but it is not a proof. An exact rational
+motivated a simpler candidate lemma at the time. The later convex example
+below refutes its blanket version; the sample was not a proof. An exact rational
 abstract angle assignment satisfies all triangle sums, strictly positive
 curvatures, strict cone inequalities, and strict versions of both curvature
 rankings while violating the left angle exclusion. Thus these linear facts
@@ -218,3 +224,75 @@ A second exact example in `caseB-smallSW-largeD.certificate.json` has
 `sigma+tau<pi` and `alpha>pi` under both selection rules, so the remaining
 large-D part is nonempty. Its full net is separately certified simple. Replay
 it with `n6.regimes` and `n6.polycert verify` as above.
+
+
+## Exact convex counterexample to the individual-apex shortcut
+
+The second continuation found the following small integer example:
+
+```
+v =( 0, 0,  0)    w =( 0, 0,100)
+u0=(81, 0, 65)    u1=(-8, 6,112)
+u2=(-10,0, 37)    u3=( 9,-4, 86).
+```
+
+The cyclic equator is (u0,u1,u2,u3). Cut the four edges at v and w-u0.
+The exact checker verifies all eight strict supporting faces and that v has
+maximum curvature and u0 has maximum equator curvature. For the consecutive
+triple W0,W1,W2, it verifies strict Case B, Sigma_W<pi, and
+
+```
+Sigma_W + a < pi,
+v0 lies strictly inside both outer half-planes defining Omega.
+```
+
+Thus **one apex can enter Omega** under the actual hypotheses. In this example
+its far equator vertex u0 is also past X. The entire other petal V2 stays
+strictly outside the left outer half-plane, so the opposite petals remain
+disjoint. Independently, all 28 pairs of this selected net are exactly
+certified nonoverlapping (19 shared-vertex checks and nine separating edges).
+
+![Apex entry without petal overlap](figures/caseB-apex-entry.svg)
+
+This refutes the sufficient strategy “neither apex enters Omega,” including
+its stronger angle-only version. It does not refute the Triple Lemma,
+Lemma L, or edge unfoldability. The slit here is at the first far vertex of
+the triple (k=i=0). The separate remote-apex bound when k=i-1 remains a
+distinct question; a reflection swaps which petal it concerns. The future
+proof must not silently exchange these orientations.
+
+```
+python3 -m n6.apex_entry n6/results/caseB-apex-entry.certificate.json
+python3 -m n6.polycert verify n6/results/caseB-apex-entry.certificate.json
+```
+
+The checker uses actual developed half-plane determinants for the entry,
+not merely a floating angle or a picture. The example was found numerically,
+then replaced by the displayed integers and independently verified. It is
+therefore an exact counterexample to that stated shortcut.
+
+
+### Exact neighborhood: all eleven free coordinates may vary
+
+The apex-entry claim and complete nonoverlap now also have a region certificate.
+Fix v=(0,0,0), w=(0,0,100), and the y-coordinate of u0 at zero. Vary the
+remaining coordinates independently by at most 1/1000 about
+
+```
+(u0x,u0z,u1x,u1y,u1z,u2x,u2y,u2z,u3x,u3y,u3z)
+= (81,65,-8,6,112,-10,0,37,9,-4,86).
+```
+
+Every shape in this closed eleven-parameter box is strictly convex, satisfies
+both rankings and the stated small-angle Case B inequalities, has its left
+apex and far vertex strictly past the other outer line, and has its right
+petal strictly outside the left outer half-plane. All 28 pairs of the selected
+net are independently certified nonoverlapping throughout the box. This is a
+continuous family of failures of the individual-apex shortcut, not a universal
+unfoldability theorem. An attempted radius 1/100 was inconclusive for the
+curvature interval check; it was not certified to fail geometrically.
+
+```
+python3 -m n6.apex_entry n6/results/caseB-apex-entry-region.certificate.json
+python3 -m n6.polycert verify n6/results/caseB-apex-entry-region.certificate.json
+```

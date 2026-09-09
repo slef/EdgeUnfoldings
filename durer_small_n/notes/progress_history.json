@@ -1,0 +1,51 @@
+[
+  {
+    "date": "9 September 2026 · 02:57 UTC",
+    "title": "Apex-entry failure extends to a certified neighborhood",
+    "results": [
+      "F_apexfailure",
+      "F_below",
+      "certification",
+      "research_plan"
+    ],
+    "body": "<p><b>New exact region:</b> the <a href=\"#F_apexfailure\">apex-entry example</a> persists when all eleven free shape coordinates vary independently by ±0.001. Every polyhedron in this closed box satisfies the selection rules, has the apex inside Ω, and still has a certified nonoverlapping net.</p><p>This strengthens the counterexample to the individual-apex shortcut. It does not prove the remaining joint-petal claim or Lemma L. The snapshots below retain the earlier discoveries and the prism investigation.</p>"
+  },
+  {
+    "date": "9 September 2026 · 02:05–03:05 UTC session",
+    "title": "Prism route choices narrowed; general theorem still open",
+    "results": [
+      "t_prismd",
+      "research_plan",
+      "certification"
+    ],
+    "body": "<p><b>Exact negative results:</b> both quadrilateral routes from one fixed degree-four apex can fail. Even at the sharper degree-four apex, the shorter route can fail while the longer one succeeds. The <a href=\"#t_prismd\">prism section</a> explains these checks.</p><p><b>Numerical lead only:</b> retaining both routes at the sharper degree-four apex survived 60,000 sampled shapes. This does not prove the selection rule. The full n=6 theorem, Lemma L, and the small-fan-angle opposite-petal branch remain open.</p><p>The earlier snapshot below records this session’s exact apex-entry counterexample, radial clearance, and axis-nonclosure certificate. The original cone proof and bounded-region certificates remain valid.</p>"
+  },
+  {
+    "date": "9 September 2026 · continuing session",
+    "title": "An individual apex can enter; distances and closure matter",
+    "results": [
+      "F_apexfailure",
+      "F_below",
+      "F_basecones",
+      "intrinsic_metric",
+      "lemmaL",
+      "certification",
+      "research_plan"
+    ],
+    "body": "<p><b>Exactly refuted shortcut:</b> a <a href=\"#F_apexfailure\">convex six-vertex example</a> satisfies both selection rules but lets one outer apex enter Ω. All 28 pairs of its net remain nonoverlapping. The full theorem and the joint-petal problem remain open.</p><p><b>New exact checks:</b> the <a href=\"#lemmaL\">local angular counterexample</a> has a certified radial distance factor of at least 1.217 on every shared direction. A separate <a href=\"#intrinsic_metric\">five-interval certificate</a> proves that a proposed intrinsic metric cannot close into the prescribed convex octahedron, despite passing all local checks.</p><p>The earlier cone proof and 409-region minus-edge cover remain valid. Work continues on distance-sensitive local separation and the joint behavior of the opposite petals.</p>"
+  },
+  {
+    "date": "9 September 2026",
+    "title": "Morning research results · retained snapshot",
+    "results": [
+      "F_basecones",
+      "t_octa_minus",
+      "t_prismd",
+      "lemmaL",
+      "thesis_audit",
+      "certification",
+      "research_plan"
+    ],
+    "body": "<p><b>The full n=6 case remains unproved here.</b> Direct review found an <a href=\"#thesis_audit\">exact counterexample to the DF entry of DiBiase’s displayed octahedron chart</a>. A <a href=\"#F_basecones\">base-cone proof</a> handles the large-angle and equality branches. Lemma L and the remaining fan-angle sum below π are open.</p><p>Independent replay verified a complete 443-region prism-with-one-diagonal certificate and a larger <a href=\"#t_octa_minus\">409-region octahedron-minus-edge certificate</a>. These cover their stated parameter boxes, not whole combinatorial types. A new <a href=\"#lemmaL\">exact example rules out angular separation around w</a> as a complete proof of Lemma L. Shared-length constraints also ruled out an earlier angle-only candidate. Global coverage remains open.</p>"
+  }
+]

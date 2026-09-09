@@ -51,6 +51,39 @@ python3 -m n6.polycert verify n6/results/local-radial-failure.certificate.json
 
 The drawing is illustrative; both proof verdicts come from the exact checker.
 
+## Distance information repairs the angular failure for this example
+
+For a fan triangle with vertices 0,a,b and det(a,b)>0, write a point as
+x=lambda*a+mu*b. Its fan directions have lambda,mu>=0, and the outer fan
+edge has lambda+mu=1. On a fixed ray, lambda+mu is exactly the ratio between
+the point's distance from w and that outer edge's distance from w.
+
+For the saved local example all three petal vertices have mu>0. Only its
+apex has lambda>0. Clipping the petal to the fan directions therefore gives
+a triangle with just three extreme points: the apex and the intersections
+of its two incident edges with lambda=0. The linear function lambda+mu
+attains its minimum at one of these three points. At a crossing between
+p and q the value is
+
+```
+(p_lambda*q_mu - q_lambda*p_mu)/(p_lambda-q_lambda).
+```
+
+The three exact outward enclosures lie near 5.3922, 2.0406, and 1.21722.
+The independent checker proves that all three exceed **1217/1000**. Thus on
+**every shared ray**, the petal begins at least 21.7% farther from w than the
+fan's outer edge. This is a finite, distance-sensitive proof for this
+particular pair, despite its overlapping angular ranges.
+
+The clipping argument is a general elementary lemma for the stated sign
+pattern. The 1.217 clearance is specific to this witness, not a universal
+constant or a proof of Lemma L. Other sign patterns and the petal/petal
+local pair still require treatment.
+
+```
+python3 -m n6.local_radial n6/results/local-radial-failure.certificate.json
+```
+
 ## Exact rejection of a proposed bisector shortcut
 
 Let the two copies of `u` be `u+` and `u-`. They have equal distance from `w`,

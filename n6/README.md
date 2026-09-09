@@ -18,6 +18,10 @@ The final overnight coverage results are in [REGION_COVER.md](REGION_COVER.md).
 route and records an exact obstruction to fixing its sector vertex globally.
 [INTRINSIC_METRIC.md](INTRINSIC_METRIC.md) gives the shared-edge compatibility
 equations and distinguishes the abstract angle and intrinsic metric relaxations.
+The second continuation refutes the individual-apex shortcut with an
+[actual convex example](CASE_PARTITION.md), and adds a necessary
+[global axis-closing condition](AXIS_CLOSURE.md). Neither changes the open
+status of the full theorem.
 
 This directory integrates the two supplied Codex archives with Claude's
 `durer_small_n` work. It adds a smaller exact counterexample query, bounded solver
@@ -32,6 +36,11 @@ execution, and a rational interval checker for explicit regions of octahedra.
 | [24-tree query](results/nearstar.result.json) | Z3 returned `unknown` / `timeout`. The full octahedron question remains unresolved. |
 | [Differential validation](results/differential-validation.json) | The two implementations agree on all 1,479 cut trees of seven fixed six-vertex realizations. Numerical validation only. |
 | [Corrected angle check](results/corrected-angle-smoke.json) | A fresh, small numerical check after fixing the far-vertex index. It does not rehabilitate the historical saved searches. |
+| [Individual-apex counterexample](results/caseB-apex-entry.certificate.json) | A convex integer-coordinate example under H and R has one apex strictly inside the outer wedge; all 28 net pairs remain nonoverlapping. |
+| [Apex-entry neighborhood](results/caseB-apex-entry-region.certificate.json) | The same entry and complete nonoverlap hold throughout an eleven-parameter closed box of radius 1/1000. |
+| [Global metric nonclosure](results/intrinsic-axis-nonclosure.certificate.json) | Five exact intervals exclude every possible opposite-vertex distance for a metric that passes all previous local checks. |
+| [Prism boundary routes](PRISM_DIAGONAL.md#two-routes-around-a-quadrilateral-exact-failures-and-a-smaller-target) | Exact failures of both routes at a fixed apex, and of the shorter route at the sharper degree-four apex. Successful alternatives are certified; the two-route conjecture remains open. |
+| [Local radial clearance](results/local-radial-distance.verification.json) | The angular-separation failure example has distance factor at least 1.217 beyond the opposite fan edge on every shared ray. Example-specific, not a proof of Lemma L. |
 | [Base-cone lemma](CASE_PARTITION.md) | Under the sharpest-apex hypothesis, only the opposite-petal regime `Sigma_W<pi` remains; large D angles and both partition equality boundaries are included. |
 | [Thesis DF witness](results/thesis-chart-DF.certificate.json) | A specified chart entry fails exactly. Reattaching only G cannot repair this core overlap. |
 | [Direct prism chart](PRISM_DIAGONAL.md) | Complete nine-parameter coordinate chart; exact failure of the two-pair tree and successful alternative regional certificates. |

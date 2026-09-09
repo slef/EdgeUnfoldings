@@ -1,8 +1,10 @@
 # What shared edge lengths add to the Case B problem
 
-Continuation on 9 September 2026. The candidate apex-direction bound and the
-universal octahedron argument remain open. These reductions explain which
-constraints a further proof or exact search must retain.
+Continuation on 9 September 2026. The blanket individual-apex bound is now
+refuted by an actual convex example (see the final section). The universal
+octahedron argument and the separate remote-apex question remain open. The
+historical reductions below explain why two simplified metric models were
+insufficient; the later exact axis-closure test supplies another condition.
 
 ## The older angle countermodel cannot even close its spokes
 
@@ -125,3 +127,22 @@ Solver limits can overrun during internal processing. The driver now reuses
 the repository's separate-process time and memory guard; its default wall
 limit is the requested solver time plus 30 seconds. A deliberate short-limit
 check confirmed termination with an explicit unresolved verdict.
+
+## Further correction: even all local checks do not enforce global closure
+
+The second continuation found `intrinsic-with-cone.certificate.json`. Unlike
+the earlier metric example, it satisfies **all six strict cone inequalities**,
+as well as shared lengths, positive curvatures, and strict H and R. It has
+`Sigma_W+a<pi` for triple 0 with slit 0. Exact rational bounds verify every
+claim; the earlier slit-3 searches must not be conflated with this orientation.
+
+Nevertheless, these lengths cannot form a convex octahedron with the prescribed
+original facets. The [axis-closure certificate](AXIS_CLOSURE.md) proves this on
+five closed intervals covering every possible distance between v and w.
+This supplies a specific missing global condition in the intrinsic relaxation.
+
+More decisively, a subsequent **actual convex integer-coordinate example**
+refutes the individual-apex exclusion itself while its selected net remains
+simple. See the [Case B correction](CASE_PARTITION.md). Adding more realization
+constraints cannot prove that false stronger statement. The remaining useful
+question concerns the two petals jointly, with each slit orientation explicit.

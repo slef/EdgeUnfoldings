@@ -105,3 +105,70 @@ Find and certify a small family of trees covering this parameter domain,
 or derive a geometric rule switching trees when the quadrilaterals or bases
 approach overlap. A fixed-tree query alone cannot settle this case. Equality
 and unbounded/degenerate parameter regimes cannot be omitted from a global proof.
+
+
+## Two routes around a quadrilateral: exact failures and a smaller target
+
+There are two degree-four vertices, b=1 and a′=3. Each lacks an edge to one
+opposite corner of an original quadrilateral. A candidate near-star cuts all
+four edges at the chosen apex, then connects the missing vertex by an edge
+through either of the other quadrilateral corners. These are four trees:
+
+| Apex | Missing neighbor | Route via |
+| --- | --- | --- |
+| b=1 | c′=5 | c=2 or b′=4 |
+| a′=3 | c=2 | a=0 or c′=5 |
+
+Each tree leaves four face-pair obligations after the shared-vertex lemma.
+`trees.quadrilateral_path_stars` constructs exactly these original-edge trees.
+
+**Both routes at a fixed apex can fail.** At the following integer points,
+the two b=1 trees have certified positive-area overlap; both a′=3 trees have
+certified simple nets:
+
+```
+a=(10000,0,0)       b=(-2300,2000,0)     c=(0,0,0)
+a′=(-32950,17875,325) b′=(-12352,5980,100) c′=(-11800,5500,100).
+```
+
+All original facets, planarity, and strict supporting planes are checked.
+The four `prism-path-apex*-via*.certificate.json` files and
+`prism-two-paths.verification.json` retain the exact results. This refutes a
+rule that fixes one degree-four apex and always expects one of its two routes
+to work. It does not refute the four-tree family.
+
+**Even at the sharper degree-four apex, the shorter route can fail.** A
+smaller second example is
+
+```
+a=(50,0,0)     b=(-5,10,0)   c=(0,0,0)
+a′=(-4,0,24)   b′=(-39,1,11) c′=(-35,0,10).
+```
+
+Exact angle comparisons prove kappa(a′)>kappa(b). The route a′–c′–c is
+strictly shorter than a′–a–c, but its unfolding has positive-area overlap.
+The longer route at the same apex gives a certified simple net. Thus a
+future two-route argument must compare the resulting faces; minimizing the
+boundary-path length is insufficient. Replay without numerical packages:
+
+```
+python3 -m n6.prism_paths n6/results/prism-shorter-path-failure.certificate.json
+python3 -m n6.polycert verify n6/results/prism-longer-path-success.certificate.json
+python3 -m unittest n6.tests.test_prism_paths
+```
+
+**Still only a conjectural target:** take the sharper of b and a′, and allow
+both quadrilateral routes. A new 60,000-shape numerical run found no failure
+of that pair, while the shorter-route rule failed 395 times. A separate
+50,000-shape run found no failure of the four-tree union. These searches omit
+limits and use tolerances; neither proves universal success or a positive
+uniform margin. Results and seeds are saved in `prism-selected-quad-star-search.json`
+and `prism-quad-star-search.json`. Reproduce the former with
+
+```
+durer_small_n/.venv/bin/python -m n6.original_star_probe --family quadrilateral \
+  --samples 60000 --seconds 500 --seed 6090918 \
+  --output /tmp/prism-selected-quad-star-search.json
+```
+
+The exact finite certificates above are independent of these sampled counts.

@@ -37,7 +37,41 @@ def main():
     from n6.intervals import set_precision
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('input',type=Path)
     ap.add_argument('--bits',type=int,default=80);args=ap.parse_args();set_precision(args.bits)
-    print(json.dumps(verify(json.loads(args.input.read_text())),indent=2))
+    cert=json.loads(args.input.read_text())
+    result=verify(cert)
+    if 'local_radial_clearance' in cert:result['distance_clearance']=verify_clearance(cert)
+    print(json.dumps(result,indent=2))
+
+
+
+
+
+def verify_clearance(cert):
+    """Certify distance separation despite angular intrusion, for one sign pattern.
+
+    In fan coordinates x=lambda*a+mu*b, the outer fan edge is lambda+mu=1.
+    If all petal vertices have mu>0 and only its apex has lambda>0, clipping
+    the petal to the fan's cone gives a triangle. Its vertices are the apex
+    and the intersections of the two apex edges with lambda=0. A linear
+    function has its minimum at one of these three vertices.
+    """
+    from fractions import Fraction as F
+    claim=cert['local_radial_clearance'];g,v,w,u,ring,ranking=selected_flanks(cert,claim)
+    A,B,(a,b)=opposite_flank_development(g,v,w,ring,claim['petal'])
+    x,y=sub(A[a],A[w]),sub(A[b],A[w]);D=det(x,y)
+    require(D.lo>0,'Fan basis orientation not certified')
+    q={k:(det(sub(p,A[w]),y)/D,det(x,sub(p,A[w]))/D) for k,p in B.items()}
+    require(all(p[1].lo>0 for p in q.values()),'Petal is not strictly above the second cone boundary')
+    apex=q[v];others=[p for k,p in q.items() if k!=v]
+    require(apex[0].lo>0 and all(p[0].hi<0 for p in others),'Expected only the apex inside the first cone boundary')
+    ratios=[apex[0]+apex[1]]+[(apex[0]*p[1]-p[0]*apex[1])/(apex[0]-p[0]) for p in others]
+    lower=F(claim['minimum_distance_ratio'])
+    require(lower>1,'Clearance ratio must exceed one')
+    require(all(r.lo>=lower for r in ratios),'Requested radial distance clearance not certified')
+    return dict(result='verified_local_radial_clearance',apex=v,antipode=w,slit_vertex=u,
+                minimum_distance_ratio=str(lower),three_extreme_ratios=[r.pair() for r in ratios],
+                scope='On every shared ray, the petal starts at least this factor farther from w than the opposite fan edge. Only the stated point or parameter region is covered.',
+                curvature_order=ranking)
 
 
 if __name__=='__main__':main()

@@ -102,7 +102,7 @@ def verify(spec):
                 scope='Shared Euclidean triangle lengths and the stated checks only. No convex original-facet realization or unfolding overlap is asserted.')
 
 
-def query(cone=True,sharpest=True,slit_index=3):
+def query(cone=True,sharpest=True,slit_index=3,axis_closure=False):
     import z3
     if slit_index not in (0,3):raise ValueError('Triple 0 permits slit 0 or 3')
     lengths={n:[z3.Real(f'{n}2_{i}') for i in range(4)] for n in ('s','r','l')}
@@ -121,7 +121,13 @@ def query(cone=True,sharpest=True,slit_index=3):
     if cone:assertions += [angle_le(cmul(a,a),total) for row,total in zip(inc,totals) for a in row]
     if sharpest:assertions += [angle_le(totals[0],t) for t in totals[1:]]
     assertions += [angle_le(totals[slit_index+2],totals[t+2]) for t in range(4) if t!=slit_index]
-    assertions.append(sum_angles_lt_pi([angles['bWp'][0],angles['bW'][1],angles['bWp'][1],angles['bW'][2],angles['aVp'][0]]))
+    if axis_closure:
+        from n6.axis_closure import symbolic_conditions
+        assertions += symbolic_conditions(lengths)
+    # Triangle W1 has bW1+bWp1+om1=pi. Thus the former five-angle
+    # target is equivalent to aVp0+bWp0+bW2 < om1, a shorter expression.
+    reach=[angles['aVp'][0],angles['bWp'][0],angles['bW'][2]]
+    assertions.append(z3.And(sum_angles_lt_pi(reach),cdet(product(reach),angles['om'][1])>0))
     return assertions,lengths
 
 
@@ -133,14 +139,14 @@ def worker(job):
     import z3
     from n6.lift import arithmetic_lift,lifted_solver
     z3.set_param('memory_max_size',args.memory_mb)
-    start=time.monotonic();assertions,lengths=query(not args.without_cone,not args.without_H,args.slit_index)
+    start=time.monotonic();assertions,lengths=query(not args.without_cone,not args.without_H,args.slit_index,getattr(args,'axis_closure',False))
     if args.unlifted:
         solver=z3.SolverFor('QF_NRA');solver.set(timeout=1000*args.seconds);aux=[]
     else:assertions,aux=arithmetic_lift(assertions);solver=lifted_solver(1000*args.seconds)
     solver.add(*assertions)
     args.output.with_suffix('.smt2').write_text(solver.to_smt2())
     result=solver.check();report=dict(job,result=str(result),seconds=time.monotonic()-start,auxiliaries=len(aux),
-        cone=not args.without_cone,H=not args.without_H,R=True,
+        cone=not args.without_cone,H=not args.without_H,R=True,axis_closure=getattr(args,'axis_closure',False),
         slit_index=args.slit_index,triple_index=0,
         scope='Solver exploration of an intrinsic relaxation, without an independent proof certificate. SAT values require exact replay and do not establish convex realization.')
     if result==z3.unknown:report['reason']=solver.reason_unknown()
@@ -158,6 +164,7 @@ def main():
     search=sub.add_parser('query');search.add_argument('--output',type=Path,required=True)
     search.add_argument('--seconds',type=int,default=600);search.add_argument('--without-cone',action='store_true')
     search.add_argument('--without-H',action='store_true');search.add_argument('--unlifted',action='store_true')
+    search.add_argument('--axis-closure',action='store_true',help='Retain necessary global closure about the v--w axis')
     search.add_argument('--slit-index',type=int,choices=(0,3),default=3)
     search.add_argument('--wall-seconds',type=float);search.add_argument('--memory-mb',type=int,default=1024)
     args=ap.parse_args()
