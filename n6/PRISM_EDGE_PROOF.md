@@ -72,6 +72,11 @@ Gauss--Bonnet, whose total is 4*pi, gives
     kappa_0+kappa_2 > 3*pi-kappa_1 > pi,
 
 because every genuine convex vertex has curvature strictly below 2*pi.
+Equivalently, writing delta_c=pi-2*kappa_c-kappa_5 for c=3,4,
+
+    kappa_0+kappa_2-pi = (2*pi-kappa_1)+(delta_3+delta_4)/2 > 0.
+
+This exact identity displays the forced gate as a sum of positive slacks.
 Also kappa_0+kappa_1>pi since vertex 1 is sharp. With the low fan at 2,
 these are exactly the hypotheses of PRISM_GATE_SWITCH.md. That lemma
 supplies star(3)+20 or T. Thus the failure of the direct rule forces a

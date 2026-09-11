@@ -74,6 +74,16 @@ A,B strictly below pi/2. Use star(A)+BC or star(B)+AC as supplied by its
 complementary-angle proof. This finishes the sharp-P branch. Reflection
 finishes sharp Q.
 
+The forced gates can also be checked directly as positive-slack identities.
+Set delta_X=pi-2*kappa_X-kappa_D for X in {A,B,Q}. Gauss--Bonnet gives
+
+    kappa_A+kappa_C-pi = (2*pi-kappa_P)+(delta_B+delta_Q)/2,
+    kappa_B+kappa_C-pi = (2*pi-kappa_P)+(delta_A+delta_Q)/2.
+
+Every term on each right-hand side is positive in this fallback. Thus the
+alternate-source gates follow from the actual failed tests, without a
+separate curvature-ranking or realizability assumption.
+
 These branches exhaust every possible curvature assignment of the actual
 polyhedron. In every branch one original spanning cut tree is proved to
 have all its face interiors disjoint. Therefore the whole original
@@ -100,5 +110,7 @@ included. Ordinary net-boundary contact is permitted.
 The mathematical dependency chain still merits independent review. Exact
 examples and parameter families are separate consistency checks of the
 hypotheses and complete nets, not formal verification of this written proof.
-The prism-with-one-diagonal type is still open; this result alone is not
-a proof of the full n=6 theorem.
+The companion [prism proof](PRISM_EDGE_PROOF.md) now supplies the other
+previously remaining type. The complete dependency and review status is in
+[N6_PROOF_MAP.md](N6_PROOF_MAP.md); this result alone does not replace those
+other arguments.
