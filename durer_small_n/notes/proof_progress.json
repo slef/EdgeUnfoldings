@@ -205,6 +205,34 @@
       "minus_trees": 1,
       "minus_cells": 16,
       "minus_classes_excluded": 7
+    },
+    {
+      "label": "Both nonsimplicial low-curvature families proved",
+      "date": "2026-09-11T11:15:13Z",
+      "proved_types": 5,
+      "octahedron_angle_branches": 3,
+      "octahedron_local_pairs": 3,
+      "minus_half_width": "1/20",
+      "prism_box_A_fraction": "1",
+      "source": "../../n6/NONSIMPLICIAL_LOW_CURVATURE.md",
+      "minus_trees": 1,
+      "minus_cells": 16,
+      "minus_classes_excluded": 7,
+      "nonsimplicial_low_families": 2
+    }
+  ],
+  "nonsimplicial_curvature_branches": [
+    {
+      "label": "All curvatures strictly below 180°",
+      "status": "proved",
+      "condition": "Original-edge existence for the entire geometric family",
+      "link": "nonsimp_low"
+    },
+    {
+      "label": "Maximum curvature exactly 180° or above",
+      "status": "open",
+      "condition": "The strict perturbation argument does not cover this remaining branch",
+      "link": "nonsimp_low"
     }
   ]
 }

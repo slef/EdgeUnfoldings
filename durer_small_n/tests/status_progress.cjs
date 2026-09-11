@@ -26,10 +26,10 @@ assert.equal(score.minus.pattern.proved_classes,7);
 assert.equal(score.minus.pattern.remaining_classes,21);
 assert.equal(score.minus.pattern.holdout_samples,10000);
 assert.equal(score.minus.pattern.status,'conjecture');
-assert.equal(score.snapshots.length,5);
-assert.equal(score.snapshots.at(-3).minus_classes_excluded,0);
+assert.equal(score.snapshots.length,6);
+assert.equal(score.snapshots[2].minus_classes_excluded,0);
 assert.equal(score.snapshots.at(-1).minus_classes_excluded,7);
-assert(score.snapshots.slice(0,-1).every(s=>s.proved_types===4 && s.octahedron_local_pairs===0));
+assert(score.snapshots.slice(0,4).every(s=>s.proved_types===4 && s.octahedron_local_pairs===0));
 assert.equal(score.snapshots.at(-1).proved_types,5);
 assert.equal(score.snapshots.at(-1).octahedron_local_pairs,3);
 assert.equal(score.snapshots.at(-1).minus_trees,1);
@@ -235,4 +235,23 @@ for(const id of ['t_octa','octa_four_slits','octa_patches','octa_three_same','le
   assert(article.body.includes('<summary>Earlier investigation, retained with its historical status</summary>'),id);
   const current=article.body.split('<details class="progress-domain">')[0];
   assert(!current.includes('22/28') && !current.includes('47 open'),id);
+}
+
+// Whole low-curvature families must not silently include the >=pi boundary,
+// prove the old two-choice conjecture, or count another entire six-vertex type.
+assert.equal(score.nonsimplicial_curvature_branches.filter(x=>x.status==='proved').length,1);
+assert.equal(score.nonsimplicial_curvature_branches.length,2);
+assert.equal(vm.runInContext('byId.t_octa_minus.status',ctx),'open');
+assert.equal(vm.runInContext('byId.t_prismd.status',ctx),'open');
+const lowTypes=vm.runInContext('article(byId.nonsimp_low,false)',ctx);
+assert(lowTypes.includes('Maximum curvature exactly 180° or above remains open'));
+assert(lowTypes.includes('every artificial diagonal uncut'));
+assert(lowTypes.includes('7/28 class count is unchanged'));
+assert(lowTypes.includes('four candidate trees') && lowTypes.includes('six original-edge candidate trees'));
+assert(lowTypes.includes('data-model="low_minus"') && lowTypes.includes('data-model="low_prism"'));
+for(const name of ['minus','prism']) {
+  const cert=JSON.parse(fs.readFileSync(path.join(root,`n6/results/low-curvature-${name}.certificate.json`),'utf8'));
+  assert.deepEqual(JSON.parse(JSON.stringify(models['low_'+name].P)),cert.coordinate_polynomials.map(p=>p.map(c=>Number(c[0][0]))));
+  assert.deepEqual(JSON.parse(JSON.stringify(models['low_'+name].cut)),cert.cut_edges);
+  assert.deepEqual(JSON.parse(JSON.stringify(models['low_'+name].faces)),cert.faces);
 }

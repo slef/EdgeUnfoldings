@@ -7,8 +7,10 @@ non-overlapping edge unfolding, in the style of J. DiBiase's 1990 thesis.
   to GitHub Pages on every push to the default branch, `master`.
 * **Current research:** a [complete written selected-net proof for every convex
   octahedron](n6/LEMMA_F_CHORD.md), with a dependency audit, is now available.
-  It awaits independent mathematical review. The every-slit Lemma F and two
-  nonsimplicial six-vertex types remain open; the full n=6 theorem is not claimed.
+  It awaits independent mathematical review. Both remaining nonsimplicial types now also
+  [unfold when every curvature is strictly below 180°](n6/NONSIMPLICIAL_LOW_CURVATURE.md).
+  The remaining n=6 cases have maximum curvature at least 180°. The every-slit
+  Lemma F stays open; the full n=6 theorem is not claimed.
 * `HANDOFF.md` — current audit followed by the historical proof account.
 * `n6/README.md` — archive integration, exact partial certificates, and reproduction.
 * `n6/REVIEW.md` — proof gaps and corrected numerical checks; the full n=6 case remains open in this investigation.

@@ -1,4 +1,81 @@
-# Current continuation: complete selected octahedron proof
+# Current continuation: source freedom and both low-curvature nonsimplicial types
+
+11 September 2026. The selected octahedron proof is saved in commit 7da9b0d
+on codex/lemma-f-continuation. A subsequent hypothesis audit gives
+[OCTA_SOURCE_CHOICE.md](OCTA_SOURCE_CHOICE.md): keep the maximum-curvature
+equator slit R, but allow any source if all six curvatures<=pi. Alternatively,
+any source of curvature>=pi works, even if not globally sharpest.
+Every former use of H is checked: through-fan L already works when the
+source>=pi or fan<=pi; Case A no-wrap is immediate at source>=pi, while
+in the all-low branch kappa_u+kappa_u'>=pi-kappa_v by Gauss--Bonnet.
+The other dependencies use R or the relevant curvature condition, not H.
+
+This proves [NONSIMPLICIAL_LOW_CURVATURE.md](NONSIMPLICIAL_LOW_CURVATURE.md):
+both remaining original-facet types unfold if every vertex curvature is
+strictly below pi. The full n=6 problem therefore remains only in those two
+types with maximum curvature>=pi, including equality. Whole types stay 5/7;
+the original every-slit Lemma F is also still open. All new results are
+written research proofs awaiting independent mathematical review.
+
+Minus-edge labels: original quad A-C-B-D, missing diagonal CD. The third
+octahedral opposite pair is A,B. Fix source A; every fifth edge from B is
+original. In each nearby strict all-low octahedron, R selects one of four
+safe trees, all avoiding CD. Take a constant-tree subsequence. This gives
+existence among four extensions of star(A), also among limiting R maxima.
+Ties in the limiting polygonal solid require retaining all possible maxima;
+do not claim every tied tree succeeds. The older P/Q two-tree conjecture
+is separate and retains its 7/28 proved class count.
+
+Prism labels follow families.PRISM_FACES. The only octahedral completion
+adds 05 and 24. Original degree-four sources 1 and 3 have opposites 5 and 2,
+with forbidden fifth-edge endpoints 0 and 4 respectively. Both endpoints
+belong to both equators. If source 1 uniquely prefers forbidden 0, then
+kappa_0>kappa_4, so source 3 cannot prefer forbidden 4. Ties leave an allowed
+choice. Thus one of six original star-plus-edge trees is safe in every
+nearby all-low refinement. Neither artificial diagonal is ever cut.
+
+Refinements are explicit: lift C outward from the minus-edge quad; lift
+vertex 0 outward from prism quad (0,3,5,2) and vertex 4 outward from
+quad (1,2,5,4). Each prism lifted vertex is absent from the other quad,
+so the required diagonal signs are independent. All other strict support
+inequalities persist. Strict all-low curvature persists by continuity.
+A fixed-tree limit merges uncut triangles back into their original quads;
+positive-area overlap would persist nearby, contradiction. The equality
+boundary max curvature=pi is deliberately NOT included in this extension.
+
+Exact modules: source_choice.py, low_curvature_types.py. The latter checks
+polygonal curvature and original candidates, and concludes EXISTENCE among
+them; it explicitly does not certify the input tree's nonoverlap. The four
+new point/region examples additionally have independent full-net polycert
+checks: low-curvature-minus, minus-family (10 parameters, +/-1/1000), prism,
+prism-family (9 parameters, +/-1/1000). Two source-choice examples prove
+the source is strictly less sharp than its opposite, in the high and low
+branches. Explicit strict octahedral refinements at two positive lift sizes
+are checked in regression tests. A prism point with three 60-degree angles
+at vertex 0 exercises rejection of the pi boundary/uncertainty.
+
+Validation: all 217 mathematical-code tests pass; navigation, progress,
+and prism-ordering tests pass. The overview has source-choice and nonsimp_low
+pages, both polygonal 3D examples, and a separate 1/2 curvature-branch count
+for each remaining type. These are named branches, not shape-space fractions.
+The older history remains collapsed. No Git push has been made this turn.
+
+Next options, not yet promoted:
+1. Continue the every-slit F question. In the all-low regime, assuming the
+   three local pairs safe may suffice without R: use the same cut containment
+   and chord proof, and replace R in the hexagon contradiction by
+   kappa_a+kappa_c+kappa_w>=pi>nu_m. Check this complete conditional reduction.
+   Thus a possible far overlap would require a local failure at that slit.
+2. Push the remaining high-curvature nonsimplicial branch. The limit argument
+   also works for a fixed eligible source with curvature strictly above pi,
+   provided a maximum equator choice avoids artificial cuts throughout nearby
+   refinements. For minus-edge, either A or B above pi suffices. For prism,
+   both degree-four sources above pi suffice via the cross-ranking argument.
+   With only one high source, a strict curvature advantage of an allowed slit
+   over its forbidden slit suffices. These additional corollaries are not yet
+   written or added to the current page. Equality still requires separate care.
+
+# Previous continuation: complete selected octahedron proof
 
 11 September 2026. [LEMMA_F_CHORD.md](LEMMA_F_CHORD.md) completes the
 low-curvature branch of the H/R selected-net rule. Combined with the

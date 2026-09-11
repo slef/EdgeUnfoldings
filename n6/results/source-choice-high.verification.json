@@ -1,0 +1,119 @@
+{
+  "hypotheses": {
+    "result": "verified_source_choice_hypotheses",
+    "source": 0,
+    "fan": 1,
+    "slit": 2,
+    "equator": [
+      2,
+      5,
+      4,
+      3
+    ],
+    "source_curvature_at_least_pi": true,
+    "all_curvatures_at_most_pi": false,
+    "curvature_comparisons_with_pi": {
+      "0": ">",
+      "1": ">",
+      "2": "<",
+      "3": "<",
+      "4": "<",
+      "5": "<"
+    },
+    "slit_order": {
+      "result": "verified_curvature_order",
+      "meaning": "For each (a,b), kappa_a >= kappa_b",
+      "comparisons": [
+        {
+          "vertices": [
+            2,
+            5
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            2,
+            4
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            2,
+            3
+          ],
+          "reason": "identical exact incident-angle multisets"
+        }
+      ]
+    },
+    "globally_sharpest_source_required": false,
+    "maximum_curvature_slit_required": true,
+    "all_28_pairs_proved_by_written_theorem": true,
+    "proof": "OCTA_SOURCE_CHOICE.md",
+    "scope": "The explicit domain satisfies the written source-choice theorem. This is not formal verification of the geometric proof and does not assert every slit works."
+  },
+  "independent_all_28_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 19,
+      "separating_edge": 9
+    },
+    "strict_facet_supports": 24,
+    "planarity_identities": 24,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 240
+  },
+  "fan_at_least_as_sharp_as_source": {
+    "result": "verified_curvature_order",
+    "meaning": "For each (a,b), kappa_a >= kappa_b",
+    "comparisons": [
+      {
+        "vertices": [
+          1,
+          0
+        ],
+        "angle_sum_products": [
+          [
+            [
+              "-127654700430238267812393244428675862768535711549263469724286048043391778911/55213970774324510299478046898216203619608871777363092441300193790394368",
+              "-2042475206883812284998291910858813804296571384788215515588576768694268460385/883423532389192164791648750371459257913741948437809479060803100646309888"
+            ],
+            [
+              "17189765418662900879723280611795001764498660709931969274388585111274743029241/1766847064778384329583297500742918515827483896875618958121606201292619776",
+              "134295042333303913122838129779648451285145786796343509956160821181833929945/13803492693581127574869511724554050904902217944340773110325048447598592"
+            ]
+          ],
+          [
+            [
+              "-527",
+              "-527"
+            ],
+            [
+              "336",
+              "336"
+            ]
+          ]
+        ],
+        "determinant": [
+          "7686463036609426908095316718318843053403498223556466981127260765079241169558935/1766847064778384329583297500742918515827483896875618958121606201292619776",
+          "240201969894044590877978647447463845418859319486139593160226898908726286655975/55213970774324510299478046898216203619608871777363092441300193790394368"
+        ]
+      }
+    ]
+  },
+  "fan_strictly_sharper_than_source": true
+}

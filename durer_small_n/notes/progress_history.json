@@ -1,5 +1,18 @@
 [
   {
+    "date": "11 September 2026 JST · original-edge low-curvature families",
+    "title": "Both remaining types are proved below 180° maximum curvature",
+    "results": [
+      "nonsimp_low",
+      "octa_source_choice",
+      "t_octa_minus",
+      "t_prismd",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#octa_source_choice\">octahedron source-choice extension</a> allows any source when all six curvatures are at most 180°. This supplies a <a href=\"#nonsimp_low\">new original-edge proof for both remaining nonsimplicial types</a> when every curvature is strictly below 180°.</p><p>The proof constructs nearby strict octahedra and ensures all added quadrilateral diagonals stay uncut. Four candidate trees suffice for the minus-edge family; six for the prism-with-diagonal family. Passing to a fixed-tree limit keeps the original quadrilaterals whole.</p><p>The full n=6 problem remains open, now only in those two types with maximum curvature at least 180°, including equality. The whole-type count stays 5/7, and the separate two-choice minus-edge conjecture retains its 7/28 class count. Exact point and full-coordinate-family replays check the implementation; they are not premises of the written geometric proof, which awaits independent review.</p>"
+  },
+  {
     "date": "11 September 2026 JST · selected octahedron proof completed",
     "title": "Equal cut-edge lengths close the last selected-net branch",
     "results": [

@@ -1,5 +1,14 @@
 # Dürer's problem for n ≤ 7 vertices — proof state and work plan
 
+**Latest extension, 11 September:** [source freedom](n6/OCTA_SOURCE_CHOICE.md)
+now gives [original-edge unfoldings for both remaining types when every
+curvature is strictly below pi](n6/NONSIMPLICIAL_LOW_CURVATURE.md).
+The proof constructs strict octahedral refinements and keeps all artificial
+diagonals uncut. The whole-type tally remains 5/7; the remaining n=6 branch
+has maximum curvature at least pi, including equality. The every-slit Lemma F
+remains separate. Independent mathematical review is still needed.
+
+
 ## Current update: complete selected octahedron proof, 11 September 2026
 
 [The equal-length proof](n6/LEMMA_F_CHORD.md) completes the low-curvature

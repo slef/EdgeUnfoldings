@@ -41,7 +41,7 @@ def witness_model(filename, names=None, face_names=None, highlight_faces=None, *
         'P': points, 'faces': witness['faces'], 'cut': witness['cut_edges'],
         'names': dict(enumerate(names)),
         'faceNames': {i: face_names[i] for i in pair},
-        'faceColors': {i: '#2878b5' if i == pair[0] else '#d26b32' if i == pair[1] else '#dce3e9'
+        'faceColors': {i: '#2878b5' if pair and i == pair[0] else '#d26b32' if len(pair)>1 and i == pair[1] else '#dce3e9'
                        for i in range(len(witness['faces']))},
         'radialLabels': True, **display,
     }
@@ -56,6 +56,20 @@ figs['models']['selected_boundary'] = witness_model(
     title='Exact octahedron at source curvature 180 degrees',
     caption='The maximum curvature at v is exactly 180 degrees. Red edges are the selected cuts. Drag to rotate.',
 )
+
+for label, names in [('minus',['A','B','C','D','P','Q']),('prism',['0','1','2','3','4','5'])]:
+    filename='low-curvature-'+label+'.certificate.json'
+    spec=json.loads((research/'results'/filename).read_text())
+    quads=[i for i,f in enumerate(spec['faces']) if len(f)==4]
+    figs['models']['low_'+label] = witness_model(
+        filename, names=names,
+        face_names=['Q' if len(f)==4 else 'T' for f in spec['faces']],
+        highlight_faces=quads,
+        faceColors={i:'#83bbd5' if len(f)==4 else '#ead2b3' for i,f in enumerate(spec['faces'])},
+        view={'yaw':-0.7,'pitch':0.3},
+        title='Exact low-curvature '+label+' example with original-edge cuts',
+        caption='Original quadrilaterals are blue and stay whole. Red edges are the independently certified cuts. Drag to rotate.',
+    )
 
 figs['models']['thesis_df'] = witness_model(
     'thesis-chart-DF.certificate.json',

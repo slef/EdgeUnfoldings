@@ -18,6 +18,11 @@ The branch kappa_v>=pi was proved in [LEMMA_F_POLE_ANGLE.md](LEMMA_F_POLE_ANGLE.
 This note supplies a different contradiction for kappa_v<=pi. Thus the
 two branches cover every source curvature, with their common boundary.
 
+**Subsequent corollaries:** [the source-choice audit](OCTA_SOURCE_CHOICE.md)
+weakens H, and the [original-edge limit proof](NONSIMPLICIAL_LOW_CURVATURE.md)
+covers both remaining nonsimplicial types when all curvatures are strictly
+below pi. These additional proofs address the diagonal restriction explicitly.
+
 ## 1. Recall exactly what a finite-cut crossing would imply
 
 Consider the last cut copy, wb. Put i=k+1, m=k, a=u_i, and let c be the

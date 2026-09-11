@@ -1,5 +1,14 @@
 # Six-vertex integration and certification
 
+**Latest extension, 11 September:** [source freedom](OCTA_SOURCE_CHOICE.md)
+now gives [original-edge unfoldings for both remaining types when every
+curvature is strictly below pi](NONSIMPLICIAL_LOW_CURVATURE.md).
+The proof constructs strict octahedral refinements and keeps all artificial
+diagonals uncut. The whole-type tally remains 5/7; the remaining n=6 branch
+has maximum curvature at least pi, including equality. The every-slit Lemma F
+remains separate. Independent mathematical review is still needed.
+
+
 The full n=6 theorem remains open. **The octahedron type now has a complete
 written selected-net proof** in [LEMMA_F_CHORD.md](LEMMA_F_CHORD.md), with a
 dependency audit and two exhaustive source-curvature branches. Choose a

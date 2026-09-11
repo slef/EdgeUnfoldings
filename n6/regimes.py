@@ -77,7 +77,8 @@ def curvature_sum_band(a,b):
     return None
 
 
-def classify(spec):
+def octahedron_frame(spec):
+    """Check the octahedral labels and selected cuts, without curvature rankings."""
     g=Geometry(spec);selection=spec['selection'];v,w=selection['apex'],selection['antipode']
     ring=selection['equator'];k=selection['slit_index']
     require(isinstance(k,int) and 0<=k<4,'Invalid slit index')
@@ -90,6 +91,11 @@ def classify(spec):
         f=g.faces[findex];j=f.index(w)
         require(f[(j+1)%3]==ring[i] and f[(j+2)%3]==ring[(i+1)%4],'Equator orientation disagrees with facets')
     require({edge(*e) for e in spec['cut_edges']}=={edge(v,u) for u in ring}|{edge(w,ring[k])},'Cuts disagree with selected near-star tree')
+    return g,v,w,ring,k,V,W
+
+
+def classify(spec):
+    g,v,w,ring,k,V,W=octahedron_frame(spec)
     products={x:angle_product(g.p,g.faces,g.h,x) for x in range(6)}
     order=verify_order(g,[(v,x) for x in range(6) if x!=v]+[(ring[k],x) for x in ring if x!=ring[k]])
     def angle(f,x):return face_angle(g.p,g.faces[f],g.h[f],x)
