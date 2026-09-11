@@ -144,6 +144,7 @@ def make_certificate(spec):
 
 
 def verify(cert):
+    from n6.intervals import BITS
     g = Geometry(cert)
     remaining = set(itertools.combinations(range(8),2))
     counts = {'vertex_fan':0, 'separating_edge':0}
@@ -163,7 +164,7 @@ def verify(cert):
         counts[w['kind']] += 1
     require(not remaining, 'Missing face pairs')
     return {'result':'verified', 'scope':'Every coordinate tuple in the explicit box; not all octahedra',
-            'arithmetic':'outward dyadic rational intervals, 80 fractional bits', 'pairs':counts,
+            'arithmetic':f'outward dyadic rational intervals, {BITS} fractional bits', 'pairs':counts,
             'strict_facet_supports':len(g.support_bounds)}
 
 

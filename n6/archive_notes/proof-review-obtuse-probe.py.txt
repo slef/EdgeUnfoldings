@@ -1,0 +1,36 @@
+# Preserved discovery experiment; numerical results are not proof premises.
+"""Look for a real obstruction to replacing the sharp-fan switch by one angle test.
+
+Discovery only. No result from this numerical search is a proof.
+"""
+import json,time
+from pathlib import Path
+import numpy as np
+from n6.families import PRISM_FACES
+rng=np.random.default_rng(609120843)
+start=time.monotonic();accepted=0;trials=0;best=None
+while time.monotonic()-start<90:
+    size=30000
+    q=10.**rng.uniform(-3,3,(size,9))
+    q[:,[0,2,3]]*=rng.normal(size=(size,3))
+    A,B,C,D=q[:,5:].T
+    valid=(A+B>1)&(C+D>1)&(D*(A-1)>B*(C-1))
+    q=q[valid];trials+=size
+    x,y,u,v,w,A,B,C,D=q.T
+    p=np.zeros((len(q),6,3));p[:,0,0]=1;p[:,1]=np.c_[x,y,np.zeros(len(q))];p[:,5]=np.c_[u,v,w]
+    p[:,3]=A[:,None]*p[:,0]+B[:,None]*p[:,5]
+    p[:,4]=C[:,None]*p[:,1]+D[:,None]*p[:,5]
+    angles={};k=np.full((len(q),6),2*np.pi)
+    for label,face in zip('ABCDEF',PRISM_FACES):
+        for i,vertex in enumerate(face):
+            a=p[:,face[i-1]]-p[:,vertex];b=p[:,face[(i+1)%len(face)]]-p[:,vertex]
+            value=np.arctan2(np.linalg.norm(np.cross(a,b),axis=1),np.einsum('ij,ij->i',a,b))
+            angles[label+str(vertex)]=value;k[:,vertex]-=value
+    margins=np.c_[k[:,2]-np.pi,angles['E1']-np.pi/2,angles['F5']-np.pi/2,np.pi-k[:,3:].sum(axis=1)]
+    score=margins.min(axis=1);i=np.argmax(score);accepted+=len(q)
+    if best is None or score[i]>best['margin']:
+        best=dict(parameters=q[i].tolist(),margin=float(score[i]),margins=margins[i].tolist(),curvatures=k[i].tolist(),angles={name:float(a[i]) for name,a in angles.items()})
+    if best['margin']>1e-4:break
+report=dict(scope='Numerical discovery only; exact original-facet and angle checks are required.',trials=trials,valid_parameter_proposals=accepted,seconds=time.monotonic()-start,best=best)
+Path('/private/tmp/edge_prism_obtuse_probe.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report,indent=2))

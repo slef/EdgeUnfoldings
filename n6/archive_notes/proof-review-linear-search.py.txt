@@ -1,0 +1,35 @@
+# Preserved discovery experiment; numerical results are not proof premises.
+from fractions import Fraction as F
+from itertools import product
+import json
+import numpy as np
+from scipy.optimize import linprog
+from n6.polynomials import Poly
+from n6.families import PRISM_FACES
+n=sum(len(f)-1 for f in PRISM_FACES);a={};j=0
+for label,face in zip('ABCDEF',PRISM_FACES):
+    for v in face[:-1]: a[label+str(v)]=Poly.variable(n,j);j+=1
+    a[label+str(face[-1])]=len(face)-2-sum(a[label+str(v)] for v in face[:-1])
+k={v:2-sum(a[label+str(v)] for label,face in zip('ABCDEF',PRISM_FACES) if v in face) for v in range(6)}
+K=k[3]+k[4]
+fC=2*a['C1']+a['E1']-2-K;fD=2*a['D1']+a['E1']-2-K
+gB=2*a['B5']+a['F5']-2-K;gD=2*a['D5']+a['F5']-2-K
+base={**a,**{'pi-'+key:1-p for key,p in a.items()},**{'k'+str(v):p for v,p in k.items()},**{'L_'+key:2-k[int(key[1:])]-2*p for key,p in a.items()},'pi':Poly.constant(n,1)}
+monomials=[tuple([0]*n)]+[tuple(int(i==j) for j in range(n)) for i in range(n)]
+def vec(p):return [float(p.terms.get(m,0)) for m in monomials]
+rng=np.random.default_rng(0)
+for title,target,extra in [('fC',-fC,{}),('gD',-gD,{'fD':fD,'E1-pi/2':a['E1']-F(1,2),'k2-pi':k[2]-1,'pi-k5':1-k[5],'E1-K':a['E1']-K}),('gB',-gB,{'fD':fD,'E1-pi/2':a['E1']-F(1,2),'k2-pi':k[2]-1,'pi-k5':1-k[5],'E1-K':a['E1']-K})]:
+    bounds=base|extra;names=list(bounds);polys=list(bounds.values());matrix=np.array([vec(p) for p in polys]).T
+    best=100
+    for attempt in range(160):
+        cost=np.ones(len(polys)) if attempt==0 else rng.uniform(.05,2,len(polys))
+        for iteration in range(4):
+            r=linprog(cost,A_eq=matrix,b_eq=vec(target),bounds=(0,None),method='highs')
+            if not r.success:break
+            coeff=[F(float(x)).limit_denominator(96) if x>1e-8 else F(0) for x in r.x]
+            exact=sum((c*p for c,p in zip(coeff,polys)),Poly.constant(n,0))
+            if (exact-target).is_zero() and all(c>=0 for c in coeff):
+                support=sum(c>0 for c in coeff)
+                if support<best:
+                    best=support;print(title,best,[(name,str(c)) for name,c in zip(names,coeff) if c],flush=True)
+            cost=1/(r.x+.04)

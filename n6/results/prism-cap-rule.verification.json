@@ -1,0 +1,1789 @@
+{
+  "result": "verified_prism_cap_rule_examples",
+  "algebra": {
+    "result": "verified_exact_prism_cap_identities",
+    "cap_identities": 4,
+    "total_curvature_identity": true,
+    "independent_angle_indeterminates": 14,
+    "arithmetic": "Exact rational polynomial coefficients",
+    "geometric_proof_formally_verified": false
+  },
+  "domains": {
+    "low-curvature-prism": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "both_cap_sums_at_least_pi",
+        "cap_comparisons": {
+          "A": ">",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": "<",
+          "2": "<",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "candidates": [
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "triangular_chain_fallback",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 13,
+          "separating_edge": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-low-curvature-prism.certificate.json"
+    },
+    "low-curvature-prism-family": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "both_cap_sums_at_least_pi",
+        "cap_comparisons": {
+          "A": ">",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": "<",
+          "2": "<",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "candidates": [
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "triangular_chain_fallback",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 9,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 13,
+          "separating_edge": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-low-curvature-prism-family.certificate.json"
+    },
+    "prism-two-pair-failure": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "large_cap_F_curvature_gate_switch",
+        "cap_comparisons": {
+          "A": "<",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": "<",
+          "2": "<",
+          "3": ">",
+          "4": ">",
+          "5": "<"
+        },
+        "large_cap_above_three_pi_by_total_curvature": "F",
+        "candidates": [
+          {
+            "name": "source_1_slit_4",
+            "source": 1,
+            "slit": 4,
+            "cut_edges": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          },
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "source_1_slit_4",
+      "cut_edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 2,
+          "face_neighborhood": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240,
+        "theorem_dependencies": [
+          {
+            "author": "Val Pinciu",
+            "year": 2007,
+            "theorem": 1,
+            "title": "On the Fewest Nets Problem for Convex Polyhedra",
+            "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+          }
+        ]
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-two-pair-failure.certificate.json"
+    },
+    "prism-one-sharp-failure": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "large_cap_F_sharp_end_switch",
+        "cap_comparisons": {
+          "A": "<",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": "<",
+          "2": "<",
+          "3": ">",
+          "4": "<",
+          "5": ">"
+        },
+        "large_cap_above_three_pi_by_total_curvature": "F",
+        "candidates": [
+          {
+            "name": "source_3_slit_5",
+            "source": 3,
+            "slit": 5,
+            "cut_edges": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "source_3_slit_5",
+      "cut_edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 3,
+          "face_neighborhood": 1
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240,
+        "theorem_dependencies": [
+          {
+            "author": "Val Pinciu",
+            "year": 2007,
+            "theorem": 1,
+            "title": "On the Fewest Nets Problem for Convex Polyhedra",
+            "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+          }
+        ]
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-one-sharp-failure.certificate.json"
+    },
+    "prism-switch-sharp-point": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "large_cap_A_sharp_end_switch",
+        "cap_comparisons": {
+          "A": ">",
+          "F": "<"
+        },
+        "vertex_curvature_comparisons": {
+          "0": ">",
+          "1": "<",
+          "2": ">",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "large_cap_above_three_pi_by_total_curvature": "A",
+        "candidates": [
+          {
+            "name": "source_1_slit_2",
+            "source": 1,
+            "slit": 2,
+            "cut_edges": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ]
+          },
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "source_1_slit_2",
+      "cut_edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 3,
+          "face_neighborhood": 1
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240,
+        "theorem_dependencies": [
+          {
+            "author": "Val Pinciu",
+            "year": 2007,
+            "theorem": 1,
+            "title": "On the Fewest Nets Problem for Convex Polyhedra",
+            "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+          }
+        ]
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-switch-sharp-point.certificate.json"
+    },
+    "prism-switch-sharp-family": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "large_cap_A_sharp_end_switch",
+        "cap_comparisons": {
+          "A": ">",
+          "F": "<"
+        },
+        "vertex_curvature_comparisons": {
+          "0": ">",
+          "1": "<",
+          "2": ">",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "large_cap_above_three_pi_by_total_curvature": "A",
+        "candidates": [
+          {
+            "name": "source_1_slit_2",
+            "source": 1,
+            "slit": 2,
+            "cut_edges": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ]
+          },
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "source_1_slit_2",
+      "cut_edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 9,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 3,
+          "face_neighborhood": 1
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": true,
+        "fractional_bits": 240,
+        "theorem_dependencies": [
+          {
+            "author": "Val Pinciu",
+            "year": 2007,
+            "theorem": 1,
+            "title": "On the Fewest Nets Problem for Convex Polyhedra",
+            "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+          }
+        ]
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-switch-sharp-family.certificate.json"
+    },
+    "prism-switch-gate-point": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "both_cap_sums_at_least_pi",
+        "cap_comparisons": {
+          "A": ">",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": ">",
+          "2": "<",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "candidates": [
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "triangular_chain_fallback",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 13,
+          "separating_edge": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-switch-gate-point.certificate.json"
+    },
+    "prism-switch-gate-family": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "both_cap_sums_at_least_pi",
+        "cap_comparisons": {
+          "A": ">",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": ">",
+          "2": "<",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "candidates": [
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "triangular_chain_fallback",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 9,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 13,
+          "separating_edge": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": true,
+        "fractional_bits": 240
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-switch-gate-family.certificate.json"
+    },
+    "prism-two-sharp-one-boundary": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "both_cap_sums_at_least_pi",
+        "cap_comparisons": {
+          "A": ">",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": "<",
+          "2": "=",
+          "3": "<",
+          "4": "<",
+          "5": ">"
+        },
+        "candidates": [
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "triangular_chain_fallback",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 13,
+          "separating_edge": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-two-sharp-one-boundary.certificate.json"
+    },
+    "prism-two-sharp-both-boundaries": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "both_cap_sums_at_least_pi",
+        "cap_comparisons": {
+          "A": ">",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": "<",
+          "2": "=",
+          "3": "<",
+          "4": "<",
+          "5": "="
+        },
+        "candidates": [
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "triangular_chain_fallback",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 13,
+          "separating_edge": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-two-sharp-both-boundaries.certificate.json"
+    },
+    "prism-complementary-point": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "large_cap_A_curvature_gate_switch",
+        "cap_comparisons": {
+          "A": ">",
+          "F": "<"
+        },
+        "vertex_curvature_comparisons": {
+          "0": ">",
+          "1": "<",
+          "2": "<",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "large_cap_above_three_pi_by_total_curvature": "A",
+        "candidates": [
+          {
+            "name": "source_3_slit_0",
+            "source": 3,
+            "slit": 0,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "source_3_slit_0",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 2,
+          "face_neighborhood": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240,
+        "theorem_dependencies": [
+          {
+            "author": "Val Pinciu",
+            "year": 2007,
+            "theorem": 1,
+            "title": "On the Fewest Nets Problem for Convex Polyhedra",
+            "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+          }
+        ]
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-complementary-point.certificate.json"
+    },
+    "prism-complementary-family": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "large_cap_A_curvature_gate_switch",
+        "cap_comparisons": {
+          "A": ">",
+          "F": "<"
+        },
+        "vertex_curvature_comparisons": {
+          "0": ">",
+          "1": "<",
+          "2": "<",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "large_cap_above_three_pi_by_total_curvature": "A",
+        "candidates": [
+          {
+            "name": "source_3_slit_0",
+            "source": 3,
+            "slit": 0,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "source_3_slit_0",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 9,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 2,
+          "face_neighborhood": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": true,
+        "fractional_bits": 240,
+        "theorem_dependencies": [
+          {
+            "author": "Val Pinciu",
+            "year": 2007,
+            "theorem": 1,
+            "title": "On the Fewest Nets Problem for Convex Polyhedra",
+            "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+          }
+        ]
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-complementary-family.certificate.json"
+    },
+    "prism-complementary-reflected": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "large_cap_F_curvature_gate_switch",
+        "cap_comparisons": {
+          "A": "<",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": "<",
+          "2": "<",
+          "3": "<",
+          "4": ">",
+          "5": "<"
+        },
+        "large_cap_above_three_pi_by_total_curvature": "F",
+        "candidates": [
+          {
+            "name": "source_1_slit_4",
+            "source": 1,
+            "slit": 4,
+            "cut_edges": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          },
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "source_1_slit_4",
+      "cut_edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 2,
+          "face_neighborhood": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240,
+        "theorem_dependencies": [
+          {
+            "author": "Val Pinciu",
+            "year": 2007,
+            "theorem": 1,
+            "title": "On the Fewest Nets Problem for Convex Polyhedra",
+            "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+          }
+        ]
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-prism-complementary-reflected.certificate.json"
+    },
+    "original-rule-prism-selected-failure": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "large_cap_A_curvature_gate_switch",
+        "cap_comparisons": {
+          "A": ">",
+          "F": "<"
+        },
+        "vertex_curvature_comparisons": {
+          "0": ">",
+          "1": ">",
+          "2": "<",
+          "3": "<",
+          "4": "<",
+          "5": "<"
+        },
+        "large_cap_above_three_pi_by_total_curvature": "A",
+        "candidates": [
+          {
+            "name": "source_3_slit_0",
+            "source": 3,
+            "slit": 0,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "source_3_slit_0",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 0,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 11,
+          "separating_edge": 2,
+          "face_neighborhood": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": false,
+        "fractional_bits": 240,
+        "theorem_dependencies": [
+          {
+            "author": "Val Pinciu",
+            "year": 2007,
+            "theorem": 1,
+            "title": "On the Fewest Nets Problem for Convex Polyhedra",
+            "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+          }
+        ]
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-original-rule-prism-selected-failure.certificate.json"
+    },
+    "cofacial-case-A-prism-family": {
+      "result": "verified_prism_cap_selected_net",
+      "selection": {
+        "branch": "both_cap_sums_at_least_pi",
+        "cap_comparisons": {
+          "A": ">",
+          "F": ">"
+        },
+        "vertex_curvature_comparisons": {
+          "0": "<",
+          "1": "<",
+          "2": "<",
+          "3": "<",
+          "4": ">",
+          "5": ">"
+        },
+        "candidates": [
+          {
+            "name": "triangular_chain_fallback",
+            "source": null,
+            "slit": null,
+            "cut_edges": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      "selected_candidate": "triangular_chain_fallback",
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "earlier_unresolved_candidates": [],
+      "independent_all_original_pairs": {
+        "result": "verified",
+        "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+        "parameter_dimension": 6,
+        "facet_sizes": [
+          3,
+          4,
+          3,
+          4,
+          3,
+          3
+        ],
+        "pairs": {
+          "vertex_fan": 13,
+          "separating_edge": 2
+        },
+        "strict_facet_supports": 16,
+        "planarity_identities": 20,
+        "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+        "linear_correlations": true,
+        "fractional_bits": 240
+      },
+      "fixed_family_size": 5,
+      "geometric_proof_formally_verified": false,
+      "proof": "PRISM_CAP_RULE.md",
+      "scope": "One original-edge tree independently certified throughout this explicit domain. The universal five-candidate theorem is a separate written geometric argument.",
+      "certificate_file": "prism-cap-cofacial-case-A-prism-family.certificate.json"
+    }
+  },
+  "universal_geometric_proof_formally_verified": false,
+  "domains_checked": 15
+}

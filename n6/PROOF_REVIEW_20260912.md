@@ -4,6 +4,150 @@
 This is a further self-audit. Independent mathematical review and formal
 verification remain outstanding. The original research material is retained.
 
+## Current checkpoint — approximately 08:15 JST
+
+The review remains active until 09:58 JST. The complete shorter account is
+in [TIDY_PROOF.md](TIDY_PROOF.md) and [TIDY_CORE.md](TIDY_CORE.md).
+The first complete draft is preserved in full as
+[TIDY_PROOF_FIRST_REVIEW.md](TIDY_PROOF_FIRST_REVIEW.md); the entries below
+record successive stages rather than replacing their earlier conclusions.
+
+The principal additional result is the [prism cap rule](PRISM_CAP_RULE.md).
+Let C_A and C_F be the sums of vertex curvature on the two triangular caps.
+If both are at least pi, the fixed two-pair tree T works. Otherwise one is
+below pi and the other above 3*pi, which forces exactly one of the two
+existing switch lemmas. This reduces the fixed family from seven trees to
+five, with **at most two candidates for a given shape**. Neither five-tree
+minimality nor sufficiency of the four cofacial trees alone has been proved.
+The original seven-tree proof and both failures of T are retained.
+
+The identity behind this rule gives a reusable degree-three Case A lemma:
+the two wider cone bounds are equivalent to |lambda-rho|<=C. This is an
+equivalence of sufficient cone bounds, not an equivalence with nonoverlap.
+Its stronger optional prism test is preserved separately in
+[CASE_A_CAP_BUDGET.md](CASE_A_CAP_BUDGET.md). The gate switch also admits
+two direct implications: a nonobtuse F_3 makes its near-star safe, and a
+nonobtuse F_5 makes T safe. At least one is nonobtuse because these are
+different angles in the same triangle.
+
+The complete suite passed **284 tests in 295.848 seconds**: the 271 original
+tests, seven initial tidy-proof audits, and six cap-rule tests. The cap
+tests were rerun successfully after strengthening an exact curvature-band
+deduction. Fifteen preserved points or parameter domains independently
+certify one of the cap rule's selected original-edge nets, including all
+four asymmetric branches and both old failures of T. These checks support
+the implementation and stated finite domains; they do not machine-verify
+the universal geometric argument. Navigation and progress checks pass.
+
+### Fresh manual checks completed
+
+* Reconstructed the finite-entry barrier, the projection and sine-angle
+  inequalities, the strict local slit determinant, and the small-fan
+  six-sided region. Checked the boundary contacts, orientation, angle ranges,
+  and that none of these steps assumes its downstream conclusion.
+* Checked that every cofacial use concerns a whole original quadrilateral.
+  Auxiliary diagonals remain uncut and the source-corner cones contain
+  the full convex faces. In T's two cap views, the three apex angles exhaust
+  the original degree-three vertex; no missing incident face is suppressed.
+* Rechecked the prior angular-span, patch-budget, two-pole, three-chain,
+  local-gate, low-curvature far-pair, radial-cover, Case A length, support-
+  triangle and intrinsic closure arguments. Their weaker hypotheses and
+  narrower sufficient conclusions remain useful and are preserved.
+* Read the interval, affine, polynomial and whole-face certificate checks.
+  Rational bounds round outward; uncertain signs are rejected. Facet
+  planarity is checked as an identity on a box, facet supports are strict,
+  cut trees and common vertex copies are checked, and every required pair
+  needs a witness. A solver's numerical status is not accepted as a proof.
+* Rechecked the selected-slit versus arbitrary-slit distinction. The
+  optional yellow Lemma F and Triple Lemma are stronger statements under
+  H alone; the existence proof uses the proved selected H/R versions.
+  The separate fixed two-tree minus-edge conjecture is also unchanged.
+
+The published bounded-sector result is Theorem 9.1 of
+[Aronov--O'Rourke](https://link.springer.com/content/pdf/10.1007/BF02293047.pdf),
+with the disk sectors defined in Section 8.1. It does not supply an empty
+infinite wedge. The original vertex-source star is covered by the cited
+Kiazyk--Lubiw result. The dome step is also stated explicitly as Corollary 2
+of [Pinciu](https://cccg.ca/proceedings/2007/01a4.pdf). The earlier direct
+DiBiase thesis audit was read and its quantifiers rechecked; the thesis PDF
+itself has not been rescanned in this session.
+
+No mathematical gap has been identified in this self-audit so far.
+Independent mathematical review remains necessary. The remaining time is
+for further scrutiny and presentation, not for upgrading that review status.
+
+### Discovery calculations retained, not used as proof premises
+
+Four scratch searches are preserved as text in `archive_notes/proof-review-*`.
+Linear optimization suggested shorter identities; their exact coefficient
+expansions and written positive remainders are the proof, not optimization.
+A later numerical search found no example with a low opposite cap and two
+particular obtuse switch angles. Its results are saved in
+`results/prism-double-obtuse-discovery-20260912.json`. They neither prove
+impossibility nor justify dropping the sharp-switch identities. Sample
+counts include parameter proposals, not certified distinct polyhedra.
+
+## Further checkpoint — approximately 08:25 JST
+
+The cap proof now states its deterministic angle rule explicitly. After
+reflecting to C_A>3*pi, the low-end branch chooses M if F_3<=pi/2 and T
+otherwise. The sharp-end branch chooses N if K>=E_1, E_1<=pi/2, or
+2*D_1+E_1<=2*pi+K; otherwise the three identities force T. Thus a shape
+needs no trial unfolding to select its tree. `prism_angle_rule.py` implements
+these proved tests separately from the independent all-pairs replay; all
+15 preserved domains pass the selected net check. The exact interval
+implementation may reject an unresolved uniform box. This does not change
+the mathematical pointwise rule or assert that every box admits one uniform
+choice.
+
+One reporting defect was found in `certify.py`: the arithmetic label was
+hardcoded to 80 fractional bits even when a caller had selected a higher
+precision. The report now reads the actual setting. This did not affect
+any acceptance condition or outward bound; historical saved reports remain
+unchanged. A regression check covers both 64- and 240-bit runs.
+
+The dome dependency was additionally cross-checked against O'Rourke's
+[2013 face-neighborhood paper](https://cccg.ca/proceedings/2013/papers/paper_22.pdf):
+its introduction states the earlier dome theorem and Pinciu's extension
+to edge neighborhoods. The counterexamples in that paper concern stronger
+band or vertex-neighborhood proposals, not this dome dependency.
+
+## A shortcut ruled out by a new exact example — approximately 08:30 JST
+
+A fresh numerical probe of the four cofacial prism routes found a shape
+where both routes at the sharper source failed. The rational simplification
+now in `SHARPEST_COFACIAL_FAILURE.md` is checked independently: source 1
+is the unique sharpest vertex of all six, but its routes through 2 and 4
+overlap A/D and D/E, respectively. Both source-3 routes and T are safe.
+These five outcomes and the strict source order also hold throughout a
+nine-parameter box of half-width 1/10^10. Thus this is an exact negative
+result about the tempting sharpest-source-only shortcut. It is no longer
+merely a numerical candidate. It does not refute the four routes together
+or show that five candidates are minimal.
+
+The 100,000-shape numerical search found no failure of all four routes;
+that absence establishes no universal statement. Its complete report is
+retained. The cap rule chooses T on the exact counterexample before any
+unfolding, and all 15 original face pairs are independently certified.
+
+## Saved validation checkpoint — approximately 08:37 JST
+
+The fresh full suite passed **290 tests in 330.481 seconds**. The packaged
+overview has 241 resolving evidence links; its six standalone reading pages
+have 72 resolving local evidence links and heading anchors. Full browser
+visual inspection was not performed because browser access was denied;
+these are static build and navigation checks. All 59 pre-review research
+Markdown documents remain unchanged. The work is being saved on the separate
+local review branch, with no push or deployment.
+
+A further possible octahedron simplification is now being investigated:
+use the largest-curvature vertex as the fifth cut's endpoint, and select
+a low-curvature fan with two adjacent face-curvature sums in [pi,3*pi].
+This would allow the existing finite-entry budget and pocket identity to
+contradict the lower cap bounds directly, avoiding the projection branch
+in a standalone existence proof. This prospective shortening is not yet
+a replacement for the checked manuscript.
+
 ## Checkpoint: complete shorter draft, review continuing
 
 At approximately 07:15 JST the separate exposition is complete end to end:

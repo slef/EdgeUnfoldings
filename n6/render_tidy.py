@@ -1,10 +1,11 @@
-"""Render the two preserved proof drafts as self-contained reading pages.
+"""Render the preserved proof drafts as self-contained reading pages.
 
-Run after editing either Markdown source. Pandoc is a local authoring tool;
+Run after editing these Markdown sources. Pandoc is a local authoring tool;
 the generated HTML is tracked, so publishing does not install dependencies.
 No mathematical content is inferred or altered by this renderer.
 """
 from pathlib import Path
+import re
 import subprocess
 import tempfile
 
@@ -50,8 +51,13 @@ def render():
                           '<a href="TIDY_CORE.html">Geometric details</a> · '
                           '<a href="PROOF_REVIEW_20260912.md">Review record</a>'
                           '</nav>')
-        for stem, title in [('TIDY_PROOF', 'A streamlined proof through six vertices'),
-                            ('TIDY_CORE', 'The shared geometric core')]:
+        pages = [('TIDY_PROOF', 'A streamlined proof through six vertices'),
+                 ('TIDY_CORE', 'The shared geometric core'),
+                 ('PRISM_CAP_RULE', 'Five prism candidates by cap curvature'),
+                 ('CASE_A_CAP_BUDGET', 'The optional three-face cap budget'),
+                 ('SHARPEST_COFACIAL_FAILURE', 'Why the sharpest cofacial source alone is insufficient'),
+                 ('TIDY_PROOF_FIRST_REVIEW', 'Earlier preserved seven-candidate draft')]
+        for stem, title in pages:
             source = (root/(stem+'.md')).read_text()
             heading, body = source.split('\n', 1)
             if not heading.startswith('# '):
@@ -63,8 +69,11 @@ def render():
                 '--metadata', 'title='+heading[2:],
                 '--include-in-header', str(header), '--include-before-body', str(before),
             ], input=body, check=True, capture_output=True, text=True)
-            html = result.stdout
-            for target in ('TIDY_PROOF', 'TIDY_CORE'):
+            # The reading pages need no remote script. Pandoc's legacy
+            # default template includes an IE8-only HTML5 shim.
+            html = re.sub(r'\s*<!--\[if lt IE 9\]>.*?<!\[endif\]-->',
+                          '', result.stdout, flags=re.S)
+            for target, _ in pages:
                 html = html.replace('href="'+target+'.md"', 'href="'+target+'.html"')
             (root/(stem+'.html')).write_text(html)
             print(stem+'.html')

@@ -1,0 +1,361 @@
+{
+  "baseline_commit": "6327f07",
+  "scope": "All pre-review Markdown research documents under n6, excluding the running continuation log. New shorter drafts are separate files.",
+  "documents": [
+    {
+      "file": "n6/AXIS_CLOSURE.md",
+      "original_sha256": "39a9c6424561926725d38ccf884c4b8656549dd994a48c236a519d15c2f6a5a7",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/CASE_A_CONES.md",
+      "original_sha256": "dbaeba5878feadf72a04594744c1bd8da5a1c66b0f7f77b63942291c57920867",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/CASE_A_LENGTH_SEPARATORS.md",
+      "original_sha256": "01834e656688a80c98d27dde888b98bd3be2bbeb9f3cfac21748d4a94d21f5c0",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/CASE_A_ONE_SIDED.md",
+      "original_sha256": "17b15f9d1fd445da4aaebf21a7aaabf358bdb4627943ec33edc0e0f6bac2ed32",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/CASE_A_SUPPORT_TRIANGLE.md",
+      "original_sha256": "2981604369f0c1ab07d5275f577f7e31c0304fb16c0f1e3c89619cc11d9d0396",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/CASE_A_WIDE_CONES.md",
+      "original_sha256": "8e59b8ea5d0ff87bd6f7596848db677d0a96712023ca371bbfa59af039e5be47",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/CASE_PARTITION.md",
+      "original_sha256": "ec6e629b487845dbee350d766ecc9a7bb7b56b6169b08048e49bc8463a9d92a2",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/COFACIAL_STAR_REDUCTION.md",
+      "original_sha256": "b822d940b37ff6f9c72eff045c24f5843ebe7e3c5f5d3957823920d205b4b78e",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/CURVATURE_ENCODING.md",
+      "original_sha256": "035c33cab5269dbd5a54f7b5fa817bc947bc154db8dfdbaedc9a63ae707d804f",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/GEODESIC_SECTOR.md",
+      "original_sha256": "3b40d4e38e21e775aceb087e5791fcb4e7151d7a5d7df71d0fafde5d18c9c17a",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/HINGE_AUDIT.md",
+      "original_sha256": "31d94a8926f561e608b39ea2acf0028c6bdbbdb19d6d930ad1e2515a90a3b937",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/INTRINSIC_METRIC.md",
+      "original_sha256": "48c017d7a33ee460f171ad99f71d183e201f493d4e29e308852aa657855f910f",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LEMMA_F_CHORD.md",
+      "original_sha256": "6f7adce592d5bd7416258d46202aa24b8a53904f01684a47ebace134e0709305",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LEMMA_F_CUT_RAYS.md",
+      "original_sha256": "7461b2b0d942504c9e27c40ae7e246d44f5aac144d2502c0b6866b2a03536878",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LEMMA_F_CUT_REDUCTION.md",
+      "original_sha256": "1aa3aea3f9c2adedb99027faf15f05f45dfaad3c951d605e60b3a23d3825e5d8",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LEMMA_F_POLE_ANGLE.md",
+      "original_sha256": "7e898001b0a14a8d930720d74c2732850e40b72471f11b52ba140daaa0288c7f",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LEMMA_L.md",
+      "original_sha256": "0c7fe0731d8a322a2200e5deecbd9c662d37c5435f4a130513555c64a2442447",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LEMMA_L_CURVATURE_GATE.md",
+      "original_sha256": "17450e2150d4e7751986d6964b5f93a8a562a7c1cba780f6f829b3aa0219e4e4",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LEMMA_L_PROOF.md",
+      "original_sha256": "f790c9238c30b82fd54e81dfc0bec5c24bdd4d65dbc181ff0745c10bd1ea8d99",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LEMMA_L_SMALL_SUM.md",
+      "original_sha256": "4ea9cde7d89f0470598030b79777bb95601b4c2bacea54fba0b2e7e3ffac9a92",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/LOW_CURVATURE_FAR_REDUCTION.md",
+      "original_sha256": "e3654f6308d145ef8befe9dbcd7a8bbf608ecc7088a5d30d5a1b6c1aa4a47158",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/MINUS_COMPLEMENTARY_SOURCES.md",
+      "original_sha256": "8a0858785096477b865097b384475939e9408e7912c1f800d3fe1000e3f6cb44",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/MINUS_EDGE_PROOF.md",
+      "original_sha256": "c92c4039efac3a364f9d639e003c030a562d40456f28baa547ddd00448b465d6",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/MINUS_NEIGHBORHOOD.md",
+      "original_sha256": "d6ae8888ff88eee3d60a0fcf0ddf25054803d54dfb2ea7f6362df14a7649ee43",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/MINUS_PAIR.md",
+      "original_sha256": "dca5d2ff7e2a363e660967a209b84ab06b2412867b334bf4dda3b1094843be38",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/N6_PROOF_MAP.md",
+      "original_sha256": "22bb654db20bdd1458cf22371e83b32bbc7ca75bcb98ba40cc39c57237d91dcf",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/NONSIMPLICIAL_LOW_CURVATURE.md",
+      "original_sha256": "535809560c00d5618c07e1e27e8d591b51246ec6a9470bc5968a56ee8a9d23cd",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_CASE_ANALYSIS.md",
+      "original_sha256": "8dc9f3fb10aa8298c861ed3fbb21a82baf4aeb528e680a80ca7b961aeba77d62",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_CONVEX_PATCHES.md",
+      "original_sha256": "28c92c0dcb99bb5a68d09d2c03bae4d851c5ef43753c36b841601285f7e7e28d",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_FLAT_HINGES.md",
+      "original_sha256": "807049d6d9304afdb120c64c23e3956b2edc99acc1cd9c12a21e4d680621debf",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_FOUR_SLITS.md",
+      "original_sha256": "09646e6140bb27937bf0d64aba684428ab8658fdfb28515fd4254e20612dbf65",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_HALF_FAN.md",
+      "original_sha256": "2af7aa9635e7a2746809355f1c3803e555119f7531ab2d8d280158a0d767c3fb",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_ONE_PATCH.md",
+      "original_sha256": "7b7d841da67d520bbfacb047da8a8cd5e36dbf0dac48ddf2426c8dbd9b906950",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_PATCH_BUDGET.md",
+      "original_sha256": "f500f4a01d449fe8f6f2137864fa142d6bb665db498cd2b5aef7f3b99384858d",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_RADIAL_COVER.md",
+      "original_sha256": "5a27f5e9b485052629917cf4c13306503c686c2cc7922b5b0136e37005f76752",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_REMAINING_FAMILIES.md",
+      "original_sha256": "34423a1583d75847d26e6365d965ea2a209b5479181ac7709084895728f3ec84",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_SHORT_EDGES.md",
+      "original_sha256": "f0d4e08b05a834593284b8fb2c693fdcde65f9db891f8bc80843e1e62669f1d0",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_SLIT_THRESHOLD.md",
+      "original_sha256": "cee1afc670a31e887cea748d6b6a4a0794e18967b4d51c0073d513d746408715",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_SOURCE_CHOICE.md",
+      "original_sha256": "4a5976f85cd59b0933d0167c4a9d69dc2381897f1923337ae24bb1f8cd2fa4ec",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_THREE_CHAIN.md",
+      "original_sha256": "5788cac57da018ca94e13e3e744fa0ef9949cd37b5cad9f0a9aeb9a281a0b94b",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OCTA_TWO_SHARP_POLES.md",
+      "original_sha256": "8ab797c8ed50d4cc413223ae8e3ec9898ec0d0b6580a804f95a29a38b7b11ef7",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/ORIGINAL_EDGE_RULE.md",
+      "original_sha256": "4eeb297179997220eff11cc98d348ab8e4b472d20ff8a237eb3529f8ae5cefdd",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/OVERNIGHT.md",
+      "original_sha256": "3039a03b60687ce1ffaa72c7d64466a9ae466febb3e01be8abe8e31be8d3650d",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/PRISM_COMPLEMENTARY_ROUTES.md",
+      "original_sha256": "d793f45ef2f84e2920f25ae34d14f146f7510ae563c92fd89d187fa51c5e31de",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/PRISM_DIAGONAL.md",
+      "original_sha256": "87f80ab45e2fde4478d6edfe9e04c618b69e10771946347237a4854147c9dc72",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/PRISM_EDGE_PROOF.md",
+      "original_sha256": "b82e4846d069acd11e027ada28e1e3d64eb1c24360148eb1c71cf5392ce44009",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/PRISM_GATE_SWITCH.md",
+      "original_sha256": "8a13b748fd86b042f00d77189f331e666ad0bb45c8867458ecc5ffef932eae26",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/PRISM_ONE_PAIR.md",
+      "original_sha256": "b57a4329960d9635e52c36081a20f60244aafeaaf931013a8c0c662a831b1246",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/PRISM_SHARP_FAN_SWITCH.md",
+      "original_sha256": "cfbe0da2e3b560cb925357de3bd73906e5aa05723c6ae208b51ac15328fd9fb2",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/PRISM_TWO_SHARP_ENDS.md",
+      "original_sha256": "d9b6f83b325bc97428505f0771a4983684bd3757253e79de70552983a54bc02b",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/README.md",
+      "original_sha256": "922462e040fe4913b28258e9276e25284040322452ad163f72d6f846b4d58d53",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/REGION_COVER.md",
+      "original_sha256": "fe435cf8e05e9cf44e975e3f600542906997eaf3aee42446438a121e5157a320",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/REVIEW.md",
+      "original_sha256": "9212c0e1dbc5e8b2efa1dcec9891648ee0084cd2d3dea267b7ae2c06e859fb4c",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/SHARP_VERTEX_PATTERNS.md",
+      "original_sha256": "1b2a25ab4b46fbcb42793a79604199e31e9d642c110f95cba0db7836309fb5e1",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/THESIS_AUDIT.md",
+      "original_sha256": "cc0777665fb8b1ff9059b2063f700aa6dfe34adf1b66a8e34234b843faa65916",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/TIMED_SESSION_2026_09_09.md",
+      "original_sha256": "c872a8e15489a6082bd37b416dce7b1307f746550872196a6a62b8d7d117afdb",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/archive_notes/computation-README.md",
+      "original_sha256": "219823605624ddef772b9b19aba94fccc8e2bb5d48ab44f6ba7414517689dbd2",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/archive_notes/computation-edge-unfolding-notes.md",
+      "original_sha256": "92510124d52a9219cc91eae71167d77cc43ff85872b138b10ae773616f3b4798",
+      "present": true,
+      "unchanged": true
+    },
+    {
+      "file": "n6/archive_notes/six-RESULTS.md",
+      "original_sha256": "7c25204ca22015f153cdf2f0572da61f4d0b58d0c7862b38c0fb7357f97387fc",
+      "present": true,
+      "unchanged": true
+    }
+  ],
+  "all_present_unchanged": true
+}

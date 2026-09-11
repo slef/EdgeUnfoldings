@@ -1,3 +1,69 @@
+## Validation checkpoint — 12 September, 08:37 JST
+
+The **290-test full suite passed in 330.481s**. The packaged overview's 241
+evidence links and six reading pages' 72 internal links/heading anchors
+all resolve. Save the cap/angle/counterexample checkpoint now. The current
+prospective mathematical shortening is a separate octahedron face-cap
+selection lemma: choose globally largest curvature c=M, opposite m, and
+write the other opposite pairs (A,a), (B,b) with A>=a,B>=b. Choose fan
+w=a or b with w<=pi and upper sum U1=M+a+B or U2=M+b+A<=3*pi. If M>=pi
+the lower cap bound is automatic; both upper sums cannot exceed 3*pi
+because U1+U2=4*pi+M-m<6*pi. If a>pi, the other choice b is below pi
+and U2=4*pi-(m+a+B)<3*pi; reflect for b>pi. If M<=pi all six are low,
+so any triangular sum is in [pi,3*pi]. The slit threshold is automatic
+since M>=2*pi/3. The local cap theorem needs w<=pi, the usual weighted
+slit test, and both incident blue-face curvature sums in [pi,3*pi]. Lower
+bounds contradict E2 and pocket P; upper bounds supply the opposite
+Case A angle bounds by total curvature. This could give a standalone
+octahedron proof without E1, while preserving the stronger old rule.
+Audit/write/check it before promoting it. Continue until 09:58 JST.
+
+## Review checkpoint — 12 September, approximately 08:30 JST
+
+Continue until **00:58:04 UTC / 09:58 JST**, with no push or deployment.
+The cap proof now has an explicit angle rule choosing one prism tree before
+any trial unfolding (`prism_angle_rule.py`). Its 15 saved domains pass
+independent whole-net replay. A new exact negative result rules out keeping
+only the two cofacial routes at the sharpest vertex: read
+`SHARPEST_COFACIAL_FAILURE.md`. The integer example and a full nine-parameter
+box have both sharpest-source nets overlapping, while both other-source
+routes and the cap rule's T are safe. All ten point/family certificates and
+the numerical discovery report are preserved. The four-route family itself
+is still open; five-tree minimality is not claimed.
+
+The original 59 research Markdown files under n6 are all byte-for-byte
+unchanged from master 6327f07 (excluding this continuation log). See
+`results/proof-review-preservation-20260912.json`. A minor precision-report
+label in certify.py was corrected; acceptance logic was unchanged. Six new
+tests since the 284-test suite passed separately (three angle-rule, one
+precision-label, two sharpest-cofacial). The fresh complete 290-test suite
+is running now. Save a local checkpoint after it passes, then package the
+site and check every new readable evidence link. The deadline and heartbeat
+instructions below still apply; do not end the session early.
+
+## Review checkpoint — 12 September, approximately 08:15 JST
+
+The session continues until **00:58:04 UTC / 09:58 JST**. Remain on
+`codex/proof-review-tidy`; do not push or deploy. A new cap-curvature theorem
+reduces the prism family to five trees and at most two candidates per shape.
+Read `PRISM_CAP_RULE.md` and the updated `TIDY_PROOF.md`; the first full draft
+is preserved as `TIDY_PROOF_FIRST_REVIEW.md`. `CASE_A_CAP_BUDGET.md` preserves
+the stronger optional angle-difference form without complicating the main
+proof. The overview has a new separate cap-rule page and retains its full
+seven-tree account in collapsed history. All **284 tests passed**; 15 old
+point/family domains have independently checked newly selected nets.
+
+The geometric core, full-quadrilateral applications, switch hypotheses,
+boundary cases, selected/every-slit distinction and certificate arithmetic
+have received a further manual audit. No mathematical gap identified so
+far, but this remains self-audit, not independent or formal review.
+`PROOF_REVIEW_20260912.md` records the details and retained numerical searches.
+Stage and save the cap checkpoint, validate the packaged site's new evidence
+links, and continue useful review until the deadline. At the end save the
+handoff, pause heartbeat `continue-lemma-f-proof-research`, and report honestly.
+Untracked `lean_statement/` and the two original PDFs are unrelated; leave
+them untouched. Earlier checkpoints below are history.
+
 ## Review checkpoint — 12 September, approximately 07:15 JST
 
 The requested 3.5-hour session remains active until **00:58:04 UTC / 09:58 JST**.

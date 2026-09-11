@@ -42,6 +42,15 @@ class CertificateTests(unittest.TestCase):
         self.assertEqual(result['pairs'],{'vertex_fan':19,'separating_edge':9})
         self.assertTrue(all(F(q[0]) < F(q[1]) for p in self.cert['coordinate_box'] for q in p))
 
+    def test_report_uses_the_current_interval_precision(self):
+        from n6.intervals import BITS, set_precision
+        try:
+            for precision in (64, 240):
+                set_precision(precision)
+                self.assertIn(f'{precision} fractional bits', verify(self.cert)['arithmetic'])
+        finally:
+            set_precision(BITS)
+
     def test_every_pair_required_once(self):
         for witnesses in [self.cert['pair_witnesses'][:-1],self.cert['pair_witnesses']+[self.cert['pair_witnesses'][0]]]:
             bad={**self.cert,'pair_witnesses':witnesses}

@@ -1,0 +1,23 @@
+# Preserved discovery experiment; numerical results are not proof premises.
+from pathlib import Path
+"""Discovery only: rational angle relaxation, not a polyhedron realization."""
+exec(Path(__file__).with_name('proof-review-linear-search.py.txt').read_text().split('rng=np.random.default_rng(0)')[0])
+common={**base,'k1-pi':k[1]-1,**{'pi-k'+str(v):1-k[v] for v in (0,2,3,4,5)},
+        'gate0fails':1-k[0]-k[2], 'middle_obtuse':a['F5']-F(1,2),
+        'FcaseA':a['F5']-K,'upperwidefan':a['C3']-a['E1'],
+        'direct2fails':1-2*k[2]-k[5],'direct4fails':1-2*k[4]-k[5]}
+for label,bad in [('B',gB),('D',gD)]:
+    conditions=common|{'bad'+label:bad}
+    vs=np.array([vec(p) for p in conditions.values()])
+    result=linprog(np.r_[np.zeros(n),-1],A_ub=np.c_[-vs[:,1:],np.ones(len(vs))],b_ub=vs[:,0],bounds=[(None,None)]*n+[(None,None)],method='highs')
+    print(label,result.message,'margin',None if result.x is None else result.x[-1],flush=True)
+    if result.success and result.x[-1]>1e-8:
+        x=[F(float(q)).limit_denominator(100000) for q in result.x[:-1]]
+        def ev(p):return p.terms.get(monomials[0],F(0))+sum(p.terms.get(m,F(0))*q for m,q in zip(monomials[1:],x))
+        print('exact relaxed model',all(ev(p)>0 for p in conditions.values()),flush=True)
+        print('angles',{key:str(ev(p)) for key,p in a.items()},flush=True)
+        print('curvatures',{key:str(ev(p)) for key,p in k.items()},flush=True)
+    else:
+        coeff=[F(float(q)).limit_denominator(120) for q in -result.ineqlin.marginals]
+        total=sum((c*p for c,p in zip(coeff,conditions.values())),Poly.constant(n,0))
+        print('certificate',[(key,str(c)) for key,c in zip(conditions,coeff) if c],total.json(),flush=True)

@@ -1,4 +1,8 @@
-# A streamlined proof of original-edge unfoldability through six vertices
+# Earlier complete review draft — seven prism candidates
+
+Preserved from the first complete reconstruction during the 12 September review.
+The current [TIDY_PROOF.md](TIDY_PROOF.md) has the subsequent cap simplification.
+All text below retains the scope and state of this earlier draft.
 
 12 September 2026. **Separate draft in progress during the proof review.**
 The original notes, alternatives, failures, figures and certificates are
@@ -45,8 +49,7 @@ are unique for a 3-connected planar graph. This also identifies directly
 the face lists used below. The triangular-prism graph is a dome: any one
 of its quadrilaterals shares an edge with every other facet. The established
 dome unfolding theorem applies without requiring parallel metric bases;
-see [Pinciu, Corollary 2](https://cccg.ca/proceedings/2007/01a4.pdf), or
-the earlier “Domes” treatment in [O'Rourke's author manuscript](https://www.science.smith.edu/~jorourke/Papers/PolyUnf0.pdf).
+see the “Domes” proof in [O'Rourke's author manuscript](https://www.science.smith.edu/~jorourke/Papers/PolyUnf0.pdf).
 Only the other three graphs need the new argument. The existing seven-type
 computer enumeration is retained as a separate check, not a proof premise.
 
@@ -155,8 +158,8 @@ Use original faces
 
 and let X_i denote the full corner angle of original face X at vertex i.
 Add 05 and 24 only as uncut auxiliary hinges when using the common rule.
-The four cofacial near-stars we retain are star(1)+25, star(1)+54,
-star(3)+20, and star(3)+25. The fifth candidate is
+The six original near-stars are star(1)+5c for c in {2,3,4}, and
+star(3)+2c for c in {0,1,5}. The seventh candidate is
 
     T={02,12,25,35,45}.
 
@@ -184,21 +187,6 @@ the two outer angles plus the middle angle equal the source's incident
 angle sum. Two simple sufficient ways to settle its Case A are therefore:
 a nonobtuse middle angle; or both outer apex angles <=(pi+theta)/2.
 A source curvature >=pi gives the original, narrower bounds as well.
-
-There is now a shorter way to organize every shape. Let C_A and C_F be
-the curvature sums of the three vertices of the two triangular caps, so
-C_A+C_F=4*pi. **If both cap sums are at least pi, T works.** Indeed,
-in either view lambda+rho+nu=2*pi-kappa_p because its source has degree
-three. Hence
-
-    2*lambda+nu-2*pi-K = lambda-rho-C,
-
-where C is that cap's curvature sum. Since 0<lambda,rho<pi, C>=pi
-makes this expression and its reflection strictly negative. Both wider
-Case A bounds hold, and the two-view observation settles T. In particular
-this covers every prism with all curvatures at most pi, since the other
-cap can sum to at most 3*pi. The [cap rule](PRISM_CAP_RULE.md) records
-the full statement, including equality and its exact example checks.
 
 ### Switch 1: a sharp vertex at 2 or 5
 
@@ -240,52 +228,32 @@ Suppose
     kappa_2<=pi, kappa_0+kappa_2>=pi, kappa_0+kappa_1>=pi.
 
 Compare M=star(3)+20 with T. The first two premises are M's cofacial
-gate. Its residual pair B/E has middle angle F_3, so M is safe whenever
-F_3<=pi/2: Case B is already safe, and Case A has a nonobtuse middle.
-T is safe whenever F_5<=pi/2: its upper view then has a safe Case A,
-while the lower view cannot be Case A since kappa_0+kappa_1>=pi>A_2.
-The two-view observation finishes T. At least one of F_3,F_5 is
-nonobtuse because they are angles of the same triangle. Thus M or T works.
+gate. Its residual pair is B/E, with middle F and apex angle F_3. If
+it is Case B, or Case A with F_3<=pi/2, M is safe. Otherwise F_3>pi/2,
+so the triangle angle sum gives F_5<pi/2. The upper F view of T has a
+safe Case A by its nonobtuse middle. The lower A view cannot be Case A,
+since kappa_0+kappa_1>=pi>A_2. Again the two-view observation makes T safe.
 Reflection exchanges 0 with 4, 1 with 3, and 2 with 5; it fixes T and
-permutes the four cofacial near-stars.
+permutes the six near-stars.
 
-### Why five candidates suffice, with at most two for each shape
+### Why one of the seven candidates always works
 
-If both cap sums are at least pi, use T. Otherwise exactly one is below
-pi and the other is above 3*pi. Reflect so C_A>3*pi and C_F<pi;
-in particular kappa_5<pi. If kappa_2>=pi, Switch 1 supplies
-star(1)+25 or T. If kappa_2<pi, then
+* **All curvatures<=pi:** one original source 1 or 3 has an allowed equator
+  maximum. Otherwise the forbidden maximum at source 1 would require
+  kappa_0>kappa_4, while that at source 3 would require kappa_4>kappa_0.
+  Use the common rule with that allowed maximum. Ties cause no difficulty.
+* **2 or 5 sharp:** Switch 1 applies.
+* **Both 2,5 below pi, and 0 or 4 sharp:** Switch 2 or its reflection applies.
+* **Only 1 or 3 can be sharp:** reflect to take 1. If an original endpoint
+  c in {2,3,4} passes 2*kappa_c+kappa_5>=pi, use star(1)+5c. Otherwise
+  the failures for 3 and 4 give kappa_3+kappa_4+kappa_5<pi. Subtracting
+  from 4*pi and using kappa_1<2*pi forces kappa_0+kappa_2>pi. Also
+  kappa_0+kappa_1>pi, so Switch 2 applies with the already-low fan at 2.
 
-    kappa_0+kappa_2=C_A-kappa_1>pi,
-    kappa_0+kappa_1=C_A-kappa_2>2*pi.
-
-Thus Switch 2 supplies star(3)+20 or T. The reflected orientation
-supplies star(3)+25 or star(1)+54, together with T. These are precisely
-the five stated original-edge candidates. On each particular shape,
-the cap sums and the indicated end curvature select just one or two.
-
-These cases exhaust every curvature assignment; neither auxiliary
-diagonal is cut. Thus the prism-with-diagonal type, and with it every case
-through six vertices, has the stated written existence argument. The
-earlier seven-candidate proof remains correct and is preserved in
-[the first review draft](TIDY_PROOF_FIRST_REVIEW.md) and PRISM_EDGE_PROOF.md.
-Five is a sufficient family size, not a claim of minimality.
-
-### Selecting one tree without a trial unfolding
-
-The proof gives an explicit rule, not just a list to search. If both cap
-sums are at least pi, choose T. Otherwise reflect to C_A>3*pi and C_F<pi.
-For kappa_2<pi, choose star(3)+20 when F_3<=pi/2 and T otherwise.
-For kappa_2>=pi, put K=kappa_3+kappa_4 and choose star(1)+25 if
-
-    K>=E_1, or E_1<=pi/2, or 2*D_1+E_1<=2*pi+K.
-
-If none holds, choose T. The first two tests are Case B and nonobtuse
-middle; in strict Case A the last is the D_1 wider bound, while the
-C_1 bound holds automatically by the first switching identity. The two
-other identities prove T safe when all three closed tests fail. Undo
-the reflection to obtain the original labels. Thus curvature and original
-face angles select one successful cut tree without comparing planar nets.
+These cases exhaust every curvature assignment. Every final tree is one
+of the seven original-edge candidates; neither auxiliary diagonal is cut.
+Thus the prism-with-diagonal type, and with it every case through six
+vertices, has the stated written existence argument.
 
 ## Equalities, preservation, and review status
 

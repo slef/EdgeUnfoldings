@@ -1,0 +1,144 @@
+{
+  "prism-sharpest-cofacial-failure-source-1-slit-2": {
+    "pair": [
+      0,
+      3
+    ],
+    "exact_check": {
+      "result": "verified_positive_area_overlap",
+      "faces": [
+        0,
+        3
+      ],
+      "strict_signs": 7,
+      "lower_bounds": [
+        "49463688352677244234825309347977855318331891598365321475008055143163/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "23759923181780733950041612376772982530495148039545878466107381509767/441711766194596082395824375185729628956870974218904739530401550323154944",
+        "16408407692974050715068969793200214085517758381681575253861905201478530343/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "269275859099882605902394566969457321503202544164784347949149158130505585/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "1609887996381273851067970090243821375201448745812957758279233514632207591/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "34605011866311295643996308090462896453967435219386643671144349197980669697/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "9828330746810113036619535364247295503834705621714750449986057829194359117/441711766194596082395824375185729628956870974218904739530401550323154944"
+      ],
+      "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+      "facet_sizes": [
+        3,
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "strict_facet_supports": 16
+    }
+  },
+  "prism-sharpest-cofacial-failure-source-1-slit-4": {
+    "pair": [
+      3,
+      4
+    ],
+    "exact_check": {
+      "result": "verified_positive_area_overlap",
+      "faces": [
+        3,
+        4
+      ],
+      "strict_signs": 7,
+      "lower_bounds": [
+        "4205114734601367691877591333765563836950531590655469824773533615687476775/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "397321236901355617307568313117798426245003086895016199257998537090351517/441711766194596082395824375185729628956870974218904739530401550323154944",
+        "33243470641664505061822629294687102521571118664306871568882321361527627445/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "1639024775073020760067449348331182831532351999128113965399165674145909/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "1254017366551935767543952984186954252160084044748678308114268800256527/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "6492047532951386095440615282397905446825455571447448904011384678970079039/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "7180767347746750225765014859030644124004681461739797341399006302000835575/1766847064778384329583297500742918515827483896875618958121606201292619776"
+      ],
+      "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+      "facet_sizes": [
+        3,
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "strict_facet_supports": 16
+    }
+  },
+  "prism-sharpest-cofacial-success-source-3-slit-0": {
+    "pair": [
+      1,
+      2
+    ],
+    "exact_check": {
+      "result": "verified",
+      "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+      "parameter_dimension": 9,
+      "facet_sizes": [
+        3,
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "pairs": {
+        "vertex_fan": 11,
+        "separating_edge": 2,
+        "face_neighborhood": 2
+      },
+      "strict_facet_supports": 16,
+      "planarity_identities": 20,
+      "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+      "linear_correlations": false,
+      "fractional_bits": 240,
+      "theorem_dependencies": [
+        {
+          "author": "Val Pinciu",
+          "year": 2007,
+          "theorem": 1,
+          "title": "On the Fewest Nets Problem for Convex Polyhedra",
+          "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+        }
+      ]
+    }
+  },
+  "prism-sharpest-cofacial-success-source-3-slit-5": {
+    "pair": [
+      1,
+      5
+    ],
+    "exact_check": {
+      "result": "verified",
+      "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+      "parameter_dimension": 9,
+      "facet_sizes": [
+        3,
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "pairs": {
+        "vertex_fan": 11,
+        "separating_edge": 3,
+        "face_neighborhood": 1
+      },
+      "strict_facet_supports": 16,
+      "planarity_identities": 20,
+      "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+      "linear_correlations": false,
+      "fractional_bits": 240,
+      "theorem_dependencies": [
+        {
+          "author": "Val Pinciu",
+          "year": 2007,
+          "theorem": 1,
+          "title": "On the Fewest Nets Problem for Convex Polyhedra",
+          "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+        }
+      ]
+    }
+  }
+}

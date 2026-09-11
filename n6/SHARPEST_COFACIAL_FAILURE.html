@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Why the sharpest cofacial source alone is insufficient</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <style>
+  :root { color-scheme: light; }
+  html { background:#f7f6f1; color:#20252b; }
+  body { max-width:58rem; margin:3rem auto; padding:0 1.5rem 4rem;
+         font:18px/1.65 Georgia,"Times New Roman",serif; }
+  h1,h2,h3,nav { font-family:system-ui,sans-serif; line-height:1.3; }
+  h1 { font-size:2rem; } h2 { margin-top:2.6rem; font-size:1.45rem; }
+  h3 { margin-top:1.9rem; font-size:1.15rem; }
+  a { color:#17638a; text-underline-offset:.15em; }
+  pre { background:#fff; border:1px solid #dcdedc; border-radius:6px;
+        padding:1rem; overflow-x:auto; font-size:.88rem; line-height:1.55; }
+  code { font-family:ui-monospace,"SFMono-Regular",Consolas,monospace; }
+  blockquote { margin:1.5rem 0; padding:.1rem 1.2rem; border-left:4px solid #78a9ba;
+               background:#edf4f5; }
+  table { width:100%; border-collapse:collapse; font-size:.94rem; }
+  th,td { text-align:left; vertical-align:top; padding:.6rem; border-bottom:1px solid #ddd; }
+  th { background:#edf0ee; font-family:system-ui,sans-serif; }
+  #TOC { font-size:.95rem; background:#fff; border:1px solid #dcdedc;
+         border-radius:6px; padding:1rem 1.5rem; }
+  #TOC ul { padding-left:1.3rem; }
+  .reading-links { font: .9rem/1.5 system-ui,sans-serif; padding-bottom:1rem;
+                   border-bottom:1px solid #dcdedc; }
+  @media(max-width:600px) { body { margin:1.5rem auto; padding:0 1rem 2rem; font-size:17px; }
+                           h1 { font-size:1.6rem; } table { font-size:.8rem; } }
+  @media print { html { background:white; } body { max-width:none; margin:0; font-size:10pt; }
+                pre,blockquote,table { break-inside:avoid; } h2,h3 { break-after:avoid; }
+                a { color:inherit; } .reading-links { display:none; } }
+  </style>
+</head>
+<body>
+<nav class="reading-links" aria-label="Proof documents"><a href="TIDY_PROOF.html">Main proof</a> · <a href="TIDY_CORE.html">Geometric details</a> · <a href="PROOF_REVIEW_20260912.md">Review record</a></nav>
+<header id="title-block-header">
+<h1 class="title">A tempting prism shortcut fails, even at the unique sharpest vertex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul><li><a href="#what-this-changes-and-what-it-does-not">What this changes, and what it does not</a></li><li><a href="#reproduction-and-preserved-evidence">Reproduction and preserved evidence</a></li></ul>
+</nav>
+<p>12 September 2026. An exact counterexample found during the simplification review. This is a failure of one proposed selection rule, not of edge unfoldability. The full five-tree proof and its angle rule remain valid.</p><p>The four cofacial routes use sources 1 and 3, the opposite corners of the two quadrilateral faces. A tempting shorter rule is: choose the sharper source, then try its two routes around its quadrilateral. The example below shows that even choosing the <strong>unique sharpest vertex of the entire solid</strong> does not make those two routes sufficient.</p><p>Keep the original faces A=021, B=0352, C=013, D=1254, E=143, F=345. Here are integer coordinates:</p><table><thead><tr class="header"><th>Vertex</th><th style="text-align: right;">x</th><th style="text-align: right;">y</th><th style="text-align: right;">z</th></tr></thead><tbody><tr class="odd"><td>0</td><td style="text-align: right;">200</td><td style="text-align: right;">0</td><td style="text-align: right;">0</td></tr><tr class="even"><td>1</td><td style="text-align: right;">-1400</td><td style="text-align: right;">200</td><td style="text-align: right;">0</td></tr><tr class="odd"><td>2</td><td style="text-align: right;">0</td><td style="text-align: right;">0</td><td style="text-align: right;">0</td></tr><tr class="even"><td>3</td><td style="text-align: right;">600</td><td style="text-align: right;">160</td><td style="text-align: right;">1000</td></tr><tr class="odd"><td>4</td><td style="text-align: right;">-180</td><td style="text-align: right;">98</td><td style="text-align: right;">550</td></tr><tr class="even"><td>5</td><td style="text-align: right;">-5</td><td style="text-align: right;">4</td><td style="text-align: right;">25</td></tr></tbody></table><p>The exact verifier checks strict convexity, every original facet, and that vertex 1 has strictly greater curvature than each of the other five. Nevertheless both its cofacial routes overlap:</p><table><colgroup><col style="width: 50%" /><col style="width: 50%" /></colgroup><thead><tr class="header"><th>Cut tree</th><th>Exact outcome</th></tr></thead><tbody><tr class="odd"><td>star(1)+25</td><td>Positive-area overlap of A and D</td></tr><tr class="even"><td>star(1)+54</td><td>Positive-area overlap of D and E</td></tr><tr class="odd"><td>star(3)+20</td><td>All 15 original face pairs safe</td></tr><tr class="even"><td>star(3)+25</td><td>All 15 original face pairs safe</td></tr><tr class="odd"><td>T={02,12,25,35,45}</td><td>Both cap sums exceed pi; the cap rule selects T, whose 15 pairs are independently safe</td></tr></tbody></table><p>The first failure cuts 01,12,13,14,25. The second replaces 25 by 45. The overlap claims concern the complete original quadrilaterals. They are not artifacts of cutting an auxiliary diagonal or substituting a triangle for a face.</p><p>The counterexample is also certified on a neighborhood with all nine parameters varying: use the original prism chart centered at</p><pre><code>(-7, 1, -1/40, 1/50, 1/8, 4, 40, 1/20, 22),</code></pre><p>with independent half-width 1/10^10 in each parameter. The same two nets have positive-area overlap throughout this box, vertex 1 remains uniquely sharpest, and both other-source nets and T remain safe. The point certificate uses the displayed integer coordinates divided by 200, a similarity.</p><h2 id="what-this-changes-and-what-it-does-not">What this changes, and what it does not</h2><p>A complete original-edge rule must allow a change of source, a different fifth edge, or another fallback. Our cap rule does exactly that: it selects T here. This example does not refute the four cofacial routes taken together, and it does not prove that the five-tree family is minimal. Those are separate questions. It also does not refute the octahedron’s sharpest-source rule, which is permitted to choose a different fifth edge; here that would be the original edge 35.</p><p>The discovery search tested 100,000 numerical shapes and found no failure of all four cofacial routes. That absence proves nothing about their universal sufficiency. The positive overlap statements above instead come from exact outward rational interval certificates, checked against every edge axis of each of the two convex faces.</p><h2 id="reproduction-and-preserved-evidence">Reproduction and preserved evidence</h2><p>Run <code>python3 -m n6.sharpest_cofacial</code>. The code independently reconstructs and checks the point and parameter family; it does not trust the search.</p><ul><li><a href="results/prism-sharpest-cofacial.verification.json">Exact point, family, curvature order and all five outcomes</a>.</li><li><a href="results/prism-sharpest-cofacial-failure-source-1-slit-2.certificate.json">First failed route, point</a>.</li><li><a href="results/prism-sharpest-cofacial-failure-source-1-slit-4.certificate.json">Second failed route, point</a>.</li><li><a href="results/prism-sharpest-cofacial-failure-source-1-slit-2-family.certificate.json">First failed route, nine-parameter box</a>.</li><li><a href="results/prism-sharpest-cofacial-failure-source-1-slit-4-family.certificate.json">Second failed route, nine-parameter box</a>.</li><li><a href="results/prism-four-candidate-review-probe-20260912.json">Preserved numerical search</a>.</li><li><a href="PRISM_CAP_RULE.html">The five-tree cap proof</a> and <a href="TIDY_PROOF.html">complete shorter proof</a>.</li></ul><p>This exact example limits a shortcut. It is not an independent review of the universal five-tree geometric argument.</p>
+</body>
+</html>

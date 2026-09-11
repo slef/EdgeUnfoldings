@@ -80,7 +80,7 @@ assert(!overview.includes('66.7%'),'Proof branch counts are not completion perce
 assert.equal(vm.runInContext("coveragePercent('99999999999999999999/100000000000000000000')",ctx),'&gt;99.9999%');
 assert.equal(vm.runInContext("coveragePercent('1/100000000000000000000')",ctx),'&lt;0.0001%');
 const prism=vm.runInContext('article(byId.t_prismd,false)',ctx);
-assert(prism.indexOf('data-model="t_prismd"')<prism.indexOf('Prism with one diagonal · complete seven-candidate proof'));
+assert(prism.indexOf('data-model="t_prismd"')<prism.indexOf('Prism with one diagonal · complete five-candidate proof'));
 assert(prism.indexOf('data-model="t_prismd"')<prism.indexOf('The proposed reduction'));
 assert(prism.indexOf('The proposed reduction')<prism.indexOf('data-model="prism_failure"'));
 const detailed=vm.runInContext('progressDashboard(false)',ctx);
@@ -394,3 +394,18 @@ assert(vm.runInContext('byId.F_triple.statement',ctx).includes('(R)'));
 assert(!vm.runInContext('byId.F_every_slit.statement',ctx).includes('(R)'));
 assert(!vm.runInContext('byId.F_triple_every_slit.statement',ctx).includes('(R)'));
 assert(vm.runInContext('article(byId.tidy_proof,false)',ctx).includes('every original proof and alternative') || vm.runInContext('byId.tidy_proof.summary',ctx).includes('every original proof and alternative'));
+
+const capRule=vm.runInContext('article(byId.prism_cap,false)',ctx);
+assert.equal(vm.runInContext('byId.prism_cap.status',ctx),'proved');
+assert(capRule.includes('at most two') && capRule.includes('720°'));
+assert(capRule.includes('not proved that five is minimal'));
+assert(prism.includes('five specified trees') && prism.includes('Earlier seven-tree proof'));
+assert(vm.runInContext('article(byId.prism_complete,false)',ctx).includes('Earlier complete seven-candidate proof, retained'));
+const capReport=JSON.parse(fs.readFileSync(path.join(root,'n6/results/prism-cap-rule.verification.json'),'utf8'));
+assert.equal(capReport.domains_checked,15);
+for(const r of Object.values(capReport.domains)) {
+  assert(r.selection.candidates.length<=2);
+  assert.equal(r.fixed_family_size,5);
+  assert.equal(Object.values(r.independent_all_original_pairs.pairs).reduce((a,b)=>a+b,0),15);
+}
+console.log('Cap rule: five candidates, selected pairs, independent domain checks, and preserved history pass.');

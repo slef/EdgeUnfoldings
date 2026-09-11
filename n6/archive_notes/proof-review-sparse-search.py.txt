@@ -1,0 +1,15 @@
+# Preserved discovery experiment; numerical results are not proof premises.
+from pathlib import Path
+exec(Path(__file__).with_name('proof-review-linear-search.py.txt').read_text().split('rng=np.random.default_rng(0)')[0])
+from scipy.optimize import milp,LinearConstraint,Bounds
+for title,target,extra in [('fC',-fC,{}),('fD+gD',-fD-gD,{}),('fD+gB',-fD-gB,{'E1-pi/2':a['E1']-F(1,2)})]:
+    bounds=base|extra;names=list(bounds);polys=list(bounds.values());m=len(names)
+    matrix=np.array([vec(p) for p in polys]).T
+    eq=np.column_stack([matrix,np.zeros_like(matrix)])
+    gate=np.column_stack([np.eye(m),-8*np.eye(m)])
+    r=milp(np.r_[np.zeros(m),np.ones(m)],integrality=np.r_[np.zeros(m),np.ones(m)],bounds=Bounds(np.zeros(2*m),np.r_[np.full(m,8),np.ones(m)]),constraints=[LinearConstraint(eq,vec(target),vec(target)),LinearConstraint(gate,np.full(m,-np.inf),np.zeros(m))],options={'time_limit':55})
+    print(title,r.message,flush=True)
+    if r.x is not None:
+        coeff=[F(float(x)).limit_denominator(120) if x>1e-8 else F(0) for x in r.x[:m]]
+        exact=sum((c*p for c,p in zip(coeff,polys)),Poly.constant(n,0))
+        print('EXACT', (exact-target).is_zero(),[(name,str(c)) for name,c in zip(names,coeff) if c],flush=True)
