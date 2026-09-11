@@ -203,7 +203,8 @@ assert(localLemma.includes('cannot automatically be reused there'));
 assert(localLemma.includes('lemma-l-cases'));
 assert(localLemma.indexOf('Which cases are solved?')<localLemma.indexOf('The slit route: extend'));
 assert(!localLemma.slice(localLemma.indexOf('lemma-l-cases'),localLemma.indexOf('What is still open?')).includes('Open in general'));
-assert.equal(vm.runInContext('byId.lemmaF.status',ctx),'numeric');
+assert.equal(vm.runInContext('byId.lemmaF.status',ctx),'proved');
+assert.equal(vm.runInContext('byId.F_every_slit.status',ctx),'numeric');
 assert.equal(vm.runInContext('byId.t_octa.status',ctx),'proved');
 
 // Coverage now uses the new complete theorem, not merely the earlier reduction.
@@ -249,7 +250,7 @@ assert(poleAngle.includes('data-model="far_projection_low"'));
 assert(poleAngle.includes('not an overlap'));
 assert(poleAngle.includes('joint obstruction is geometrically possible'));
 assert(detailed.includes('equal-length proof'));
-assert(farLemma.includes('every-slit quantifier remains open'));
+assert(farLemma.replace(/<[^>]*>/g,'').includes('every-slit quantifier remains open'));
 assert(smallFar.includes('still obtuse after flattening'));
 assert(remainingPattern.includes('new ≥180° theorem now covers'));
 const lowCertificate=JSON.parse(fs.readFileSync(path.join(root,'n6/results/far-projection-low-curvature.certificate.json'),'utf8'));
@@ -304,7 +305,8 @@ for(const name of ['minus','prism']) {
 // It must not silently turn the original every-slit statement into a theorem.
 const lowFar=vm.runInContext('article(byId.F_low_local,false)',ctx);
 assert.equal(vm.runInContext('byId.F_low_local.status',ctx),'proved');
-assert.equal(vm.runInContext('byId.lemmaF.status',ctx),'numeric');
+assert.equal(vm.runInContext('byId.lemmaF.status',ctx),'proved');
+assert.equal(vm.runInContext('byId.F_every_slit.status',ctx),'numeric');
 assert.equal(score.octahedron.every_slit_reduction.required_local_pairs,3);
 assert.equal(score.octahedron.every_slit_reduction.far_pairs_implied,6);
 assert.equal(score.octahedron.every_slit_reduction.unconditional_every_slit_status,'open');
@@ -383,3 +385,12 @@ assert(prismComplete.includes('Numerical experiments are not proof premises'));
 assert(prismComplete.includes('stronger every-slit Lemma F'));
 assert.equal(vm.runInContext('byId.prism_one_pair.status',ctx),'proved');
 assert(vm.runInContext('article(byId.prism_one_pair,false)',ctx).includes('14 of 15 face pairs'));
+
+// The green statements retain R; the optional yellow statements retain H alone.
+assert.equal(vm.runInContext('byId.F_triple.status',ctx),'proved');
+assert.equal(vm.runInContext('byId.F_triple_every_slit.status',ctx),'numeric');
+assert(vm.runInContext('byId.lemmaF.statement',ctx).includes('(R)'));
+assert(vm.runInContext('byId.F_triple.statement',ctx).includes('(R)'));
+assert(!vm.runInContext('byId.F_every_slit.statement',ctx).includes('(R)'));
+assert(!vm.runInContext('byId.F_triple_every_slit.statement',ctx).includes('(R)'));
+assert(vm.runInContext('article(byId.tidy_proof,false)',ctx).includes('every original proof and alternative') || vm.runInContext('byId.tidy_proof.summary',ctx).includes('every original proof and alternative'));

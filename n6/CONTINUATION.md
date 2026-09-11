@@ -1,3 +1,22 @@
+## Active review and simplification session — 12 September 2026
+
+User-authorized window: 2026-09-11 21:28:04 UTC through 2026-09-12
+00:58:04 UTC (06:28–09:58 JST, around the user's 10 AM return).
+Branch: codex/proof-review-tidy, starting from published master 6327f07.
+Review all proof dependencies and develop the shortest justified account
+in a separate section. Preserve every existing argument, certificate,
+figure, failed approach, and historical result. Do not hide any discovered
+gap or count numerical searches as proofs. This is a further self-audit,
+not independent mathematical review or formal verification. No subagents
+are authorized. Leave lean_statement/ and the two untracked PDFs alone.
+No new push/deployment has been requested. Save local checkpoints.
+
+Heartbeat continue-lemma-f-proof-research is active every 15 minutes through
+the deadline; pause it then and give a final report. Read PROOF_REVIEW_20260912.md
+for the current audit and TIDY_PROOF.md when that draft exists. Also clarify
+the selected-slit versus every-slit distinction in the website's Lemma F and
+Triple Lemma sections. Earlier session instructions below are historical.
+
 ## Closing audit of the requested four-hour session
 
 Window: 11 September 2026 17:05:34–21:05:34 UTC (12 September
