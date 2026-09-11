@@ -1,0 +1,76 @@
+{
+  "scope": "Historical status text preserved; no mathematical material or figures removed.",
+  "entries": [
+    {
+      "node": "lemmaA",
+      "field": "body",
+      "previous": "<p>Cut the edges at a vertex <i>v</i> that is adjacent to all the others and nothing else. This is the limit of the Aronov–O'Rourke star unfolding as the source point moves to <i>v</i>: for a source in the interior of a face the star unfolding is known to be non-overlapping, and non-overlap is a closed condition, so the limit is non-overlapping too (touching is allowed).</p>\n  <div class=\"why\"><span class=\"k\">Why it settles so much</span>With at most six vertices, a vertex of degree <i>n</i> − 1 exists in every type except the prism, the prism with one diagonal, the octahedron minus an edge, and the octahedron.</div>",
+      "change": "Direct application of the published vertex-source theorem; prior limiting presentation remains in collapsed history."
+    },
+    {
+      "node": "t_octa",
+      "field": "earlier status",
+      "previous": "The octahedron-minus-edge and prism-with-one-diagonal types still need proofs using their original edges."
+    },
+    {
+      "node": "octa_switch",
+      "field": "summary",
+      "previous": "Moving the opening repairs the old local pairs. At the sharpest apex, opposite petals cannot overlap along both routes. The whole net still needs checking."
+    },
+    {
+      "node": "octa_three_chain",
+      "field": "summary",
+      "previous": "A condition on the middle inward corner guarantees one of four prescribed nets. A stronger switching test covers additional shapes. The full pattern remains open."
+    },
+    {
+      "node": "octa_three_same",
+      "field": "earlier status",
+      "previous": "The octahedron-minus-edge and prism-with-one-diagonal types still need proofs using their original edges."
+    },
+    {
+      "node": "octa_curvature_remainder",
+      "field": "summary",
+      "previous": "A proved reduction to three curvature patterns; the unfolding of those remaining families is still open."
+    },
+    {
+      "node": "prism_complementary",
+      "field": "earlier status",
+      "previous": "an unresolved prism must have"
+    },
+    {
+      "node": "prism_two_sharp",
+      "field": "earlier status",
+      "previous": "The complete prism type and the minus-edge type remain open."
+    },
+    {
+      "node": "original_rule",
+      "field": "earlier status",
+      "previous": "The <a href=\"#minus_complete\">minus-edge type is now proved</a>; the prism remains open."
+    },
+    {
+      "node": "nonsimp_low",
+      "field": "summary",
+      "previous": "A geometric original-edge unfolding theorem for the octahedron minus an edge and the prism with one diagonal. Equality at 180° is included; higher-curvature shapes remain open in general."
+    },
+    {
+      "node": "F_pole_angle",
+      "field": "earlier status",
+      "previous": "The octahedron-minus-edge and prism-with-one-diagonal types still need proofs using their original edges."
+    },
+    {
+      "node": "F_basecones",
+      "field": "earlier status",
+      "previous": "We still need a proof in that branch, while the three local slit pairs in <a href=\"#lemmaL\">Lemma L</a> are now proved."
+    },
+    {
+      "node": "F_basecones",
+      "field": "explanation",
+      "previous": "<b>Proved: a general geometric lemma.</b> Two specified petals cannot overlap when the two angle sums below are each at least 180°. This includes equality and configurations where an individual angle exceeds 180°. It settles part of the opposite-petal argument; the octahedron theorem still needs the two retained Lemma F checks. Lemma L is now proved."
+    },
+    {
+      "node": "F_below",
+      "field": "earlier status",
+      "previous": "The octahedron-minus-edge and prism-with-one-diagonal types still need proofs using their original edges."
+    }
+  ]
+}
