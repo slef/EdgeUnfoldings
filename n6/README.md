@@ -8,7 +8,16 @@ original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
 case and the convex-patch existence theorem remain proved; the proposed
 fixed-source one-nonconvex-patch argument has a remaining far-fan step.
 
-**Latest result, 11 September:** [two cut-side fan checks now suffice for all
+**Latest result, 11 September:** [two finite cut segments characterize safety
+of the selected net](LEMMA_F_CUT_RAYS.md) under H and R. The through-fan bound
+from Lemma L excludes one approach to each segment. Convex remote patches,
+leans away from the slit gap, and insufficient angular reach are proved safe,
+including in Case B past X. The common-direction three-patch pattern leaves
+one segment check. The universal gap inequality and finite-edge separation
+remain open; the unconditional count stays 22/28. Replay the exact point
+and coordinate-box checks with `python3 -m n6.cut_ray_examples`.
+
+**Previous result, 11 September:** [two cut-side fan checks now suffice for all
 six far pairs](LEMMA_F_CUT_REDUCTION.md) under H and R. The proved reduction
 uses the completed Lemma L. It also settles the small-angle case when the
 slit-side far vertex is at or before X, even if the other far vertex passes X.

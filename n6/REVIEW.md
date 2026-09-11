@@ -7,7 +7,15 @@ There is new rigorous partial coverage of a full coordinate box, an exactly
 checked counterexample to a supporting lemma, and a reproducible reduced SMT
 attempt that reports a timeout.
 
-**Latest continuation, 11 September JST:** [LEMMA_L_PROOF.md](LEMMA_L_PROOF.md) proves the full Lemma L geometrically. The current local count is 3/3, with 22/28 selected-net pairs universally safe. This does not prove the far pairs or the whole octahedron. The earlier notes below retain their historical proof states.
+**Latest continuation, 11 September JST:** [the selected-slit Lemma F reduction](LEMMA_F_CUT_RAYS.md)
+makes two finite cut-segment checks sufficient and necessary under H and R.
+The through-fan approach is excluded, and new direction subcases are proved
+even past X in Case B. The same-direction three-patch pattern leaves one
+segment check. The universal gap bound, full Lemma F, and octahedron remain
+open; the unconditional pair count stays 22/28. Exact replays agree with
+independent all-28-pair certificates on the specified coordinate regions.
+
+**Previous continuation, 11 September JST:** [LEMMA_L_PROOF.md](LEMMA_L_PROOF.md) proves the full Lemma L geometrically. The current local count is 3/3, with 22/28 selected-net pairs universally safe. This does not prove the far pairs or the whole octahedron. The earlier notes below retain their historical proof states.
 
 **Previous continuation, 10 September JST:**
 [LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md) proves a curvature
