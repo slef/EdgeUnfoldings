@@ -1,5 +1,11 @@
 # An exhaustive opposite-petal partition
 
+**Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
+completes the selected H/R octahedron proof. Earlier open-case counts in this
+note describe the investigation at that stage. The every-slit Lemma F and
+full n=6 theorem remain open; the new research proof awaits independent review.
+
+
 Continuation, 9 September 2026. This supplies a missing reduction in the
 octahedron argument. It does **not** prove the remaining small-fan-angle case
 or Lemma L.

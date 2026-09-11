@@ -73,6 +73,19 @@ def face_plus_curvature_lt_pi(angle,total):
 
 def interval_angle_le(a,b):
     """Certify an ordering by signs; inconclusive intervals return None."""
+    determinant=cdet(a,b)
+    # On the open left half-plane the two phases differ by less than pi.
+    # This also handles a region crossing the negative real axis, where
+    # a split by the sign of sin alone would leave its ordering unresolved.
+    if a[0].hi<0 and b[0].hi<0:
+        if determinant.lo>=0:return True
+        if determinant.hi<0:return False
+    if a[0].hi<0 and b[0].lo>=0:
+        if b[1].hi<0:return True
+        if b[1].lo>=0:return False
+    if b[0].hi<0 and a[0].lo>=0:
+        if a[1].lo>=0:return True
+        if a[1].hi<0:return False
     def half(z):
         if z[1].lo>=0:return 0
         if z[1].hi<0:return 1
@@ -80,7 +93,6 @@ def interval_angle_le(a,b):
     ha,hb=half(a),half(b)
     if ha is None or hb is None:return None
     if ha!=hb:return ha<hb
-    determinant=cdet(a,b)
     if determinant.lo>=0:return True
     if determinant.hi<0:return False
     return None
@@ -94,11 +106,45 @@ def verify_order(geometry,comparisons):
     for a,b in comparisons:
         require(a in products and b in products,'Invalid curvature comparison')
         if a==b:records.append(dict(vertices=[a,b],reason='identical vertex'));continue
+        # An exact point can have equal curvatures by congruent incident
+        # angle multisets. Interval subtraction of two equal trigonometric
+        # products need not recover zero, so retain this exact equality.
+        signature_a = point_angle_signature(geometry,a)
+        if signature_a is not None and signature_a == point_angle_signature(geometry,b):
+            records.append(dict(vertices=[a,b],reason='identical exact incident-angle multisets'))
+            continue
         require(interval_angle_le(products[a],products[b]) is True,'Curvature comparison not certified')
         records.append(dict(vertices=[a,b],angle_sum_products=[
             [q.pair() for q in products[a]],[q.pair() for q in products[b]]],
             determinant=cdet(products[a],products[b]).pair()))
     return dict(result='verified_curvature_order',meaning='For each (a,b), kappa_a >= kappa_b',comparisons=records)
+
+
+def point_angle_signature(geometry, vertex):
+    """Sufficient exact equality test for curvature, never a rounded test.
+
+    On (0,pi), an angle is determined by the sign of its cosine and its
+    squared cosine. Both are rational for exact rational point coordinates.
+    The sorted multiset determines the sum of the incident face angles.
+    Nontrivial coordinate intervals and nontriangular facets are excluded.
+    """
+    if any(x.lo != x.hi for point in geometry.p for x in point):
+        return None
+    points = [tuple(x.lo for x in point) for point in geometry.p]
+    result = []
+    for face in geometry.faces:
+        if vertex not in face:
+            continue
+        if len(face) != 3:
+            return None
+        a,b = [x for x in face if x!=vertex]
+        u,v = sub(points[a],points[vertex]),sub(points[b],points[vertex])
+        product = sum(x*y for x,y in zip(u,v))
+        squared_lengths = sum(x*x for x in u)*sum(x*x for x in v)
+        if squared_lengths<=0:
+            return None
+        result.append(((product>0)-(product<0),product*product/squared_lengths))
+    return tuple(sorted(result))
 
 
 def main():

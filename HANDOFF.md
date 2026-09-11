@@ -1,6 +1,23 @@
 # Dürer's problem for n ≤ 7 vertices — proof state and work plan
 
-## Current proof state: 11 September 2026 JST, codex/minus-edge-patterns
+## Current update: complete selected octahedron proof, 11 September 2026
+
+[The equal-length proof](n6/LEMMA_F_CHORD.md) completes the low-curvature
+branch. Together with the high-curvature pole-angle argument and the recorded
+dependency audit, this gives a complete written proof for the H/R selected
+tree on every convex octahedron. All 28 pairs and all five patch regimes are
+covered, including equality and ties. Independent mathematical review is
+still needed. The every-slit Lemma F and the two nonsimplicial six-vertex types
+remain open; the full n=6 theorem is not claimed.
+
+See [n6/CONTINUATION.md](n6/CONTINUATION.md) for the current proof and
+next research. All earlier counts below are historical. In particular the
+old 2-excluded/47-open report is unchanged as a record; the new theorem
+excludes all 49 simultaneous-failure classes at once. The false older
+unrestricted fan-to-petal reduction remains false and is not used.
+
+
+## Previous proof state: 11 September 2026 JST, codex/minus-edge-patterns
 
 **The full n=6 case remains unproved. Read [n6/REVIEW.md](n6/REVIEW.md)
 before relying on the historical proof status below.**

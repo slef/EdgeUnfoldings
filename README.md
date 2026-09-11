@@ -5,9 +5,10 @@ non-overlapping edge unfolding, in the style of J. DiBiase's 1990 thesis.
 
 * **Status page** (case tree, figures, interactive octahedron): deployed from `durer_small_n/notes/status.html`
   to GitHub Pages on every push to the default branch, `master`.
-* **Current research:** [Lemma L is proved](n6/LEMMA_L_PROOF.md). The selected-slit
-  Lemma F problem now reduces to [two finite cut segments](n6/LEMMA_F_CUT_RAYS.md),
-  with additional direction subcases proved. The full octahedron and n=6 remain open.
+* **Current research:** a [complete written selected-net proof for every convex
+  octahedron](n6/LEMMA_F_CHORD.md), with a dependency audit, is now available.
+  It awaits independent mathematical review. The every-slit Lemma F and two
+  nonsimplicial six-vertex types remain open; the full n=6 theorem is not claimed.
 * `HANDOFF.md` — current audit followed by the historical proof account.
 * `n6/README.md` — archive integration, exact partial certificates, and reproduction.
 * `n6/REVIEW.md` — proof gaps and corrected numerical checks; the full n=6 case remains open in this investigation.

@@ -1,4 +1,65 @@
-# Current continuation: the high-curvature selected-net theorem
+# Current continuation: complete selected octahedron proof
+
+11 September 2026. [LEMMA_F_CHORD.md](LEMMA_F_CHORD.md) completes the
+low-curvature branch of the H/R selected-net rule. Combined with the
+high-curvature [pole-angle proof](LEMMA_F_POLE_ANGLE.md), it gives a complete
+written proof for every convex octahedron: 28/28 face pairs, all five possible
+patch regimes, equality and tied selections included. This is a research
+proof with a recorded dependency audit; independent mathematical review and
+formal verification have not been performed. Numerical experiments are not
+premises. The original every-slit Lemma F and both nonsimplicial remaining
+six-vertex types remain open. The whole-type tally is now 5/7.
+
+For the low branch, H and kappa_v<=pi imply all six curvatures<=pi. A supposed
+finite-cut crossing traps the neighboring patch Q_m inside triangle(w,a,p).
+At a, its apex M and the entering petal's apex P have equal radius s=|av|.
+The gap from aM to aP is kappa_a. Put theta=angle_a(Q_m) and
+delta=omega_m+kappa_w. Entry before P while M stays on a's side of the cut
+line forces 2*theta+2*delta+kappa_a<pi, by the sine-difference formula.
+But the neighboring blue-face angle gamma at slit c gives
+
+    2*theta+2*delta+kappa_a
+      >= kappa_a+kappa_c+2*kappa_w+2*mu > pi,
+
+where mu=angle_a(V_m)>0. Indeed, its complementary three vertices have
+curvature<=3*pi, so kappa_a+kappa_c+kappa_w>=pi. This is the contradiction.
+An explicit positive-sum identity and orientation audit are in the proof.
+Reflection handles the other finite cut at the same R-selected slit.
+
+The whole-net dependency audit rechecks Case A's apex cones/no-wrap bound,
+the exhaustive base-cone partition, and the Case B auxiliary closed curve.
+Section 5 added to LEMMA_L_PROOF.md proves strict separation of a closed
+flank petal from the opposite closed finite slit edge, even at equality of
+its angular extension with the gap. This removes a possible boundary pinch
+when taking the six-sided region. Do not use the refuted unrestricted
+far-fan implication; only its surviving interior-target version is needed.
+
+Exact replays: `python3 -m n6.selected_octahedron_examples`. Nine coordinate
+domains pass independent all-28-pair certificates. New examples include a
+point with exactly pi source curvature, an 18-coordinate box crossing that
+threshold, and the regular octahedron with H/R ties. The exact equality
+shortcut compares signed squared cosines of incident angle multisets only
+at rational points; it never treats interval uncertainty as equality.
+The checker accepts unresolved source comparison with pi because both
+branches and equality have written proofs, after H/R and geometry pass.
+
+Next research: the every-slit Lemma F. R is used through Lemma L's local
+exclusions in the containment and the six-sided-region bound. A different
+slit need not inherit those premises. Study what a local failure forces
+before attempting to transfer the finite-cut proof. Another possible
+generalization is that all curvatures<=pi may allow any source with R:
+through-fan L works since kappa_w<=pi, and Case A's no-wrap bound follows
+from the other three curvatures<=pi. This weakening is not yet promoted.
+
+The overview has a new F_chord page, proof schematic, exact-boundary 3D model,
+and explicit current/historical scopes. Earlier enumeration reports retain
+their 2/47 count as history; all 49 simultaneous-failure classes are now
+excluded by the selected theorem, not a new enumerator. Tests currently:
+207 mathematical-code tests pass; nine independent exact replays pass.
+The local branch is codex/lemma-f-continuation. No Git push is implied by
+continuing the proof. Do not stage the two untracked user thesis PDFs.
+
+# Previous continuation: the high-curvature selected-net theorem
 
 11 September 2026. [LEMMA_F_POLE_ANGLE.md](LEMMA_F_POLE_ANGLE.md) proves the
 whole selected net when the globally sharpest source has curvature >=pi.

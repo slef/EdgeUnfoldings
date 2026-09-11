@@ -2,7 +2,9 @@
 
 11 September 2026 JST. **Lemma L is proved below.** This is a geometric
 proof; numerical searches and individual certificates are not premises.
-It does not prove Lemma F, a complete octahedron unfolding, or the n=6 theorem.
+On its own it does not prove Lemma F or the whole net. The subsequent
+[equal-length completion](LEMMA_F_CHORD.md) supplies the selected octahedron
+result; the stronger every-slit Lemma F and full n=6 remain open.
 
 ## The theorem
 
@@ -186,7 +188,37 @@ the other route. All three local pairs are safe.
 This completes Lemma L for every curvature sum, including all boundaries
 and straight patch corners.
 
-## Scope and remaining work
+## 5. Strict separation from the opposite finite slit edge
+
+The closed first petal V_0 does not meet the closed opposite finite slit
+edge wb, where b is the last copy of u_0. Reflection gives the last-petal
+version. This stronger boundary fact is useful when removing the first
+patch from the closed curve in the later Lemma F reduction.
+
+The through-fan bounds above put V_0 strictly before the last radial
+direction when approached through the fan: its forward angular endpoint
+is at most omega_0+F_0<Gamma. Across the gap, B_0<kappa_w gives strict
+angular separation. The point w itself is outside V_0 by their common
+equator line.
+
+It remains to treat B_0>=kappa_w. The first patch is inward at its slit
+copy A; put rho=angle_A(Q_0)-pi. The small outer triangle gives
+
+    rho>B_0>=kappa_w,   rho<pi-kappa_u.
+
+Thus the same cut-edge separator from Section 4 applies even when
+B_0=kappa_w: its proof required rho>kappa_w, which is still strict.
+Both w and b lie strictly to the right of line A->P, since
+
+    det(d,w-A) = -r*sin(rho) < 0,
+    det(d,b-A) = -2*r*sin(kappa_w/2)*cos(rho-kappa_w/2) < 0.
+
+Their whole closed segment lies strictly to the right. The entire closed
+petal V_0 lies to the left or on that line, so even boundary contact is
+excluded. This covers equality of the angular extension with the gap;
+it does not exclude boundary contacts in unrelated parts of a net.
+
+## Scope at the Lemma L stage (retained history)
 
 - **Lemma L: 3/3 local pair statements proved** under its stated selections.
 - The theorem applies to ties in either curvature selection.

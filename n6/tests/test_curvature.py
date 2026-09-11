@@ -4,7 +4,8 @@ from pathlib import Path
 import unittest
 import z3
 from n6.certify import Geometry
-from n6.curvature import angle_le,cmul,sum_angles_lt_pi,curvature_sum_lt_pi,curvature_sum_lt_angle,face_plus_curvature_lt_pi,verify_order
+from n6.curvature import angle_le,cmul,sum_angles_lt_pi,curvature_sum_lt_pi,curvature_sum_lt_angle,face_plus_curvature_lt_pi,verify_order,interval_angle_le
+from n6.intervals import I
 
 RAYS={1:(1,1),2:(0,1),3:(-1,1),4:(-1,0),5:(-1,-1),6:(0,-1),7:(1,-1)}
 
@@ -13,6 +14,17 @@ def truth(expr):return z3.is_true(z3.simplify(expr))
 
 
 class CurvaturePredicateTests(unittest.TestCase):
+    def test_interval_order_across_pi_but_not_across_zero(self):
+        across_pi=(I(-2,-1),I('-1/10','1/10'))
+        lower_left=(I(-1),I(-1))
+        self.assertIs(interval_angle_le(across_pi,lower_left),True)
+        self.assertIs(interval_angle_le(lower_left,across_pi),False)
+        self.assertIs(interval_angle_le(across_pi,(I(1),I(-1))),True)
+        self.assertIs(interval_angle_le(across_pi,(I(1),I(1))),False)
+        across_zero=(I(1,2),I('-1/10','1/10'))
+        self.assertIsNone(interval_angle_le(across_zero,lower_left))
+        self.assertIsNone(interval_angle_le(across_pi,across_pi))
+
     def test_sum_angle_order_including_pi_and_ties(self):
         for a,b in itertools.product(RAYS,repeat=2):
             self.assertEqual(truth(angle_le(RAYS[a],RAYS[b])),a<=b,(a,b))

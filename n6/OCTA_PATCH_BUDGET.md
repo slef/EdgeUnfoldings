@@ -1,5 +1,11 @@
 # A shared lean budget: all two-patch cases and the mixed three-patch case
 
+**Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
+completes the selected H/R octahedron proof. Earlier open-case counts in this
+note describe the investigation at that stage. The every-slit Lemma F and
+full n=6 theorem remain open; the new research proof awaits independent review.
+
+
 10 September 2026 JST / 9 September UTC. These are written geometric
 proofs. **The full octahedron remains open.** The proofs allow exchanging
 the two poles and do not settle the fixed sharpest-source four-choice rule.

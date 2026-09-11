@@ -1,5 +1,11 @@
 # A pole-angle theorem for the remaining Lemma F cut segments
 
+**Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
+completes the selected H/R octahedron proof. Earlier open-case counts in this
+note describe the investigation at that stage. The every-slit Lemma F and
+full n=6 theorem remain open; the new research proof awaits independent review.
+
+
 11 September 2026. **Geometric proof of a complete selected-net family.**
 The full, every-slit Lemma F and the general octahedron remain open.
 Numerical searches are not premises of the proof.

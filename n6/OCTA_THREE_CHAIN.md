@@ -1,5 +1,11 @@
 # A middle-patch switch for three inward corners with a common direction
 
+**Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
+completes the selected H/R octahedron proof. Earlier open-case counts in this
+note describe the investigation at that stage. The every-slit Lemma F and
+full n=6 theorem remain open; the new research proof awaits independent review.
+
+
 10 September 2026 JST / 9 September UTC. **Written geometric proofs for
 explicit subfamilies; the full octahedron remains open.** These results
 extend [OCTA_PATCH_BUDGET.md](OCTA_PATCH_BUDGET.md). They allow exchanging

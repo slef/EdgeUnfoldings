@@ -11,6 +11,8 @@ far_pair_svg = (research / 'figures/lemma-F-two-pairs.svg').read_text()
 figs['far_pair_targets'] = far_pair_svg[far_pair_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 projection_svg = (research / 'figures/lemma-F-pole-angle.svg').read_text()
 figs['far_projection'] = projection_svg[projection_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
+chord_svg = (research / 'figures/lemma-F-equal-lengths.svg').read_text()
+figs['far_chord'] = chord_svg[chord_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 true_scale_svg = (research / 'figures/octa-three-same-true-scale.svg').read_text()
 figs['three_same_true_scale'] = true_scale_svg[true_scale_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 for key, filename in [('local_small_sum','local-small-sum.svg'),('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg'),('patch_budget','octa-patch-budget.svg'),('three_same','octa-three-same.svg'),('chain_switch','octa-three-chain.svg')]:
@@ -43,6 +45,17 @@ def witness_model(filename, names=None, face_names=None, highlight_faces=None, *
                        for i in range(len(witness['faces']))},
         'radialLabels': True, **display,
     }
+
+figs['models']['selected_boundary'] = witness_model(
+    'selected-octahedron-curvature-equality.certificate.json',
+    names=['v','w','u₀','u₁','u₂','u₃'],
+    face_names=['V0','V3','V1','V2','W0','W3','W1','W2'],
+    highlight_faces=[0,4],
+    faceColors={i:'#8fc1dd' if 1 in f else '#e6af78' for i,f in enumerate(json.loads((research/'results/selected-octahedron-curvature-equality.certificate.json').read_text())['faces'])},
+    view={'yaw':-0.7,'pitch':0.3},
+    title='Exact octahedron at source curvature 180 degrees',
+    caption='The maximum curvature at v is exactly 180 degrees. Red edges are the selected cuts. Drag to rotate.',
+)
 
 figs['models']['thesis_df'] = witness_model(
     'thesis-chart-DF.certificate.json',

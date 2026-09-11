@@ -1,0 +1,138 @@
+{
+  "theorem_hypotheses": {
+    "result": "verified_selected_octahedron_hypotheses",
+    "parameter_dimension": 0,
+    "selected_source": 0,
+    "fan_vertex": 1,
+    "selected_slit": 2,
+    "curvature_order": {
+      "result": "verified_curvature_order",
+      "meaning": "For each (a,b), kappa_a >= kappa_b",
+      "comparisons": [
+        {
+          "vertices": [
+            0,
+            1
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            0,
+            2
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            0,
+            3
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            0,
+            4
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            0,
+            5
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            2,
+            5
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            2,
+            4
+          ],
+          "reason": "identical exact incident-angle multisets"
+        },
+        {
+          "vertices": [
+            2,
+            3
+          ],
+          "reason": "identical exact incident-angle multisets"
+        }
+      ]
+    },
+    "source_curvature_comparison_with_pi": "<",
+    "proof_branch": "low_curvature_equal_lengths",
+    "low_curvature_face_complements": [
+      {
+        "face": [
+          1,
+          2,
+          5
+        ],
+        "complement": [
+          0,
+          3,
+          4
+        ]
+      },
+      {
+        "face": [
+          1,
+          2,
+          3
+        ],
+        "complement": [
+          0,
+          4,
+          5
+        ]
+      }
+    ],
+    "all_28_pairs_proved_by_written_theorem": true,
+    "whole_selected_net_nonoverlapping": true,
+    "every_slit_lemma_F_proved": false,
+    "full_n6_proved": false,
+    "theorem_dependencies": [
+      "LEMMA_F_CHORD.md",
+      "LEMMA_F_POLE_ANGLE.md",
+      "LEMMA_L_PROOF.md",
+      "LEMMA_F_CUT_RAYS.md",
+      "LEMMA_F_CUT_REDUCTION.md",
+      "CASE_PARTITION.md",
+      "HINGE_AUDIT.md"
+    ],
+    "scope": "Every parameter tuple in the explicit domain satisfies the hypotheses of the written universal selected-net theorem. The geometric proof is a dependency, not formally verified by this program. The every-slit Lemma F and nonsimplicial n=6 cases are separate."
+  },
+  "independent_all_28_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 19,
+      "separating_edge": 9
+    },
+    "strict_facet_supports": 24,
+    "planarity_identities": 24,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 240
+  },
+  "source_certificate": "selected-octahedron-regular-ties.certificate.json"
+}

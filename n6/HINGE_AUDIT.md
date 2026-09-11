@@ -1,5 +1,11 @@
 # The conditional far-fan reduction is false as stated
 
+**Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
+completes the selected H/R octahedron proof. Earlier open-case counts in this
+note describe the investigation at that stage. The every-slit Lemma F and
+full n=6 theorem remain open; the new research proof awaits independent review.
+
+
 **11 September continuation:** the [new cut-side reduction](LEMMA_F_CUT_REDUCTION.md)
 retains the two slit-side fan tests. Under H and R, their safety implies
 opposite-petal safety; the valid interior-fan result below then finishes the

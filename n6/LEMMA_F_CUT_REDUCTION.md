@@ -1,5 +1,11 @@
 # Lemma F reduces to the two slit-side fan pairs
 
+**Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
+completes the selected H/R octahedron proof. Earlier open-case counts in this
+note describe the investigation at that stage. The every-slit Lemma F and
+full n=6 theorem remain open; the new research proof awaits independent review.
+
+
 11 September 2026. This is a geometric reduction, **not a proof of Lemma F**.
 The subsequent [cut-segment refinement](LEMMA_F_CUT_RAYS.md) replaces the
 two triangle tests by two finite-segment tests and proves further direction

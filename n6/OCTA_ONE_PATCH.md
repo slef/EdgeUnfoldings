@@ -1,5 +1,11 @@
 # One nonconvex patch: two prescribed nets, with the poles exchanged
 
+**Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
+completes the selected H/R octahedron proof. Earlier open-case counts in this
+note describe the investigation at that stage. The every-slit Lemma F and
+full n=6 theorem remain open; the new research proof awaits independent review.
+
+
 9 September 2026, continuation after the hinge audit.
 
 **Theorem.** Choose a globally sharpest vertex v of a strictly convex

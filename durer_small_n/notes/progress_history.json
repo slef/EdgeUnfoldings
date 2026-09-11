@@ -1,5 +1,19 @@
 [
   {
+    "date": "11 September 2026 JST · selected octahedron proof completed",
+    "title": "Equal cut-edge lengths close the last selected-net branch",
+    "results": [
+      "F_chord",
+      "t_octa",
+      "lemmaF",
+      "F_below",
+      "octa_three_same",
+      "octa_four_slits",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#F_chord\">new equal-length proof</a> completes the low-curvature branch, including obtuse pole angles. A hypothetical cut entry traps the neighboring patch, but its two equal cut edges force an angle quantity below 180°. The total curvature and convex-face bound force the same quantity above 180°.</p><p>Combined with the high-curvature proof, this gives a complete written proof for the H/R selected tree on every convex octahedron: <b>28/28 pairs, 5/5 patch regimes, and 5/7 six-vertex types</b>. Equality and tied selections are included. All 49 simultaneous-failure classes are excluded by this theorem, not by a new numerical enumeration.</p><p>The dependency audit includes the auxiliary closed curve and strict local separation at boundary contacts. Nine exact domain replays, including a box crossing the 180° threshold and the regular octahedron, agree with independent all-28 certificates. This remains a research proof awaiting independent review. The stronger every-slit Lemma F and both nonsimplicial remaining types stay open.</p>"
+  },
+  {
     "date": "11 September 2026 JST · Lemma F pole-angle proof",
     "title": "The selected-net theorem is proved for sharpest curvature at least 180°",
     "results": [

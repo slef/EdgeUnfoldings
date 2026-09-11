@@ -1,5 +1,22 @@
 # Repository and proof audit, 9 September 2026
 
+## Current update: complete selected octahedron proof, 11 September 2026
+
+[The equal-length proof](LEMMA_F_CHORD.md) completes the low-curvature
+branch. Together with the high-curvature pole-angle argument and the recorded
+dependency audit, this gives a complete written proof for the H/R selected
+tree on every convex octahedron. All 28 pairs and all five patch regimes are
+covered, including equality and ties. Independent mathematical review is
+still needed. The every-slit Lemma F and the two nonsimplicial six-vertex types
+remain open; the full n=6 theorem is not claimed.
+
+See [CONTINUATION.md](CONTINUATION.md) for the current proof and
+next research. All earlier counts below are historical. In particular the
+old 2-excluded/47-open report is unchanged as a record; the new theorem
+excludes all 49 simultaneous-failure classes at once. The false older
+unrestricted fan-to-petal reduction remains false and is not used.
+
+
 Branch: `codex/n6-unfolding`, based on `65d5988`.
 
 **No complete proof or universal computational certificate of n=6 was obtained.**

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="792pt" height="345.6pt" viewBox="0 0 792 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-11T19:52:22.876998</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 345.6 
+L 792 345.6 
+L 792 0 
+L 0 0 
+z
+" style="fill: #f7fafc"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 247.583593 241.276668 
+C 247.583593 213.924572 241.351099 186.928673 229.360729 162.344772 
+C 217.370359 137.760871 199.934407 116.229263 178.380661 99.389631 
+" clip-path="url(#pf70336b17a)" style="fill: none; stroke-dasharray: 5.18,2.24; stroke-dashoffset: 0; stroke: #8595a3; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 67.526359 241.276668 
+L 367.621749 241.276668 
+L 189.846361 138.638 
+z
+" clip-path="url(#pf70336b17a)" style="fill: #dceaf1; stroke: #486a80; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 67.526359 241.276668 
+L 236.724813 179.693467 
+" clip-path="url(#pf70336b17a)" style="fill: none; stroke: #277b97; stroke-width: 2.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 67.526359 241.276668 
+L 205.458203 125.538109 
+" clip-path="url(#pf70336b17a)" style="fill: none; stroke: #c67b28; stroke-width: 2.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 367.621749 241.276668 
+L 174.252947 129.635138 
+" clip-path="url(#pf70336b17a)" style="fill: none; stroke: #b82f4b; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start" x="57.526359" y="258.276668" transform="rotate(-0 57.526359 258.276668)">a</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start" x="373.621749" y="254.276668" transform="rotate(-0 373.621749 254.276668)">w</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start" x="244.724813" y="176.693467" transform="rotate(-0 244.724813 176.693467)">M</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start" x="195.458203" y="115.538109" transform="rotate(-0 195.458203 115.538109)">P</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start" x="172.846361" y="139.638" transform="rotate(-0 172.846361 139.638)">q</text>
+   </g>
+   <g id="patch_4">
+    <path d="M 130.78086 93.966384 
+Q 126.726831 156.621842 122.672802 219.2773 
+" style="fill: none; stroke: #8595a3; stroke-linecap: round"/>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #243b49" transform="translate(57.52318 72.97625)">two copies of one cut edge</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #243b49" transform="translate(57.52318 86.227383)">|aM| = |aP|</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #b82f4b" x="237.580413" y="101.232153" transform="rotate(-0 237.580413 101.232153)">hypothetical cut entry</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="152.553386" y="276.287797" transform="rotate(-0 152.553386 276.287797)">M must stay on a’s side of the cut line.</text>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="m230e0e8711" d="M 0 2.598076 
+C 0.689018 2.598076 1.349908 2.324327 1.837117 1.837117 
+C 2.324327 1.349908 2.598076 0.689018 2.598076 0 
+C 2.598076 -0.689018 2.324327 -1.349908 1.837117 -1.837117 
+C 1.349908 -2.324327 0.689018 -2.598076 0 -2.598076 
+C -0.689018 -2.598076 -1.349908 -2.324327 -1.837117 -1.837117 
+C -2.324327 -1.349908 -2.598076 -0.689018 -2.598076 0 
+C -2.598076 0.689018 -2.324327 1.349908 -1.837117 1.837117 
+C -1.349908 2.324327 -0.689018 2.598076 0 2.598076 
+z
+" style="stroke: #243b49"/>
+    </defs>
+    <g clip-path="url(#pf70336b17a)">
+     <use xlink:href="#m230e0e8711" x="67.526359" y="241.276668" style="fill: #243b49; stroke: #243b49"/>
+    </g>
+   </g>
+   <g id="PathCollection_2">
+    <g clip-path="url(#pf70336b17a)">
+     <use xlink:href="#m230e0e8711" x="367.621749" y="241.276668" style="fill: #243b49; stroke: #243b49"/>
+    </g>
+   </g>
+   <g id="PathCollection_3">
+    <g clip-path="url(#pf70336b17a)">
+     <use xlink:href="#m230e0e8711" x="236.724813" y="179.693467" style="fill: #243b49; stroke: #243b49"/>
+    </g>
+   </g>
+   <g id="PathCollection_4">
+    <g clip-path="url(#pf70336b17a)">
+     <use xlink:href="#m230e0e8711" x="205.458203" y="125.538109" style="fill: #243b49; stroke: #243b49"/>
+    </g>
+   </g>
+   <g id="PathCollection_5">
+    <g clip-path="url(#pf70336b17a)">
+     <use xlink:href="#m230e0e8711" x="189.846361" y="138.638" style="fill: #243b49; stroke: #243b49"/>
+    </g>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="text_9">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #243b49" x="459.050811" y="74.23488" transform="rotate(-0 459.050811 74.23488)">A crossing would require</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 20px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #b82f4b" x="459.050811" y="109.07136" transform="rotate(-0 459.050811 109.07136)">2θ + 2δ + κₐ &lt; 180°</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #243b49" x="459.050811" y="153.86112" transform="rotate(-0 459.050811 153.86112)">But if every curvature is ≤180°:</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 20px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #24775d" x="459.050811" y="193.67424" transform="rotate(-0 459.050811 193.67424)">2θ + 2δ + κₐ &gt; 180°</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #243b49" transform="translate(459.050811 240.071032)">The two equal edge lengths give the first bound.</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #243b49" transform="translate(459.050811 257.121032)">The total curvature and a face-angle bound</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #243b49" transform="translate(459.050811 274.171033)">give the second. Both cannot hold.</text>
+   </g>
+  </g>
+  <g id="text_14">
+   <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #243b49" x="39.6" y="25.9815" transform="rotate(-0 39.6 25.9815)">The missing distance argument: equal cut edges forbid entry</text>
+  </g>
+  <g id="text_15">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #4d6372" x="39.6" y="333.504" transform="rotate(-0 39.6 333.504)">Proof schematic only. The displayed planar crossing cannot satisfy the low-curvature octahedron hypotheses.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pf70336b17a">
+   <rect x="47.52" y="56.217844" width="340.108108" height="240.076312"/>
+  </clipPath>
+ </defs>
+</svg>

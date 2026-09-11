@@ -1,5 +1,27 @@
 # Six-vertex integration and certification
 
+The full n=6 theorem remains open. **The octahedron type now has a complete
+written selected-net proof** in [LEMMA_F_CHORD.md](LEMMA_F_CHORD.md), with a
+dependency audit and two exhaustive source-curvature branches. Choose a
+maximum-curvature source v, its opposite w, and a maximum-curvature equator
+slit c; cut the four edges at v and w-c. Every tied choice is included.
+
+This gives 28/28 safe pairs and all five patch regimes, bringing the whole
+six-vertex type count to 5/7. The original every-slit Lemma F remains open,
+as do the two nonsimplicial types, where artificial diagonals cannot be cut.
+The proof awaits independent mathematical review; the code checks explicit
+domains and is not a formal verification of the whole geometric argument.
+
+Run `python3 -m n6.selected_octahedron_examples` to replay nine exact domains,
+including a point at source curvature pi, a full 18-coordinate box crossing
+pi, and the regular octahedron with ties. Each domain also has an independent
+all-28-pair certificate. Numerical searches are not proof premises.
+Read [CONTINUATION.md](CONTINUATION.md) for the current next questions.
+
+<details>
+<summary>Earlier investigation, retained with its historical proof states</summary>
+
+
 The full six-vertex theorem is **not proved or computationally certified here**.
 Read [REVIEW.md](REVIEW.md) before using the older handoff or proof notes.
 The current priority is the **octahedron**. The [hinge audit](HINGE_AUDIT.md)
@@ -112,6 +134,9 @@ status of the full theorem.
 This directory integrates the two supplied Codex archives with Claude's
 `durer_small_n` work. It adds a smaller exact counterexample query, bounded solver
 execution, and a rational interval checker for explicit regions of octahedra.
+
+
+</details>
 
 ## Results with their scope
 

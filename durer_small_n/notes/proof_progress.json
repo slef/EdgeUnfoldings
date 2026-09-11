@@ -17,13 +17,13 @@
       {
         "label": "Opposite-petal pairs",
         "count": 2,
-        "status": "open",
+        "status": "proved",
         "link": "F_below"
       },
       {
         "label": "Petal–far-fan pairs",
         "count": 4,
-        "status": "open",
+        "status": "proved",
         "link": "F_hinge"
       }
     ],
@@ -43,50 +43,41 @@
       {
         "label": "Case B, fan sum < π",
         "condition": "ΣW < π",
-        "status": "open",
+        "status": "proved",
         "link": "F_below"
       }
     ],
-    "remaining": [
-      {
-        "label": "Prove the first radial cut segment cannot enter V(k+2) in the remaining low-curvature obtuse branch",
-        "link": "F_cut_rays"
-      },
-      {
-        "label": "Prove the last radial cut segment cannot enter V(k+1) in the remaining low-curvature obtuse branch",
-        "link": "F_cut_rays"
-      }
-    ],
+    "remaining": [],
     "patch_regimes": [
       {
         "label": "No nonconvex patches",
         "status": "proved",
         "link": "octa_patches",
-        "condition": "Every opening works"
+        "condition": "The same H/R selected tree works, including ties"
       },
       {
         "label": "One nonconvex patch",
         "status": "proved",
         "link": "octa_one_patch",
-        "condition": "Existence under H using two pole choices; fixed source remains open"
+        "condition": "The same H/R selected tree works, including ties"
       },
       {
         "label": "Two adjacent nonconvex patches",
         "status": "proved",
         "link": "octa_budget",
-        "condition": "Existence under H using two pole choices; no 180-degree restriction"
+        "condition": "The same H/R selected tree works, including ties"
       },
       {
         "label": "Two opposite nonconvex patches",
         "status": "proved",
         "link": "octa_budget",
-        "condition": "Existence under H for both direction patterns"
+        "condition": "The same H/R selected tree works, including ties"
       },
       {
         "label": "Three nonconvex patches",
-        "status": "open",
+        "status": "proved",
         "link": "octa_three_same",
-        "condition": "All sharpest curvatures ≥180° now covered; mixed directions and middle-patch subfamilies also proved; common-direction low-curvature remainder open"
+        "condition": "The same H/R selected tree works, including ties"
       }
     ],
     "local_curvature_branches": [
@@ -118,9 +109,9 @@
       },
       {
         "label": "Approach across the slit gap",
-        "status": "open",
-        "condition": "Proved at sharpest curvature ≥180°; below it, nonobtuse pole angles and the quarter-turn circle test cover further families",
-        "link": "F_pole_angle"
+        "status": "proved",
+        "condition": "Both source-curvature branches exclude finite entry, including obtuse pole angles",
+        "link": "F_chord"
       }
     ],
     "source_curvature_branches": [
@@ -132,11 +123,20 @@
       },
       {
         "label": "Sharpest curvature from 120° to below 180°",
-        "condition": "Partly proved; remaining obstruction needs obtuse original and flat pole angles, with blue angle plus gap below 90°",
-        "status": "open",
-        "link": "F_pole_angle"
+        "condition": "All 28 selected pairs safe by the equal-length contradiction",
+        "status": "proved",
+        "link": "F_chord"
       }
-    ]
+    ],
+    "selected_rule": {
+      "status": "proved",
+      "scope": "H/R selected net; written geometric proof, independent review pending",
+      "all_pairs": 28,
+      "failure_classes_excluded": 49,
+      "failure_classes_total": 49,
+      "every_slit_lemma_F": "open",
+      "proof": "F_chord"
+    }
   },
   "coverage_obligations": [
     "Reduce the full, unbounded shape space to finitely many domains the checker can handle, plus explicit limiting cases.",
@@ -189,6 +189,19 @@
       "minus_half_width": "1/20",
       "prism_box_A_fraction": "1",
       "source": "../../n6/MINUS_NEIGHBORHOOD.md",
+      "minus_trees": 1,
+      "minus_cells": 16,
+      "minus_classes_excluded": 7
+    },
+    {
+      "label": "Complete selected octahedron proof",
+      "date": "2026-09-11T10:47:45Z",
+      "proved_types": 5,
+      "octahedron_angle_branches": 3,
+      "octahedron_local_pairs": 3,
+      "minus_half_width": "1/20",
+      "prism_box_A_fraction": "1",
+      "source": "../../n6/LEMMA_F_CHORD.md",
       "minus_trees": 1,
       "minus_cells": 16,
       "minus_classes_excluded": 7

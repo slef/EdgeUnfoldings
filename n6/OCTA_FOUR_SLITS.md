@@ -1,5 +1,11 @@
 # Octahedron priority: a four-choice unfolding rule
 
+**Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
+completes the selected H/R octahedron proof. Earlier open-case counts in this
+note describe the investigation at that stage. The every-slit Lemma F and
+full n=6 theorem remain open; the new research proof awaits independent review.
+
+
 9 September 2026. **The rule is conjectural.** The [overlap case analysis](OCTA_CASE_ANALYSIS.md)
 now proves two switching implications: moving the opening repairs the old
 local pairs, and opposite petals cannot overlap along both routes under H.
