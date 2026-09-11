@@ -1,6 +1,10 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
 const notes=path.join(__dirname,'../notes');
 const html=fs.readFileSync(path.join(notes,'status.html'),'utf8');
+const currentIntro=html.slice(html.indexOf('<header>'),html.indexOf('<details class="progress-domain"><summary>Previous overview notes'));
+assert(currentIntro.includes('All seven six-vertex types now have complete written arguments'));
+assert(currentIntro.includes('Independent mathematical review is still pending'));
+assert(!currentIntro.includes('Five of the seven') && !currentIntro.includes('The full n=6 theorem stays open'));
 const script=html.match(/<script>([\s\S]*?)<\/script>/)[1];
 const ctx=vm.createContext({document:{addEventListener(){}},console});
 vm.runInContext(script.slice(0,script.indexOf('let showAll = false;')),ctx);
