@@ -1,3 +1,22 @@
+## Closing audit of the requested four-hour session
+
+Window: 11 September 2026 17:05:34–21:05:34 UTC (12 September
+02:05:34–06:05:34 JST). Both remaining original-edge type arguments were
+completed as written research proofs. Independent mathematical review is
+still pending; the geometric dependency chain is not formally verified.
+
+The last audit checked the same-net pair obligations, copied edges,
+closed curvature thresholds, flat auxiliary hinges, and positive-slack
+identities. The overview introduction now agrees with the 7/7 written-proof
+ledger; its earlier 5/7 introduction remains in collapsed history.
+All 271 distinct scientific tests passed (269 in the full run and two
+subsequent switching tests), as did the final navigation and progress
+checks. All 220 rendered evidence links resolve in the packaged site.
+These are implementation and algebra checks, not a substitute for review
+of the universal geometric proofs. Work is saved locally, without a push.
+The next substantive task is the independent audit in N6_PROOF_MAP.md.
+Earlier session instructions and counts below are historical.
+
 ## Verification of the completed written argument
 
 The full Python suite passed **269 tests** in 274.058 seconds. The two

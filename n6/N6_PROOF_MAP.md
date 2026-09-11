@@ -61,7 +61,8 @@ replayed and again returns seven types. The [prism reflection](results/prism-ref
 preserves the facets and seven-candidate family. The three sharp-fan angle
 identities also vanish coefficient by coefficient
 over the exact rational polynomial ring after eliminating one angle per
-face. This verifies the algebraic identities for all assignments satisfying
+face. The three final forced-gate identities in the two completion proofs
+also vanish coefficient by coefficient under the total-curvature identity. This verifies the algebraic identities for all assignments satisfying
 the face-angle sums, not just at sample solids.
 
 Former failed nets, exact curvature-boundary examples, and full nine- and

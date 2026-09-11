@@ -14,7 +14,7 @@ universal-proof premise. The current web overview marks 7/7 **written proofs**,
 with independent review explicitly pending. Earlier checkpoints below keep
 their original counts and limitations.
 
-## Current checkpoint: 12 September 2026
+## Earlier checkpoint: 12 September 2026
 
 The complete written original-edge minus-edge proof is in
 [n6/MINUS_EDGE_PROOF.md](n6/MINUS_EDGE_PROOF.md). Direct-rule failures force

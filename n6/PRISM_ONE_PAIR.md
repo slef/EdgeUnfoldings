@@ -54,3 +54,12 @@ The reduction suggests comparing two candidates when vertex 2 is sharp:
 T and N=star(1)+25. If N's cofacial Case A pair is safe, N works. Otherwise
 T needs just B/D. This is a new single-pair switching target, not a proof
 that either candidate must work. The same comparison reflects at vertex 5.
+
+## Subsequent completion
+
+[PRISM_SHARP_FAN_SWITCH.md](PRISM_SHARP_FAN_SWITCH.md) now proves the
+sharp-fan switch proposed above. Together with the other curvature branches,
+[PRISM_EDGE_PROOF.md](PRISM_EDGE_PROOF.md) gives a complete seven-candidate
+written argument for the original prism type, pending independent review.
+The single tree T still does not work universally; the old overlaps remain
+valid counterexamples to that stronger fixed-tree claim.
