@@ -1,4 +1,41 @@
-# Current continuation: Lemma L is proved
+# Current continuation: Lemma F reduced to two cut-side fan checks
+
+11 September 2026 JST. [LEMMA_F_CUT_REDUCTION.md](LEMMA_F_CUT_REDUCTION.md)
+proves a new reduction under H and R. In Z_k retain V_(k+2)/W_k and
+V_(k+1)/W_(k-1). If these two pairs are safe, the whole net is safe.
+Opposite petals are now consequences of the retained checks, then the
+surviving interior-fan reduction disposes of the two interior targets.
+
+For the last triple, put a=u_i, b=the last slit copy, and p inside a
+hypothetical opposite-petal overlap. Gamma=a,p,b,w,a is simple: the retained
+cut-side check excludes ap/bw crossing and L excludes bp/wa crossing.
+All four vertices are below the middle base, even if a or b passes X.
+The inside must face the fourth patch; otherwise the above-base middle
+petal would be inside a below-base curve. Shared vertices and L put the
+whole fourth patch inside. Remove it to get the historical hexagon.
+Its angle sum requires nu_m>kappa_back, contradicting R plus the cone bound.
+Reflection supplies the other opposite pair without changing the slit.
+
+The same proof settles the small-angle case when the slit-side far vertex
+is at or before X: the other outer edge separates the blue-orange pair.
+Unlike the historical two-apex lemma, the nonslit far vertex may pass X.
+The slit-side-past-X branch remains open; this position is necessary for
+failure of that sufficient test, not sufficient for overlap. The two fan
+checks also need study outside the small-angle branch.
+
+Next: prove these two actual blue-orange checks, possibly by controlling
+entry across their cut radial edge. Do not return to individual-apex
+exclusion (refuted), nor assume an interior-hinge argument applies at a cut.
+The universal pair count stays 22/28, the 49-class record stays 2/47, and the
+full octahedron and n=6 remain open. Original Lemma F asks for all slits under
+H; the new reduction uses the selected slit under H and R.
+
+`n6/far_pairs.py` checks H/R, the hull/cuts, and precisely two exact edge
+separators. Four saved examples, including 11- and 18-coordinate boxes,
+agree with independent all-28 certificates. The geometric reduction is a
+written proof dependency, not a numerical inference or formal verification.
+
+# Previous continuation: Lemma L is proved
 
 11 September 2026 JST. [LEMMA_L_PROOF.md](LEMMA_L_PROOF.md) is a complete
 geometric proof of all three local pairs. It needs only kappa_v>=kappa_w

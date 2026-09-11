@@ -4,6 +4,13 @@ Continuation, 9 September 2026. This supplies a missing reduction in the
 octahedron argument. It does **not** prove the remaining small-fan-angle case
 or Lemma L.
 
+**11 September continuation:** Lemma L is now proved independently. The new
+[cut-side reduction](LEMMA_F_CUT_REDUCTION.md) proves that the two slit-side
+fan tests suffice for all six far pairs at the selected slit. In the small-angle
+branch below, the slit-side far vertex at or before X is now settled even if
+the other far vertex passes X. The original angle partition remains valid;
+the whole small-angle branch and the full Lemma F remain open.
+
 **Latest correction:** the proposed exclusion of each individual apex is false
 even for a strictly convex octahedron under H and R. The exact witness and
 its successful net are described below. The base-cone partition remains valid.
@@ -178,7 +185,7 @@ that matching edge lengths and the rankings do not suffice if the convex-vertex
 cone conditions are dropped. A smaller algebraic query now retains both
 ingredients; the first 900-second run timed out without settling the bound.
 
-## The slit rule closes the two-apex branch, conditional on L
+## The slit rule closes the two-apex branch (now proved under H and R)
 
 Let `s` be the slit vertex. Its maximum equator curvature gives
 `4 pi <= kappa_v+4 kappa_s+kappa_w`. For any angle `nu_t` at `v`, the
@@ -191,9 +198,12 @@ kappa_s+kappa_w-nu_t >= (kappa_v+3 kappa_w)/4 > 0.
 In the historical `(a,a)` branch, both far equator vertices are before X, and
 the existing hexagon lemma requires `nu_m>kappa_back` for a meeting, where
 `kappa_back=kappa_s+kappa_w+kappa_ui`. The new bound rules this out. This
-conclusion is conditional on L, as is the hexagon lemma. It does not exclude
-branches where a far vertex is past X, and it does not prove that either apex
-individually stays outside Omega.
+conclusion originally depended on the then-open L. With L now proved it is
+a proved subcase. The new [closed-curve proof](LEMMA_F_CUT_REDUCTION.md)
+goes further: the nonslit far vertex may pass X if the slit-side far vertex
+does not. More generally the two slit-side fan tests imply opposite-petal
+safety without either near-X assumption. Those two tests remain open in
+general. No claim that either apex individually stays outside Omega is made.
 
 ## Exact nonempty large-angle example
 

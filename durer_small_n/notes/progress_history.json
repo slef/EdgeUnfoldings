@@ -1,5 +1,17 @@
 [
   {
+    "date": "11 September 2026 JST · Lemma F reduction",
+    "title": "Six far-pair checks reduced to two direct cut-side tests",
+    "results": [
+      "lemmaF",
+      "F_cut_reduction",
+      "F_below",
+      "lemmaL",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#F_cut_reduction\">new geometric reduction</a> uses the completed Lemma L: if the two distant petals avoid the blue triangles beside the slit, the opposite petals are safe, then the interior blue targets are safe. It reverses the direction of the old refuted reduction and retains the troublesome cut boundary explicitly.</p><p>In the small-angle branch, the slit-side far endpoint at or before X is now proved safe even when the other far endpoint passes X. The slit-side-past-X branch remains open. The same two tests also need study outside the small-angle branch.</p><p>The count stays <b>22/28 unconditional pairs</b>, but only <b>two direct checks suffice for the other six</b>. Exact two-pair certificates on four saved examples, including 11- and 18-coordinate boxes, agree with independent all-28 certificates. The full octahedron and n=6 remain open; numerical experiments are not proof premises.</p>"
+  },
+  {
     "date": "11 September 2026 JST · Lemma L completed",
     "title": "All three local pairs proved: both overlap routes are closed",
     "results": [

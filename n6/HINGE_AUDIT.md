@@ -1,5 +1,10 @@
 # The conditional far-fan reduction is false as stated
 
+**11 September continuation:** the [new cut-side reduction](LEMMA_F_CUT_REDUCTION.md)
+retains the two slit-side fan tests. Under H and R, their safety implies
+opposite-petal safety; the valid interior-fan result below then finishes the
+net. This is a different implication and does not restore the refuted claim.
+
 9 September 2026, timed-session audit. **This is an exact counterexample to
 an older supporting lemma, not to the sharpest-source unfolding rule.**
 The new curvature, central-symmetry, and sector-family proofs do not use it.

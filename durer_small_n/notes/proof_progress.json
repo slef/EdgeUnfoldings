@@ -49,12 +49,12 @@
     ],
     "remaining": [
       {
-        "label": "Prove joint-petal separation in the small-fan-angle branch",
-        "link": "F_below"
+        "label": "Prove V(k+2) cannot overlap the first slit-side fan triangle W(k)",
+        "link": "F_cut_reduction"
       },
       {
-        "label": "Prove the two slit-side far-fan pairs after local and opposite-petal safety",
-        "link": "F_hinge"
+        "label": "Prove V(k+1) cannot overlap the last slit-side fan triangle W(k−1)",
+        "link": "F_cut_reduction"
       }
     ],
     "patch_regimes": [

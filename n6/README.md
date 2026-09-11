@@ -8,7 +8,17 @@ original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
 case and the convex-patch existence theorem remain proved; the proposed
 fixed-source one-nonconvex-patch argument has a remaining far-fan step.
 
-**Latest result, 11 September:** [Lemma L is proved](LEMMA_L_PROOF.md). All three local pairs are safe under the original selections (in fact, a pole-curvature comparison and maximum-curvature slit suffice). A cut-edge separator handles the slit route; a spherical-link and pole-triangle argument handles the route through the fan. The selected net now has 22/28 pairs universally safe. Lemma F and the full octahedron remain open. Use `python3 -m n6.local_lemma CERTIFICATE` for exact hypothesis checks.
+**Latest result, 11 September:** [two cut-side fan checks now suffice for all
+six far pairs](LEMMA_F_CUT_REDUCTION.md) under H and R. The proved reduction
+uses the completed Lemma L. It also settles the small-angle case when the
+slit-side far vertex is at or before X, even if the other far vertex passes X.
+The two universal fan checks remain open; the unconditional count stays 22/28.
+Replay exact two-pair certificates with `python3 -m n6.far_pair_examples` or
+`python3 -m n6.far_pairs n6/results/far-pair-apex-entry-family.certificate.json`.
+The latter covers an 11-coordinate box; another saved box has 18 coordinates.
+Independent all-28-pair certificates agree on these explicit regions.
+
+**Previous result, 11 September:** [Lemma L is proved](LEMMA_L_PROOF.md). All three local pairs are safe under the original selections (in fact, a pole-curvature comparison and maximum-curvature slit suffice). A cut-edge separator handles the slit route; a spherical-link and pole-triangle argument handles the route through the fan. The selected net now has 22/28 pairs universally safe. Lemma F and the full octahedron remain open. Use `python3 -m n6.local_lemma CERTIFICATE` for exact hypothesis checks.
 
 **Previous result:** [LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md)
 directly advances Lemma L. The slit and opposite-pole curvatures determine

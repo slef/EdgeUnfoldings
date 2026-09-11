@@ -67,7 +67,7 @@ assert(prism.indexOf('data-model="t_prismd"')<prism.indexOf('Prism with one diag
 assert(prism.indexOf('data-model="t_prismd"')<prism.indexOf('The proposed reduction'));
 assert(prism.indexOf('The proposed reduction')<prism.indexOf('data-model="prism_failure"'));
 const detailed=vm.runInContext('progressDashboard(false)',ctx);
-assert(detailed.includes('old reduction') && detailed.includes('refuted'));
+assert(detailed.includes('older reduction') && detailed.includes('refuted'));
 assert(detailed.includes('3 / 3 local pair obligations'));
 assert(detailed.includes('94.6%'),'Explicitly explain why raw cell counts mislead');
 assert(!detailed.includes('undefined') && !detailed.includes('NaN'));
@@ -162,3 +162,19 @@ assert(localLemma.indexOf('Which cases are solved?')<localLemma.indexOf('The sli
 assert(!localLemma.slice(localLemma.indexOf('lemma-l-cases'),localLemma.indexOf('What is still open?')).includes('Open in general'));
 assert.equal(vm.runInContext('byId.lemmaF.status',ctx),'numeric');
 assert.equal(vm.runInContext('byId.t_octa.status',ctx),'open');
+
+// A sufficient two-pair reduction must not inflate unconditional coverage.
+assert(score.octahedron.remaining.every(g=>g.link==='F_cut_reduction'));
+assert.equal(vm.runInContext('byId.F_cut_reduction.status',ctx),'proved');
+const farLemma=vm.runInContext('article(byId.lemmaF,false)',ctx);
+const farReduction=vm.runInContext('article(byId.F_cut_reduction,false)',ctx);
+const smallFar=vm.runInContext('article(byId.F_below,false)',ctx);
+assert(farLemma.includes('22/28 pairs remain proved unconditionally'));
+assert(farLemma.includes('both H and R'));
+assert(farLemma.includes('lemma-f-cases'));
+assert(farReduction.includes('the whole selected net is nonoverlapping'));
+assert(farReduction.includes('The two retained checks remain open'));
+assert(farReduction.includes('slit index k=0'));
+assert(smallFar.includes('Before X, or exactly at X'));
+assert(smallFar.includes('Past X'));
+assert(smallFar.includes('Open in general'));
