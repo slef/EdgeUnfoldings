@@ -1,5 +1,10 @@
 # The octahedral proof allows flat auxiliary hinges
 
+**12 September extension:** [the original-edge curvature-budget theorem](ORIGINAL_EDGE_RULE.md)
+accepts further high-curvature families even when every original degree-four
+source is below pi. It also identifies the remaining Case A obligations
+at sharp slits. The earlier sufficient rules below remain valid.
+
 11 September 2026. Written extension with a spherical-link and dependency
 audit. Independent mathematical review is still needed; this is not formal
 verification. No numerical experiment is a premise.

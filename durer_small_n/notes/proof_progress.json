@@ -1,5 +1,5 @@
 {
-  "as_of": "11 September 2026 JST",
+  "as_of": "12 September 2026 JST",
   "octahedron": {
     "pair_groups": [
       {
@@ -243,8 +243,8 @@
     {
       "label": "Maximum curvature strictly above 180°",
       "status": "open",
-      "condition": "Fixed original degree-four star trees passing the source/slit threshold are proved; other shapes remain open",
-      "link": "nonsimp_flat"
+      "condition": "Earlier source/slit criteria plus new curvature budgets prove original-edge families; sharp-slit residuals reduce to Case A opposite petals; a universal fallback is still missing",
+      "link": "original_rule"
     }
   ]
 }

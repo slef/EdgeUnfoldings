@@ -1,3 +1,85 @@
+# Current continuation: the last two original-face types
+
+12 September 2026. The user asked to apply the octahedron rule to the last
+two types, classify its failures, and attack those cases. Work stayed on
+codex/lemma-f-continuation. Full types remain 5/7; neither remaining type
+is claimed complete. New written proofs await independent mathematical review.
+
+## New proved sufficient rule
+
+Read ORIGINAL_EDGE_RULE.md. For an original degree-four source v, its
+opposite w, and an original fifth edge wc, use the equator (c,a,d,b).
+The new sufficient predicates are:
+
+- kappa_w<=pi;
+- 2*kappa_c+kappa_w>=pi;
+- kappa_a+kappa_c+2*kappa_w>=pi and its b version;
+- kappa_v+kappa_a+kappa_d>=pi and kappa_v+kappa_d+kappa_b>=pi;
+- kappa_c+kappa_w>=pi-kappa_v/2.
+
+Their proof directly audits L, the equal-length finite-cut exclusion,
+Case A's no-wrap bounds, the small-fan angle contradiction, and the
+surviving boundary-entry reduction. No source or slit ranking is required.
+All displayed equalities are included. Flat original-face diagonals remain
+uncut, using the previous audit.
+
+If c>=pi and w<=pi, all except the two no-wrap sums are automatic. Even
+when those sums fail, only the two opposite-petal Case A branches can
+remain. Actual weaker apex-angle inequalities can replace the sums;
+Case B is already safe. This is the next focused geometric target.
+Configurations with no such original sharp-slit/low-fan candidate remain
+separate, e.g. the prism with both possible fan vertices 2 and 5 sharp.
+Do not call a failed sufficient inequality a positive-area overlap.
+
+## Exact new positive and negative results
+
+original_edge_rule.py verifies the sufficient predicates with rational
+intervals, including careful unwrapped sum/half-angle comparisons.
+original_edge_examples.py builds four positive certificates (points plus
+independent ten-/nine-parameter boxes). Every original degree-four source
+is below pi and some degree-three vertex is above pi throughout each,
+so all old source conditions fail. All original face pairs replay separately.
+
+There are also exact counterexamples to the deterministic adaptation:
+choose the sharpest original degree-four source, then the sharpest allowed
+fifth-cut endpoint. Both strict rankings and real overlap are verified.
+Same-coordinate repairs have separate all-pairs certificates. Minus chooses
+source 5/fan 2/slit 1; prism chooses source 1/fan 5/slit 2. These do not
+refute the union of the 14 minus-edge or 6 prism star candidates, much
+less unfoldability. Saved files begin results/original-rule-.
+
+The numerical probe preserves original faces using integer affine and
+positive projective maps of fixed seeds. It is biased and not exhaustive.
+At 5,000 samples each (seed6091201), old/extra/newly-unresolved counts are
+3925/396/679 minus and 2610/930/1460 prism. Every unresolved sample had a
+numerically successful original star candidate. Greedy failures within
+the unresolved sets: 67 and 223. All 1987/2219 additional predicate-passing
+trees checked numerically were safe. Counts are NOT coverage/proof premises.
+Exact witness generation does not trust the floating geometry/rankings.
+
+## Page and reproduction
+
+The overview has a new #original_rule page with the proof, explicit remaining
+obligations, two true-scale nets and corresponding integer-coordinate 3D
+models. Both type pages and the progress panel link to it. Previous progress
+entries and the separate 7/28 minus two-choice-class count are retained.
+No current full-type or snapshot count was incremented.
+
+Run python3 -m n6.original_edge_examples and
+python3 -m unittest n6.tests.test_original_edge_rule.
+Validation: all 236 n6 tests pass (77.981 seconds); navigation, progress,
+minus-edge UI, and all 172 rendered deployment evidence links pass. The
+changes are saved locally; no push or live deployment was requested this turn.
+SVG source: original_edge_figure.py; plot rendering is illustration only.
+The local-file browser denial remains respected: no live-browser access
+or browser visual verification is claimed. The SVG was visually inspected.
+
+An untracked lean_statement/ directory appeared during this work, along
+with the two previously untracked PDFs. It was not created by this task;
+do not stage, edit, or remove it as part of this continuation.
+
+---
+
 # Current continuation: flat auxiliary hinges and the weighted slit threshold
 
 11 September 2026, end of the authorized two-hour continuation. Branch

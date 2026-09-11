@@ -1,0 +1,84 @@
+{
+  "new_rule": {
+    "result": "verified_original_edge_curvature_budget_rule",
+    "source": 0,
+    "fan": 1,
+    "slit": 2,
+    "cuts": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "equator": [
+      2,
+      3,
+      5,
+      4
+    ],
+    "fan_curvature_comparison": "<",
+    "curvature_sum_comparisons": {
+      "local_slit": ">",
+      "first_cut": ">",
+      "last_cut": ">",
+      "first_no_wrap": ">",
+      "last_no_wrap": ">",
+      "small_fan": ">"
+    },
+    "accepted": true,
+    "type": "octahedron_minus_edge",
+    "curvature_comparisons_with_pi": {
+      "0": "<",
+      "1": "<",
+      "2": ">",
+      "3": ">",
+      "4": "<",
+      "5": "<"
+    },
+    "original_faces_remain_whole": true,
+    "whole_net_safe_by_written_theorem": true,
+    "full_n6_proved": false,
+    "proof": "ORIGINAL_EDGE_RULE.md",
+    "scope": "Exact sufficient hypotheses on this explicit original-face domain. The written proof is not formally verified. Numerical samples are not premises."
+  },
+  "independent_all_original_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 10,
+    "facet_sizes": [
+      4,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 16,
+      "separating_edge": 5
+    },
+    "strict_facet_supports": 20,
+    "planarity_identities": 22,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": true,
+    "fractional_bits": 240
+  },
+  "all_old_candidates_fail_source_condition": true
+}

@@ -1,5 +1,15 @@
 # Six-vertex integration and certification
 
+**Latest original-face progress, 12 September:**
+[new curvature budgets](ORIGINAL_EDGE_RULE.md) prove more high-curvature
+families in both remaining types without requiring a sharp source. With a
+sharp fifth-cut endpoint and a fan of curvature at most pi, only Case A
+opposite-petal obligations can remain. Exact counterexamples in both types
+refute choosing the sharpest original degree-four source and then the
+sharpest allowed endpoint; each same solid has a certified repair. The
+whole-type count stays 5/7, and the new written proof needs independent review.
+Replay with `python3 -m n6.original_edge_examples`.
+
 **Every-slit progress:** [safe local pairs imply the whole net is safe](LOW_CURVATURE_FAR_REDUCTION.md)
 when all six curvatures are at most pi. Neither H nor R is needed. The
 three local premises must be checked at the actual slit; the original

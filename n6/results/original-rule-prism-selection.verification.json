@@ -1,0 +1,81 @@
+{
+  "failure": {
+    "result": "verified_sharper_original_source_allowed_maximum_failure",
+    "source": 1,
+    "fan": 5,
+    "slit": 2,
+    "source_candidates": [
+      1,
+      3
+    ],
+    "allowed_slit_candidates": [
+      2,
+      3,
+      4
+    ],
+    "forbidden_slit": 0,
+    "forbidden_strictly_sharper_than_allowed": true,
+    "rankings_strict": true,
+    "overlap": {
+      "result": "verified_positive_area_overlap",
+      "faces": [
+        0,
+        3
+      ],
+      "strict_signs": 7,
+      "lower_bounds": [
+        "9376699686194089923193339266062658602666828293316707442839591829230138282297/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "2732857534271979237132731606798305048795796732698258045339376266960664209387/441711766194596082395824375185729628956870974218904739530401550323154944",
+        "17889995898711760152862201486030732102564620916127807713670810910271795158043/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "7916473867017396420566546607411710968213626111165106793127855587727387966559/441711766194596082395824375185729628956870974218904739530401550323154944",
+        "5524425766141201920988582184976530148989708007433093072246549037702916394459/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "4302077095957374517279254839248475913763348151895045189842304464852819778095/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "5910608294508458093347591939276156410054458876597516231435596026269893481825/1766847064778384329583297500742918515827483896875618958121606201292619776"
+      ],
+      "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+      "facet_sizes": [
+        3,
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "strict_facet_supports": 16
+    },
+    "full_n6_refuted": false,
+    "scope": "This deterministic selection rule fails. A different original tree on the same solid has an independent nonoverlap certificate."
+  },
+  "repair": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      4,
+      3,
+      4,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 9,
+      "separating_edge": 5,
+      "face_neighborhood": 1
+    },
+    "strict_facet_supports": 16,
+    "planarity_identities": 20,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 240,
+    "theorem_dependencies": [
+      {
+        "author": "Val Pinciu",
+        "year": 2007,
+        "theorem": 1,
+        "title": "On the Fewest Nets Problem for Convex Polyhedra",
+        "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+      }
+    ]
+  }
+}

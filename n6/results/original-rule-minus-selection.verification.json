@@ -1,0 +1,74 @@
+{
+  "failure": {
+    "result": "verified_sharper_original_source_allowed_maximum_failure",
+    "source": 5,
+    "fan": 2,
+    "slit": 1,
+    "source_candidates": [
+      0,
+      1,
+      4,
+      5
+    ],
+    "allowed_slit_candidates": [
+      0,
+      1,
+      4
+    ],
+    "forbidden_slit": 3,
+    "forbidden_strictly_sharper_than_allowed": true,
+    "rankings_strict": true,
+    "overlap": {
+      "result": "verified_positive_area_overlap",
+      "faces": [
+        4,
+        5
+      ],
+      "strict_signs": 6,
+      "lower_bounds": [
+        "1116763378208038605904921527372039651051520272468277323983736702784352716567/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "168970342918106005132032443618839175858441577912614462999020241648113159457/441711766194596082395824375185729628956870974218904739530401550323154944",
+        "150946164280189268175511514761052150159600927629013782184238215294919995987/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "19723089802573034067010545666273916516498774800767594507341901836190035430055/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "243337242760499318503106481434368100592864456942466465554009887368740671423/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "2337466832329602165961790770935417847691048286197062427391182913053313403995/1766847064778384329583297500742918515827483896875618958121606201292619776"
+      ],
+      "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+      "facet_sizes": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "strict_facet_supports": 20
+    },
+    "full_n6_refuted": false,
+    "scope": "This deterministic selection rule fails. A different original tree on the same solid has an independent nonoverlap certificate."
+  },
+  "repair": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      4,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 14,
+      "separating_edge": 7
+    },
+    "strict_facet_supports": 20,
+    "planarity_identities": 22,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 240
+  }
+}

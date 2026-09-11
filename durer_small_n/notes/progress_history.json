@@ -1,5 +1,17 @@
 [
   {
+    "date": "12 September 2026 JST · the last two original-face types",
+    "title": "New sharp-vertex families and a precise map of how the original-edge rule can fail",
+    "results": [
+      "original_rule",
+      "t_octa_minus",
+      "t_prismd",
+      "research_plan",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#original_rule\">new curvature-budget argument</a> proves additional high-curvature original-edge families in both remaining types. The source can be less sharp; putting a sharp vertex at the fifth cut leaves only two sufficient Case A curvature sums to check.</p><p>If those sums fail, only the opposite-petal Case A obligations remain at a sharp slit with a low-curvature fan. Exact examples also refute the naive adaptation that selects the sharpest original degree-four source and then the sharpest allowed endpoint. Both failed solids have separately certified repairs.</p><p>The page includes two new nets and 3D models, the full proof, exact family certificates, and clearly separated diagnostic counts. Whole types remain 5/7. Independent mathematical review and a fallback covering every remaining shape are still needed.</p>"
+  },
+  {
     "date": "11 September 2026 JST · flat-hinge extension",
     "title": "Both 180° boundaries are closed; more high-curvature original nets are proved",
     "results": [

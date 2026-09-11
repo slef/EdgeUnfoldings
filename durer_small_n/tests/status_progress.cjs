@@ -75,6 +75,20 @@ assert(detailed.includes('3 / 3 local pairs'));
 assert(detailed.includes('94.6%'),'Explicitly explain why raw cell counts mislead');
 assert(!detailed.includes('undefined') && !detailed.includes('NaN'));
 const root=path.join(__dirname,'../..');
+const originalRule=vm.runInContext('article(byId.original_rule,false)',ctx);
+assert(originalRule.includes('14 original star-plus-one candidates'));
+assert(originalRule.includes('At most two opposite-petal pairs remain'));
+assert(originalRule.includes('Case A') && originalRule.includes('not coverage fractions or proofs'));
+assert(originalRule.includes('data-model="original_rule_minus"') && originalRule.includes('data-model="original_rule_prism"'));
+assert.equal(vm.runInContext('byId.t_octa_minus.status',ctx),'open');
+assert.equal(vm.runInContext('byId.t_prismd.status',ctx),'open');
+for(const kind of ['minus','prism']) {
+  const model=vm.runInContext(`FIGS.models.original_rule_${kind}`,ctx);
+  const cert=JSON.parse(fs.readFileSync(path.join(root,`n6/results/original-rule-${kind}.certificate.json`),'utf8'));
+  assert.equal(JSON.stringify(model.cut),JSON.stringify(cert.cut_edges));
+  assert.equal(JSON.stringify(model.faces),JSON.stringify(cert.faces));
+  assert.equal(model.P.length,6);
+}
 for(const m of detailed.matchAll(/href="\.\.\/\.\.\/([^"#]+)(?:#[^"]*)?"/g)) assert(fs.existsSync(path.join(root,m[1])),m[1]);
 console.log('Progress: denominators, conditional pairs, provisional coverage, retained snapshots, file links, and prism ordering pass.');
 
