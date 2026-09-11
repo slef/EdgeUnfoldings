@@ -7,6 +7,54 @@ The heartbeat continue-lemma-f-proof-research is active every 15 minutes
 through the deadline; pause it at the deadline and report the full result.
 No subagents or push in this turn. Preserve unrelated lean_statement/ and PDFs.
 
+## Third checkpoint: wider Case A and exact length separators
+
+CASE_A_WIDE_CONES.md proves that s<=L and lambda<=(pi+theta)/2,
+or the reflected condition, suffice for opposite-petal nonoverlap.
+The geometric distance-sum inequality s+s'<L+R and the source identity
+lambda+rho<pi+theta are the only extra ingredients. Equalities included.
+This proves both-short cases, two nonobtuse outer apex angles, and a
+nonobtuse middle apex (which forces both-short). A possible remaining
+failure needs two adjacent obtuse face angles at the source. Hence
+sources with at most one obtuse incident angle have all Case A triples safe.
+This does not alone supply local or Case B premises for the whole net.
+
+cofacial_case_a_examples.py gives exact minus and prism examples and
+six-parameter symmetric affine boxes that fail every older original-star
+criterion, Case B and the older one-sided test, but pass the wider theorem.
+Independent original-face certificates check all21/all15 pairs. These affine
+boxes are not full shape charts. Whole-type count and sharp-position ledger
+are unchanged.
+
+The wider bound is NOT automatic with fan<=pi: a targeted optimization
+found case-A-low-fan-wide-failure.certificate.json. It has a sharp actual
+slit, low fan, Case A, one long side and an obtuse short-side apex above
+the wider bound. Every actual face pair is nevertheless nonoverlapping.
+The new CASE_A_LENGTH_SEPARATORS.md retains the actual shortfall A and
+overshoot B on a common positive scale. A>B; in the difficult positive
+case the left line works iff A*sin(lambda)>=B*sin(lambda-theta).
+The full four-branch table gives exact boundary tests for the two full
+apex cones, assuming the automatic source angle identity. The exact
+low-fan wider-test failure passes this metric test. The high-fan real
+overlap case-A-high-fan-failure fails both, and its same-solid repair
+is independently certified safe. Failure of a cone test is not by itself
+finite-face overlap. No universal low-fan Case A theorem has been proved.
+
+The new checker functions are length_planar_tests and verify_lengths in
+case_a_one_sided.py; cofacial verify_case_A now uses the actual-length
+separator to certify its whole original net. The overview has #case_A_wide
+and #case_A_lengths with the exact meaning and limits; successive notes
+remain in history. A 150000-shape exploratory sample missed the wider-test
+failure, illustrating why no sampled success fraction is treated as proof.
+The symbolic low-fan wider-failure query was interrupted once the exact
+counterexample was verified; its result is UNKNOWN, not UNSAT.
+
+A literature dependency audit found that an older infinite empty-wedge
+claim in a star-unfolding proof was false (Kiazyk--Lubiw 2015 section3.2,
+Figure8 explicitly corrects it). Our star comparison uses only their
+Theorem4 nonoverlap, not that false wedge assertion. The dependency
+boundary is documented in COFACIAL_STAR_REDUCTION.md.
+
 ## First new geometric theorem
 
 PRISM_TWO_SHARP_ENDS.md proves the fixed original two-pair tree whenever

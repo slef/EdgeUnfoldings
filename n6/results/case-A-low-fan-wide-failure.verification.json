@@ -1,0 +1,105 @@
+{
+  "classification": {
+    "left_short_comparison": ">",
+    "right_short_comparison": "<",
+    "left_no_wrap_comparison": "<",
+    "right_no_wrap_comparison": ">",
+    "left_condition": false,
+    "right_condition": false,
+    "earlier_two_angle_condition": false,
+    "left_wide_angle_comparison": "<",
+    "right_wide_angle_comparison": ">",
+    "both_short_condition": false,
+    "left_wide_condition": false,
+    "right_wide_condition": false,
+    "source": 4,
+    "fan": 3,
+    "equator": [
+      0,
+      1,
+      5,
+      2
+    ],
+    "slit_index": 0,
+    "triple_index": 0,
+    "pair": [
+      4,
+      7
+    ],
+    "case_A_comparison": "<",
+    "middle_nonobtuse_condition": false
+  },
+  "bands": {
+    "0": ">",
+    "1": "<",
+    "2": ">",
+    "3": "<",
+    "4": "<",
+    "5": "<"
+  },
+  "independent_all_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 19,
+      "separating_edge": 9
+    },
+    "strict_facet_supports": 24,
+    "planarity_identities": 24,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 240
+  },
+  "scope": "Exact low-fan, sharp-slit Case A example refuting automatic satisfaction of the wider sufficient angle test. The specified whole net remains nonoverlapping.",
+  "length_separator": {
+    "result": "verified_length_case_A_pair",
+    "left_short_comparison": ">",
+    "right_short_comparison": "<",
+    "left_no_wrap_comparison": "<",
+    "right_no_wrap_comparison": ">",
+    "left_condition": false,
+    "right_condition": false,
+    "earlier_two_angle_condition": false,
+    "left_wide_angle_comparison": "<",
+    "right_wide_angle_comparison": ">",
+    "both_short_condition": false,
+    "left_wide_condition": false,
+    "right_wide_condition": false,
+    "left_length_margin": ">",
+    "right_length_margin": "<",
+    "left_length_condition": true,
+    "right_length_condition": false,
+    "source": 4,
+    "fan": 3,
+    "equator": [
+      0,
+      1,
+      5,
+      2
+    ],
+    "slit_index": 0,
+    "triple_index": 0,
+    "pair": [
+      4,
+      7
+    ],
+    "case_A_comparison": "<",
+    "middle_nonobtuse_condition": false,
+    "pair_nonoverlap_by_written_lemma": true,
+    "whole_net_claimed": false,
+    "angle_sum_condition": "Follows strictly from positive source curvature and the fourth petal angle.",
+    "proof": "CASE_A_LENGTH_SEPARATORS.md",
+    "scope": "Actual edge lengths separate the full apex cones for this specified pair. A failed sufficient test does not certify finite-face overlap."
+  }
+}

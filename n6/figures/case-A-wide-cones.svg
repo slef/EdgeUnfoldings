@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="684pt" height="468pt" viewBox="0 0 684 468" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-12T03:52:04.441538</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 468
+L 684 468
+L 684 0
+L 0 0
+z
+" style="fill: #f7fafc"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 173.54289 386.519306
+L 563.092023 386.519306
+L 261.191445 309.220547
+z
+" clip-path="url(#pb50d69154a)" style="fill: #dbe4e8; stroke: #435c6a; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 173.54289 386.519306
+L 256.17874 303.883456
+L 256.17874 171.436751
+z
+" clip-path="url(#pb50d69154a)" style="fill: #e3b16b; stroke: #435c6a; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 563.092023 386.519306
+L 342.729756 166.15704
+L 475.176462 166.15704
+z
+" clip-path="url(#pb50d69154a)" style="fill: #b6a0cf; stroke: #435c6a; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 256.17874 280.510508
+C 251.556561 280.510508 247.036628 281.881615 243.193426 284.44956
+C 239.350225 287.017505 236.353783 290.66868 234.584952 294.939016
+C 232.816121 299.209353 232.353154 303.909927 233.254897 308.443292
+C 234.156639 312.976657 236.383196 317.142252 239.65157 320.410626
+" clip-path="url(#pb50d69154a)" style="fill: none; stroke: #8a5629; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 173.54289 386.519306
+L 446.227283 113.834913
+" clip-path="url(#pb50d69154a)" style="fill: none; stroke-dasharray: 1.5,2.475; stroke-dashoffset: 0; stroke: #7c8e98; stroke-width: 1.5"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 563.092023 386.519306
+L 290.40763 113.834913
+" clip-path="url(#pb50d69154a)" style="fill: none; stroke-dasharray: 1.5,2.475; stroke-dashoffset: 0; stroke: #7c8e98; stroke-width: 1.5"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 256.17874 411.84
+L 256.17874 74.88
+" clip-path="url(#pb50d69154a)" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: #2f856b; stroke-width: 2"/>
+   </g>
+   <g id="line2d_4">
+    <defs>
+     <path id="m282df50da9" d="M 0 2
+C 0.530406 2 1.03916 1.789267 1.414214 1.414214
+C 1.789267 1.03916 2 0.530406 2 0
+C 2 -0.530406 1.789267 -1.03916 1.414214 -1.414214
+C 1.03916 -1.789267 0.530406 -2 0 -2
+C -0.530406 -2 -1.03916 -1.789267 -1.414214 -1.414214
+C -1.789267 -1.03916 -2 -0.530406 -2 0
+C -2 0.530406 -1.789267 1.03916 -1.414214 1.414214
+C -1.03916 1.789267 -0.530406 2 0 2
+z
+" style="stroke: #284553"/>
+    </defs>
+    <g clip-path="url(#pb50d69154a)">
+     <use xlink:href="#m282df50da9" x="173.54289" y="386.519306" style="fill: #284553; stroke: #284553"/>
+    </g>
+   </g>
+   <g id="line2d_5">
+    <g clip-path="url(#pb50d69154a)">
+     <use xlink:href="#m282df50da9" x="563.092023" y="386.519306" style="fill: #284553; stroke: #284553"/>
+    </g>
+   </g>
+   <g id="line2d_6">
+    <g clip-path="url(#pb50d69154a)">
+     <use xlink:href="#m282df50da9" x="261.191445" y="309.220547" style="fill: #284553; stroke: #284553"/>
+    </g>
+   </g>
+   <g id="line2d_7">
+    <g clip-path="url(#pb50d69154a)">
+     <use xlink:href="#m282df50da9" x="256.17874" y="303.883456" style="fill: #284553; stroke: #284553"/>
+    </g>
+   </g>
+   <g id="line2d_8">
+    <g clip-path="url(#pb50d69154a)">
+     <use xlink:href="#m282df50da9" x="342.729756" y="166.15704" style="fill: #284553; stroke: #284553"/>
+    </g>
+   </g>
+   <g id="line2d_9">
+    <g clip-path="url(#pb50d69154a)">
+     <use xlink:href="#m282df50da9" x="368.317457" y="191.74474" style="fill: #284553; stroke: #284553"/>
+    </g>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #284553" x="157.960925" y="398.20578" transform="rotate(-0 157.960925 398.20578)">u</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #284553" x="568.93526" y="396.258035" transform="rotate(-0 568.93526 396.258035)">u′</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #284553" x="267.034682" y="326.750258" transform="rotate(-0 267.034682 326.750258)">M</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #284553" x="238.649029" y="298.040219" transform="rotate(-0 238.649029 298.040219)">P</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #284553" x="325.200045" y="152.52282" transform="rotate(-0 325.200045 152.52282)">Q</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #284553" x="381.951676" y="201.483468" transform="rotate(-0 381.951676 201.483468)">ray intersection</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; fill: #875221" transform="translate(129.606796 142.282037)">Short side</text>
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; fill: #875221" transform="translate(126.902108 156.685318)">angle 135°</text>
+   </g>
+   <g id="patch_6">
+    <path d="M 166.979933 169.947574
+Q 210.965496 226.389117 254.951059 282.830659
+" style="fill: none; stroke: #875221; stroke-linecap: round"/>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #2f856b" x="259.243699" y="96.305202" transform="rotate(-0 259.243699 96.305202)">Separating line</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #705189" x="471.547977" y="148.894335" transform="rotate(-0 471.547977 148.894335)">Other face</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #526874" x="387.794913" y="359.250867" transform="rotate(-0 387.794913 359.250867)">Middle triangle</text>
+   </g>
+  </g>
+  <g id="text_11">
+   <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #253d4b" x="30.78" y="27.717188" transform="rotate(-0 30.78 27.717188)">A short side can tolerate an obtuse apex</text>
+  </g>
+  <g id="text_12">
+   <text style="font-size: 11.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #405766" x="30.78" y="46.8" transform="rotate(-0 30.78 46.8)">Here θ = 90°, so the new bound is (180° + θ) / 2 = 135°.</text>
+  </g>
+  <g id="text_13">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #405766" x="30.78" y="437.58" transform="rotate(-0 30.78 437.58)">P stops before the rays meet; Q passes their meeting point. The green line still separates the faces.</text>
+  </g>
+  <g id="text_14">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #405766" x="30.78" y="456.3" transform="rotate(-0 30.78 456.3)">Planar proof illustration, with no stretching. This is not presented as a six-vertex polyhedron.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pb50d69154a">
+   <rect x="103.424046" y="74.88" width="490.831908" height="336.96"/>
+  </clipPath>
+ </defs>
+</svg>

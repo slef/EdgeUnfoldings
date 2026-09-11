@@ -57,27 +57,10 @@ def verify(spec):
         scope='All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted.')
 
 
-if __name__=='__main__':
-    import argparse,json
-    from pathlib import Path
-    from n6.intervals import set_precision
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('input',type=Path)
-    args=ap.parse_args();spec=json.loads(args.input.read_text());set_precision(spec.get('suggested_fractional_bits',240))
-    print(json.dumps(verify(spec),indent=2))
-
-
-def verify_case_B(spec):
-    """A sharp route endpoint, low fan, and the sole remaining Case B suffice.
-
-    The inherited star proves one opposite-petal pair. ORIGINAL_EDGE_RULE.md
-    then supplies every other pair once the remaining opposite-petal triple
-    is outside strict Case A. All hypotheses concern this same physical net.
-    """
+def case_frame(spec):
+    """Shared geometry for the one remaining opposite-petal triple."""
     from n6.flat_octahedron import original_candidates,curvature_bands
     from n6.original_edge_rule import ring_for
-    from n6.prism_paths import polygon_angle_product
-    from n6.curvature import face_angle
-    from n6.regimes import two_curvatures_angle
     partial=verify(spec);g=Geometry(spec);family,trees=original_candidates(g.faces)
     t=next(t for t in trees if t['cuts']==sorted(edge(*e) for e in spec['cut_edges']))
     v,w,c=(t[k] for k in ('source','fan','slit'));ring=ring_for(family,v,w,c)
@@ -88,6 +71,16 @@ def verify_case_B(spec):
     bands=curvature_bands(g)
     require(bands[w] in ('<','='),'Fan curvature <=pi is not certified')
     require(bands[c] in ('>','='),'Route endpoint curvature >=pi is not certified')
+    return g,v,w,c,ring,middle,fi,bands
+
+
+def verify_case_B(spec):
+    """A sharp route endpoint, low fan, and the sole remaining Case B suffice."""
+    from n6.prism_paths import polygon_angle_product
+    from n6.curvature import face_angle
+    from n6.regimes import two_curvatures_angle
+    g,v,w,c,ring,middle,fi,bands=case_frame(spec)
+    u,up=ring[middle],ring[(middle+1)%4]
     if bands[u] in ('>','=') or bands[up] in ('>','='):case='>'
     else:
         case=two_curvatures_angle(polygon_angle_product(g,u),polygon_angle_product(g,up),
@@ -100,3 +93,49 @@ def verify_case_B(spec):
         dependencies=['ORIGINAL_EDGE_RULE.md','OCTA_FLAT_HINGES.md',REFERENCE],
         full_type_proved=False,
         scope='These exact hypotheses supply the whole specified original-edge net by the written geometric reduction. The proof awaits independent review; numerical experiments are not premises.')
+
+
+def verify_case_A(spec):
+    """The actual-length Case A separator finishes the same original net."""
+    from n6.prism_paths import polygon_angle_product
+    from n6.curvature import face_angle,cmul,conjugate
+    from n6.regimes import two_curvatures_angle
+    from n6.intervals import sub,dot,cross,norm2
+    from n6.case_a_one_sided import length_planar_tests
+    g,v,w,c,ring,middle,fi,bands=case_frame(spec)
+    u,up=ring[middle],ring[(middle+1)%4]
+    totals={x:polygon_angle_product(g,x) for x in (u,up)}
+    case=two_curvatures_angle(totals[u],totals[up],face_angle(g.p,g.faces[fi],g.h[fi],v))
+    require(case=='<','The remaining triple is not certified in strict Case A')
+    def outer(j):
+        target={v,ring[j],ring[(j+1)%4]}
+        candidates=[i for i,f in enumerate(g.faces) if target<=set(f)]
+        require(len(candidates)==1,'Expected a unique original outer face')
+        f=g.faces[candidates[0]];k=f.index(v)
+        a=sub(g.p[f[k-1]],g.p[v]);b=sub(g.p[f[(k+1)%len(f)]],g.p[v])
+        return candidates[0],(dot(a,b),norm2(cross(a,b)).sqrt())
+    left,la=outer(middle-1);right,ra=outer((middle+1)%4)
+    alpha=cmul(face_angle(g.p,g.faces[fi],g.h[fi],u),conjugate(totals[u]))
+    beta=cmul(face_angle(g.p,g.faces[fi],g.h[fi],up),conjugate(totals[up]))
+    tests=length_planar_tests(alpha,beta,la,ra,norm2(sub(g.p[v],g.p[u])).sqrt(),
+                           norm2(sub(g.p[v],g.p[up])).sqrt(),norm2(sub(g.p[u],g.p[up])).sqrt())
+    tests['middle_nonobtuse_condition']=face_angle(g.p,g.faces[fi],g.h[fi],v)[0].lo>=0
+    require(tests['left_length_condition'] or tests['right_length_condition'],
+            'Neither actual-length Case A separator is certified')
+    return dict(result='verified_cofacial_sharp_route_length_case_A',source=v,fan=w,slit=c,
+        curvature_comparisons_with_pi=bands,remaining_middle_base=[u,up],middle_face=fi,
+        remaining_original_pair=[left,right],case_A_comparison=case,**tests,
+        original_faces_remain_whole=True,whole_net_safe_by_written_theorem=True,
+        proof='CASE_A_LENGTH_SEPARATORS.md',dependencies=['COFACIAL_STAR_REDUCTION.md','ORIGINAL_EDGE_RULE.md',REFERENCE],
+        full_type_proved=False,scope='The specified original net satisfies the written actual-length Case A theorem. No universal low-fan Case A claim is made.')
+
+
+if __name__=='__main__':
+    import argparse,json
+    from pathlib import Path
+    from n6.intervals import set_precision
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('input',type=Path)
+    ap.add_argument('--whole-net',choices=['case_A','case_B'])
+    args=ap.parse_args();spec=json.loads(args.input.read_text());set_precision(spec.get('suggested_fractional_bits',240))
+    fn=verify_case_A if args.whole_net=='case_A' else verify_case_B if args.whole_net=='case_B' else verify
+    print(json.dumps(fn(spec),indent=2))

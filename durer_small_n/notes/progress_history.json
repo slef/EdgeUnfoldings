@@ -1,5 +1,29 @@
 [
   {
+    "date": "12 September 2026 JST · four-hour continuation, fourth result",
+    "title": "The actual lengths settle examples beyond the wider angle bound",
+    "body": "<p>The <a href=\"#case_A_lengths\">new metric separator</a> compares how far one cut edge falls short with how far the other overshoots. Keeping both amounts proves configurations that the wider angle bound misses.</p><p>An exact low-fan, sharp-slit octahedron confirms that the remaining obtuse-angle pattern is real. The length comparison proves its difficult pair safe; all 28 pairs also pass an independent exact check. A different exact high-fan example really overlaps and fails the metric test. These distinguish failed sufficient tests from actual overlaps.</p><p>The two whole types remain open. The next target is to prove that at least one permitted original-edge choice supplies a separator, or handle the finite faces when their full cones cannot be separated.</p>",
+    "results": [
+      "case_A_lengths",
+      "case_A_wide",
+      "cofacial_star",
+      "t_octa_minus",
+      "t_prismd"
+    ]
+  },
+  {
+    "date": "12 September 2026 JST · four-hour continuation, third result",
+    "title": "A wider Case A separator leaves an obtuse short-side obstruction",
+    "results": [
+      "case_A_wide",
+      "cofacial_star",
+      "sharp_positions",
+      "original_rule",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#case_A_wide\">new distance-sum argument</a> increases the allowable angle on a short cut side from θ to (180°+θ)/2. It proves every both-short Case A configuration, and every configuration with two nonobtuse outer apex angles. Equality in the new angle bound is included.</p><p>With the cofacial star comparison, this proves additional whole original-edge families in both remaining types. Exact six-parameter affine boxes pass the wider test and all original face-pair checks while failing the earlier sufficient criteria. The residual low-fan pattern has one long side and an obtuse angle above the new bound on the short side.</p><p>An initial diagnostic search found no wider-test failure in 82,786 low-fan Case A instances. A later targeted search found an exact failure of that bound; the subsequent actual-length test proves its pair safe. The full types remain open, and the positional counts stay six minus-edge patterns and ten prism patterns. Written proofs await independent review.</p>"
+  },
+  {
     "date": "12 September 2026 JST · four-hour continuation, second result",
     "title": "Every three-sharp-vertex pattern is covered; the remaining positions are explicit",
     "results": [

@@ -157,3 +157,23 @@ The implementation `verify_case_B` checks this stronger conclusion. The
 next consequences for entire sharp-vertex position patterns are recorded
 in SHARP_VERTEX_PATTERNS.md. Their finite counts concern vertex positions,
 not fractions of the continuous realization space.
+
+## A further whole-net consequence in Case A
+
+If the remaining triple is in Case A, CASE_A_WIDE_CONES.md now finishes
+the net whenever one short cut side has apex angle <=(pi+theta)/2. In
+particular, both-short triples and triples with both outer apex angles
+nonobtuse are safe. `verify_case_A` checks this use on the original faces.
+Exact points and six-parameter affine families of both remaining types
+pass the new test while failing the earlier one-sided angle condition.
+The still-unresolved geometric pattern has one long side and an obtuse
+angle, above the new threshold, on the opposite short side.
+
+## Dependency boundary: an infinite empty wedge is not available
+
+Section 3.2 of the same 2015 paper explicitly reports that an earlier
+claim of an entirely empty exterior wedge at a star-unfolding vertex was
+false, and repairs a quasigeodesic-loop proof that used it. We use the
+valid star nonoverlap theorem, not that refuted stronger claim. Lemma 6's
+bounded or partially unbounded W-region is a different statement; it
+does not license replacing that region by its whole angular cone.

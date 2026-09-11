@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
 import unittest
-from n6.cofacial_star_reduction import verify,verify_case_B
+from n6.cofacial_star_reduction import verify,verify_case_B,verify_case_A
 from n6.cofacial_case_b_examples import specification
+from n6.cofacial_case_a_examples import specification as case_A_spec
 from n6.flat_octahedron import original_candidates,verify_fixed_tree
 from n6.intervals import set_precision
 from n6.original_edge_rule import verify as budget_verify
@@ -21,6 +22,22 @@ class CofacialStarTests(unittest.TestCase):
                     self.assertTrue(result['whole_net_safe_by_written_theorem'])
                     self.assertEqual({v for v,b in result['curvature_comparisons_with_pi'].items() if b=='>'},sharp)
                     self.assertEqual(all_pairs(make_certificate(spec))['result'],'verified')
+
+    def test_wider_case_A_families_need_more_than_the_earlier_one_sided_test(self):
+        for kind in ('minus','prism'):
+            for region in (False,True):
+                with self.subTest(kind=kind,region=region):
+                    spec=case_A_spec(kind,region);r=verify_case_A(spec)
+                    self.assertEqual(r['case_A_comparison'],'<')
+                    self.assertFalse(r['left_condition'] or r['right_condition'])
+                    self.assertTrue(r['left_wide_condition'] or r['right_wide_condition'])
+                    self.assertTrue(r['whole_net_safe_by_written_theorem'])
+                    with self.assertRaises(ValueError):verify_case_B(spec)
+                    self.assertEqual(all_pairs(make_certificate(spec))['result'],'verified')
+                    _,trees=original_candidates(spec['faces'])
+                    for tree in trees:
+                        with self.assertRaises(ValueError):verify_fixed_tree({**spec,'cut_edges':tree['cuts']})
+                        with self.assertRaises(ValueError):budget_verify({**spec,'cut_edges':tree['cuts']})
 
     def test_strict_examples_are_outside_every_old_original_star_criterion(self):
         for kind in ('minus','prism'):

@@ -1,0 +1,11 @@
+{
+  "target": "caseA_low_fan_wide_failure",
+  "hypothesis": "none",
+  "hard_local": false,
+  "lifted": true,
+  "solver_ms": 900000,
+  "wall_seconds": 930.0,
+  "memory_mb": 1536,
+  "export_only": false,
+  "output": "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/n6/results/caseA-low-fan-wide-failure-query"
+}

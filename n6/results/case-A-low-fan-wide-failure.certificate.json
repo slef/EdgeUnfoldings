@@ -1,0 +1,464 @@
+{
+  "schema": "n6-polyhedron-region-v1",
+  "parameter_box": [],
+  "coordinate_polynomials": [
+    [
+      [
+        [
+          "-7703225241",
+          []
+        ]
+      ],
+      [
+        [
+          "-16482264790",
+          []
+        ]
+      ],
+      [
+        [
+          "-22003294760",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "-1107141054",
+          []
+        ]
+      ],
+      [
+        [
+          "268355315",
+          []
+        ]
+      ],
+      [
+        [
+          "419505479",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "19996944474",
+          []
+        ]
+      ],
+      [
+        [
+          "-336743212",
+          []
+        ]
+      ],
+      [
+        [
+          "-5957420535",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "-1107983551",
+          []
+        ]
+      ],
+      [
+        [
+          "268560144",
+          []
+        ]
+      ],
+      [
+        [
+          "419823862",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "0",
+          []
+        ]
+      ],
+      [
+        [
+          "0",
+          []
+        ]
+      ],
+      [
+        [
+          "0",
+          []
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "2957803276",
+          []
+        ]
+      ],
+      [
+        [
+          "19437024",
+          []
+        ]
+      ],
+      [
+        [
+          "-779895848",
+          []
+        ]
+      ]
+    ]
+  ],
+  "faces": [
+    [
+      0,
+      3,
+      2
+    ],
+    [
+      1,
+      3,
+      0
+    ],
+    [
+      5,
+      2,
+      3
+    ],
+    [
+      5,
+      3,
+      1
+    ],
+    [
+      4,
+      1,
+      0
+    ],
+    [
+      4,
+      5,
+      1
+    ],
+    [
+      4,
+      0,
+      2
+    ],
+    [
+      4,
+      2,
+      5
+    ]
+  ],
+  "cut_edges": [
+    [
+      0,
+      3
+    ],
+    [
+      0,
+      4
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      4,
+      5
+    ]
+  ],
+  "selection": {
+    "apex": 4,
+    "antipode": 3,
+    "equator": [
+      0,
+      1,
+      5,
+      2
+    ],
+    "slit_index": 0
+  },
+  "case_A_triple_index": 0,
+  "pair_witnesses": [
+    {
+      "faces": [
+        0,
+        1
+      ],
+      "kind": "vertex_fan",
+      "vertex": 3
+    },
+    {
+      "faces": [
+        0,
+        2
+      ],
+      "kind": "vertex_fan",
+      "vertex": 2
+    },
+    {
+      "faces": [
+        0,
+        3
+      ],
+      "kind": "vertex_fan",
+      "vertex": 3
+    },
+    {
+      "faces": [
+        0,
+        4
+      ],
+      "kind": "separating_edge",
+      "owner": 0,
+      "edge": [
+        3,
+        2
+      ]
+    },
+    {
+      "faces": [
+        0,
+        5
+      ],
+      "kind": "separating_edge",
+      "owner": 0,
+      "edge": [
+        3,
+        2
+      ]
+    },
+    {
+      "faces": [
+        0,
+        6
+      ],
+      "kind": "vertex_fan",
+      "vertex": 0
+    },
+    {
+      "faces": [
+        0,
+        7
+      ],
+      "kind": "vertex_fan",
+      "vertex": 2
+    },
+    {
+      "faces": [
+        1,
+        2
+      ],
+      "kind": "vertex_fan",
+      "vertex": 3
+    },
+    {
+      "faces": [
+        1,
+        3
+      ],
+      "kind": "vertex_fan",
+      "vertex": 1
+    },
+    {
+      "faces": [
+        1,
+        4
+      ],
+      "kind": "vertex_fan",
+      "vertex": 0
+    },
+    {
+      "faces": [
+        1,
+        5
+      ],
+      "kind": "vertex_fan",
+      "vertex": 1
+    },
+    {
+      "faces": [
+        1,
+        6
+      ],
+      "kind": "separating_edge",
+      "owner": 1,
+      "edge": [
+        1,
+        3
+      ]
+    },
+    {
+      "faces": [
+        1,
+        7
+      ],
+      "kind": "separating_edge",
+      "owner": 1,
+      "edge": [
+        0,
+        1
+      ]
+    },
+    {
+      "faces": [
+        2,
+        3
+      ],
+      "kind": "vertex_fan",
+      "vertex": 3
+    },
+    {
+      "faces": [
+        2,
+        4
+      ],
+      "kind": "separating_edge",
+      "owner": 2,
+      "edge": [
+        3,
+        5
+      ]
+    },
+    {
+      "faces": [
+        2,
+        5
+      ],
+      "kind": "vertex_fan",
+      "vertex": 5
+    },
+    {
+      "faces": [
+        2,
+        6
+      ],
+      "kind": "vertex_fan",
+      "vertex": 2
+    },
+    {
+      "faces": [
+        2,
+        7
+      ],
+      "kind": "vertex_fan",
+      "vertex": 2
+    },
+    {
+      "faces": [
+        3,
+        4
+      ],
+      "kind": "vertex_fan",
+      "vertex": 1
+    },
+    {
+      "faces": [
+        3,
+        5
+      ],
+      "kind": "vertex_fan",
+      "vertex": 1
+    },
+    {
+      "faces": [
+        3,
+        6
+      ],
+      "kind": "separating_edge",
+      "owner": 3,
+      "edge": [
+        5,
+        3
+      ]
+    },
+    {
+      "faces": [
+        3,
+        7
+      ],
+      "kind": "vertex_fan",
+      "vertex": 5
+    },
+    {
+      "faces": [
+        4,
+        5
+      ],
+      "kind": "vertex_fan",
+      "vertex": 1
+    },
+    {
+      "faces": [
+        4,
+        6
+      ],
+      "kind": "separating_edge",
+      "owner": 4,
+      "edge": [
+        4,
+        1
+      ]
+    },
+    {
+      "faces": [
+        4,
+        7
+      ],
+      "kind": "separating_edge",
+      "owner": 4,
+      "edge": [
+        0,
+        4
+      ]
+    },
+    {
+      "faces": [
+        5,
+        6
+      ],
+      "kind": "separating_edge",
+      "owner": 5,
+      "edge": [
+        5,
+        1
+      ]
+    },
+    {
+      "faces": [
+        5,
+        7
+      ],
+      "kind": "vertex_fan",
+      "vertex": 5
+    },
+    {
+      "faces": [
+        6,
+        7
+      ],
+      "kind": "vertex_fan",
+      "vertex": 2
+    }
+  ]
+}

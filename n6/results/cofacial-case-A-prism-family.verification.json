@@ -1,0 +1,92 @@
+{
+  "hypotheses": {
+    "result": "verified_cofacial_sharp_route_length_case_A",
+    "source": 3,
+    "fan": 2,
+    "slit": 5,
+    "curvature_comparisons_with_pi": {
+      "0": "<",
+      "1": "<",
+      "2": "<",
+      "3": "<",
+      "4": ">",
+      "5": ">"
+    },
+    "remaining_middle_base": [
+      0,
+      1
+    ],
+    "middle_face": 2,
+    "remaining_original_pair": [
+      1,
+      4
+    ],
+    "case_A_comparison": "<",
+    "left_short_comparison": ">",
+    "right_short_comparison": "<",
+    "left_no_wrap_comparison": "<",
+    "right_no_wrap_comparison": ">",
+    "left_condition": false,
+    "right_condition": false,
+    "earlier_two_angle_condition": false,
+    "left_wide_angle_comparison": ">",
+    "right_wide_angle_comparison": ">",
+    "both_short_condition": false,
+    "left_wide_condition": true,
+    "right_wide_condition": false,
+    "left_length_margin": ">",
+    "right_length_margin": "<",
+    "left_length_condition": true,
+    "right_length_condition": false,
+    "middle_nonobtuse_condition": false,
+    "original_faces_remain_whole": true,
+    "whole_net_safe_by_written_theorem": true,
+    "proof": "CASE_A_LENGTH_SEPARATORS.md",
+    "dependencies": [
+      "COFACIAL_STAR_REDUCTION.md",
+      "ORIGINAL_EDGE_RULE.md",
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ],
+    "full_type_proved": false,
+    "scope": "The specified original net satisfies the written actual-length Case A theorem. No universal low-fan Case A claim is made."
+  },
+  "independent_all_original_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 6,
+    "facet_sizes": [
+      3,
+      4,
+      3,
+      4,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 11,
+      "separating_edge": 3,
+      "face_neighborhood": 1
+    },
+    "strict_facet_supports": 16,
+    "planarity_identities": 20,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": true,
+    "fractional_bits": 240,
+    "theorem_dependencies": [
+      {
+        "author": "Val Pinciu",
+        "year": 2007,
+        "theorem": 1,
+        "title": "On the Fewest Nets Problem for Convex Polyhedra",
+        "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+      }
+    ]
+  }
+}

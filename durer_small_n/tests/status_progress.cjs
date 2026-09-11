@@ -345,3 +345,10 @@ for(const kind of ['minus','prism']) {
   assert.deepEqual(JSON.parse(JSON.stringify(model.cut)),cert.cut_edges);
   assert.deepEqual(JSON.parse(JSON.stringify(model.faces)),cert.faces);
 }
+
+const wider=vm.runInContext('article(byId.case_A_wide,false)',ctx);
+assert(wider.includes('The remaining pattern really exists'));
+assert(wider.includes('middle apex angle is nonobtuse'));
+const lengths=vm.runInContext('article(byId.case_A_lengths,false)',ctx);
+assert(lengths.includes('Both whole types remain open'));
+assert(lengths.includes('case-A-low-fan-wide-failure.verification.json'));

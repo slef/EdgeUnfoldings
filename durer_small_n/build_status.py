@@ -21,6 +21,8 @@ two_sharp_svg = (research / 'figures/prism-two-sharp-ends.svg').read_text()
 figs['prism_two_sharp'] = two_sharp_svg[two_sharp_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 cofacial_svg = (research / 'figures/cofacial-star-comparison.svg').read_text()
 figs['cofacial_star'] = cofacial_svg[cofacial_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
+wide_cones_svg = (research / 'figures/case-A-wide-cones.svg').read_text()
+figs['case_A_wide'] = wide_cones_svg[wide_cones_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 true_scale_svg = (research / 'figures/octa-three-same-true-scale.svg').read_text()
 figs['three_same_true_scale'] = true_scale_svg[true_scale_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 for key, filename in [('local_small_sum','local-small-sum.svg'),('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg'),('patch_budget','octa-patch-budget.svg'),('three_same','octa-three-same.svg'),('chain_switch','octa-three-chain.svg')]:
