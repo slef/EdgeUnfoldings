@@ -1,0 +1,661 @@
+{
+  "result": "verified_streamlined_proof_checks",
+  "complement_classification": {
+    "result": "verified_complement_graph_classification",
+    "labeled_complements_checked": 820,
+    "component_types": [
+      {
+        "complement": "C3+C3",
+        "excluded_by": "K_3,3 subgraph"
+      },
+      {
+        "complement": "C3+P3",
+        "excluded_by": "K_3,3 subgraph"
+      },
+      {
+        "complement": "C4+P2",
+        "excluded_by": "two-vertex separator"
+      },
+      {
+        "complement": "C6",
+        "original_type": "triangular prism",
+        "relabeling": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "complement": "P2+P2+P2",
+        "original_type": "octahedron",
+        "relabeling": [
+          0,
+          2,
+          4,
+          5,
+          3,
+          1
+        ]
+      },
+      {
+        "complement": "P2+P4",
+        "original_type": "octahedron minus an edge",
+        "relabeling": [
+          2,
+          3,
+          0,
+          1,
+          4,
+          5
+        ]
+      },
+      {
+        "complement": "P3+P3",
+        "excluded_by": "K_3,3 subgraph"
+      },
+      {
+        "complement": "P6",
+        "original_type": "prism with one diagonal",
+        "relabeling": [
+          2,
+          5,
+          0,
+          4,
+          1,
+          3
+        ]
+      }
+    ],
+    "retained_types": 4,
+    "geometry_or_unfolding_formally_verified": false,
+    "scope": "Finite graph classification only; not a metric-shape sample.",
+    "proof": "TIDY_PROOF.md"
+  },
+  "minus_identity": {
+    "result": "verified_exact_minus_single_identity",
+    "independent_angle_indeterminates": 15,
+    "arithmetic": "Exact rational polynomial coefficients",
+    "positivity_or_geometry_formally_verified": false,
+    "proof": "TIDY_PROOF.md"
+  },
+  "prism_identities": {
+    "result": "verified_exact_prism_angle_identities",
+    "identities": 3,
+    "independent_angle_indeterminates": 14,
+    "arithmetic": "Exact rational polynomial coefficients",
+    "geometry_or_positivity_formally_verified": false,
+    "proof": "PRISM_SHARP_FAN_SWITCH.md"
+  },
+  "shorter_prism_identities": {
+    "result": "verified_exact_shorter_prism_identities",
+    "identities": 3,
+    "independent_angle_indeterminates": 14,
+    "arithmetic": "Exact rational polynomial coefficients",
+    "geometry_or_positivity_formally_verified": false,
+    "proof": "TIDY_PROOF.md"
+  },
+  "half_fan_domains": {
+    "regular-ties": {
+      "result": "verified_direct_half_fan_spans",
+      "source": 0,
+      "fan": 1,
+      "parameter_dimension": 0,
+      "curvature_bands": {
+        "0": "<",
+        "1": "<",
+        "2": "<",
+        "3": "<",
+        "4": "<",
+        "5": "<"
+      },
+      "patches": [
+        {
+          "index": 0,
+          "equator_edge": [
+            2,
+            5
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 1,
+          "equator_edge": [
+            5,
+            4
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 2,
+          "equator_edge": [
+            4,
+            3
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 3,
+          "equator_edge": [
+            3,
+            2
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        }
+      ],
+      "comparisons": [
+        {
+          "patch": 0,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 1,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 2,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 3,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        }
+      ],
+      "whole_net_claimed": false,
+      "geometric_proof_formally_verified": false,
+      "scope": "Direct exact angular inequalities on this explicit domain only.",
+      "proof": "TIDY_CORE.md"
+    },
+    "high-curvature": {
+      "result": "verified_direct_half_fan_spans",
+      "source": 0,
+      "fan": 1,
+      "parameter_dimension": 0,
+      "curvature_bands": {
+        "0": ">",
+        "1": "<",
+        "2": "<",
+        "3": "<",
+        "4": "<",
+        "5": "<"
+      },
+      "patches": [
+        {
+          "index": 0,
+          "equator_edge": [
+            2,
+            3
+          ],
+          "corner_relations_to_pi": [
+            ">",
+            "<"
+          ],
+          "convex": false
+        },
+        {
+          "index": 1,
+          "equator_edge": [
+            3,
+            4
+          ],
+          "corner_relations_to_pi": [
+            ">",
+            "<"
+          ],
+          "convex": false
+        },
+        {
+          "index": 2,
+          "equator_edge": [
+            4,
+            5
+          ],
+          "corner_relations_to_pi": [
+            ">",
+            "<"
+          ],
+          "convex": false
+        },
+        {
+          "index": 3,
+          "equator_edge": [
+            5,
+            2
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        }
+      ],
+      "comparisons": [
+        {
+          "patch": 0,
+          "direction": "B",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 1,
+          "direction": "B",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 2,
+          "direction": "B",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 3,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        }
+      ],
+      "whole_net_claimed": false,
+      "geometric_proof_formally_verified": false,
+      "scope": "Direct exact angular inequalities on this explicit domain only.",
+      "proof": "TIDY_CORE.md"
+    },
+    "low-curvature": {
+      "result": "verified_direct_half_fan_spans",
+      "source": 2,
+      "fan": 5,
+      "parameter_dimension": 0,
+      "curvature_bands": {
+        "0": "<",
+        "1": "<",
+        "2": "<",
+        "3": "<",
+        "4": "<",
+        "5": "<"
+      },
+      "patches": [
+        {
+          "index": 0,
+          "equator_edge": [
+            0,
+            3
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 1,
+          "equator_edge": [
+            3,
+            1
+          ],
+          "corner_relations_to_pi": [
+            ">",
+            "<"
+          ],
+          "convex": false
+        },
+        {
+          "index": 2,
+          "equator_edge": [
+            1,
+            4
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 3,
+          "equator_edge": [
+            4,
+            0
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        }
+      ],
+      "comparisons": [
+        {
+          "patch": 0,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 1,
+          "direction": "B",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 2,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 3,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        }
+      ],
+      "whole_net_claimed": false,
+      "geometric_proof_formally_verified": false,
+      "scope": "Direct exact angular inequalities on this explicit domain only.",
+      "proof": "TIDY_CORE.md"
+    },
+    "obtuse": {
+      "result": "verified_direct_half_fan_spans",
+      "source": 5,
+      "fan": 4,
+      "parameter_dimension": 0,
+      "curvature_bands": {
+        "0": "<",
+        "1": "<",
+        "2": "<",
+        "3": "<",
+        "4": "<",
+        "5": "<"
+      },
+      "patches": [
+        {
+          "index": 0,
+          "equator_edge": [
+            0,
+            1
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 1,
+          "equator_edge": [
+            1,
+            2
+          ],
+          "corner_relations_to_pi": [
+            ">",
+            "<"
+          ],
+          "convex": false
+        },
+        {
+          "index": 2,
+          "equator_edge": [
+            2,
+            3
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 3,
+          "equator_edge": [
+            3,
+            0
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        }
+      ],
+      "comparisons": [
+        {
+          "patch": 0,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 1,
+          "direction": "B",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 2,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 3,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        }
+      ],
+      "whole_net_claimed": false,
+      "geometric_proof_formally_verified": false,
+      "scope": "Direct exact angular inequalities on this explicit domain only.",
+      "proof": "TIDY_CORE.md"
+    },
+    "curvature-equality": {
+      "result": "verified_direct_half_fan_spans",
+      "source": 0,
+      "fan": 1,
+      "parameter_dimension": 0,
+      "curvature_bands": {
+        "0": "=",
+        "1": "<",
+        "2": "<",
+        "3": "<",
+        "4": "<",
+        "5": "<"
+      },
+      "patches": [
+        {
+          "index": 0,
+          "equator_edge": [
+            2,
+            3
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 1,
+          "equator_edge": [
+            3,
+            4
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 2,
+          "equator_edge": [
+            4,
+            5
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 3,
+          "equator_edge": [
+            5,
+            2
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        }
+      ],
+      "comparisons": [
+        {
+          "patch": 0,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 1,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 2,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 3,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        }
+      ],
+      "whole_net_claimed": false,
+      "geometric_proof_formally_verified": false,
+      "scope": "Direct exact angular inequalities on this explicit domain only.",
+      "proof": "TIDY_CORE.md"
+    },
+    "crossing-threshold": {
+      "result": "verified_direct_half_fan_spans",
+      "source": 0,
+      "fan": 1,
+      "parameter_dimension": 18,
+      "curvature_bands": {
+        "0": null,
+        "1": "<",
+        "2": "<",
+        "3": "<",
+        "4": "<",
+        "5": "<"
+      },
+      "patches": [
+        {
+          "index": 0,
+          "equator_edge": [
+            2,
+            3
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 1,
+          "equator_edge": [
+            3,
+            4
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 2,
+          "equator_edge": [
+            4,
+            5
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        },
+        {
+          "index": 3,
+          "equator_edge": [
+            5,
+            2
+          ],
+          "corner_relations_to_pi": [
+            "<",
+            "<"
+          ],
+          "convex": true
+        }
+      ],
+      "comparisons": [
+        {
+          "patch": 0,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 1,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 2,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        },
+        {
+          "patch": 3,
+          "direction": "",
+          "twice_span_strictly_below_fan": true
+        }
+      ],
+      "whole_net_claimed": false,
+      "geometric_proof_formally_verified": false,
+      "scope": "Direct exact angular inequalities on this explicit domain only.",
+      "proof": "TIDY_CORE.md"
+    }
+  },
+  "actual_finite_entry": {
+    "result": "verified_actual_entry_satisfies_both_obstructions",
+    "source_curvature_below_pi": true,
+    "equal_radius_budget_below_pi": true,
+    "curvature_bands": {
+      "0": "<",
+      "1": "<",
+      "2": "<",
+      "3": ">",
+      "4": ">",
+      "5": "<"
+    },
+    "original_overlap_rechecked": true,
+    "other_pairs_rechecked": 27,
+    "universal_geometric_proof_formally_verified": false,
+    "scope": "One exact historical counterexample; the chosen source does not meet the selected rule.",
+    "proof": "TIDY_CORE.md"
+  },
+  "universal_geometric_proof_formally_verified": false
+}

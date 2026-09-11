@@ -4,6 +4,77 @@
 This is a further self-audit. Independent mathematical review and formal
 verification remain outstanding. The original research material is retained.
 
+## Checkpoint: complete shorter draft, review continuing
+
+At approximately 07:15 JST the separate exposition is complete end to end:
+[TIDY_PROOF.md](TIDY_PROOF.md) gives the classification and original-edge
+choices, and [TIDY_CORE.md](TIDY_CORE.md) supplies the geometric core and
+planar separators. Readable HTML versions are linked from the overview.
+No actual gap has been identified in this review so far. This is not an
+independent review or formal verification of the proof.
+
+The fresh reconstruction checks the following points explicitly:
+
+* The finite-entry containment uses only shared vertices and the actual
+  slit's local lemma. It does not assume opposite-petal safety.
+* The small-fan overlap is below the middle base by two linear half-plane
+  inequalities. The middle blue triangle suffices to exclude the wrong
+  interior sector; its attached petal is unnecessary.
+* The finite-cut and strict local boundary facts make the auxiliary curve
+  and six-sided region simple. The orientation at the last slit copy fixes
+  the complementary interior angle used in the angle sum.
+* A single source-curvature contradiction now handles the small-fan pocket,
+  just as a single obstruction handles finite entry.
+* Four explicit target-boundary checks replace the historical interior-hinge
+  dependency. The refuted unrestricted reduction is still retained.
+* The original-face star comparisons keep exactly the same connected tree
+  after removing the appropriate leaf faces. The reference diagonals are
+  shortest paths, while every final cut remains an original edge.
+* The prism's two cap views have complementary central angle sums. This
+  gives one shared observation for both switches and the two-sharp case.
+* Every equality threshold routes to a proved closed branch. Flat auxiliary
+  hinges are handled directly, using the closed tangent link, not a presumed
+  curvature-preserving perturbation.
+
+There are two additional shortenings beyond the first draft:
+
+1. An elementary complement-graph classification replaces a computational
+   type enumeration in the main argument. After excluding a vertex joined
+   to all others, the complement has only paths and cycles. Its eight
+   possible component types reduce to the four remaining polyhedral graphs:
+   three exclusions contain K_(3,3), and one has a two-vertex separator.
+2. The three prism identities have shorter positive-remainder forms. The
+   first two need only positive original angles and angles below pi; the
+   last retains three strict link slacks and the obtuse-middle premise.
+   Numerical linear optimization suggested the forms; exact coefficient
+   expansion, not the optimizer's status, checks the identities.
+
+Seven new tests pass. They check the graph list and its explicit exclusions,
+the new minus and prism identities, half-fan spans at five exact points and
+an 18-coordinate box crossing the source-curvature threshold, a rejected
+reversal of the source condition, and the two necessary inequalities on the
+historical actual finite-entry counterexample (whose other 27 pairs are
+rechecked). See [the exact report](results/tidy-core-audit.verification.json).
+These are algebraic/finite-domain checks, not a machine proof of the geometry.
+
+The external dependencies were checked at their stated scope. Definition 1
+and Theorem 4 of [Kiazyk--Lubiw](https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390)
+include the vertex-source star used here; their Section 3.2 also confirms why
+an entirely empty infinite exterior wedge must not be assumed. The dome
+result and definition are supported by [O'Rourke's treatment](https://www.science.smith.edu/~jorourke/Papers/PolyUnf0.pdf)
+and the opening sections of [Demaine--Demaine--Uehara](https://erikdemaine.org/papers/ZipperDomes_CCCG2013/paper.pdf).
+The latter's introductory six-vertex attribution to DiBiase is not being used
+to validate the new proof or to override the repository's direct thesis audit.
+
+The remaining time is for a second pass against the reconstructed manuscript,
+focused on geometric containment, polygonal-face applicability, and exact
+boundary assumptions, followed by presentation and packaging checks.
+
+## Initial review notes, retained
+
+The following entries record the first stage, including its then-open tasks.
+The checkpoint above gives the current state of those tasks.
+
 ## Review objectives
 
 1. Reconstruct the geometric dependencies without assuming that a completed
