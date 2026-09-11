@@ -243,6 +243,11 @@ assert.equal(score.nonsimplicial_curvature_branches.filter(x=>x.status==='proved
 assert.equal(score.nonsimplicial_curvature_branches.length,2);
 assert.equal(vm.runInContext('byId.t_octa_minus.status',ctx),'open');
 assert.equal(vm.runInContext('byId.t_prismd.status',ctx),'open');
+for(const id of ['t_octa_minus','t_prismd']) {
+  const current=vm.runInContext(`byId.${id}.body`,ctx);
+  assert(!current.includes('Maximum curvature exactly 180° or above remains open in general'));
+  assert(current.includes('Maximum curvature strictly above 180° remains open in general'));
+}
 const lowTypes=vm.runInContext('article(byId.nonsimp_low,false)',ctx);
 assert(lowTypes.includes('Equality at 180° is included; higher-curvature shapes remain open in general'));
 assert(lowTypes.includes('every artificial diagonal uncut'));
