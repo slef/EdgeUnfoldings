@@ -1,5 +1,17 @@
 [
   {
+    "date": "12 September 2026 JST · four-hour continuation, first result",
+    "title": "The prism branch with two sharp ends now has a complete proof",
+    "results": [
+      "prism_two_sharp",
+      "t_prismd",
+      "original_rule",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#prism_two_sharp\">new two-sharp-end theorem</a> proves the original two-pair tree safe whenever end vertices 2 and 5 both have curvature at least 180°. Complementary views give separating lines for both residual face pairs. Equality at either or both ends is included.</p><p>The page gives the full proof in readable steps, an exact net and 3D model, a nine-parameter family, and independent equality checks. This closes one whole curvature branch. The two remaining types are still open in full; the whole-type tally remains 5/7. Work continues on the sharp-slit Case A obstruction. The written proof awaits independent review.</p>"
+  },
+  {
     "date": "12 September 2026 JST · the last two original-face types",
     "title": "New sharp-vertex families and a precise map of how the original-edge rule can fail",
     "results": [

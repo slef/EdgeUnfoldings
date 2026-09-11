@@ -140,7 +140,9 @@ supplies a missing premise here.
 This tells us where to push next: try another original source or slit
 against the remaining Case A pair. Configurations with no original
 candidate having a low-curvature fan and a sharp slit require another
-argument; for example the prism can have both possible fan vertices sharp.
+argument. The prism branch with both possible fan vertices sharp is now
+settled by [PRISM_TWO_SHARP_ENDS.md](PRISM_TWO_SHARP_ENDS.md), using a
+different original cut tree. The broader sharp-slit Case A step remains open.
 
 ## 4. Two explicit new families, outside the old source conditions
 

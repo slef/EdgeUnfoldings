@@ -246,5 +246,25 @@
       "condition": "Earlier source/slit criteria plus new curvature budgets prove original-edge families; sharp-slit residuals reduce to Case A opposite petals; a universal fallback is still missing",
       "link": "original_rule"
     }
+  ],
+  "prism_curvature_branches": [
+    {
+      "label": "All six curvatures at most 180°",
+      "status": "proved",
+      "condition": "Original-edge existence, including every equality boundary",
+      "link": "nonsimp_flat"
+    },
+    {
+      "label": "Some curvature above 180°; both end curvatures at least 180°",
+      "status": "proved",
+      "condition": "Vertices 2 and 5 are sharp: the fixed two-pair tree has all 15 pairs safe",
+      "link": "prism_two_sharp"
+    },
+    {
+      "label": "Some curvature above 180°; at least one end curvature below 180°",
+      "status": "open",
+      "condition": "Additional original-star families are proved; a universal Case A argument or switching rule remains missing",
+      "link": "original_rule"
+    }
   ]
 }

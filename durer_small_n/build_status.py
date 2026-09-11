@@ -17,6 +17,8 @@ local_overlap_svg = (research / 'figures/low-local-failure.svg').read_text()
 figs['low_local_overlap'] = local_overlap_svg[local_overlap_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 original_rule_svg = (research / 'figures/original-rule-families.svg').read_text()
 figs['original_rule_families'] = original_rule_svg[original_rule_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
+two_sharp_svg = (research / 'figures/prism-two-sharp-ends.svg').read_text()
+figs['prism_two_sharp'] = two_sharp_svg[two_sharp_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 true_scale_svg = (research / 'figures/octa-three-same-true-scale.svg').read_text()
 figs['three_same_true_scale'] = true_scale_svg[true_scale_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 for key, filename in [('local_small_sum','local-small-sum.svg'),('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg'),('patch_budget','octa-patch-budget.svg'),('three_same','octa-three-same.svg'),('chain_switch','octa-three-chain.svg')]:
@@ -85,6 +87,14 @@ for kind,names in [('minus',['v=A','w=B','c=C','D','P','Q']),('prism',['0','1','
         view={'yaw':-0.7,'pitch':0.3},title='A sharp fifth-cut endpoint gives an original-edge net',
         caption='The source v is below 180 degrees; c is above it. Blue quadrilaterals remain whole. Red edges are certified cuts.',
     )
+
+figs['models']['prism_two_sharp'] = witness_model(
+    'prism-two-sharp-point.certificate.json', names=['0','1','2','3','4','5'],
+    face_names=list('ABCDEF'), highlight_faces=[1,3],
+    faceColors={i:'#9bc7dd' if i in (1,3) else '#edc189' if i in (0,5) else '#e2e8e8' for i in range(6)},
+    view={'yaw':-0.7,'pitch':0.3}, title='The prism branch with both end vertices sharp',
+    caption='Vertices 2 and 5 have curvature above 180 degrees. Cut their five incident edges, shown in red. Drag to rotate.',
+)
 
 for suffix, title in [('failure','A nonmaximum slit with two certified local overlaps'),
                       ('repair','The same solid with a certified successful slit')]:

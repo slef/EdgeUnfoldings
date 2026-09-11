@@ -1,3 +1,84 @@
+# Active four-hour continuation: two sharp prism ends
+
+User request: keep trying the last proofs for four hours, starting
+11 September 2026 17:05:34 UTC, through 21:05:34 UTC (12 September
+02:05–06:05 JST). This checkpoint is early in that window, not the end.
+The heartbeat continue-lemma-f-proof-research is active every 15 minutes
+through the deadline; pause it at the deadline and report the full result.
+No subagents or push in this turn. Preserve unrelated lean_statement/ and PDFs.
+
+## First new geometric theorem
+
+PRISM_TWO_SHARP_ENDS.md proves the fixed original two-pair tree whenever
+kappa_2>=pi AND kappa_5>=pi, equality included. Face labels A..F are
+021,0352,013,1254,143,345. Cuts 02,12,25,35,45; hinges C-A,C-B,C-E,E-D,E-F.
+Thirteen pairs are shared-vertex pairs; only A/F and B/D remain.
+
+At each sharp end, every original face angle is strictly below pi/2 by
+the spherical-link triangle inequality. For A/F, view around B or D;
+the middle quadrilateral base-angle sum exceeds pi in both views.
+Their intervening central-angle sums are pi-angle(C,1)+angle(E,3)
+and pi-angle(E,3)+angle(C,1), totaling 2*pi. At least one base-cone
+separator applies. For B/D, use middle cap A or F. Their intervening
+sums are pi-angle(C,3)+angle(E,1) and its complement. Choose one >=pi.
+Its Case B has a base-cone separator; its Case A has both no-wrap bounds
+because the three incident angles at its sharp apex total <=pi.
+The equal-cut-length cone proof applies to convex polygonal petals too.
+
+This is a written research proof awaiting independent review, not formal
+verification. prism_two_sharp_ends.py checks its hypotheses on a point,
+a full nine-parameter box, and exact one-/two-end equality points. All
+15 original pairs replay independently (13 vertex fans + 2 edge separators).
+The strict example is outside every previous original-star sufficient rule.
+Five focused tests check this branch and its limits. The overview has #prism_two_sharp with the full
+explanation, true-scale net and exact 3D model; the prism now has an explicit
+three-part curvature partition, two branches proved and one open. This is
+not a fraction of shape space. Whole types remain 5/7.
+
+## Current research target and exploratory work
+
+The main remaining strategy is sharp slit c>=pi with low fan w<=pi:
+only the opposite-petal Case A tests remain, by ORIGINAL_EDGE_RULE.md.
+A provisional stronger conjecture is that Case A alone is always safe
+when w<=pi. It is unproved. If the sharp-slit theorem were completed,
+it would close the minus type; together with the new double-sharp prism
+branch it would close the prism type. Recheck the combinatorial selection
+argument before asserting that implication as a theorem.
+
+CASE_A_ONE_SIDED.md gives a new written planar separator: the angle bound
+is needed only on one short cut edge, rather than both apex angles. It is
+not automatic even at sharp slits: later low-fan random examples have
+both conditions fail, but their actual faces are still numerically safe.
+No exact examples/checker for this improvement have yet been saved.
+
+Numerical work only (not proof): 30,000 original samples per type gave no
+sharp-slit/low-fan failures. Detouring around a forbidden diagonal via its
+two boundary neighbors CAN fail in both directions; these differ from
+the older cofacial two-route prism conjecture, which remains unrefuted.
+The new probe files retain exact rational input proposals, not verified
+failures. A 20,000 strict-octahedron low-fan search had 10,953 Case A pairs,
+20 failing the old no-wrap bounds, and no actual numerical pair failure.
+Several also fail the new one-sided test. Bounded optimization of all 20
+found no positive overlap; it often approached degeneracy/contact.
+The direct exact algebraic query caseA_low_fan returned UNKNOWN due to
+memory exhaustion after 33 seconds at 2 GB, not UNSAT or a proof.
+
+Temporary scripts/results in /private/tmp: case_a_low_fan.py and
+case-a-low-fan-octa.json; optimize_case_a_lowfan.py and
+case-a-lowfan-optimized.json; check_prism_double_high.py (1623 double-high
+samples, no failure); prism_caps_probe.py (250356 cap-pair samples, no
+failure); check_prism_one_high.py found a numerical failure of the stronger
+one-sharp-end version. It is now exactly verified in prism-one-sharp-
+failure.certificate.json: end 5 is sharp, end 2 is not, and B/D overlap.
+The same solid has a separately certified star(3)+25 repair, accepted by
+the older high-source theorem. This refutes only the one-end extension. The last two positive searches do not prove universality.
+
+Continue useful theoretical work and exact verification until the deadline.
+The local-file browser denial remains respected; UI VM tests pass, and the
+new SVG was rendered and visually inspected. No browser access is claimed.
+
+---
+
 # Current continuation: the last two original-face types
 
 12 September 2026. The user asked to apply the octahedron rule to the last
