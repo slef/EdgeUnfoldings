@@ -8,7 +8,9 @@ original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
 case and the convex-patch existence theorem remain proved; the proposed
 fixed-source one-nonconvex-patch argument has a remaining far-fan step.
 
-**Latest result:** [LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md)
+**Latest result, 11 September:** [Lemma L is proved](LEMMA_L_PROOF.md). All three local pairs are safe under the original selections (in fact, a pole-curvature comparison and maximum-curvature slit suffice). A cut-edge separator handles the slit route; a spherical-link and pole-triangle argument handles the route through the fan. The selected net now has 22/28 pairs universally safe. Lemma F and the full octahedron remain open. Use `python3 -m n6.local_lemma CERTIFICATE` for exact hypothesis checks.
+
+**Previous result:** [LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md)
 directly advances Lemma L. The slit and opposite-pole curvatures determine
 which of two local overlap routes is impossible; at sum pi, all three local
 pairs are safe. Additional corner subfamilies follow. In the small-sum

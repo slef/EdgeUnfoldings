@@ -1,4 +1,46 @@
-# Current continuation: direct progress on Lemma L
+# Current continuation: Lemma L is proved
+
+11 September 2026 JST. [LEMMA_L_PROOF.md](LEMMA_L_PROOF.md) is a complete
+geometric proof of all three local pairs. It needs only kappa_v>=kappa_w
+and a maximum-curvature equator slit, so it includes the original hypotheses.
+The full octahedron and n=6 remain open; **do not claim a whole net from L**.
+
+First, [LEMMA_L_SMALL_SUM.md](LEMMA_L_SMALL_SUM.md) closed the entire
+sigma<=pi branch. If one petal reaches across the slit, extend its cut edge
+vu. The slit ranking gives 2*kappa_u+kappa_w>pi; the other u copy and its
+whole patch lie strictly on the other side of the line. This handles both
+remaining pairs at once, including the older radial obstruction.
+
+The missing through-fan route is now excluded for every slit under the pole
+curvature comparison. The spherical link at a pole is a convex polygon with
+perimeter equal to its total face angle; the direction of the other pole is
+strictly interior. Boundary paths bound the distance from the slit direction
+to that interior direction. For the original triangle wuv, if its angle beta
+at v is nonobtuse, flattening an inward-away patch increases the pole distance
+and decreases its angle at w. The link bounds then separate one or both
+extending flanks. If beta is obtuse, the link at v forces kappa_v<pi, hence
+kappa_w<pi. The fan spans more than pi while each extending patch subtends
+less than pi/2, again giving separation. The proof includes all equalities.
+
+Current status: **3/3 universal local obligations; 22/28 pairs of the selected
+net safe**. The remaining two universal objectives are the opposite-petal
+small-angle branch and the cut-side far-fan pairs. Once opposite-petal safety
+is proved at this same slit, the interior-fan reduction is applicable.
+The unrecounted 49-class four-opening enumeration stays a separate conservative
+2-excluded/47-open record. Four of five whole patch regimes remain settled.
+
+Next: work on Lemma F at the maximum-curvature slit, where L is now available.
+Do not silently carry the slit ranking to an angle-safe opening chosen by the
+switching theorem; the openings need not coincide. Do not revive the refuted
+unrestricted far-fan reduction. Numerical searches are not proof premises.
+
+Exact hypothesis checks: `python3 -m n6.local_lemma CERTIFICATE`. The saved
+large-sum and radial-family reports illustrate the complete theorem. The
+small-sum separator is independently checked by `python3 -m n6.local_small_sum
+CERTIFICATE --cut-separator`. The webpage includes the full case table and
+preserves the earlier radial picture and proof history.
+
+# Previous continuation: direct progress on Lemma L
 
 10 September 2026 JST / 9 September UTC.
 [LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md) proves a new local

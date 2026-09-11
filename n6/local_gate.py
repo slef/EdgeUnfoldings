@@ -77,7 +77,7 @@ def analyze(spec):
                 across_slit_cone_test=slit_test, through_fan_cone_test=through_test,
                 all_local_pairs_by_direct_cone_tests=slit_test is True and through_test is True,
                 full_lemma_L_proved=False, full_net_claimed=False,
-                scope='The written theorem excludes the listed routes and local pairs on this point or region. A failed sufficient cone test does not prove face overlap. The two strict curvature-sum halves and general Lemma L remain open.')
+                scope='The written theorem excludes the listed routes and local pairs on this point or region. A failed sufficient cone test does not prove face overlap. This checker invokes only the gate theorem; the full selected-rule result is proved separately in LEMMA_L_PROOF.md.')
 
 
 def verify(spec):

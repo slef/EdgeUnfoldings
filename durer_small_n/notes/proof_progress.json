@@ -1,5 +1,5 @@
 {
-  "as_of": "10 September 2026 JST",
+  "as_of": "11 September 2026 JST",
   "octahedron": {
     "pair_groups": [
       {
@@ -11,7 +11,7 @@
       {
         "label": "Local slit pairs",
         "count": 3,
-        "status": "open",
+        "status": "proved",
         "link": "lemmaL"
       },
       {
@@ -48,10 +48,6 @@
       }
     ],
     "remaining": [
-      {
-        "label": "Prove all three local slit pairs (Lemma L)",
-        "link": "lemmaL"
-      },
       {
         "label": "Prove joint-petal separation in the small-fan-angle branch",
         "link": "F_below"
@@ -96,21 +92,21 @@
     "local_curvature_branches": [
       {
         "label": "Lemma L: curvature sum below 180°",
-        "condition": "Through-fan route proved impossible; the across-slit distance problem remains",
-        "status": "open",
-        "link": "L_gate"
+        "condition": "All three pairs safe: through-fan bound plus the cut-edge separator",
+        "status": "proved",
+        "link": "lemmaL"
       },
       {
         "label": "Lemma L: curvature sum exactly 180°",
         "condition": "All three local pairs proved safe, including equality",
         "status": "proved",
-        "link": "L_gate"
+        "link": "lemmaL"
       },
       {
         "label": "Lemma L: curvature sum above 180°",
-        "condition": "Across-slit route proved impossible; the through-fan distance problem remains",
-        "status": "open",
-        "link": "L_gate"
+        "condition": "All three pairs safe: slit-gap bound plus the new spherical-link and pole-triangle argument",
+        "status": "proved",
+        "link": "lemmaL"
       }
     ]
   },

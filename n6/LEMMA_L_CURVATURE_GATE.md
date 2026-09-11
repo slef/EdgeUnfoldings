@@ -1,7 +1,7 @@
 # Lemma L: a curvature gate separates the two local overlap routes
 
-10 September 2026 JST / 9 September UTC. **The general Lemma L remains
-open.** The results below are geometric proofs about the three local face
+10 September 2026 JST / 9 September UTC. **Subsequent completion:** [LEMMA_L_PROOF.md](LEMMA_L_PROOF.md) now proves
+the general Lemma L. This earlier gate theorem remains valid. The results below are geometric proofs about the three local face
 pairs. They do not establish a whole net or the full octahedron theorem.
 Unlike L's proposed selection rule, these proofs require neither the source
 nor the slit vertex to have maximum curvature.
@@ -36,7 +36,8 @@ at w. Its only possible reflex corner is at one equator endpoint.
 In particular both angular-overlap routes can never be active at once.
 A cone intersection is only a necessary condition for face overlap. Each
 strict half still requires a further geometric argument in the cases left
-below; the theorem is not a proof of L in either entire half.
+below; this gate theorem alone is not a proof of L in either entire half.
+The subsequent complete proof supplies the remaining geometric arguments.
 
 ## The across-slit bound
 
@@ -175,11 +176,11 @@ explicit coordinate region, not a universal radial inequality.
 
 ## Scope and replay
 
-The two strict halves sigma<pi and sigma>pi remain open in general. The
-boundary sigma=pi and the explicit local subfamilies above are proved.
-The original universal count remains **0 of 3 local pair obligations fully
-settled** under L's selection rules. No full octahedron failure class is
-excluded by this local result: **2 excluded, 47 open** is unchanged.
+The gate theorem by itself settled the boundary and explicit corner families.
+At that stage the general count was 0/3 local pair obligations. The subsequent
+[complete proof](LEMMA_L_PROOF.md) closes both strict halves and changes the
+current count to **3/3**. This is separate from the unrecounted four-opening
+failure-class enumeration and does not settle the full octahedron.
 
 ```sh
 python3 -m n6.local_gate n6/results/local-gate-three-chain.certificate.json

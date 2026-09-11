@@ -7,7 +7,9 @@ There is new rigorous partial coverage of a full coordinate box, an exactly
 checked counterexample to a supporting lemma, and a reproducible reduced SMT
 attempt that reports a timeout.
 
-**Latest continuation, 10 September JST:**
+**Latest continuation, 11 September JST:** [LEMMA_L_PROOF.md](LEMMA_L_PROOF.md) proves the full Lemma L geometrically. The current local count is 3/3, with 22/28 selected-net pairs universally safe. This does not prove the far pairs or the whole octahedron. The earlier notes below retain their historical proof states.
+
+**Previous continuation, 10 September JST:**
 [LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md) proves a curvature
 split for the local angular-overlap routes. At slit-plus-fan curvature pi,
 all three local pairs are safe; explicit corner families are also covered.

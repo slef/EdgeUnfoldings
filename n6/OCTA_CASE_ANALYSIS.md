@@ -5,6 +5,11 @@ conditional far-fan reduction used below. The two switching statements
 remain proved. Use the original **49 classes, with 2 excluded and 47 open**;
 the former 24-class sufficient target is withdrawn.
 
+**Subsequent completion, 11 September:** [Lemma L is proved](LEMMA_L_PROOF.md)
+at the maximum-curvature equator slit. It cannot be transferred to a new
+opening without rechecking that slit hypothesis. The four-opening class
+record below has not been recounted.
+
 9 September 2026. This develops the user's proposed case analysis. It proves
 two switching statements, using the existing shared-vertex, Case A, and
 base-cone lemmas. **The four-choice unfolding rule and the octahedron case

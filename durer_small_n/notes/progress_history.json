@@ -1,5 +1,18 @@
 [
   {
+    "date": "11 September 2026 JST · Lemma L completed",
+    "title": "All three local pairs proved: both overlap routes are closed",
+    "results": [
+      "lemmaL",
+      "L_small_sum",
+      "L_gate",
+      "lemmaF",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#lemmaL\">complete geometric proof of Lemma L</a> now settles all three local pairs. First the cut-edge separator closed the entire below-180° branch, including the old angular counterexample. Then a spherical-link bound and a cosine-law comparison excluded the through-fan route for every curvature sum under the pole comparison.</p><p>The one-extending-patch and two-extending-patch cases are both proved, with equality and straight corners included. No numerical search is a proof premise. The current count changes from 0/3 to <b>3/3 universal local pairs</b>, and from 19/28 to <b>22/28 safe pairs in the selected net</b>.</p><p>The remaining work is in Lemma F: opposite petals in their small-fan-angle branch, then the cut-side far-fan pairs. The full octahedron and n=6 remain open. The four-opening class record has not been recounted, and its 2/47 figures are separate. Earlier entries remain below as historical progress states.</p>"
+  },
+  {
     "date": "10 September 2026 JST · Lemma L curvature split",
     "title": "A direct partial proof for Lemma L: separate the two possible overlap routes",
     "results": [

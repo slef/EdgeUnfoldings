@@ -347,7 +347,7 @@
     "all_local_pairs_by_direct_cone_tests": false,
     "full_lemma_L_proved": false,
     "full_net_claimed": false,
-    "scope": "The written theorem excludes the listed routes and local pairs on this point or region. A failed sufficient cone test does not prove face overlap. The two strict curvature-sum halves and general Lemma L remain open."
+    "scope": "The written theorem excludes the listed routes and local pairs on this point or region. A failed sufficient cone test does not prove face overlap. This checker invokes only the gate theorem; the full selected-rule result is proved separately in LEMMA_L_PROOF.md."
   },
   "net": {
     "result": "verified",

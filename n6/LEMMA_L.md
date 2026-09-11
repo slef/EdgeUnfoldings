@@ -1,6 +1,6 @@
 # Lemma L: local pairs at the slit
 
-The claim remains open. Let `v` have maximum curvature among all six vertices,
+The claim is now proved in [LEMMA_L_PROOF.md](LEMMA_L_PROOF.md). Let `v` have maximum curvature among all six vertices,
 let `w` be its antipode, and slit at an equator vertex `u` of maximum equator
 curvature. The three pairs to exclude are the first and last petals, and each
 of those petals against the fan face at the opposite side of the slit.
@@ -9,14 +9,31 @@ The surviving interior-fan reduction in Lemma F assumes these local pairs
 do not overlap. It cannot be used to prove L without an independent argument;
 the older full far-fan reduction was refuted in [HINGE_AUDIT.md](HINGE_AUDIT.md).
 
-## New partial proof: curvature separates the two possible routes
+## Complete proof, 11 September 2026
+
+[LEMMA_L_PROOF.md](LEMMA_L_PROOF.md) proves all three local pairs for every
+curvature sum. A spherical-link bound and a cosine-law comparison rule out
+meeting through the fan when kappa_v>=kappa_w. The maximum-curvature slit
+rule supplies the cut-edge separator for possible meeting across the slit.
+The globally sharpest source required by the original conjecture is therefore
+more than this local proof needs.
+
+**Current status: 3/3 local pair obligations proved; 22/28 pairs of this
+selected net are universally safe.** The six far pairs in Lemma F and the
+full octahedron theorem remain open. Do not transfer the slit-ranking
+hypothesis to another opening after a switching operation.
+
+The entries below retain the earlier discoveries and failed shortcuts.
+Their former open targets are superseded by the complete proof above.
+
+## Earlier partial proof: curvature separates the two possible routes
 
 [LEMMA_L_CURVATURE_GATE.md](LEMMA_L_CURVATURE_GATE.md) proves that, with
 sigma=kappa_u+kappa_w, a local angular intersection can only occur across
 the slit when sigma<pi, and only through the intervening fan when sigma>pi.
 At sigma=pi all three local pairs are safe. Neither curvature ranking is
 needed for this theorem. Explicit corner conditions close additional local
-families; both strict halves remain open in general.
+families. Both strict halves were open at this stage; the complete proof above now settles them.
 
 In the small-sum half, any remaining overlap must involve the petal of the
 unique patch inward at the slit. One mixed pair is then already safe;
@@ -26,8 +43,8 @@ all its 18 coordinates independently by ±1/10000 and proves a distance ratio
 of at least 6/5 on every shared ray, while retaining both curvature rankings.
 All 28 face pairs have separate certificates throughout this box.
 
-The original count stays **0/3 universal local obligations proved**; the
-new boundary and local families are genuine partial results within them.
+The count at that stage was **0/3 universal local obligations proved**.
+The subsequent complete proof changes the current count to **3/3**.
 
 ## Angular separation about w is also too strong
 
@@ -173,8 +190,7 @@ kappa_u+kappa_w-nu_t >= (kappa_v+3 kappa_w)/4 > 0.
 
 This is a proved inequality, but does not yet exclude the local overlaps. The
 old suggestion that the entire range `kappa_u+kappa_w>=pi` was already proved
-needs a written argument accounting for every angle branch. It is not counted
-as established here.
+needs a written argument accounting for every angle branch. That missing argument is now supplied by [LEMMA_L_PROOF.md](LEMMA_L_PROOF.md).
 
 ## What the elementary gap bound actually proves
 
