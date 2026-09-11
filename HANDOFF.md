@@ -1,3 +1,19 @@
+## Current completion checkpoint: 12 September 2026
+
+All seven six-vertex type arguments are now written, pending independent
+mathematical review. The complete review map is [n6/N6_PROOF_MAP.md](n6/N6_PROOF_MAP.md).
+The new prism proof is [n6/PRISM_EDGE_PROOF.md](n6/PRISM_EDGE_PROOF.md):
+its six near-stars plus the triangular-chain fallback cover every curvature
+case. PRISM_ONE_PAIR.md proves fourteen fallback pairs universally;
+PRISM_SHARP_FAN_SWITCH.md gives three exact positive angle identities;
+PRISM_GATE_SWITCH.md handles the other source by an obtuse/acute switch.
+Direct-cut failures force the latter gate. All equality cases and original
+quadrilaterals are retained. The stronger every-slit Lemma F and fixed two-tree
+minus-edge conjecture remain open. No finite numerical experiment is a
+universal-proof premise. The current web overview marks 7/7 **written proofs**,
+with independent review explicitly pending. Earlier checkpoints below keep
+their original counts and limitations.
+
 ## Current checkpoint: 12 September 2026
 
 The complete written original-edge minus-edge proof is in

@@ -1,3 +1,46 @@
+## Verification of the completed written argument
+
+The full Python suite passed **269 tests** in 274.058 seconds. The two
+subsequently added exact switching-family tests passed separately (17.007 s),
+for **271 distinct tests**. Navigation, progress accounting, retained history,
+original prism model ordering, and the separate minus-edge conjecture checks
+passed. The new face-tree SVG was rendered and visually checked; the full
+browser page was not inspected through a blocked browser surface.
+
+The three prism angle identities vanish as exact rational polynomials in
+14 independent angle variables. The reflection preserves the original facet
+sets, fixes the seventh tree, and permutes the six near-stars. The existing
+finite graph enumeration again returns exactly seven six-vertex types.
+These algebraic/combinatorial audits do not formally verify the geometric
+lemmas. New sharp-fan and obtuse/acute fallback examples each include a
+whole nine-parameter family with independently checked original face pairs.
+
+Reproduce the final saved examples with:
+
+    python3 -m n6.prism_edge_examples
+    python3 -m n6.prism_switch_examples
+    python3 -m n6.prism_angle_identities
+
+All new universal claims are written research proofs pending independent
+mathematical review. The whole n=6 argument is now written; the stronger
+original every-slit and fixed-two-tree questions remain open.
+
+## Current completion checkpoint: 12 September 2026
+
+All seven six-vertex type arguments are now written, pending independent
+mathematical review. The complete review map is [N6_PROOF_MAP.md](N6_PROOF_MAP.md).
+The new prism proof is [PRISM_EDGE_PROOF.md](PRISM_EDGE_PROOF.md):
+its six near-stars plus the triangular-chain fallback cover every curvature
+case. PRISM_ONE_PAIR.md proves fourteen fallback pairs universally;
+PRISM_SHARP_FAN_SWITCH.md gives three exact positive angle identities;
+PRISM_GATE_SWITCH.md handles the other source by an obtuse/acute switch.
+Direct-cut failures force the latter gate. All equality cases and original
+quadrilaterals are retained. The stronger every-slit Lemma F and fixed two-tree
+minus-edge conjecture remain open. No finite numerical experiment is a
+universal-proof premise. The current web overview marks 7/7 **written proofs**,
+with independent review explicitly pending. Earlier checkpoints below keep
+their original counts and limitations.
+
 ## Latest prism branch (12 September, after the complete minus-edge proof)
 
 PRISM_COMPLEMENTARY_ROUTES.md proves both fans <=pi with sum >=pi.

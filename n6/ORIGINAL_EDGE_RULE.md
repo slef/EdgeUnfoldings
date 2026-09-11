@@ -1,5 +1,11 @@
 # Applying the octahedron rule to the last two original-face types
 
+**Later completion in the same continuation:** [PRISM_EDGE_PROOF.md](PRISM_EDGE_PROOF.md)
+and [MINUS_EDGE_PROOF.md](MINUS_EDGE_PROOF.md) close both whole types as written
+research arguments, pending independent review. Any remaining-case count below
+records this ingredient's earlier scope. The underlying theorem remains valid.
+
+
 12 September 2026. New sufficient geometric theorem and an explicit residual
 case reduction. These are written arguments depending on the existing
 octahedron proof and flat-hinge audit; independent mathematical review is

@@ -1,0 +1,15 @@
+{
+  "result": "verified_prism_reflection_automorphism",
+  "permutation": [
+    4,
+    3,
+    5,
+    1,
+    0,
+    2
+  ],
+  "facet_sets_preserved": true,
+  "extra_tree_fixed": true,
+  "seven_candidate_family_preserved": true,
+  "arithmetic": "Exact finite integer and set operations"
+}

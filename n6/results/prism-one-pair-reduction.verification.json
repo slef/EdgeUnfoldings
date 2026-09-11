@@ -1,0 +1,199 @@
+{
+  "two_sharp": {
+    "result": "verified_prism_one_pair_reduction",
+    "pairs_total": 15,
+    "pairs_proved": 14,
+    "remaining_pairs": [
+      [
+        1,
+        3
+      ]
+    ],
+    "triangular_caps_safe": true,
+    "curvature_hypothesis_required": false,
+    "cut_edges": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ]
+    ],
+    "whole_net_claimed": false,
+    "proof": "PRISM_ONE_PAIR.md",
+    "theorem_dependencies": [
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ]
+  },
+  "failure": {
+    "result": "verified_prism_one_pair_reduction",
+    "pairs_total": 15,
+    "pairs_proved": 14,
+    "remaining_pairs": [
+      [
+        1,
+        3
+      ]
+    ],
+    "triangular_caps_safe": true,
+    "curvature_hypothesis_required": false,
+    "cut_edges": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ]
+    ],
+    "whole_net_claimed": false,
+    "proof": "PRISM_ONE_PAIR.md",
+    "theorem_dependencies": [
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ],
+    "independent_remaining_pair_overlap": {
+      "result": "verified_positive_area_overlap",
+      "faces": [
+        1,
+        3
+      ],
+      "strict_signs": 8,
+      "lower_bounds": [
+        "336282120427979696422138040570516438022130789448993578808071763983002086191/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "1618429159232091079300181903684652704093363254110052221328776164973343250773/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "3280224826468751627530237714652352030364400520672932604711039578188172831/441711766194596082395824375185729628956870974218904739530401550323154944",
+        "42416702806999663866338940160445869381914232607759749351902255512457907687/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "908979494791052958215636513733100350675884053033298893271300554426308003593/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "1240235055370036320091829665937123917478245047286463305623730060659360958501/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "1809270706961543530894882828968945596592525022952679910878867536583293006315/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "724588741438049116247565332590828188808607739950350172720670987182727284045/883423532389192164791648750371459257913741948437809479060803100646309888"
+      ],
+      "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+      "facet_sizes": [
+        3,
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "strict_facet_supports": 16
+    }
+  },
+  "one_sharp_failure": {
+    "result": "verified_prism_one_pair_reduction",
+    "pairs_total": 15,
+    "pairs_proved": 14,
+    "remaining_pairs": [
+      [
+        1,
+        3
+      ]
+    ],
+    "triangular_caps_safe": true,
+    "curvature_hypothesis_required": false,
+    "cut_edges": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ]
+    ],
+    "whole_net_claimed": false,
+    "proof": "PRISM_ONE_PAIR.md",
+    "theorem_dependencies": [
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ],
+    "independent_remaining_pair_overlap": {
+      "result": "verified_positive_area_overlap",
+      "faces": [
+        1,
+        3
+      ],
+      "strict_signs": 8,
+      "lower_bounds": [
+        "90712166771628546425124215615621575075281166463657898925382017379254389315/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "8841967808319143592445491184230449416536814123444430631515730909617145376661/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "37890428697103292901193676052198101714437212238142481351075776317753164825/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "18496619754675309403433661900906085270071804850116452834300486098034691835/1766847064778384329583297500742918515827483896875618958121606201292619776",
+        "2353048272436533695312742920316754692224640906586644673139154021160030260631/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "10296340006466816623211939414836312718330114958241578977412666666803486029/441711766194596082395824375185729628956870974218904739530401550323154944",
+        "7197665127230510377646933551357320266288292004495758172642044448833226270025/883423532389192164791648750371459257913741948437809479060803100646309888",
+        "163009369677412482472457709176760294636881608480046519213789362272923473163/1766847064778384329583297500742918515827483896875618958121606201292619776"
+      ],
+      "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+      "facet_sizes": [
+        3,
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "strict_facet_supports": 16
+    }
+  }
+}

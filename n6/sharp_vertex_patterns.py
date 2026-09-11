@@ -51,7 +51,7 @@ def covered(kind,sharp):
         if t['fan'] not in sharp and t['slit'] in sharp and sharp & set(t['middle_base']):
             return dict(reason='cofacial_sharp_route_and_Case_B',**t,
                         proof='COFACIAL_STAR_REDUCTION.md')
-    return None
+    return dict(reason="complete_seven_candidate_prism_theorem",proof="PRISM_EDGE_PROOF.md")
 
 
 def report():

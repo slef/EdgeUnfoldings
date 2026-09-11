@@ -1,5 +1,11 @@
 # Prism: complementary routes when the two fan curvatures sum to at least pi
 
+**Later completion in the same continuation:** [PRISM_EDGE_PROOF.md](PRISM_EDGE_PROOF.md)
+and [MINUS_EDGE_PROOF.md](MINUS_EDGE_PROOF.md) close both whole types as written
+research arguments, pending independent review. Any remaining-case count below
+records this ingredient's earlier scope. The underlying theorem remains valid.
+
+
 12 September 2026. Written geometric theorem, pending independent review.
 The full prism-with-one-diagonal type remains open. Numerical tests are
 not premises of the argument.

@@ -1,0 +1,12 @@
+Exact finite graph enumeration, replayed 12 September 2026.
+This counts combinatorial types, not metric samples or unfolding proofs.
+Reproduce: durer_small_n/.venv/bin/python durer_small_n/types6.py
+
+7 combinatorial types with 6 vertices
+ E=10 F=6 degrees=[5, 3, 3, 3, 3, 3] face sizes=[3, 3, 3, 3, 3, 5] maxdeg=5 dome=True
+ E=9 F=5 degrees=[3, 3, 3, 3, 3, 3] face sizes=[3, 3, 4, 4, 4] maxdeg=3 dome=True
+ E=10 F=6 degrees=[4, 4, 3, 3, 3, 3] face sizes=[3, 3, 3, 3, 4, 4] maxdeg=4 dome=False
+ E=11 F=7 degrees=[5, 4, 4, 3, 3, 3] face sizes=[3, 3, 3, 3, 3, 3, 4] maxdeg=5 dome=False
+ E=11 F=7 degrees=[4, 4, 4, 4, 3, 3] face sizes=[3, 3, 3, 3, 3, 3, 4] maxdeg=4 dome=False
+ E=12 F=8 degrees=[5, 5, 4, 4, 3, 3] face sizes=[3, 3, 3, 3, 3, 3, 3, 3] maxdeg=5 dome=False
+ E=12 F=8 degrees=[4, 4, 4, 4, 4, 4] face sizes=[3, 3, 3, 3, 3, 3, 3, 3] maxdeg=4 dome=False

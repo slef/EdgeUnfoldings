@@ -1,3 +1,9 @@
+**Final written-proof checkpoint, 12 September:** both types now have all
+6 singleton positions, all 15 pairs, and all 20 triples covered by the
+complete existence proofs. See MINUS_EDGE_PROOF.md and PRISM_EDGE_PROOF.md.
+Independent mathematical review is pending. Earlier counts below are retained
+as the progression, not the current state.
+
 **Latest result, 12 September:** [MINUS_EDGE_PROOF.md](MINUS_EDGE_PROOF.md) now
 closes P-alone and Q-alone by a direct-threshold-or-complementary-gates
 argument. The complete minus-edge counts are **6/6, 15/15, 20/20**.

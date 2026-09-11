@@ -1,26 +1,30 @@
 # Six-vertex integration and certification
 
-**Latest original-face progress, 12 September:**
-[the whole octahedron-minus-edge type now has a written proof](MINUS_EDGE_PROOF.md).
-The direct sharp-source rule either works or its failures force the
-[complementary-source curvature gates](MINUS_COMPLEMENTARY_SOURCES.md).
-All cases and equalities are included, with the original quadrilateral whole.
-The written-proof count is **6/7**, pending independent mathematical review.
-The prism remains open, with a new [complementary-route family](PRISM_COMPLEMENTARY_ROUTES.md)
-when both fan curvatures are at most pi and their sum is at least pi.
-Its remaining regimes are one high and one low fan, or two low fans whose
-sum is below pi, outside the already-proved all-low family.
+**Latest completion, 12 September:** [all seven six-vertex type arguments are written](N6_PROOF_MAP.md),
+including the [complete minus-edge proof](MINUS_EDGE_PROOF.md) and now the
+[seven-candidate prism proof](PRISM_EDGE_PROOF.md). **Independent mathematical
+review remains necessary.** The three new prism angle identities pass exact
+rational coefficient expansion; the geometric dependencies are written proofs,
+not formally verified results. Numerical experiments are not proof premises.
 
-Replay the new exact illustrations with `python3 -m n6.minus_complementary_examples`
-and `python3 -m n6.prism_complementary_examples`. They include full ten- and
-nine-parameter families and separate all-original-face-pair certificates.
-These are checks of examples and implementation, not proof premises.
-The narrower old two-tree minus-edge conjecture remains separate at 7/28.
+The prism argument uses the [one-pair chain reduction](PRISM_ONE_PAIR.md),
+[sharp-fan switch](PRISM_SHARP_FAN_SWITCH.md), and [alternate-source gate switch](PRISM_GATE_SWITCH.md).
+A failed direct-cut test forces an alternate candidate's hypotheses.
+The old fixed two-tree minus-edge conjecture remains separate at 7/28.
+
+Replay exact illustrations with `python3 -m n6.minus_complementary_examples`,
+`python3 -m n6.prism_complementary_examples`, and
+`python3 -m n6.prism_edge_theorem INPUT.json`. The last selector tries seven
+original trees and certifies one uniformly on the supplied domain; it may
+reject a box whose shapes require different choices. The universal theorem
+is the separate written proof. Run `python3 -m n6.prism_angle_identities`
+for its exact algebraic audit. New results include full ten- and nine-parameter
+families and independent original-face checks.
 
 The earlier [curvature budgets](ORIGINAL_EDGE_RULE.md), [wider Case A cones](CASE_A_WIDE_CONES.md),
 [actual-length separators](CASE_A_LENGTH_SEPARATORS.md), and
-[support-triangle sharpening](CASE_A_SUPPORT_TRIANGLE.md) remain useful.
-The following earlier entries keep their historical scopes and counts.
+[support-triangle sharpening](CASE_A_SUPPORT_TRIANGLE.md) remain available.
+The following earlier entries retain their historical scopes and counts.
 
 **Every-slit progress:** [safe local pairs imply the whole net is safe](LOW_CURVATURE_FAR_REDUCTION.md)
 when all six curvatures are at most pi. Neither H nor R is needed. The

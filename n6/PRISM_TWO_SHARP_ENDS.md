@@ -1,5 +1,11 @@
 # The two-pair prism net works when both end vertices are sharp
 
+**Later completion in the same continuation:** [PRISM_EDGE_PROOF.md](PRISM_EDGE_PROOF.md)
+and [MINUS_EDGE_PROOF.md](MINUS_EDGE_PROOF.md) close both whole types as written
+research arguments, pending independent review. Any remaining-case count below
+records this ingredient's earlier scope. The underlying theorem remains valid.
+
+
 12 September 2026. A written geometric proof, pending independent review.
 No numerical experiment is a premise. This proves a complete curvature
 branch of the prism-with-one-diagonal type, not the entire type.

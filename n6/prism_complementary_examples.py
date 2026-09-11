@@ -12,8 +12,9 @@ NUMERATORS=[[900,0,1020],[-1200,580,1740],[0,0,0],[-300,-480,2664],[-2580,100,31
 DENOMINATORS=[10,430,110,310,750,430]
 
 
-def specification(family=False,reflected=False):
-    p=[[F(x,d) for x in row] for row,d in zip(NUMERATORS,DENOMINATORS)]
+def specification(family=False,reflected=False,points=None):
+    p=([[F(x,d) for x in row] for row,d in zip(NUMERATORS,DENOMINATORS)]
+       if points is None else [[F(x) for x in row] for row in points])
     if reflected:p=[p[i] for i in [4,3,5,1,0,2]]
     p=[[x-y for x,y in zip(row,p[2])] for row in p]
     scale=max(abs(x) for row in p for x in row);p=[[x/scale for x in row] for row in p]

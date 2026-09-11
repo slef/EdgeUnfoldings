@@ -1,5 +1,11 @@
 # The octahedral proof allows flat auxiliary hinges
 
+**Later completion in the same continuation:** [PRISM_EDGE_PROOF.md](PRISM_EDGE_PROOF.md)
+and [MINUS_EDGE_PROOF.md](MINUS_EDGE_PROOF.md) close both whole types as written
+research arguments, pending independent review. Any remaining-case count below
+records this ingredient's earlier scope. The underlying theorem remains valid.
+
+
 **12 September extension:** [the original-edge curvature-budget theorem](ORIGINAL_EDGE_RULE.md)
 accepts further high-curvature families even when every original degree-four
 source is below pi. It also identifies the remaining Case A obligations

@@ -642,72 +642,96 @@
     {
       "sharp_count": 1,
       "patterns_total": 6,
-      "patterns_proved": 0,
+      "patterns_proved": 6,
       "patterns": [
         {
           "sharp_vertices": [
             0
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
             1
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
             2
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
             3
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
             4
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
             5
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         }
       ]
     },
     {
       "sharp_count": 2,
       "patterns_total": 15,
-      "patterns_proved": 11,
+      "patterns_proved": 15,
       "patterns": [
         {
           "sharp_vertices": [
             0,
             1
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
             0,
             2
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
@@ -1061,8 +1085,11 @@
             3,
             4
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
@@ -1105,8 +1132,11 @@
             4,
             5
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complete_seven_candidate_prism_theorem",
+            "proof": "PRISM_EDGE_PROOF.md"
+          }
         }
       ]
     },

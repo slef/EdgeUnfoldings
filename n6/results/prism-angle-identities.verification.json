@@ -1,0 +1,8 @@
+{
+  "result": "verified_exact_prism_angle_identities",
+  "identities": 3,
+  "independent_angle_indeterminates": 14,
+  "arithmetic": "Exact rational polynomial coefficients",
+  "geometry_or_positivity_formally_verified": false,
+  "proof": "PRISM_SHARP_FAN_SWITCH.md"
+}

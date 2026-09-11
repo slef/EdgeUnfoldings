@@ -1,5 +1,20 @@
 [
   {
+    "date": "12 September 2026 JST \u00b7 four-hour continuation, eighth result",
+    "title": "All seven six-vertex types now have complete written arguments",
+    "results": [
+      "prism_complete",
+      "prism_one_pair",
+      "t_prismd",
+      "t_octa_minus",
+      "minus_complete",
+      "progress",
+      "research_plan",
+      "sharp_positions"
+    ],
+    "body": "<p>The <a href=\"#prism_complete\">seven-candidate prism proof</a> closes the final whole type. A reference star settles the triangular chain, leaving one quadrilateral pair in the fallback. Three exact angle identities settle the sharp-fan switch. In the remaining regime, failure of the direct cuts forces an alternate-source curvature gate; an obtuse middle angle then makes the fallback\u2019s middle angle acute.</p><p>The written-proof count is now <b>7/7</b>, with all equality branches included and every final cut an original edge. <b>Independent mathematical review is still needed.</b> The angle identities pass exact rational coefficient checks. Former counterexamples and full parameter families have independent successful-net certificates among the seven candidates. Numerical experiments are not proof premises.</p><p>The stronger every-slit Lemma F and the old fixed two-tree minus-edge conjecture remain open as optional strengthenings. Earlier progress snapshots remain below with their original counts.</p>"
+  },
+  {
     "date": "12 September 2026 JST \u00b7 four-hour continuation, seventh result",
     "title": "Prism: complementary routes settle a further curvature branch",
     "results": [

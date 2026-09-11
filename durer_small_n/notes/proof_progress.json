@@ -245,6 +245,20 @@
       "minus_cells": 16,
       "minus_classes_excluded": 7,
       "nonsimplicial_low_families": 2
+    },
+    {
+      "label": "Complete seven-candidate prism proof",
+      "date": "2026-09-11T20:33:00Z",
+      "proved_types": 7,
+      "octahedron_angle_branches": 3,
+      "octahedron_local_pairs": 3,
+      "minus_half_width": "1/20",
+      "prism_box_A_fraction": "1",
+      "source": "../../n6/PRISM_EDGE_PROOF.md",
+      "minus_trees": 1,
+      "minus_cells": 16,
+      "minus_classes_excluded": 7,
+      "nonsimplicial_low_families": 2
     }
   ],
   "nonsimplicial_curvature_branches": [
@@ -278,19 +292,19 @@
       "label": "Above the all-low family; both fans low, large combined deficit",
       "condition": "\u03ba2,\u03ba5\u2264180\u00b0, at least one strictly below; \u03ba2+\u03ba5\u2265180\u00b0",
       "status": "proved",
-      "link": "prism_complementary"
+      "link": "prism_complete"
     },
     {
       "label": "Above the all-low family; one high fan and one low fan",
       "condition": "One of \u03ba2,\u03ba5>180\u00b0 and the other <180\u00b0",
-      "status": "open",
-      "link": "prism_complementary"
+      "status": "proved",
+      "link": "prism_complete"
     },
     {
       "label": "Above the all-low family; two low fans, small combined deficit",
       "condition": "\u03ba2,\u03ba5<180\u00b0 and \u03ba2+\u03ba5<180\u00b0",
-      "status": "open",
-      "link": "prism_complementary"
+      "status": "proved",
+      "link": "prism_complete"
     }
   ]
 }
