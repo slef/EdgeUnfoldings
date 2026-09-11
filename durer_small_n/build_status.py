@@ -9,6 +9,8 @@ figs = json.loads((notes / 'status_figs.json').read_text())
 figs['thickness'] = json.loads((notes / 'thickness.json').read_text())
 far_pair_svg = (research / 'figures/lemma-F-two-pairs.svg').read_text()
 figs['far_pair_targets'] = far_pair_svg[far_pair_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
+true_scale_svg = (research / 'figures/octa-three-same-true-scale.svg').read_text()
+figs['three_same_true_scale'] = true_scale_svg[true_scale_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 for key, filename in [('local_small_sum','local-small-sum.svg'),('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg'),('patch_budget','octa-patch-budget.svg'),('three_same','octa-three-same.svg'),('chain_switch','octa-three-chain.svg')]:
     svg = (research / 'figures' / filename).read_text()
     figs[key] = svg[svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
@@ -136,6 +138,10 @@ for key, filename, title in [
         view={'yaw': -0.7, 'pitch': 0.3}, title=title,
         caption='The exact convex solid. The two highlighted faces form the middle patch; red edges give a separately certified successful net. Drag to rotate.',
     )
+# View perpendicular to each example's broadest plane, avoiding the old
+# almost end-on view. These are camera rotations, never changes to points.
+figs['models']['three_same']['view'] = {'yaw': -2.5206086676, 'pitch': 0.7051927251}
+figs['models']['chain_uncovered']['view'] = {'yaw': 0.1086721582, 'pitch': 0.0078613013}
 figs['models']['local_gate_chain'] = witness_model(
     'local-gate-three-chain.certificate.json', names=['v','w','u₀','u₁','u₂','u₃'],
     face_names=['W'+str(i) for i in range(4)]+['V'+str(i) for i in range(4)],

@@ -71,6 +71,51 @@ def patch(ax, g, i, report, labels=False):
     return W, V
 
 
+def expanded_patch(ax, g, i, report):
+    """Affine display expansion preserves straight edges and inward corners.
+
+    Lengths and angles are deliberately not to scale. Keep the exact-scale
+    figure available separately and label the expansion in every panel.
+    """
+    W, V = g.develop([i]), g.develop([i, i+4])
+    origin = xy(W[1])
+    ex = xy(V[0])-origin
+    ex /= np.linalg.norm(ex)
+    ey = np.array([-ex[1], ex[0]])
+    points = {u: xy(p) for u, p in W.items()} | {u: xy(p) for u, p in V.items()}
+    flat = {u: np.array([np.dot(p-origin, ex), np.dot(p-origin, ey)]) for u, p in points.items()}
+    extent = np.ptp(np.array(list(flat.values())), axis=0)
+    expansion = max(1., .55*extent[0]/extent[1])
+    view = {u: p*np.array([1., expansion])/extent[0] for u, p in flat.items()}
+    for fi, color in ((i, BLUE), (i+4, ORANGE)):
+        ax.add_patch(Polygon([view[u] for u in g.faces[fi]], facecolor=color,
+                             edgecolor='#33495b', linewidth=1.3))
+    ax.plot(*np.array([view[1], view[0]]).T, '--', color='#87939b', linewidth=.9)
+    direction = report['directions'][i]
+    a, b = report['patches'][i]['equator_edge']
+    inward = (b if direction == 'F' else a) if direction else None
+    for u in (1, 0, a, b):
+        p = view[u]
+        label = 'w' if u==1 else 'v′' if u==0 else 'u'+'₀₁₂₃'[u-2]
+        color = '#ad2945' if u==inward else '#33495b'
+        ax.scatter(*p, color=color, s=24 if u==inward else 13, zorder=4)
+        offset = (-10,-4) if u==1 else (0,-19) if u==0 or p[1]<0 else (0,10)
+        if u==inward:
+            label += '\ninward corner'
+            offset = (3,-33)
+        ax.annotate(label, p, xytext=offset, textcoords='offset points',
+                    ha='right' if u==1 else 'center', fontsize=11, color=color, linespacing=1.25)
+    ax.set_title(f'Q{i} · '+('backward lean' if direction else 'convex patch'),
+                 loc='left', fontsize=15, color='#ad2945' if direction else '#244c42', pad=16)
+    ax.text(0, 1.04, f'Height magnified ×{expansion:.1f}', transform=ax.transAxes,
+            fontsize=10, color='#586672')
+    values = np.array(list(view.values()))
+    lo, hi = values.min(0), values.max(0)
+    ax.set_xlim(lo[0]-.08, hi[0]+.08)
+    ax.set_ylim(lo[1]-.18, hi[1]+.11)
+    ax.set_aspect('equal'); ax.axis('off')
+
+
 def render():
     set_precision(240)
     cert = json.loads((ROOT / 'results/patch-budget-adjacent-below-pi.certificate.json').read_text())
@@ -110,6 +155,20 @@ def render():
     fig.text(.035, .03, 'The same exact octahedron, with each patch scaled separately. This example unfolds; its whole geometric family remains open.',
              fontsize=10, color='#40515e')
     fig.subplots_adjust(left=.035, right=.985, bottom=.15, top=.78, wspace=.3)
+    save(fig, 'octa-three-same-true-scale')
+
+    fig, axes = plt.subplots(2, 2, figsize=(10.4, 8.5))
+    for ax, i in zip(axes.flat, (3, 0, 1, 2)):
+        expanded_patch(ax, g, i, report)
+    fig.suptitle('Three inward corners, one convex patch',
+                 x=.035, ha='left', fontsize=19, fontweight='bold')
+    fig.text(.035, .915, 'Blue: fan triangle at w    Orange: petal at v′    Red dot: inward corner',
+             fontsize=11, color='#40515e')
+    fig.text(.035, .055, 'Explanatory view: heights are magnified separately so the corners are visible.',
+             fontsize=11, color='#40515e')
+    fig.text(.035, .025, 'Straight edges and inward/convex corners are preserved; lengths and angles are not to scale.',
+             fontsize=10, color='#586672')
+    fig.subplots_adjust(left=.055, right=.965, bottom=.11, top=.83, wspace=.24, hspace=.40)
     save(fig, 'octa-three-same')
 
 
