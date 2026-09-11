@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="792pt" height="345.6pt" viewBox="0 0 792 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-11T21:00:45.108418</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 345.6
+L 792 345.6
+L 792 0
+L 0 0
+z
+" style="fill: #f7fafc"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 62.235601 227.144371
+L 345.180615 227.144371
+L 197.250543 194.040108
+z
+" clip-path="url(#p1e91f90f74)" style="fill: #e7ad72; opacity: 0.7; stroke: #465b69; stroke-width: 1.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 328.039484 124.653182
+L 264.776379 175.856566
+L 233.148363 238.226818
+z
+" clip-path="url(#p1e91f90f74)" style="fill: #91c6df; opacity: 0.7; stroke: #465b69; stroke-width: 1.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 238.768283 227.144371
+L 242.407781 227.144371
+L 258.596539 207.768311
+L 249.613324 205.758018
+z
+" clip-path="url(#p1e91f90f74)" style="fill: url(#h599748b97a); opacity: 0.7; stroke: #982e4a; stroke-width: 1.3; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #253d4b" x="201.555586" y="207.109617" transform="rotate(-0 201.555586 207.109617)">F3</text>
+   </g>
+   <g id="text_2">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #253d4b" x="275.321409" y="193.578855" transform="rotate(-0 275.321409 193.578855)">F4</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #253d4b" x="203.708108" y="88.017581" transform="rotate(-0 203.708108 88.017581)">Orange petal against blue fan face</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_5">
+    <path d="M 462.659385 225.905814
+L 737.936781 225.905814
+L 594.015514 193.698654
+z
+" clip-path="url(#pb098f337f4)" style="fill: #e7ad72; opacity: 0.7; stroke: #465b69; stroke-width: 1.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 721.260164 126.192066
+L 628.940527 236.687934
+L 745.604399 146.465024
+z
+" clip-path="url(#pb098f337f4)" style="fill: #a8bf79; opacity: 0.7; stroke: #465b69; stroke-width: 1.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 637.949022 225.905814
+L 642.882483 225.905814
+L 664.215028 209.408125
+L 653.699075 207.054831
+z
+" clip-path="url(#pb098f337f4)" style="fill: url(#h599748b97a); opacity: 0.7; stroke: #982e4a; stroke-width: 1.3; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #253d4b" x="598.203893" y="206.170094" transform="rotate(-0 598.203893 206.170094)">F3</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #253d4b" x="698.601697" y="183.781675" transform="rotate(-0 698.601697 183.781675)">F7</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #253d4b" x="604.131892" y="89.556465" transform="rotate(-0 604.131892 89.556465)">One petal against the other</text>
+   </g>
+  </g>
+  <g id="text_7">
+   <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #253d4b" x="31.68" y="25.221656" transform="rotate(-0 31.68 25.221656)">A poor slit can create local overlap even at the sharpest source</text>
+  </g>
+  <g id="text_8">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #465b69" x="31.68" y="326.592" transform="rotate(-0 31.68 326.592)">Hatched regions are the certified overlaps. Only the indicated face pairs are shown, at true scale.</text>
+  </g>
+  <g id="text_9">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #465b69" x="31.68" y="339.3792" transform="rotate(-0 31.68 339.3792)">All six far pairs remain safe. Switching the fifth cut from 3–2 to 3–4 makes all 28 pairs safe.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p1e91f90f74">
+   <rect x="39.6" y="102.017581" width="328.216216" height="158.844838"/>
+  </clipPath>
+  <clipPath id="pb098f337f4">
+   <rect x="440.023784" y="103.556465" width="328.216216" height="155.76707"/>
+  </clipPath>
+ </defs>
+ <defs>
+  <pattern id="h599748b97a" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72">
+   <rect x="0" y="0" width="73" height="73" fill="#c84065"/>
+   <path d="M -36 36
+L 36 -36
+M -32 40
+L 40 -32
+M -28 44
+L 44 -28
+M -24 48
+L 48 -24
+M -20 52
+L 52 -20
+M -16 56
+L 56 -16
+M -12 60
+L 60 -12
+M -8 64
+L 64 -8
+M -4 68
+L 68 -4
+M 0 72
+L 72 0
+M 4 76
+L 76 4
+M 8 80
+L 80 8
+M 12 84
+L 84 12
+M 16 88
+L 88 16
+M 20 92
+L 92 20
+M 24 96
+L 96 24
+M 28 100
+L 100 28
+M 32 104
+L 104 32
+M 36 108
+L 108 36
+" style="fill: #982e4a; stroke: #982e4a; stroke-width: 1.0; stroke-linecap: butt; stroke-linejoin: miter; stroke-opacity: 0.7"/>
+  </pattern>
+ </defs>
+</svg>

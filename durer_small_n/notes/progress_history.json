@@ -1,5 +1,27 @@
 [
   {
+    "date": "11 September 2026 JST · flat-hinge extension",
+    "title": "Both 180° boundaries are closed; more high-curvature original nets are proved",
+    "results": [
+      "nonsimp_flat",
+      "nonsimp_low",
+      "F_slit_threshold",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#nonsimp_flat\">new closed-link audit</a> shows that the octahedron proof works directly with flat, uncut quadrilateral diagonals. It closes maximum curvature exactly 180° for both remaining types, without assuming that a perturbation stays below the boundary.</p><p>The same argument proves a specified original-edge tree when its original degree-four source has curvature at least 180° and its original fifth edge satisfies the weighted slit threshold. Both equality conditions are included. Exact boundary examples and higher-curvature parameter families have independent checks of all original face pairs.</p><p>The full n=6 problem remains open only above 180° maximum curvature in those two types, outside the additional fixed-tree criteria. Whole types stay 5/7. These are written geometric proofs with dependency audits, awaiting independent review; numerical experiments are not proof premises."
+  },
+  {
+    "date": "11 September 2026 JST · a direct slit threshold",
+    "title": "The maximum-slit ranking can be replaced by a curvature inequality",
+    "results": [
+      "F_slit_threshold",
+      "lemmaF",
+      "F_low_local",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#F_slit_threshold\">new geometric threshold</a> proves that every slit with 2κc+κw≥180° works at the sharpest source, including equality. A maximum-curvature equator vertex always passes, but it is no longer the only eligible choice.</p><p>The proof supplies the local separating line and closes both far-pair curvature branches. Exact low- and high-curvature coordinate families check nonmaximum slit choices. The displayed local-failure solid has three threshold-passing safe slits and one low-curvature slit with two local overlaps; all four choices are audited separately.</p><p>Every-slit Lemma F remains open only below the weighted threshold. In its low-source branch, a far overlap would also require a local overlap. This is a written research proof awaiting independent review. It widens proved slit choices without changing the 28/28 selected-pair count or the 5/7 whole-type count."
+  },
+  {
     "date": "11 September 2026 JST · every-slit Lemma F reduction",
     "title": "Three local checks now suffice at any low-curvature slit",
     "results": [

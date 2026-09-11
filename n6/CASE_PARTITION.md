@@ -1,5 +1,9 @@
 # An exhaustive opposite-petal partition
 
+The [complete Case A cone proof](CASE_A_CONES.md) is now available in the
+same evidence directory, including its strict distance-sum argument and
+the weaker source hypotheses used in the newer extensions.
+
 **Subsequent completion, 11 September:** [the equal-length argument](LEMMA_F_CHORD.md)
 completes the selected H/R octahedron proof. Earlier open-case counts in this
 note describe the investigation at that stage. The every-slit Lemma F and

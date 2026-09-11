@@ -1,0 +1,57 @@
+{
+  "threshold_hypotheses": {
+    "result": "verified_weighted_slit_threshold_hypotheses",
+    "source": 0,
+    "fan": 1,
+    "slit": 5,
+    "source_curvature_at_least_pi": true,
+    "all_curvatures_at_most_pi": false,
+    "curvature_comparisons_with_pi": {
+      "0": ">",
+      "1": "<",
+      "2": "<",
+      "3": "<",
+      "4": "<",
+      "5": "<"
+    },
+    "twice_slit_plus_fan_curvature_compared_with_pi": ">",
+    "H_required": false,
+    "R_required": false,
+    "whole_net_nonoverlapping": true,
+    "every_slit_lemma_F_proved": false,
+    "proof": "OCTA_SLIT_THRESHOLD.md",
+    "scope": "This explicit domain passes the source condition and 2*kappa_slit+kappa_fan>=pi. The written geometric theorem supplies the whole net; it is not formally verified here. Failing the sufficient check is not evidence of overlap."
+  },
+  "nonmaximum_slit": {
+    "slit": 5,
+    "strictly_sharper_equator_vertices": [
+      2,
+      3,
+      4
+    ]
+  },
+  "independent_all_28_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 19,
+      "separating_edge": 9
+    },
+    "strict_facet_supports": 24,
+    "planarity_identities": 24,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 240
+  }
+}

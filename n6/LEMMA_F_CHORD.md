@@ -1,5 +1,10 @@
 # Equal cut-edge lengths close the low-curvature branch
 
+**Later extension:** [the flat-hinge audit](OCTA_FLAT_HINGES.md) includes
+original polygonal types at maximum curvature exactly pi, and proves
+additional higher-curvature original-edge trees. Earlier strict-boundary
+restrictions below record the scope of the earlier argument.
+
 11 September 2026. **Complete written proof of the selected-net theorem.**
 The dependency audit is included below; independent mathematical review
 and formal verification have not been performed.

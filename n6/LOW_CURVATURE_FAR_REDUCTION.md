@@ -135,7 +135,7 @@ The explicit integer-coordinate solid in `low_local_failure.py` has source
 v=5, opposite w=3, equator (0,4,1,2), and slit c=2. Exact outward interval
 checks verify every curvature is strictly below pi and v is globally
 sharpest. Curvatures in vertex order, rounded only for readability, are
-approximately (157.54,170.52,2.29,48.04,170.52,171.09) degrees.
+approximately (157.55,170.51,2.29,48.04,170.53,171.09) degrees.
 
 Its local face pairs (3,4) and (3,7) have positive-area overlap. Every other
 pair, including all six far pairs, is certified nonoverlapping. Thus this

@@ -1,5 +1,10 @@
 # Both remaining nonsimplicial types: the strictly low-curvature family
 
+**Later extension:** [the flat-hinge audit](OCTA_FLAT_HINGES.md) includes
+original polygonal types at maximum curvature exactly pi, and proves
+additional higher-curvature original-edge trees. Earlier strict-boundary
+restrictions below record the scope of the earlier argument.
+
 11 September 2026. Written geometric proof using the source-choice theorem
 in [OCTA_SOURCE_CHOICE.md](OCTA_SOURCE_CHOICE.md). Independent review is still
 needed. This is an entire shape family, not a numerical inference or a

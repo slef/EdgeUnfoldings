@@ -1,0 +1,79 @@
+{
+  "fixed_original_tree": {
+    "result": "verified_original_edge_fixed_tree_threshold",
+    "type": "prism_with_one_diagonal",
+    "source": 1,
+    "fan": 5,
+    "slit": 2,
+    "cuts": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        5
+      ]
+    ],
+    "curvature_comparisons_with_pi": {
+      "0": "<",
+      "1": ">",
+      "2": "<",
+      "3": "<",
+      "4": "<",
+      "5": "<"
+    },
+    "all_curvatures_at_most_pi": false,
+    "source_curvature_at_least_pi": true,
+    "weighted_threshold_comparison": ">",
+    "artificial_diagonals_uncut": true,
+    "input_tree_nonoverlapping_by_written_theorem": true,
+    "full_n6_proved": false,
+    "proof": "OCTA_FLAT_HINGES.md",
+    "scope": "This original-edge tree satisfies the source and weighted slit conditions on the original polygonal domain. The written flat-hinge theorem proves it safe; formal mathematical verification is not claimed."
+  },
+  "independent_all_original_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 9,
+    "facet_sizes": [
+      3,
+      4,
+      3,
+      4,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 11,
+      "separating_edge": 3,
+      "face_neighborhood": 1
+    },
+    "strict_facet_supports": 16,
+    "planarity_identities": 20,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": true,
+    "fractional_bits": 240,
+    "theorem_dependencies": [
+      {
+        "author": "Val Pinciu",
+        "year": 2007,
+        "theorem": 1,
+        "title": "On the Fewest Nets Problem for Convex Polyhedra",
+        "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+      }
+    ]
+  }
+}

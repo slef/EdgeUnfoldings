@@ -144,7 +144,10 @@
       "H_required": false,
       "R_required": false,
       "unconditional_every_slit_status": "open",
-      "link": "F_low_local"
+      "link": "F_low_local",
+      "weighted_slit_threshold": "2*kappa_c+kappa_w>=pi",
+      "weighted_threshold_status": "proved",
+      "weighted_threshold_link": "F_slit_threshold"
     }
   },
   "coverage_obligations": [
@@ -232,16 +235,16 @@
   ],
   "nonsimplicial_curvature_branches": [
     {
-      "label": "All curvatures strictly below 180°",
+      "label": "All curvatures at most 180°, including equality",
       "status": "proved",
-      "condition": "Original-edge existence for the entire geometric family",
-      "link": "nonsimp_low"
+      "condition": "Original-edge existence by the flat-hinge theorem",
+      "link": "nonsimp_flat"
     },
     {
-      "label": "Maximum curvature exactly 180° or above",
+      "label": "Maximum curvature strictly above 180°",
       "status": "open",
-      "condition": "The strict perturbation argument does not cover this remaining branch",
-      "link": "nonsimp_low"
+      "condition": "Fixed original degree-four star trees passing the source/slit threshold are proved; other shapes remain open",
+      "link": "nonsimp_flat"
     }
   ]
 }

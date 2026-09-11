@@ -1,4 +1,99 @@
-# Current continuation: low-curvature every-slit reduction and a real local failure
+# Current continuation: flat auxiliary hinges and the weighted slit threshold
+
+11 September 2026, end of the authorized two-hour continuation. Branch
+codex/lemma-f-continuation; local commits only, no Git push this turn.
+Earlier checkpoints: 7da9b0d complete selected octahedron proof; 5a2d107
+strict-low nonsimplicial families; 6461160 conditional low far theorem plus
+exact H-local failure. The new material below follows those checkpoints.
+All universal results are written research proofs with dependency audits,
+awaiting independent mathematical review; none is machine-checked in full.
+
+[OCTA_SLIT_THRESHOLD.md](OCTA_SLIT_THRESHOLD.md) replaces R by
+2*kappa_c+kappa_w>=pi. It gives a safe whole octahedral net if source>=pi
+or all six curvatures<=pi; therefore under H it always applies whenever
+that threshold holds. Equality is included. The L cut-edge separator needs
+only this weighted bound. In the high branch the hexagon contradiction uses
+kappa_c+kappa_w-nu_m >= (kappa_v+kappa_w-pi)/2 > 0.
+The low branch uses LOW_CURVATURE_FAR_REDUCTION.md after L is supplied.
+A maximum equator choice always passes strictly by Gauss--Bonnet, but other
+slits can pass too. Four non-R point/18-coordinate-domain examples have
+independent all-28 checks. A synthetic exact phase test exercises threshold
+equality without pretending the prescribed phases are a realized solid.
+The low-local-failure solid has three threshold-passing safe slits and one
+threshold-failing slit with exactly two local overlaps and six safe far pairs.
+
+[OCTA_FLAT_HINGES.md](OCTA_FLAT_HINGES.md) audits the same proof for a convex
+surface triangulated with the octahedron graph, allowing flat auxiliary
+edges but requiring six genuine vertices and nondegenerate triangles.
+The only stronger 3D premise needing attention was the opposite direction's
+strict interiority in a spherical link. The closed-link lemma proves the
+same strict bounds: perimeter Gamma>2*distance(a,q), and after removing
+an incident side of length omega, Gamma-omega>distance(a,q). Extend a-q
+to boundary c and use the two boundary paths; both cannot be the unique
+shortest arc because the link has positive area. For the one-sided bound,
+choose c on the retained path; its positive tail to b gives strictness,
+or c=b leaves a nongeodesic retained boundary path. Flat side subdivisions
+do not change this argument. All other proof steps need positive curvature,
+nondegenerate triangles, planar wedge geometry, and the already retained
+local premises, not strict folding across every triangulation edge.
+
+Consequences for original polygonal facets:
+- Both nonsimplicial types now unfold when every curvature<=pi, INCLUDING
+  equality. Use the same four A-source candidates in the minus type and
+  six prism candidates. At allowed R ties each tied net works directly.
+  The earlier strict perturbation proof remains preserved as history.
+- Any original degree-four source with curvature>=pi and an ORIGINAL
+  fifth edge wc satisfying 2*kappa_c+kappa_w>=pi gives a safe fixed net.
+  This includes equality in both tests, without a limiting perturbation.
+- The whole-type count remains 5/7. The two unresolved types now require
+  maximum curvature STRICTLY above pi and failure of the new sufficient
+  original-tree criteria. Failure of a sufficient criterion is not overlap.
+
+Exact checker flat_octahedron.py keeps polycert's original strict-polygon
+hull checks; it does NOT weaken the geometry verifier to accept non-strict
+triangular hulls. It checks octahedral completion, original candidates,
+polygonal curvature, and the written theorem's conditions. The pi recognizer
+uses exact rational squared cosines for a finite set of known angles; three
+60-degree incident angles give exactly pi. Unresolved signs remain rejected.
+There are 14 original degree-four star candidates in the minus-edge type
+when all four degree-four sources are allowed, versus four at the fixed
+A source used by the all-low existence rule; prism has six total.
+
+Exact boundary examples:
+- Minus points A=(10,10,0), B=(10,0,10), C=(0,0,0), D=(20,10,10),
+  P=(0,10,10), Q=(10,15,15), original MINUS_FACES reversed: kappa_C=pi.
+- Prism points (0,0,0),(5,5,0),(5,0,5),(0,5,5),(6,10,6),(6,5,11),
+  original PRISM_FACES reversed: kappa_0=pi.
+All other curvatures are below pi. Independent full-original-face checks
+pass on both. Higher-curvature examples apply positive-definite affine
+stretches I+3*a*a^T to the earlier low examples: a=(1,1,-1) for minus,
+a=(0,1,-1) for prism. The full ten-/nine-parameter neighborhoods of
+half-width 1/1000 pass using exact affine interval arithmetic.
+
+The overview has F_slit_threshold and nonsimp_flat pages, a true-scale
+local-overlap figure, failed/repaired 3D cut choices, both pi-boundary
+polygonal models, and updated proved/open tables. Two stale figure captions
+were corrected; the dated investigation bodies and history remain retained.
+
+Validation at this checkpoint: all 232 mathematical-code tests pass. The
+three overview tests pass, and all 164 rendered evidence links resolve in
+the staged deployment package. The new overlap SVG was rendered and
+visually checked; no actual browser inspection is claimed.
+
+Next work:
+1. Independent line-by-line review of the complete selected proof and the
+   closed-link/flat-hinge extension. Do not treat successful exact examples
+   as proof of those universal geometric steps.
+2. Original every-slit F: only 2*kappa_c+kappa_w<pi can remain under H;
+   in the all-low branch a local pair must also overlap. Such local failures
+   exist (see low_local_failure.py), but its far pairs are all safe.
+3. Higher-curvature original-edge types outside the new fixed-tree tests:
+   especially a sharp original degree-three vertex, or an eligible high
+   source whose only threshold-passing fifth edge is artificial. Do not
+   silently cut an added diagonal. The older P/Q two-choice conjecture
+   remains separate, with 7/28 whole classes excluded, not a full proof.
+
+# Previous continuation: low-curvature every-slit reduction and a real local failure
 
 11 September 2026. New written conditional theorem:
 [LOW_CURVATURE_FAR_REDUCTION.md](LOW_CURVATURE_FAR_REDUCTION.md).

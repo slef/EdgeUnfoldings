@@ -7,13 +7,21 @@ every-slit Lemma F remains open. Replay the point and 18-coordinate family
 with `python3 -m n6.low_far_examples`. Both curvature rankings fail there,
 and independent all-28-pair certificates agree.
 
-**Latest extension, 11 September:** [source freedom](OCTA_SOURCE_CHOICE.md)
-now gives [original-edge unfoldings for both remaining types when every
-curvature is strictly below pi](NONSIMPLICIAL_LOW_CURVATURE.md).
-The proof constructs strict octahedral refinements and keeps all artificial
-diagonals uncut. The whole-type tally remains 5/7; the remaining n=6 branch
-has maximum curvature at least pi, including equality. The every-slit Lemma F
-remains separate. Independent mathematical review is still needed.
+**Latest extension, 11 September:** [flat auxiliary hinges](OCTA_FLAT_HINGES.md)
+close the maximum-curvature pi boundary for both nonsimplicial types.
+Every shape of either type with all six curvatures<=pi now has an
+original-edge unfolding. Additional higher-curvature fixed trees follow
+when the original degree-four source has curvature>=pi and the original
+fifth edge satisfies [the weighted slit threshold](OCTA_SLIT_THRESHOLD.md).
+The remaining n=6 shapes have maximum curvature strictly above pi and
+lie outside these sufficient original-tree criteria. Whole types stay 5/7.
+Independent mathematical review is still needed.
+
+The weighted threshold also widens the octahedral selected rule: under H,
+any slit with 2*kappa_c+kappa_w>=pi gives a whole safe net, including
+equality. A remaining every-slit Lemma F counterexample must lie below
+that threshold; in its all-low branch it must also have a local overlap.
+
 
 
 The full n=6 theorem remains open. **The octahedron type now has a complete

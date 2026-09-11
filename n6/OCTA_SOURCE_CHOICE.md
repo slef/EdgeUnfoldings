@@ -1,5 +1,10 @@
 # The selected octahedron rule needs less than a sharpest source
 
+**Later extension:** [the flat-hinge audit](OCTA_FLAT_HINGES.md) includes
+original polygonal types at maximum curvature exactly pi, and proves
+additional higher-curvature original-edge trees. Earlier strict-boundary
+restrictions below record the scope of the earlier argument.
+
 11 September 2026. Written geometric corollary of the complete proof in
 [LEMMA_F_CHORD.md](LEMMA_F_CHORD.md). Independent review is still needed.
 Numerical experiments are not premises.

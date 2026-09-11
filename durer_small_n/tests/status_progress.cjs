@@ -237,14 +237,14 @@ for(const id of ['t_octa','octa_four_slits','octa_patches','octa_three_same','le
   assert(!current.includes('22/28') && !current.includes('47 open'),id);
 }
 
-// Whole low-curvature families must not silently include the >=pi boundary,
-// prove the old two-choice conjecture, or count another entire six-vertex type.
+// The later flat-hinge proof includes the pi boundary, but must not prove
+// the old two-choice conjecture or count another entire six-vertex type.
 assert.equal(score.nonsimplicial_curvature_branches.filter(x=>x.status==='proved').length,1);
 assert.equal(score.nonsimplicial_curvature_branches.length,2);
 assert.equal(vm.runInContext('byId.t_octa_minus.status',ctx),'open');
 assert.equal(vm.runInContext('byId.t_prismd.status',ctx),'open');
 const lowTypes=vm.runInContext('article(byId.nonsimp_low,false)',ctx);
-assert(lowTypes.includes('Maximum curvature exactly 180° or above remains open'));
+assert(lowTypes.includes('Equality at 180° is included; higher-curvature shapes remain open in general'));
 assert(lowTypes.includes('every artificial diagonal uncut'));
 assert(lowTypes.includes('7/28 class count is unchanged'));
 assert(lowTypes.includes('four candidate trees') && lowTypes.includes('six original-edge candidate trees'));
@@ -270,3 +270,38 @@ assert(lowFar.includes('Neither a sharpest source nor a sharpest slit'));
 assert(lowFar.includes('±0.0001'));
 assert(farLemma.includes('A far overlap would have to accompany a local overlap'));
 assert(detailed.includes('three local checks imply all six far pairs'));
+
+const thresholdPage=vm.runInContext('article(byId.F_slit_threshold,false)',ctx);
+assert.equal(vm.runInContext('byId.F_slit_threshold.status',ctx),'proved');
+assert(thresholdPage.includes('Failure of the test is not evidence of overlap'));
+assert(thresholdPage.includes('Equality is included'));
+assert(thresholdPage.includes('three of four slits are certified safe'));
+assert(thresholdPage.includes('not a claim that three slits always work'));
+assert(thresholdPage.includes('all four choices are audited') || thresholdPage.includes('All four choices in the displayed solid'));
+for(const suffix of ['failure','repair']) {
+  const cert=JSON.parse(fs.readFileSync(path.join(root,`n6/results/low-local-${suffix}.certificate.json`),'utf8'));
+  assert(thresholdPage.includes(`data-model="low_local_${suffix}"`));
+  assert.deepEqual(JSON.parse(JSON.stringify(models['low_local_'+suffix].P)),cert.coordinate_polynomials.map(p=>p.map(c=>Number(c[0][0]))));
+  assert.deepEqual(JSON.parse(JSON.stringify(models['low_local_'+suffix].cut)),cert.cut_edges);
+}
+assert.deepEqual(models.low_local_failure.P,models.low_local_repair.P);
+assert.notDeepEqual(models.low_local_failure.cut,models.low_local_repair.cut);
+assert(!vm.runInContext('CAPTIONS.far_pair_targets()',ctx).includes('remains the open task'));
+assert(!vm.runInContext('CAPTIONS.three_same()',ctx).includes('general case remains open'));
+
+const flatPage=vm.runInContext('article(byId.nonsimp_flat,false)',ctx);
+assert.equal(vm.runInContext('byId.nonsimp_flat.status',ctx),'proved');
+assert(flatPage.includes('three original face angles of exactly 60°'));
+assert(flatPage.includes('strictly greater than 180°'));
+assert(flatPage.includes('six vertices must remain genuine vertices'));
+assert(lowTypes.includes('Maximum curvature ≤180°, including equality'));
+assert.equal(score.nonsimplicial_curvature_branches[0].link,'nonsimp_flat');
+assert(score.nonsimplicial_curvature_branches[1].label.includes('strictly above'));
+for(const kind of ['minus','prism']) {
+  const cert=JSON.parse(fs.readFileSync(path.join(root,`n6/results/flat-hinges-${kind}-boundary.certificate.json`),'utf8'));
+  const model=models['flat_'+kind+'_boundary'];
+  assert(flatPage.includes(`data-model="flat_${kind}_boundary"`));
+  assert.deepEqual(JSON.parse(JSON.stringify(model.P)),cert.coordinate_polynomials.map(p=>p.map(c=>Number(c[0][0]))));
+  assert.deepEqual(JSON.parse(JSON.stringify(model.cut)),cert.cut_edges);
+  assert.deepEqual(JSON.parse(JSON.stringify(model.faces)),cert.faces);
+}
