@@ -255,3 +255,18 @@ for(const name of ['minus','prism']) {
   assert.deepEqual(JSON.parse(JSON.stringify(models['low_'+name].cut)),cert.cut_edges);
   assert.deepEqual(JSON.parse(JSON.stringify(models['low_'+name].faces)),cert.faces);
 }
+
+// The new arbitrary-slit result is conditional on all three local pairs.
+// It must not silently turn the original every-slit statement into a theorem.
+const lowFar=vm.runInContext('article(byId.F_low_local,false)',ctx);
+assert.equal(vm.runInContext('byId.F_low_local.status',ctx),'proved');
+assert.equal(vm.runInContext('byId.lemmaF.status',ctx),'numeric');
+assert.equal(score.octahedron.every_slit_reduction.required_local_pairs,3);
+assert.equal(score.octahedron.every_slit_reduction.far_pairs_implied,6);
+assert.equal(score.octahedron.every_slit_reduction.unconditional_every_slit_status,'open');
+assert(lowFar.includes('a local pair overlaps'));
+assert(lowFar.includes('Every-slit far statement remains open'));
+assert(lowFar.includes('Neither a sharpest source nor a sharpest slit'));
+assert(lowFar.includes('±0.0001'));
+assert(farLemma.includes('A far overlap would have to accompany a local overlap'));
+assert(detailed.includes('three local checks imply all six far pairs'));

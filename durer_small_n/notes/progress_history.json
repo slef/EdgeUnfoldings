@@ -1,5 +1,16 @@
 [
   {
+    "date": "11 September 2026 JST · every-slit Lemma F reduction",
+    "title": "Three local checks now suffice at any low-curvature slit",
+    "results": [
+      "F_low_local",
+      "lemmaF",
+      "F_chord",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#F_low_local\">new conditional theorem</a> proves all six far pairs at any source and slit when all six curvatures are at most 180° and the three local pairs are safe. Neither curvature ranking is needed.</p><p>The equal-length proof excludes both cut entries. In the remaining opposite-petal branch, total curvature replaces the slit ranking in the angle contradiction. An auxiliary triangle shrink handles boundary contacts without assuming a strict gap.</p><p>Exact point and 18-coordinate-family checks work where both H and R fail, with independent all-28-pair certificates. These are examples, not universal proof premises. Every-slit Lemma F remains open where a local pair fails, and in the higher-curvature branch away from the selected slit. The selected 28/28 count and whole-type 5/7 count stay unchanged. The written proof awaits independent mathematical review.<p>A separate exact example shows two local overlaps even under H with every curvature below 180°. Its six far pairs remain safe; changing to R repairs the whole net. Thus the local-failure branch is nonempty, without refuting the far-only Lemma F.</p>"
+  },
+  {
     "date": "11 September 2026 JST · original-edge low-curvature families",
     "title": "Both remaining types are proved below 180° maximum curvature",
     "results": [

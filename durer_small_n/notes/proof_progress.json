@@ -136,6 +136,15 @@
       "failure_classes_total": 49,
       "every_slit_lemma_F": "open",
       "proof": "F_chord"
+    },
+    "every_slit_reduction": {
+      "all_curvatures_at_most_pi": true,
+      "required_local_pairs": 3,
+      "far_pairs_implied": 6,
+      "H_required": false,
+      "R_required": false,
+      "unconditional_every_slit_status": "open",
+      "link": "F_low_local"
     }
   },
   "coverage_obligations": [

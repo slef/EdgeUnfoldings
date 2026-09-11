@@ -1,5 +1,12 @@
 # Six-vertex integration and certification
 
+**Every-slit progress:** [safe local pairs imply the whole net is safe](LOW_CURVATURE_FAR_REDUCTION.md)
+when all six curvatures are at most pi. Neither H nor R is needed. The
+three local premises must be checked at the actual slit; the original
+every-slit Lemma F remains open. Replay the point and 18-coordinate family
+with `python3 -m n6.low_far_examples`. Both curvature rankings fail there,
+and independent all-28-pair certificates agree.
+
 **Latest extension, 11 September:** [source freedom](OCTA_SOURCE_CHOICE.md)
 now gives [original-edge unfoldings for both remaining types when every
 curvature is strictly below pi](NONSIMPLICIAL_LOW_CURVATURE.md).

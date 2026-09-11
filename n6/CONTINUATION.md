@@ -1,4 +1,58 @@
-# Current continuation: source freedom and both low-curvature nonsimplicial types
+# Current continuation: low-curvature every-slit reduction and a real local failure
+
+11 September 2026. New written conditional theorem:
+[LOW_CURVATURE_FAR_REDUCTION.md](LOW_CURVATURE_FAR_REDUCTION.md).
+If all six octahedral curvatures<=pi, any source/slit with all three local
+pairs safe has every far pair safe and hence the whole net safe. No H or R.
+The original every-slit Lemma F remains open at slits with a local failure;
+this condition is not automatically supplied by L at a different slit.
+
+Proof: through-fan L needs only fan curvature<=pi. The local premises
+trap the neighboring patch for the equal-cut-length proof, excluding both
+finite cut segments. The Case A no-wrap bound follows from all-low total
+curvature. The base-cone branch needs no ranking. In the small-fan branch,
+the closed-curve hexagon identity would force nu_m>kappa_a+kappa_c+kappa_w,
+but the latter sum>=pi>nu_m. Boundary contacts without R require care:
+M may touch the opposite slit segment; shrink the auxiliary triangle acM
+slightly into itself, apply the angle identity to the simple region, then
+pass to the limit. The positive angle at the chosen overlap point remains
+strict. This is a planar diagram perturbation, not a realizability claim.
+
+Exact modules low_far.py and low_far_examples.py check just the three
+local separators and all-low hypothesis on a point and full 18-coordinate
+box +/-1/10000 where both H and R strictly fail. Independent all-28
+certificates agree. Missing/duplicate/wrong/reversed witnesses, high or
+uncertain curvature bounds, and a genuinely overlapping local pair are
+rejected. Equality at pi is accepted when certified.
+
+Crucially, the local-failure branch is nonempty even under H. The exact
+integer example in low_local_failure.py has source 5, opposite 3, ring
+(0,4,1,2), slit 2. All curvatures<pi; source 5 is sharpest. Exactly two
+local pairs overlap, (3,4) and (3,7), and all other 26 pairs are safe,
+including all six far pairs. Thus this refutes all-slits WHOLE-NET safety
+under H, not the far-only Lemma F. Changing to R gives an independent
+all-28 safe net. All claims in this example are checked exactly; the
+floating-point affine optimization merely found its coordinates.
+
+The selected octahedral proof remains in 7da9b0d; the two strictly-low
+nonsimplicial theorems are in 5a2d107. The whole-type tally stays 5/7.
+The web overview now separates the conditional low-curvature far theorem
+from the still-open every-slit statement and retains the earlier history.
+No Git push has been made this turn. All new universal proofs await
+independent mathematical review and are not machine-checked proofs.
+
+Next mathematical lead (not yet promoted): replace R by the weaker
+weighted threshold 2*kappa_c+kappa_w>=pi. The L slit-edge separator only
+needs that inequality (equality gives a strict angle via rho<pi-kappa_c).
+Through-fan L holds when source>=pi or all curvatures<=pi. In the high
+source branch the small-fan contradiction follows from
+kappa_c+kappa_w-nu_m >= (kappa_v+kappa_w-pi)/2 > 0.
+In the all-low branch use the new conditional theorem. This would prove
+the whole net at every slit passing the weighted threshold, without R.
+Check it in full before claiming it, particularly equality and no-wrap.
+It may help the remaining nonsimplicial original-edge high-curvature cases.
+
+# Previous continuation: source freedom and both low-curvature nonsimplicial types
 
 11 September 2026. The selected octahedron proof is saved in commit 7da9b0d
 on codex/lemma-f-continuation. A subsequent hypothesis audit gives
