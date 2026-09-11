@@ -7,7 +7,7 @@
     {
       "sharp_count": 1,
       "patterns_total": 6,
-      "patterns_proved": 2,
+      "patterns_proved": 6,
       "patterns": [
         {
           "sharp_vertices": [
@@ -39,36 +39,60 @@
           "sharp_vertices": [
             2
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 2,
+            "sources": [
+              0,
+              1
+            ],
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
+          }
         },
         {
           "sharp_vertices": [
             3
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 3,
+            "sources": [
+              0,
+              1
+            ],
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
+          }
         },
         {
           "sharp_vertices": [
             4
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "sharp_off_quad_threshold_or_forced_complementary_gates",
+            "proof": "MINUS_EDGE_PROOF.md"
+          }
         },
         {
           "sharp_vertices": [
             5
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "sharp_off_quad_threshold_or_forced_complementary_gates",
+            "proof": "MINUS_EDGE_PROOF.md"
+          }
         }
       ]
     },
     {
       "sharp_count": 2,
       "patterns_total": 15,
-      "patterns_proved": 13,
+      "patterns_proved": 15,
       "patterns": [
         {
           "sharp_vertices": [
@@ -203,37 +227,14 @@
           ],
           "status": "proved",
           "argument": {
-            "reason": "cofacial_sharp_route_and_Case_B",
-            "source": 0,
-            "fan": 1,
-            "slit": 2,
-            "cuts": [
-              [
-                0,
-                2
-              ],
-              [
-                0,
-                3
-              ],
-              [
-                0,
-                4
-              ],
-              [
-                0,
-                5
-              ],
-              [
-                1,
-                2
-              ]
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 2,
+            "sources": [
+              0,
+              1
             ],
-            "middle_base": [
-              3,
-              5
-            ],
-            "proof": "COFACIAL_STAR_REDUCTION.md"
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
           }
         },
         {
@@ -241,8 +242,17 @@
             2,
             4
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 2,
+            "sources": [
+              0,
+              1
+            ],
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
+          }
         },
         {
           "sharp_vertices": [
@@ -251,33 +261,14 @@
           ],
           "status": "proved",
           "argument": {
-            "reason": "high_source_and_automatic_weighted_threshold",
-            "source": 5,
-            "fan": 2,
-            "slit": 0,
-            "cuts": [
-              [
-                0,
-                2
-              ],
-              [
-                0,
-                5
-              ],
-              [
-                1,
-                5
-              ],
-              [
-                3,
-                5
-              ],
-              [
-                4,
-                5
-              ]
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 2,
+            "sources": [
+              0,
+              1
             ],
-            "proof": "OCTA_FLAT_HINGES.md"
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
           }
         },
         {
@@ -287,33 +278,14 @@
           ],
           "status": "proved",
           "argument": {
-            "reason": "high_source_and_automatic_weighted_threshold",
-            "source": 4,
-            "fan": 3,
-            "slit": 0,
-            "cuts": [
-              [
-                0,
-                3
-              ],
-              [
-                0,
-                4
-              ],
-              [
-                1,
-                4
-              ],
-              [
-                2,
-                4
-              ],
-              [
-                4,
-                5
-              ]
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 3,
+            "sources": [
+              0,
+              1
             ],
-            "proof": "OCTA_FLAT_HINGES.md"
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
           }
         },
         {
@@ -321,8 +293,17 @@
             3,
             5
           ],
-          "status": "open",
-          "argument": null
+          "status": "proved",
+          "argument": {
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 3,
+            "sources": [
+              0,
+              1
+            ],
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
+          }
         },
         {
           "sharp_vertices": [
@@ -331,33 +312,8 @@
           ],
           "status": "proved",
           "argument": {
-            "reason": "high_source_and_automatic_weighted_threshold",
-            "source": 4,
-            "fan": 3,
-            "slit": 5,
-            "cuts": [
-              [
-                0,
-                4
-              ],
-              [
-                1,
-                4
-              ],
-              [
-                2,
-                4
-              ],
-              [
-                3,
-                5
-              ],
-              [
-                4,
-                5
-              ]
-            ],
-            "proof": "OCTA_FLAT_HINGES.md"
+            "reason": "sharp_off_quad_threshold_or_forced_complementary_gates",
+            "proof": "MINUS_EDGE_PROOF.md"
           }
         }
       ]
@@ -615,33 +571,14 @@
           ],
           "status": "proved",
           "argument": {
-            "reason": "high_source_and_automatic_weighted_threshold",
-            "source": 4,
-            "fan": 3,
-            "slit": 0,
-            "cuts": [
-              [
-                0,
-                3
-              ],
-              [
-                0,
-                4
-              ],
-              [
-                1,
-                4
-              ],
-              [
-                2,
-                4
-              ],
-              [
-                4,
-                5
-              ]
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 2,
+            "sources": [
+              0,
+              1
             ],
-            "proof": "OCTA_FLAT_HINGES.md"
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
           }
         },
         {
@@ -652,33 +589,14 @@
           ],
           "status": "proved",
           "argument": {
-            "reason": "high_source_and_automatic_weighted_threshold",
-            "source": 5,
-            "fan": 2,
-            "slit": 0,
-            "cuts": [
-              [
-                0,
-                2
-              ],
-              [
-                0,
-                5
-              ],
-              [
-                1,
-                5
-              ],
-              [
-                3,
-                5
-              ],
-              [
-                4,
-                5
-              ]
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 2,
+            "sources": [
+              0,
+              1
             ],
-            "proof": "OCTA_FLAT_HINGES.md"
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
           }
         },
         {
@@ -689,33 +607,14 @@
           ],
           "status": "proved",
           "argument": {
-            "reason": "high_source_and_automatic_weighted_threshold",
-            "source": 4,
-            "fan": 3,
-            "slit": 5,
-            "cuts": [
-              [
-                0,
-                4
-              ],
-              [
-                1,
-                4
-              ],
-              [
-                2,
-                4
-              ],
-              [
-                3,
-                5
-              ],
-              [
-                4,
-                5
-              ]
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 2,
+            "sources": [
+              0,
+              1
             ],
-            "proof": "OCTA_FLAT_HINGES.md"
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
           }
         },
         {
@@ -726,33 +625,14 @@
           ],
           "status": "proved",
           "argument": {
-            "reason": "high_source_and_automatic_weighted_threshold",
-            "source": 4,
-            "fan": 3,
-            "slit": 0,
-            "cuts": [
-              [
-                0,
-                3
-              ],
-              [
-                0,
-                4
-              ],
-              [
-                1,
-                4
-              ],
-              [
-                2,
-                4
-              ],
-              [
-                4,
-                5
-              ]
+            "reason": "complementary_cofacial_sources_at_a_sharp_corner",
+            "sharp_corner": 3,
+            "sources": [
+              0,
+              1
             ],
-            "proof": "OCTA_FLAT_HINGES.md"
+            "choose": "Case B, or a source whose two outer angles obey the Case A no-wrap bound",
+            "proof": "MINUS_COMPLEMENTARY_SOURCES.md"
           }
         }
       ]

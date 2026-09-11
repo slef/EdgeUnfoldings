@@ -1,6 +1,45 @@
 [
   {
-    "date": "12 September 2026 JST · four-hour continuation, fourth result",
+    "date": "12 September 2026 JST \u00b7 four-hour continuation, seventh result",
+    "title": "Prism: complementary routes settle a further curvature branch",
+    "results": [
+      "prism_complementary",
+      "t_prismd",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>After completing the <a href=\"#minus_complete\">minus-edge proof</a>, the same failure-driven strategy yields a new prism theorem. If both fan curvatures are at most 180\u00b0 but their sum is at least 180\u00b0, complementary middle-angle sums guarantee a Case B route, or the route failures force a sharp original source.</p><p>The prism map is refined from three to five disjoint curvature branches, three proved and two open. This is a finer case split, not a percentage of progress. Ten positional patterns remain open in general, with new subfamilies proved inside them. A new nine-parameter family and reflection pass exact original-face checks. The whole-type count remains <b>6/7</b>.</p>"
+  },
+  {
+    "date": "12 September 2026 JST \u00b7 four-hour continuation, sixth result",
+    "title": "The octahedron-minus-edge proof is complete: six of seven types",
+    "results": [
+      "minus_complete",
+      "minus_complementary",
+      "t_octa_minus",
+      "sharp_positions",
+      "progress",
+      "research_plan",
+      "original_rule"
+    ],
+    "body": "<p>The <a href=\"#minus_complete\">last two positional families now close</a>. If all three original fifth cuts at a sharp P fail the direct curvature test, their failures force both curvature conditions for the complementary sources A and B. Their angle sums guarantee that one entire tree works. Reflection handles Q.</p><p>The whole minus-edge type is therefore proved as a written geometric argument, including equalities and with the quadrilateral uncut. <b>Six of seven whole types now have written proofs</b>; the prism with one diagonal remains open. Independent mathematical review is still needed. An exact rational example, its reflected example, and a full ten-parameter family verify the new fallback and all 21 original face pairs separately.</p>"
+  },
+  {
+    "date": "12 September 2026 JST \u00b7 four-hour continuation, fifth result",
+    "title": "Minus-edge: the remaining sharp-position cases drop from six to two",
+    "results": [
+      "minus_complementary",
+      "sharp_positions",
+      "t_octa_minus",
+      "cofacial_star",
+      "original_rule",
+      "progress",
+      "research_plan"
+    ],
+    "body": "<p>The <a href=\"#minus_complementary\">new complementary-source proof</a> settles every minus-edge shape with C or D sharp. Hold the sharp corner fixed and compare sources A and B. Their angle sums show that the two residual Case A tests cannot both fail; a Case B choice is already safe.</p><p>This closes the two formerly open sharp pairs {C,P} and {D,Q}, and the singleton positions C and D. Every two-sharp and three-sharp minus-edge family is now covered. <b>Only P alone sharp or Q alone sharp remains</b>, down from six positional patterns to two. The prism count remains ten patterns, and the whole types remain 5/7.</p><p>The proof includes all boundaries and keeps the original quadrilateral whole. A new full ten-parameter family, a reflected example, and an exact 180\u00b0 corner have independent original-face checks. The written universal argument awaits independent mathematical review.</p>"
+  },
+  {
+    "date": "12 September 2026 JST \u00b7 four-hour continuation, fourth result",
     "title": "The actual lengths settle examples beyond the wider angle bound",
     "body": "<p>The <a href=\"#case_A_lengths\">new metric separator</a> compares how far one cut edge falls short with how far the other overshoots. Keeping both amounts proves configurations that the wider angle bound misses.</p><p>An exact low-fan, sharp-slit octahedron confirms that the remaining obtuse-angle pattern is real. The length comparison proves its difficult pair safe; all 28 pairs also pass an independent exact check. A different exact high-fan example really overlaps and fails the metric test. These distinguish failed sufficient tests from actual overlaps.</p><p>The two whole types remain open. The next target is to prove that at least one permitted original-edge choice supplies a separator, or handle the finite faces when their full cones cannot be separated.</p>",
     "results": [
@@ -12,7 +51,7 @@
     ]
   },
   {
-    "date": "12 September 2026 JST · four-hour continuation, third result",
+    "date": "12 September 2026 JST \u00b7 four-hour continuation, third result",
     "title": "A wider Case A separator leaves an obtuse short-side obstruction",
     "results": [
       "case_A_wide",
@@ -21,10 +60,10 @@
       "original_rule",
       "progress"
     ],
-    "body": "<p>The <a href=\"#case_A_wide\">new distance-sum argument</a> increases the allowable angle on a short cut side from θ to (180°+θ)/2. It proves every both-short Case A configuration, and every configuration with two nonobtuse outer apex angles. Equality in the new angle bound is included.</p><p>With the cofacial star comparison, this proves additional whole original-edge families in both remaining types. Exact six-parameter affine boxes pass the wider test and all original face-pair checks while failing the earlier sufficient criteria. The residual low-fan pattern has one long side and an obtuse angle above the new bound on the short side.</p><p>An initial diagnostic search found no wider-test failure in 82,786 low-fan Case A instances. A later targeted search found an exact failure of that bound; the subsequent actual-length test proves its pair safe. The full types remain open, and the positional counts stay six minus-edge patterns and ten prism patterns. Written proofs await independent review.</p>"
+    "body": "<p>The <a href=\"#case_A_wide\">new distance-sum argument</a> increases the allowable angle on a short cut side from \u03b8 to (180\u00b0+\u03b8)/2. It proves every both-short Case A configuration, and every configuration with two nonobtuse outer apex angles. Equality in the new angle bound is included.</p><p>With the cofacial star comparison, this proves additional whole original-edge families in both remaining types. Exact six-parameter affine boxes pass the wider test and all original face-pair checks while failing the earlier sufficient criteria. The residual low-fan pattern has one long side and an obtuse angle above the new bound on the short side.</p><p>An initial diagnostic search found no wider-test failure in 82,786 low-fan Case A instances. A later targeted search found an exact failure of that bound; the subsequent actual-length test proves its pair safe. The full types remain open, and the positional counts stay six minus-edge patterns and ten prism patterns. Written proofs await independent review.</p>"
   },
   {
-    "date": "12 September 2026 JST · four-hour continuation, second result",
+    "date": "12 September 2026 JST \u00b7 four-hour continuation, second result",
     "title": "Every three-sharp-vertex pattern is covered; the remaining positions are explicit",
     "results": [
       "sharp_positions",
@@ -37,7 +76,7 @@
     "body": "<p>The <a href=\"#sharp_positions\">new positional ledger</a> covers all twenty three-sharp-vertex patterns in both remaining types. For exactly two sharp vertices it covers thirteen of fifteen minus-edge pairs and eleven of fifteen prism pairs. Six minus-edge and ten prism position patterns remain overall. These count positions, not percentages of shapes.</p><p>The <a href=\"#cofacial_star\">new star comparison</a> universally settles 19/21 or 13/15 original face pairs in each cofacial route. A low fan, sharp route endpoint, and one remaining Case B suffice for the whole net. This proves the minus-edge family with both degree-three corners sharp, including equality, and additional prism pairs. Exact parameter boxes illustrate genuinely new cases. A <a href=\"#case_A_one_side\">one-sided Case A separator</a> gives a further sufficient test.</p><p>All four cofacial routes can nevertheless fail on one exactly checked minus-edge solid; a different original tree repairs it. The written universal arguments await independent review. Neither entire type is claimed solved; whole types remain 5/7.</p>"
   },
   {
-    "date": "12 September 2026 JST · four-hour continuation, first result",
+    "date": "12 September 2026 JST \u00b7 four-hour continuation, first result",
     "title": "The prism branch with two sharp ends now has a complete proof",
     "results": [
       "prism_two_sharp",
@@ -46,10 +85,10 @@
       "progress",
       "research_plan"
     ],
-    "body": "<p>The <a href=\"#prism_two_sharp\">new two-sharp-end theorem</a> proves the original two-pair tree safe whenever end vertices 2 and 5 both have curvature at least 180°. Complementary views give separating lines for both residual face pairs. Equality at either or both ends is included.</p><p>The page gives the full proof in readable steps, an exact net and 3D model, a nine-parameter family, and independent equality checks. This closes one whole curvature branch. The two remaining types are still open in full; the whole-type tally remains 5/7. Work continues on the sharp-slit Case A obstruction. The written proof awaits independent review.</p>"
+    "body": "<p>The <a href=\"#prism_two_sharp\">new two-sharp-end theorem</a> proves the original two-pair tree safe whenever end vertices 2 and 5 both have curvature at least 180\u00b0. Complementary views give separating lines for both residual face pairs. Equality at either or both ends is included.</p><p>The page gives the full proof in readable steps, an exact net and 3D model, a nine-parameter family, and independent equality checks. This closes one whole curvature branch. The two remaining types are still open in full; the whole-type tally remains 5/7. Work continues on the sharp-slit Case A obstruction. The written proof awaits independent review.</p>"
   },
   {
-    "date": "12 September 2026 JST · the last two original-face types",
+    "date": "12 September 2026 JST \u00b7 the last two original-face types",
     "title": "New sharp-vertex families and a precise map of how the original-edge rule can fail",
     "results": [
       "original_rule",
@@ -61,18 +100,18 @@
     "body": "<p>The <a href=\"#original_rule\">new curvature-budget argument</a> proves additional high-curvature original-edge families in both remaining types. The source can be less sharp; putting a sharp vertex at the fifth cut leaves only two sufficient Case A curvature sums to check.</p><p>If those sums fail, only the opposite-petal Case A obligations remain at a sharp slit with a low-curvature fan. Exact examples also refute the naive adaptation that selects the sharpest original degree-four source and then the sharpest allowed endpoint. Both failed solids have separately certified repairs.</p><p>The page includes two new nets and 3D models, the full proof, exact family certificates, and clearly separated diagnostic counts. Whole types remain 5/7. Independent mathematical review and a fallback covering every remaining shape are still needed.</p>"
   },
   {
-    "date": "11 September 2026 JST · flat-hinge extension",
-    "title": "Both 180° boundaries are closed; more high-curvature original nets are proved",
+    "date": "11 September 2026 JST \u00b7 flat-hinge extension",
+    "title": "Both 180\u00b0 boundaries are closed; more high-curvature original nets are proved",
     "results": [
       "nonsimp_flat",
       "nonsimp_low",
       "F_slit_threshold",
       "progress"
     ],
-    "body": "<p>The <a href=\"#nonsimp_flat\">new closed-link audit</a> shows that the octahedron proof works directly with flat, uncut quadrilateral diagonals. It closes maximum curvature exactly 180° for both remaining types, without assuming that a perturbation stays below the boundary.</p><p>The same argument proves a specified original-edge tree when its original degree-four source has curvature at least 180° and its original fifth edge satisfies the weighted slit threshold. Both equality conditions are included. Exact boundary examples and higher-curvature parameter families have independent checks of all original face pairs.</p><p>The full n=6 problem remains open only above 180° maximum curvature in those two types, outside the additional fixed-tree criteria. Whole types stay 5/7. These are written geometric proofs with dependency audits, awaiting independent review; numerical experiments are not proof premises."
+    "body": "<p>The <a href=\"#nonsimp_flat\">new closed-link audit</a> shows that the octahedron proof works directly with flat, uncut quadrilateral diagonals. It closes maximum curvature exactly 180\u00b0 for both remaining types, without assuming that a perturbation stays below the boundary.</p><p>The same argument proves a specified original-edge tree when its original degree-four source has curvature at least 180\u00b0 and its original fifth edge satisfies the weighted slit threshold. Both equality conditions are included. Exact boundary examples and higher-curvature parameter families have independent checks of all original face pairs.</p><p>The full n=6 problem remains open only above 180\u00b0 maximum curvature in those two types, outside the additional fixed-tree criteria. Whole types stay 5/7. These are written geometric proofs with dependency audits, awaiting independent review; numerical experiments are not proof premises."
   },
   {
-    "date": "11 September 2026 JST · a direct slit threshold",
+    "date": "11 September 2026 JST \u00b7 a direct slit threshold",
     "title": "The maximum-slit ranking can be replaced by a curvature inequality",
     "results": [
       "F_slit_threshold",
@@ -80,10 +119,10 @@
       "F_low_local",
       "progress"
     ],
-    "body": "<p>The <a href=\"#F_slit_threshold\">new geometric threshold</a> proves that every slit with 2κc+κw≥180° works at the sharpest source, including equality. A maximum-curvature equator vertex always passes, but it is no longer the only eligible choice.</p><p>The proof supplies the local separating line and closes both far-pair curvature branches. Exact low- and high-curvature coordinate families check nonmaximum slit choices. The displayed local-failure solid has three threshold-passing safe slits and one low-curvature slit with two local overlaps; all four choices are audited separately.</p><p>Every-slit Lemma F remains open only below the weighted threshold. In its low-source branch, a far overlap would also require a local overlap. This is a written research proof awaiting independent review. It widens proved slit choices without changing the 28/28 selected-pair count or the 5/7 whole-type count."
+    "body": "<p>The <a href=\"#F_slit_threshold\">new geometric threshold</a> proves that every slit with 2\u03bac+\u03baw\u2265180\u00b0 works at the sharpest source, including equality. A maximum-curvature equator vertex always passes, but it is no longer the only eligible choice.</p><p>The proof supplies the local separating line and closes both far-pair curvature branches. Exact low- and high-curvature coordinate families check nonmaximum slit choices. The displayed local-failure solid has three threshold-passing safe slits and one low-curvature slit with two local overlaps; all four choices are audited separately.</p><p>Every-slit Lemma F remains open only below the weighted threshold. In its low-source branch, a far overlap would also require a local overlap. This is a written research proof awaiting independent review. It widens proved slit choices without changing the 28/28 selected-pair count or the 5/7 whole-type count."
   },
   {
-    "date": "11 September 2026 JST · every-slit Lemma F reduction",
+    "date": "11 September 2026 JST \u00b7 every-slit Lemma F reduction",
     "title": "Three local checks now suffice at any low-curvature slit",
     "results": [
       "F_low_local",
@@ -91,11 +130,11 @@
       "F_chord",
       "progress"
     ],
-    "body": "<p>The <a href=\"#F_low_local\">new conditional theorem</a> proves all six far pairs at any source and slit when all six curvatures are at most 180° and the three local pairs are safe. Neither curvature ranking is needed.</p><p>The equal-length proof excludes both cut entries. In the remaining opposite-petal branch, total curvature replaces the slit ranking in the angle contradiction. An auxiliary triangle shrink handles boundary contacts without assuming a strict gap.</p><p>Exact point and 18-coordinate-family checks work where both H and R fail, with independent all-28-pair certificates. These are examples, not universal proof premises. Every-slit Lemma F remains open where a local pair fails, and in the higher-curvature branch away from the selected slit. The selected 28/28 count and whole-type 5/7 count stay unchanged. The written proof awaits independent mathematical review.<p>A separate exact example shows two local overlaps even under H with every curvature below 180°. Its six far pairs remain safe; changing to R repairs the whole net. Thus the local-failure branch is nonempty, without refuting the far-only Lemma F.</p>"
+    "body": "<p>The <a href=\"#F_low_local\">new conditional theorem</a> proves all six far pairs at any source and slit when all six curvatures are at most 180\u00b0 and the three local pairs are safe. Neither curvature ranking is needed.</p><p>The equal-length proof excludes both cut entries. In the remaining opposite-petal branch, total curvature replaces the slit ranking in the angle contradiction. An auxiliary triangle shrink handles boundary contacts without assuming a strict gap.</p><p>Exact point and 18-coordinate-family checks work where both H and R fail, with independent all-28-pair certificates. These are examples, not universal proof premises. Every-slit Lemma F remains open where a local pair fails, and in the higher-curvature branch away from the selected slit. The selected 28/28 count and whole-type 5/7 count stay unchanged. The written proof awaits independent mathematical review.<p>A separate exact example shows two local overlaps even under H with every curvature below 180\u00b0. Its six far pairs remain safe; changing to R repairs the whole net. Thus the local-failure branch is nonempty, without refuting the far-only Lemma F.</p>"
   },
   {
-    "date": "11 September 2026 JST · original-edge low-curvature families",
-    "title": "Both remaining types are proved below 180° maximum curvature",
+    "date": "11 September 2026 JST \u00b7 original-edge low-curvature families",
+    "title": "Both remaining types are proved below 180\u00b0 maximum curvature",
     "results": [
       "nonsimp_low",
       "octa_source_choice",
@@ -104,10 +143,10 @@
       "progress",
       "research_plan"
     ],
-    "body": "<p>The <a href=\"#octa_source_choice\">octahedron source-choice extension</a> allows any source when all six curvatures are at most 180°. This supplies a <a href=\"#nonsimp_low\">new original-edge proof for both remaining nonsimplicial types</a> when every curvature is strictly below 180°.</p><p>The proof constructs nearby strict octahedra and ensures all added quadrilateral diagonals stay uncut. Four candidate trees suffice for the minus-edge family; six for the prism-with-diagonal family. Passing to a fixed-tree limit keeps the original quadrilaterals whole.</p><p>The full n=6 problem remains open, now only in those two types with maximum curvature at least 180°, including equality. The whole-type count stays 5/7, and the separate two-choice minus-edge conjecture retains its 7/28 class count. Exact point and full-coordinate-family replays check the implementation; they are not premises of the written geometric proof, which awaits independent review.</p>"
+    "body": "<p>The <a href=\"#octa_source_choice\">octahedron source-choice extension</a> allows any source when all six curvatures are at most 180\u00b0. This supplies a <a href=\"#nonsimp_low\">new original-edge proof for both remaining nonsimplicial types</a> when every curvature is strictly below 180\u00b0.</p><p>The proof constructs nearby strict octahedra and ensures all added quadrilateral diagonals stay uncut. Four candidate trees suffice for the minus-edge family; six for the prism-with-diagonal family. Passing to a fixed-tree limit keeps the original quadrilaterals whole.</p><p>The full n=6 problem remains open, now only in those two types with maximum curvature at least 180\u00b0, including equality. The whole-type count stays 5/7, and the separate two-choice minus-edge conjecture retains its 7/28 class count. Exact point and full-coordinate-family replays check the implementation; they are not premises of the written geometric proof, which awaits independent review.</p>"
   },
   {
-    "date": "11 September 2026 JST · selected octahedron proof completed",
+    "date": "11 September 2026 JST \u00b7 selected octahedron proof completed",
     "title": "Equal cut-edge lengths close the last selected-net branch",
     "results": [
       "F_chord",
@@ -118,11 +157,11 @@
       "octa_four_slits",
       "progress"
     ],
-    "body": "<p>The <a href=\"#F_chord\">new equal-length proof</a> completes the low-curvature branch, including obtuse pole angles. A hypothetical cut entry traps the neighboring patch, but its two equal cut edges force an angle quantity below 180°. The total curvature and convex-face bound force the same quantity above 180°.</p><p>Combined with the high-curvature proof, this gives a complete written proof for the H/R selected tree on every convex octahedron: <b>28/28 pairs, 5/5 patch regimes, and 5/7 six-vertex types</b>. Equality and tied selections are included. All 49 simultaneous-failure classes are excluded by this theorem, not by a new numerical enumeration.</p><p>The dependency audit includes the auxiliary closed curve and strict local separation at boundary contacts. Nine exact domain replays, including a box crossing the 180° threshold and the regular octahedron, agree with independent all-28 certificates. This remains a research proof awaiting independent review. The stronger every-slit Lemma F and both nonsimplicial remaining types stay open.</p>"
+    "body": "<p>The <a href=\"#F_chord\">new equal-length proof</a> completes the low-curvature branch, including obtuse pole angles. A hypothetical cut entry traps the neighboring patch, but its two equal cut edges force an angle quantity below 180\u00b0. The total curvature and convex-face bound force the same quantity above 180\u00b0.</p><p>Combined with the high-curvature proof, this gives a complete written proof for the H/R selected tree on every convex octahedron: <b>28/28 pairs, 5/5 patch regimes, and 5/7 six-vertex types</b>. Equality and tied selections are included. All 49 simultaneous-failure classes are excluded by this theorem, not by a new numerical enumeration.</p><p>The dependency audit includes the auxiliary closed curve and strict local separation at boundary contacts. Nine exact domain replays, including a box crossing the 180\u00b0 threshold and the regular octahedron, agree with independent all-28 certificates. This remains a research proof awaiting independent review. The stronger every-slit Lemma F and both nonsimplicial remaining types stay open.</p>"
   },
   {
-    "date": "11 September 2026 JST · Lemma F pole-angle proof",
-    "title": "The selected-net theorem is proved for sharpest curvature at least 180°",
+    "date": "11 September 2026 JST \u00b7 Lemma F pole-angle proof",
+    "title": "The selected-net theorem is proved for sharpest curvature at least 180\u00b0",
     "results": [
       "F_pole_angle",
       "lemmaF",
@@ -130,10 +169,10 @@
       "octa_three_same",
       "progress"
     ],
-    "body": "<p>The <a href=\"#F_pole_angle\">new geometric proof</a> excludes a finite-cut crossing by trapping a neighboring patch in a triangle where its apex cannot fit. The spherical-link bound makes the needed pole angles acute whenever the sharpest curvature is at least 180°, including equality. The selected net then has all 28 pairs safe.</p><p>Below 180°, nonobtuse original or flattened pole angles still suffice. A second circle argument handles obtuse original angles when the blue angle plus gap is at least 90°. The remaining target requires both angles obtuse and a gap-crossing angle below 90°. Its joint realizability is not established.</p><p>Four exact examples, including an 18-coordinate box and an obtuse example repaired by the circle argument, agree with independent all-28 certificates. The general selected rule, the every-slit Lemma F, the full octahedron, and n=6 remain open. These are geometric subfamilies, not a percentage of shape space.</p>"
+    "body": "<p>The <a href=\"#F_pole_angle\">new geometric proof</a> excludes a finite-cut crossing by trapping a neighboring patch in a triangle where its apex cannot fit. The spherical-link bound makes the needed pole angles acute whenever the sharpest curvature is at least 180\u00b0, including equality. The selected net then has all 28 pairs safe.</p><p>Below 180\u00b0, nonobtuse original or flattened pole angles still suffice. A second circle argument handles obtuse original angles when the blue angle plus gap is at least 90\u00b0. The remaining target requires both angles obtuse and a gap-crossing angle below 90\u00b0. Its joint realizability is not established.</p><p>Four exact examples, including an 18-coordinate box and an obtuse example repaired by the circle argument, agree with independent all-28 certificates. The general selected rule, the every-slit Lemma F, the full octahedron, and n=6 remain open. These are geometric subfamilies, not a percentage of shape space.</p>"
   },
   {
-    "date": "11 September 2026 JST · Case B cut-entry proof",
+    "date": "11 September 2026 JST \u00b7 Case B cut-entry proof",
     "title": "The fan route is excluded; the common-direction pattern leaves one segment",
     "results": [
       "F_cut_rays",
@@ -145,7 +184,7 @@
     "body": "<p>The <a href=\"#F_cut_rays\">new theorem</a> makes whole-net safety equivalent to two finite radial cut segments missing their remote petals. The through-fan bound from Lemma L excludes reaching those segments through the fan. Only entry across the slit gap remains.</p><p>This proves new subcases even when the slit-side endpoint passes X: convex remote patches, leans away from the gap, and leans with insufficient angular reach. When all inward patches lean the same way, one of the two segment checks is automatic. The remaining common-direction three-patch family therefore leaves one check.</p><p>The general angular bound and finite-edge separation remain open. The unconditional count stays 22/28; no completion percentage is inferred. Exact replays of four saved examples, including 11- and 18-coordinate boxes, agree with their independent all-28 certificates. Numerical searches are exploratory only.</p>"
   },
   {
-    "date": "11 September 2026 JST · Lemma F reduction",
+    "date": "11 September 2026 JST \u00b7 Lemma F reduction",
     "title": "Six far-pair checks reduced to two direct cut-side tests",
     "results": [
       "lemmaF",
@@ -157,7 +196,7 @@
     "body": "<p>The <a href=\"#F_cut_reduction\">new geometric reduction</a> uses the completed Lemma L: if the two distant petals avoid the blue triangles beside the slit, the opposite petals are safe, then the interior blue targets are safe. It reverses the direction of the old refuted reduction and retains the troublesome cut boundary explicitly.</p><p>In the small-angle branch, the slit-side far endpoint at or before X is now proved safe even when the other far endpoint passes X. The slit-side-past-X branch remains open. The same two tests also need study outside the small-angle branch.</p><p>The count stays <b>22/28 unconditional pairs</b>, but only <b>two direct checks suffice for the other six</b>. Exact two-pair certificates on four saved examples, including 11- and 18-coordinate boxes, agree with independent all-28 certificates. The full octahedron and n=6 remain open; numerical experiments are not proof premises.</p>"
   },
   {
-    "date": "11 September 2026 JST · Lemma L completed",
+    "date": "11 September 2026 JST \u00b7 Lemma L completed",
     "title": "All three local pairs proved: both overlap routes are closed",
     "results": [
       "lemmaL",
@@ -167,10 +206,10 @@
       "progress",
       "research_plan"
     ],
-    "body": "<p>The <a href=\"#lemmaL\">complete geometric proof of Lemma L</a> now settles all three local pairs. First the cut-edge separator closed the entire below-180° branch, including the old angular counterexample. Then a spherical-link bound and a cosine-law comparison excluded the through-fan route for every curvature sum under the pole comparison.</p><p>The one-extending-patch and two-extending-patch cases are both proved, with equality and straight corners included. No numerical search is a proof premise. The current count changes from 0/3 to <b>3/3 universal local pairs</b>, and from 19/28 to <b>22/28 safe pairs in the selected net</b>.</p><p>The remaining work is in Lemma F: opposite petals in their small-fan-angle branch, then the cut-side far-fan pairs. The full octahedron and n=6 remain open. The four-opening class record has not been recounted, and its 2/47 figures are separate. Earlier entries remain below as historical progress states.</p>"
+    "body": "<p>The <a href=\"#lemmaL\">complete geometric proof of Lemma L</a> now settles all three local pairs. First the cut-edge separator closed the entire below-180\u00b0 branch, including the old angular counterexample. Then a spherical-link bound and a cosine-law comparison excluded the through-fan route for every curvature sum under the pole comparison.</p><p>The one-extending-patch and two-extending-patch cases are both proved, with equality and straight corners included. No numerical search is a proof premise. The current count changes from 0/3 to <b>3/3 universal local pairs</b>, and from 19/28 to <b>22/28 safe pairs in the selected net</b>.</p><p>The remaining work is in Lemma F: opposite petals in their small-fan-angle branch, then the cut-side far-fan pairs. The full octahedron and n=6 remain open. The four-opening class record has not been recounted, and its 2/47 figures are separate. Earlier entries remain below as historical progress states.</p>"
   },
   {
-    "date": "10 September 2026 JST · Lemma L curvature split",
+    "date": "10 September 2026 JST \u00b7 Lemma L curvature split",
     "title": "A direct partial proof for Lemma L: separate the two possible overlap routes",
     "results": [
       "L_gate",
@@ -179,10 +218,10 @@
       "progress",
       "research_plan"
     ],
-    "body": "<p>The <a href=\"#L_gate\">new geometric proof</a> compares the slit vertex’s curvature plus the fan center’s curvature with 180°. At or below this value it excludes meeting through the intervening fan; at or above it excludes meeting across the slit. At equality all three local pairs are safe. Explicit corner conditions prove additional local families.</p><p>Below 180°, a remaining overlap must involve the unique petal inward at the slit. Its two targets are the other petal and the other fan face; the third local pair is already safe in that subcase. An exact 18-coordinate box around the earlier angular counterexample retains both selection rules and proves a 6/5 radial separation ratio. All 28 face pairs pass independent certificates throughout the box.</p><p>Both strict halves remain open in general. The count stays 0 of 3 universal local obligations, 4 of 5 entire patch regimes, and 2 excluded / 47 open fixed-source classes. The displayed three-patch solid is the earlier uncovered example with a different fifth cut, not a proof of its entire family. Earlier progress entries remain below.</p>"
+    "body": "<p>The <a href=\"#L_gate\">new geometric proof</a> compares the slit vertex\u2019s curvature plus the fan center\u2019s curvature with 180\u00b0. At or below this value it excludes meeting through the intervening fan; at or above it excludes meeting across the slit. At equality all three local pairs are safe. Explicit corner conditions prove additional local families.</p><p>Below 180\u00b0, a remaining overlap must involve the unique petal inward at the slit. Its two targets are the other petal and the other fan face; the third local pair is already safe in that subcase. An exact 18-coordinate box around the earlier angular counterexample retains both selection rules and proves a 6/5 radial separation ratio. All 28 face pairs pass independent certificates throughout the box.</p><p>Both strict halves remain open in general. The count stays 0 of 3 universal local obligations, 4 of 5 entire patch regimes, and 2 excluded / 47 open fixed-source classes. The displayed three-patch solid is the earlier uncovered example with a different fifth cut, not a proof of its entire family. Earlier progress entries remain below.</p>"
   },
   {
-    "date": "10 September 2026 JST · middle-patch switch",
+    "date": "10 September 2026 JST \u00b7 middle-patch switch",
     "title": "A proved four-tree rule inside the last three-patch pattern",
     "results": [
       "octa_three_chain",
@@ -195,7 +234,7 @@
     "body": "<p>The <a href=\"#octa_three_chain\">middle-patch theorem</a> proves common-direction three-patch subfamilies. A simple condition compares the middle inward-angle excess with the smaller pole curvature. A stronger version separately bounds the two middle extensions and uses curvature at the first inward vertex. Both give four prescribed trees and a written pole-switching proof.</p><p>Exact point examples and an 18-coordinate region pass the hypotheses and all 28 independent face-pair checks. They fail the older weighted-curvature criterion for all three opposite pairs. An exact uncovered example fails a middle-gap condition but still unfolds.</p><p>The <a href=\"#octa_three_same\">remaining hypotheses split into two precise branches</a>. The whole three-patch pattern is not settled, so the coarse count stays 4 of 5 entire regimes, with the fifth partly proved. The original fixed-source count stays 2 excluded and 47 open. No numerical survey is used as a proof.</p>"
   },
   {
-    "date": "10 September 2026 JST · shared lean budget",
+    "date": "10 September 2026 JST \u00b7 shared lean budget",
     "title": "Both two-patch arrangements proved; three mixed directions are covered too",
     "results": [
       "octa_budget",
@@ -207,10 +246,10 @@
       "progress",
       "research_plan"
     ],
-    "body": "<p>The <a href=\"#octa_budget\">new geometric proof</a> uses an exact identity: a patch’s extensions viewed from the two poles sum to its reflex excess. Summing over the bad patches gives a shared angle budget when all vertex curvatures are below 180°. A larger-curvature pole supplies the complementary case.</p><p>This settles adjacent and opposite two-patch configurations under H. It also settles three bad patches with mixed directions. The <a href=\"#octa_three_same\">three patches all leaning the same way</a> are the remaining pattern.</p><p>The coarse existence count changes from 2 of 5 regimes to 4 of 5, with the fifth partly settled. This is not a coverage percentage. The four-cut source may change, so the original fixed-source target remains 2 excluded and 47 open. The full octahedron remains open.</p><p>Exact coordinates and an 18-coordinate region independently verify the hypotheses and every face pair of the saved nets. The universal claims come from the written identities and case proofs, not numerical surveys.</p>"
+    "body": "<p>The <a href=\"#octa_budget\">new geometric proof</a> uses an exact identity: a patch\u2019s extensions viewed from the two poles sum to its reflex excess. Summing over the bad patches gives a shared angle budget when all vertex curvatures are below 180\u00b0. A larger-curvature pole supplies the complementary case.</p><p>This settles adjacent and opposite two-patch configurations under H. It also settles three bad patches with mixed directions. The <a href=\"#octa_three_same\">three patches all leaning the same way</a> are the remaining pattern.</p><p>The coarse existence count changes from 2 of 5 regimes to 4 of 5, with the fifth partly settled. This is not a coverage percentage. The four-cut source may change, so the original fixed-source target remains 2 excluded and 47 open. The full octahedron remains open.</p><p>Exact coordinates and an 18-coordinate region independently verify the hypotheses and every face pair of the saved nets. The universal claims come from the written identities and case proofs, not numerical surveys.</p>"
   },
   {
-    "date": "10 September 2026 JST · 9 September UTC",
+    "date": "10 September 2026 JST \u00b7 9 September UTC",
     "title": "One bad patch: a complete existence proof by exchanging the poles",
     "results": [
       "octa_one_patch",
@@ -220,10 +259,10 @@
       "progress",
       "research_plan"
     ],
-    "body": "<p>The <a href=\"#octa_one_patch\">two-pole proof</a> settles existence for the entire one-nonconvex-patch family when a pole is globally sharpest. Both prescribed trees use the same equator endpoint for the fifth cut. If both whole-patch cone tests failed, an equator vertex would have curvature above 180° while both poles had curvature below 180°, contradicting sharpness.</p><p>The <a href=\"#octa_half_fan\">half-turn fan proof</a> also handles all three possible direction patterns of two adjacent bad patches when either pole has curvature at least 180°. Exact examples and an 18-coordinate region have independent all-pairs checks.</p><p>The old fixed sharpest-source claim remains open, and the 49-class count stays 2 excluded and 47 open. The new existence theorem does not rely on the refuted far-fan reduction. These families can overlap older sufficient criteria; no coverage percentage is inferred.</p>"
+    "body": "<p>The <a href=\"#octa_one_patch\">two-pole proof</a> settles existence for the entire one-nonconvex-patch family when a pole is globally sharpest. Both prescribed trees use the same equator endpoint for the fifth cut. If both whole-patch cone tests failed, an equator vertex would have curvature above 180\u00b0 while both poles had curvature below 180\u00b0, contradicting sharpness.</p><p>The <a href=\"#octa_half_fan\">half-turn fan proof</a> also handles all three possible direction patterns of two adjacent bad patches when either pole has curvature at least 180\u00b0. Exact examples and an 18-coordinate region have independent all-pairs checks.</p><p>The old fixed sharpest-source claim remains open, and the 49-class count stays 2 excluded and 47 open. The new existence theorem does not rely on the refuted far-fan reduction. These families can overlap older sufficient criteria; no coverage percentage is inferred.</p>"
   },
   {
-    "date": "9 September 2026 · exact boundary audit",
+    "date": "9 September 2026 \u00b7 exact boundary audit",
     "title": "A supporting lemma fails; independent curvature and sector proofs survive",
     "results": [
       "F_hinge",
@@ -233,10 +272,10 @@
       "octa_patches",
       "progress"
     ],
-    "body": "<p>An exact convex octahedron has one far-fan overlap and all other 27 pairs safe. Its source is not sharpest, so the proposed sharpest-source rule is not refuted. The old unrestricted reduction is false.</p><p>The current rigorous target is 49 classes, 2 excluded and 47 open. The one-patch whole-net argument has a remaining step. The new curvature theorem still proves every centrally symmetric octahedron, and a stronger local sector test certifies further asymmetric families.</p><p>A further proved reduction puts every vertex of curvature at least 120° on one face whenever the opposite-pair theorem fails. The remaining one-, two-, and three-high-vertex branches are all open in full.</p><p>The corrected interior-fan lemma leaves only two slit-side far-fan pairs once local and opposite-petal safety are known. The all-convex-patch proof also gives a simple complete family: all octahedra with nonobtuse triangular faces.</p>"
+    "body": "<p>An exact convex octahedron has one far-fan overlap and all other 27 pairs safe. Its source is not sharpest, so the proposed sharpest-source rule is not refuted. The old unrestricted reduction is false.</p><p>The current rigorous target is 49 classes, 2 excluded and 47 open. The one-patch whole-net argument has a remaining step. The new curvature theorem still proves every centrally symmetric octahedron, and a stronger local sector test certifies further asymmetric families.</p><p>A further proved reduction puts every vertex of curvature at least 120\u00b0 on one face whenever the opposite-pair theorem fails. The remaining one-, two-, and three-high-vertex branches are all open in full.</p><p>The corrected interior-fan lemma leaves only two slit-side far-fan pairs once local and opposite-petal safety are known. The all-convex-patch proof also gives a simple complete family: all octahedra with nonobtuse triangular faces.</p>"
   },
   {
-    "date": "9 September 2026 · curvature and length theorems",
+    "date": "9 September 2026 \u00b7 curvature and length theorems",
     "title": "An opposite-pair curvature test; every centrally symmetric octahedron follows",
     "results": [
       "octa_curvature",
@@ -246,10 +285,10 @@
       "progress",
       "research_plan"
     ],
-    "body": "<p><b>Later correction:</b> the <a href=\"#F_hinge\">boundary audit</a> withdraws the 24-class reduction and one-patch whole-net claim recorded in this historical entry.</p><p>The <a href=\"#octa_curvature\">curvature-pair proof</a> guarantees a net if the sharper pole’s curvature plus twice its opposite’s is at least 360°. The required short edge follows by adding two elementary triangle-angle comparisons. This proves every centrally symmetric octahedron.</p><p>A separate <a href=\"#octa_short_edges\">short-edge condition</a> proves further geometric families, including some shapes with three nonconvex patches. Both arguments use the exterior-sector star-unfolding theorem. Their conditions are not universal. The fixed-source class count remains 2 excluded and 22 open, and no additional whole six-vertex type has been settled.</p>"
+    "body": "<p><b>Later correction:</b> the <a href=\"#F_hinge\">boundary audit</a> withdraws the 24-class reduction and one-patch whole-net claim recorded in this historical entry.</p><p>The <a href=\"#octa_curvature\">curvature-pair proof</a> guarantees a net if the sharper pole\u2019s curvature plus twice its opposite\u2019s is at least 360\u00b0. The required short edge follows by adding two elementary triangle-angle comparisons. This proves every centrally symmetric octahedron.</p><p>A separate <a href=\"#octa_short_edges\">short-edge condition</a> proves further geometric families, including some shapes with three nonconvex patches. Both arguments use the exterior-sector star-unfolding theorem. Their conditions are not universal. The fixed-source class count remains 2 excluded and 22 open, and no additional whole six-vertex type has been settled.</p>"
   },
   {
-    "date": "9 September 2026 · convex-patch proofs",
+    "date": "9 September 2026 \u00b7 convex-patch proofs",
     "title": "Two geometric regimes proved; a second failure class excluded",
     "results": [
       "octa_patches",
@@ -259,10 +298,10 @@
       "progress",
       "research_plan"
     ],
-    "body": "<p><b>Later correction:</b> the <a href=\"#F_hinge\">boundary audit</a> withdraws the 24-class reduction and one-patch whole-net claim recorded in this historical entry.</p><p>The <a href=\"#octa_patches\">new patch analysis</a> proves unfoldability for all shapes with zero or one nonconvex blue–orange patch, with the sharpest-apex hypothesis in the one-patch case. It also proves that four nonconvex patches are impossible, excluding original class 20.</p><p>Two of the 24 sufficient failure classes are now excluded; 22 remain. The two-adjacent, two-opposite, and three-patch regimes remain open. Five exact examples check that the regimes occur, independently of the universal written proofs. No additional whole six-vertex type is settled.</p>"
+    "body": "<p><b>Later correction:</b> the <a href=\"#F_hinge\">boundary audit</a> withdraws the 24-class reduction and one-patch whole-net claim recorded in this historical entry.</p><p>The <a href=\"#octa_patches\">new patch analysis</a> proves unfoldability for all shapes with zero or one nonconvex blue\u2013orange patch, with the sharpest-apex hypothesis in the one-patch case. It also proves that four nonconvex patches are impossible, excluding original class 20.</p><p>Two of the 24 sufficient failure classes are now excluded; 22 remain. The two-adjacent, two-opposite, and three-patch regimes remain open. Five exact examples check that the regimes occur, independently of the universal written proofs. No additional whole six-vertex type is settled.</p>"
   },
   {
-    "date": "9 September 2026 · overlap case analysis",
+    "date": "9 September 2026 \u00b7 overlap case analysis",
     "title": "Two switching implications proved; 23 sufficient failure classes remain",
     "results": [
       "octa_switch",
@@ -271,10 +310,10 @@
       "research_plan",
       "progress"
     ],
-    "body": "<p><b>Later correction:</b> the <a href=\"#F_hinge\">boundary audit</a> withdraws the 24-class reduction and one-patch whole-net claim recorded in this historical entry.</p><p>The <a href=\"#octa_switch\">new case analysis</a> follows the proposal to assume an overlap and study another opening. Moving the opening repairs all three old local pairs. For opposite petals, the two route-angle sums add to 360° plus the deficit at w, so under the sharpest-apex hypothesis the same petals cannot overlap along both routes.</p><p>Reusing the conditional hinge reduction gives 24 sufficient classes from the original 49. This removes redundant obligations. The angle identity then excludes original class 49, leaving 23 open. The complete rule and octahedron theorem remain unproved; the earlier notes are retained below.</p>"
+    "body": "<p><b>Later correction:</b> the <a href=\"#F_hinge\">boundary audit</a> withdraws the 24-class reduction and one-patch whole-net claim recorded in this historical entry.</p><p>The <a href=\"#octa_switch\">new case analysis</a> follows the proposal to assume an overlap and study another opening. Moving the opening repairs all three old local pairs. For opposite petals, the two route-angle sums add to 360\u00b0 plus the deficit at w, so under the sharpest-apex hypothesis the same petals cannot overlap along both routes.</p><p>Reusing the conditional hinge reduction gives 24 sufficient classes from the original 49. This removes redundant obligations. The angle identity then excludes original class 49, leaving 23 open. The complete rule and octahedron theorem remain unproved; the earlier notes are retained below.</p>"
   },
   {
-    "date": "9 September 2026 · octahedron priority",
+    "date": "9 September 2026 \u00b7 octahedron priority",
     "title": "Four opening positions; 49 simultaneous-failure classes to study",
     "results": [
       "octa_four_slits",
@@ -285,7 +324,7 @@
     "body": "<p>The <a href=\"#octa_four_slits\">new octahedron proposal</a> keeps the sharpest apex but allows four positions for the opening at the opposite vertex. An exhaustive combinatorial enumeration reduces simultaneous failure to 49 symmetry classes; none of these new geometric classes is yet excluded.</p><p>A comparison on 3,000 sampled shapes found a successful choice throughout. This is numerical evidence only. The earlier single-choice proof still has two gaps, and the seven excluded minus-edge classes remain recorded below.</p>"
   },
   {
-    "date": "9 September 2026 · face-neighborhood proof",
+    "date": "9 September 2026 \u00b7 face-neighborhood proof",
     "title": "Seven universal failure classes excluded; 21 remain",
     "results": [
       "minus_neighborhood",
@@ -295,10 +334,10 @@
       "research_plan",
       "certification"
     ],
-    "body": "<p>The <a href=\"#minus_neighborhood\">new proof step</a> applies Pinciu’s face-neighborhood theorem to one previously residual pair in each tree. It excludes seven of the original 28 simultaneous-failure classes throughout the full convex realization space.</p><p>The remaining 21 classes and two-tree conjecture are open. The coordinate-box certificate is unchanged. Targeted numerical searches and exact checks of eight near-flat candidates did not close further classes.</p>"
+    "body": "<p>The <a href=\"#minus_neighborhood\">new proof step</a> applies Pinciu\u2019s face-neighborhood theorem to one previously residual pair in each tree. It excludes seven of the original 28 simultaneous-failure classes throughout the full convex realization space.</p><p>The remaining 21 classes and two-tree conjecture are open. The coordinate-box certificate is unchanged. Targeted numerical searches and exact checks of eight near-flat candidates did not close further classes.</p>"
   },
   {
-    "date": "9 September 2026 · local pattern investigation",
+    "date": "9 September 2026 \u00b7 local pattern investigation",
     "title": "Two candidate trees; one now certifies the entire old box",
     "results": [
       "minus_pair",
@@ -307,10 +346,10 @@
       "research_plan",
       "certification"
     ],
-    "body": "<p>The <a href=\"#minus_pair\">new two-choice rule</a> switches between two off-quadrilateral stars. Each net consists of two vertex fans. It survived 23,000 discovery shapes and a separate 10,000-shape holdout; its universal validity remains conjectural.</p><p><b>Exact simplification:</b> one of the two trees now covers the whole previously certified ±0.05 box, with 16 closed cells and 336 face-pair checks. The earlier proof used 409 cells and nine trees. The domain has not changed.</p><p>Exact examples show that each of the two individual trees can fail, and that all four quadrilateral-only routes can fail together. There is now an exhaustive target of 28 symmetry classes of simultaneous failure; no whole geometric class has yet been excluded. Numerical tests are not proofs.</p>"
+    "body": "<p>The <a href=\"#minus_pair\">new two-choice rule</a> switches between two off-quadrilateral stars. Each net consists of two vertex fans. It survived 23,000 discovery shapes and a separate 10,000-shape holdout; its universal validity remains conjectural.</p><p><b>Exact simplification:</b> one of the two trees now covers the whole previously certified \u00b10.05 box, with 16 closed cells and 336 face-pair checks. The earlier proof used 409 cells and nine trees. The domain has not changed.</p><p>Exact examples show that each of the two individual trees can fail, and that all four quadrilateral-only routes can fail together. There is now an exhaustive target of 28 symmetry classes of simultaneous failure; no whole geometric class has yet been excluded. Numerical tests are not proofs.</p>"
   },
   {
-    "date": "9 September 2026 · progress dashboard added",
+    "date": "9 September 2026 \u00b7 progress dashboard added",
     "title": "Counts now distinguish proof gaps, local extent, and search coverage",
     "results": [
       "progress",
@@ -322,10 +361,10 @@
       "research_plan",
       "certification"
     ],
-    "body": "<p>The <a href=\"#progress\">new dashboard</a> records 4 of 7 types proved, 2 of 3 opposite-petal angle branches proved, and the two remaining octahedron proof obligations. The 19 directly settled face pairs are separated from the four conditional ones.</p><p>Minus-edge progress is shown as certified half-widths ±0.01 → ±0.05 in the same ten-coordinate box. The two prism boxes are identified separately: box A is fully certified; box B has only 437/4194304 of its parameter volume marked covered by the search, with full independent replay pending.</p><p>A retained before-and-after table makes explicit that the latest research hour closed no universal proof gap. Its exact counterexamples and neighborhood results remain useful, separately recorded progress.</p>"
+    "body": "<p>The <a href=\"#progress\">new dashboard</a> records 4 of 7 types proved, 2 of 3 opposite-petal angle branches proved, and the two remaining octahedron proof obligations. The 19 directly settled face pairs are separated from the four conditional ones.</p><p>Minus-edge progress is shown as certified half-widths \u00b10.01 \u2192 \u00b10.05 in the same ten-coordinate box. The two prism boxes are identified separately: box A is fully certified; box B has only 437/4194304 of its parameter volume marked covered by the search, with full independent replay pending.</p><p>A retained before-and-after table makes explicit that the latest research hour closed no universal proof gap. Its exact counterexamples and neighborhood results remain useful, separately recorded progress.</p>"
   },
   {
-    "date": "9 September 2026 · 02:57 UTC",
+    "date": "9 September 2026 \u00b7 02:57 UTC",
     "title": "Apex-entry failure extends to a certified neighborhood",
     "results": [
       "F_apexfailure",
@@ -333,20 +372,20 @@
       "certification",
       "research_plan"
     ],
-    "body": "<p><b>New exact region:</b> the <a href=\"#F_apexfailure\">apex-entry example</a> persists when all eleven free shape coordinates vary independently by ±0.001. Every polyhedron in this closed box satisfies the selection rules, has the apex inside Ω, and still has a certified nonoverlapping net.</p><p>This strengthens the counterexample to the individual-apex shortcut. It does not prove the remaining joint-petal claim or Lemma L. The snapshots below retain the earlier discoveries and the prism investigation.</p>"
+    "body": "<p><b>New exact region:</b> the <a href=\"#F_apexfailure\">apex-entry example</a> persists when all eleven free shape coordinates vary independently by \u00b10.001. Every polyhedron in this closed box satisfies the selection rules, has the apex inside \u03a9, and still has a certified nonoverlapping net.</p><p>This strengthens the counterexample to the individual-apex shortcut. It does not prove the remaining joint-petal claim or Lemma L. The snapshots below retain the earlier discoveries and the prism investigation.</p>"
   },
   {
-    "date": "9 September 2026 · 02:05–03:05 UTC session",
+    "date": "9 September 2026 \u00b7 02:05\u201303:05 UTC session",
     "title": "Prism route choices narrowed; general theorem still open",
     "results": [
       "t_prismd",
       "research_plan",
       "certification"
     ],
-    "body": "<p><b>Exact negative results:</b> both quadrilateral routes from one fixed degree-four apex can fail. Even at the sharper degree-four apex, the shorter route can fail while the longer one succeeds. The <a href=\"#t_prismd\">prism section</a> explains these checks.</p><p><b>Numerical lead only:</b> retaining both routes at the sharper degree-four apex survived 60,000 sampled shapes. This does not prove the selection rule. The full n=6 theorem, Lemma L, and the small-fan-angle opposite-petal branch remain open.</p><p>The earlier snapshot below records this session’s exact apex-entry counterexample, radial clearance, and axis-nonclosure certificate. The original cone proof and bounded-region certificates remain valid.</p>"
+    "body": "<p><b>Exact negative results:</b> both quadrilateral routes from one fixed degree-four apex can fail. Even at the sharper degree-four apex, the shorter route can fail while the longer one succeeds. The <a href=\"#t_prismd\">prism section</a> explains these checks.</p><p><b>Numerical lead only:</b> retaining both routes at the sharper degree-four apex survived 60,000 sampled shapes. This does not prove the selection rule. The full n=6 theorem, Lemma L, and the small-fan-angle opposite-petal branch remain open.</p><p>The earlier snapshot below records this session\u2019s exact apex-entry counterexample, radial clearance, and axis-nonclosure certificate. The original cone proof and bounded-region certificates remain valid.</p>"
   },
   {
-    "date": "9 September 2026 · continuing session",
+    "date": "9 September 2026 \u00b7 continuing session",
     "title": "An individual apex can enter; distances and closure matter",
     "results": [
       "F_apexfailure",
@@ -357,11 +396,11 @@
       "certification",
       "research_plan"
     ],
-    "body": "<p><b>Exactly refuted shortcut:</b> a <a href=\"#F_apexfailure\">convex six-vertex example</a> satisfies both selection rules but lets one outer apex enter Ω. All 28 pairs of its net remain nonoverlapping. The full theorem and the joint-petal problem remain open.</p><p><b>New exact checks:</b> the <a href=\"#lemmaL\">local angular counterexample</a> has a certified radial distance factor of at least 1.217 on every shared direction. A separate <a href=\"#intrinsic_metric\">five-interval certificate</a> proves that a proposed intrinsic metric cannot close into the prescribed convex octahedron, despite passing all local checks.</p><p>The earlier cone proof and 409-region minus-edge cover remain valid. Work continues on distance-sensitive local separation and the joint behavior of the opposite petals.</p>"
+    "body": "<p><b>Exactly refuted shortcut:</b> a <a href=\"#F_apexfailure\">convex six-vertex example</a> satisfies both selection rules but lets one outer apex enter \u03a9. All 28 pairs of its net remain nonoverlapping. The full theorem and the joint-petal problem remain open.</p><p><b>New exact checks:</b> the <a href=\"#lemmaL\">local angular counterexample</a> has a certified radial distance factor of at least 1.217 on every shared direction. A separate <a href=\"#intrinsic_metric\">five-interval certificate</a> proves that a proposed intrinsic metric cannot close into the prescribed convex octahedron, despite passing all local checks.</p><p>The earlier cone proof and 409-region minus-edge cover remain valid. Work continues on distance-sensitive local separation and the joint behavior of the opposite petals.</p>"
   },
   {
     "date": "9 September 2026",
-    "title": "Morning research results · retained snapshot",
+    "title": "Morning research results \u00b7 retained snapshot",
     "results": [
       "F_basecones",
       "t_octa_minus",
@@ -371,6 +410,6 @@
       "certification",
       "research_plan"
     ],
-    "body": "<p><b>The full n=6 case remains unproved here.</b> Direct review found an <a href=\"#thesis_audit\">exact counterexample to the DF entry of DiBiase’s displayed octahedron chart</a>. A <a href=\"#F_basecones\">base-cone proof</a> handles the large-angle and equality branches. Lemma L and the remaining fan-angle sum below π are open.</p><p>Independent replay verified a complete 443-region prism-with-one-diagonal certificate and a larger <a href=\"#t_octa_minus\">409-region octahedron-minus-edge certificate</a>. These cover their stated parameter boxes, not whole combinatorial types. A new <a href=\"#lemmaL\">exact example rules out angular separation around w</a> as a complete proof of Lemma L. Shared-length constraints also ruled out an earlier angle-only candidate. Global coverage remains open.</p>"
+    "body": "<p><b>The full n=6 case remains unproved here.</b> Direct review found an <a href=\"#thesis_audit\">exact counterexample to the DF entry of DiBiase\u2019s displayed octahedron chart</a>. A <a href=\"#F_basecones\">base-cone proof</a> handles the large-angle and equality branches. Lemma L and the remaining fan-angle sum below \u03c0 are open.</p><p>Independent replay verified a complete 443-region prism-with-one-diagonal certificate and a larger <a href=\"#t_octa_minus\">409-region octahedron-minus-edge certificate</a>. These cover their stated parameter boxes, not whole combinatorial types. A new <a href=\"#lemmaL\">exact example rules out angular separation around w</a> as a complete proof of Lemma L. Shared-length constraints also ruled out an earlier angle-only candidate. Global coverage remains open.</p>"
   }
 ]

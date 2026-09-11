@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import unittest
-from n6.case_a_one_sided import planar_tests,wide_planar_tests,length_planar_tests,verify,verify_wide,verify_lengths,classify
+from n6.case_a_one_sided import planar_tests,wide_planar_tests,triangle_planar_tests,length_planar_tests,verify,verify_wide,verify_lengths,classify
 from n6.intervals import I,set_precision
 from n6.polycert import Geometry,verify_overlap,verify as all_pairs
 from n6.flat_octahedron import curvature_bands
@@ -63,7 +63,32 @@ class OneSidedCaseATests(unittest.TestCase):
         self.assertEqual(bands[r['equator'][r['slit_index']]],'>')
         self.assertEqual((r['left_length_margin'],r['right_length_margin']),('>','<'))
         self.assertTrue(r['left_length_condition'])
+        self.assertTrue(r['left_triangle_condition'])
         self.assertEqual(all_pairs(cert)['result'],'verified')
+
+    def test_support_triangle_bound_includes_its_exact_angle_boundary(self):
+        # The middle point (.1,.1) is strictly inside the 3-4-5 ray triangle.
+        # theta=90, alpha=atan(4/3); lambda=pi-atan(1/3) is the new boundary.
+        args=((I(3),I(4)),(I(4),I(3)),(I(-3),I(1)),(I(1),I(1)),
+              I(2).sqrt()/10,I(82).sqrt()/10,I(1))
+        r=triangle_planar_tests(*args)
+        self.assertEqual(r['left_triangle_angle_comparison'],'=')
+        self.assertTrue(r['left_triangle_condition'])
+        self.assertFalse(r['left_wide_condition'] or r['right_wide_condition'])
+        beyond=length_planar_tests(*args[:2],(I(-4),I(1)),*args[3:])
+        self.assertFalse(beyond['left_triangle_condition'] or beyond['right_triangle_condition'])
+        self.assertTrue(beyond['left_length_condition'])
+
+    def test_full_length_separator_accepts_tangency_and_rejects_cone_entry(self):
+        # L=3,R=4,s=1,s'=17/4: the shortfall/overshoot ratio is exactly 8.
+        # These three middle lengths give a strict interior middle triangle.
+        args=((I(3),I(4)),(I(4),I(3)),(I(-8),I(1)),(I(1),I(1)),I(1),I('17/4'),I(5))
+        r=length_planar_tests(*args)
+        self.assertEqual(r['left_length_margin'],'=')
+        self.assertTrue(r['left_length_condition'])
+        self.assertFalse(r['left_triangle_condition'] or r['right_triangle_condition'])
+        beyond=length_planar_tests(*args[:2],(I(-9),I(1)),*args[3:])
+        self.assertFalse(beyond['left_length_condition'] or beyond['right_length_condition'])
 
     def test_length_separator_keeps_phase_scale_and_reflection(self):
         args=((I(1),I(1)),(I(1),I(1)),(I(-2),I(1)),(I(1),I(1)),I('3/10'),I('4/5'),I(1))

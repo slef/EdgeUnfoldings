@@ -177,3 +177,18 @@ false, and repairs a quasigeodesic-loop proof that used it. We use the
 valid star nonoverlap theorem, not that refuted stronger claim. Lemma 6's
 bounded or partially unbounded W-region is a different statement; it
 does not license replacing that region by its whole angular cone.
+
+
+## A lower-curvature route endpoint also works through the curvature gate
+
+The preceding sharp-endpoint reduction holds under the more general pair
+of assumptions kappa_w<=pi and kappa_c+kappa_w>=pi. The gate supplies
+2*kappa_c+kappa_w>pi, both finite-cut budgets
+kappa_a+kappa_c+2*kappa_w>pi and its reflection, and the small-fan budget
+kappa_c+kappa_w>=pi-kappa_v/2. These are exactly the non-Case-A rows of
+ORIGINAL_EDGE_RULE.md. Thus all local pairs, both finite cut edges, and
+the remaining Case B branch are safe at this same slit. The star comparison
+still removes the other opposite pair, since it has no curvature premise.
+Consequently the same one-pair Case A test completes a cofacial candidate
+under this curvature gate. Equality is included, and all auxiliary diagonals
+remain uncut. This extension is used by MINUS_EDGE_PROOF.md.

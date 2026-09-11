@@ -1,3 +1,9 @@
+**Latest result, 12 September:** [MINUS_EDGE_PROOF.md](MINUS_EDGE_PROOF.md) now
+closes P-alone and Q-alone by a direct-threshold-or-complementary-gates
+argument. The complete minus-edge counts are **6/6, 15/15, 20/20**.
+The intermediate counts below are retained as the preceding checkpoint.
+Prism counts remain **0/6, 11/15, 20/20**; its whole type is still open.
+
 # The remaining types: an explicit map of sharp-vertex positions
 
 12 September 2026. Written geometric consequences, pending independent
@@ -14,7 +20,7 @@ position patterns. The following table is an exhaustive positional ledger:
 
 | Type | Exactly one sharp vertex | Exactly two | Exactly three |
 | --- | --- | --- | --- |
-| Minus-edge | 2/6 positions proved | 13/15 pairs proved | 20/20 triples proved |
+| Minus-edge | 4/6 positions proved | 15/15 pairs proved | 20/20 triples proved |
 | Prism with one diagonal | 0/6 entire positions proved | 11/15 pairs proved | 20/20 triples proved |
 
 A zero here does not mean there are no proved examples or families. It means
@@ -26,12 +32,12 @@ every possible curvature assignment.
 
 The full types remain open. The remaining complete positional obligations are:
 
-- Minus, one sharp vertex: C, D, P, or Q.
-- Minus, two sharp vertices: {C,P} or {D,Q}.
+- Minus, one sharp vertex: P or Q.
+- Minus, two sharp vertices: none remain.
 - Prism, one sharp vertex: any one of 0,1,2,3,4,5.
 - Prism, two sharp vertices: {0,1}, {0,2}, {3,4}, or {4,5}.
 
-Thus there are six remaining minus-edge position patterns and ten prism
+Thus there are two remaining minus-edge position patterns and ten prism
 patterns in this ledger. Symmetry relates several; the table keeps the
 original labels so that every geometric case has an unambiguous place.
 These are new targets, separate from the older T_P/T_Q failure-class count.
@@ -73,12 +79,16 @@ Among the other four vertices:
 
 This proves the entire branch with both degree-three quadrilateral corners
 sharp, including both equality boundaries. It does not require A or B to
-be a globally sharpest vertex. The only two-sharp pairs not covered are
-{C,P} and {D,Q}.
+be a globally sharpest vertex. The later complementary-source proof below closes {C,P} and {D,Q} as well.
 
-Every set of three sharp vertices contains a covered pair: the two uncovered
-pairs are disjoint, so they cannot contain all three pairwise combinations
-of any triple. Thus all twenty triple positions are covered.
+MINUS_COMPLEMENTARY_SOURCES.md now proves the stronger statement that any
+sharp C or D suffices. If A/B are low, use source A or B and route through
+that same sharp corner. If both residual pairs are Case A, four exact
+angle-sum identities show that at least one source has both outer angles
+below its no-wrap threshold. If either is Case B, use it directly. Thus
+singletons C,D and pairs {C,P},{D,Q} are all covered, including equality.
+All fifteen sharp pairs and therefore all twenty triples are now covered.
+Only the P-alone and Q-alone positional families remain open.
 
 ## Prism: the covered pairs
 
@@ -124,6 +134,7 @@ has curvature strictly below pi, whereas a vertex inside it is not silently
 assumed below pi. The output is `results/sharp-vertex-patterns.json`.
 
 This finite bookkeeping does not replace the geometric theorems. Those are
-OCTA_FLAT_HINGES.md, COFACIAL_STAR_REDUCTION.md and PRISM_TWO_SHARP_ENDS.md.
+OCTA_FLAT_HINGES.md, COFACIAL_STAR_REDUCTION.md,
+MINUS_COMPLEMENTARY_SOURCES.md and PRISM_TWO_SHARP_ENDS.md.
 Exact original-face examples and parameter families separately check their
 hypotheses and the resulting full nets. No random count enters the proofs.

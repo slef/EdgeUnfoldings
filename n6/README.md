@@ -1,14 +1,26 @@
 # Six-vertex integration and certification
 
 **Latest original-face progress, 12 September:**
-[new curvature budgets](ORIGINAL_EDGE_RULE.md) prove more high-curvature
-families in both remaining types without requiring a sharp source. With a
-sharp fifth-cut endpoint and a fan of curvature at most pi, only Case A
-opposite-petal obligations can remain. Exact counterexamples in both types
-refute choosing the sharpest original degree-four source and then the
-sharpest allowed endpoint; each same solid has a certified repair. The
-whole-type count stays 5/7, and the new written proof needs independent review.
-Replay with `python3 -m n6.original_edge_examples`.
+[the whole octahedron-minus-edge type now has a written proof](MINUS_EDGE_PROOF.md).
+The direct sharp-source rule either works or its failures force the
+[complementary-source curvature gates](MINUS_COMPLEMENTARY_SOURCES.md).
+All cases and equalities are included, with the original quadrilateral whole.
+The written-proof count is **6/7**, pending independent mathematical review.
+The prism remains open, with a new [complementary-route family](PRISM_COMPLEMENTARY_ROUTES.md)
+when both fan curvatures are at most pi and their sum is at least pi.
+Its remaining regimes are one high and one low fan, or two low fans whose
+sum is below pi, outside the already-proved all-low family.
+
+Replay the new exact illustrations with `python3 -m n6.minus_complementary_examples`
+and `python3 -m n6.prism_complementary_examples`. They include full ten- and
+nine-parameter families and separate all-original-face-pair certificates.
+These are checks of examples and implementation, not proof premises.
+The narrower old two-tree minus-edge conjecture remains separate at 7/28.
+
+The earlier [curvature budgets](ORIGINAL_EDGE_RULE.md), [wider Case A cones](CASE_A_WIDE_CONES.md),
+[actual-length separators](CASE_A_LENGTH_SEPARATORS.md), and
+[support-triangle sharpening](CASE_A_SUPPORT_TRIANGLE.md) remain useful.
+The following earlier entries keep their historical scopes and counts.
 
 **Every-slit progress:** [safe local pairs imply the whole net is safe](LOW_CURVATURE_FAR_REDUCTION.md)
 when all six curvatures are at most pi. Neither H nor R is needed. The

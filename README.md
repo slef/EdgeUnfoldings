@@ -5,12 +5,14 @@ non-overlapping edge unfolding, in the style of J. DiBiase's 1990 thesis.
 
 * **Status page** (case tree, figures, interactive octahedron): deployed from `durer_small_n/notes/status.html`
   to GitHub Pages on every push to the default branch, `master`.
-* **Current research:** a [complete written selected-net proof for every convex
-  octahedron](n6/LEMMA_F_CHORD.md), with a dependency audit, is now available.
-  It awaits independent mathematical review. Both remaining nonsimplicial types now also
-  [unfold when every curvature is strictly below 180°](n6/NONSIMPLICIAL_LOW_CURVATURE.md).
-  The remaining n=6 cases have maximum curvature at least 180°. The every-slit
-  Lemma F stays open; the full n=6 theorem is not claimed.
+* **Current research:** complete written proofs are available for the
+  [octahedron](n6/LEMMA_F_CHORD.md) and now the
+  [octahedron minus an edge](n6/MINUS_EDGE_PROOF.md), with dependency audits.
+  They await independent mathematical review. This brings the written-proof
+  count to **6 of 7 six-vertex types**. The prism with one diagonal remains
+  open; its [new complementary-route theorem](n6/PRISM_COMPLEMENTARY_ROUTES.md)
+  adds a proved curvature branch. The stronger every-slit Lemma F and the
+  full n=6 theorem remain open.
 * `HANDOFF.md` — current audit followed by the historical proof account.
 * `n6/README.md` — archive integration, exact partial certificates, and reproduction.
 * `n6/REVIEW.md` — proof gaps and corrected numerical checks; the full n=6 case remains open in this investigation.

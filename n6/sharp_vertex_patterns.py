@@ -33,6 +33,14 @@ def covered(kind,sharp):
         return dict(reason='high_source_with_all_four_fifth_edges_original',source=v,
                     fan=1-v,choose='maximum-curvature equator vertex',
                     proof='OCTA_FLAT_HINGES.md')
+    if kind=='minus' and sharp & {2,3}:
+        return dict(reason='complementary_cofacial_sources_at_a_sharp_corner',
+                    sharp_corner=min(sharp & {2,3}),sources=[0,1],
+                    choose='Case B, or a source whose two outer angles obey the Case A no-wrap bound',
+                    proof='MINUS_COMPLEMENTARY_SOURCES.md')
+    if kind=='minus':
+        return dict(reason='sharp_off_quad_threshold_or_forced_complementary_gates',
+                    proof='MINUS_EDGE_PROOF.md')
     if kind=='prism' and {2,5}<=sharp:
         return dict(reason='two_sharp_ends',proof='PRISM_TWO_SHARP_ENDS.md')
     for t in trees:

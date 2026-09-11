@@ -70,12 +70,16 @@ def case_frame(spec):
     fi=next(i for i,f in enumerate(g.faces) if set(f)=={v,u,up})
     bands=curvature_bands(g)
     require(bands[w] in ('<','='),'Fan curvature <=pi is not certified')
-    require(bands[c] in ('>','='),'Route endpoint curvature >=pi is not certified')
+    from n6.prism_paths import polygon_angle_product
+    from n6.original_edge_rule import sum_pi
+    totals={x:polygon_angle_product(g,x) for x in (c,w)}
+    gate=sum_pi(totals,bands,[c,w])
+    require(gate in ('>','='),'Route endpoint plus fan curvature >=pi is not certified')
     return g,v,w,c,ring,middle,fi,bands
 
 
 def verify_case_B(spec):
-    """A sharp route endpoint, low fan, and the sole remaining Case B suffice."""
+    """A slit-plus-fan curvature gate, low fan, and the sole Case B suffice."""
     from n6.prism_paths import polygon_angle_product
     from n6.curvature import face_angle
     from n6.regimes import two_curvatures_angle
@@ -86,8 +90,8 @@ def verify_case_B(spec):
         case=two_curvatures_angle(polygon_angle_product(g,u),polygon_angle_product(g,up),
                                  face_angle(g.p,g.faces[fi],g.h[fi],v))
     require(case in ('>','='),'The sole remaining opposite-petal triple is not certified in Case B')
-    return dict(result='verified_cofacial_sharp_route_case_B',source=v,fan=w,slit=c,
-        curvature_comparisons_with_pi=bands,remaining_middle_base=[u,up],middle_face=fi,
+    return dict(result='verified_cofacial_curvature_gate_case_B',source=v,fan=w,slit=c,
+        curvature_comparisons_with_pi=bands,route_hypothesis='fan<=pi and slit+fan>=pi',remaining_middle_base=[u,up],middle_face=fi,
         remaining_case_B_comparison=case,original_faces_remain_whole=True,
         whole_net_safe_by_written_theorem=True,proof='COFACIAL_STAR_REDUCTION.md',
         dependencies=['ORIGINAL_EDGE_RULE.md','OCTA_FLAT_HINGES.md',REFERENCE],
@@ -122,8 +126,8 @@ def verify_case_A(spec):
     tests['middle_nonobtuse_condition']=face_angle(g.p,g.faces[fi],g.h[fi],v)[0].lo>=0
     require(tests['left_length_condition'] or tests['right_length_condition'],
             'Neither actual-length Case A separator is certified')
-    return dict(result='verified_cofacial_sharp_route_length_case_A',source=v,fan=w,slit=c,
-        curvature_comparisons_with_pi=bands,remaining_middle_base=[u,up],middle_face=fi,
+    return dict(result='verified_cofacial_curvature_gate_length_case_A',source=v,fan=w,slit=c,
+        curvature_comparisons_with_pi=bands,route_hypothesis='fan<=pi and slit+fan>=pi',remaining_middle_base=[u,up],middle_face=fi,
         remaining_original_pair=[left,right],case_A_comparison=case,**tests,
         original_faces_remain_whole=True,whole_net_safe_by_written_theorem=True,
         proof='CASE_A_LENGTH_SEPARATORS.md',dependencies=['COFACIAL_STAR_REDUCTION.md','ORIGINAL_EDGE_RULE.md',REFERENCE],

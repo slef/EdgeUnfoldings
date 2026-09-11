@@ -1,3 +1,15 @@
+## Current checkpoint: 12 September 2026
+
+The complete written original-edge minus-edge proof is in
+[n6/MINUS_EDGE_PROOF.md](n6/MINUS_EDGE_PROOF.md). Direct-rule failures force
+complementary-source gates, closing the last P-only and Q-only families.
+The count is now 6/7 written whole-type proofs, pending independent review.
+Prism remains open; [n6/PRISM_COMPLEMENTARY_ROUTES.md](n6/PRISM_COMPLEMENTARY_ROUTES.md)
+adds the both-low-fans/sum-at-least-pi family. See n6/CONTINUATION.md and the
+web overview for the current remaining regimes. The narrower old two-tree
+minus-edge conjecture still has its own 7/28 count. No numerical experiment
+is a universal-proof premise. Earlier account follows with historical scope.
+
 # Dürer's problem for n ≤ 7 vertices — proof state and work plan
 
 **Latest extension, 11 September:** [source freedom](n6/OCTA_SOURCE_CHOICE.md)

@@ -21,7 +21,7 @@
         "link": "F_below"
       },
       {
-        "label": "Petal–far-fan pairs",
+        "label": "Petal\u2013far-fan pairs",
         "count": 4,
         "status": "proved",
         "link": "F_hinge"
@@ -30,19 +30,19 @@
     "angle_branches": [
       {
         "label": "Case A",
-        "condition": "κ < ν",
+        "condition": "\u03ba < \u03bd",
         "status": "proved",
         "link": "F_above"
       },
       {
-        "label": "Case B, fan sum ≥ π",
-        "condition": "κ ≥ ν and ΣW ≥ π; equality included",
+        "label": "Case B, fan sum \u2265 \u03c0",
+        "condition": "\u03ba \u2265 \u03bd and \u03a3W \u2265 \u03c0; equality included",
         "status": "proved",
         "link": "F_basecones"
       },
       {
-        "label": "Case B, fan sum < π",
-        "condition": "ΣW < π",
+        "label": "Case B, fan sum < \u03c0",
+        "condition": "\u03a3W < \u03c0",
         "status": "proved",
         "link": "F_below"
       }
@@ -82,19 +82,19 @@
     ],
     "local_curvature_branches": [
       {
-        "label": "Lemma L: curvature sum below 180°",
+        "label": "Lemma L: curvature sum below 180\u00b0",
         "condition": "All three pairs safe: through-fan bound plus the cut-edge separator",
         "status": "proved",
         "link": "lemmaL"
       },
       {
-        "label": "Lemma L: curvature sum exactly 180°",
+        "label": "Lemma L: curvature sum exactly 180\u00b0",
         "condition": "All three local pairs proved safe, including equality",
         "status": "proved",
         "link": "lemmaL"
       },
       {
-        "label": "Lemma L: curvature sum above 180°",
+        "label": "Lemma L: curvature sum above 180\u00b0",
         "condition": "All three pairs safe: slit-gap bound plus the new spherical-link and pole-triangle argument",
         "status": "proved",
         "link": "lemmaL"
@@ -116,13 +116,13 @@
     ],
     "source_curvature_branches": [
       {
-        "label": "Sharpest curvature at least 180°",
+        "label": "Sharpest curvature at least 180\u00b0",
         "condition": "All 28 pairs of the selected H/R net proved safe, including equality",
         "status": "proved",
         "link": "F_pole_angle"
       },
       {
-        "label": "Sharpest curvature from 120° to below 180°",
+        "label": "Sharpest curvature from 120\u00b0 to below 180\u00b0",
         "condition": "All 28 selected pairs safe by the equal-length contradiction",
         "status": "proved",
         "link": "F_chord"
@@ -156,7 +156,7 @@
   ],
   "snapshots": [
     {
-      "label": "Before the latest research hour · 02:05 UTC",
+      "label": "Before the latest research hour \u00b7 02:05 UTC",
       "date": "2026-09-09T02:05:00Z",
       "proved_types": 4,
       "octahedron_angle_branches": 2,
@@ -168,7 +168,7 @@
       "minus_cells": 409
     },
     {
-      "label": "After that hour · 03:05 UTC",
+      "label": "After that hour \u00b7 03:05 UTC",
       "date": "2026-09-09T03:05:00Z",
       "proved_types": 4,
       "octahedron_angle_branches": 2,
@@ -231,17 +231,31 @@
       "minus_cells": 16,
       "minus_classes_excluded": 7,
       "nonsimplicial_low_families": 2
+    },
+    {
+      "label": "Complete original-edge minus-edge proof",
+      "date": "2026-09-11T20:08:00Z",
+      "proved_types": 6,
+      "octahedron_angle_branches": 3,
+      "octahedron_local_pairs": 3,
+      "minus_half_width": "1/20",
+      "prism_box_A_fraction": "1",
+      "source": "../../n6/MINUS_EDGE_PROOF.md",
+      "minus_trees": 1,
+      "minus_cells": 16,
+      "minus_classes_excluded": 7,
+      "nonsimplicial_low_families": 2
     }
   ],
   "nonsimplicial_curvature_branches": [
     {
-      "label": "All curvatures at most 180°, including equality",
+      "label": "All curvatures at most 180\u00b0, including equality",
       "status": "proved",
       "condition": "Original-edge existence by the flat-hinge theorem",
       "link": "nonsimp_flat"
     },
     {
-      "label": "Maximum curvature strictly above 180°",
+      "label": "Maximum curvature strictly above 180\u00b0",
       "status": "open",
       "condition": "Earlier source/slit criteria plus new curvature budgets prove original-edge families; sharp-slit residuals reduce to Case A opposite petals; a universal fallback is still missing",
       "link": "original_rule"
@@ -249,22 +263,34 @@
   ],
   "prism_curvature_branches": [
     {
-      "label": "All six curvatures at most 180°",
+      "label": "All curvatures at most 180\u00b0",
+      "condition": "Equality included",
       "status": "proved",
-      "condition": "Original-edge existence, including every equality boundary",
       "link": "nonsimp_flat"
     },
     {
-      "label": "Some curvature above 180°; both end curvatures at least 180°",
+      "label": "Above the all-low family; both fan vertices sharp",
+      "condition": "\u03ba2\u2265180\u00b0 and \u03ba5\u2265180\u00b0",
       "status": "proved",
-      "condition": "Vertices 2 and 5 are sharp: the fixed two-pair tree has all 15 pairs safe",
       "link": "prism_two_sharp"
     },
     {
-      "label": "Some curvature above 180°; at least one end curvature below 180°",
+      "label": "Above the all-low family; both fans low, large combined deficit",
+      "condition": "\u03ba2,\u03ba5\u2264180\u00b0, at least one strictly below; \u03ba2+\u03ba5\u2265180\u00b0",
+      "status": "proved",
+      "link": "prism_complementary"
+    },
+    {
+      "label": "Above the all-low family; one high fan and one low fan",
+      "condition": "One of \u03ba2,\u03ba5>180\u00b0 and the other <180\u00b0",
       "status": "open",
-      "condition": "Additional original-star families are proved; a universal Case A argument or switching rule remains missing",
-      "link": "original_rule"
+      "link": "prism_complementary"
+    },
+    {
+      "label": "Above the all-low family; two low fans, small combined deficit",
+      "condition": "\u03ba2,\u03ba5<180\u00b0 and \u03ba2+\u03ba5<180\u00b0",
+      "status": "open",
+      "link": "prism_complementary"
     }
   ]
 }

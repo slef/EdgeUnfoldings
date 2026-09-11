@@ -1,3 +1,29 @@
+## Latest prism branch (12 September, after the complete minus-edge proof)
+
+PRISM_COMPLEMENTARY_ROUTES.md proves both fans <=pi with sum >=pi.
+Both routes at a source cannot be Case A when both curvature gates hold;
+if neither source gets both gates, their failures force an original source
+above pi, with an allowed weighted cut. All equalities included.
+Exact point, nine-parameter family, and reflected example are saved under
+results/prism-complementary-*. Outside the all-low and two-high-end families,
+only one-high/one-low fan or two-low-fan sum<pi remains. These regimes have
+proved subfamilies; the whole prism type remains open. Positional counts
+remain 0/6,11/15,20/20; geometric branch count is now 3/5.
+
+## Latest: complete original-edge minus-edge proof (12 September 2026)
+
+MINUS_EDGE_PROOF.md closes the entire type. When sharp P has no allowed
+fifth endpoint passing 2*kappa_c+kappa_D>=pi, its three strict failures
+force kappa_C+kappa_A>pi and kappa_C+kappa_B>pi, with A,B<pi/2.
+The generalized complementary-source theorem then supplies one safe net.
+Reflect for Q. Every branch and equality is included. The total is now
+6/7 written whole-type proofs, pending independent review; prism remains open.
+The old T_P/T_Q conjecture retains its separate 7/28 class count.
+Exact fallback point, full 10-parameter family, and reflection are saved
+under results/minus-complementary-fallback*. The universal argument is
+geometric, not an inference from these examples. Earlier entries below
+retain their original progress counts.
+
 # Active four-hour continuation: two sharp prism ends
 
 User request: keep trying the last proofs for four hours, starting
@@ -54,6 +80,44 @@ claim in a star-unfolding proof was false (Kiazyk--Lubiw 2015 section3.2,
 Figure8 explicitly corrects it). Our star comparison uses only their
 Theorem4 nonoverlap, not that false wedge assertion. The dependency
 boundary is documented in COFACIAL_STAR_REDUCTION.md.
+
+## Fifth result: the complementary-source angle proof closes C/D sharp
+
+MINUS_COMPLEMENTARY_SOURCES.md is the main new breakthrough at 19:46 UTC.
+If minus-edge C is sharp and A/B low, compare star(A)+BC and star(B)+AC.
+The cofacial/sharp-slit reduction leaves Qquad/APQ versus Qquad/BPQ;
+middles ADQ/BDQ share K=kappa_D+kappa_Q. If either K>=nu_A/B, Case B
+finishes it. Otherwise both are Case A. Define theta_X=pi-nu_X+K,
+q_X the quadrilateral angles, mu_A=PAQ, mu_B=PBQ,
+tau=APQ+BPQ at P. Exact angle sums give
+K+q_D=nu_A+nu_B+mu_A+mu_B+tau. For all four combinations of an outer
+angle at A and one at B, their sum is strictly below theta_A+theta_B.
+The four positive gaps are recorded in the proof. Thus one source has
+BOTH outer angles strictly below its OLD theta no-wrap bound. This
+uses CASE_A_CONES.md directly, not the newer wider or length refinements.
+If A/B sharp, the older high-source rule works; C=pi is included. Reflect
+C/D and P/Q for D sharp. One tree has all its own obligations proved safe.
+
+Consequently minus singleton positions A,B,C,D and ALL15 two-sharp pairs
+are proved. All20 triples remain proved. Only P-alone and Q-alone remain
+open (two positions related by symmetry). Prism remains singleton0/6,
+pairs11/15, triples20/20. Whole-type count remains5/7.
+
+minus_complementary_sources.py selects a uniformly verified fixed tree
+on an exact domain. minus_complementary_examples.py saves a new C/P-sharp
+point and full10parameter local chart outside all earlier curvature
+criteria, the D/Q-reflected point, and an exact C=pi example. All21 pairs
+are independently checked for each. The initial runtime call without
+setting interval precision was unresolved; at prescribed240bits it passes.
+Do not mistake that initial interval failure for a geometric counterexample.
+
+CASE_A_SUPPORT_TRIANGLE.md is a separate new planar refinement: for a
+left-short/right-long pair, convexity of
+(ell-R)|uX|+L|u'X| on the containing triangle gives
+(L-s)/(s'-R)>L/(ell-R). This yields the still wider angular allowance
+2*lambda<=pi+theta+alpha, or its reflection. Exact angle equality and
+actual-length tangency controls pass. These refinements are not needed
+for the complementary-source proof.
 
 ## First new geometric theorem
 

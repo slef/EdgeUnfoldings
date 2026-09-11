@@ -1,0 +1,169 @@
+{
+  "choice": {
+    "result": "verified_minus_edge_theorem_fixed_choice",
+    "branch": "failed_sharp_source_forces_complementary_gates",
+    "failed_direct_thresholds": {
+      "4": {
+        "0": "<",
+        "1": "<",
+        "5": "<"
+      }
+    },
+    "cut_edges": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "fixed_tree_proof": {
+      "result": "verified_minus_sharp_corner_choice",
+      "route_corner": 2,
+      "corner_gate_comparisons": {
+        "0": ">",
+        "1": ">"
+      },
+      "cut_edges": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "source": 0,
+      "branch": "complementary_two_angle_Case_A",
+      "fixed_tree_proof": {
+        "result": "verified_cofacial_curvature_gate_length_case_A",
+        "source": 0,
+        "fan": 1,
+        "slit": 2,
+        "curvature_comparisons_with_pi": {
+          "0": "<",
+          "1": "<",
+          "2": "<",
+          "3": "<",
+          "4": ">",
+          "5": "<"
+        },
+        "route_hypothesis": "fan<=pi and slit+fan>=pi",
+        "remaining_middle_base": [
+          3,
+          5
+        ],
+        "middle_face": 3,
+        "remaining_original_pair": [
+          0,
+          2
+        ],
+        "case_A_comparison": "<",
+        "left_short_comparison": ">",
+        "right_short_comparison": ">",
+        "left_no_wrap_comparison": ">",
+        "right_no_wrap_comparison": ">",
+        "left_condition": true,
+        "right_condition": true,
+        "earlier_two_angle_condition": true,
+        "left_wide_angle_comparison": ">",
+        "right_wide_angle_comparison": ">",
+        "both_short_condition": true,
+        "left_wide_condition": true,
+        "right_wide_condition": true,
+        "left_triangle_angle_comparison": ">",
+        "right_triangle_angle_comparison": ">",
+        "left_triangle_condition": true,
+        "right_triangle_condition": true,
+        "left_length_margin": ">",
+        "right_length_margin": ">",
+        "left_length_condition": true,
+        "right_length_condition": true,
+        "middle_nonobtuse_condition": false,
+        "original_faces_remain_whole": true,
+        "whole_net_safe_by_written_theorem": true,
+        "proof": "CASE_A_LENGTH_SEPARATORS.md",
+        "dependencies": [
+          "COFACIAL_STAR_REDUCTION.md",
+          "ORIGINAL_EDGE_RULE.md",
+          {
+            "authors": "Stephen Kiazyk and Anna Lubiw",
+            "year": 2015,
+            "theorem": 4,
+            "title": "Star Unfolding from a Geodesic Curve",
+            "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+            "role": "Nonoverlap of the shortest-path star, including a vertex source"
+          }
+        ],
+        "full_type_proved": false,
+        "scope": "The specified original net satisfies the written actual-length Case A theorem. No universal low-fan Case A claim is made."
+      },
+      "earlier_choices": [],
+      "curvature_comparisons_with_pi": {
+        "0": "<",
+        "1": "<",
+        "2": "<",
+        "3": "<",
+        "4": ">",
+        "5": "<"
+      },
+      "whole_original_net_safe": true,
+      "proof": "MINUS_COMPLEMENTARY_SOURCES.md",
+      "full_type_proof": "MINUS_EDGE_PROOF.md",
+      "scope": "One fixed original tree satisfies the written theorem throughout this exact domain. The universal existence proof does not assume a uniform tree on arbitrary regions."
+    },
+    "proof": "MINUS_EDGE_PROOF.md",
+    "whole_original_net_safe": true,
+    "scope": "Exact hypotheses for this fixed tree; the universal written proof awaits independent review."
+  },
+  "independent_all_original_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      4,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 16,
+      "separating_edge": 5
+    },
+    "strict_facet_supports": 20,
+    "planarity_identities": 22,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 240
+  }
+}

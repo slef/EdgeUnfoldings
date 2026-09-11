@@ -80,7 +80,7 @@ class CofacialStarTests(unittest.TestCase):
 
     def test_exhaustive_sharp_position_ledger(self):
         r=report()
-        expected={'minus':{1:{(2,),(3,),(4,),(5,)},2:{(2,4),(3,5)},3:set()},
+        expected={'minus':{1:set(),2:set(),3:set()},
                   'prism':{1:{(i,) for i in range(6)},2:{(0,1),(0,2),(3,4),(4,5)},3:set()}}
         for kind in expected:
             for group in r[kind]:

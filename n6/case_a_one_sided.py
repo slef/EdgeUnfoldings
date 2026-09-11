@@ -60,6 +60,24 @@ def wide_planar_tests(alpha,beta,left_angle,right_angle,s,sprime,ell):
                 right_wide_condition=tests['right_short_comparison'] in ('>','=') and right in ('>','='))
 
 
+def triangle_planar_tests(alpha,beta,left_angle,right_angle,s,sprime,ell):
+    """Support-triangle bound from CASE_A_SUPPORT_TRIANGLE.md."""
+    tests=wide_planar_tests(alpha,beta,left_angle,right_angle,s,sprime,ell)
+    theta=cmul(alpha,beta)
+    def bound(angle,total):
+        # total is theta+alpha or theta+beta, strictly between 0 and 2pi.
+        if total[1].hi<=0 or angle[0].lo>=0:return '>'
+        if total[1].lo>0 and angle[0].hi<0:
+            square=cmul(angle,angle)
+            return comparison(cdet((-square[0],-square[1]),total))
+        return None
+    left=bound(left_angle,cmul(theta,alpha))
+    right=bound(right_angle,cmul(theta,beta))
+    return dict(**tests,left_triangle_angle_comparison=left,right_triangle_angle_comparison=right,
+                left_triangle_condition=tests['left_short_comparison'] in ('>','=') and left in ('>','='),
+                right_triangle_condition=tests['right_short_comparison'] in ('>','=') and right in ('>','='))
+
+
 def length_planar_tests(alpha,beta,left_angle,right_angle,s,sprime,ell):
     """Exact full-apex-cone separators from CASE_A_LENGTH_SEPARATORS.md.
 
@@ -67,7 +85,7 @@ def length_planar_tests(alpha,beta,left_angle,right_angle,s,sprime,ell):
     phase scales are retained in every sine product. Failure means that
     these unbounded cones have not been separated, not that faces overlap.
     """
-    tests=wide_planar_tests(alpha,beta,left_angle,right_angle,s,sprime,ell)
+    tests=triangle_planar_tests(alpha,beta,left_angle,right_angle,s,sprime,ell)
     theta=cmul(alpha,beta)
     na,nb=norm2(alpha).sqrt(),norm2(beta).sqrt();nt=na*nb
     A=ell*beta[1]*na-s*theta[1]
