@@ -164,7 +164,7 @@ assert.equal(vm.runInContext('byId.lemmaF.status',ctx),'numeric');
 assert.equal(vm.runInContext('byId.t_octa.status',ctx),'open');
 
 // A sufficient two-pair reduction must not inflate unconditional coverage.
-assert(score.octahedron.remaining.every(g=>g.link==='F_cut_reduction'));
+assert(score.octahedron.remaining.every(g=>g.link==='F_cut_rays'));
 assert.equal(vm.runInContext('byId.F_cut_reduction.status',ctx),'proved');
 const farLemma=vm.runInContext('article(byId.lemmaF,false)',ctx);
 const farReduction=vm.runInContext('article(byId.F_cut_reduction,false)',ctx);
@@ -178,3 +178,17 @@ assert(farReduction.includes('slit index k=0'));
 assert(smallFar.includes('Before X, or exactly at X'));
 assert(smallFar.includes('Past X'));
 assert(smallFar.includes('Open in general'));
+
+// New subcases and simpler obligations must keep the universal theorem open.
+const cutRays=vm.runInContext('article(byId.F_cut_rays,false)',ctx);
+assert.equal(vm.runInContext('byId.F_cut_rays.status',ctx),'proved');
+assert(cutRays.includes('only one segment remains'));
+assert(cutRays.includes('finite radial cut segment'));
+assert(cutRays.includes('conjectural strengthening'));
+assert(cutRays.includes('22/28 face pairs'));
+assert(cutRays.includes('Boundary contact is allowed'));
+assert(smallFar.includes('Now proved safe'));
+assert(smallFar.includes('does not span the blue angle plus the gap'));
+assert.equal(score.octahedron.cut_routes.length,2);
+assert.equal(score.octahedron.cut_routes.filter(g=>g.status==='proved').length,1);
+assert(detailed.includes('one cut-segment check'));

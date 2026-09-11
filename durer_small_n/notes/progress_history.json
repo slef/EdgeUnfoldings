@@ -1,5 +1,17 @@
 [
   {
+    "date": "11 September 2026 JST · Case B cut-entry proof",
+    "title": "The fan route is excluded; the common-direction pattern leaves one segment",
+    "results": [
+      "F_cut_rays",
+      "F_below",
+      "lemmaF",
+      "octa_three_same",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#F_cut_rays\">new theorem</a> makes whole-net safety equivalent to two finite radial cut segments missing their remote petals. The through-fan bound from Lemma L excludes reaching those segments through the fan. Only entry across the slit gap remains.</p><p>This proves new subcases even when the slit-side endpoint passes X: convex remote patches, leans away from the gap, and leans with insufficient angular reach. When all inward patches lean the same way, one of the two segment checks is automatic. The remaining common-direction three-patch family therefore leaves one check.</p><p>The general angular bound and finite-edge separation remain open. The unconditional count stays 22/28; no completion percentage is inferred. Exact replays of four saved examples, including 11- and 18-coordinate boxes, agree with their independent all-28 certificates. Numerical searches are exploratory only.</p>"
+  },
+  {
     "date": "11 September 2026 JST · Lemma F reduction",
     "title": "Six far-pair checks reduced to two direct cut-side tests",
     "results": [

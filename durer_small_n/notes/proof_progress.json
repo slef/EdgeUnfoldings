@@ -49,12 +49,12 @@
     ],
     "remaining": [
       {
-        "label": "Prove V(k+2) cannot overlap the first slit-side fan triangle W(k)",
-        "link": "F_cut_reduction"
+        "label": "Prove the first radial cut segment cannot enter V(k+2)",
+        "link": "F_cut_rays"
       },
       {
-        "label": "Prove V(k+1) cannot overlap the last slit-side fan triangle W(k−1)",
-        "link": "F_cut_reduction"
+        "label": "Prove the last radial cut segment cannot enter V(k+1)",
+        "link": "F_cut_rays"
       }
     ],
     "patch_regimes": [
@@ -107,6 +107,20 @@
         "condition": "All three pairs safe: slit-gap bound plus the new spherical-link and pole-triangle argument",
         "status": "proved",
         "link": "lemmaL"
+      }
+    ],
+    "cut_routes": [
+      {
+        "label": "Approach through the blue fan",
+        "status": "proved",
+        "condition": "Excluded by the through-fan bound of Lemma L",
+        "link": "F_cut_rays"
+      },
+      {
+        "label": "Approach across the slit gap",
+        "status": "open",
+        "condition": "Convex patches, wrong-direction leans, and insufficient angular reach are proved safe; universal finite-edge separation remains open",
+        "link": "F_cut_rays"
       }
     ]
   },

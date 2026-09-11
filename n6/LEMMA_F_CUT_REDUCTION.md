@@ -1,6 +1,9 @@
 # Lemma F reduces to the two slit-side fan pairs
 
 11 September 2026. This is a geometric reduction, **not a proof of Lemma F**.
+The subsequent [cut-segment refinement](LEMMA_F_CUT_RAYS.md) replaces the
+two triangle tests by two finite-segment tests and proves further direction
+subcases, including part of the slit-side-past-X branch.
 It uses the now-proved [Lemma L](LEMMA_L_PROOF.md). The two remaining tests
 are different from the opposite-petal tests in the old, refuted reduction.
 

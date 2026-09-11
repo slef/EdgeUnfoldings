@@ -1,4 +1,44 @@
-# Current continuation: Lemma F reduced to two cut-side fan checks
+# Current continuation: cut-segment equivalence and the only remaining route
+
+11 September 2026 JST. [LEMMA_F_CUT_RAYS.md](LEMMA_F_CUT_RAYS.md) proves
+that the selected H/R net is safe iff the two open radial cut segments
+miss the interiors of V_(k+2) and V_(k+1), respectively. The earlier
+hexagon proof only used its fan-pair assumption to exclude a cut-edge
+crossing. This weaker assumption suffices; a boundary-crossing argument
+then recovers that fan-pair separation.
+
+The through-fan part of Lemma L works at EVERY slit under the pole
+comparison. Reindexing it bounds F_(k+1) strictly below the remaining
+forward fan angles. Thus V_(k+1) can reach its target cut ray only backwards
+through the slit gap, requiring B_(k+1)>omega_k+kappa_w. Reflection requires
+F_(k+2)>omega_(k-1)+kappa_w for the other petal. The opposite weak
+inequalities suffice for the whole selected net, with equality allowed.
+
+New subcases: convex or wrong-direction remote patches are safe even in
+small-angle Case B with the slit endpoint past X. If all inward patches
+lean backward, the first-cut test is automatic and only V_(k+1) against
+the last finite cut remains; reflect for all-forward. This is useful in
+the remaining three-patch common-direction family, but does not settle it.
+The general angular inequalities are a candidate lemma, not yet proved.
+If they fail, finite-edge radial separation can still succeed.
+
+`cut_rays.py` rigorously clips three necessary linear inequalities in the
+ray parameter using outward rational bounds. It distinguishes finite-edge
+safety, infinite-ray safety, and unresolved intervals. Four saved domains
+pass both ray checks and agree with independent all-28 certificates.
+The apex-entry 11-coordinate box also passes the new general direction
+corollary. Regression tests include the historical H-failing cut crossing,
+true finite-only separation, touching, and widened interval uncertainty.
+
+Next: attack B_(k+1)<=omega_k+kappa_w under H/R (its reflected inequality
+is the other test). If false, certify a rational witness before changing
+the claim, and study its intersection parameter relative to the endpoint.
+Keep checking the full far-fan angle range, not only small-angle Case B.
+Unconditional pair count stays 22/28; the selected-net claim, full Lemma F,
+full octahedron, and n=6 remain open. No numerical observation is a premise
+of the written proofs.
+
+# Previous continuation: Lemma F reduced to two cut-side fan checks
 
 11 September 2026 JST. [LEMMA_F_CUT_REDUCTION.md](LEMMA_F_CUT_REDUCTION.md)
 proves a new reduction under H and R. In Z_k retain V_(k+2)/W_k and
