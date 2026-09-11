@@ -28,6 +28,11 @@ function boxScope(data,label) {
 function coverageGaps() {
   return `<p><b>Two steps are still missing for a complete computational proof:</b></p><ol class="coverage-gaps">${SCORE.coverage_obligations.map(s=>`<li>${s}</li>`).join('')}</ol><p>A geometric theorem could replace this route. Neither missing step has a measured fraction complete.</p>`;
 }
+function sharpPositionProgress(kind) {
+  const groups=SCORE.sharp_positions[kind], names=kind==='minus'?['A','B','C','D','P','Q']:['0','1','2','3','4','5'];
+  const open=groups.flatMap(g=>g.patterns.filter(p=>p.status==='open').map(p=>'{'+p.sharp_vertices.map(v=>names[v]).join(', ')+ '}'));
+  return `<h4>New map: sharp-vertex positions</h4><p>A sharp vertex has curvature at least 180°. Above the already-proved all-low family:</p><table><thead><tr><th>Sharp vertices</th><th>Position patterns proved</th></tr></thead><tbody>${groups.map(g=>`<tr><td>Exactly ${g.sharp_count}</td><td><b>${g.patterns_proved} / ${g.patterns_total}</b></td></tr>`).join('')}</tbody></table><p><b>${open.length} positional patterns remain:</b> ${open.join(', ')}. These are vertex-position counts, not fractions of shape space. Open patterns can contain proved subfamilies. <a href="#sharp_positions">Read the proof and the exact remaining cases</a>.</p>`;
+}
 function caseProgress(id,compact=false) {
   const octa=SCORE.octahedron;
   const pairTotal=octa.pair_groups.reduce((n,g)=>n+g.count,0);
@@ -57,6 +62,7 @@ function caseProgress(id,compact=false) {
   } else return '';
   if (id==='t_octa_minus') body=`<h4>New universal geometric progress</h4><p><b>${proofTally(SCORE.nonsimplicial_curvature_branches)} curvature branches proved.</b> <a href="#nonsimp_flat">Every shape with all curvatures at most 180° has an original-edge net</a>. The branch strictly above 180° has <a href="#original_rule">new original-edge curvature budgets and a sharp-slit Case A reduction</a>; other shapes remain open. These are not equal fractions of shape space.</p>${compact?'':proofSteps(SCORE.nonsimplicial_curvature_branches)}${body}`;
   if (id==='t_prismd') body=`<h4>Three disjoint curvature branches</h4><p><b>${proofTally(SCORE.prism_curvature_branches)} branches proved.</b> The all-low branch is settled. The <a href="#prism_two_sharp">branch with both end vertices sharp</a> is now settled too. Remaining: some vertex is above 180°, while at least one of the two ends is below 180°. Some families there already have proofs. These branch counts are not fractions of shape space.</p>${compact?'':proofSteps(SCORE.prism_curvature_branches)}${body}`;
+  if (id==='t_octa_minus' || id==='t_prismd') body=sharpPositionProgress(id==='t_octa_minus'?'minus':'prism')+body;
   return `<section class="case-progress ${compact?'compact':''}" aria-label="${title}"><h3>${compact?`<a href="#${id}">${title}</a>`:title}</h3>${body}${compact?`<a class="progress-more" href="#${id}">See the obligations and precise scope →</a>`:''}</section>`;
 }
 function progressComparison() {

@@ -19,6 +19,8 @@ original_rule_svg = (research / 'figures/original-rule-families.svg').read_text(
 figs['original_rule_families'] = original_rule_svg[original_rule_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 two_sharp_svg = (research / 'figures/prism-two-sharp-ends.svg').read_text()
 figs['prism_two_sharp'] = two_sharp_svg[two_sharp_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
+cofacial_svg = (research / 'figures/cofacial-star-comparison.svg').read_text()
+figs['cofacial_star'] = cofacial_svg[cofacial_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 true_scale_svg = (research / 'figures/octa-three-same-true-scale.svg').read_text()
 figs['three_same_true_scale'] = true_scale_svg[true_scale_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 for key, filename in [('local_small_sum','local-small-sum.svg'),('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg'),('patch_budget','octa-patch-budget.svg'),('three_same','octa-three-same.svg'),('chain_switch','octa-three-chain.svg')]:
@@ -86,6 +88,18 @@ for kind,names in [('minus',['v=A','w=B','c=C','D','P','Q']),('prism',['0','1','
         faceColors={i:'#83bbd5' if len(f)==4 else '#ead2b3' for i,f in enumerate(spec['faces'])},
         view={'yaw':-0.7,'pitch':0.3},title='A sharp fifth-cut endpoint gives an original-edge net',
         caption='The source v is below 180 degrees; c is above it. Blue quadrilaterals remain whole. Red edges are certified cuts.',
+    )
+
+for kind,names in [('minus',['v=A','w=B','C','D','P','Q']),('prism',['0','v=1','2','3','4','w=5'])]:
+    filename='cofacial-case-B-'+kind+'.certificate.json'
+    spec=json.loads((research/'results'/filename).read_text())
+    figs['models']['cofacial_case_B_'+kind] = witness_model(
+        filename,names=names,face_names=['Q' if len(f)==4 else 'T'+str(i) for i,f in enumerate(spec['faces'])],
+        highlight_faces=[i for i,f in enumerate(spec['faces']) if len(f)==4],
+        faceColors={i:'#83bbd5' if len(f)==4 else '#ead2b3' for i,f in enumerate(spec['faces'])},
+        view={'yaw':-0.7,'pitch':0.3},title='A newly proved two-sharp-vertex family',
+        caption=('C and D are sharp.' if kind=='minus' else 'Vertices 2 and 4 are sharp.')+
+                ' Red edges give the new proved net. Original blue quadrilaterals remain whole. Drag to rotate.',
     )
 
 figs['models']['prism_two_sharp'] = witness_model(

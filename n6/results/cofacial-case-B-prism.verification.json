@@ -1,0 +1,71 @@
+{
+  "hypotheses": {
+    "result": "verified_cofacial_sharp_route_case_B",
+    "source": 1,
+    "fan": 5,
+    "slit": 2,
+    "curvature_comparisons_with_pi": {
+      "0": "<",
+      "1": "<",
+      "2": ">",
+      "3": "<",
+      "4": ">",
+      "5": "<"
+    },
+    "remaining_middle_base": [
+      3,
+      4
+    ],
+    "middle_face": 4,
+    "remaining_case_B_comparison": ">",
+    "original_faces_remain_whole": true,
+    "whole_net_safe_by_written_theorem": true,
+    "proof": "COFACIAL_STAR_REDUCTION.md",
+    "dependencies": [
+      "ORIGINAL_EDGE_RULE.md",
+      "OCTA_FLAT_HINGES.md",
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ],
+    "full_type_proved": false,
+    "scope": "These exact hypotheses supply the whole specified original-edge net by the written geometric reduction. The proof awaits independent review; numerical experiments are not premises."
+  },
+  "independent_all_original_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      3,
+      4,
+      3,
+      4,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 11,
+      "separating_edge": 3,
+      "face_neighborhood": 1
+    },
+    "strict_facet_supports": 16,
+    "planarity_identities": 20,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 240,
+    "theorem_dependencies": [
+      {
+        "author": "Val Pinciu",
+        "year": 2007,
+        "theorem": 1,
+        "title": "On the Fewest Nets Problem for Convex Polyhedra",
+        "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+      }
+    ]
+  }
+}

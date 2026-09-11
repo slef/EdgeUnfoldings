@@ -1,0 +1,443 @@
+{
+  "scope": "All four cofacial choices fail on this same exact solid; another original tree succeeds. This does not refute unfoldability.",
+  "curvature_bands": {
+    "0": "<",
+    "1": "<",
+    "2": "<",
+    "3": "<",
+    "4": ">",
+    "5": ">"
+  },
+  "four_failures": [
+    {
+      "pair_reduction": {
+        "result": "verified_cofacial_star_pair_reduction",
+        "source": 0,
+        "nonneighbor": 1,
+        "via": 2,
+        "movable_quadrilateral": 0,
+        "cut_edges": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "pairs_total": 21,
+        "pairs_proved": 19,
+        "remaining_pairs": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ]
+        ],
+        "inherited_star_pairs": 15,
+        "additional_shared_vertex_pairs": 4,
+        "original_faces_remain_whole": true,
+        "curvature_ranking_required": false,
+        "whole_net_claimed": false,
+        "proof": "COFACIAL_STAR_REDUCTION.md",
+        "theorem_dependencies": [
+          {
+            "authors": "Stephen Kiazyk and Anna Lubiw",
+            "year": 2015,
+            "theorem": 4,
+            "title": "Star Unfolding from a Geodesic Curve",
+            "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+            "role": "Nonoverlap of the shortest-path star, including a vertex source"
+          }
+        ],
+        "scope": "All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted."
+      },
+      "exact_overlap": {
+        "result": "verified_positive_area_overlap",
+        "faces": [
+          0,
+          1
+        ],
+        "strict_signs": 7,
+        "lower_bounds": [
+          "2184238345620643945559511391/1208925819614629174706176",
+          "11684843724856671866930621613/1208925819614629174706176",
+          "7108187110990758480930078065/1208925819614629174706176",
+          "4543100501303859810366883675/1208925819614629174706176",
+          "12161501408207379344742493111/1208925819614629174706176",
+          "537199551848768565823371453/151115727451828646838272",
+          "1673642342134591932703879113/1208925819614629174706176"
+        ],
+        "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+        "facet_sizes": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "strict_facet_supports": 20
+      }
+    },
+    {
+      "pair_reduction": {
+        "result": "verified_cofacial_star_pair_reduction",
+        "source": 0,
+        "nonneighbor": 1,
+        "via": 3,
+        "movable_quadrilateral": 0,
+        "cut_edges": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "pairs_total": 21,
+        "pairs_proved": 19,
+        "remaining_pairs": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "inherited_star_pairs": 15,
+        "additional_shared_vertex_pairs": 4,
+        "original_faces_remain_whole": true,
+        "curvature_ranking_required": false,
+        "whole_net_claimed": false,
+        "proof": "COFACIAL_STAR_REDUCTION.md",
+        "theorem_dependencies": [
+          {
+            "authors": "Stephen Kiazyk and Anna Lubiw",
+            "year": 2015,
+            "theorem": 4,
+            "title": "Star Unfolding from a Geodesic Curve",
+            "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+            "role": "Nonoverlap of the shortest-path star, including a vertex source"
+          }
+        ],
+        "scope": "All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted."
+      },
+      "exact_overlap": {
+        "result": "verified_positive_area_overlap",
+        "faces": [
+          0,
+          3
+        ],
+        "strict_signs": 7,
+        "lower_bounds": [
+          "1233262588626958020966094625/604462909807314587353088",
+          "11388163525779799660905354327/1208925819614629174706176",
+          "2807572614978740854090101163/604462909807314587353088",
+          "139820093409578094654137237/604462909807314587353088",
+          "164063873215055870392020825/1208925819614629174706176",
+          "53861413551961665939017055/151115727451828646838272",
+          "8340740558751124562190576755/1208925819614629174706176"
+        ],
+        "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+        "facet_sizes": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "strict_facet_supports": 20
+      }
+    },
+    {
+      "pair_reduction": {
+        "result": "verified_cofacial_star_pair_reduction",
+        "source": 1,
+        "nonneighbor": 0,
+        "via": 2,
+        "movable_quadrilateral": 0,
+        "cut_edges": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "pairs_total": 21,
+        "pairs_proved": 19,
+        "remaining_pairs": [
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ]
+        ],
+        "inherited_star_pairs": 15,
+        "additional_shared_vertex_pairs": 4,
+        "original_faces_remain_whole": true,
+        "curvature_ranking_required": false,
+        "whole_net_claimed": false,
+        "proof": "COFACIAL_STAR_REDUCTION.md",
+        "theorem_dependencies": [
+          {
+            "authors": "Stephen Kiazyk and Anna Lubiw",
+            "year": 2015,
+            "theorem": 4,
+            "title": "Star Unfolding from a Geodesic Curve",
+            "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+            "role": "Nonoverlap of the shortest-path star, including a vertex source"
+          }
+        ],
+        "scope": "All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted."
+      },
+      "exact_overlap": {
+        "result": "verified_positive_area_overlap",
+        "faces": [
+          0,
+          6
+        ],
+        "strict_signs": 7,
+        "lower_bounds": [
+          "3812837880501874252912498791/302231454903657293676544",
+          "7021975531665348414185298899/1208925819614629174706176",
+          "579586847825691809973302925/604462909807314587353088",
+          "1001560408931142729389621241/75557863725914323419136",
+          "2359163124496020292741209495/604462909807314587353088",
+          "7832306071011021067253623831/1208925819614629174706176",
+          "21426759584073104816212125081/604462909807314587353088"
+        ],
+        "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+        "facet_sizes": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "strict_facet_supports": 20
+      }
+    },
+    {
+      "pair_reduction": {
+        "result": "verified_cofacial_star_pair_reduction",
+        "source": 1,
+        "nonneighbor": 0,
+        "via": 3,
+        "movable_quadrilateral": 0,
+        "cut_edges": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "pairs_total": 21,
+        "pairs_proved": 19,
+        "remaining_pairs": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "inherited_star_pairs": 15,
+        "additional_shared_vertex_pairs": 4,
+        "original_faces_remain_whole": true,
+        "curvature_ranking_required": false,
+        "whole_net_claimed": false,
+        "proof": "COFACIAL_STAR_REDUCTION.md",
+        "theorem_dependencies": [
+          {
+            "authors": "Stephen Kiazyk and Anna Lubiw",
+            "year": 2015,
+            "theorem": 4,
+            "title": "Star Unfolding from a Geodesic Curve",
+            "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+            "role": "Nonoverlap of the shortest-path star, including a vertex source"
+          }
+        ],
+        "scope": "All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted."
+      },
+      "exact_overlap": {
+        "result": "verified_positive_area_overlap",
+        "faces": [
+          0,
+          4
+        ],
+        "strict_signs": 7,
+        "lower_bounds": [
+          "3603682767059204055701315269/1208925819614629174706176",
+          "866947759215910795359350269/151115727451828646838272",
+          "132012599139865114891108899/151115727451828646838272",
+          "866110489559359894853479415/604462909807314587353088",
+          "4898518536604755537008601619/302231454903657293676544",
+          "18092530580762128246583475697/1208925819614629174706176",
+          "315492671300840465361007511/1208925819614629174706176"
+        ],
+        "scope": "Failure of this specified cut tree only; not a counterexample to edge unfoldability",
+        "facet_sizes": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "strict_facet_supports": 20
+      }
+    }
+  ],
+  "repair_rule": {
+    "result": "verified_original_edge_fixed_tree_threshold",
+    "type": "octahedron_minus_edge",
+    "source": 4,
+    "fan": 3,
+    "slit": 5,
+    "cuts": [
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ]
+    ],
+    "curvature_comparisons_with_pi": {
+      "0": "<",
+      "1": "<",
+      "2": "<",
+      "3": "<",
+      "4": ">",
+      "5": ">"
+    },
+    "all_curvatures_at_most_pi": false,
+    "source_curvature_at_least_pi": true,
+    "weighted_threshold_comparison": ">",
+    "artificial_diagonals_uncut": true,
+    "input_tree_nonoverlapping_by_written_theorem": true,
+    "full_n6_proved": false,
+    "proof": "OCTA_FLAT_HINGES.md",
+    "scope": "This original-edge tree satisfies the source and weighted slit conditions on the original polygonal domain. The written flat-hinge theorem proves it safe; formal mathematical verification is not claimed."
+  },
+  "repair_all_pairs": {
+    "result": "verified",
+    "scope": "Every parameter tuple in the explicit region, not a universal n=6 theorem",
+    "parameter_dimension": 0,
+    "facet_sizes": [
+      4,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "pairs": {
+      "vertex_fan": 14,
+      "separating_edge": 5,
+      "face_neighborhood": 2
+    },
+    "strict_facet_supports": 20,
+    "planarity_identities": 22,
+    "arithmetic": "Exact rational polynomials and outward dyadic intervals",
+    "linear_correlations": false,
+    "fractional_bits": 80,
+    "theorem_dependencies": [
+      {
+        "author": "Val Pinciu",
+        "year": 2007,
+        "theorem": 1,
+        "title": "On the Fewest Nets Problem for Convex Polyhedra",
+        "url": "https://cccg.ca/proceedings/2007/01a4.pdf"
+      }
+    ]
+  }
+}

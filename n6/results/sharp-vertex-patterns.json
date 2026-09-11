@@ -1,0 +1,1889 @@
+{
+  "sharp_definition": "curvature >= pi",
+  "domain": "Maximum curvature > pi; the all-at-most-pi family is already proved.",
+  "at_most_three_sharp": "Four curvatures >=pi would leave no positive curvature for the other two vertices.",
+  "scope": "Finite position patterns, not percentages of shape space. Covered means a written universal argument, pending independent mathematical review. Open patterns can have proved subfamilies.",
+  "minus": [
+    {
+      "sharp_count": 1,
+      "patterns_total": 6,
+      "patterns_proved": 2,
+      "patterns": [
+        {
+          "sharp_vertices": [
+            0
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            3
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            4
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            5
+          ],
+          "status": "open",
+          "argument": null
+        }
+      ]
+    },
+    {
+      "sharp_count": 2,
+      "patterns_total": 15,
+      "patterns_proved": 13,
+      "patterns": [
+        {
+          "sharp_vertices": [
+            0,
+            1
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            2
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            2
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "cofacial_sharp_route_and_Case_B",
+            "source": 0,
+            "fan": 1,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "middle_base": [
+              3,
+              5
+            ],
+            "proof": "COFACIAL_STAR_REDUCTION.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            4
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            2,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 5,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                1,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            3,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 4,
+            "fan": 3,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            3,
+            5
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 4,
+            "fan": 3,
+            "slit": 5,
+            "cuts": [
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        }
+      ]
+    },
+    {
+      "sharp_count": 3,
+      "patterns_total": 20,
+      "patterns_proved": 20,
+      "patterns": [
+        {
+          "sharp_vertices": [
+            0,
+            1,
+            2
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            1,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            1,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            1,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            2,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            2,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            2,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            3,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            3,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 0,
+            "fan": 1,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            2,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            2,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            2,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            3,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            3,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_with_all_four_fifth_edges_original",
+            "source": 1,
+            "fan": 0,
+            "choose": "maximum-curvature equator vertex",
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            3,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 4,
+            "fan": 3,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            3,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 5,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                1,
+                5
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 4,
+            "fan": 3,
+            "slit": 5,
+            "cuts": [
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            3,
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 4,
+            "fan": 3,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        }
+      ]
+    }
+  ],
+  "prism": [
+    {
+      "sharp_count": 1,
+      "patterns_total": 6,
+      "patterns_proved": 0,
+      "patterns": [
+        {
+          "sharp_vertices": [
+            0
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            1
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            2
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            3
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            4
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            5
+          ],
+          "status": "open",
+          "argument": null
+        }
+      ]
+    },
+    {
+      "sharp_count": 2,
+      "patterns_total": 15,
+      "patterns_proved": 11,
+      "patterns": [
+        {
+          "sharp_vertices": [
+            0,
+            1
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            0,
+            2
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            0,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 3,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "cofacial_sharp_route_and_Case_B",
+            "source": 1,
+            "fan": 5,
+            "slit": 4,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "middle_base": [
+              2,
+              0
+            ],
+            "proof": "COFACIAL_STAR_REDUCTION.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "cofacial_sharp_route_and_Case_B",
+            "source": 3,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "middle_base": [
+              4,
+              5
+            ],
+            "proof": "COFACIAL_STAR_REDUCTION.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            2
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 3,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 4,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 3,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "cofacial_sharp_route_and_Case_B",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "middle_base": [
+              3,
+              4
+            ],
+            "proof": "COFACIAL_STAR_REDUCTION.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "two_sharp_ends",
+            "proof": "PRISM_TWO_SHARP_ENDS.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            3,
+            4
+          ],
+          "status": "open",
+          "argument": null
+        },
+        {
+          "sharp_vertices": [
+            3,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 3,
+            "fan": 2,
+            "slit": 5,
+            "cuts": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            4,
+            5
+          ],
+          "status": "open",
+          "argument": null
+        }
+      ]
+    },
+    {
+      "sharp_count": 3,
+      "patterns_total": 20,
+      "patterns_proved": 20,
+      "patterns": [
+        {
+          "sharp_vertices": [
+            0,
+            1,
+            2
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            1,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 3,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            1,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 4,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            1,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            2,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 3,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            2,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "cofacial_sharp_route_and_Case_B",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "middle_base": [
+              3,
+              4
+            ],
+            "proof": "COFACIAL_STAR_REDUCTION.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            2,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "two_sharp_ends",
+            "proof": "PRISM_TWO_SHARP_ENDS.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            3,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 3,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            3,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 3,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            0,
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "cofacial_sharp_route_and_Case_B",
+            "source": 3,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "middle_base": [
+              4,
+              5
+            ],
+            "proof": "COFACIAL_STAR_REDUCTION.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            2,
+            3
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            2,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            2,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "two_sharp_ends",
+            "proof": "PRISM_TWO_SHARP_ENDS.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            3,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 3,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            3,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            1,
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 1,
+            "fan": 5,
+            "slit": 2,
+            "cuts": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            3,
+            4
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 3,
+            "fan": 2,
+            "slit": 0,
+            "cuts": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            3,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "two_sharp_ends",
+            "proof": "PRISM_TWO_SHARP_ENDS.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            2,
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "two_sharp_ends",
+            "proof": "PRISM_TWO_SHARP_ENDS.md"
+          }
+        },
+        {
+          "sharp_vertices": [
+            3,
+            4,
+            5
+          ],
+          "status": "proved",
+          "argument": {
+            "reason": "high_source_and_automatic_weighted_threshold",
+            "source": 3,
+            "fan": 2,
+            "slit": 5,
+            "cuts": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            "proof": "OCTA_FLAT_HINGES.md"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -35,6 +35,64 @@ explanation, true-scale net and exact 3D model; the prism now has an explicit
 three-part curvature partition, two branches proved and one open. This is
 not a fraction of shape space. Whole types remain 5/7.
 
+## Second checkpoint: a star comparison and sharp-position ledger
+
+COFACIAL_STAR_REDUCTION.md proves that each of the four cofacial routes
+in either remaining type inherits all faces except its movable original
+quadrilateral from a shortest-path star. The diagonal across that Q is
+only a comparison cut; final trees use original edges. The theorem uses
+Kiazyk--Lubiw 2015 Definition 1/Theorem 4, which explicitly allows a vertex
+source. Adding shared-vertex paths leaves exactly two original pair checks:
+19/21 proved for minus, 13/15 for prism, with no curvature ranking.
+
+For a cofacial route with fan w<=pi and route endpoint c>=pi, the existing
+sharp-slit reduction supplies every local/finite-cut/small-fan premise.
+One opposite-petal pair lies outside Q and is inherited; only the other
+opposite pair remains. If its middle base xy has kappa_x+kappa_y>=nu_middle,
+Case B applies and the whole net is proved. A sharp x or y suffices.
+Remaining middle bases: minus A/C or B/C -> DQ; A/D or B/D -> CP;
+prism 1/2 -> 34, 1/4 -> 02, 3/0 -> 45, 3/5 -> 01.
+
+SHARP_VERTEX_PATTERNS.md now covers all 20 three-sharp-vertex position
+patterns in both types. Sharp means >=pi. At most three sharp vertices
+are possible by positive curvature and total 4pi. Outside all<=pi:
+minus singleton 2/6, pairs 13/15; prism singleton 0/6, pairs 11/15.
+Open minus positions: C,D,P,Q and pairs CP,DQ. Open prism: all six
+singletons and pairs 01,02,34,45. Counts are positions, not shape volume.
+The full types remain open. In particular minus C,D both sharp is a
+new whole branch: choose the lesser A/B as low fan, slit C, then D makes
+Case B. Prism new pairs 24,05 use the same theorem; 04 also follows from
+the earlier curvature budgets. The earlier prism two-sharp-end theorem
+covers 25, including both exact equality boundaries.
+
+cofacial_case_b_examples.py saves minus C,D-sharp and prism 2,4-sharp
+points and full ten-/nine-parameter boxes. All old original-star criteria
+reject these examples; the new condition plus independent all-pair replay
+passes. An exact minus point has both C,D curvature exactly pi. Six
+focused tests check these domains, every cofacial route, and the ledger.
+An initial prism 0,4 example was correctly found to meet earlier budgets
+and was replaced with the genuinely new 2,4 example.
+
+All four minus cofacial routes CAN fail on one exact solid: retained
+minus-cofacial-{0,1,2,3}-failure.certificate.json and shared verification.
+Each overlap involves Q; P and Q are both sharp. Same-solid star(P)+DQ
+repair passes old high-source rule and all21 original pairs. Do not claim
+the four cofacial choices universal. Numerical lead only: 150313 samples
+with min(kappa_P,kappa_Q)<pi gave no simultaneous failure of all four.
+
+The lifted low-fan Case A nonlinear query also returned UNKNOWN after
+its 30-minute timeout, not UNSAT; both query encodings/reports are saved.
+No running solver remains. The useful next target is the one residual
+quadrilateral/triangle Case A pair at a sharp cofacial route, or a switching
+argument for the remaining one-/two-sharp-position patterns.
+
+The overview now has #sharp_positions, #cofacial_star (three-panel
+true-scale comparison figure), #case_A_one_side, and exact 3D models.
+Progress dashboard reads and checks the saved positional ledger. Existing
+history is preserved. Navigation/progress/minus VM tests pass; the new SVG
+was rendered and visually inspected. Local-file browser denial remains
+respected. Continue through 21:05:34 UTC; this is not the final checkpoint.
+
 ## Current research target and exploratory work
 
 The main remaining strategy is sharp slit c>=pi with low fan w<=pi:
@@ -49,7 +107,7 @@ CASE_A_ONE_SIDED.md gives a new written planar separator: the angle bound
 is needed only on one short cut edge, rather than both apex angles. It is
 not automatic even at sharp slits: later low-fan random examples have
 both conditions fail, but their actual faces are still numerically safe.
-No exact examples/checker for this improvement have yet been saved.
+The exact checker and an example failing the older two-angle criterion are now saved in case_a_one_sided.py and results/case-A-one-sided.*. Three focused tests pass.
 
 Numerical work only (not proof): 30,000 original samples per type gave no
 sharp-slit/low-fan failures. Detouring around a forbidden diagonal via its

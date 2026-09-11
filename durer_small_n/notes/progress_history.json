@@ -1,5 +1,18 @@
 [
   {
+    "date": "12 September 2026 JST · four-hour continuation, second result",
+    "title": "Every three-sharp-vertex pattern is covered; the remaining positions are explicit",
+    "results": [
+      "sharp_positions",
+      "cofacial_star",
+      "case_A_one_side",
+      "t_octa_minus",
+      "t_prismd",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#sharp_positions\">new positional ledger</a> covers all twenty three-sharp-vertex patterns in both remaining types. For exactly two sharp vertices it covers thirteen of fifteen minus-edge pairs and eleven of fifteen prism pairs. Six minus-edge and ten prism position patterns remain overall. These count positions, not percentages of shapes.</p><p>The <a href=\"#cofacial_star\">new star comparison</a> universally settles 19/21 or 13/15 original face pairs in each cofacial route. A low fan, sharp route endpoint, and one remaining Case B suffice for the whole net. This proves the minus-edge family with both degree-three corners sharp, including equality, and additional prism pairs. Exact parameter boxes illustrate genuinely new cases. A <a href=\"#case_A_one_side\">one-sided Case A separator</a> gives a further sufficient test.</p><p>All four cofacial routes can nevertheless fail on one exactly checked minus-edge solid; a different original tree repairs it. The written universal arguments await independent review. Neither entire type is claimed solved; whole types remain 5/7.</p>"
+  },
+  {
     "date": "12 September 2026 JST · four-hour continuation, first result",
     "title": "The prism branch with two sharp ends now has a complete proof",
     "results": [

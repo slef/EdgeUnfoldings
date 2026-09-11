@@ -63,7 +63,7 @@ def formulation(target,hypothesis='H3R',hard_local=False,lifted=False):
     import networkx as nx
     import z3
     from n6.encoding import Counterexample
-    from n6.curvature import cmul,angle_le,curvature_sum_lt_pi,sum_angles_lt_pi
+    from n6.curvature import cmul,angle_le,curvature_sum_lt_pi,sum_angles_lt_pi,curvature_sum_lt_angle
     ce=Counterexample(nx.octahedral_graph(),prune_vertex_fans=True)
     v,w,u=0,5,1
     cuts={tuple(sorted((v,x))) for x in ce.g[v]}|{tuple(sorted((w,u)))}
@@ -102,6 +102,12 @@ def formulation(target,hypothesis='H3R',hard_local=False,lifted=False):
     if target=='local_vv':pair=(V[0],V[3])
     elif target=='local_vw':pair=(V[0],W[3])
     elif target=='opposite':pair=(V[1],V[3])
+    elif target=='caseA_low_fan':
+        pair=(V[1],V[3])
+        # Convexity gives Gamma_w in (0,2*pi), so sin(Gamma_w)<=0
+        # means Gamma_w>=pi, equivalently kappa_w<=pi. Keep equality.
+        assertions.append(products[w][1]<=0)
+        assertions.append(curvature_sum_lt_angle(products[ring[2]],products[ring[3]],angles[V[2],v]))
     elif target in ('caseB_small_SW','left_apex','right_apex'):
         pair=(V[1],V[3])
         assertions.append(sum_angles_lt_pi([angles[W[1],ring[2]],angles[W[2],ring[2]],
@@ -159,7 +165,7 @@ def worker(job):
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--worker',type=Path,help=argparse.SUPPRESS)
-    ap.add_argument('--target',choices=['local_vv','local_vw','opposite','caseB_small_SW','left_apex','right_apex'],default='local_vv')
+    ap.add_argument('--target',choices=['local_vv','local_vw','opposite','caseA_low_fan','caseB_small_SW','left_apex','right_apex'],default='local_vv')
     ap.add_argument('--hypothesis',choices=['none','H3','R','H3R'],default='H3R')
     ap.add_argument('--hard-local',action='store_true');ap.add_argument('--lifted',action='store_true')
     ap.add_argument('--solver-ms',type=int,default=600000);ap.add_argument('--wall-seconds',type=float,default=660)

@@ -1,0 +1,11 @@
+{
+  "target": "caseA_low_fan",
+  "hypothesis": "none",
+  "hard_local": false,
+  "lifted": false,
+  "solver_ms": 1200000,
+  "wall_seconds": 1230.0,
+  "memory_mb": 2048,
+  "export_only": false,
+  "output": "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/n6/results/caseA-low-fan-query"
+}

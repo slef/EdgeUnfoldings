@@ -11,11 +11,14 @@ import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from n6.cover import read_cover,summary,leaves
 from n6.minus_pair import proof_progress
+from n6.sharp_vertex_patterns import report as sharp_pattern_report
 
 
 def load_progress(notes,research):
     result=json.loads((notes/'proof_progress.json').read_text())
     results=research/'results'
+    result['sharp_positions']=json.loads((results/'sharp-vertex-patterns.json').read_text())
+    assert result['sharp_positions']==json.loads(json.dumps(sharp_pattern_report()))
     def cover(cert_name,report_name):
         cert=read_cover(results/cert_name);report=json.loads((results/report_name).read_text());s=summary(cert)
         assert report['result']=='verified_complete_region_cover'

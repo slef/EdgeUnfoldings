@@ -1,0 +1,234 @@
+[
+  {
+    "result": "verified_cofacial_star_pair_reduction",
+    "source": 0,
+    "nonneighbor": 1,
+    "via": 2,
+    "movable_quadrilateral": 0,
+    "cut_edges": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "pairs_total": 21,
+    "pairs_proved": 19,
+    "remaining_pairs": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "inherited_star_pairs": 15,
+    "additional_shared_vertex_pairs": 4,
+    "original_faces_remain_whole": true,
+    "curvature_ranking_required": false,
+    "whole_net_claimed": false,
+    "proof": "COFACIAL_STAR_REDUCTION.md",
+    "theorem_dependencies": [
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ],
+    "scope": "All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted."
+  },
+  {
+    "result": "verified_cofacial_star_pair_reduction",
+    "source": 0,
+    "nonneighbor": 1,
+    "via": 3,
+    "movable_quadrilateral": 0,
+    "cut_edges": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "pairs_total": 21,
+    "pairs_proved": 19,
+    "remaining_pairs": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ]
+    ],
+    "inherited_star_pairs": 15,
+    "additional_shared_vertex_pairs": 4,
+    "original_faces_remain_whole": true,
+    "curvature_ranking_required": false,
+    "whole_net_claimed": false,
+    "proof": "COFACIAL_STAR_REDUCTION.md",
+    "theorem_dependencies": [
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ],
+    "scope": "All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted."
+  },
+  {
+    "result": "verified_cofacial_star_pair_reduction",
+    "source": 1,
+    "nonneighbor": 0,
+    "via": 2,
+    "movable_quadrilateral": 0,
+    "cut_edges": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ]
+    ],
+    "pairs_total": 21,
+    "pairs_proved": 19,
+    "remaining_pairs": [
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        6
+      ]
+    ],
+    "inherited_star_pairs": 15,
+    "additional_shared_vertex_pairs": 4,
+    "original_faces_remain_whole": true,
+    "curvature_ranking_required": false,
+    "whole_net_claimed": false,
+    "proof": "COFACIAL_STAR_REDUCTION.md",
+    "theorem_dependencies": [
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ],
+    "scope": "All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted."
+  },
+  {
+    "result": "verified_cofacial_star_pair_reduction",
+    "source": 1,
+    "nonneighbor": 0,
+    "via": 3,
+    "movable_quadrilateral": 0,
+    "cut_edges": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ]
+    ],
+    "pairs_total": 21,
+    "pairs_proved": 19,
+    "remaining_pairs": [
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ]
+    ],
+    "inherited_star_pairs": 15,
+    "additional_shared_vertex_pairs": 4,
+    "original_faces_remain_whole": true,
+    "curvature_ranking_required": false,
+    "whole_net_claimed": false,
+    "proof": "COFACIAL_STAR_REDUCTION.md",
+    "theorem_dependencies": [
+      {
+        "authors": "Stephen Kiazyk and Anna Lubiw",
+        "year": 2015,
+        "theorem": 4,
+        "title": "Star Unfolding from a Geodesic Curve",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390",
+        "role": "Nonoverlap of the shortest-path star, including a vertex source"
+      }
+    ],
+    "scope": "All but the two listed pairs follow from the written reduction for this exact original-face domain. Those two pairs, and the existence of a successful candidate, are not asserted."
+  }
+]
