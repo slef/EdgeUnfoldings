@@ -49,11 +49,11 @@
     ],
     "remaining": [
       {
-        "label": "Prove the first radial cut segment cannot enter V(k+2)",
+        "label": "Prove the first radial cut segment cannot enter V(k+2) in the remaining low-curvature obtuse branch",
         "link": "F_cut_rays"
       },
       {
-        "label": "Prove the last radial cut segment cannot enter V(k+1)",
+        "label": "Prove the last radial cut segment cannot enter V(k+1) in the remaining low-curvature obtuse branch",
         "link": "F_cut_rays"
       }
     ],
@@ -86,7 +86,7 @@
         "label": "Three nonconvex patches",
         "status": "open",
         "link": "octa_three_same",
-        "condition": "Mixed directions and middle-patch common-direction subfamilies proved; two branches remain outside the latter conditions"
+        "condition": "All sharpest curvatures ≥180° now covered; mixed directions and middle-patch subfamilies also proved; common-direction low-curvature remainder open"
       }
     ],
     "local_curvature_branches": [
@@ -119,8 +119,22 @@
       {
         "label": "Approach across the slit gap",
         "status": "open",
-        "condition": "Convex patches, wrong-direction leans, and insufficient angular reach are proved safe; universal finite-edge separation remains open",
-        "link": "F_cut_rays"
+        "condition": "Proved at sharpest curvature ≥180°; below it, nonobtuse pole angles and the quarter-turn circle test cover further families",
+        "link": "F_pole_angle"
+      }
+    ],
+    "source_curvature_branches": [
+      {
+        "label": "Sharpest curvature at least 180°",
+        "condition": "All 28 pairs of the selected H/R net proved safe, including equality",
+        "status": "proved",
+        "link": "F_pole_angle"
+      },
+      {
+        "label": "Sharpest curvature from 120° to below 180°",
+        "condition": "Partly proved; remaining obstruction needs obtuse original and flat pole angles, with blue angle plus gap below 90°",
+        "status": "open",
+        "link": "F_pole_angle"
       }
     ]
   },

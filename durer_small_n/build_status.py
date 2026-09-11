@@ -9,6 +9,8 @@ figs = json.loads((notes / 'status_figs.json').read_text())
 figs['thickness'] = json.loads((notes / 'thickness.json').read_text())
 far_pair_svg = (research / 'figures/lemma-F-two-pairs.svg').read_text()
 figs['far_pair_targets'] = far_pair_svg[far_pair_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
+projection_svg = (research / 'figures/lemma-F-pole-angle.svg').read_text()
+figs['far_projection'] = projection_svg[projection_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 true_scale_svg = (research / 'figures/octa-three-same-true-scale.svg').read_text()
 figs['three_same_true_scale'] = true_scale_svg[true_scale_svg.index('<svg'):].replace('<svg ', '<svg class="net" ', 1)
 for key, filename in [('local_small_sum','local-small-sum.svg'),('thesis_df','thesis-DF.svg'),('prism_failure','prism-two-pair.svg'),('local_radial','local-radial-failure.svg'),('apex_entry','caseB-apex-entry.svg'),('minus_pair','minus-pair-switch.svg'),('octa_patches','octa-convex-patches.svg'),('octa_patch_net','octa-one-patch-net.svg'),('hinge_boundary','hinge-boundary-counterexample.svg'),('half_fan','octa-half-fan.svg'),('one_patch','octa-one-patch-two-poles.svg'),('patch_budget','octa-patch-budget.svg'),('three_same','octa-three-same.svg'),('chain_switch','octa-three-chain.svg')]:
@@ -149,6 +151,14 @@ figs['models']['local_gate_chain'] = witness_model(
     view={'yaw': -0.7, 'pitch': 0.3},
     title='Lemma L at the maximum-curvature equator slit',
     caption='Same solid as the earlier uncovered middle-patch example, with a different fifth cut: w–u₃. The highlighted faces are the two flank patches. This selected net has an independent all-pairs certificate. Drag to rotate.',
+)
+figs['models']['far_projection_low'] = witness_model(
+    'far-projection-low-curvature.certificate.json', names=['u₀','u₂','v','u₁','u₃','w'],
+    face_names=['V0','V3','W0','W3','V1','V2','W1','W2'],
+    highlight_faces=[0,1,2,3,4,5,6,7],
+    faceColors={i:'#8fc1dd' if i in (2,3,6,7) else '#e6af78' for i in range(8)},
+    view={'yaw': -0.7, 'pitch': 0.3}, title='A low-curvature octahedron covered by the pole-angle theorem',
+    caption='Exact integer coordinates. Red edges form the selected original-edge net, proved safe by the pole-angle theorem. Drag to rotate.',
 )
 t = t.replace('__PROGRESS_CSS__', (notes / 'progress_dashboard.css').read_text())
 t = t.replace('__PROGRESS_DASHBOARD_JS__', (notes / 'progress_dashboard.js').read_text())

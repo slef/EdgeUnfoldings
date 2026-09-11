@@ -1,5 +1,17 @@
 [
   {
+    "date": "11 September 2026 JST · Lemma F pole-angle proof",
+    "title": "The selected-net theorem is proved for sharpest curvature at least 180°",
+    "results": [
+      "F_pole_angle",
+      "lemmaF",
+      "F_below",
+      "octa_three_same",
+      "progress"
+    ],
+    "body": "<p>The <a href=\"#F_pole_angle\">new geometric proof</a> excludes a finite-cut crossing by trapping a neighboring patch in a triangle where its apex cannot fit. The spherical-link bound makes the needed pole angles acute whenever the sharpest curvature is at least 180°, including equality. The selected net then has all 28 pairs safe.</p><p>Below 180°, nonobtuse original or flattened pole angles still suffice. A second circle argument handles obtuse original angles when the blue angle plus gap is at least 90°. The remaining target requires both angles obtuse and a gap-crossing angle below 90°. Its joint realizability is not established.</p><p>Four exact examples, including an 18-coordinate box and an obtuse example repaired by the circle argument, agree with independent all-28 certificates. The general selected rule, the every-slit Lemma F, the full octahedron, and n=6 remain open. These are geometric subfamilies, not a percentage of shape space.</p>"
+  },
+  {
     "date": "11 September 2026 JST · Case B cut-entry proof",
     "title": "The fan route is excluded; the common-direction pattern leaves one segment",
     "results": [

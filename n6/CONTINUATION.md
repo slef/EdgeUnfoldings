@@ -1,4 +1,64 @@
-# Current continuation: cut-segment equivalence and the only remaining route
+# Current continuation: the high-curvature selected-net theorem
+
+11 September 2026. [LEMMA_F_POLE_ANGLE.md](LEMMA_F_POLE_ANGLE.md) proves the
+whole selected net when the globally sharpest source has curvature >=pi.
+Keep H and R: four cuts at a sharpest v, fifth at a sharpest equator u_k.
+This includes equality and all patch patterns. It is a geometric proof,
+not a numerical inference; the full selected rule, every-slit Lemma F,
+general octahedron, and n=6 remain open.
+
+For a hypothetical last-cut crossing by V_i, i=k+1, take p just inside
+that petal and before the slit endpoint b. At a=u_i, |ap|<s=|av|. Lemma L
+and shared-vertex separation trap the entire neighboring Q_m, m=k, inside
+T=triangle(w,a,p). Its developed apex M has |aM|=s. If angle(a,M,w)<=pi/2,
+projection along aM bounds the whole triangle strictly before M, except
+possibly w itself. M is not w. This contradicts containment. No opposite
+petal or far-fan nonoverlap is assumed in that trap.
+
+The corner of Q_m at a is <pi because Q_i is reflex there. Its developed
+pole distance t=|wM| is at least the original |wv|, by the spherical
+triangle inequality at a and cosine law. Thus original angle(w,v,a)<=pi/2
+implies the needed flat angle. The link bound 2*angle(w,v,a)<2*pi-kappa_v
+makes every applicable angle acute when kappa_v>=pi. Reflection handles
+the other target. The existing cut-segment equivalence completes the net.
+
+The low-curvature branch has a second sufficient test. An obtuse original
+angle implies r=|aw|>s=|av|. The circle centered at a of radius s lies in
+the half-plane facing a from w; backward reach is <pi/2. Therefore
+delta=omega_m+kappa_w>=pi/2 excludes that cut direction. For delta<pi/2,
+s<=r*sin(delta) is a sharper sufficient test. The checker currently uses
+the quarter-turn version, not this sharper sine test.
+
+Next proof target: an uncovered selected shape needs 2*pi/3<=kappa_v<pi,
+pi/2<beta=angle(w,v,a)<pi-kappa_v/2<=2*pi/3, the neighboring flat pole
+angle still obtuse, delta<pi/2, and s>r*sin(delta). Prove that this joint
+configuration is impossible or control finite entry before the endpoint.
+For three common-direction bad patches only one remote cut test is active.
+
+Do not silently exchange poles: although one angle in triangle v,w,a is
+nonobtuse, the replacement source can fail H. Lemma L's through-fan bound
+may still work at both poles below pi, but Case A's no-wrap bound in the
+whole-net reduction is not thereby inherited. This was a tempting invalid
+shortcut during this investigation.
+
+Exact code: `far_projection.py`, `far_projection_examples.py`. Four domains
+pass the hypothesis checker and independent all-28 certificates: a high
+three-common-direction point, a low-curvature point, its 18-coordinate box
+of half-width 1/10000, and a low-curvature point with both pole angles
+obtuse but repaired by the circle argument. Source selection is normalized
+from the older local_gate metadata for the first point; its earlier
+selection metadata had preceded a change of slit.
+
+Exploratory searches found real obtuse original-angle configurations at the
+selected dangerous remote patch. The saved small-integer obtuse example
+proves that the original and flat nonobtuse hypotheses are not universal.
+The searched obtuse points had wide enough gaps for the circle repair.
+Searches directed at simultaneous obtuse beta and acute delta found no
+candidate; this does not prove their joint domain empty. The necessary
+geometric restrictions, not a measured coverage percentage, guide the
+next step. Universal pairs remain 22/28; within kappa_v>=pi they are 28/28.
+
+# Previous continuation: cut-segment equivalence and the only remaining route
 
 11 September 2026 JST. [LEMMA_F_CUT_RAYS.md](LEMMA_F_CUT_RAYS.md) proves
 that the selected H/R net is safe iff the two open radial cut segments

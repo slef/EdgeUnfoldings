@@ -8,7 +8,20 @@ original **49 failure classes: 2 excluded, 47 open**. The all-convex-patch
 case and the convex-patch existence theorem remain proved; the proposed
 fixed-source one-nonconvex-patch argument has a remaining far-fan step.
 
-**Latest result, 11 September:** [two finite cut segments characterize safety
+**Latest result, 11 September:** [the selected net is nonoverlapping whenever
+the sharpest curvature is at least 180 degrees](LEMMA_F_POLE_ANGLE.md),
+including equality. A hypothetical cut crossing traps a neighboring patch
+inside a triangle; a supporting line makes that containment impossible.
+The spherical-link bound supplies the nonobtuse pole angle throughout this
+entire curvature family, completing all 28 pairs. Below 180 degrees,
+nonobtuse original/flat angles and a quarter-turn circle argument cover
+further families. The remaining obstruction needs an obtuse original and
+flat angle, with blue angle plus gap below 90 degrees. That joint branch
+is open; the general selected rule and every-slit Lemma F are not proved.
+Replay four exact examples, including an 18-coordinate box and an obtuse
+point repaired by the circle argument: `python3 -m n6.far_projection_examples`.
+
+**Previous result, 11 September:** [two finite cut segments characterize safety
 of the selected net](LEMMA_F_CUT_RAYS.md) under H and R. The through-fan bound
 from Lemma L excludes one approach to each segment. Convex remote patches,
 leans away from the slit gap, and insufficient angular reach are proved safe,
