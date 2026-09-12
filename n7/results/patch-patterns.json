@@ -1,0 +1,279 @@
+{
+  "scope": "Necessary symbolic patterns; not every admitted pattern is asserted realizable. Counts are not fractions of metric space.",
+  "labelled_count": 121,
+  "class_count": 15,
+  "proved_classes": 3,
+  "classes": [
+    {
+      "representative": "CCCCC",
+      "inward_count": 0,
+      "labelled_count": 1,
+      "members": [
+        "CCCCC"
+      ],
+      "status": "proved conditional family",
+      "theorem": "C",
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BCCCC",
+      "inward_count": 1,
+      "labelled_count": 10,
+      "members": [
+        "CCCCB",
+        "CCCCF",
+        "CCCBC",
+        "CCCFC",
+        "CCBCC",
+        "CCFCC",
+        "CBCCC",
+        "CFCCC",
+        "BCCCC",
+        "FCCCC"
+      ],
+      "status": "proved conditional family",
+      "theorem": "One",
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BBCCC",
+      "inward_count": 2,
+      "labelled_count": 10,
+      "members": [
+        "CCCBB",
+        "CCCFF",
+        "CCBBC",
+        "CCFFC",
+        "CBBCC",
+        "CFFCC",
+        "BCCCB",
+        "BBCCC",
+        "FCCCF",
+        "FFCCC"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": "Gap (one pole curvature at least pi)"
+    },
+    {
+      "representative": "BCBCC",
+      "inward_count": 2,
+      "labelled_count": 10,
+      "members": [
+        "CCBCB",
+        "CCFCF",
+        "CBCCB",
+        "CBCBC",
+        "CFCCF",
+        "CFCFC",
+        "BCCBC",
+        "BCBCC",
+        "FCCFC",
+        "FCFCC"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BCCFC",
+      "inward_count": 2,
+      "labelled_count": 5,
+      "members": [
+        "CCFCB",
+        "CBCCF",
+        "CFCBC",
+        "BCCFC",
+        "FCBCC"
+      ],
+      "status": "proved conditional family",
+      "theorem": "Toward",
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BCFCC",
+      "inward_count": 2,
+      "labelled_count": 5,
+      "members": [
+        "CCBCF",
+        "CBCFC",
+        "CFCCB",
+        "BCFCC",
+        "FCCBC"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BFCCC",
+      "inward_count": 2,
+      "labelled_count": 5,
+      "members": [
+        "CCCBF",
+        "CCBFC",
+        "CBFCC",
+        "BFCCC",
+        "FCCCB"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BBBCC",
+      "inward_count": 3,
+      "labelled_count": 10,
+      "members": [
+        "CCBBB",
+        "CCFFF",
+        "CBBBC",
+        "CFFFC",
+        "BCCBB",
+        "BBCCB",
+        "BBBCC",
+        "FCCFF",
+        "FFCCF",
+        "FFFCC"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BBCBC",
+      "inward_count": 3,
+      "labelled_count": 10,
+      "members": [
+        "CBCBB",
+        "CBBCB",
+        "CFCFF",
+        "CFFCF",
+        "BCBCB",
+        "BCBBC",
+        "BBCBC",
+        "FCFCF",
+        "FCFFC",
+        "FFCFC"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BBCFC",
+      "inward_count": 3,
+      "labelled_count": 10,
+      "members": [
+        "CBCFF",
+        "CBBCF",
+        "CFCBB",
+        "CFFCB",
+        "BCFCB",
+        "BCFFC",
+        "BBCFC",
+        "FCBCF",
+        "FCBBC",
+        "FFCBC"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BBFCC",
+      "inward_count": 3,
+      "labelled_count": 10,
+      "members": [
+        "CCBBF",
+        "CCBFF",
+        "CBBFC",
+        "CBFFC",
+        "BBFCC",
+        "BFCCB",
+        "BFFCC",
+        "FCCBB",
+        "FCCBF",
+        "FFCCB"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BCBFC",
+      "inward_count": 3,
+      "labelled_count": 10,
+      "members": [
+        "CBCBF",
+        "CBFCB",
+        "CBFCF",
+        "CFCBF",
+        "BCBFC",
+        "BFCBC",
+        "BFCFC",
+        "FCBCB",
+        "FCBFC",
+        "FCFCB"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BBBBC",
+      "inward_count": 4,
+      "labelled_count": 10,
+      "members": [
+        "CBBBB",
+        "CFFFF",
+        "BCBBB",
+        "BBCBB",
+        "BBBCB",
+        "BBBBC",
+        "FCFFF",
+        "FFCFF",
+        "FFFCF",
+        "FFFFC"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BBBFC",
+      "inward_count": 4,
+      "labelled_count": 10,
+      "members": [
+        "CBBBF",
+        "CBFFF",
+        "BBBFC",
+        "BBFCB",
+        "BFCBB",
+        "BFFFC",
+        "FCBBB",
+        "FCBFF",
+        "FFCBF",
+        "FFFCB"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    },
+    {
+      "representative": "BBFFC",
+      "inward_count": 4,
+      "labelled_count": 5,
+      "members": [
+        "CBBFF",
+        "BBFFC",
+        "BFFCB",
+        "FCBBF",
+        "FFCBB"
+      ],
+      "status": "open",
+      "theorem": null,
+      "extra_partial_theorem": null
+    }
+  ]
+}

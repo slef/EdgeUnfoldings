@@ -1,0 +1,108 @@
+[
+  {
+    "id": "N7-A1104",
+    "completions": [
+      {
+        "auxiliary_diagonals": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "completed_graph": "N7-A1205",
+        "restriction": "Every inserted diagonal must stay uncut in an original-edge net."
+      },
+      {
+        "auxiliary_diagonals": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "completed_graph": "N7-A1212",
+        "restriction": "Every inserted diagonal must stay uncut in an original-edge net."
+      },
+      {
+        "auxiliary_diagonals": [
+          [
+            1,
+            6
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "completed_graph": "N7-A1212",
+        "restriction": "Every inserted diagonal must stay uncut in an original-edge net."
+      },
+      {
+        "auxiliary_diagonals": [
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "completed_graph": "N7-A1205",
+        "restriction": "Every inserted diagonal must stay uncut in an original-edge net."
+      }
+    ]
+  },
+  {
+    "id": "N7-A1167",
+    "completions": [
+      {
+        "auxiliary_diagonals": [
+          [
+            0,
+            3
+          ]
+        ],
+        "completed_graph": "N7-A1212",
+        "restriction": "Every inserted diagonal must stay uncut in an original-edge net."
+      },
+      {
+        "auxiliary_diagonals": [
+          [
+            4,
+            5
+          ]
+        ],
+        "completed_graph": "N7-A1205",
+        "restriction": "Every inserted diagonal must stay uncut in an original-edge net."
+      }
+    ]
+  },
+  {
+    "id": "N7-A1205",
+    "completions": [
+      {
+        "auxiliary_diagonals": [],
+        "completed_graph": "N7-A1205",
+        "restriction": "Every inserted diagonal must stay uncut in an original-edge net."
+      }
+    ]
+  },
+  {
+    "id": "N7-A1212",
+    "completions": [
+      {
+        "auxiliary_diagonals": [],
+        "completed_graph": "N7-A1212",
+        "restriction": "Every inserted diagonal must stay uncut in an original-edge net."
+      }
+    ]
+  }
+]

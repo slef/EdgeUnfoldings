@@ -1,0 +1,702 @@
+{
+  "kind": "exact_rational_interval_hypothesis_certificate",
+  "scope": "One explicit 21-coordinate box. All ten polestar-plus-slit trees are safe by the written all-convex-patches theorem; no universal graph or Lean certification.",
+  "center": [
+    [
+      "1",
+      "0",
+      "0"
+    ],
+    [
+      "3/5",
+      "4/5",
+      "0"
+    ],
+    [
+      "-3/5",
+      "4/5",
+      "0"
+    ],
+    [
+      "-1",
+      "0",
+      "0"
+    ],
+    [
+      "0",
+      "-1",
+      "0"
+    ],
+    [
+      "0",
+      "0",
+      "1"
+    ],
+    [
+      "0",
+      "0",
+      "-1"
+    ]
+  ],
+  "half_width": "1/1000",
+  "facets": [
+    [
+      5,
+      0,
+      1
+    ],
+    [
+      5,
+      1,
+      2
+    ],
+    [
+      5,
+      2,
+      3
+    ],
+    [
+      5,
+      3,
+      4
+    ],
+    [
+      5,
+      4,
+      0
+    ],
+    [
+      6,
+      0,
+      1
+    ],
+    [
+      6,
+      1,
+      2
+    ],
+    [
+      6,
+      2,
+      3
+    ],
+    [
+      6,
+      3,
+      4
+    ],
+    [
+      6,
+      4,
+      0
+    ]
+  ],
+  "support_count": 40,
+  "corner_count": 30,
+  "minimum_support_lower_bound": "147201/156250",
+  "minimum_corner_lower_bound": "98199/250000",
+  "supports": [
+    {
+      "facet": 0,
+      "other_vertex": 2,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "147201/156250",
+        "30560601/31250000"
+      ]
+    },
+    {
+      "facet": 0,
+      "other_vertex": 3,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "247751/156250",
+        "50451601/31250000"
+      ]
+    },
+    {
+      "facet": 0,
+      "other_vertex": 4,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "74000799/62500000",
+        "38001351/31250000"
+      ]
+    },
+    {
+      "facet": 0,
+      "other_vertex": 6,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "99148999/62500000",
+        "50426601/31250000"
+      ]
+    },
+    {
+      "facet": 1,
+      "other_vertex": 0,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "29464749/31250000",
+        "30536451/31250000"
+      ]
+    },
+    {
+      "facet": 1,
+      "other_vertex": 3,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "29464749/31250000",
+        "30536451/31250000"
+      ]
+    },
+    {
+      "facet": 1,
+      "other_vertex": 4,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "66990799/31250000",
+        "68011701/31250000"
+      ]
+    },
+    {
+      "facet": 1,
+      "other_vertex": 6,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "59514999/31250000",
+        "60486701/31250000"
+      ]
+    },
+    {
+      "facet": 2,
+      "other_vertex": 0,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "247751/156250",
+        "50451601/31250000"
+      ]
+    },
+    {
+      "facet": 2,
+      "other_vertex": 1,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "147201/156250",
+        "30560601/31250000"
+      ]
+    },
+    {
+      "facet": 2,
+      "other_vertex": 4,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "74000799/62500000",
+        "38001351/31250000"
+      ]
+    },
+    {
+      "facet": 2,
+      "other_vertex": 6,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "99148999/62500000",
+        "50426601/31250000"
+      ]
+    },
+    {
+      "facet": 3,
+      "other_vertex": 0,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "124000499/62500000",
+        "126003003/62500000"
+      ]
+    },
+    {
+      "facet": 3,
+      "other_vertex": 1,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "37213/15625",
+        "151153203/62500000"
+      ]
+    },
+    {
+      "facet": 3,
+      "other_vertex": 2,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "73850199/62500000",
+        "38075701/31250000"
+      ]
+    },
+    {
+      "facet": 3,
+      "other_vertex": 6,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "62061999/31250000",
+        "125878003/62500000"
+      ]
+    },
+    {
+      "facet": 4,
+      "other_vertex": 1,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "73850199/62500000",
+        "38075701/31250000"
+      ]
+    },
+    {
+      "facet": 4,
+      "other_vertex": 2,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "37213/15625",
+        "151153203/62500000"
+      ]
+    },
+    {
+      "facet": 4,
+      "other_vertex": 3,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "124000499/62500000",
+        "126003003/62500000"
+      ]
+    },
+    {
+      "facet": 4,
+      "other_vertex": 6,
+      "inward_sign": -1,
+      "oriented_determinant": [
+        "62061999/31250000",
+        "125878003/62500000"
+      ]
+    },
+    {
+      "facet": 5,
+      "other_vertex": 2,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "147201/156250",
+        "30560601/31250000"
+      ]
+    },
+    {
+      "facet": 5,
+      "other_vertex": 3,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "247751/156250",
+        "50451601/31250000"
+      ]
+    },
+    {
+      "facet": 5,
+      "other_vertex": 4,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "74000799/62500000",
+        "38001351/31250000"
+      ]
+    },
+    {
+      "facet": 5,
+      "other_vertex": 5,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "99148999/62500000",
+        "50426601/31250000"
+      ]
+    },
+    {
+      "facet": 6,
+      "other_vertex": 0,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "29464749/31250000",
+        "30536451/31250000"
+      ]
+    },
+    {
+      "facet": 6,
+      "other_vertex": 3,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "29464749/31250000",
+        "30536451/31250000"
+      ]
+    },
+    {
+      "facet": 6,
+      "other_vertex": 4,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "66990799/31250000",
+        "68011701/31250000"
+      ]
+    },
+    {
+      "facet": 6,
+      "other_vertex": 5,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "59514999/31250000",
+        "60486701/31250000"
+      ]
+    },
+    {
+      "facet": 7,
+      "other_vertex": 0,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "247751/156250",
+        "50451601/31250000"
+      ]
+    },
+    {
+      "facet": 7,
+      "other_vertex": 1,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "147201/156250",
+        "30560601/31250000"
+      ]
+    },
+    {
+      "facet": 7,
+      "other_vertex": 4,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "74000799/62500000",
+        "38001351/31250000"
+      ]
+    },
+    {
+      "facet": 7,
+      "other_vertex": 5,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "99148999/62500000",
+        "50426601/31250000"
+      ]
+    },
+    {
+      "facet": 8,
+      "other_vertex": 0,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "124000499/62500000",
+        "126003003/62500000"
+      ]
+    },
+    {
+      "facet": 8,
+      "other_vertex": 1,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "37213/15625",
+        "151153203/62500000"
+      ]
+    },
+    {
+      "facet": 8,
+      "other_vertex": 2,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "73850199/62500000",
+        "38075701/31250000"
+      ]
+    },
+    {
+      "facet": 8,
+      "other_vertex": 5,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "62061999/31250000",
+        "125878003/62500000"
+      ]
+    },
+    {
+      "facet": 9,
+      "other_vertex": 1,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "73850199/62500000",
+        "38075701/31250000"
+      ]
+    },
+    {
+      "facet": 9,
+      "other_vertex": 2,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "37213/15625",
+        "151153203/62500000"
+      ]
+    },
+    {
+      "facet": 9,
+      "other_vertex": 3,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "124000499/62500000",
+        "126003003/62500000"
+      ]
+    },
+    {
+      "facet": 9,
+      "other_vertex": 5,
+      "inward_sign": 1,
+      "oriented_determinant": [
+        "62061999/31250000",
+        "125878003/62500000"
+      ]
+    }
+  ],
+  "corners": [
+    {
+      "facet": 0,
+      "vertex": 5,
+      "dot_product": [
+        "397801/250000",
+        "402203/250000"
+      ]
+    },
+    {
+      "facet": 0,
+      "vertex": 0,
+      "dot_product": [
+        "98399/250000",
+        "101603/250000"
+      ]
+    },
+    {
+      "facet": 0,
+      "vertex": 1,
+      "dot_product": [
+        "98199/250000",
+        "101801/250000"
+      ]
+    },
+    {
+      "facet": 1,
+      "vertex": 5,
+      "dot_product": [
+        "317601/250000",
+        "322401/250000"
+      ]
+    },
+    {
+      "facet": 1,
+      "vertex": 1,
+      "dot_product": [
+        "178199/250000",
+        "181803/250000"
+      ]
+    },
+    {
+      "facet": 1,
+      "vertex": 2,
+      "dot_product": [
+        "178199/250000",
+        "181803/250000"
+      ]
+    },
+    {
+      "facet": 2,
+      "vertex": 5,
+      "dot_product": [
+        "397801/250000",
+        "402203/250000"
+      ]
+    },
+    {
+      "facet": 2,
+      "vertex": 2,
+      "dot_product": [
+        "98199/250000",
+        "101801/250000"
+      ]
+    },
+    {
+      "facet": 2,
+      "vertex": 3,
+      "dot_product": [
+        "98399/250000",
+        "101603/250000"
+      ]
+    },
+    {
+      "facet": 3,
+      "vertex": 5,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 3,
+      "vertex": 3,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 3,
+      "vertex": 4,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 4,
+      "vertex": 5,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 4,
+      "vertex": 4,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 4,
+      "vertex": 0,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 5,
+      "vertex": 6,
+      "dot_product": [
+        "397801/250000",
+        "402203/250000"
+      ]
+    },
+    {
+      "facet": 5,
+      "vertex": 0,
+      "dot_product": [
+        "98399/250000",
+        "101603/250000"
+      ]
+    },
+    {
+      "facet": 5,
+      "vertex": 1,
+      "dot_product": [
+        "98199/250000",
+        "101801/250000"
+      ]
+    },
+    {
+      "facet": 6,
+      "vertex": 6,
+      "dot_product": [
+        "317601/250000",
+        "322401/250000"
+      ]
+    },
+    {
+      "facet": 6,
+      "vertex": 1,
+      "dot_product": [
+        "178199/250000",
+        "181803/250000"
+      ]
+    },
+    {
+      "facet": 6,
+      "vertex": 2,
+      "dot_product": [
+        "178199/250000",
+        "181803/250000"
+      ]
+    },
+    {
+      "facet": 7,
+      "vertex": 6,
+      "dot_product": [
+        "397801/250000",
+        "402203/250000"
+      ]
+    },
+    {
+      "facet": 7,
+      "vertex": 2,
+      "dot_product": [
+        "98199/250000",
+        "101801/250000"
+      ]
+    },
+    {
+      "facet": 7,
+      "vertex": 3,
+      "dot_product": [
+        "98399/250000",
+        "101603/250000"
+      ]
+    },
+    {
+      "facet": 8,
+      "vertex": 6,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 8,
+      "vertex": 3,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 8,
+      "vertex": 4,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 9,
+      "vertex": 6,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 9,
+      "vertex": 4,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    },
+    {
+      "facet": 9,
+      "vertex": 0,
+      "dot_product": [
+        "247999/250000",
+        "252003/250000"
+      ]
+    }
+  ]
+}

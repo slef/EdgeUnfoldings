@@ -1,0 +1,452 @@
+{
+  "generator": "plantri 5.8",
+  "command": "plantri -pg 7 n7.g6",
+  "source": "https://users.cecs.anu.edu.au/~bdm/plantri/plantri58.tar.gz",
+  "archive_sha256": "e78a944116fec9f2c9f5e484206276cc2b0043bae803e9815f4b2683614629b8",
+  "output_count": 34,
+  "all_atlas_graphs_matched_once": true,
+  "matches": [
+    {
+      "plantri_graph6": "F|nmG",
+      "atlas_id": "N7-A1190",
+      "vertex_mapping": {
+        "1": 0,
+        "6": 1,
+        "5": 3,
+        "2": 4,
+        "0": 6,
+        "3": 2,
+        "4": 5
+      }
+    },
+    {
+      "plantri_graph6": "FtnjG",
+      "atlas_id": "N7-A1145",
+      "vertex_mapping": {
+        "1": 0,
+        "6": 1,
+        "0": 4,
+        "5": 6,
+        "2": 3,
+        "3": 2,
+        "4": 5
+      }
+    },
+    {
+      "plantri_graph6": "F|dow",
+      "atlas_id": "N7-A1097",
+      "vertex_mapping": {
+        "1": 0,
+        "2": 1,
+        "0": 5,
+        "5": 6,
+        "3": 2,
+        "4": 3,
+        "6": 4
+      }
+    },
+    {
+      "plantri_graph6": "FtvJo",
+      "atlas_id": "N7-A1154",
+      "vertex_mapping": {
+        "3": 0,
+        "2": 1,
+        "0": 3,
+        "4": 4,
+        "6": 6,
+        "5": 2,
+        "1": 5
+      }
+    },
+    {
+      "plantri_graph6": "FtpZg",
+      "atlas_id": "N7-A1101",
+      "vertex_mapping": {
+        "2": 0,
+        "3": 4,
+        "6": 5,
+        "0": 6,
+        "4": 1,
+        "1": 2,
+        "5": 3
+      }
+    },
+    {
+      "plantri_graph6": "F|nMG",
+      "atlas_id": "N7-A1150",
+      "vertex_mapping": {
+        "1": 0,
+        "6": 1,
+        "5": 3,
+        "2": 4,
+        "0": 6,
+        "3": 2,
+        "4": 5
+      }
+    },
+    {
+      "plantri_graph6": "FtnJG",
+      "atlas_id": "N7-A1091",
+      "vertex_mapping": {
+        "1": 0,
+        "0": 1,
+        "6": 3,
+        "5": 4,
+        "2": 2,
+        "4": 5,
+        "3": 6
+      }
+    },
+    {
+      "plantri_graph6": "F|d_w",
+      "atlas_id": "N7-A998",
+      "vertex_mapping": {
+        "2": 0,
+        "0": 3,
+        "3": 4,
+        "5": 5,
+        "1": 6,
+        "6": 1,
+        "4": 2
+      }
+    },
+    {
+      "plantri_graph6": "Fut`g",
+      "atlas_id": "N7-A1006",
+      "vertex_mapping": {
+        "2": 0,
+        "5": 1,
+        "6": 4,
+        "0": 5,
+        "1": 6,
+        "4": 2,
+        "3": 3
+      }
+    },
+    {
+      "plantri_graph6": "F~e]g",
+      "atlas_id": "N7-A1187",
+      "vertex_mapping": {
+        "6": 0,
+        "1": 1,
+        "5": 2,
+        "0": 3,
+        "3": 4,
+        "2": 5,
+        "4": 6
+      }
+    },
+    {
+      "plantri_graph6": "FvfZ_",
+      "atlas_id": "N7-A1141",
+      "vertex_mapping": {
+        "1": 0,
+        "6": 3,
+        "0": 4,
+        "5": 5,
+        "3": 6,
+        "2": 1,
+        "4": 2
+      }
+    },
+    {
+      "plantri_graph6": "FtdJw",
+      "atlas_id": "N7-A1089",
+      "vertex_mapping": {
+        "2": 0,
+        "3": 4,
+        "0": 5,
+        "6": 6,
+        "1": 1,
+        "5": 2,
+        "4": 3
+      }
+    },
+    {
+      "plantri_graph6": "FtdJg",
+      "atlas_id": "N7-A997",
+      "vertex_mapping": {
+        "2": 0,
+        "0": 3,
+        "6": 4,
+        "3": 6,
+        "4": 1,
+        "5": 5,
+        "1": 2
+      }
+    },
+    {
+      "plantri_graph6": "FtdJG",
+      "atlas_id": "N7-A875",
+      "vertex_mapping": {
+        "1": 0,
+        "5": 4,
+        "6": 5,
+        "0": 6,
+        "2": 1,
+        "3": 3,
+        "4": 2
+      }
+    },
+    {
+      "plantri_graph6": "FtdJW",
+      "atlas_id": "N7-A999",
+      "vertex_mapping": {
+        "1": 0,
+        "5": 3,
+        "6": 5,
+        "0": 6,
+        "2": 1,
+        "3": 2,
+        "4": 4
+      }
+    },
+    {
+      "plantri_graph6": "Fs|ho",
+      "atlas_id": "N7-A1080",
+      "vertex_mapping": {
+        "4": 0,
+        "0": 1,
+        "2": 2,
+        "1": 3,
+        "3": 4,
+        "5": 5,
+        "6": 6
+      }
+    },
+    {
+      "plantri_graph6": "FsTxg",
+      "atlas_id": "N7-A993",
+      "vertex_mapping": {
+        "4": 0,
+        "1": 4,
+        "3": 5,
+        "5": 6,
+        "6": 1,
+        "2": 3,
+        "0": 2
+      }
+    },
+    {
+      "plantri_graph6": "FsThg",
+      "atlas_id": "N7-A877",
+      "vertex_mapping": {
+        "5": 0,
+        "1": 1,
+        "2": 2,
+        "4": 4,
+        "6": 5,
+        "0": 3,
+        "3": 6
+      }
+    },
+    {
+      "plantri_graph6": "FvtPg",
+      "atlas_id": "N7-A1078",
+      "vertex_mapping": {
+        "2": 0,
+        "6": 1,
+        "0": 4,
+        "3": 5,
+        "5": 2,
+        "1": 3,
+        "4": 6
+      }
+    },
+    {
+      "plantri_graph6": "FvSow",
+      "atlas_id": "N7-A1008",
+      "vertex_mapping": {
+        "0": 0,
+        "1": 1,
+        "2": 5,
+        "3": 6,
+        "4": 2,
+        "6": 3,
+        "5": 4
+      }
+    },
+    {
+      "plantri_graph6": "F|bWw",
+      "atlas_id": "N7-A1083",
+      "vertex_mapping": {
+        "2": 0,
+        "3": 1,
+        "1": 4,
+        "0": 6,
+        "6": 2,
+        "5": 5,
+        "4": 3
+      }
+    },
+    {
+      "plantri_graph6": "F{vHo",
+      "atlas_id": "N7-A1082",
+      "vertex_mapping": {
+        "1": 0,
+        "2": 1,
+        "4": 3,
+        "0": 4,
+        "5": 6,
+        "6": 2,
+        "3": 5
+      }
+    },
+    {
+      "plantri_graph6": "F{fHo",
+      "atlas_id": "N7-A992",
+      "vertex_mapping": {
+        "3": 0,
+        "0": 3,
+        "6": 4,
+        "4": 6,
+        "5": 1,
+        "1": 5,
+        "2": 2
+      }
+    },
+    {
+      "plantri_graph6": "FtfJw",
+      "atlas_id": "N7-A1160",
+      "vertex_mapping": {
+        "4": 0,
+        "0": 3,
+        "6": 4,
+        "3": 5,
+        "5": 6,
+        "1": 1,
+        "2": 2
+      }
+    },
+    {
+      "plantri_graph6": "Ft~JO",
+      "atlas_id": "N7-A1142",
+      "vertex_mapping": {
+        "0": 0,
+        "4": 1,
+        "1": 3,
+        "2": 4,
+        "3": 5,
+        "5": 6,
+        "6": 2
+      }
+    },
+    {
+      "plantri_graph6": "Ftpww",
+      "atlas_id": "N7-A1093",
+      "vertex_mapping": {
+        "1": 0,
+        "5": 3,
+        "0": 4,
+        "4": 6,
+        "6": 1,
+        "3": 5,
+        "2": 2
+      }
+    },
+    {
+      "plantri_graph6": "F~f]G",
+      "atlas_id": "N7-A1186",
+      "vertex_mapping": {
+        "1": 0,
+        "3": 1,
+        "5": 2,
+        "0": 3,
+        "6": 4,
+        "2": 5,
+        "4": 6
+      }
+    },
+    {
+      "plantri_graph6": "FtfZg",
+      "atlas_id": "N7-A1146",
+      "vertex_mapping": {
+        "4": 0,
+        "3": 4,
+        "5": 5,
+        "0": 6,
+        "1": 1,
+        "6": 3,
+        "2": 2
+      }
+    },
+    {
+      "plantri_graph6": "FtdZg",
+      "atlas_id": "N7-A1095",
+      "vertex_mapping": {
+        "2": 0,
+        "6": 4,
+        "0": 5,
+        "3": 6,
+        "4": 1,
+        "5": 3,
+        "1": 2
+      }
+    },
+    {
+      "plantri_graph6": "FsThw",
+      "atlas_id": "N7-A1005",
+      "vertex_mapping": {
+        "1": 0,
+        "4": 3,
+        "5": 4,
+        "0": 6,
+        "3": 1,
+        "6": 5,
+        "2": 2
+      }
+    },
+    {
+      "plantri_graph6": "F|fJw",
+      "atlas_id": "N7-A1212",
+      "vertex_mapping": {
+        "1": 0,
+        "2": 1,
+        "5": 4,
+        "0": 5,
+        "6": 6,
+        "3": 2,
+        "4": 3
+      }
+    },
+    {
+      "plantri_graph6": "F|tJw",
+      "atlas_id": "N7-A1205",
+      "vertex_mapping": {
+        "5": 0,
+        "1": 4,
+        "4": 5,
+        "6": 6,
+        "3": 1,
+        "2": 2,
+        "0": 3
+      }
+    },
+    {
+      "plantri_graph6": "F|dJw",
+      "atlas_id": "N7-A1167",
+      "vertex_mapping": {
+        "5": 0,
+        "1": 4,
+        "4": 5,
+        "6": 6,
+        "3": 1,
+        "2": 2,
+        "0": 3
+      }
+    },
+    {
+      "plantri_graph6": "F|dJg",
+      "atlas_id": "N7-A1104",
+      "vertex_mapping": {
+        "4": 0,
+        "5": 1,
+        "0": 5,
+        "3": 6,
+        "6": 3,
+        "1": 4,
+        "2": 2
+      }
+    }
+  ]
+}

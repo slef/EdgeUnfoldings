@@ -1,0 +1,8 @@
+{
+  "graphs_checked": 34,
+  "saved_candidate_audits_replayed": 276,
+  "all_tree_count_independently_matched": 25942,
+  "solved_graphs": 10,
+  "open_graphs": 24,
+  "scope": "Finite combinatorial verification plus stated geometric theorem dependencies; not proof-assistant verification."
+}

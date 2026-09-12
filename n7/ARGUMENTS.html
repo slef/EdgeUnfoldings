@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Seven-vertex arguments</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body class="reading"><p class="back"><a href="index.html">← Seven-vertex overview</a></p>
+<header id="title-block-header">
+<h1 class="title">Seven-vertex arguments</h1>
+</header>
+<h1 id="seven-vertices-first-case-map-and-transferable-arguments">Seven vertices: first case map and transferable arguments</h1>
+<p>12 September 2026. This is a separate investigation in <code>n7/</code>, on branch <code>codex/n7-unfolding</code>. The six-vertex arguments and Lean work are not modified. The new arguments below are written proofs under self-review; no formal or independent mathematical verification is claimed.</p>
+<h2 id="what-is-covered-now">What is covered now</h2>
+<p>We consider full-dimensional convex three-dimensional polytopes with seven genuine vertices. Cuts must be original edges. Face interiors must be disjoint in the resulting connected planar net; boundary contact is allowed. A graph case is solved only if the argument covers <strong>every convex realization of that graph</strong>, not just a convenient symmetric example.</p>
+<p>There are <strong>34 combinatorial types</strong>. They split as follows, with priority from top to bottom so that no graph is counted twice:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 30%" />
+<col style="width: 23%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th style="text-align: right;">Graph types</th>
+<th>Whole graph status</th>
+<th>Reason / next obligation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A. A vertex joined to all six others</td>
+<td style="text-align: right;">9</td>
+<td>Solved by an established theorem</td>
+<td>Cut its six edges; this is a shortest-path star</td>
+</tr>
+<tr class="even">
+<td>B. A dome, after removing group A</td>
+<td style="text-align: right;">1</td>
+<td>Solved by an established theorem</td>
+<td>Keep all other faces hinged to the base</td>
+</tr>
+<tr class="odd">
+<td>C. Degree-five source sharing a face with its sole nonneighbor</td>
+<td style="text-align: right;">11</td>
+<td>Open, with a reduction</td>
+<td>Only one quadrilateral changes position</td>
+</tr>
+<tr class="even">
+<td>D. Another source sharing a face with every vertex</td>
+<td style="text-align: right;">9</td>
+<td>Open, with a reduction</td>
+<td>One, two, or three incident polygons change position</td>
+</tr>
+<tr class="odd">
+<td>E. No source of either kind</td>
+<td style="text-align: right;">4</td>
+<td>Open</td>
+<td>Two triangular core graphs, plus two graphs with quadrilaterals</td>
+</tr>
+</tbody>
+</table>
+<p>Thus <strong>10/34 whole graph types are covered; 24 remain open</strong>. This is a combinatorial count, not a percentage of shapes, proof difficulty, or elapsed research. The 10 covered cases use published results, independently of the new six-vertex manuscript. The other 20 reductions do not depend on the six-vertex existence theorem either: their general proof is given below.</p>
+<p>The <a href="index.html">overview</a> draws every graph and lists a specific candidate cut tree and all remaining face-pair obligations. The <a href="results/catalogue.json">census data</a> retain vertex labels, facets, edge lists, and the exact paths used by the pair reductions. IDs such as N7-A992 use stable Graph Atlas indices; degree sequences alone are <strong>not</strong> used to identify graphs.</p>
+<h2 id="why-this-is-the-complete-graph-list">Why this is the complete graph list</h2>
+<p>A convex three-polytope has a simple, planar, 3-connected graph, and conversely Steinitz’s theorem realizes every such graph. Its planar embedding is unique up to reflection, so its facet cycles are determined by its graph. We filter the complete Graph Atlas through these conditions, rather than sampling coordinates. The result has edge-count distribution</p>
+<table>
+<thead>
+<tr class="header">
+<th>Edges</th>
+<th style="text-align: right;">11</th>
+<th style="text-align: right;">12</th>
+<th style="text-align: right;">13</th>
+<th style="text-align: right;">14</th>
+<th style="text-align: right;">15</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Types</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table>
+<p>The lower edge bound follows from degree at least three; the upper bound is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mi>n</mi><mo>−</mo><mn>6</mn><mo>=</mo><mn>15</mn></mrow><annotation encoding="application/x-tex">3n-6=15</annotation></semantics></math>. The <a href="https://networkx.org/documentation/stable/reference/generated/networkx.generators.atlas.graph_atlas_g.html">NetworkX atlas documentation</a> records completeness through seven vertices. We also ran the independently implemented <a href="https://users.cecs.anu.edu.au/~bdm/plantri/">plantri</a> generator and matched all 34 outputs to the atlas by graph isomorphism. Its authors’ <a href="https://users.cecs.anu.edu.au/~bdm/plantri/plantri-guide.txt">manual</a> separately gives the same count. The saved comparison includes the source archive hash and the label maps. These are exhaustive finite graph checks, not geometric experiments or a proof-assistant formalization of enumeration.</p>
+<h2 id="edge-star">A. A universal vertex works for any number of vertices</h2>
+<p><strong>Theorem.</strong> If a convex polytope has a vertex <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> joined by an original edge to every other vertex, cutting precisely those edges gives a nonoverlapping net.</p>
+<p>Each segment <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>u</mi></mrow><annotation encoding="application/x-tex">vu</annotation></semantics></math> is a shortest surface path: it attains the Euclidean distance between its endpoints, which is a lower bound for every surface path. The segments have disjoint interiors and form a spanning tree. Their unfolding is therefore the shortest-path star at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>. The established star theorem allows the source to be a vertex: see Definition 1 and Theorem 4 of <a href="https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SOCG.2015.390">Kiazyk and Lubiw (2015)</a>. Nothing in this application uses <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">n=6</annotation></semantics></math>. It settles the nine indicated types.</p>
+<h2 id="dome">B. The dome theorem also has no vertex-count restriction</h2>
+<p>A dome has a base facet sharing an edge with every other facet. Retain those hinges and cut all remaining edges. <a href="https://cccg.ca/proceedings/2007/01a4.pdf">Pinciu (2007), Theorem 1 and Corollary 2</a> prove nonoverlap for this face-neighborhood unfolding. There are two dome graphs here; the hexagonal pyramid is already in A. The additional case is N7-A875, whose base is the pentagon with labels 1, 3, 2, 4, 5 in our atlas embedding. The catalogue’s facet witness, rather than this descriptive label, is the source of truth.</p>
+<h2 id="cofacial-core">C–D. Move a few whole faces; the rest keeps a known safe placement</h2>
+<p>Call <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> a <strong>cofacial source</strong> if every vertex shares an original face with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>. Adjacent vertices automatically satisfy this condition. We extend the six-vertex quadrilateral comparison to an arbitrary number of vertices and to several incident polygons.</p>
+<p><strong>Cofacial-core theorem.</strong> At a cofacial source <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>:</p>
+<ol type="1">
+<li>Cut every original edge incident to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>.</li>
+<li>For each original face incident to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>, choose exactly one boundary edge not incident to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> to remain as a hinge; cut the other such boundary edges.</li>
+</ol>
+<p>These cuts form an original-edge spanning tree. In the resulting net, every pair of faces <strong>outside the nontriangular faces incident to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math></strong> has disjoint interiors. Any overlap must involve at least one of those movable polygons. The theorem does not say that any hinge choice makes the movable polygons safe.</p>
+<h3 id="proof">Proof</h3>
+<p>First make a comparison unfolding, temporarily allowing face diagonals. In each face containing <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>, draw the diagonals from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> to all its other nonadjacent corners. Together with the original edges at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>, these are straight segments to all other vertices. They are shortest surface paths. Their interiors do not intersect, so cutting them gives a nonoverlapping shortest-path star.</p>
+<p>A nonneighbor can share at most one face with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>. Otherwise two distinct facets would intersect in two nonadjacent vertices, which is impossible: their intersection must be a common vertex or edge. Also an original facet cannot have a graph edge as a diagonal in its interior. Thus a face with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math> corners at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> contributes exactly <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>−</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">m-3</annotation></semantics></math> distinct nonneighbors and the same number of comparison diagonals.</p>
+<p>The fan triangulation of each incident face consists of leaf triangles in the comparison unfolding’s uncut dual tree. Each such triangle has two cut sides at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> and one boundary hinge away from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>. Remove all the triangles belonging to the nontriangular incident faces. Deleting leaves from a tree leaves the other faces connected, with their same safe relative placements.</p>
+<p>In the proposed original-edge net, each removed polygon is a single leaf, attached by its one retained boundary hinge. Removing these whole leaves leaves exactly the same connected core and the same hinges as before. The core’s development is unique up to a planar rigid motion, so all its pairs stay safe.</p>
+<p>For completeness the original cuts really form a spanning tree. For an incident face <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>,</mo><mi>a</mi><mo>,</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>k</mi></msub><mo>,</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">v,a,x_1,\ldots,x_k,b</annotation></semantics></math>, the vertices <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>,</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a,b</annotation></semantics></math> are neighbors of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> and each <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math> is a distinct nonneighbor belonging only to this face. Deleting one edge of the chain <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>,</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>k</mi></msub><mo>,</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a,x_1,\ldots,x_k,b</annotation></semantics></math> leaves two paths, each attached at one end to the radial star. Doing this in every incident face adds each nonneighbor once and creates no cycle. All vertices are connected and there are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo stretchy="false" form="prefix">(</mo><mi>v</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mo>∑</mo><mi>k</mi><mo>=</mo><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">d(v)+\sum k=n-1</annotation></semantics></math> cuts. All are original edges. This also shows directly why leaving the comparison diagonals cut would be an invalid substitute for the required original-edge net.</p>
+<h3 id="exactly-what-the-eleven-quadrilateral-cases-gain">Exactly what the eleven quadrilateral cases gain</h3>
+<p>For a degree-five source at seven vertices there is only one nonneighbor. If it is cofacial with the source, their common facet is a quadrilateral: a larger facet would contribute more than one nonneighbor. The two possible retained hinges are precisely the six-vertex comparison’s two routes. All pairs avoiding that quadrilateral are safe, without curvature assumptions. Additional pairs follow from the two local facts below.</p>
+<p>For the other nine cofacial types, the same proof handles the complete set of incident polygons. In the displayed candidates, one type moves a single pentagon, six move two quadrilaterals, one moves a quadrilateral and a pentagon, and N7-A1005 moves three quadrilaterals. The candidate shown in the overview minimizes the remaining pair count <strong>within this finite family</strong>, not among all possible proof techniques or all geometric cut rules.</p>
+<h2 id="two-local-reductions-that-remain-valid-at-seven-vertices">Two local reductions that remain valid at seven vertices</h2>
+<p><strong>Uncut vertex fan.</strong> If all faces on the unique uncut hinge path from face <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math> to face <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math> contain the same original vertex <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>, they form a consecutive fan there. Its angle is at most the full angle at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>, strictly below <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math>. Convexity puts each face inside its corner wedge. These successive wedges have disjoint interiors, so <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math> cannot overlap. Merely sharing a label is insufficient: every face and hinge along the path must retain that vertex.</p>
+<p><strong>Two hinges through an original face.</strong> If the path is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>−</mo><mi>Q</mi><mo>−</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A-Q-B</annotation></semantics></math>, the relative placement is exactly a subplacement of Pinciu’s unfolding of the neighborhood of the original facet <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>. Hence <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math> are safe. This does not authorize using an arbitrary auxiliary triangle as <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>, or a path with extra hinges.</p>
+<p>The census checks all <strong>25,942 original cut trees</strong> across the 34 graphs with these two tests. They alone do not settle an extra graph beyond A–B. They do give a concrete short residual list for every remaining graph. For cofacial candidates we add the core theorem before reporting that list.</p>
+<h3 id="a-useful-first-target-n7-a992">A useful first target: N7-A992</h3>
+<p>Use the catalogue’s seven original faces:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Face</th>
+<th>Cycle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0–3–2–4 (quadrilateral)</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0–3–6</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0–4–6</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>1–3–5</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>1–3–6</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>1–5–2–4–6 (pentagon)</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>2–3–5</td>
+</tr>
+</tbody>
+</table>
+<p>Choose source 3 and cut <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>03</mn><mo>,</mo><mn>13</mn><mo>,</mo><mn>23</mn><mo>,</mo><mn>35</mn><mo>,</mo><mn>36</mn><mo>,</mo><mn>04</mn></mrow><annotation encoding="application/x-tex">03,13,23,35,36,04</annotation></semantics></math>. The quadrilateral stays hinged on 24. Exactly <strong>20 of its 21 face-pair obligations</strong> are settled by the preceding arguments. The one remaining pair is the quadrilateral (face 0) against triangle 036 (face 1), along hinge path 0–5–2–1.</p>
+<p>This is a particularly clean target for a separator or a switch of hinge/source. It is <strong>not</strong> a 20/21 proof of the full graph theorem in any measure of effort: one stubborn pair could require a different tree. Nor is a missing witness an example of actual overlap. No numerical geometry search has established failure or success of this particular residual pair in this investigation.</p>
+<h2 id="core-graphs">E. Two core graphs and two original-edge restrictions</h2>
+<p>The four graphs without any cofacial source are:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Graph</th>
+<th>Structure</th>
+<th>Further decomposition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>N7-A1212</td>
+<td>Pentagonal bipyramid</td>
+<td>Five two-face patches around its two poles</td>
+</tr>
+<tr class="even">
+<td>N7-A1205</td>
+<td>Capped-octahedron graph</td>
+<td>Octahedron graph with a new vertex over a triangular face</td>
+</tr>
+<tr class="odd">
+<td>N7-A1167</td>
+<td>One quadrilateral, otherwise triangles</td>
+<td>Either diagonal completes it to one of the two preceding graphs</td>
+</tr>
+<tr class="even">
+<td>N7-A1104</td>
+<td>Two quadrilaterals, otherwise triangles</td>
+<td>Its four triangulations give the same two core graphs</td>
+</tr>
+</tbody>
+</table>
+<p>These are graph completions, <strong>not unfoldability reductions</strong>. A diagonal inserted in an original quadrilateral is a flat auxiliary hinge and must remain uncut. Likewise, deleting the cap vertex from the capped-octahedron graph does not justify appending a tetrahedral cap to an arbitrary safe six-vertex net. The replacement faces can collide with remote faces. A cap-attachment lemma would need to prove that missing geometric step.</p>
+<p>The separate <a href="BIPYRAMID_PATCHES.html">bipyramid arguments</a> extend several of the old octahedral lemmas. They cover three complete conditional patch patterns and additional curvature-restricted families. The bipyramid graph as a whole remains open here.</p>
+<h2 id="what-does-not-automatically-extend-from-the-six-vertex-proof">What does not automatically extend from the six-vertex proof</h2>
+<ul>
+<li>The four-patch exhaustion in Lemma F does not cover a five-patch fan. There are more separated patch pairs and longer intervening chains.</li>
+<li>Lemma L’s local geometry extends with an explicit curvature threshold; the proof that the old choice automatically meets that threshold used <strong>four</strong>, rather than five, equator vertices.</li>
+<li>The paired-pole rule’s wider-angle identity closes a three-petal block using the one remaining petal. A five-petal fan leaves two petals outside that block. The old identity cannot simply be cited with a renamed index.</li>
+<li>Removing a degree-three vertex or merging two vertices does not by itself transfer an edge unfolding back to the original polytope.</li>
+<li>The legacy seven-vertex experiment keys some samples by degree sequence. Our catalogue does not reuse that identification: different graphs can have the same degrees. The old archived bipyramid solver runs returned unknown; they supply no proof premise here.</li>
+</ul>
+<h2 id="next-work-in-order">Next work, in order</h2>
+<ol type="1">
+<li>Work on the single residual pair of N7-A992, with an explicit alternative tree if its fixed candidate fails. This would settle one additional whole graph.</li>
+<li>Use the five-patch census to attack the still-open bipyramid patterns, especially two inward patches. This is the closest structural continuation of the octahedron work.</li>
+<li>Prove a controlled cap-attachment lemma for N7-A1205. Preserve the six-vertex proof as a dependency rather than editing it while the Lean audit runs.</li>
+<li>Track flat auxiliary hinges when applying either core theorem to the two nonsimplicial core graphs. A proof that needs to cut the new diagonal is not enough.</li>
+</ol>
+<p>Every later update should retain the earlier status in the overview history. New experiments must be labelled as examples; a whole graph changes status only after its universal argument and hypotheses are written down.</p>
+</body>
+</html>
