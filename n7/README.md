@@ -95,6 +95,9 @@ and explicit bijection of its 34 outputs to our catalogue are retained in
 | File | Purpose |
 | --- | --- |
 | `ARGUMENTS.md` | Complete graph decomposition; universal edge-star and dome cases; general cofacial-core proof; next targets |
+| `BIPYRAMID_ALIGNED.md` | Entire aligned-pole family; one fixed cut tree throughout lower-pole insertion from zero curvature |
+| `bipyramid_four_bad_box.py` | Exact 21-coordinate CBBBB neighborhood, including nonplanar equators and displaced poles; all 45 face pairs certified |
+| `bipyramid-aligned-demo.html` | Interactive illustration of the written all-height theorem, with a 3D solid and safe net |
 | `BIPYRAMID_STAR_PATCH.md` | Shortest-patch comparison; every large-pole bipyramid proved; obtuse-corner and empty-region tests; exact four-tree failures |
 | `BIPYRAMID_OVERNIGHT.md` | Universal local rule, two-patch large-gap and receiver-gate theorems, and curvature transfer |
 | `BIPYRAMID_CHAIN_PAIR.md` | Small-fan exclusion, complete large-angle branch, wider-apex separator, and seventh-vertex correction |
@@ -135,7 +138,8 @@ formal verification of the geometric arguments.
    Read `BIPYRAMID_STAR_PATCH.md`: every pole-curvature-at-least-π case is now proved.
    Four shortest-patch endpoint trees can all fail outside the proved gates;
    do not assume that restricted rule universal. Work in the both-low-pole
-   region, while also pursuing the small-angle configurations in `BIPYRAMID_CHAIN_PAIR.md#remaining`.
+   region outside the aligned-pole family, now proved by the auxiliary-pyramid
+   comparison in `BIPYRAMID_ALIGNED.md`, while also pursuing the small-angle configurations in `BIPYRAMID_CHAIN_PAIR.md#remaining`.
    Opposite receiver preferences and both receiver-plus-gap failures are
    now realized by an exact integer example with six safe nets. Do not
    try to prove those inequalities impossible. The original fixed

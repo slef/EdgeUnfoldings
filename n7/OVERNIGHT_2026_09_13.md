@@ -1,7 +1,7 @@
 # Pentagonal bipyramid overnight session — 13 September 2026
 
 Work window: **2026-09-12 16:04–22:04 UTC** (01:04–07:04 Tokyo).
-Checkpoint updated around 18:45 UTC; approximately 3 hours 20 minutes remain.
+Checkpoint updated around 19:03 UTC; approximately 3 hours remain.
 Continue substantive research until the deadline. The heartbeat automation
 `pentagonal-bipyramid-overnight` is active in this task every 5 minutes,
 with UNTIL 22:06 UTC so the final deadline run is included. At the deadline,
@@ -52,24 +52,38 @@ Completed and installed; all 43 Python tests and both Node UI tests pass.
    `bipyramid-star-replacement.svg` rendered and visually checked. History
    retained in collapsed entries. All edits only n7; no push or merge.
 
-**NEXT PRIORITY — promising complete geometric family theorem:**
-Read `BIPYRAMID_ALIGNED_WORKING.md`. A convex planar equator, two poles
-vertically above/below the SAME interior point, with arbitrary heights,
-appears fully proved by a new auxiliary-pyramid comparison. Use lower pole
-as fan, higher as cut-star source, and farthest ring vertex as slit. Complete
-its low-curvature opened fan to a convex polygon; for high curvature the fan
-already is convex. The constant difference of squared pole-to-ring distances
-is the squared height of an auxiliary pyramid, whose safe edge-star net
-contains the actual fan and petals. Equal-height case follows by a justified
-pyramid-height-zero limit. The SAME cut tree works when both original pole
-heights scale from zero in a fixed ratio. This directly implements the
-user's morph idea on a defined family. Need polish proof, exact examples,
-figure, overview, and independently audit before marking family proved.
+**Further completed result — aligned poles, around 19:03 UTC:**
 
-The working note gives a simple integer four-inward CBBBB example with
-both poles below 0.01 degrees, both shortest-patch ring corners acute,
-and ten individually certified safe nets. Thus the low-pole four-inward
-region is real; the aligned-family proof covers its max-radius tree.
+`BIPYRAMID_ALIGNED.md` proves the ENTIRE family with convex planar equator,
+poles on a common perpendicular through an interior point, arbitrary
+positive heights, any ring size. Lower-height pole is fan, higher source;
+slit at farthest equator vertex. Complete the fan to convex B if its gap
+is belowπ; aboveπ the fan alreadyisconvex. The constant difference of
+squared pole distances is C=H²-h². An auxiliary pyramid with baseB and
+apex height sqrtC has exactly the actual petal triangles; its safe star
+net contains the original net. Equal heights follow from a justified
+zero-auxiliary-height limit. Boundary fan curvatureπ included inproof.
+
+Fix the higher pole and grow the lower one fromzero toheight≤H. This is
+an ACTUAL six-to-seven insertion froma pentagonal pyramid, withonefixed
+cut tree safe throughout. Maximum-radius slitdoesnotchangewithheight.
+`bipyramid_aligned.py`: seven exact examples, both completionregimes,
+equal/unequalheights andtwoCBBBBlow-poleexamples. `bipyramid-aligned-demo.html`
+has101 drawingframes,rotatable3Dandconvexcompletion; drawingsarenotproof.
+Scientificfigure andUI SVGsvisuallychecked;labelsanddefaultviewimproved.
+
+`bipyramid_four_bad_box.py` adds an exactfull21-coordinateclosedbox with
+halfwidth1/10000aroundtheintegerCBBBBexample. Thisallowseachcoordinate
+independently,soincludesnonplanarequatorsanddisplacedpoles. All40strict
+supportsandpatchsignsheld; bothpolesbelow1degree; all45pairs(27commonfan,
+18strictintervalaxes)certifiedforonefixedtree. DoNOTtreatthewholeCBBBB
+classasproved. Wholecountsremain10/34and3/15.
+
+**NEXT PROOF TARGETS:** both-low-pole shapes outside alignedfamily andthe
+specifiedbox; opposing-chain small-angle residual remainsonepair. Consider
+extendingtheconvex-fan/pyramidcomparison,orprove theremainingthree-petal
+separator. The unrestrictedfourshortest-patchendpointtreesareexactlyrefuted.
+No need to re-run those searches. Alln6/Leanfilesuntouched.
 
 No active search process. The idle-sleep inhibitor and overnight heartbeat
 remain active until the deadline. Continue substantive research.

@@ -1,3 +1,9 @@
+**Historical discovery note.** The family theorem and its unequal-height
+extension are now proved in BIPYRAMID_ALIGNED.md. That page also proves a
+fixed-tree insertion from a genuine pyramid and records a separate exact
+21-coordinate neighborhood outside alignment. Preserve this early note
+as history; its pending-work language is superseded.
+
 # Mirror-symmetric bipyramids: new full-family proof under final audit
 
 Research checkpoint around 18:40 UTC, 13 September Tokyo. This is n7-only.

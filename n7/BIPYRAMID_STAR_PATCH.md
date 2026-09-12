@@ -315,6 +315,11 @@ census stays **10/34 whole graphs covered**. The complete symbolic-pattern
 count stays **3/15**, while all twelve other classes now have their
 large-pole branch covered, whenever that branch is geometrically realizable.
 
+A further [aligned-pole theorem](BIPYRAMID_ALIGNED.html) covers every
+planar equator with poles on the same perpendicular line, at arbitrary
+heights, and preserves one cut tree throughout the lower-pole insertion.
+It includes four-inward low-curvature examples outside the conditions here.
+
 For the opposing-receiver pattern, the separate
 [three-petal analysis](BIPYRAMID_CHAIN_PAIR.html#remaining) continues to
 reduce its remaining small-angle branch to one independent separation.

@@ -12,6 +12,11 @@ remains open. This does not change the three complete pattern classes below.
 settles the local pairs for every convex bipyramid. The [two-patch rules](BIPYRAMID_OVERNIGHT.html#two-gap)
 prove larger curvature branches without changing the 3/15 whole-class count.
 
+**Further family theorem:** [aligned poles](BIPYRAMID_ALIGNED.html) are now
+covered at every height, including four inward patches with low pole
+curvatures. The [shortest-patch theorem](BIPYRAMID_STAR_PATCH.html) covers
+all large-pole cases without alignment. Whole-class counts are unchanged.
+
 ## Setup: ten triangles, five simple candidate cuts
 
 Let $v,w$ be the two nonadjacent degree-five poles. Write the equator in
