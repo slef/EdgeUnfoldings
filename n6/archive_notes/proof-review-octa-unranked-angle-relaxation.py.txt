@@ -1,0 +1,47 @@
+"""Exact follow-up of a linear relaxation, not a polyhedron realization.
+
+Search for angle data with an obtuse unresolved Case A middle angle.
+A positive solution disproves only a proposed deduction from these linear
+constraints. Optimizer infeasibility itself is never promoted to a proof.
+"""
+from fractions import Fraction as F
+from pathlib import Path
+import json,numpy as np
+from scipy.optimize import linprog
+from n6.octa_patterns import FACES
+
+keys=[(i,v) for i,f in enumerate(FACES) for v in f];n=len(keys)
+def unit(i,v):
+ z=np.zeros(n+1);z[keys.index((i,v))]=1;return z
+def const(x):
+ z=np.zeros(n+1);z[-1]=x;return z
+angles={key:unit(*key) for key in keys}
+gamma={v:sum((a for (i,u),a in angles.items() if u==v),np.zeros(n+1)) for v in range(6)}
+k={v:const(2)-gamma[v] for v in range(6)}
+rows={}
+for key,a in angles.items():
+ rows['positive '+str(key)]=a
+ rows['below pi '+str(key)]=const(1)-a
+ rows['link '+str(key)]=gamma[key[1]]-2*a
+for v in range(6):rows['curvature '+str(v)]=k[v]
+for v in (0,1,3,4,5):rows['sharp slit over '+str(v)]=k[2]-k[v]
+rows['source sharper than fan']=k[0]-k[1]
+rows['upper cap fails']=k[1]+k[2]+k[3]-const(3)
+rows['obtuse middle']=angles[6,0]-const(F(1,2))
+rows['Case A']=angles[6,0]-k[4]-k[5]
+eq=np.array([sum((angles[i,v] for v in f),np.zeros(n+1)) for i,f in enumerate(FACES)])
+ineq=np.array(list(rows.values()));r=linprog(np.r_[np.zeros(n),-1],A_ub=np.c_[-ineq[:,:n],np.ones(len(ineq))],b_ub=ineq[:,-1],
+ A_eq=np.c_[eq[:,:n],np.zeros(len(eq))],b_eq=np.ones(len(eq)),bounds=[(None,None)]*(n+1),method='highs')
+report=dict(scope=__doc__,optimizer_status=r.message,angles_in_units_of_pi=True,metric_realization_claimed=False)
+if r.success and r.x[-1]>1e-9:
+ # Recover a rational point and verify every stated condition exactly.
+ x=[F(float(value)).limit_denominator(1000000) for value in r.x[:n]]
+ def value(row):return F(float(row[-1]))+sum(F(float(c))*q for c,q in zip(row[:n],x))
+ exact_eq=all(value(row)==1 for row in eq)
+ slacks={name:value(row) for name,row in rows.items()}
+ report.update(exact_triangle_sums=exact_eq,all_listed_conditions_strict=all(q>0 for q in slacks.values()),
+   exact_minimum_slack=str(min(slacks.values())),angles={str(key):str(q) for key,q in zip(keys,x)},
+   curvatures={str(v):str(value(row)) for v,row in k.items()},slacks={key:str(q) for key,q in slacks.items()})
+ assert exact_eq and all(q>0 for q in slacks.values())
+Path('n6/results/octa-unranked-angle-relaxation.json').write_text(json.dumps(report,indent=2)+'\n')
+print({key:report[key] for key in ('optimizer_status','exact_triangle_sums','all_listed_conditions_strict','exact_minimum_slack','curvatures') if key in report})

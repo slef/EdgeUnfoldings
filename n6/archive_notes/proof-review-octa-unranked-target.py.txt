@@ -1,0 +1,77 @@
+"""Try to falsify an optional unproved simplification of the face-cap rule.
+
+Target the insufficient upper-cap branch at the smaller-gap pole pair.
+This is numerical exploration only; optimizer output is not proof evidence.
+"""
+import json,time
+from collections import Counter
+from functools import lru_cache
+from pathlib import Path
+import numpy as np
+from scipy.optimize import minimize
+from durer_small_n.octa import Octa,rand_points
+from n6.axis_probe import pack,quantities
+from n6.octa_patterns import FACES,ADJ,canonical_points
+from n6.original_star_probe import apex_curvature
+from n6.minus_patterns import TreeBatch
+from n6.trees import degree_four_stars
+
+rng=np.random.default_rng(609120928); start=time.monotonic(); budget=900
+batch=TreeBatch([t for t in degree_four_stars(FACES) if t['apex']==0 and t['slit_vertex']==2],faces=FACES)
+pi=batch.pairs.index((5,7)); initial=[]
+prior=json.loads(Path('n6/results/octa-face-cap-shortcut-probe-20260912.json').read_text())
+r=prior['worst']['unused_smaller_gap']; initial.append(pack(Octa(r['points'],r['source'],FACES,ADJ),0))
+while len(initial)<25 and time.monotonic()-start<12:
+    p=canonical_points(rand_points(6,rng))
+    if p is None:continue
+    k=[apex_curvature(p,FACES,v) for v in range(6)]; c=int(np.argmax(k))
+    pairs=[tuple(sorted(pair,key=lambda v:k[v])) for pair in ((0,1),(2,4),(3,5)) if c not in pair]
+    pairs.sort(key=lambda pair:k[pair[1]]-k[pair[0]])
+    w,v=pairs[0]; others=pairs[1]
+    if max(k[w]+k[c]+k[u] for u in others)>3*np.pi:
+        initial.append(pack(Octa(p,v,FACES,ADJ),0))
+# Reversing azimuth orientation, if necessary, puts the high cap at u_1=3.
+for i,x in enumerate(initial):
+    q=quantities(x); k=2*np.pi-q['totals']
+    if k[5]>k[3]:
+        p=q['points'][[0,1,2,5,4,3]].copy();p[:,1]*=-1
+        initial[i]=pack(Octa(p,0,FACES,ADJ),0)
+output=Path('n6/results/octa-unranked-targeted-review-20260912.json')
+best=None; calls=attempts=0; outcomes=Counter(); improvements=[]
+def save():
+    output.write_text(json.dumps(dict(scope='Bounded numerical search, not a theorem or exact counterexample.',seed=609120928,
+        requested_seconds=budget,seconds=time.monotonic()-start,starts=len(initial),attempts=attempts,calls=calls,
+        target='Opposite petals V1/V3 when the unranked source is sharper than its fan, c is sharpest, and the cap bound fails.',
+        constraints='Strict facet supports; turns in(0,pi); c globally sharpest; source>=fan; other pair has larger difference; S_plus>3pi.',
+        bounds='Log radii [-9,9], heights [-100,100], turns(1e-7,pi-1e-7). No extrapolation beyond these bounds.',
+        best=best,improvements=improvements,optimizer_outcomes=dict(outcomes),universal_conclusions_proved=0),indent=2)+'\n')
+while time.monotonic()-start<budget:
+    x=initial[attempts%len(initial)].copy()
+    if attempts>=len(initial):x[:8]+=rng.normal(0,rng.uniform(.001,.15),8)
+    guard=1e-10 if attempts%2 else 1e-8
+    @lru_cache(maxsize=128)
+    def evaluate(t):
+        global calls
+        if time.monotonic()-start>=budget:raise TimeoutError
+        calls+=1;q=quantities(np.array(t)); totals=q['totals']; turns=np.r_[t[8:],2*np.pi-sum(t[8:])]
+        constraints=np.r_[turns-guard,np.pi-turns-guard,q['support']-guard,
+            totals[[0,1,3,4,5]]-totals[2],totals[1]-totals[0],
+            (totals[5]-totals[3])-(totals[1]-totals[0]),3*np.pi-sum(totals[[1,2,3]])-guard]
+        with np.errstate(all='ignore'):score=float(batch.pair_scores(q['points'])[0,pi]/q['scale'])
+        if not np.isfinite(score):score=-1000
+        return score,constraints,q['points']
+    try:
+        res=minimize(lambda z:-evaluate(tuple(z))[0],x,method='SLSQP',
+            bounds=[(-9,9)]*4+[(-100,100)]*4+[(1e-7,np.pi-1e-7)]*3,
+            constraints=[{'type':'ineq','fun':lambda z:evaluate(tuple(z))[1]}],
+            options={'ftol':1e-11,'maxiter':350})
+        score,constraints,points=evaluate(tuple(res.x));feas=float(min(constraints))
+    except TimeoutError:break
+    attempts+=1;outcomes[str(res.message)]+=1
+    if feas>=0 and (best is None or score>best['score']):
+        best=dict(points=points.tolist(),source=0,fan=1,slit=2,pair=[5,7],score=score,
+            minimum_constraint=feas,guard=guard,optimizer_success=bool(res.success),attempt=attempts)
+        improvements.append(best);print('improvement',attempts,score,feas,flush=True)
+    if attempts%10==0:save();print('progress',attempts,calls,round(time.monotonic()-start,1),flush=True)
+    if best and best['score']>1e-7:break
+save();print('FINISHED',attempts,calls,None if best is None else best['score'],flush=True)

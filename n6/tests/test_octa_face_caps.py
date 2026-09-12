@@ -4,7 +4,7 @@ import unittest
 
 from n6.intervals import set_precision
 from n6.octa_face_caps import select, select_curvatures
-from n6.selected_octahedron_examples import specification
+from n6.octa_face_cap_examples import specification
 
 
 class OctaFaceCapTests(unittest.TestCase):
@@ -52,6 +52,15 @@ class OctaFaceCapTests(unittest.TestCase):
         self.assertEqual(bands[d['slit']], '>')
         self.assertEqual(bands[d['source']], '<')
         self.assertFalse(d['old_high_source_or_all_low_condition_used'])
+        self.assertTrue(d['canonical_larger_difference_choice'])
+        self.assertEqual(sum(result['independent_all_28_pairs']['pairs'].values()), 28)
+
+    def test_a_genuine_high_fan_metric_example_needs_no_low_fan_assumption(self):
+        result = select(specification('high-fan'))
+        d = result['selection']
+        self.assertEqual((d['source'], d['fan'], d['slit']), (3, 5, 4))
+        self.assertEqual(d['curvature_comparisons_with_pi'][d['source']], '>')
+        self.assertEqual(d['curvature_comparisons_with_pi'][d['fan']], '>')
         self.assertTrue(d['canonical_larger_difference_choice'])
         self.assertEqual(sum(result['independent_all_28_pairs']['pairs'].values()), 28)
 

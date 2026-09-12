@@ -49,17 +49,31 @@ def render():
         before.write_text('<nav class="reading-links" aria-label="Proof documents">'
                           '<a href="TIDY_PROOF.html">Main proof</a> · '
                           '<a href="TIDY_CORE.html">Geometric details</a> · '
-                          '<a href="PROOF_REVIEW_20260912.md">Review record</a>'
+                          '<a href="PROOF_REVIEW_20260912.html">Review record</a>'
                           '</nav>')
         pages = [('TIDY_PROOF', 'A streamlined proof through six vertices'),
+                 ('PROOF_REVIEW_20260912', 'Proof review and successive simplifications'),
+                 ('PAIRED_POLE_RULE', 'The paired-pole octahedron and minus-edge rule'),
                  ('TIDY_CORE', 'The shared geometric core'),
                  ('PRISM_CAP_RULE', 'Five prism candidates by cap curvature'),
                  ('CASE_A_CAP_BUDGET', 'The optional three-face cap budget'),
                  ('SHARPEST_COFACIAL_FAILURE', 'Why the sharpest cofacial source alone is insufficient'),
                  ('OCTA_FACE_CAP_RULE', 'A shorter curvature-only octahedron proof'),
+                 ('OCTA_UNRANKED_SHORTCUT', 'A further octahedron shortcut, still unproved'),
+                 ('OCTA_FACE_CAP_LOW_FAN_DRAFT', 'Preserved first octahedron cap-rule draft'),
+                 ('TIDY_CORE_BEFORE_CONTACT', 'Preserved interior-point geometric core'),
                  ('TIDY_PROOF_FIRST_REVIEW', 'Earlier preserved seven-candidate draft')]
+        pages += [('TIDY_PROOF_BEFORE_PAIRED', 'Preserved draft before the paired-pole simplification')]
+        pages += [('OCTA_UNRANKED_BEFORE_IDENTITY', 'Preserved unranked-rule investigation before the identity'),
+                  ('TIDY_CORE_BEFORE_PAIRED', 'Preserved core before the paired-pole identity')]
+        source_overrides = {
+            'OCTA_FACE_CAP_LOW_FAN_DRAFT': 'archive_notes/octa-face-cap-low-fan/OCTA_FACE_CAP_RULE.md',
+            'TIDY_CORE_BEFORE_CONTACT': 'archive_notes/TIDY_CORE_before_contact.md',
+            'OCTA_UNRANKED_BEFORE_IDENTITY': 'archive_notes/OCTA_UNRANKED_SHORTCUT_before_identity.md',
+            'TIDY_CORE_BEFORE_PAIRED': 'archive_notes/TIDY_CORE_before_paired.md',
+        }
         for stem, title in pages:
-            source = (root/(stem+'.md')).read_text()
+            source = (root/source_overrides.get(stem, stem+'.md')).read_text()
             heading, body = source.split('\n', 1)
             if not heading.startswith('# '):
                 raise ValueError('Expected one document title before the proof')

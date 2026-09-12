@@ -1,0 +1,66 @@
+"""Bounded falsification experiment; never a universal proof.
+
+Run from the repository root with PYTHONPATH=. using the scientific Python.
+Compare the canonical larger-gap pole pair with the unused smaller-gap pair.
+Both put the largest-curvature vertex at the fifth cut endpoint.
+"""
+import json, time
+from collections import Counter
+from pathlib import Path
+import numpy as np
+from durer_small_n.octa import rand_points
+from n6.octa_patterns import FACES, ADJ, canonical_points
+from n6.original_star_probe import apex_curvature
+from n6.minus_patterns import TreeBatch
+from n6.trees import degree_four_stars
+
+rng=np.random.default_rng(609120925)
+trees=degree_four_stars(FACES)
+batch=TreeBatch(trees,faces=FACES)
+lookup={(t['apex'],t['slit_vertex']):i for i,t in enumerate(trees)}
+pairs=((0,1),(2,4),(3,5))
+counts=Counter(); worst={}; examples={}; start=time.monotonic(); attempts=0
+output=Path('n6/results/octa-face-cap-shortcut-probe-20260912.json')
+
+def save():
+    report=dict(scope='Numerical falsification experiment only. Absence of a failure proves nothing. Positive scores require exact rational checking.',
+        seed=609120925, seconds=time.monotonic()-start, requested_seconds=600,
+        attempts=attempts, counts=dict(counts), worst=worst, examples=examples,
+        normalized_diameter=1, failure_threshold=1e-8,
+        distribution='Existing Gaussian/sphere/cube/distant-point mixture with anisotropic scales exp[-4,4]; strict floating octahedral facet screen.',
+        checks='The nine non-shared-vertex pairs in each chosen tree; final rational replay checks all 28.',
+        universal_conclusions_proved=0)
+    output.write_text(json.dumps(report,indent=2)+'\n')
+
+while time.monotonic()-start<600 and counts['accepted']<80000:
+    attempts+=1
+    p=canonical_points(rand_points(6,rng))
+    if p is None: continue
+    k=np.array([apex_curvature(p,FACES,v) for v in range(6)])
+    c=int(np.argmax(k))
+    other=[tuple(sorted(pair,key=lambda v:k[v])) for pair in pairs if c not in pair]
+    other.sort(key=lambda pair:k[pair[1]]-k[pair[0]],reverse=True)
+    scores=batch.pair_scores(p)
+    if not np.isfinite(scores[batch.pair_mask]).all():
+        counts['nonfinite']+=1; continue
+    counts['accepted']+=1
+    for label,(w,v) in zip(('canonical','unused_smaller_gap'),other):
+        row=scores[lookup[v,c]]; index=int(np.argmax(row)); score=float(row[index])
+        state='failure_candidate' if score>1e-8 else 'borderline' if score>=-1e-10 else 'separated'
+        counts[label+'_'+state]+=1
+        record=dict(points=p.tolist(),curvatures=k.tolist(),source=int(v),fan=int(w),slit=c,
+                    cuts=[list(e) for e in trees[lookup[v,c]]['cuts']],pair=list(batch.pairs[index]),score=score,
+                    cap_sums=[float(k[w]+k[c]+k[u]) for u in next(pair for pair in pairs if c not in pair and w not in pair)])
+        if label not in worst or score>worst[label]['score']:worst[label]=record
+        if label=='canonical':
+            if k[w]>np.pi:
+                counts['canonical_high_fan']+=1; examples.setdefault('high_fan',record)
+            if k[v]<np.pi and max(k)>np.pi:
+                counts['canonical_outside_old_source_condition']+=1
+                examples.setdefault('outside_old_source_condition',record)
+    if counts['accepted']%1000==0:
+        save(); print(counts['accepted'],dict(counts),flush=True)
+    if counts['canonical_failure_candidate']:
+        break
+save()
+print('FINISHED',dict(counts),round(time.monotonic()-start,1),flush=True)

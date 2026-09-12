@@ -1,0 +1,23 @@
+"""Can the unresolved pair fail the wider angle test as well?
+
+A rational feasible relaxation is not a realized convex octahedron.
+"""
+from pathlib import Path
+exec(Path(__file__).with_name('proof-review-octa-unranked-angle-relaxation.py.txt').read_text().split('eq=np.array')[0])
+eq=np.array([sum((angles[i,v] for v in f),np.zeros(n+1)) for i,f in enumerate(FACES)])
+reports=[]
+for outer in (5,7):
+ conditions=rows|{'wider outer bound fails':2*angles[outer,0]+angles[6,0]-const(2)-k[4]-k[5]}
+ ineq=np.array(list(conditions.values()));r=linprog(np.r_[np.zeros(n),-1],A_ub=np.c_[-ineq[:,:n],np.ones(len(ineq))],b_ub=ineq[:,-1],
+ A_eq=np.c_[eq[:,:n],np.zeros(len(eq))],b_eq=np.ones(len(eq)),bounds=[(None,None)]*(n+1),method='highs')
+ report=dict(outer_face=outer,optimizer_status=r.message,metric_realization_claimed=False)
+ if r.success:
+  report['optimizer_margin']=float(r.x[-1])
+  x=[F(float(value)).limit_denominator(1000000) for value in r.x[:n]]
+  def value(row):return F(float(row[-1]))+sum(F(float(c))*q for c,q in zip(row[:n],x))
+  slacks={name:value(row) for name,row in conditions.items()}
+  report.update(exact_triangle_sums=all(value(row)==1 for row in eq),all_conditions_strict=all(q>0 for q in slacks.values()),
+    minimum_slack=str(min(slacks.values())),angles={str(key):str(q) for key,q in zip(keys,x)},
+    curvatures={str(v):str(value(row)) for v,row in k.items()},slacks={key:str(q) for key,q in slacks.items()})
+ reports.append(report);print({key:report[key] for key in ('outer_face','optimizer_status','optimizer_margin','exact_triangle_sums','all_conditions_strict','minimum_slack','curvatures') if key in report})
+Path('n6/results/octa-unranked-wide-angle-relaxation.json').write_text(json.dumps(dict(scope=__doc__,cases=reports),indent=2)+'\n')

@@ -1,6 +1,6 @@
 {
   "baseline_commit": "6327f07",
-  "scope": "All pre-review Markdown research documents under n6, excluding the running continuation log. New shorter drafts are separate files.",
+  "scope": "All pre-review Markdown research documents under n6, excluding the running continuation log; original figure and result files checked for presence and changes. New shorter drafts are separate files.",
   "documents": [
     {
       "file": "n6/AXIS_CLOSURE.md",
@@ -357,5 +357,17 @@
       "unchanged": true
     }
   ],
-  "all_present_unchanged": true
+  "all_present_unchanged": true,
+  "artifact_preservation": {
+    "original_figures": {
+      "files": 24,
+      "all_present": true,
+      "changed_files": []
+    },
+    "original_result_artifacts": {
+      "files": 491,
+      "all_present": true,
+      "changed_files": []
+    }
+  }
 }

@@ -4,6 +4,77 @@
 This is a further self-audit. Independent mathematical review and formal
 verification remain outstanding. The original research material is retained.
 
+## Final validation — approximately 09:52 JST
+
+The complete updated suite passed **300 tests in 342.348 seconds**.
+The paired-pole report independently verifies all 38 selected nets, with
+no unresolved choice in that explicit list. The earlier whole-suite
+check passed 296 tests before the four paired-pole tests were added.
+These are implementation, algebra and finite-domain checks, not a formal
+verification of the universal geometry.
+
+The final manual pass rechecked the wider-cone identity in both directions,
+its positive link remainders, the automatic angle-sum premise, the closed
+source-order case, and the use of uncut flat diagonals. The paired-pole
+proof reuses the local, finite-contact, base-cone, pocket, boundary and
+wider-cone lemmas; it does not assume the older source-selection conclusion.
+For the minus graph, A/B are opposite degree-four vertices and every one
+of their possible star-plus-equator cuts is original. No extra facet or
+suppressed triangle is needed when the original quadrilateral is rejoined.
+
+The full scientific suite, navigation and progress checks pass. Final
+packaging also checks every overview evidence link and the standalone
+reading pages, including the formatted preserved drafts. No full browser
+visual inspection was performed after browser access was denied.
+
+## Latest result — approximately 09:48 JST
+
+A final exact positive identity gives a substantially shorter result:
+[PAIRED_POLE_RULE.md](PAIRED_POLE_RULE.md). On an octahedron, fix any
+opposite pair, choose its sharper endpoint as source, and use an equator
+maximum for the fifth cut. The two wider Case A bounds follow from
+
+    2*pi+K-2*lambda-nu=(kappa_v-kappa_w)+S+nu+2*rho,
+
+and its reflection, where S is the sum of the fourth petal's two strict
+base-angle link slacks. All terms on the right are nonnegative, and S,
+nu and rho are strictly positive. Sixteen cyclic/reflected coefficient
+expansions vanish exactly. The optimizer's negative feasibility margin
+was only a discovery hint; the displayed identity is the proof.
+
+The local, finite-contact, small-fan and final-boundary arguments then
+complete the paired-pole theorem. If the source is below pi, either the
+equator maximum is at least pi, or all six curvatures are below pi; both
+supply the needed lower face budget. At a high source, E1 and the strict
+source-angle bound supply the two contradictions. This includes equalities.
+
+For the minus-edge graph, choose its opposite degree-four corners A,B.
+Every resulting star edge and fifth cut is original, and the auxiliary CD
+stays uncut. Thus the former source-switch exhaustion is unnecessary in
+the shortest main proof. It remains intact in the preceding complete draft
+and the original files. The new theorem also closes the unranked octahedron
+shortcut investigated immediately beforehand; that investigation and its
+then-open status are preserved in full.
+
+The independent examples now replay **38 selected nets**: all three fixed
+pairs on ten octahedral points/domains, seven earlier minus-edge examples
+(including parameter families and equality), and the former upper-cap
+failure. There are no unresolved uniform choices in that saved list.
+All four new paired-pole tests pass. The preceding complete suite passed
+296 tests; the new complete 300-test run is underway.
+
+Preservation was rechecked against published master 6327f07: all 59 original
+research Markdown documents, all 24 original figures and all 491 original
+result artifacts are unchanged. The running continuation log is the stated
+exception. No mathematical gap has been found in this self-audit, but the
+new and old research proofs still need independent mathematical review.
+No full browser visual inspection was performed after browser access was
+denied. The work is saved locally on the separate review branch.
+
+## Earlier checkpoints, retained in full
+
+The entries below record successive stages and their then-current status.
+
 ## Current checkpoint — approximately 08:15 JST
 
 The review remains active until 09:58 JST. The complete shorter account is
@@ -217,6 +288,36 @@ The fresh manual check examined both positive angular gaps at a, the first
 contact on aP, q=b and q=P, the triangle's nondegeneracy, the half-plane
 orientation and strictness of the closed link. Both obstruction inequalities
 are unchanged, so the existing exact historical-entry check remains relevant.
+
+## Final-pass refinements — approximately 09:30 JST
+
+The through-fan step now stays entirely in the actual opening: the remote
+patch contains ray wu_1 at angle omega_0, while the last cut copy has angle
+Gamma_w. Reaching it through the fan would require span at least
+Gamma_w-omega_0>Gamma_w/2, contrary to the half-fan lemma. Reflection
+handles the other remote target. This removes the earlier explanation
+through another opening; that paragraph is retained separately.
+
+The canonical octahedron rule now has ten independently replayed point or
+parameter domains. The new small-integer high-fan example has both selected
+poles above pi, and passes all 28 pairs. All six current face-cap tests pass;
+the full suite is to be rerun after these final additions.
+
+A further optional shortcut was examined: omit the difference comparison
+and use either remaining pole pair, oriented from sharper source to less
+sharp fan. Both choices were numerically separated on 80,000 screened
+samples, which proves no universal statement. An exact integer example
+shows that the unranked choice can violate the current upper cap premise
+while still having a safe whole net. Thus the proof cannot simply drop
+that comparison. The unproved shortcut, its exact boundary, and the
+numerical probes are kept separately in OCTA_UNRANKED_SHORTCUT.md.
+
+The reading pages now include preserved versions of the low-fan and
+interior-point drafts, with their relative links resolved from the original
+n6 base. The review log itself also has a readable HTML page. The overview's
+new current introduction explains the latest octahedron rule and five-tree
+prism proof; its earlier seven-tree introduction is retained in collapsed
+history. This is presentation and self-audit, not independent verification.
 
 ## Checkpoint: complete shorter draft, review continuing
 

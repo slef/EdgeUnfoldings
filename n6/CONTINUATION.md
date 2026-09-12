@@ -1,3 +1,34 @@
+## Final review phase — 12 September, approximately 09:52 JST
+
+Continue until 00:58:04 UTC / 09:58 JST. The main new result is now
+PAIRED_POLE_RULE.md: fix any opposite pair, source at its sharper end,
+and fifth cut to an equator maximum. Both wider Case A bounds follow
+from a strict positive identity using the fourth petal's two base-angle
+link slacks. Exact polynomial expansion checks 16 cyclic/reflected identities.
+This also settles the minus-edge graph using the fixed pair A,B, without
+source switching. The earlier whole manuscript, core and unranked proposal
+are preserved before editing. The cap rule remains a correct weaker proof.
+
+The new paired_poles.py uses exact original polygon angles, with equality
+recognized only by exact corner-angle signatures. Its 38 saved whole-net
+replays cover three fixed pairs on ten octahedron domains, seven minus
+examples/families, and the former upper-cap failure; none unresolved.
+Four new tests pass. The full 300-test suite PASSED in 342.348 seconds, with output in
+/private/tmp/edge-proof-review-final-300.log. A complete 296-test run
+also passed before the paired-pole additions.
+
+The unranked numerical target finished 900 seconds, 1,840 optimizer attempts,
+with no positive feasible score; this is NOT a proof. The exact wider-angle
+identity is the proof of the algebraic inequalities, with the geometric
+core still subject to independent review. All 59 original Markdown research
+documents, 24 figures and 491 original result artifacts remain unchanged.
+
+Finish the full suite, render all current/readable archived pages, package
+and link-check, update final overview/review wording, and commit locally.
+No push/deployment requested. At the deadline pause the existing heartbeat
+and give the user a concise report. Do not touch the two untracked PDFs or
+lean_statement/. Earlier checkpoints below are history.
+
 ## Current checkpoint — 12 September, approximately 09:05 JST
 
 About 53 minutes remain until **00:58:04 UTC / 09:58 JST**; do not end early.

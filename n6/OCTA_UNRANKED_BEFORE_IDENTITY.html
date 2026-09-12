@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Preserved unranked-rule investigation before the identity</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <style>
+  :root { color-scheme: light; }
+  html { background:#f7f6f1; color:#20252b; }
+  body { max-width:58rem; margin:3rem auto; padding:0 1.5rem 4rem;
+         font:18px/1.65 Georgia,"Times New Roman",serif; }
+  h1,h2,h3,nav { font-family:system-ui,sans-serif; line-height:1.3; }
+  h1 { font-size:2rem; } h2 { margin-top:2.6rem; font-size:1.45rem; }
+  h3 { margin-top:1.9rem; font-size:1.15rem; }
+  a { color:#17638a; text-underline-offset:.15em; }
+  pre { background:#fff; border:1px solid #dcdedc; border-radius:6px;
+        padding:1rem; overflow-x:auto; font-size:.88rem; line-height:1.55; }
+  code { font-family:ui-monospace,"SFMono-Regular",Consolas,monospace; }
+  blockquote { margin:1.5rem 0; padding:.1rem 1.2rem; border-left:4px solid #78a9ba;
+               background:#edf4f5; }
+  table { width:100%; border-collapse:collapse; font-size:.94rem; }
+  th,td { text-align:left; vertical-align:top; padding:.6rem; border-bottom:1px solid #ddd; }
+  th { background:#edf0ee; font-family:system-ui,sans-serif; }
+  #TOC { font-size:.95rem; background:#fff; border:1px solid #dcdedc;
+         border-radius:6px; padding:1rem 1.5rem; }
+  #TOC ul { padding-left:1.3rem; }
+  .reading-links { font: .9rem/1.5 system-ui,sans-serif; padding-bottom:1rem;
+                   border-bottom:1px solid #dcdedc; }
+  @media(max-width:600px) { body { margin:1.5rem auto; padding:0 1rem 2rem; font-size:17px; }
+                           h1 { font-size:1.6rem; } table { font-size:.8rem; } }
+  @media print { html { background:white; } body { max-width:none; margin:0; font-size:10pt; }
+                pre,blockquote,table { break-inside:avoid; } h2,h3 { break-after:avoid; }
+                a { color:inherit; } .reading-links { display:none; } }
+  </style>
+</head>
+<body>
+<nav class="reading-links" aria-label="Proof documents"><a href="TIDY_PROOF.html">Main proof</a> · <a href="TIDY_CORE.html">Geometric details</a> · <a href="PROOF_REVIEW_20260912.html">Review record</a></nav>
+<header id="title-block-header">
+<h1 class="title">A further octahedron shortcut, not yet proved</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul><li><a href="#an-exact-example-shows-the-missing-implication">An exact example shows the missing implication</a></li><li><a href="#numerical-investigation-kept-outside-the-proof">Numerical investigation, kept outside the proof</a></li></ul>
+</nav>
+<p>12 September 2026. Retained from the proof-simplification review. This is an optional research direction, not part of the written existence proof.</p><p>The <a href="OCTA_FACE_CAP_RULE.html">new face-cap rule</a> chooses a sharpest vertex c, then selects the more unequal of the other two opposite pairs. Its sharper endpoint is the star source v; the other endpoint w is joined to c by the fifth cut. The comparison of differences is a short, proved way to make two required face-curvature sums at most 3*pi.</p><p>Could that comparison be omitted? The tempting stronger claim is:</p><blockquote><p>Choose either of the two opposite pairs not containing a sharpest vertex c. Orient it so kappa_v&gt;=kappa_w. Then star(v)+wc always unfolds.</p></blockquote><p>This has <strong>not</strong> been proved here. The lower face-cap bounds, half-fan hypothesis and weighted slit threshold still hold. The upper face-cap bounds need not hold, so the current Case A proof does not finish this stronger rule. Failure of an upper bound is not failure of the unfolding.</p><h2 id="an-exact-example-shows-the-missing-implication">An exact example shows the missing implication</h2><p>Use these integer coordinates, with their convex-hull octahedral facets:</p><table><thead><tr class="header"><th>Vertex</th><th>x</th><th>y</th><th>z</th></tr></thead><tbody><tr class="odd"><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr class="even"><td>1</td><td>49</td><td>-55</td><td>-22</td></tr><tr class="odd"><td>2</td><td>-12</td><td>16</td><td>14</td></tr><tr class="even"><td>3</td><td>0</td><td>-4</td><td>2</td></tr><tr class="odd"><td>4</td><td>5</td><td>-10</td><td>-2</td></tr><tr class="even"><td>5</td><td>18</td><td>-20</td><td>-12</td></tr></tbody></table><p>The <a href="results/octa-unranked-cap-failure.verification.json">exact check</a> certifies that c=1 is sharpest and kappa_5&gt;=kappa_3. Thus the unranked choice v=5,w=3 passes its proposed selection assumptions. Nevertheless</p><pre><code>kappa_0+kappa_4+kappa_5 &lt; pi,</code></pre><p>so the complementary blue face has</p><pre><code>kappa_3+kappa_1+kappa_2 &gt; 3*pi.</code></pre><p>The necessary premise of the current face-cap proof is therefore absent. This is an actual metric example, not an abstract assignment of curvatures. Its whole net still has all 28 face pairs independently certified safe; see the <a href="results/octa-unranked-cap-failure.certificate.json">standalone certificate</a>. The canonical larger-difference rule instead chooses v=2,w=4,c=1 and passes its cap inequalities. The report records that comparison too.</p><p>This example refutes only the claim that the unranked choice automatically passes the stated cap criterion. It does not refute the unranked unfolding rule, or indicate any gap in the canonical rule’s proof.</p><h2 id="numerical-investigation-kept-outside-the-proof">Numerical investigation, kept outside the proof</h2><p>A <a href="results/octa-face-cap-shortcut-probe-20260912.json">bounded probe</a> checked both choices on 80,000 floating-point-screened octahedra. Its nine non-shared-vertex pair scores reported separation for both choices on all samples. The canonical choice had a fan above pi in 121 samples and lay outside the older high-source-or-all-low condition in 42,434 samples. These are sample counts, not a count of proved geometric cases or a coverage percentage. Absence of a sampled failure establishes no theorem.</p><p>The high-fan branch was also simplified to a small integer example and checked exactly, separately from those floating results. It is included in the <a href="results/octa-face-cap-rule.verification.json">ten face-cap point/domain checks</a>. The more focused numerical search of the unranked choice is retained in <code>results/octa-unranked-targeted-review-20260912.json</code>; any optimizer result is only a proposal for exact follow-up. The scripts are preserved in <code>archive_notes/proof-review-octa-*.py.txt</code>.</p><p>The shortest justified proof currently keeps the curvature-difference comparison. A further shortening would need a new Case A separator for these failed-cap choices, rather than more numerical successes.</p>
+</body>
+</html>

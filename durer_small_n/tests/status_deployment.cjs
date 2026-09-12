@@ -24,8 +24,11 @@ console.log(`Deployment: all ${count} rendered evidence links resolve inside the
 
 // The new reading pages contain proof-to-proof links and native heading
 // anchors, independently of the overview's JavaScript navigation.
-const proofPages = ['TIDY_PROOF', 'TIDY_CORE', 'PRISM_CAP_RULE',
-  'CASE_A_CAP_BUDGET', 'SHARPEST_COFACIAL_FAILURE', 'OCTA_FACE_CAP_RULE', 'TIDY_PROOF_FIRST_REVIEW'];
+const proofPages = ['TIDY_PROOF', 'TIDY_CORE', 'PROOF_REVIEW_20260912', 'PRISM_CAP_RULE',
+  'PAIRED_POLE_RULE', 'TIDY_PROOF_BEFORE_PAIRED',
+  'OCTA_UNRANKED_BEFORE_IDENTITY', 'TIDY_CORE_BEFORE_PAIRED',
+  'CASE_A_CAP_BUDGET', 'SHARPEST_COFACIAL_FAILURE', 'OCTA_FACE_CAP_RULE', 'OCTA_UNRANKED_SHORTCUT',
+  'OCTA_FACE_CAP_LOW_FAN_DRAFT', 'TIDY_CORE_BEFORE_CONTACT', 'TIDY_PROOF_FIRST_REVIEW'];
 let proofLinkCount = 0;
 for (const name of proofPages) {
   const file = path.join(site, 'n6', `${name}.html`);

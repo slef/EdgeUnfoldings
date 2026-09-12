@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>The paired-pole octahedron and minus-edge rule</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <style>
+  :root { color-scheme: light; }
+  html { background:#f7f6f1; color:#20252b; }
+  body { max-width:58rem; margin:3rem auto; padding:0 1.5rem 4rem;
+         font:18px/1.65 Georgia,"Times New Roman",serif; }
+  h1,h2,h3,nav { font-family:system-ui,sans-serif; line-height:1.3; }
+  h1 { font-size:2rem; } h2 { margin-top:2.6rem; font-size:1.45rem; }
+  h3 { margin-top:1.9rem; font-size:1.15rem; }
+  a { color:#17638a; text-underline-offset:.15em; }
+  pre { background:#fff; border:1px solid #dcdedc; border-radius:6px;
+        padding:1rem; overflow-x:auto; font-size:.88rem; line-height:1.55; }
+  code { font-family:ui-monospace,"SFMono-Regular",Consolas,monospace; }
+  blockquote { margin:1.5rem 0; padding:.1rem 1.2rem; border-left:4px solid #78a9ba;
+               background:#edf4f5; }
+  table { width:100%; border-collapse:collapse; font-size:.94rem; }
+  th,td { text-align:left; vertical-align:top; padding:.6rem; border-bottom:1px solid #ddd; }
+  th { background:#edf0ee; font-family:system-ui,sans-serif; }
+  #TOC { font-size:.95rem; background:#fff; border:1px solid #dcdedc;
+         border-radius:6px; padding:1rem 1.5rem; }
+  #TOC ul { padding-left:1.3rem; }
+  .reading-links { font: .9rem/1.5 system-ui,sans-serif; padding-bottom:1rem;
+                   border-bottom:1px solid #dcdedc; }
+  @media(max-width:600px) { body { margin:1.5rem auto; padding:0 1rem 2rem; font-size:17px; }
+                           h1 { font-size:1.6rem; } table { font-size:.8rem; } }
+  @media print { html { background:white; } body { max-width:none; margin:0; font-size:10pt; }
+                pre,blockquote,table { break-inside:avoid; } h2,h3 { break-after:avoid; }
+                a { color:inherit; } .reading-links { display:none; } }
+  </style>
+</head>
+<body>
+<nav class="reading-links" aria-label="Proof documents"><a href="TIDY_PROOF.html">Main proof</a> · <a href="TIDY_CORE.html">Geometric details</a> · <a href="PROOF_REVIEW_20260912.html">Review record</a></nav>
+<header id="title-block-header">
+<h1 class="title">The paired-pole rule: an octahedron and minus-edge proof without switching</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul><li><a href="#the-rule">The rule</a></li><li><a href="#the-identity-that-removes-the-last-angle-condition">The identity that removes the last angle condition</a></li><li><a href="#completing-the-same-whole-net">Completing the same whole net</a></li><li><a href="#the-minus-edge-graph-now-needs-no-source-switch">The minus-edge graph now needs no source switch</a></li><li><a href="#what-the-exact-checks-establish">What the exact checks establish</a></li></ul>
+</nav>
+<p>12 September 2026, final review pass. This is a newly shortened written research proof, pending independent mathematical review. All preceding proofs, the cap criterion and the earlier unproved shortcut are preserved. Exact coefficient checks verify the identity below; numerical searches are not premises of the theorem.</p><h2 id="the-rule">The rule</h2><p>On an octahedron, fix <strong>any opposite pair</strong>. Call its sharper endpoint v and its other endpoint w. Among their four equator vertices, choose a sharpest c. Cut the four edges at v and the edge wc. This whole net has disjoint face interiors. All ties may be resolved either way.</p><p>Thus the source need only be at least as sharp as its opposite, rather than sharpest among all six vertices. There is no comparison between the curvature differences of different pairs and no trial unfolding.</p><p>An equivalent useful option is to choose a globally sharpest c first, set aside its opposite, and use either remaining opposite pair, oriented from sharper source to less sharp fan. For that option the projection argument E1 is unnecessary, as explained below.</p><h2 id="the-identity-that-removes-the-last-angle-condition">The identity that removes the last angle condition</h2><p>Use the three-patch Case A setup in <a href="TIDY_CORE.html">TIDY_CORE.md</a>. The middle petal has apex angle nu and base vertices u,u’ with total curvature K=kappa_u+kappa_(u’). The two outer petals have apex angles lambda,rho. Put theta=pi-nu+K, so Case A is 0&lt;theta&lt;pi.</p><p>There is exactly one other petal. Write eta for its apex angle, a,b for its base vertices, and xi,zeta for its angles at a,b. Define the two strict link slacks</p><pre><code>s_a=(2*pi-kappa_a)-2*xi &gt; 0,
+s_b=(2*pi-kappa_b)-2*zeta &gt; 0,
+S=s_a+s_b.</code></pre><p>Their positivity is the closed spherical-link lemma. The original face and vertex angle sums give</p><pre><code>eta+lambda+nu+rho=2*pi-kappa_v,
+xi+zeta=pi-eta,
+kappa_v+kappa_w+K+kappa_a+kappa_b=4*pi.</code></pre><p>Eliminating eta and the two complementary curvatures gives</p><pre><code>2*pi+K-2*lambda-nu = (kappa_v-kappa_w)+S+nu+2*rho,
+2*pi+K-2*rho-nu    = (kappa_v-kappa_w)+S+nu+2*lambda.</code></pre><p>When kappa_v&gt;=kappa_w, both right sides are strictly positive. Therefore</p><pre><code>lambda &lt; (pi+theta)/2,   rho &lt; (pi+theta)/2.</code></pre><p>These are exactly the two sufficient bounds in the wider Case A lemma. Its angle-sum premise holds because lambda+rho+nu&lt;2<em>pi-kappa_v&lt;2</em>pi+K. The strict distance-sum inequality supplies a short copied edge, and that lemma separates the whole two petals. <strong>Every opposite-petal Case A is safe whenever the source is at least as sharp as its opposite.</strong></p><p>No cap upper bound, obtuse/nonobtuse split, maximum-curvature hypothesis, or numerical feasibility claim is used in this identity. The fourth petal is essential: its two base-angle link slacks provide the remainder. Flat auxiliary hinges are allowed, since all vertices are genuine and the spherical-link inequalities remain strict.</p><h2 id="completing-the-same-whole-net">Completing the same whole net</h2><p>For clarity, the following slightly broader criterion suffices:</p><pre><code>kappa_v&gt;=kappa_w,
+2*kappa_c+kappa_w&gt;=pi,
+either kappa_v&gt;=pi or both slit-adjacent blue-face
+    curvature sums are at least pi.                 (P)</code></pre><p>The geometric steps are written out in <a href="TIDY_CORE.html">the shared core</a>:</p><ol type="1"><li>The source order implies its half-fan alternative: either the fan is at most pi, or the source is above pi too. The weighted slit threshold then settles the three local pairs and strictly separates each local petal from the opposite closed slit segment.</li><li>A remote petal touching a finite slit would force both E1, kappa_v&lt;pi, and E2, kappa_a+kappa_c+2<em>kappa_w+2</em>mu&lt;pi. The last premise of (P) therefore supplies the blue-face lower bound, contradicting E2.</li><li>Case A is settled by the new identity. The large-fan Case B is already separated by the base cones. A small-fan overlap would force nu_0&gt;kappa_a+kappa_c+kappa_w. If kappa_v&gt;=pi, the link bound gives nu_0&lt;pi/2, whereas the slit threshold gives kappa_c+kappa_w&gt;pi/2. Otherwise the blue-face lower bound forces nu_0&gt;pi, also impossible.</li><li>The four target-boundary checks finish the remaining petal/fan pairs. With the 19 shared-vertex pairs, this accounts for all 28 pairs in this one net. It does not invoke the refuted unrestricted hinge reduction.</li></ol><p>To apply (P) to the fixed-pair rule, choose an equator maximum c. Then</p><pre><code>2*kappa_c+kappa_w &gt;= 2*pi-kappa_v/2+kappa_w/2 &gt; pi.</code></pre><p>If kappa_v&gt;=pi, the last premise of (P) holds directly. Otherwise w is also below pi. If c&gt;=pi, both blue-face sums exceed pi. If c&lt;pi, all six curvatures are below pi, so the three complementary curvatures sum below 3*pi and each blue face has curvature sum above pi. These alternatives include every equality and prove the rule.</p><p>If c was chosen globally sharpest instead, each triple containing c has curvature sum above pi: if one summed to at most pi, then c and the three complementary vertices would all be below pi, contradicting total 4<em>pi. Also kappa_c&gt;=2</em>pi/3 makes the slit threshold automatic. Thus (P) applies for either remaining oriented pair. In this version the lower blue-face bounds contradict E2 directly, so E1 can be omitted entirely.</p><h2 id="the-minus-edge-graph-now-needs-no-source-switch">The minus-edge graph now needs no source switch</h2><p>Label the original facets as before: ACBD, ACP, APQ, ADQ, BDQ, BPQ, BCP. The two nonadjacent quadrilateral corners A,B each have degree four and are joined to every other vertex. Add CD as an uncut flat hinge.</p><p>Fix opposite pair A,B. Take its sharper endpoint as v, the other as w, and choose c with largest curvature among C,D,P,Q. Every edge in star(v) and every possible wc is original. The paired-pole rule therefore gives a nonoverlapping net, and the uncut CD rejoins the original quadrilateral.</p><p>This replaces the complete source-switch exhaustion for this type by one rule. The earlier complementary-source identity, switching proof, examples and counterexamples remain available for future work. It does not settle the separate conjecture about two particular fixed trees.</p><h2 id="what-the-exact-checks-establish">What the exact checks establish</h2><p>The <a href="results/paired-poles.verification.json">saved exact report</a> records 38 independent selected-net replays. The <a href="paired_poles.py">checker</a> expands all 16 reflected and cyclic versions of the two identities as exact rational polynomials in 16 independent face-angle variables. Each residual is identically zero. Its selector checks actual uniform curvature orders and independently verifies the entire chosen net on an explicit point or parameter domain. It may reject a box on which one uniform order cannot be established; that is not a failure of the pointwise mathematical rule.</p><p>The earlier integer example where the unranked choice failed an upper cap bound is now covered by this proof: its wider angle bounds suffice instead. The <a href="OCTA_UNRANKED_BEFORE_IDENTITY.html">previous investigation</a> and its exact example are preserved. The wider-angle identities were suggested by a numerical linear optimization, but their displayed exact expansion and strictly positive remainder are the proof of the inequalities. The universal geometric argument still requires independent review.</p>
+</body>
+</html>

@@ -86,10 +86,13 @@ through-fan part of Lemma L at every opening, without a slit ranking or
 the separate one-sided spherical-link estimate of the original proof.
 
 It also excludes a remote petal reaching a finite slit copy through the
-fan: apply this inequality to the same two physical patches in the
-opening where they are first and last. Their angle data do not change.
-The actual cut tree is not changed, and no slit-selection premise is
-reused at a different vertex.
+fan, directly in the actual opening. Give the first slit ray wc angle
+zero and the last copy wb angle Gamma_w. The patch Q_1 contains the
+ray wu_1 at angle omega_0. Reaching wb through the fan would therefore
+require span at least Gamma_w-omega_0>Gamma_w/2, because (L) gives
+omega_0<Gamma_w/2. This contradicts its half-fan span. Reflection treats
+Q_2 reaching the first slit copy. A route through the other angular gap
+is the separate reflex case below. No unfolding is changed in this argument.
 
 ## A single slit-edge separator proves the local lemma
 
@@ -219,7 +222,7 @@ This proves (E2), including first contact at P or b. Strictness comes from
 the positive curvature gap at a and the strict link bound at c, not from
 moving an auxiliary point into an overlap or perturbing the solid.
 The earlier interior-point version is preserved in
-[the preceding core draft](archive_notes/TIDY_CORE_before_contact.md).
+[the readable preceding core draft](TIDY_CORE_BEFORE_CONTACT.html).
 
 ## One contradiction replaces the two source-curvature cases
 
@@ -443,3 +446,15 @@ still under self-audit. The exact checks in tidy_audit.py check identities
 and specified coordinate domains, not this universal geometric argument.
 The original longer proofs, failed reductions and alternative estimates
 remain available. Independent mathematical review is still needed.
+
+## Further shortening: the paired-pole rule
+
+The final review pass gives the stronger rule in
+[PAIRED_POLE_RULE.md](PAIRED_POLE_RULE.md): fix any opposite pair, put the
+source at its sharper end, and choose an equator maximum for the fifth cut.
+Its new positive identity makes both wider Case A bounds automatic when
+kappa_v>=kappa_w. Together with the local, finite-contact, small-fan and
+boundary arguments above, this proves the whole selected net. The new
+account writes every hypothesis and the identity explicitly. It also
+settles the original-edge minus graph by the fixed opposite pair A,B,
+without a source switch. The [preceding core draft](TIDY_CORE_BEFORE_PAIRED.html) is preserved in full.

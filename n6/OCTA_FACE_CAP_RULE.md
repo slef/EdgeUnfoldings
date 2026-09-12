@@ -124,7 +124,8 @@ independently and are not the proof of this universal selection lemma.
 
 The first draft restricted the fan itself to curvature at most pi and
 selected a passing cap sum. It is preserved in
-[the low-fan draft archive](archive_notes/octa-face-cap-low-fan/README.md).
+[the readable low-fan draft](OCTA_FACE_CAP_LOW_FAN_DRAFT.html), with its
+code and exact examples in the [archive](archive_notes/octa-face-cap-low-fan/README.md).
 The sharper-pole orientation removes that restriction and the extra
 selection cases. An implementation on a parameter box may certify either
 of the two proposals directly from (C), even if their difference ranking
@@ -137,3 +138,11 @@ L_1+L_2=4*pi-M+m>2*pi. Thus both of those petals have curvature sum
 above pi. The other petals contain c and already have that property.
 The rule makes all four petals and the two blue triangles beside the slit
 carry the curvature budgets needed by the geometric proof.
+
+## Final review update: the difference comparison can also be removed
+
+The [paired-pole theorem](PAIRED_POLE_RULE.md) now supplies the missing
+wider Case A bounds from a positive identity. It proves the unranked
+choice too, and simplifies the minus-edge graph. The complete cap proof
+above remains correct; its former open-shortcut note and the preceding
+version are preserved in archive_notes/OCTA_FACE_CAP_RULE_before_paired.md.

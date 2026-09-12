@@ -1,6 +1,6 @@
 # A streamlined proof of original-edge unfoldability through six vertices
 
-12 September 2026. **Separate draft in progress during the proof review.**
+12 September 2026. **Separate streamlined research manuscript.**
 The original notes, alternatives, failures, figures and certificates are
 preserved. This is a shorter presentation under self-audit, not independent
 review or formal verification. Numerical experiments are not proof premises.
@@ -10,7 +10,7 @@ review or formal verification. Numerical experiments are not proof premises.
 The claim concerns full-dimensional convex polytopes with at most six
 genuine vertices. Only original edges may be cut; face interiors must be
 disjoint, while net-boundary contact is allowed. The argument below uses
-one geometric core, one minus-edge identity, and two prism switches. All
+one geometric core, a paired-pole rule, and two prism switches. All
 geometric details of the new common criterion and planar separators are
 collected in [TIDY_CORE.md](TIDY_CORE.md). The longer original dependency
 map remains [N6_PROOF_MAP.md](N6_PROOF_MAP.md).
@@ -50,32 +50,18 @@ the earlier “Domes” treatment in [O'Rourke's author manuscript](https://www.
 Only the other three graphs need the new argument. The existing seven-type
 computer enumeration is retained as a separate check, not a proof premise.
 
-## The common rule and the original-face comparison
+## The shared core and an original-face comparison
 
-Write kappa_x for the curvature at vertex x, so 0<kappa_x<2*pi and
-the six curvatures sum to 4*pi. Complete the three remaining graphs to
-an octahedron by adding the missing quadrilateral diagonals as flat hinges.
-The common theorem in TIDY_CORE.md says:
+Write kappa_x for vertex curvature, with 0<kappa_x<2*pi and total 4*pi.
+Complete the three remaining graphs to an octahedron using uncut flat
+quadrilateral diagonals. The shared core proves local separation, the
+finite-cut obstruction, opposite-petal cone and pocket lemmas, and the
+four final boundary checks. The new paired-pole identity organizes these
+into the short octahedron and minus-edge rule below.
 
-> If v,w are opposite and either kappa_v>=pi or all curvatures<=pi,
-> then star(v)+wc unfolds whenever 2*kappa_c+kappa_w>=pi.
-
-An equator maximum c always passes this threshold: four times its curvature
-is at least 4*pi-kappa_v-kappa_w, so
-
-    2*kappa_c+kappa_w >= 2*pi-kappa_v/2+kappa_w/2 > pi.
-
-Thus the octahedron is settled by a sharpest source and an equator maximum,
-including all ties. For the other graphs, every final cut below is checked
-to be original, so the flat hinges rejoin whole original quadrilaterals.
-
-The review subsequently produced an even shorter standalone octahedron
-argument: [put the sharpest vertex at the slit and choose the more unequal
-remaining opposite pair](OCTA_FACE_CAP_RULE.md). Two face-curvature sums
-replace the source-curvature split, so that existence proof omits the
-projection step E1. The stronger selected-source theorem above remains
-useful for the nonsimplicial choices below. The new rule cannot simply be
-transferred there without checking for auxiliary cuts.
+The prism also needs an original-face comparison and the cofacial gate.
+These keep the final cuts on original edges and leave only a stated
+Case A pair to settle at each candidate.
 
 We also use a useful comparison. Let an original degree-four source v
 and its sole nonneighbor w be opposite corners of an original quadrilateral
@@ -92,8 +78,6 @@ remains. Here are the middle bases for that remaining triple:
 
 | Original type | Source / fifth endpoint | Middle base |
 | --- | --- | --- |
-| Minus edge | A / C or B / C | DQ |
-| Minus edge | A / D or B / D | CP |
 | Prism diagonal | 1 / 2, 1 / 4, 3 / 0, 3 / 5 | respectively 34, 02, 45, 01 |
 
 If its base-curvature sum is at least its middle apex angle, it is Case B
@@ -102,58 +86,26 @@ TIDY_CORE.md apply to the full original outer-face apex cones. The comparison
 uses only star nonoverlap; it does not assume an empty infinite exterior
 wedge, a stronger claim that is false.
 
-## The minus-edge switch in one identity
+## One paired-pole rule settles the octahedron and minus-edge graph
 
-The original facets are ACBD, ACP, APQ, ADQ, BDQ, BPQ, BCP. Suppose
-A and B have curvature below pi and
+The final review gives a shorter theorem: **fix any opposite pair, use its
+sharper endpoint as source, and put the fifth cut at an equator maximum**.
+The complete deduction is in [PAIRED_POLE_RULE.md](PAIRED_POLE_RULE.md).
+Its central identity makes the two wider Case A bounds automatic from
+kappa_v>=kappa_w; the shared core then excludes every remaining pair.
+No comparison between different pole pairs or trial unfolding is needed.
 
-    kappa_C+kappa_A>=pi,   kappa_C+kappa_B>=pi.
+For the minus graph, use facets ACBD, ACP, APQ, ADQ, BDQ, BPQ, BCP and
+add CD as an uncut flat hinge. Both A and B have degree four. Choose the
+sharper of A,B as v and the other as w, then take a largest-curvature c
+among C,D,P,Q. All four star edges and wc are original, and CD remains
+uncut. The paired-pole theorem gives the whole net, including equality.
 
-Compare the two original-edge cuts star(A)+BC and star(B)+AC. The
-cofacial-star and curvature-gate reduction leaves only ACBD/APQ in the
-first candidate and ACBD/BPQ in the second. Each statement concerns the
-whole candidate in question; safe pairs are not moved between candidates.
-
-Set K=kappa_D+kappa_Q, nu_A=angle(DAQ), nu_B=angle(DBQ). If K>=nu_X
-for either source X, its remaining pair is Case B and that net is safe.
-Otherwise theta_X=pi-nu_X+K lies in (0,pi) for both sources.
-
-Let q_X be the quadrilateral angle at X, mu_A=angle(PAQ),
-mu_B=angle(PBQ), and tau=angle(APQ)+angle(BPQ)>0. The original face-angle
-sums and the two curvatures give
-
-    K+q_D=nu_A+nu_B+mu_A+mu_B+tau,
-    q_A+q_B+q_C+q_D=2*pi.
-
-Consequently
-
-    theta_A+theta_B
-      = (q_A+mu_A)+(q_B+mu_B)+(K+q_C+tau).
-
-The final parenthesis is positive, so at least one source satisfies
-q_X+mu_X<theta_X. Both of its positive outer face angles are then below
-theta_X. The Case A cone lemma separates its remaining pair and completes
-that entire original-edge net. Reflection gives the corner-D statement.
-
-This short proof replaces the four comparisons in
-MINUS_COMPLEMENTARY_SOURCES.md without discarding them. The exhaustive
-curvature argument selecting this switch or a direct net is as follows.
-
-* If all curvatures are at most pi, use source A and any equator maximum.
-  Its four star edges and every possible fifth cut at B are original.
-* If A or B has curvature at least pi, use that source and an equator maximum.
-* Otherwise A,B<pi. If C or D has curvature at least pi, the complementary
-  gates above hold, so use its two-source switch.
-* Otherwise P or Q is sharp. Reflect to take P, opposite D. Its allowed
-  fifth endpoints are A,B,Q. If one passes 2*kappa_X+kappa_D>=pi, use it.
-  If all fail, adding the B,Q failures gives kappa_B+kappa_Q+kappa_D<pi.
-  Subtracting from 4*pi and using kappa_P<2*pi yields kappa_A+kappa_C>pi.
-  Adding the A,Q failures similarly yields kappa_B+kappa_C>pi. Both
-  complementary gates are forced, so the two-source switch works.
-
-These alternatives exhaust every actual curvature assignment. The only
-auxiliary edge CD is never cut. Every branch supplies one complete original
-net, establishing the minus-edge type.
+Thus this type needs no source-switch exhaustion. The previous one-identity
+switch, its full case analysis and its wider uses are retained in
+[the preceding complete review draft](TIDY_PROOF_BEFORE_PAIRED.md) and
+MINUS_COMPLEMENTARY_SOURCES.md. The separate two-fixed-tree conjecture
+remains an optional question.
 
 ## Prism: one fixed fallback with two views
 
