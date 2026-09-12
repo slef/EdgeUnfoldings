@@ -223,7 +223,11 @@ A cap-attachment lemma would need to prove that missing geometric step.
 The separate [bipyramid arguments](BIPYRAMID_PATCHES.html) extend several
 of the old octahedral lemmas. They cover three complete conditional patch
 patterns and additional curvature-restricted families. The bipyramid graph
-as a whole remains open here.
+as a whole remains open here. The new [insertion arguments](BIPYRAMID_MORPH.html)
+prove a convex deformation from six vertices, nondecreasing inserted
+curvature, and at least two octahedral reductions. Carrying a safe net to
+the target is the separate missing lemma; minimum curvature alone does not
+preserve an arbitrary safe tree.
 
 ## What does not automatically extend from the six-vertex proof
 
@@ -244,14 +248,17 @@ as a whole remains open here.
 
 ## Next work, in order
 
-1. Work on the single residual pair of N7-A992, with an explicit alternative
+1. Focus on [pentagonal bipyramid insertion](BIPYRAMID_MORPH.html#next-lemma):
+   analyze the first collision and prove a suitable change of cuts. Keep
+   the alternative deletion vertices as additional choices.
+2. As a secondary route, work on the single residual pair of N7-A992, with an explicit alternative
    tree if its fixed candidate fails. This would settle one additional whole graph.
-2. Use the five-patch census to attack the still-open bipyramid patterns,
+3. Use the five-patch census to attack the still-open bipyramid patterns,
    especially two inward patches. This is the closest structural continuation
    of the octahedron work.
-3. Prove a controlled cap-attachment lemma for N7-A1205. Preserve the six-vertex
+4. Prove a controlled cap-attachment lemma for N7-A1205. Preserve the six-vertex
    proof as a dependency rather than editing it while the Lean audit runs.
-4. Track flat auxiliary hinges when applying either core theorem to the two
+5. Track flat auxiliary hinges when applying either core theorem to the two
    nonsimplicial core graphs. A proof that needs to cut the new diagonal is
    not enough.
 

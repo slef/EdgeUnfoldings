@@ -3,8 +3,15 @@
 Start with the [overview](index.html), the [arguments](ARGUMENTS.md), or the
 [bipyramid patch proofs](BIPYRAMID_PATCHES.md), the dedicated [A992 case](A992.md),
 its [cone proof](A992_CONES.md), the [R0 repair lemma](A992_R0.md), or the
-[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the six
+[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the seven
 proof documents contain rendered mathematics and work without network access.
+
+**New focus:** [pentagonal bipyramid insertion](BIPYRAMID_MORPH.md), with an
+[interactive comparison](bipyramid-morph-demo.html). Every equator vertex has
+a convex insertion with nondecreasing curvature; at least two reductions
+give octahedra. A minimum-curvature insertion can spoil an initially safe
+net. Two exact one-parameter families have safe nets over 264 closed
+interval cells. Universal net selection remains open.
 
 **Current result:** 34 graph types, 10 whole graph cases covered by established
 theorems, 24 open. Twenty of the open types have a cofacial-core reduction.
@@ -41,7 +48,7 @@ this initial overview is a local research page.
 ## Reproduce
 
 Dependencies are listed in `requirements.txt`. Run from the worktree root,
-with a Python environment containing them. The build of the six reading
+with a Python environment containing them. The build of the seven reading
 pages additionally needs Pandoc on the command path.
 
 ```sh
@@ -55,9 +62,12 @@ python3 -B -m n7.r0_examples
 python3 -B -m n7.r0_figures
 python3 -B -m n7.base_edge_examples
 python3 -B -m n7.base_edge_figures
+python3 -B -m n7.bipyramid_morph
+python3 -B -m n7.bipyramid_morph_figures
 python3 -B -m n7.build_overview
 python3 -B -m unittest discover -s n7/tests -v
 node n7/tests/overview.cjs
+node n7/tests/morph.cjs
 ```
 
 The saved `results/plantri.g6` was generated independently using the authors'
@@ -70,6 +80,9 @@ and explicit bijection of its 34 outputs to our catalogue are retained in
 | File | Purpose |
 | --- | --- |
 | `ARGUMENTS.md` | Complete graph decomposition; universal edge-star and dome cases; general cofacial-core proof; next targets |
+| `BIPYRAMID_MORPH.md` | Three deletion types, convex insertion, monotone curvature, tree lifting, exact failures, and the open continuation problem |
+| `bipyramid_morph.py` | Exact replay of two insertion paths, minimum-curvature ordering, and a positive-area overlap |
+| `bipyramid-morph-demo.html` | Offline slider showing both inserted solids and their nets; drawings are rounded illustrations |
 | `BIPYRAMID_PATCHES.md` | Patch-family proofs, a general local Lemma L with explicit hypotheses, and the remaining pattern partition |
 | `A992_BASE_EDGES.md` | E/235 proved for obtuse E and converging or parallel base hinges; divergent family still open |
 | `A992_R0.md` | Obtuse-petal proof closing E/135 throughout R0; five conditional obligations remain |
@@ -97,15 +110,19 @@ formal verification of the geometric arguments.
 
 ## Next session
 
-1. Read `A992.md#next-lemma`. The fixed source-3 rule is refuted; do not
+1. Focus on `BIPYRAMID_MORPH.md#next-lemma`. Study first collisions during
+   insertion and candidate changes of slit or pole. Minimum curvature does
+   not preserve every safe tree; the exact counterexample must be retained.
+   The universal continuation lemma is open.
+2. Keep the A992 results as a secondary route. Read `A992.md#next-lemma`. The fixed source-3 rule is refuted; do not
    restart its universal proof. Read `A992_CONES.md`, `A992_R0.md`, and `A992_BASE_EDGES.md`. Work on E/Q in R0, E/235 with divergent hinges,
    or one of the three remaining R6 implications
    for the Left-to-Right triangle attachment, using the five-vertex
    localization of the initial obstruction.
-2. Investigate the remaining two-inward-patch bipyramid patterns. The one-
+3. Investigate the remaining two-inward-patch bipyramid patterns. The one-
    patch and single-intervening-convex-patch identities are particularly
    short starting points; no curvature ranking was needed for those proofs.
-3. Treat cap attachment for N7-A1205 and uncut-diagonal restrictions for
+4. Treat cap attachment for N7-A1205 and uncut-diagonal restrictions for
    N7-A1167/N7-A1104 as separate missing lemmas.
-4. Retain the initial overview history and keep graph counts distinct from
+5. Retain the initial overview history and keep graph counts distinct from
    conditional pattern counts, pair counts, and example certificates.

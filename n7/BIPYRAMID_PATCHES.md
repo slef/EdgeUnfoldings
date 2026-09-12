@@ -4,6 +4,10 @@
 is still open in general.** The conditional theorems below are geometric
 arguments; the accompanying finite counts and examples have different scopes.
 
+**New route, 13 September:** [grow the solid from six vertices](BIPYRAMID_MORPH.html).
+Convexity and monotone curvature are proved; carrying a safe net throughout
+remains open. This does not change the three complete pattern classes below.
+
 ## Setup: ten triangles, five simple candidate cuts
 
 Let $v,w$ be the two nonadjacent degree-five poles. Write the equator in

@@ -210,7 +210,7 @@
 </tbody>
 </table>
 <p>These are graph completions, <strong>not unfoldability reductions</strong>. A diagonal inserted in an original quadrilateral is a flat auxiliary hinge and must remain uncut. Likewise, deleting the cap vertex from the capped-octahedron graph does not justify appending a tetrahedral cap to an arbitrary safe six-vertex net. The replacement faces can collide with remote faces. A cap-attachment lemma would need to prove that missing geometric step.</p>
-<p>The separate <a href="BIPYRAMID_PATCHES.html">bipyramid arguments</a> extend several of the old octahedral lemmas. They cover three complete conditional patch patterns and additional curvature-restricted families. The bipyramid graph as a whole remains open here.</p>
+<p>The separate <a href="BIPYRAMID_PATCHES.html">bipyramid arguments</a> extend several of the old octahedral lemmas. They cover three complete conditional patch patterns and additional curvature-restricted families. The bipyramid graph as a whole remains open here. The new <a href="BIPYRAMID_MORPH.html">insertion arguments</a> prove a convex deformation from six vertices, nondecreasing inserted curvature, and at least two octahedral reductions. Carrying a safe net to the target is the separate missing lemma; minimum curvature alone does not preserve an arbitrary safe tree.</p>
 <h2 id="what-does-not-automatically-extend-from-the-six-vertex-proof">What does not automatically extend from the six-vertex proof</h2>
 <ul>
 <li>The four-patch exhaustion in Lemma F does not cover a five-patch fan. There are more separated patch pairs and longer intervening chains.</li>
@@ -221,7 +221,8 @@
 </ul>
 <h2 id="next-work-in-order">Next work, in order</h2>
 <ol type="1">
-<li>Work on the single residual pair of N7-A992, with an explicit alternative tree if its fixed candidate fails. This would settle one additional whole graph.</li>
+<li>Focus on <a href="BIPYRAMID_MORPH.html#next-lemma">pentagonal bipyramid insertion</a>: analyze the first collision and prove a suitable change of cuts. Keep the alternative deletion vertices as additional choices.</li>
+<li>As a secondary route, work on the single residual pair of N7-A992, with an explicit alternative tree if its fixed candidate fails. This would settle one additional whole graph.</li>
 <li>Use the five-patch census to attack the still-open bipyramid patterns, especially two inward patches. This is the closest structural continuation of the octahedron work.</li>
 <li>Prove a controlled cap-attachment lemma for N7-A1205. Preserve the six-vertex proof as a dependency rather than editing it while the Lean audit runs.</li>
 <li>Track flat auxiliary hinges when applying either core theorem to the two nonsimplicial core graphs. A proof that needs to cut the new diagonal is not enough.</li>

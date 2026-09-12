@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Growing a pentagonal bipyramid from six vertices</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body class="reading"><p class="back"><a href="index.html">← Seven-vertex overview</a></p>
+<header id="title-block-header">
+<h1 class="title">Growing a pentagonal bipyramid from six vertices</h1>
+</header>
+<h1 id="growing-a-pentagonal-bipyramid-from-six-vertices">Growing a pentagonal bipyramid from six vertices</h1>
+<p><strong>13 September 2026 · New geometric lemmas and two exact example families.</strong> The pentagonal bipyramid remains open in general. These arguments are separate from the six-vertex manuscript and its Lean formalization.</p>
+<p><a href="index.html#bipyramid">Seven-vertex overview</a> · <a href="bipyramid-morph-demo.html">Interactive insertion and unfolded nets</a> · <a href="BIPYRAMID_PATCHES.html">Earlier five-patch proofs</a></p>
+<h2 id="idea">The idea, and what we can now say</h2>
+<p>Your suggestion gives a useful new approach: start with a surface on which one extra marked point is completely flat, then push that point out until it becomes the seventh vertex. We can make this construction work for <strong>every equator vertex</strong> of a convex pentagonal bipyramid, with the other six vertices fixed. The solid stays convex, and the new vertex’s curvature increases monotonically from zero to its target value.</p>
+<p>The starting six-vertex solid depends on which vertex we remove. Sometimes it is an octahedron. Sometimes it gains an edge between the two poles, giving a different solid with an especially simple safe unfolding.</p>
+<p>The difficult step is carrying a safe net to the end. We now have an exact counterexample to carrying an <strong>arbitrary initially safe net unchanged</strong>, even when the moving vertex is the unique minimum-curvature vertex. Another net works along that entire example. Thus this does not refute the proposed inductive approach: it identifies the extra net-selection lemma it needs.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Result here</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Can an equator vertex be inserted from curvature zero?</td>
+<td><strong>Yes</strong></td>
+<td>Every convex pentagonal bipyramid</td>
+</tr>
+<tr class="even">
+<td>Does this preserve convexity and increase its curvature?</td>
+<td><strong>Yes</strong></td>
+<td>The full straight-line insertion</td>
+</tr>
+<tr class="odd">
+<td>Are there several reductions to an octahedron?</td>
+<td><strong>At least two</strong></td>
+<td>Every convex pentagonal bipyramid</td>
+</tr>
+<tr class="even">
+<td>Does this flexibility grow with the ring size?</td>
+<td><strong>At least <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>−</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">m-3</annotation></semantics></math> reductions</strong></td>
+<td>Any convex bipyramid with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>≥</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">m\ge5</annotation></semantics></math> equator vertices</td>
+</tr>
+<tr class="odd">
+<td>Must the minimum-curvature equator vertex reduce to an octahedron?</td>
+<td><strong>No</strong></td>
+<td>Exact rational counterexample below</td>
+</tr>
+<tr class="even">
+<td>Can every safe initial net be kept unchanged?</td>
+<td><strong>No, even for the minimum vertex</strong></td>
+<td>Exact rational counterexample below</td>
+</tr>
+<tr class="odd">
+<td>Can we always choose or change cuts to reach the target?</td>
+<td><strong>Open</strong></td>
+<td>The missing existence lemma</td>
+</tr>
+</tbody>
+</table>
+<p>These results do not increase the number of complete patch-pattern proofs: it remains <strong>3 of 15</strong>, and the whole-graph census remains <strong>10 covered, 24 open</strong>.</p>
+<h2 id="deletion">1. Three possible six-vertex starting shapes</h2>
+<p>Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>,</mo><mi>w</mi></mrow><annotation encoding="application/x-tex">v,w</annotation></semantics></math> be the poles, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mn>0</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>u</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">u_0,\ldots,u_4</annotation></semantics></math> the equator in cyclic order. The equator need not lie in a plane. Remove <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><msub><mi>u</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x=u_i</annotation></semantics></math>, and let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msub><mi>u</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">a=u_{i-1}</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><msub><mi>u</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">b=u_{i+1}</annotation></semantics></math>. The four triangles incident to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> disappear. The six other triangles remain strictly supporting faces of the smaller convex hull: deleting a point cannot invalidate their strict supporting inequalities. The hole has boundary <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>,</mo><mi>a</mi><mo>,</mo><mi>w</mi><mo>,</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">v,a,w,b</annotation></semantics></math>.</p>
+<p>Every old vertex remains extreme, since its old exposing functional still exposes it after a different vertex is deleted. The new hull is three dimensional: any surviving face has another surviving vertex strictly on its inner side. Its new faces therefore fill this four-sided hole using only its four boundary vertices. There are exactly three possibilities:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>New cap</th>
+<th>Reduced solid</th>
+<th>Where to put the flat point <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>0</mn></msub><annotation encoding="application/x-tex">x_0</annotation></semantics></math></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Two triangles meeting along <strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">ab</annotation></semantics></math></strong></td>
+<td>An octahedron</td>
+<td>Inside edge <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">ab</annotation></semantics></math></td>
+</tr>
+<tr class="even">
+<td>Two triangles meeting along <strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">vw</annotation></semantics></math></strong></td>
+<td>Both poles adjacent to all other vertices</td>
+<td>Inside edge <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">vw</annotation></semantics></math></td>
+</tr>
+<tr class="odd">
+<td>One quadrilateral <strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>a</mi><mi>w</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">vawb</annotation></semantics></math></strong></td>
+<td>The boundary between these cases</td>
+<td>Inside diagonal <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">vw</annotation></semantics></math> of that face</td>
+</tr>
+</tbody>
+</table>
+<p>The first two rows are geometrically different reductions of the same seven-vertex graph. In the second row the pole edge is a real edge of the smaller hull, although it is not an edge of the final bipyramid.</p>
+<h3 id="projection">A simple way to decide which row applies</h3>
+<p>Project centrally from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> to a plane cutting all rays from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> through the other vertices. Such a plane exists because <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> is an exposed vertex. The five equator images <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mi>i</mi></msub><annotation encoding="application/x-tex">q_i</annotation></semantics></math> are the vertices of a strictly convex polygon: this is the cross-section of the tangent cone at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>. The image <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>O</mi><annotation encoding="application/x-tex">O</annotation></semantics></math> of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math> is strictly inside that polygon. Indeed, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math> share no supporting face, so the open segment between them lies inside the original solid.</p>
+<figure>
+<img src="figures/bipyramid-deletion.svg" alt="Three central projections: the pole image stays inside, falls outside, or lies on the boundary of the remaining equator polygon."/>
+<figcaption>
+The equator need not be planar: this diagram is a central projection from v. The removed vertex is dashed off; the position of the other pole’s image selects the reduction.
+</figcaption>
+</figure>
+<p>Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>π</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">g_i\in(0,\pi)</annotation></semantics></math> be the successive positive angular gaps from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mi>i</mi></msub><annotation encoding="application/x-tex">q_i</annotation></semantics></math> to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">q_{i+1}</annotation></semantics></math> as seen from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>O</mi><annotation encoding="application/x-tex">O</annotation></semantics></math>. They sum to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math>. On deleting <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mi>i</mi></msub><annotation encoding="application/x-tex">q_i</annotation></semantics></math>, the only new gap is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub><mo>=</mo><msub><mi>g</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>g</mi><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">h_i=g_{i-1}+g_i.</annotation></semantics></math></p>
+<p>If <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub><mo>&lt;</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">h_i&lt;\pi</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>O</mi><annotation encoding="application/x-tex">O</annotation></semantics></math> is still inside the remaining polygon: the new edge is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">ab</annotation></semantics></math>. If <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub><mo>&gt;</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">h_i&gt;\pi</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>O</mi><annotation encoding="application/x-tex">O</annotation></semantics></math> is outside, becomes an extreme ray at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>, and the new edge is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">vw</annotation></semantics></math>. At equality, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>O</mi><annotation encoding="application/x-tex">O</annotation></semantics></math> is on the open segment <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>q</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">q_{i-1}q_{i+1}</annotation></semantics></math>; the four cap vertices are coplanar and form the quadrilateral row. This also proves the classification for nonplanar equators.</p>
+<p><strong>More vertices really do give more choices.</strong> For an <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>-vertex equator,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>h</mi><mi>i</mi></msub><mo>=</mo><mn>2</mn><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>g</mi><mi>i</mi></msub><mo>=</mo><mn>4</mn><mi>π</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_{i=0}^{m-1} h_i=2\sum_i g_i=4\pi.</annotation></semantics></math></p>
+<p>When <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>≥</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">m\ge5</annotation></semantics></math>, four values at least <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math> would already use the entire sum, leaving nothing for the remaining positive values. Thus at most three vertices fail the strict <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub><mo>&lt;</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">h_i&lt;\pi</annotation></semantics></math> test. <strong>At least <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>−</mo><mn>3</mn><mo>=</mo><mi>n</mi><mo>−</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">m-3=n-5</annotation></semantics></math> vertices can be removed to leave a smaller bipyramid.</strong> In particular a pentagonal bipyramid always has at least two octahedral reductions.</p>
+<h2 id="morph">2. A convex insertion with monotonically increasing curvature</h2>
+<p>Choose any <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>0</mn></msub><annotation encoding="application/x-tex">x_0</annotation></semantics></math> in the open segment specified in the table, and let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>1</mn></msub><annotation encoding="application/x-tex">x_1</annotation></semantics></math> be the original vertex. Hold the other six points fixed and set</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><msub><mi>x</mi><mn>0</mn></msub><mo>+</mo><mi>t</mi><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mspace width="2.0em"></mspace><mn>0</mn><mo>≤</mo><mi>t</mi><mo>≤</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">x(t)=(1-t)x_0+t x_1,\qquad 0\le t\le1.</annotation></semantics></math></p>
+<p>At zero, the four triangles around <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>0</mn></msub><annotation encoding="application/x-tex">x_0</annotation></semantics></math> are a flat subdivision of the new cap. Each small triangle is nondegenerate. Intrinsically their angles at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>0</mn></msub><annotation encoding="application/x-tex">x_0</annotation></semantics></math> sum to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math>, including when <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>0</mn></msub><annotation encoding="application/x-tex">x_0</annotation></semantics></math> lies on a bent polyhedral edge: an interior point of an edge has no intrinsic curvature.</p>
+<p><strong>Convexity lemma.</strong> For every <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>t</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;t\le1</annotation></semantics></math>, these same ten triangles are exactly the strictly supporting facets of a convex pentagonal bipyramid.</p>
+<p>For each triangle and each vertex outside it, orient its supporting volume determinant to be positive at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t=1</annotation></semantics></math>. It is affine in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>: in its four-point determinant only one point moves. Its value at zero is nonnegative because the starting triangles subdivide a supporting cap; its value at one is strictly positive. Hence it is positive for all <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>t</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;t\le1</annotation></semantics></math>. These ten supporting triangles form the given closed triangulated sphere, so they exhaust the hull boundary. No graph change or nonconvex intermediate shape occurs.</p>
+<p><strong>Curvature lemma.</strong> The angular defect <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mi>x</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\kappa_x(t)</annotation></semantics></math> is nondecreasing from zero to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mi>x</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\kappa_x(1)</annotation></semantics></math>.</p>
+<p>Write <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> for the fixed six-vertex hull, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><msub><mi>x</mi><mn>1</mn></msub><mo>−</mo><msub><mi>x</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">d=x_1-x_0</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>K</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mo>max</mo><mrow><mi>y</mi><mo>∈</mo><mi>K</mi></mrow></msub><mi>n</mi><mo>⋅</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">h_K(n)=\max_{y\in K}n\cdot y</annotation></semantics></math>. The spherical normal cone at the inserted vertex is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">{</mo><mi>n</mi><mo>∈</mo><msup><mi>S</mi><mn>2</mn></msup><mo>:</mo><msub><mi>h</mi><mi>K</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>n</mi><mo>⋅</mo><msub><mi>x</mi><mn>0</mn></msub><mo>≤</mo><mi>t</mi><mspace width="0.167em"></mspace><mi>n</mi><mo>⋅</mo><mi>d</mi><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">N_t=\{n\in S^2:h_K(n)-n\cdot x_0\le t\,n\cdot d\}.</annotation></semantics></math></p>
+<p>The left side is nonnegative because <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>∈</mo><mi>K</mi></mrow><annotation encoding="application/x-tex">x_0\in K</annotation></semantics></math>. Membership for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t&gt;0</annotation></semantics></math> therefore implies <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>⋅</mo><mi>d</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">n\cdot d\ge0</annotation></semantics></math>, so <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>s</mi></msub><mo>⊆</mo><msub><mi>N</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">N_s\subseteq N_t</annotation></semantics></math> whenever <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>s</mi><mo>&lt;</mo><mi>t</mi></mrow><annotation encoding="application/x-tex">0&lt;s&lt;t</annotation></semantics></math>. Angular defect is the spherical area of this normal cone. One way to see this identity is to note that the normal polygon’s interior angles are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math> minus the original face angles; its spherical excess is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math> minus their sum. Nested normal cones have nondecreasing areas. The flat starting point has area zero, and continuity gives the endpoint. For the standard normal-area identity, see <a href="https://math.berkeley.edu/~giventh/hw140s.pdf">Givental’s geometry exercises, Homework 11</a>.</p>
+<p>This controls curvature at <strong>the inserted vertex</strong>. We do not assert that it stays the minimum at every intermediate time, or that other curvatures are monotone.</p>
+<h2 id="lifting">3. How to transfer a cut tree from six vertices</h2>
+<p>In either triangular-cap case let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>e</mi><annotation encoding="application/x-tex">e</annotation></semantics></math> be the new edge of the smaller solid. Take any safe original-edge cut tree of that solid.</p>
+<ul>
+<li>If it cuts <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>e</mi><annotation encoding="application/x-tex">e</annotation></semantics></math>, replace that cut by the two halves through <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>0</mn></msub><annotation encoding="application/x-tex">x_0</annotation></semantics></math>.</li>
+<li>If it does not cut <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>e</mi><annotation encoding="application/x-tex">e</annotation></semantics></math>, keep its cuts and attach <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>0</mn></msub><annotation encoding="application/x-tex">x_0</annotation></semantics></math> as a leaf by cutting one of its four incident segments to a neighbor.</li>
+</ul>
+<p>The result is a spanning tree using only edges of the eventual bipyramid. At <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t=0</annotation></semantics></math> its developed triangles reproduce the old net, with a face subdivision and possibly a zero-width slit. This follows by unfolding the coplanar subdivisions across their uncut edges; their intrinsic placement is unchanged. The operation therefore transfers any certified old tree, not just one with a pole as source.</p>
+<p>For an octahedral starting solid, the existence of an old safe tree is a <strong>dependency on the six-vertex result</strong>; we do not revise or independently formalize it here. The lifting statement itself needs only the supplied net.</p>
+<p>For the pole-edge case there is a particularly simple starting tree: cut the edge star at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>, since <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> is adjacent to every other vertex. It is a shortest-path star and has a nonoverlapping unfolding by the <a href="ARGUMENTS.html#edge-star">edge-star argument</a>. After subdivision this becomes the five edges <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><msub><mi>u</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">vu_j</annotation></semantics></math>, together with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">xw</annotation></semantics></math>. At the quadrilateral boundary the same comparison uses the straight face diagonal <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">vw</annotation></semantics></math> as a shortest path; splitting it at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mn>0</mn></msub><annotation encoding="application/x-tex">x_0</annotation></semantics></math> again gives only original bipyramid edges after insertion.</p>
+<h3 id="stability">When a safe starting net remains safe for a while</h3>
+<p><strong>Strict-clearance lemma.</strong> Fix one lifted tree. Suppose every pair of triangles in its initial net either belongs to a consecutive uncut fan at a common original vertex, or has strictly separated closed triangles. Then the tree stays nonoverlapping for some <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>t</mi><mo>≤</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">0\le t\le\varepsilon</annotation></semantics></math>.</p>
+<p>A consecutive fan has angle sum at most <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math> on the flat starting surface and strictly less than <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math> at a convex vertex; its face interiors cannot overlap. For every other pair, its positive distance persists by continuity of the developed coordinates. There are finitely many pairs, so take the minimum of their positive continuity neighborhoods.</p>
+<p>Simply knowing the initial net is nonoverlapping is weaker: unrelated faces may touch on their boundaries. We must analyze those contacts or certify strict clearance; we cannot silently invoke continuity.</p>
+<h2 id="minimum">4. What minimum curvature does, and does not, buy us</h2>
+<p>For seven vertices, total curvature <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">4\pi</annotation></semantics></math> gives</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>min</mo><mi>z</mi></munder><msub><mi>κ</mi><mi>z</mi></msub><mo>≤</mo><mfrac><mrow><mn>4</mn><mi>π</mi></mrow><mn>7</mn></mfrac><mo>≈</mo><msup><mn>102.86</mn><mo>∘</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\min_z\kappa_z\le\frac{4\pi}{7}\approx102.86^\circ.</annotation></semantics></math></p>
+<p>That is a useful bound, but does not guarantee a small enough motion for a net with an arbitrarily narrow clearance. Curvature measures a spherical normal-cone area, rather than the distance between pieces of a chosen net.</p>
+<p>The global minimum might also be a <strong>pole</strong>. Our insertion proof applies to equator vertices. Restricting the choice to them gives only <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>min</mo><mi>i</mi></msub><msub><mi>κ</mi><msub><mi>u</mi><mi>i</mi></msub></msub><mo>&lt;</mo><mn>4</mn><mi>π</mi><mi>/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">\min_i\kappa_{u_i}&lt;4\pi/5</annotation></semantics></math>. A planar equator allows a pole to flatten into its base polygon; a general nonplanar equator needs a separate construction if we insist on keeping all five neighbors fixed.</p>
+<h3 id="pole-example">An exact minimum vertex which requires the pole-edge route</h3>
+<p>Take</p>
+<table>
+<thead>
+<tr class="header">
+<th>Vertex</th>
+<th>Coordinates</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>0</mn></msub><annotation encoding="application/x-tex">u_0</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,0,0)</annotation></semantics></math></td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>1</mn></msub><annotation encoding="application/x-tex">u_1</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,1,0)</annotation></semantics></math></td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>2</mn></msub><annotation encoding="application/x-tex">u_2</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1,1/2,0)</annotation></semantics></math></td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>3</mn></msub><annotation encoding="application/x-tex">u_3</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mo>−</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1,-1/2,0)</annotation></semantics></math></td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>4</mn></msub><annotation encoding="application/x-tex">u_4</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mo>−</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,-1,0)</annotation></semantics></math></td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>9</mn><mi>/</mi><mn>10</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>10</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(9/10,0,10)</annotation></semantics></math></td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>9</mn><mi>/</mi><mn>10</mn><mo>,</mo><mn>0</mn><mo>,</mo><mo>−</mo><mn>10</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(9/10,0,-10)</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+<p>The unique minimum is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>0</mn></msub><annotation encoding="application/x-tex">u_0</annotation></semantics></math>, with curvature approximately <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>1.621</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">1.621^\circ</annotation></semantics></math>. Removing it exposes edge <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">vw</annotation></semantics></math>: the poles have <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>-coordinate <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><mi>/</mi><mn>10</mn></mrow><annotation encoding="application/x-tex">9/10</annotation></semantics></math> and all remaining equator points have <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x\le0</annotation></semantics></math>. The starting point is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>9</mn><mi>/</mi><mn>10</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">u_0(0)=(9/10,0,0)</annotation></semantics></math>, and</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>9</mn><mi>/</mi><mn>10</mn><mo>+</mo><mi>t</mi><mi>/</mi><mn>10</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">u_0(t)=(9/10+t/10,0,0).</annotation></semantics></math></p>
+<p>The cut tree consisting of all five edges at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> and edge <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><msub><mi>u</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">wu_0</annotation></semantics></math> is safe throughout this entire one-parameter family. <strong>Eight closed rational intervals cover all <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>t</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0\le t\le1</annotation></semantics></math></strong>, and every interval passes the exact pair checks described below. This is a proved family of shapes, rather than eight sampled shapes. It does not cover arbitrary pole heights or arbitrary motion of the remaining vertices.</p>
+<h2 id="failure">5. A minimum-curvature insertion can spoil a safe initial net</h2>
+<p>The following coordinates are exact terminating decimals. They define a second convex pentagonal bipyramid; here labels 5 and 6 mean <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>,</mo><mi>w</mi></mrow><annotation encoding="application/x-tex">v,w</annotation></semantics></math>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Vertex</th>
+<th style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math></th>
+<th style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math></th>
+<th style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>0</mn></msub><annotation encoding="application/x-tex">u_0</annotation></semantics></math></td>
+<td style="text-align: right;">2.86985</td>
+<td style="text-align: right;">0.41002</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>1</mn></msub><annotation encoding="application/x-tex">u_1</annotation></semantics></math></td>
+<td style="text-align: right;">2.41136</td>
+<td style="text-align: right;">0.64241</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>2</mn></msub><annotation encoding="application/x-tex">u_2</annotation></semantics></math></td>
+<td style="text-align: right;">−0.41673</td>
+<td style="text-align: right;">0.99119</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>3</mn></msub><annotation encoding="application/x-tex">u_3</annotation></semantics></math></td>
+<td style="text-align: right;">−1.35765</td>
+<td style="text-align: right;">0.90212</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>4</mn></msub><annotation encoding="application/x-tex">u_4</annotation></semantics></math></td>
+<td style="text-align: right;">−2.61183</td>
+<td style="text-align: right;">−0.55766</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math></td>
+<td style="text-align: right;">1.72924</td>
+<td style="text-align: right;">0.42311</td>
+<td style="text-align: right;">0.35891</td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math></td>
+<td style="text-align: right;">0.92266</td>
+<td style="text-align: right;">0.68566</td>
+<td style="text-align: right;">−0.36188</td>
+</tr>
+</tbody>
+</table>
+<p>The unique minimum is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>2</mn></msub><annotation encoding="application/x-tex">u_2</annotation></semantics></math>, approximately <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>17.59</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">17.59^\circ</annotation></semantics></math>. Its removal gives an octahedron with new edge <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mn>1</mn></msub><msub><mi>u</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">u_1u_3</annotation></semantics></math>. Insert it from that edge’s midpoint. Cut all five edges at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> and the slit <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><msub><mi>u</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">wu_1</annotation></semantics></math>.</p>
+<p>At <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t=0</annotation></semantics></math> all 45 face pairs are safe: 27 by the uncut common-vertex fan argument and 18 by strict separation. At <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t=1</annotation></semantics></math>, faces <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><msub><mi>u</mi><mn>0</mn></msub><msub><mi>u</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">vu_0u_1</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><msub><mi>u</mi><mn>1</mn></msub><msub><mi>u</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">wu_1u_2</annotation></semantics></math> have a strictly interior common point. In the development used by the checker, that rational witness is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>2305109</mn><mn>10000000</mn></mfrac><mo>,</mo><mfrac><mn>793357</mn><mn>10000000</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\left(\frac{2305109}{10000000},\frac{793357}{10000000}\right).</annotation></semantics></math></p>
+<p>All six oriented edge tests at that point have strictly certified signs. Thus this is positive-area overlap, not a rounding artifact or boundary contact. The source triangle <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><msub><mi>u</mi><mn>0</mn></msub><msub><mi>u</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">vu_0u_1</annotation></semantics></math> is placed with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">v=(0,0)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>0</mn></msub><annotation encoding="application/x-tex">u_0</annotation></semantics></math> on the positive horizontal axis, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mn>1</mn></msub><annotation encoding="application/x-tex">u_1</annotation></semantics></math> in the upper half-plane.</p>
+<figure>
+<img src="figures/bipyramid-morph-overlap.svg" alt="The failing endpoint net and a magnified region containing a rational point strictly inside faces 0 and 6."/>
+<figcaption>
+The initial tree at the final solid. The inset shows the small positive-area overlap; its existence is certified by exact signs, not by the drawing.
+</figcaption>
+</figure>
+<p><strong>A better tree works along the whole path.</strong> Cut the five edges at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math> and the slit <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><msub><mi>u</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">vu_4</annotation></semantics></math>. A cover by 256 closed rational intervals certifies all 45 pairs for every parameter from zero to one. Thus the example refutes neither the existence of a good fixed tree for this deformation nor the proposed approach with adaptive cuts. It refutes the assertion that <em>any</em> initially safe tree remains safe merely because the inserted vertex has minimum curvature.</p>
+<p><a href="bipyramid-morph-demo.html#viewer">Move the vertex and compare these two trees →</a></p>
+<h2 id="certificates">6. What the exact checks establish</h2>
+<p><a href="results/bipyramid-morph.json">The saved rational inputs and certificates</a> and <a href="bipyramid_morph.py">the replay checker</a> use outward-rounded rational intervals with 160 binary fractional bits. No floating sign is a premise.</p>
+<ul>
+<li>Strict supporting determinants verify the target hull and the reduced six-vertex cap. Nonnegative start determinants, nonzero starting triangle areas, and the affine-support lemma certify every intermediate solid.</li>
+<li>The global minimum-curvature comparisons use products of complex numbers <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">⟨</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false" form="postfix">⟩</mo><mo>+</mo><mi>i</mi><mo stretchy="false" form="prefix">|</mo><mi>a</mi><mo>×</mo><mi>b</mi><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">\langle a,b\rangle+i|a\times b|</annotation></semantics></math> for the incident face angles. Strict convexity puts the total angle in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>2</mn><mi>π</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,2\pi)</annotation></semantics></math>. Both chosen vertices have total angle in the lower half-circle. Other vertices in the upper half have smaller total angle; within the lower half, a positive determinant certifies the order. All half-circle signs and determinants are enclosed strictly. No approximate inverse trigonometry determines the minimum.</li>
+<li>A cut must be an original-edge spanning tree with a tree as uncut dual. A common-vertex pair is used only if <strong>every face on the entire uncut path</strong> contains that vertex. Merely sharing a vertex label is insufficient.</li>
+<li>Every remaining pair has a strictly separated projection. Over each closed parameter cell, all unfolded coordinates and separating-axis expressions are enclosed uniformly. The 8- and 256-cell covers include every parameter and both endpoints; these are interval proofs, not grids.</li>
+<li>The failing endpoint has a rational point strictly inside both triangles. Stored margins are outputs: replay recomputes all supporting, ordering, overlap, and separation signs.</li>
+</ul>
+<p>The interactive drawings use rounded coordinates and are illustrations. The checker and its written geometric dependencies are not a Lean artifact.</p>
+<h2 id="next-lemma">7. The next lemma to attack</h2>
+<p>The natural target is now more precise:</p>
+<blockquote>
+<p><strong>Open continuation problem.</strong> For every convex pentagonal bipyramid, choose an equator vertex, one of its valid six-vertex reductions, and safe original-edge trees along its straight-line insertion, so that a safe tree exists all the way to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t=1</annotation></semantics></math>.</p>
+</blockquote>
+<p>There are 1,805 original-edge spanning trees for this graph. The ten pole-star-plus-slit trees are a useful smaller starting family, but have not been proved sufficient. A six-vertex seed tree need not even have one of the two poles as its source.</p>
+<p>I would next study the <strong>first loss of clearance</strong>, starting with the ten simple trees: identify which vertex meets which edge in the unfolded net, then try to prove that changing the slit or swapping the pole prevents that obstruction. We must cover the simultaneous-failure cases too; showing that each individual failure has some repair at a few shapes would not complete the proof.</p>
+<p>The minimum-curvature choice is still a sensible candidate to compare against the alternatives. The new reduction count suggests also keeping all available octahedral starting points, since there are always at least two. We now have a valid geometric path and exact examples with which to formulate and test a specific collision-repair lemma.</p>
+</body>
+</html>
