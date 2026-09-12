@@ -148,6 +148,76 @@ contradict the lower cap bounds directly, avoiding the projection branch
 in a standalone existence proof. This prospective shortening is not yet
 a replacement for the checked manuscript.
 
+## Shorter octahedron proof completed — approximately 09:05 JST
+
+`OCTA_FACE_CAP_RULE.md` now gives a complete separate existence argument.
+Choose sharpest c, then the more unequal of the other two opposite pairs,
+and cut the star at its sharper end plus the edge from its other end to c.
+The source need not be the globally sharpest vertex. The two proposed upper
+cap sums satisfy U1-U2=(B-b)-(A-a) and U1+U2=4*pi+M-m<6*pi, so the rule
+chooses an upper sum below 3*pi. Every triple containing a maximum-curvature
+vertex has sum above pi: otherwise that maximum and the remaining three
+vertices would all be below pi, contradicting total curvature 4*pi. The
+weighted slit test is automatic because the maximum is at least 2*pi/3.
+
+The source is at least as sharp as its fan, which guarantees the half-fan
+alternative (source>=pi or fan<=pi). Thus the same criterion also covers a
+fan above pi; no extra selection branch is needed. The first low-fan draft,
+its code, tests and nine certificate domains are retained in
+`archive_notes/octa-face-cap-low-fan/`.
+
+The lower cap bounds contradict the finite-entry budget and small-fan pocket
+identity directly. The upper bounds are exactly the complementary source-
+face budgets needed by the Case A apex cones. This standalone octahedron
+argument therefore omits projection E1 and both source-curvature case splits.
+The original stronger selected-source theorem remains unchanged and useful
+in the full six-vertex proof. No dependence on the refuted unrestricted
+interior-hinge reduction has been introduced.
+
+All five new tests pass. They include every 1/6-grid curvature assignment
+with six positive entries below 2 summing to 4 (28,897 assignments), ordered
+and tied comparisons, an abstract high-fan branch, and actual metric cases.
+The grid is only a finite algebra/selection check, not a realization claim
+or the universal proof. All nine saved point/parameter domains pass the
+canonical larger-difference choice and independent checks of all 28 face
+pairs. The domains include regular ties, an exact pi curvature, an 18-coordinate
+box crossing pi, and a new chosen source outside the former high-source-or-
+all-low condition. The full suite previously passed 290 tests; these five
+additional distinct tests bring the tested total to 295.
+
+An attempted automatic transfer to the minus-edge graph was deliberately
+not promoted. A coarse rational grid covered by original cap candidates
+and old complementary gates concealed an exact abstract uncovered budget.
+`FACE_CAP_ORIGINAL_EDGE_LIMIT.md` records it, with no metric realization
+claim. It shows why a finite grid cannot replace the missing argument and
+why auxiliary cuts must still be checked. The original whole proof remains
+the main reference for those nonsimplicial choices.
+
+## One fewer auxiliary point in the finite-cut argument — approximately 09:15 JST
+
+The core now uses the first contact q itself, instead of moving to an
+auxiliary interior point p. W0 and V0 meet closed V1 only at their common
+a: the intervening face angles and curvature gap separate their closed
+sectors. Thus aq remains a barrier even though it is on V1's boundary,
+and M lies in triangle(a,w,q). With q=λP, 0<λ<=1, projection gives
+e·q=λs cos(κa)<s, retaining the strict E1 contradiction. The sine argument
+gives 2θ+2δ+κa<=π; using the strictly smaller face-angle link bound at c
+then gives the same strict E2 budget.
+
+This includes first contact at the apex P or the slit endpoint b, so the
+corresponding closed remote petal misses the closed finite cut under each
+stated application. No perturbation or interior-point adjustment is needed.
+The old complete core draft is preserved as
+`archive_notes/TIDY_CORE_before_contact.md`. The original proof files remain
+unchanged. This strengthens one boundary conclusion; it does not change
+the stated overall scope of disjoint face interiors with boundary contact
+allowed, or assert a formal verification.
+
+The fresh manual check examined both positive angular gaps at a, the first
+contact on aP, q=b and q=P, the triangle's nondegeneracy, the half-plane
+orientation and strictness of the closed link. Both obstruction inequalities
+are unchanged, so the existing exact historical-entry check remains relevant.
+
 ## Checkpoint: complete shorter draft, review continuing
 
 At approximately 07:15 JST the separate exposition is complete end to end:

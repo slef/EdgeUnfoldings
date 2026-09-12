@@ -1,0 +1,165 @@
+{
+  "scope": "Exact abstract curvature assignment only; no convex metric realization is claimed.",
+  "order": "A,B,C,D,P,Q",
+  "curvatures_in_units_of_pi": [
+    "39461/20000",
+    "1/20",
+    "19/200",
+    "1881/2000",
+    "1881/2000",
+    "19/20000"
+  ],
+  "original_near_star_cap_checks": [
+    {
+      "source": 0,
+      "fan": 1,
+      "slit": 2,
+      "cap_sums": [
+        "2171/2000",
+        "2171/2000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 0,
+      "fan": 1,
+      "slit": 3,
+      "cap_sums": [
+        "2171/2000",
+        "19829/20000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 0,
+      "fan": 1,
+      "slit": 4,
+      "cap_sums": [
+        "2171/2000",
+        "19829/20000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 0,
+      "fan": 1,
+      "slit": 5,
+      "cap_sums": [
+        "19829/20000",
+        "19829/20000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 1,
+      "fan": 0,
+      "slit": 2,
+      "cap_sums": [
+        "60171/20000",
+        "60171/20000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 1,
+      "fan": 0,
+      "slit": 3,
+      "cap_sums": [
+        "60171/20000",
+        "5829/2000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 1,
+      "fan": 0,
+      "slit": 4,
+      "cap_sums": [
+        "60171/20000",
+        "5829/2000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 1,
+      "fan": 0,
+      "slit": 5,
+      "cap_sums": [
+        "5829/2000",
+        "5829/2000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 4,
+      "fan": 3,
+      "slit": 0,
+      "cap_sums": [
+        "60171/20000",
+        "5829/2000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 4,
+      "fan": 3,
+      "slit": 1,
+      "cap_sums": [
+        "2171/2000",
+        "19829/20000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 4,
+      "fan": 3,
+      "slit": 5,
+      "cap_sums": [
+        "5829/2000",
+        "19829/20000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 5,
+      "fan": 2,
+      "slit": 0,
+      "cap_sums": [
+        "60171/20000",
+        "60171/20000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 5,
+      "fan": 2,
+      "slit": 1,
+      "cap_sums": [
+        "2171/2000",
+        "2171/2000"
+      ],
+      "passes": false
+    },
+    {
+      "source": 5,
+      "fan": 2,
+      "slit": 4,
+      "cap_sums": [
+        "60171/20000",
+        "2171/2000"
+      ],
+      "passes": false
+    }
+  ],
+  "complementary_source_gate": false,
+  "auxiliary_star_source": "C",
+  "auxiliary_edge_cut": "CD",
+  "earlier_grid": {
+    "denominator": 6,
+    "assignments": 28897,
+    "cap_covered": 28609,
+    "complementary_gate_covered": 288,
+    "uncovered": 0,
+    "universal_coverage_proved": false
+  }
+}

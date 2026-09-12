@@ -1,3 +1,8 @@
+# Preserved interior-point version of the geometric core
+
+This is the complete earlier draft, before the first-contact shortening.
+The original research proofs are also retained.
+
 # Shared geometric core — streamlined proof draft
 
 12 September 2026. A separate exposition developed during the proof review.
@@ -127,109 +132,109 @@ lies strictly on the opposite side of the separator. Reflection gives
 the analogous fact for V_3. Equality in the threshold and B=kappa_w
 are included; no general-position assumption on the solid is used.
 
-## The finite-cut contact obstruction in one lemma
+## The finite-entry obstruction in one lemma
 
 Use an octahedrally triangulated convex surface with genuine vertices and
 nondegenerate triangles. Flat auxiliary hinges are allowed. Cut the four
 edges at source v and one edge at opposite pole w. Suppose the local pairs
 are safe and the through-fan route to the relevant cut copy is excluded.
 
-Suppose a closed remote petal meets the closed finite cut segment. We treat
-V_1 meeting the last copy wb; reflection treats the other target. Put
-a=u_1, let c be the first slit copy, let P be V_1's apex and M the neighboring
-petal V_0's apex, and set
+If a remote petal enters the open finite cut segment, let a be its reflex
+equator endpoint, c the first slit copy, b the last slit copy, P its apex,
+and M the neighboring petal's apex. Set
 
     r=|aw|, s=|av|=|aP|=|aM|, D=|wv|,
-    theta=angle(waM), delta=angle(awb)=omega_0+kappa_w,
+    theta=angle(waM), delta=angle(awb)=omega_m+kappa_w,
     mu=angle(caM), gamma=angle(wca).
 
-All quantities refer to this same unfolding. The strict through-fan bound
-forces contact across the gap, with Q_1 reflex at a and 0<delta<pi.
-The reflex vertex a is inside Q_1's outer triangle w,u_2,P. Subdividing
-there shows that the cut ray first meets V_1 on aP, at q before or at b.
-Thus q=lambda*P in coordinates with a=0, where 0<lambda<=1. The case
-lambda=1 includes contact at the petal apex. The cut ray cannot meet the
-fan-base endpoints, which have different radial directions. The triangle
-T=conv{a,w,q} is nondegenerate and has angle delta at w.
+Here delta denotes the smaller angle at w in the triangle below; it is
+positive and less than pi. All quantities refer to this same unfolding.
+We treat entry by V_1 into the last cut segment wb; then a=u_1, m=0,
+and c is its first slit copy. Reflection gives the other target. The
+through-fan bound forces entry across the gap, with Q_1 reflex at a.
+The reflex vertex lies inside Q_1's outer triangle; subdividing there
+shows that the ray first enters V_1 across the open edge aP, at q before b.
+Choose p just beyond q, inside V_1 and before b, with |ap|<s.
+The triangle T=conv{a,w,p} has the short sector omega_m+kappa_w at w.
 
-Here is the containment argument using q itself. The closed W_0 and V_0
-meet closed V_1 only at a: their sectors at a are separated from V_1 by
-positive intervening face angles and the positive curvature gap kappa_a.
-W_0 starts inside T near w and cannot cross aq (on closed V_1), wa (its
-own boundary), or wq (outside its fan wedge). Its open edge ac is therefore
-inside T. The attached V_0 starts inside T along ac. It cannot cross aq
-by the same strict vertex-sector separation, or wq by local V_0/W_3
-separation, since wq is within wb. Its corner theta at a is below pi:
+Here is the full containment argument. W_m starts inside T near w. It
+cannot cross ap (whose open points lie inside V_1, a shared-vertex-safe
+face), wa (its own boundary), or wp (outside its angular wedge). Its
+open edge ac is therefore inside T. The attached V_m starts inside T
+along that edge. It cannot cross ap by shared-vertex separation, or wp
+by the local V_m/W_3 theorem, since wp is within the slit segment wb.
+Its corner theta at a is below pi: theta+angle_a(Q_1)=2*pi-kappa_a
+and the second corner is reflex. Thus the whole Q_m is on W_m's side
+of line wa, and V_m cannot cross that side either. Convex interior paths
+exclude escape through a vertex of T. Consequently
 
-    theta+angle_a(Q_1)=2*pi-kappa_a,
-
-and the second corner is reflex. Thus V_0 is on W_0's side of line wa
-and cannot cross that side either. Convex interior paths exclude escape
-through a vertex of T. Consequently
-
-    M in triangle(a,w,q),   M != w.                         (C)
+    M in triangle(a,w,p),   M != w.                         (C)
 
 The second assertion holds because M and w lie on opposite sides of ac.
-Only local and shared-vertex separation have been used; no opposite-petal
-or distant-fan conclusion is assumed.
+This uses only the local and shared-vertex facts already proved, with no
+opposite-petal or distant-fan premise. Tangencies are allowed in (C).
 
-**Lemma.** Such contact forces both
+**Lemma.** Such an entry forces both
 
     kappa_v < pi,                                         (E1)
     kappa_a+kappa_c+2*kappa_w+2*mu < pi.                   (E2)
 
-**Proof of (E1).** Put a=0 and e=M/s. The functional e dot x takes value
-s at M, 0 at a, and lambda*s*cos(kappa_a)<s at q, since the copied
-apex edges have the positive angle gap kappa_a. Containment (C), with
-M different from w, therefore requires e dot w>s. Writing t=|wM| gives
+**Proof of (E1).** Put a=0 and e=M/s. The linear functional e dot x
+takes value s at M, value 0 at a, and a value strictly below s at p.
+Containment (C), with M different from w, therefore requires e dot w>s.
+Writing t=|wM| gives
 
     r^2 > s^2+t^2.
 
-The neighboring patch angle theta at a is below pi. The spherical triangle
-inequality there, followed by the cosine law, gives t>=D. Consequently
-r^2>s^2+D^2, so the original angle beta=angle(wva) is obtuse. The closed
-spherical-link bound gives 2*beta<2*pi-kappa_v, hence kappa_v<pi.
+The neighboring patch angle at a is below pi: it is the complement of
+the entering patch's reflex corner, minus the positive curvature at a.
+The spherical triangle inequality at a, followed by the cosine law, gives
+t>=D. Consequently r^2>s^2+D^2, so the original angle beta=angle(wva)
+is obtuse. The closed spherical-link bound gives
 
-**Proof of (E2).** Orient coordinates by
+    2*beta < 2*pi-kappa_v,
+
+and hence kappa_v<pi.
+
+**Proof of (E2).** The first crossing q of the cut ray is strictly inside
+the edge aP, so q=lambda*P with 0<lambda<1. Orient coordinates by
 
     a=0, w=(r,0),
     M=s*(cos(theta),sin(theta)),
     P=s*(cos(theta+kappa_a),sin(theta+kappa_a)).
 
 The triangle awq has angle delta at w, so
-0<theta+delta<theta+kappa_a+delta<pi. The cut line with direction
-(-cos(delta),sin(delta)) gives
+0<theta+delta<theta+kappa_a+delta<pi. The cut line, oriented by
+d=(-cos(delta),sin(delta)), yields
 
     r*sin(delta)=lambda*s*sin(theta+kappa_a+delta),
     r*sin(delta)-s*sin(theta+delta)>=0.
 
-The second inequality is (C)'s half-plane containment. Since lambda<=1,
-sin(theta+kappa_a+delta)>=sin(theta+delta). The sine-difference identity,
-with both arguments in the stated interval, yields
+The second inequality is exactly (C)'s half-plane containment. Thus
+sin(theta+kappa_a+delta)>sin(theta+delta). The sine-difference identity,
+with both arguments in the stated interval, gives
 
-    2*theta+2*delta+kappa_a <= pi.
+    2*theta+2*delta+kappa_a < pi.
 
-But theta+delta=pi-gamma+mu+kappa_w, and the **strict** closed-link bound
-is 2*gamma<2*pi-kappa_c. Therefore
+But theta+delta=pi-gamma+mu+kappa_w, and the face-angle link bound gives
+2*gamma<=2*pi-kappa_c. Therefore
 
-    kappa_a+kappa_c+2*kappa_w+2*mu
-      < 2*theta+2*delta+kappa_a <= pi.
+    2*theta+2*delta+kappa_a
+      >= kappa_a+kappa_c+2*kappa_w+2*mu.
 
-This proves (E2), including first contact at P or b. Strictness comes from
-the positive curvature gap at a and the strict link bound at c, not from
-moving an auxiliary point into an overlap or perturbing the solid.
-The earlier interior-point version is preserved in
-[the preceding core draft](archive_notes/TIDY_CORE_before_contact.md).
+This proves (E2). Both strict conclusions tolerate tangency in (C): the
+strictness comes from |ap|<s and lambda<1, not from generic position of
+the original solid.
 
 ## One contradiction replaces the two source-curvature cases
 
 Assume either kappa_v>=pi or every vertex curvature is at most pi.
-A finite-cut contact would first force kappa_v<pi by (E1), so the source
+A finite entry would first force kappa_v<pi by (E1), so the source
 assumption now forces every curvature to be at most pi. The three vertices
 outside the blue face wca then have total curvature at most 3*pi.
 Gauss--Bonnet gives kappa_w+kappa_c+kappa_a>=pi, contradicting (E2).
 
-Thus both closed finite cut segments miss the corresponding closed remote petals, by reflection. This is the same
+Thus both finite cut segments are safe, by reflection. This is the same
 geometric content as the original projection and equal-radius proofs,
 combined into a single contradiction. It retains the weaker source-choice
 theorem, including source curvature equal to pi and all-low equalities.

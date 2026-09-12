@@ -1,0 +1,34 @@
+# Preserved exact curvature-budget check. No metric realization is claimed.
+from fractions import Fraction as F
+from itertools import combinations
+from pathlib import Path
+import json
+from n6.families import MINUS_FACES
+from n6.flat_octahedron import original_candidates
+
+_, trees = original_candidates(MINUS_FACES)
+opp = {0:1, 1:0, 2:5, 5:2, 3:4, 4:3}
+frames = [(t['source'], t['fan'], t['slit'],
+           sorted(set(range(6))-{t['source'],t['fan'],t['slit'],opp[t['slit']]}))
+          for t in trees]
+k = list(map(F, ('39461/20000','1/20','19/200','1881/2000','1881/2000','19/20000')))
+assert all(0 < q < 2 for q in k) and sum(k) == 4
+checks = []
+for v,w,c,other in frames:
+    caps = [k[w]+k[c]+k[u] for u in other]
+    # Source>=pi OR fan<=pi is the general half-fan premise. On this
+    # assignment only A is high, so this also checks the revised cap rule.
+    passes = (k[v]>=1 or k[w]<=1) and 2*k[c]+k[w]>=1 and all(1<=q<=3 for q in caps)
+    checks.append(dict(source=v,fan=w,slit=c,cap_sums=list(map(str,caps)),passes=passes))
+assert not any(row['passes'] for row in checks)
+complementary = k[0]<=1 and k[1]<=1 and any(k[c]+min(k[0],k[1])>=1 for c in (2,3))
+assert not complementary
+report = dict(scope='Exact abstract curvature assignment only; no convex metric realization is claimed.',
+              order='A,B,C,D,P,Q',curvatures_in_units_of_pi=list(map(str,k)),
+              original_near_star_cap_checks=checks,complementary_source_gate=False,
+              auxiliary_star_source='C',auxiliary_edge_cut='CD',
+              earlier_grid=dict(denominator=6,assignments=28897,cap_covered=28609,
+                                complementary_gate_covered=288,uncovered=0,
+                                universal_coverage_proved=False))
+Path('n6/results/face-cap-original-edge-limit.json').write_text(json.dumps(report,indent=2)+'\n')
+print('All 14 abstract original-edge cap candidates fail; no metric realization asserted.')

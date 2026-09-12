@@ -69,6 +69,14 @@ Thus the octahedron is settled by a sharpest source and an equator maximum,
 including all ties. For the other graphs, every final cut below is checked
 to be original, so the flat hinges rejoin whole original quadrilaterals.
 
+The review subsequently produced an even shorter standalone octahedron
+argument: [put the sharpest vertex at the slit and choose the more unequal
+remaining opposite pair](OCTA_FACE_CAP_RULE.md). Two face-curvature sums
+replace the source-curvature split, so that existence proof omits the
+projection step E1. The stronger selected-source theorem above remains
+useful for the nonsimplicial choices below. The new rule cannot simply be
+transferred there without checking for auxiliary cuts.
+
 We also use a useful comparison. Let an original degree-four source v
 and its sole nonneighbor w be opposite corners of an original quadrilateral
 Q with other corners c,d. In the shortest-path star at v, the fifth path

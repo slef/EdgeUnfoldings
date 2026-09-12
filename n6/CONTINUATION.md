@@ -1,3 +1,88 @@
+## Current checkpoint — 12 September, approximately 09:05 JST
+
+About 53 minutes remain until **00:58:04 UTC / 09:58 JST**; do not end early.
+The new `OCTA_FACE_CAP_RULE.md` is complete and linked as #octa_face_caps in
+the overview and from TIDY_PROOF.md. The canonical rule is sharpest c, then
+MORE UNEQUAL of the remaining opposite pairs; source is its sharper end,
+fan its other end. No fan<=pi restriction is needed: source>=fan implies
+(source>=pi or fan<=pi). All nine exact domains now verify the canonical
+choice (flag canonical_larger_difference_choice=True), not merely another
+passing cap candidate. Exact difference phases are Γw-Γv in[0,2π); equal
+incident-angle signatures give phase(1,0). If a box has unresolved gap order,
+direct cap comparisons may still certify a valid alternative, labeled as
+such. Canonical cap bounds are strict: any triple containing max c exceeds
+pi, while min(U1,U2)<3pi. Five tests pass, including28,897 rational budgets
+and an18-coordinate family; they are not the universal proof.
+
+The main manuscript still retains the selected-source core for the original
+minus/prism arguments. The exact abstract minus transfer obstruction is
+saved in FACE_CAP_ORIGINAL_EDGE_LIMIT.md and results/face-cap-original-edge-limit.json;
+it is NOT a metric counterexample. The old low-fan draft and nine certificates
+are archived. PROOF_REVIEW_20260912.md is updated. Save the octahedron checkpoint,
+package and link-check the seven reading pages, then continue the remaining
+review. Final full suite should have295 tests (290 already passed before the
+new module). Pause heartbeat atdeadline, finalhandoff, no push.
+
+Possible further tidy idea, NOT YET IMPLEMENTED: in finite-entry containment
+use the first crossing q itself instead of an auxiliary interior point p.
+W0 and V0 meet closed V1 only at shared a, since their sectors there are
+separated by positive face angles or κa. This makes aq a barrier even though
+it is on V1's boundary. M lies in triangle(a,w,q), q=λP with0<λ<=1. Since
+e=M/s gives e·q=λs cosκa<s, E1's projection is still strict; E2 is strict
+for interior entry λ<1 and at most pi for closed contact λ=1. The existing
+applications contradict even that non-strict budget because they have an
+extra positive κw+2μ. This may strengthen finite-cut safety to closed-contact
+exclusion and remove the auxiliary p. Carefully audit first; old core unchanged.
+
+## New octahedron simplification — 12 September, approximately 08:50 JST
+
+Still continue until **00:58:04 UTC / 09:58 JST**. New mathematical advance
+written in `OCTA_FACE_CAP_RULE.md`: a local cap criterion needs only
+(κv>=π OR κw<=π), the weighted slit threshold, and both first/last blue-face
+curvature sums S± in [π,3π]. Lower bounds contradict finite-entry E2 and
+pocket P directly; upper bounds give Case A apex-angle bounds by complement
+curvature. Thus no projection E1 or high/low source case split is needed
+for this alternative octahedron existence proof. All original proofs remain.
+
+The selection became even simpler than the earlier low-fan draft. Choose
+sharpest c with curvature M; opposite has m. Other pairs are (A,a),(B,b),
+A>=a,B>=b. Choose the pair with LARGER curvature difference and use its
+sharper endpoint as source, smaller endpoint as fan. Put extra cut at c.
+U1=M+a+B, U2=M+b+A; U1-U2=(B-b)-(A-a), and U1+U2=4π+M-m<6π. Thus the
+chosen larger-difference pair has U=min(U1,U2)<3π. Lower caps hold because
+either M>=π, or all curvatures<=π. Threshold holds since M>=2π/3. Source
+>=fan automatically implies the half-fan alternative, even if BOTH exceed
+π. NO low-fan filter is needed! The earlier low-fan proof/code/tests/nine
+certificates are preserved under archive_notes/octa-face-cap-low-fan/.
+
+`octa_face_caps.py` and five new tests exist. The initial nine saved metric
+domains all passed independent 28-pair checks, including a new source with
+curvature <π while another vertex is >π, regular ties, exact π, and an
+18-coordinate box crossing π. The refined five tests/examples are running
+(or just finished) in session 37886. Refine the exact selector to prefer
+the larger curvature difference, using complex phase difference Γw-Γv
+(in [0,2π)); if equality signatures recognize a zero gap use exact phase
+(1,0). A comparison of the two gaps plus max-c/order proves the cap bounds
+by the displayed identities, without evaluating curvature sums. On boxes
+where the gap order cannot be resolved, direct cap comparisons may still
+certify one of the two choices; label this broader criterion honestly.
+
+Do not replace the whole six-vertex proof blindly: the face-cap selector can
+cut an auxiliary diagonal in nonsimplicial types. A 28,897-point rational
+curvature grid was covered for minus by original cap candidates OR old
+complementary gates, but this does NOT prove coverage. An exact abstract
+curvature counterexample to that attempted shortcut is
+(A,B,C,D,P,Q)=(1.97305,.05,.095,.9405,.9405,.00095) times π. It sums to4π
+and all entries are in(0,2π), but none of the14 original cap candidates and
+no old complementary-source gate passes. This is NOT a claimed metric
+realization. Preserve this limitation in a short note; keep the original
+full selected-source proof for the whole main manuscript.
+
+Next: finish tests and exact preferred choice, add/readable-render the new
+octahedron alternative and its web section, save a checkpoint, continue
+auditing until deadline. Latest completed main checkpoint is14fcc31, with
+290 full tests and241overview+72reading-page links passing. No push.
+
 ## Validation checkpoint — 12 September, 08:37 JST
 
 The **290-test full suite passed in 330.481s**. The packaged overview's 241

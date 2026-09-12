@@ -56,6 +56,7 @@ def render():
                  ('PRISM_CAP_RULE', 'Five prism candidates by cap curvature'),
                  ('CASE_A_CAP_BUDGET', 'The optional three-face cap budget'),
                  ('SHARPEST_COFACIAL_FAILURE', 'Why the sharpest cofacial source alone is insufficient'),
+                 ('OCTA_FACE_CAP_RULE', 'A shorter curvature-only octahedron proof'),
                  ('TIDY_PROOF_FIRST_REVIEW', 'Earlier preserved seven-candidate draft')]
         for stem, title in pages:
             source = (root/(stem+'.md')).read_text()
