@@ -3,8 +3,14 @@
 Start with the [overview](index.html), the [arguments](ARGUMENTS.md), or the
 [bipyramid patch proofs](BIPYRAMID_PATCHES.md), the dedicated [A992 case](A992.md),
 its [cone proof](A992_CONES.md), the [R0 repair lemma](A992_R0.md), or the
-[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the fourteen
+[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the fifteen
 proof documents contain rendered mathematics and work without network access.
+
+**Newest result:** [radial receiver lemmas](BIPYRAMID_RADIAL.md) close
+FCFCC / BCBCC and FCCCB / BFCCC, and give a shorter proof of FCCBC.
+Six of fifteen necessary symbolic classes now have complete proofs.
+Four exact local examples check both lemmas in all three projection regimes;
+five complete-net applications verify the rules independently.
 
 **Latest result:** [the complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.md)
 closes FCCBC / BCFCC with no curvature-order hypothesis. The new local
@@ -19,8 +25,8 @@ ring size when either pole has curvature at least π.
 plus the [exact first collision](BIPYRAMID_COLLISION.md). The length-sum slit
 settles all adjacent patch pairs universally. All two-inward-patch patterns
 are covered when a pole curvature is at least π; three receiver patterns
-also have the weighted gate `2κ_p + κ_q >= 2π`. The conflicting-receiver pattern has since been completed. The other
-three two-inward classes and the three/four-inward classes retain open parts. Seven exact
+also have the weighted gate `2κ_p + κ_q >= 2π`. The conflicting-receiver pattern has since been completed. Only the adjacent same-direction two-inward class and the three/four-inward
+classes retain open parts. Seven exact
 examples and a 491-cell first-collision certificate are replayable.
 
 The [insertion construction](BIPYRAMID_MORPH.md) and its
@@ -28,7 +34,7 @@ The [insertion construction](BIPYRAMID_MORPH.md) and its
 
 **Current result:** 34 graph types, 10 whole graph cases covered by established
 theorems, 24 open. Twenty of the open types have a cofacial-core reduction.
-For the pentagonal bipyramid, four of 15 necessary symbolic pattern classes
+For the pentagonal bipyramid, six of 15 necessary symbolic pattern classes
 have written conditional existence proofs; the full graph remains open.
 For N7-A992, exact certificates refute the first fixed rule, both source-3
 hinge choices together, and a longer-edge heuristic. A full-dimensional
@@ -61,7 +67,7 @@ this initial overview is a local research page.
 ## Reproduce
 
 Dependencies are listed in `requirements.txt`. Run from the worktree root,
-with a Python environment containing them. The build of the fourteen reading
+with a Python environment containing them. The build of the fifteen reading
 pages additionally needs Pandoc on the command path.
 
 ```sh
@@ -81,6 +87,8 @@ python3 -B -m n7.bipyramid_collision
 python3 -B -m n7.bipyramid_receiver_conflict
 python3 -B -m n7.bipyramid_receiver_identity
 python3 -B -m n7.bipyramid_receiver_pairs
+python3 -B -m n7.bipyramid_radial
+python3 -B -m n7.bipyramid_radial_figures
 python3 -B -m n7.bipyramid_chain_rule
 python3 -B -m n7.bipyramid_chain_figures
 python3 -B -m n7.bipyramid_star_patch
@@ -105,6 +113,7 @@ and explicit bijection of its 34 outputs to our catalogue are retained in
 | File | Purpose |
 | --- | --- |
 | `ARGUMENTS.md` | Complete graph decomposition; universal edge-star and dome cases; general cofacial-core proof; next targets |
+| `BIPYRAMID_RADIAL.md` | Universal shield and cone-and-disk lemmas; complete Separated and Long Chain patterns; shorter Chain proof |
 | `BIPYRAMID_CHAIN_RULE.md` | Complete FCCBC / BCFCC class, finite pole-selection rule, and local acute-fan lemma |
 | `BIPYRAMID_ALIGNED.md` | Entire aligned-pole family; one fixed cut tree throughout lower-pole insertion from zero curvature |
 | `bipyramid_four_bad_box.py` | Exact 21-coordinate CBBBB neighborhood, including nonplanar equators and displaced poles; all 45 face pairs certified |

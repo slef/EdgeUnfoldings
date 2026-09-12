@@ -7,12 +7,12 @@ arguments; the accompanying finite counts and examples have different scopes.
 **New route, 13 September:** [grow the solid from six vertices](BIPYRAMID_MORPH.html).
 Convexity and monotone curvature are proved; carrying a safe net throughout
 remains open in general. The aligned-pole insertion is now proved, and the
-complete chain rule raises the count below to four.
+complete chain rule raises the count below to six.
 
 **Overnight extension:** [the length-sum slit theorem](BIPYRAMID_OVERNIGHT.html#length-slit)
 settles the local pairs for every convex bipyramid. The [two-patch rules](BIPYRAMID_OVERNIGHT.html#two-gap)
 prove larger curvature branches. The subsequent chain theorem raises the
-whole-class count to **4/15**.
+whole-class count, now **6/15** after the radial extension.
 
 **Further family theorem:** [aligned poles](BIPYRAMID_ALIGNED.html) are now
 covered at every height, including four inward patches with low pole
@@ -154,6 +154,26 @@ The [complete proof and finite rule](BIPYRAMID_CHAIN_RULE.html) explain
 why a long extension into a convex receiver forces an acute fan angle.
 This closes one further entire symbolic class, rather than just examples.
 
+## Separated bad patches pointing the same way {#theorem-separated}
+
+**Theorem Separated.** FCFCC / canonical BCBCC is completely covered.
+If no pole has both extensions short, use the fan where the first bad
+patch is long. The new radial lemma forces a strict distance-sum order,
+placing every potentially interfering distant patch inside a disk that
+the protrusion cannot enter. [Complete proof](BIPYRAMID_RADIAL.html#theorem-separated).
+
+## Opposing bad patches across three convex patches {#theorem-long-chain}
+
+**Theorem Long Chain.** FCCCB / canonical BFCCC is completely covered.
+If no pole has both extensions short, compare the distance sums at the
+two receivers' far vertices. A disk protects the central patch, and the
+other bad cone together with a smaller disk protects the far receiver.
+[Complete proof](BIPYRAMID_RADIAL.html#theorem-long-chain).
+
+The same lemmas also give a [shorter proof of Chain](BIPYRAMID_RADIAL.html#shorter-chain).
+Among the five two-inward classes, only adjacent same-direction BBCCC
+retains an open part. All its large-pole cases are already proved.
+
 ## 5. A further family when one pole has curvature at least pi {#theorem-gap}
 
 **Theorem Gap.** Suppose precisely two adjacent patches are inward and
@@ -264,14 +284,14 @@ has a convex realization. This is an exhaustive necessary partition.
 | --- | ---: | ---: | ---: |
 | 0 | 1 | 1 | 1, Theorem C |
 | 1 | 10 | 1 | 1, Theorem One |
-| 2 | 35 | 5 | 2, Theorems Toward and Chain; the other three have proved curvature branches |
+| 2 | 35 | 5 | 4, Toward, Chain, Separated, and Long Chain; only adjacent same-direction remains open |
 | 3 | 50 | 5 | 0 |
 | 4 | 25 | 3 | 0 |
 | 5 | 0 | 0 | impossible |
 
-The four fully covered representatives are CCCCC, BCCCC, BCCFC, BCFCC in the
-catalogue's canonical convention. Thus **4/15 symbolic classes have whole
-conditional existence proofs**; 11 retain open parts. Theorem L7 settles
+The six fully covered representatives are CCCCC, BCCCC, BCCFC, BCFCC, BCBCC, BFCCC in the
+catalogue's canonical convention. Thus **6/15 symbolic classes have whole
+conditional existence proofs**; 9 retain open parts. Theorem L7 settles
 three local pairs under its additional inequalities across many of them.
 The [new local selection theorem](BIPYRAMID_OVERNIGHT.html#length-slit)
 removes the threshold when the slit may be chosen by the distance-sum rule.

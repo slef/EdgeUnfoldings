@@ -1,6 +1,6 @@
 # Pentagonal bipyramid: a simpler local rule and a larger solved branch
 
-**Later update, 13 September:** the [complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.html) now closes the entire FCCBC / BCFCC class. The current count is **4/15**; the earlier reductions and open questions below are preserved as the record of how that result was reached.
+**Later update, 13 September:** the [complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.html) now closes the entire FCCBC / BCFCC class. The [radial extension](BIPYRAMID_RADIAL.html) brings the current count to **6/15**; the earlier reductions and open questions below are preserved as the record of how that result was reached.
 
 **Later strengthening:** [the shortest-patch proof](BIPYRAMID_STAR_PATCH.html)
 now covers every bipyramid with a pole curvature at least π, with no

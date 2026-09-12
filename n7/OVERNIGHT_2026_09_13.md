@@ -23,6 +23,28 @@ A temporary idle-sleep inhibitor runs until approximately the deadline
 (`caffeinate -i -t`, tool session 90334); no persistent power setting changed.
 No mathematical search is currently running.
 
+## Newest checkpoint — radial receivers, around 20:17 UTC
+
+`BIPYRAMID_RADIAL.md` proves two universal local lemmas and two further
+whole classes, FCFCC/BCBCC and FCCCB/BFCCC. Currentcount6/15,9open.
+Shield: longfan f, bada, badsourceP, receiverM, farb. db<distance(f,[aP]);
+badprotrusionoutsideitsownfanwedgestaysoutsidethatdisk. Threefootpositions
+handled exactly withunitcircleandconvexity. Other-fan lemma: receiveroutside
+itsbadneighborcone liesinside diskdb. Algebra provesclippingpointYcloser
+thanreceiversourcecopy. Fourexactexamplescheckbothlemmasallthreefootcases.
+
+FCFCC opposinglongpreferences force d0>d1>d2>d3>d4, soQ2,Q3 lieinshielded
+diskd2; Q0/Q4 separatedbyhalf-fan. FCCCB choosefanoflongreceiverwithlarger
+farvertexdistance(d2vsd3): centralQ2insidebigdisk; farQ3insideotherbadcone
+unionsmalldisk. Two badconesdisjointbyhalf-fan(bothpoleslow). Largepole
+alreadyproved. SameproofshortensFCCBC sincebothfarverticescoincideu2.
+No actualopposingexamplesfoundfornewtwoclasses,butNOTUSEDinproof.
+Fiveexactfullnetapplications(threebothshort,twoFCCBCopposing)check45pairs.
+
+Next: BBCCC adjacent same-direction badrun islasttwo-badclass. No general
+proof yet. Five threebadandthreefourbadclassesalsoopen. Bothlowpolesonly,
+outsidealignedfamilyandshortestpatchgates. Preservealloldproofs. Deadline22:04UTC.
+
 ## Latest complete result — opposing chain, around 19:43 UTC
 
 `BIPYRAMID_CHAIN_RULE.md` proves the ENTIRE FCCBC / canonical BCFCC class.
