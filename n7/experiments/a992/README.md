@@ -21,6 +21,11 @@ floating `valid` predicates and tolerances are discovery filters only.
 | `three_hinges_search.py` | `a992-three-hinges-search.json` |
 | `local_corner_search.py` | `a992-local-corner-search.json` |
 | `conditional_base_search.py` | `a992-conditional-base-search.json` |
+| `r0_line36_search.py` | `a992-r0-line36-search.json` |
+| `obtuse_petal_survey.py` | `a992-obtuse-petal-survey.json` |
+| `unrestricted_petal_survey.py` | `a992-unrestricted-petal-survey.json` |
+| `obtuse_petal_target_search.py` | `a992-obtuse-petal-target-search.json` |
+| `r0_identity_discovery.py` | Prints a numerical linear-program dual; the exact check is `n7.r0_identity` |
 
 Reproducibility means the inputs, seeds, searches, and outputs are available;
 floating optimization may differ with library/platform versions. The exact
@@ -31,3 +36,6 @@ without depending on any optimizer result or tolerance.
 The [continuation notes](CONTINUATION_NOTES.md) record the projective roof-edge
 split, a potentially useful published truncation theorem, and the precise
 reason a tempting application does not yet finish the proof.
+
+The [R0 continuation notes](R0_RESEARCH.md) explain the failed separator
+shortcuts and how the searches led to a separate positive geometric proof.

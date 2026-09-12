@@ -1,6 +1,7 @@
 # N7-A992: a proved split of the first obstruction
 
 12 September 2026. **Conditional geometric theorem; the whole graph remains open.**
+A subsequent [repair lemma](A992_R0.html) closes the E/135 obligation in R0.
 This argument proves that the Left unfolding works except in two explicitly
 described regimes. It does not yet prove that Right repairs those regimes.
 No sampling or interval certificate is a premise of the theorem.
@@ -228,9 +229,10 @@ are disjoint, and neither includes $\kappa_4=\pi$.
 
 The two-attachment conjecture now has a more concrete starting point:
 **assume actual Q/E overlap in Left, and split into R0 and R6**. In each
-regime, Right still needs E separated from Q, 135, and 235. This gives six
-conditional statements to investigate. None of those six is proved by the
-cone argument. They are not six equal portions of the realization space.
+regime, Right still needs E separated from Q, 135, and 235. This gave six
+conditional statements to investigate at the cone-proof stage. The subsequent
+[obtuse-petal argument](A992_R0.html) proves E/135 in R0. The other five
+remain open. These are not equal portions of the realization space.
 
 R0 supplies two strict squared-length inequalities and a severe lower bound
 on the inward angle. R6 supplies a vertex of curvature greater than $\pi$.
