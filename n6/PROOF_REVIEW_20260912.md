@@ -1,8 +1,34 @@
 # Review and simplification of the six-vertex proof
 
-12 September 2026. In progress during the requested 06:28–09:58 JST session.
+12 September 2026. Completed the requested 06:28–09:58 JST review session.
 This is a further self-audit. Independent mathematical review and formal
 verification remain outstanding. The original research material is retained.
+
+## Completed review
+
+The 3.5-hour session is complete and its heartbeat is paused. The separate
+[streamlined manuscript](TIDY_PROOF.md) now uses the
+[paired-pole theorem](PAIRED_POLE_RULE.md) for the octahedron and minus-edge
+graph, and the five-candidate cap/angle rule for the prism with one diagonal.
+The paired-pole identity removes both the comparison of different pole
+pairs and the entire minus-edge source-switch exhaustion from this shortest
+account. Every earlier argument and successive draft is retained.
+
+No mathematical gap was identified in this self-review. This is not an
+independent audit or formal verification. The main independent review
+priorities remain the contact-containment and small-fan polygon arguments,
+the new positive identity's geometric application, and the original-face
+prism separators. The stronger every-slit lemmas and fixed-two-tree
+conjecture are optional questions, not premises of the existence proof.
+
+All 300 tests pass; 38 new selected nets have independent exact whole-net
+replays. The original 59 research documents, 24 figures and 491 result
+artifacts are unchanged. The readable overview, new proofs and preserved
+drafts pass packaging and link checks. Work is committed on the separate
+local branch codex/proof-review-tidy; no deployment was performed.
+
+The detailed validation and successive checkpoints below are preserved,
+including their earlier open questions and intermediate claims.
 
 ## Final validation — approximately 09:52 JST
 

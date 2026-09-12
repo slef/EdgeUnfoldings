@@ -1,3 +1,41 @@
+## Completed 3.5-hour proof review — 12 September 2026
+
+The requested session ran from 06:28 to 09:58 JST. Its heartbeat
+continue-lemma-f-proof-research is PAUSED (verified after the deadline).
+No automatic continuation is required. Main mathematical checkpoint:
+6d9e63d on the local branch codex/proof-review-tidy; no push/deployment.
+
+Start with TIDY_PROOF.md, PAIRED_POLE_RULE.md and TIDY_CORE.md. The new
+paired-pole theorem says: fix any opposite pair on the octahedron, choose
+its sharper endpoint as source, and choose an equator maximum for the
+fifth cut. A strict positive identity from the fourth petal makes both
+wider Case A bounds automatic. For the minus-edge graph, fix A,B; all
+resulting cuts are original, so no source switch is needed. The prism
+proof uses five candidates with a direct angle selector. All former
+switch proofs, cap rules and unsuccessful approaches remain available.
+
+The complete 300-test suite passed in 342.348 seconds. The paired-pole
+report independently verifies 38 selected whole nets, including all three
+pairs on ten octahedron domains, seven minus examples/families, and the
+former cap-bound failure. The 16 polynomial identities vanish exactly.
+These finite/algebra checks do not formally verify the universal geometry.
+All 59 original research Markdown files, 24 figures and 491 result files
+are unchanged from published master 6327f07. The two untracked PDFs and
+lean_statement/ were left untouched. The overview and 15 reading pages
+pass navigation, progress and packaged-link checks. Full browser visual
+inspection was not performed after access was denied.
+
+No mathematical gap found in this self-audit. Independent review remains
+outstanding, especially contact containment, the small-fan hexagon,
+the paired-pole identity's geometric application, and the prism's full-face
+cone separators. Stronger every-slit F/Triple and the old two-fixed-tree
+minus conjecture remain optional open questions. The newly investigated
+unranked pole shortcut is NOW PROVED by PAIRED_POLE_RULE.md; its prior
+then-open record is deliberately archived, not a current blocker.
+
+Earlier checkpoints below are history, not active instructions to resume
+a timed run. See PROOF_REVIEW_20260912.md for the complete audit trail.
+
 ## Final review phase — 12 September, approximately 09:52 JST
 
 Continue until 00:58:04 UTC / 09:58 JST. The main new result is now
