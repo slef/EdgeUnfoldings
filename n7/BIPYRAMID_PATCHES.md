@@ -8,6 +8,10 @@ arguments; the accompanying finite counts and examples have different scopes.
 Convexity and monotone curvature are proved; carrying a safe net throughout
 remains open. This does not change the three complete pattern classes below.
 
+**Overnight extension:** [the length-sum slit theorem](BIPYRAMID_OVERNIGHT.html#length-slit)
+settles the local pairs for every convex bipyramid. The [two-patch rules](BIPYRAMID_OVERNIGHT.html#two-gap)
+prove larger curvature branches without changing the 3/15 whole-class count.
+
 ## Setup: ten triangles, five simple candidate cuts
 
 Let $v,w$ be the two nonadjacent degree-five poles. Write the equator in
@@ -240,7 +244,7 @@ has a convex realization. This is an exhaustive necessary partition.
 | --- | ---: | ---: | ---: |
 | 0 | 1 | 1 | 1, Theorem C |
 | 1 | 10 | 1 | 1, Theorem One |
-| 2 | 35 | 5 | 1, Theorem Toward; plus part of another by Theorem Gap |
+| 2 | 35 | 5 | 1, Theorem Toward; the other four now have proved curvature branches |
 | 3 | 50 | 5 | 0 |
 | 4 | 25 | 3 | 0 |
 | 5 | 0 | 0 | impossible |
@@ -249,6 +253,8 @@ The three fully covered representatives are CCCCC, BCCCC, BCCFC in the
 catalogue's canonical convention. Thus **3/15 symbolic classes have whole
 conditional existence proofs**; 12 retain open parts. Theorem L7 settles
 three local pairs under its additional inequalities across many of them.
+The [new local selection theorem](BIPYRAMID_OVERNIGHT.html#length-slit)
+removes the threshold when the slit may be chosen by the distance-sum rule.
 Neither count changes the bipyramid graph's overall open status.
 
 ## Exact example and boundary of the certificate

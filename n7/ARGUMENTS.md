@@ -227,7 +227,10 @@ as a whole remains open here. The new [insertion arguments](BIPYRAMID_MORPH.html
 prove a convex deformation from six vertices, nondecreasing inserted
 curvature, and at least two octahedral reductions. Carrying a safe net to
 the target is the separate missing lemma; minimum curvature alone does not
-preserve an arbitrary safe tree.
+preserve an arbitrary safe tree. The [overnight proofs](BIPYRAMID_OVERNIGHT.html)
+now give a universal local slit rule and larger complete two-patch
+curvature branches. The [first collision](BIPYRAMID_COLLISION.html) on
+one exact insertion path is also classified.
 
 ## What does not automatically extend from the six-vertex proof
 

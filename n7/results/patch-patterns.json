@@ -53,7 +53,7 @@
       ],
       "status": "open",
       "theorem": null,
-      "extra_partial_theorem": "Gap (one pole curvature at least pi)"
+      "extra_partial_theorem": "TwoGap (one pole curvature at least pi)"
     },
     {
       "representative": "BCBCC",
@@ -73,7 +73,7 @@
       ],
       "status": "open",
       "theorem": null,
-      "extra_partial_theorem": null
+      "extra_partial_theorem": "Receiver (weighted pole-curvature gate)"
     },
     {
       "representative": "BCCFC",
@@ -103,7 +103,7 @@
       ],
       "status": "open",
       "theorem": null,
-      "extra_partial_theorem": null
+      "extra_partial_theorem": "Receiver (weighted pole-curvature gate)"
     },
     {
       "representative": "BFCCC",
@@ -118,7 +118,7 @@
       ],
       "status": "open",
       "theorem": null,
-      "extra_partial_theorem": null
+      "extra_partial_theorem": "Receiver (weighted pole-curvature gate)"
     },
     {
       "representative": "BBBCC",

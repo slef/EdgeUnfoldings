@@ -141,9 +141,11 @@ The flat starting point has area zero, and continuity gives the endpoint.
 For the standard normal-area identity, see
 [Givental's geometry exercises, Homework 11](https://math.berkeley.edu/~giventh/hw140s.pdf).
 
-This controls curvature at **the inserted vertex**. We do not assert that
-it stays the minimum at every intermediate time, or that other curvatures
-are monotone.
+The later [curvature-transfer theorem](BIPYRAMID_OVERNIGHT.html#curvature-transfer)
+strengthens this: old curvatures are nonincreasing, so a target minimum
+stays minimum throughout. In fact the inserted curvature and the losses
+at its four neighbors are strict, as proved in the
+[first-collision analysis](BIPYRAMID_COLLISION.html#strict-curvature).
 
 ## 3. How to transfer a cut tree from six vertices {#lifting}
 
@@ -267,6 +269,11 @@ The source triangle $vu_0u_1$ is placed with $v=(0,0)$, $u_0$ on the
 positive horizontal axis, and $u_1$ in the upper half-plane.
 
 <figure><img src="figures/bipyramid-morph-overlap.svg" alt="The failing endpoint net and a magnified region containing a rational point strictly inside faces 0 and 6."/><figcaption>The initial tree at the final solid. The inset shows the small positive-area overlap; its existence is certified by exact signs, not by the drawing.</figcaption></figure>
+
+**The first collision is now classified:** [the initial tree is safe until
+a unique contact parameter between 0.6260373 and 0.6260374, and overlaps
+afterward](BIPYRAMID_COLLISION.html). All nonadjacent pairs remain safe
+on this particular path; its obstruction is local to the slit.
 
 **A better tree works along the whole path.** Cut the five edges at $w$
 and the slit $vu_4$. A cover by 256 closed rational intervals certifies

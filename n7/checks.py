@@ -78,7 +78,7 @@ def patch_patterns():
     for rep, members in sorted(families.items(),key=lambda kv:(5-kv[0].count('C'),kv[0])):
         rows.append({'representative':rep,'inward_count':5-rep.count('C'),'labelled_count':len(members),
                      'members':members,'status':'proved conditional family' if rep in proved else 'open',
-                     'theorem':proved.get(rep), 'extra_partial_theorem':'Gap (one pole curvature at least pi)' if rep=='BBCCC' else None})
+                     'theorem':proved.get(rep), 'extra_partial_theorem':'TwoGap (one pole curvature at least pi)' if rep=='BBCCC' else 'Receiver (weighted pole-curvature gate)' if rep in ('BCBCC','BCFCC','BFCCC') else None})
     return {'scope':'Necessary symbolic patterns; not every admitted pattern is asserted realizable. Counts are not fractions of metric space.',
             'labelled_count':sum(map(len,families.values())),'class_count':len(rows),'proved_classes':len(proved),'classes':rows}
 
