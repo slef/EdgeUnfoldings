@@ -73,7 +73,7 @@ def patch_patterns():
         if any(p[i]=='F' and p[(i+1)%5]=='B' for i in range(5)):continue
         if all(x=='F' for x in p) or all(x=='B' for x in p):continue
         p=''.join(p);families.setdefault(canonical_pattern(p),[]).append(p)
-    proved={'CCCCC':'C','BCCCC':'One','BCCFC':'Toward','BCFCC':'Chain','BCBCC':'Separated','BFCCC':'Long-chain'}
+    proved={'CCCCC':'C','BCCCC':'One','BCCFC':'Toward','BCFCC':'Chain','BCBCC':'Separated','BFCCC':'Long-chain','BBCCC':'Adjacent'}
     rows=[]
     for rep, members in sorted(families.items(),key=lambda kv:(5-kv[0].count('C'),kv[0])):
         rows.append({'representative':rep,'inward_count':5-rep.count('C'),'labelled_count':len(members),

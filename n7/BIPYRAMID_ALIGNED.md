@@ -320,8 +320,8 @@ outside that family.
 | Arbitrary zero-curvature insertion chosen by minimum vertex curvature | **Open**; earlier exact failures show that a fixed initial tree can fail |
 
 This family theorem does not change the whole-class count. With the
-subsequent [radial theorems](BIPYRAMID_RADIAL.html), the current totals
-are **10/34 graph types** and **6/15 symbolic classes** covered. This page
+subsequent [two-inward completion](BIPYRAMID_ADJACENT.html), the current totals
+are **10/34 graph types** and **7/15 symbolic classes** covered. This page
 adds a theorem for an explicitly described geometric subfamily extending
 across the symbolic partition, not a sampled percentage of shapes.
 

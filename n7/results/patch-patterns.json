@@ -2,7 +2,7 @@
   "scope": "Necessary symbolic patterns; not every admitted pattern is asserted realizable. Counts are not fractions of metric space.",
   "labelled_count": 121,
   "class_count": 15,
-  "proved_classes": 6,
+  "proved_classes": 7,
   "classes": [
     {
       "representative": "CCCCC",
@@ -53,8 +53,8 @@
         "FCCCF",
         "FFCCC"
       ],
-      "status": "open",
-      "theorem": null,
+      "status": "proved conditional family",
+      "theorem": "Adjacent",
       "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": "TwoGap (one pole curvature at least pi)"
     },

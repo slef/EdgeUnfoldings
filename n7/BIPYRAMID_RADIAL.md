@@ -1,8 +1,10 @@
 # Long receivers give a distance barrier
 
+**Later result:** [the adjacent-run theorem](BIPYRAMID_ADJACENT.html) now closes the last two-inward class. The current total is **7/15**; this page preserves the radial proof that raised the count to six.
+
 **13 September 2026 · Two further complete pattern classes, and a shorter
 proof of the opposing chain.** The whole pentagonal bipyramid remains
-open. The complete symbolic count is now **6 of 15**: all classes with
+open. At this step the complete symbolic count reached **6 of 15**: all classes with
 at most two inward patches except the adjacent same-direction class.
 The arguments below concern every convex realization satisfying the
 stated pattern, including nonplanar equators.
@@ -305,8 +307,9 @@ This is the ring-size-independent argument from the
 ## 9. Exact checks and the remaining classes {#status}
 
 The complete necessary symbolic classes are now CCCCC, BCCCC, BCCFC,
-BCFCC, BCBCC, and BFCCC: **6 of 15**. The remaining two-inward class is
-**BBCCC**, two adjacent inward patches leaning the same way. The five
+BCFCC, BCBCC, and BFCCC: **6 of 15**. The remaining two-inward class at that point was **BBCCC**, two adjacent
+inward patches leaning the same way; it is now covered by the
+[adjacent-run proof](BIPYRAMID_ADJACENT.html). The five
 three-inward and three four-inward classes also retain open parts.
 All their large-pole branches and the aligned-pole family are proved.
 The whole graph and the whole n7 problem remain open.

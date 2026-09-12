@@ -7,12 +7,12 @@ arguments; the accompanying finite counts and examples have different scopes.
 **New route, 13 September:** [grow the solid from six vertices](BIPYRAMID_MORPH.html).
 Convexity and monotone curvature are proved; carrying a safe net throughout
 remains open in general. The aligned-pole insertion is now proved, and the
-complete chain rule raises the count below to six.
+complete chain rule raises the count below to seven.
 
 **Overnight extension:** [the length-sum slit theorem](BIPYRAMID_OVERNIGHT.html#length-slit)
 settles the local pairs for every convex bipyramid. The [two-patch rules](BIPYRAMID_OVERNIGHT.html#two-gap)
 prove larger curvature branches. The subsequent chain theorem raises the
-whole-class count, now **6/15** after the radial extension.
+whole-class count, now **7/15** after the radial and adjacent-run extensions.
 
 **Further family theorem:** [aligned poles](BIPYRAMID_ALIGNED.html) are now
 covered at every height, including four inward patches with low pole
@@ -171,8 +171,21 @@ other bad cone together with a smaller disk protects the far receiver.
 [Complete proof](BIPYRAMID_RADIAL.html#theorem-long-chain).
 
 The same lemmas also give a [shorter proof of Chain](BIPYRAMID_RADIAL.html#shorter-chain).
-Among the five two-inward classes, only adjacent same-direction BBCCC
-retains an open part. All its large-pole cases are already proved.
+The adjacent same-direction class is now covered too, as follows.
+
+## Two adjacent patches pointing the same way {#theorem-adjacent}
+
+**Theorem Adjacent.** FFCCC / canonical BBCCC is completely covered.
+Choose a pole where the second bad extension is short. If the first bad
+patch ends earlier, outer-triangle containment proves the net safe.
+Otherwise compare the other pole: either its ordering works, or its long
+receiver supplies the distance barrier and obtuse angle needed at the
+first pole. [Complete proof and finite rule](BIPYRAMID_ADJACENT.html).
+
+Thus every convex pentagonal bipyramid with at most two inward patches
+has an edge unfolding. The adjacent-run proof works for any ring size.
+The following older large-pole argument is retained as a shorter proof
+of that particular branch.
 
 ## 5. A further family when one pole has curvature at least pi {#theorem-gap}
 
@@ -284,14 +297,14 @@ has a convex realization. This is an exhaustive necessary partition.
 | --- | ---: | ---: | ---: |
 | 0 | 1 | 1 | 1, Theorem C |
 | 1 | 10 | 1 | 1, Theorem One |
-| 2 | 35 | 5 | 4, Toward, Chain, Separated, and Long Chain; only adjacent same-direction remains open |
+| 2 | 35 | 5 | 5: every two-inward class is proved |
 | 3 | 50 | 5 | 0 |
 | 4 | 25 | 3 | 0 |
 | 5 | 0 | 0 | impossible |
 
-The six fully covered representatives are CCCCC, BCCCC, BCCFC, BCFCC, BCBCC, BFCCC in the
-catalogue's canonical convention. Thus **6/15 symbolic classes have whole
-conditional existence proofs**; 9 retain open parts. Theorem L7 settles
+The seven fully covered representatives are CCCCC, BCCCC, BBCCC, BCCFC, BCFCC, BCBCC, BFCCC in the
+catalogue's canonical convention. Thus **7/15 symbolic classes have whole
+conditional existence proofs**; 8 retain open parts. Theorem L7 settles
 three local pairs under its additional inequalities across many of them.
 The [new local selection theorem](BIPYRAMID_OVERNIGHT.html#length-slit)
 removes the threshold when the slit may be chosen by the distance-sum rule.

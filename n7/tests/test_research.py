@@ -54,7 +54,7 @@ class ResearchChecks(unittest.TestCase):
         self.assertEqual(len(candidate(triple)['changed_faces']),3)
         self.assertEqual(triple['status'],'open')
     def test_pattern_partition_and_proved_subfamilies(self):
-        p=patch_patterns();self.assertEqual((p['labelled_count'],p['class_count'],p['proved_classes']),(121,15,6))
+        p=patch_patterns();self.assertEqual((p['labelled_count'],p['class_count'],p['proved_classes']),(121,15,7))
         self.assertEqual(p,json.loads((ROOT/'results/patch-patterns.json').read_text()))
         self.assertEqual(canonical_pattern('FCBCC'),'BCCFC')
         self.assertFalse(any('FFFFF' in r['members'] or 'BBBBB' in r['members'] for r in p['classes']))

@@ -1,6 +1,6 @@
 # Growing a pentagonal bipyramid from six vertices
 
-**Later update, 13 September:** the [complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.html) now closes the entire FCCBC / BCFCC class. The [radial extension](BIPYRAMID_RADIAL.html) brings the current count to **6/15**; the earlier reductions and open questions below are preserved as the record of how that result was reached.
+**Later update, 13 September:** the [complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.html) now closes the entire FCCBC / BCFCC class. The [radial extension](BIPYRAMID_RADIAL.html) brings the current count to **7/15** after the [adjacent-run theorem](BIPYRAMID_ADJACENT.html); the earlier reductions and open questions below are preserved as the record of how that result was reached.
 
 **13 September 2026 · New geometric lemmas and two exact example families.**
 The pentagonal bipyramid remains open in general. These arguments are

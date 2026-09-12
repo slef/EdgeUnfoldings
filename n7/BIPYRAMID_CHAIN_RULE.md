@@ -1,6 +1,6 @@
 # Two bad patches facing across two convex patches: a complete rule
 
-**Later progress:** the [radial receiver lemmas](BIPYRAMID_RADIAL.html) now give a shorter proof of this class and close two more classes. The current count is **6/15**. The angle-based proof below is preserved in full.
+**Later progress:** the [radial receiver lemmas](BIPYRAMID_RADIAL.html) now give a shorter proof of this class and close two more classes. The current count is **7/15** after the [adjacent-run theorem](BIPYRAMID_ADJACENT.html). The angle-based proof below is preserved in full.
 
 **13 September 2026 · Written proof of the entire opposing-chain class.**
 The pentagonal bipyramid is still open, but one further complete pattern
@@ -212,7 +212,7 @@ equalities.
 ## 5. Scope and reproducible checks {#status}
 
 At this checkpoint the count reached **4 of 15 complete necessary symbolic classes**:
-CCCCC, BCCCC, BCCFC, and BCFCC. The later radial extension raises this to six, leaving nine with open parts.
+CCCCC, BCCCC, BCCFC, and BCFCC. The later radial extension and adjacent-run extensions raise this to seven, leaving eight with open parts.
 Every large-pole branch is independently proved, and the aligned-pole
 family is proved across the partition. The whole graph remains open.
 These are counts of symbolic classes, not percentages of all shapes.

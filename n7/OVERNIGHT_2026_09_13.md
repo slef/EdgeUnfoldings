@@ -23,6 +23,29 @@ A temporary idle-sleep inhibitor runs until approximately the deadline
 (`caffeinate -i -t`, tool session 90334); no persistent power setting changed.
 No mathematical search is currently running.
 
+## Current checkpoint — all two-inward classes, around20:30UTC
+
+BIPYRAMID_ADJACENT.md proves FFCCC / BBCCC for ANYring sizewithonly2bad.
+Currentcount7/15, remaining8are3/4bad. Newlocaltools: Q0safeagainstENTIRE
+outertriangleH1 ofnextbadQ1 byuncutsharedvertexsector. C receiverQ2 clipped
+toQ1cone hasINTERIORinsideH1 (avoidfalseboundary-onlycontainmentclaim).
+A_s=ell0-omega1-ell1; sumA=-kappa1<0. B_s=ell1-omega2; sumB<0.
+Picklastshortpoleq. IfAq<=0 orderedcase safeusingH1clipping. IfAq>0,other
+Ap<0; ifotherBp<=0 switch. ElseotherpQ1long: q hasP1strictinsideQ0pocket,
+D1<delta0 andell0q<pi/2. Otherlongreceivergivesomega2q>pi/2, d3<D1, and
+Q2containedQ1cone uniondiskd3. ConepartprotectedH1, diskpartdelta0shield.
+FirstbadcannotreachQ3 becauseell0q<omega2q. Allpairsdone, nobigpoleassumption.
+
+Exactexamples: ordered and pole-switch cases. Hardthirdbranchnotfoundin
+400000samples+30planarringoptimizations; NOTUSEDinproof. 33exactlinear
+coefficientidentities(n=3..8ring)verified. No needfindexampleoffalsebranch.
+
+Currentpriorcommit e502db1 isvalidatedradial6/15 (52Python+3Nodepass).
+Adjacent7/15 changesbeinginstalled. Nexttry3badrunFFFCC or2+1runpatterns,
+andreviewnewproofs. Deadline22:04UTC. Alln7only; noactive processes now.
+Temporarydiscoverynotes /private/tmp/ADJACENT_BAD_WORKING.md,
+/private/tmp/RADIAL_RECEIVER_WORKING.md. Earliercheckpointsbelowarehistory.
+
 ## Newest checkpoint — radial receivers, around 20:17 UTC
 
 `BIPYRAMID_RADIAL.md` proves two universal local lemmas and two further

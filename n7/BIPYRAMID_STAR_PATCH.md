@@ -11,8 +11,8 @@ of equator vertices and without requiring a planar equator:
 
 For the pentagonal bipyramid this covers the large-pole part of **all
 15 patch-pattern classes**, including three and four inward patches.
-The whole graph remains open. The subsequent [radial theorems](BIPYRAMID_RADIAL.html) brings the count
-to **6/15 whole symbolic classes proved**; curvature-restricted progress
+The whole graph remains open. The subsequent [two-inward completion](BIPYRAMID_ADJACENT.html) brings the count
+to **7/15 whole symbolic classes proved**; curvature-restricted progress
 is counted separately.
 
 [Overview](index.html#bipyramid) · [Earlier receiver analysis](BIPYRAMID_CHAIN_PAIR.html) ·
@@ -313,7 +313,7 @@ This is a substantial reduction of the geometric region still needing
 work, not a percentage of all shapes: there is no uniform distribution
 on the space of convex realizations being used here. The original graph
 census stays **10/34 whole graphs covered**. The complete symbolic-pattern
-count is now **6/15** after the separate radial theorems; all nine other classes have their
+count is now **7/15** after the separate two-inward completion; all eight other classes have their
 large-pole branch covered, whenever that branch is geometrically realizable.
 
 A further [aligned-pole theorem](BIPYRAMID_ALIGNED.html) covers every
