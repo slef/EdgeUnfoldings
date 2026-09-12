@@ -1,0 +1,54 @@
+{
+  "created_utc": "2026-09-12T16:25:57.120299+00:00",
+  "scope": "n=5 and n=6 only",
+  "worktree": "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings-topological-n5-n6",
+  "branch": "codex/topological-n5-n6",
+  "base_commit": "5b21be4896f9e178626f1ca4fdcdc7e7458b93dc",
+  "source_pdf": {
+    "path": "/Users/sl/Downloads/unfoldable6.pdf",
+    "sha256": "583f9c32211fed5bf11b268272ad83a6d0891c504455155a9d6f4f1018db2e41"
+  },
+  "lean_snapshot_note": "read-only audit copies of currently untracked work; not a standalone build or a formalization of the new result",
+  "snapshots": {
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/BIPYRAMID_STATUS.md": {
+      "snapshot": "reference_snapshot/lean_statement/BIPYRAMID_STATUS.md",
+      "sha256": "814e6e85668cd48f14d1cecd0970809173b35bc9c81f6a0e8ab69caf9c0bc57b"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Pyramid.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Pyramid.lean",
+      "sha256": "2b2f80772d459279c3683237caae6b0a5494d36ed40d9b38f4ce1bb761c699cd"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Geometry/FacetHingeSides.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Geometry/FacetHingeSides.lean",
+      "sha256": "a85fe55acc176eb902eead3cfe9ced666dd4cf21a0bfdf178c825d3382010af0"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Geometry/TrianglePetal.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Geometry/TrianglePetal.lean",
+      "sha256": "4adf83b66833a76bb7895820a3f76d4aac50f202047f6f3c14a867021351da8d"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Geometry/PyramidCertificate.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Geometry/PyramidCertificate.lean",
+      "sha256": "00fbed9d315aa33cee6af76ae4d93c0022da1d441884676afd5f5aa7122e4166"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Geometry/EdgeHullSeparation.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Geometry/EdgeHullSeparation.lean",
+      "sha256": "dbddc0fb70e1b0365001efdb13a6288a624e176441d8896c561fc01c8650743c"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Geometry/BipyramidRadon.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Geometry/BipyramidRadon.lean",
+      "sha256": "ecd00313a38271b549eb13d18931a0e3f40b119c0c22aab3327a2d031763d6b6"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Geometry/BipyramidWeights.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Geometry/BipyramidWeights.lean",
+      "sha256": "816c08db2624b24d2520b5958508baf95fcfc721ebdb10c08d5c9509a8b03a00"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Geometry/RadonMetric.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Geometry/RadonMetric.lean",
+      "sha256": "c49160a3dc97394d99099904928f8d241a781ba8a0adf771b0b5eee033852163"
+    },
+    "/Users/sl/Dropbox/MyStuff/dev/EdgeUnfoldings/lean_statement/SixVertexUnfolding/Geometry/BipyramidMetric.lean": {
+      "snapshot": "reference_snapshot/lean_statement/SixVertexUnfolding/Geometry/BipyramidMetric.lean",
+      "sha256": "397a3c5f80b0f9c3733b10247d8006fa3fdbfb4d1f4808a8d1f26d6fb7c9128c"
+    }
+  }
+}

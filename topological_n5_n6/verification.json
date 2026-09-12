@@ -1,0 +1,166 @@
+{
+  "scope": "four fixed examples; exact rational arithmetic",
+  "n5_pyramid": {
+    "mesh_triangle_pairs_checked": 15,
+    "apex_star_cut_edges": [
+      [
+        "A",
+        "P"
+      ],
+      [
+        "B",
+        "P"
+      ],
+      [
+        "C",
+        "P"
+      ],
+      [
+        "D",
+        "P"
+      ]
+    ],
+    "conclusion": "C has negative curvature; the apex star overlaps locally"
+  },
+  "n5_bipyramid": {
+    "mesh_triangle_pairs_checked": 15,
+    "original_pole_segment_misses_equator_plane": true,
+    "reflected_realization_strictly_convex": true,
+    "original_edge_lengths_preserved": 9,
+    "conclusion": "the same face metric has a convex realization, so its equator-star nets transfer"
+  },
+  "n5_two_saddles": {
+    "mesh_triangle_pairs_checked": 15,
+    "negative_curvature_vertices_certified": [
+      "A",
+      "B"
+    ],
+    "all_three_equator_stars_fail_locally": true,
+    "conclusion": "choosing a different universal vertex cannot repair the star rule in general"
+  },
+  "n6": {
+    "mesh_triangle_pairs_checked": 28,
+    "octahedral_diagonal_BD_is_outside": true,
+    "angle_lower_bounds": [
+      {
+        "angle": "AEB",
+        "lower_degrees": 150,
+        "integer_margin": "3102400116025"
+      },
+      {
+        "angle": "BEC",
+        "lower_degrees": 150,
+        "integer_margin": "21064116025"
+      },
+      {
+        "angle": "CEF",
+        "lower_degrees": 60,
+        "integer_margin": "437739344"
+      }
+    ],
+    "curvature_signs": {
+      "A": "+",
+      "B": "+",
+      "C": "-",
+      "D": "+",
+      "E": "-",
+      "F": "-"
+    },
+    "tree_counts": {
+      "spanning_trees": 224,
+      "negative_curvature_leaf": 194,
+      "forced_hinge_overlap": 26,
+      "overfull_E_or_F_sector": 4
+    },
+    "last_four_trees": [
+      [
+        [
+          "A",
+          "E"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "F"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      [
+        [
+          "A",
+          "E"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "D",
+          "F"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      [
+        [
+          "A",
+          "F"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "B",
+          "E"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      [
+        [
+          "A",
+          "F"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ]
+    ]
+  }
+}
