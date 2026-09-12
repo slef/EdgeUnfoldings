@@ -3,8 +3,13 @@
 Start with the [overview](index.html), the [arguments](ARGUMENTS.md), or the
 [bipyramid patch proofs](BIPYRAMID_PATCHES.md), the dedicated [A992 case](A992.md),
 its [cone proof](A992_CONES.md), the [R0 repair lemma](A992_R0.md), or the
-[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the ten
+[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the eleven
 proof documents contain rendered mathematics and work without network access.
+
+**Latest focus:** [the remaining small-angle receiver pair](BIPYRAMID_CHAIN_PAIR.md).
+The small-fan pocket is now excluded; the large-angle branch is proved.
+An exact identity isolates the seventh vertex's correction to the n6
+separator, and four rational examples replay the new applications.
 
 **Overnight focus:** [new local and two-patch rules](BIPYRAMID_OVERNIGHT.md),
 plus the [exact first collision](BIPYRAMID_COLLISION.md). The length-sum slit
@@ -52,7 +57,7 @@ this initial overview is a local research page.
 ## Reproduce
 
 Dependencies are listed in `requirements.txt`. Run from the worktree root,
-with a Python environment containing them. The build of the ten reading
+with a Python environment containing them. The build of the eleven reading
 pages additionally needs Pandoc on the command path.
 
 ```sh
@@ -70,6 +75,8 @@ python3 -B -m n7.bipyramid_morph
 python3 -B -m n7.bipyramid_rule_checks
 python3 -B -m n7.bipyramid_collision
 python3 -B -m n7.bipyramid_receiver_conflict
+python3 -B -m n7.bipyramid_receiver_identity
+python3 -B -m n7.bipyramid_receiver_pairs
 python3 -B -m n7.bipyramid_overnight_figures
 python3 -B -m n7.bipyramid_morph_figures
 python3 -B -m n7.build_overview
@@ -88,7 +95,9 @@ and explicit bijection of its 34 outputs to our catalogue are retained in
 | File | Purpose |
 | --- | --- |
 | `ARGUMENTS.md` | Complete graph decomposition; universal edge-star and dome cases; general cofacial-core proof; next targets |
+| `BIPYRAMID_STAR_PATCH.md` | Shortest-patch comparison; every large-pole bipyramid proved; obtuse-corner and empty-region tests; exact four-tree failures |
 | `BIPYRAMID_OVERNIGHT.md` | Universal local rule, two-patch large-gap and receiver-gate theorems, and curvature transfer |
+| `BIPYRAMID_CHAIN_PAIR.md` | Small-fan exclusion, complete large-angle branch, wider-apex separator, and seventh-vertex correction |
 | `BIPYRAMID_RECEIVERS.md` | Exact opposing receiver preferences, and a universal reduction of that pattern to two metric pairs |
 | `BIPYRAMID_COLLISION.md` | Exact safe/overlapping transition on one insertion path, with a monotone circle-line proof |
 | `OVERNIGHT_2026_09_13.md` | Overnight deadline, progress, discovery limits, and the next bounded investigation |
@@ -123,7 +132,10 @@ formal verification of the geometric arguments.
 ## Next session
 
 1. Read `OVERNIGHT_2026_09_13.md` and `BIPYRAMID_OVERNIGHT.md#next`.
-   Prioritize the two metric pairs in `BIPYRAMID_RECEIVERS.md#chain`.
+   Read `BIPYRAMID_STAR_PATCH.md`: every pole-curvature-at-least-π case is now proved.
+   Four shortest-patch endpoint trees can all fail outside the proved gates;
+   do not assume that restricted rule universal. Work in the both-low-pole
+   region, while also pursuing the small-angle configurations in `BIPYRAMID_CHAIN_PAIR.md#remaining`.
    Opposite receiver preferences and both receiver-plus-gap failures are
    now realized by an exact integer example with six safe nets. Do not
    try to prove those inequalities impossible. The original fixed

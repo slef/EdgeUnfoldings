@@ -1,7 +1,7 @@
 # Pentagonal bipyramid overnight session — 13 September 2026
 
 Work window: **2026-09-12 16:04–22:04 UTC** (01:04–07:04 Tokyo).
-Checkpoint written around 17:25 UTC; approximately 4.5 hours remain.
+Checkpoint updated around 18:45 UTC; approximately 3 hours 20 minutes remain.
 Continue substantive research until the deadline. The heartbeat automation
 `pentagonal-bipyramid-overnight` is active in this task every 5 minutes,
 with UNTIL 22:06 UTC so the final deadline run is included. At the deadline,
@@ -22,6 +22,57 @@ Research checkpoint: `40f7bae` (all first-pass proofs and exact checks).
 A temporary idle-sleep inhibitor runs until approximately the deadline
 (`caffeinate -i -t`, tool session 90334); no persistent power setting changed.
 No mathematical search is currently running.
+
+## Latest checkpoint — second pass, around 18:45 UTC
+
+Completed and installed; all 43 Python tests and both Node UI tests pass.
+
+1. `BIPYRAMID_CHAIN_PAIR.md`: long receivers force source apex >π/2 and
+   source curvature <π; the small-fan pocket is impossible. The whole
+   large-angle base-cone branch is proved. Small-angle Case A retains
+   an explicit sufficient wide-apex/short-cut test. The seventh-vertex
+   correction identity isolates H; H>=0 suffices but is not universal.
+   Twenty cyclic/pole linear identities checked exactly; four exact
+   examples, including H<0 and reduced-hull cases outside the old gate.
+2. `BIPYRAMID_STAR_PATCH.md`: every convex bipyramid with EITHER pole
+   curvature >=π has a safe original-edge net, any ring size. Also proved:
+   shortest-patch obtuse ring corner and empty-region replacement tests.
+   Written argument uses Kiazyk–Lubiw Theorem4/Lemma6, primary PDF inspected.
+   Exact replay has six successes (including three/four inward patches and
+   an acute-corner high-pole case) and TWO exact failures of ALL FOUR
+   shortest-patch endpoint trees. Do not try to prove that restricted
+   four-tree rule universal. Graph still open; 3/15 whole pattern classes,
+   but all 12 open classes have their large-pole branch proved.
+3. `BIPYRAMID_RECEIVERS.md#other-caps`: pole-edge and flat-cap auxiliary
+   reductions give a star comparison at either pole, without curvature
+   orders. The actual octahedral reduction alone still needs its ranks
+   or the new local pair separator. Exact pole-edge example checks both
+   source stars, 28 pairs each.
+4. Overview updated, 12 mathematical reading pages. New scientific figure
+   `bipyramid-star-replacement.svg` rendered and visually checked. History
+   retained in collapsed entries. All edits only n7; no push or merge.
+
+**NEXT PRIORITY — promising complete geometric family theorem:**
+Read `BIPYRAMID_ALIGNED_WORKING.md`. A convex planar equator, two poles
+vertically above/below the SAME interior point, with arbitrary heights,
+appears fully proved by a new auxiliary-pyramid comparison. Use lower pole
+as fan, higher as cut-star source, and farthest ring vertex as slit. Complete
+its low-curvature opened fan to a convex polygon; for high curvature the fan
+already is convex. The constant difference of squared pole-to-ring distances
+is the squared height of an auxiliary pyramid, whose safe edge-star net
+contains the actual fan and petals. Equal-height case follows by a justified
+pyramid-height-zero limit. The SAME cut tree works when both original pole
+heights scale from zero in a fixed ratio. This directly implements the
+user's morph idea on a defined family. Need polish proof, exact examples,
+figure, overview, and independently audit before marking family proved.
+
+The working note gives a simple integer four-inward CBBBB example with
+both poles below 0.01 degrees, both shortest-patch ring corners acute,
+and ten individually certified safe nets. Thus the low-pole four-inward
+region is real; the aligned-family proof covers its max-radius tree.
+
+No active search process. The idle-sleep inhibitor and overnight heartbeat
+remain active until the deadline. Continue substantive research.
 
 ## Starting point
 

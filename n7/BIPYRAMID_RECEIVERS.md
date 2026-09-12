@@ -186,8 +186,8 @@ the original net; it serves only to justify those two face separations.
 For a long $Q_3$, reflection uses deletion of $u_0$ and auxiliary equator
 $u_1,u_2,u_3,u_4$, with an endpoint maximum at $u_1$ or $u_4$.
 Ties in the auxiliary source and slit comparisons are allowed by the
-six-vertex theorem. This bridge currently assumes an actual octahedral
-reduced hull; other deletion types need separate arguments.
+six-vertex theorem. The octahedral bridge needs these orders; the
+other deletion types have the simpler argument just below.
 
 **The integer example satisfies this branch.** With $p=v$, delete $u_4$.
 The reduced curvatures, rounded only for explanation, are
@@ -207,13 +207,47 @@ The paired-pole theorem is a written n6 dependency, undergoing separate
 formalization. Its files are not changed by this argument, and the n7
 checker does not claim to formalize that theorem.
 
+**Further progress:** [the local pair analysis](BIPYRAMID_CHAIN_PAIR.html)
+now excludes the small-fan pocket, proves the entire large-angle branch,
+and extends the wider-apex separator with an explicit seventh-vertex
+correction. Only its remaining small-angle configurations are open.
+
+### Pole-edge and flat-cap reductions need no curvature orders {#other-caps}
+
+The remaining six-vertex cap has boundary $p,u_3,q,u_0$. If it is
+triangulated by $pq$, both poles are universal vertices in the reduced
+hull. Cut all five edges at $q$, including $pq$. This is a shortest-path
+star and its whole net is safe. The three consecutive original patches
+$Q_0,Q_1,Q_2$ keep all their internal joins, so their placement is
+congruent to that in the seven-vertex candidate. This proves the two
+remaining separations at **either choice of fan pole**, with no curvature
+ranking. The new edge $pq$ is only a comparison cut on the smaller hull.
+
+If the cap is a planar quadrilateral, use its internal straight diagonal
+$pq$ as the comparison cut. It is a shortest path because it realizes the
+Euclidean distance. The same star theorem and congruent-three-patch
+argument apply. Once again the actual seven-vertex net uses only its
+original edges. Reflection gives the long-$Q_3$ case by deleting $u_0$.
+
+These are all non-octahedral possibilities: the six inherited triangular
+facets leave a four-edge cap, which is either a quadrilateral or has one
+of its two diagonals. The reduced hull is full dimensional and its six
+vertices remain extreme as a subset of the original vertices.
+
+The exact example labelled `other-reduced-graph-Case-A` in
+[the pair certificates](results/bipyramid-receiver-pairs.json) has the
+$pq$ cap. Its replay verifies strict support and all 28 auxiliary face
+pairs for both source choices. The flat-cap case is covered by the
+written argument, not claimed as an additional sampled certificate.
+
 ## 4. Next proof question {#next}
 
 When $\ell_0^p>a_p$, prove separation of $V_0$ from the whole convex
 patch $Q_2$, or show that the other pole or a different slit repairs any
 failure. The auxiliary bridge already does this when its three geometric
-conditions hold. The remaining branches are: a different reduced graph,
-the wrong reduced pole ordering, or an interior equator maximum. Check
+conditions hold; pole-edge and flat-cap reductions are also settled.
+The remaining auxiliary branches are actual octahedra with the wrong
+reduced pole ordering or an interior equator maximum. Check
 which of those can coexist with the chain's one-long-extension condition;
 do not assume the auxiliary hypotheses merely from six-vertex existence.
 

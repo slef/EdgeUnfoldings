@@ -13,6 +13,7 @@
       ],
       "status": "proved conditional family",
       "theorem": "C",
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -33,6 +34,7 @@
       ],
       "status": "proved conditional family",
       "theorem": "One",
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -53,6 +55,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": "TwoGap (one pole curvature at least pi)"
     },
     {
@@ -73,6 +76,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": "Receiver (weighted pole-curvature gate)"
     },
     {
@@ -88,6 +92,7 @@
       ],
       "status": "proved conditional family",
       "theorem": "Toward",
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -103,6 +108,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": "Receiver (weighted pole-curvature gate)"
     },
     {
@@ -118,6 +124,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": "Receiver (weighted pole-curvature gate)"
     },
     {
@@ -138,6 +145,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -158,6 +166,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -178,6 +187,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -198,6 +208,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -218,6 +229,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -238,6 +250,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -258,6 +271,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     },
     {
@@ -273,6 +287,7 @@
       ],
       "status": "open",
       "theorem": null,
+      "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": null
     }
   ]

@@ -1,5 +1,10 @@
 # Pentagonal bipyramid: a simpler local rule and a larger solved branch
 
+**Later strengthening:** [the shortest-patch proof](BIPYRAMID_STAR_PATCH.html)
+now covers every bipyramid with a pole curvature at least π, with no
+restriction on its number of inward patches. The earlier proofs below
+are preserved; the weighted receiver branch still adds low-pole cases.
+
 **13 September 2026 · Overnight research, first pass.** These are written
 geometric proofs, accompanied by seven exact example checks. The
 pentagonal-bipyramid graph remains open. The six-vertex and Lean files are
@@ -333,6 +338,16 @@ The petal/fan separation follows from the petal/petal separation, so
 there is only one independent pair question.
 An [auxiliary-octahedron bridge](BIPYRAMID_RECEIVERS.html#auxiliary)
 closes a further branch, including that exact example.
+
+### The remaining pair now has only a small-angle gap
+
+The [next local analysis](BIPYRAMID_CHAIN_PAIR.html) proves that a long
+receiver extension forces the large-fan angle inequality, so the
+small-fan pocket is impossible. The whole large-angle branch is then
+separated. In the small-angle branch, a short copied cut with a bounded
+apex angle suffices; a new exact identity gives an additional sufficient
+condition involving the seventh vertex. Four exact examples check these
+applications. The whole symbolic class remains open.
 
 ## 5. Exact checks and next proof targets {#next}
 

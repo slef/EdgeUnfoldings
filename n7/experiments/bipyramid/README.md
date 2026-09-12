@@ -30,3 +30,30 @@ The finite proof examples and universal written lemmas have distinct scopes.
   are overlapping choices, not disjoint shape counts. Classification
   tests graph and pole order before the endpoint maximum, so absence
   of the last label does not establish its automatic validity.
+
+
+## Second overnight pass
+
+The six additional searches are discovery only. They are archived without
+rewriting their original temporary output paths; run with the repository
+and this experiment directory on PYTHONPATH and inspect the explicit paths.
+
+- `n7_pair_class_search`: 350,000 attempts, 124,043 valid sampled shapes,
+  4,916 relevant opposing-chain shapes with both poles below π. No missing
+  local-separator case found. This is not proof or coverage of metric space.
+- `n7_chain_adversary` and `n7_chain_cobyla`: constrained floating attempts
+  to break the wide-apex condition; no rigorous bound follows from outcomes.
+- `n7_chain_gate_cover`: five sampled shapes where the only eligible chain
+  pole has a negative seventh-vertex correction. A naive pole swap cannot
+  be presumed to supply that sufficient gate. These five are not exact
+  certificates; the saved local-pair data have a separate exact negative-H
+  example that still passes the wider separator.
+- `n7_star_patch_search`: discovers both proved-gate examples and failures
+  of all four shortest-patch endpoint choices. Two failures were converted
+  to exact certificates in `results/bipyramid-star-patch.json`.
+- `n7_star_high_stress`: 200,000 attempts, 86,106 valid samples, 67,654 with
+  a pole above π; no sampled failure of the separately written theorem.
+  Includes 667 four-inward samples. Counts are discovery diagnostics only.
+
+The universal results are in BIPYRAMID_CHAIN_PAIR.md and
+BIPYRAMID_STAR_PATCH.md, not in these search statistics.
