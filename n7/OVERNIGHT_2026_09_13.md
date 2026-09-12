@@ -1,7 +1,7 @@
 # Pentagonal bipyramid overnight session — 13 September 2026
 
 Work window: **2026-09-12 16:04–22:04 UTC** (01:04–07:04 Tokyo).
-Final review checkpoint around 22:00 UTC; earlier checkpoints are preserved below.
+Final results saved before 22:04 UTC; earlier checkpoints are preserved below.
 Continue substantive research until the deadline. The heartbeat automation
 `pentagonal-bipyramid-overnight` is active in this task every 5 minutes,
 with UNTIL 22:06 UTC so the final deadline run is included. At the deadline,
@@ -58,13 +58,16 @@ interactive insertion page. Its continuum claim uses the family theorem
 and exact hypotheses, not drawing frames or sampled nets.
 
 Checkpoint 620120f contains the main universal rules and insertion work.
+Checkpoint 270b8f2 records the counterexamples and shorter corollaries;
+38fbde8 adds the one/three corner-pair reduction for the pure runs.
 The final counterexamples, corollaries, and presentation corrections
 passed 62 Python tests, all four Node interface checks, and a local link
 audit with zero missing files or anchors. A final wording correction
 distinguishes ring-vertex and fixed-pole support determinants during
 insertion. These arguments are self-reviewed, not formally verified. No n6 or Lean files were edited;
-no push or merge is being performed. At 22:04 UTC pause the heartbeat and
-provide the morning report.
+no push or merge is being performed. The research window ends at
+22:04 UTC; the final action is to pause the heartbeat and provide the
+morning report. Resume with Product Rule #pure-run-targets when requested.
 
 ## Earlier checkpoint — general local rule and finite-switch insertion, around 21:27 UTC
 
