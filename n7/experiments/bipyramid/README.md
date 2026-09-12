@@ -57,3 +57,45 @@ and this experiment directory on PYTHONPATH and inspect the explicit paths.
 
 The universal results are in BIPYRAMID_CHAIN_PAIR.md and
 BIPYRAMID_STAR_PATCH.md, not in these search statistics.
+
+
+## Final overnight pass: local radial lemmas, ordered runs, and insertion
+
+These discovery scripts retain their original temporary output paths.
+They are not imported by the exact checkers. Several run at top level;
+read a script before importing it. The working Markdown notes record
+intermediate reasoning; the finished proof pages in n7 supersede them.
+
+- Opposing-receiver searches and angle linear relaxations informed the
+  radial and adjacent proofs. Failure to find a proposed metric branch is
+  not a proof that it is impossible. Linear angle feasibility does not
+  establish a convex spatial realization.
+- The adjacent search used 400,000 attempts and the pocket optimizer used
+  30 planar rings. Neither realized the last decision branch. The written
+  proof covers that branch without assuming it is absent.
+- The ordered-run search used 1,485,096 attempts, with 1,151,951 numerically
+  accepted shapes. No robust failed common fan was found for FFFCC/FFFFC.
+  Its 154 near-threshold labels were floating uncertainty, not exact failures.
+- The fixed-azimuth run optimizer found no positive valid conflict. This
+  does not certify infeasibility of any branch.
+- The source-plane stress check used 199,783 attempts, 84,281 numerically
+  accepted shapes, and 135,545 qualifying pole choices. All fifteen
+  symbolic classes occurred. The single apparent overlap was between
+  adjacent fan faces 5/6 at extreme aspect ratio. A separate exact replay
+  certified all 45 pairs of the rounded rational shape; the floating
+  overlap is a numerical artifact, not a theorem counterexample.
+- The product search used 2,000,000 attempts and 1,327,019 numerically
+  accepted shapes. It found strict conflicts in BBCBC, BCBFC, BBCFC;
+  examples were converted to exact certificates in the main results folder.
+  Absence of conflicts in the five contiguous-block classes motivates a
+  conjecture only. Many variable-azimuth optimizer outputs violate convexity
+  or have degenerate angles. Neither an unsuccessful optimizer nor an
+  infeasible returned point proves the conjecture.
+- The insertion searches supplied integer examples with changing maximum
+  slits. The three-inward example has a separate exact certificate for
+  the entire slit schedule and its supporting-plane hypotheses.
+
+The universal proofs are in BIPYRAMID_RADIAL, BIPYRAMID_ADJACENT,
+BIPYRAMID_RUNS, BIPYRAMID_SOURCE_PLANE, BIPYRAMID_PRODUCT_RULE, and
+BIPYRAMID_SWITCH_INSERTION. Drawing frames and these search counts are
+not used as universal proof premises.

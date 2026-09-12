@@ -1,7 +1,7 @@
 # Pentagonal bipyramid overnight session — 13 September 2026
 
 Work window: **2026-09-12 16:04–22:04 UTC** (01:04–07:04 Tokyo).
-Checkpoint updated around 19:43 UTC; approximately 2 hours 20 minutes remain.
+Checkpoint updated around 21:27 UTC; approximately 37 minutes remain.
 Continue substantive research until the deadline. The heartbeat automation
 `pentagonal-bipyramid-overnight` is active in this task every 5 minutes,
 with UNTIL 22:06 UTC so the final deadline run is included. At the deadline,
@@ -23,7 +23,66 @@ A temporary idle-sleep inhibitor runs until approximately the deadline
 (`caffeinate -i -t`, tool session 90334); no persistent power setting changed.
 No mathematical search is currently running.
 
-## Current checkpoint — all two-inward classes, around20:30UTC
+## Current checkpoint — general local rule and finite-switch insertion, around 21:27 UTC
+
+All work remains isolated under n7. The last committed checkpoint is
+30d17b0 (seven whole classes). The following further results are being
+validated for a local checkpoint; no push or merge is authorized this night.
+
+- BIPYRAMID_RUNS: any all-forward run is safe when its source endpoints
+  stay ordered and its last extension stops in the first convex receiver.
+  Three exact off-axis examples cover three/four bad patches, both poles low.
+- BIPYRAMID_SOURCE_PLANE: for ANY ring size and ANY patch pattern, if the
+  plane through source q perpendicular to pq supports the ring on p's side,
+  source-star q plus a maximum distance-sum slit is safe. The plane excludes
+  equal-radius captures by making every developed source corner acute.
+  Ordered source rays then separate all runs. Eight exact applications,
+  including a nonplanar four-bad shape, a boundary-plane example, and
+  examples where only one pole passes. Scientific SVG visually inspected.
+- BIPYRAMID_PRODUCT_RULE strengthens this: at each inward corner a require
+  H_a=|pa|²−|qa|² <= D_left D_right. Opposite source changes H's sign.
+  Capture M inside triangle(a,p,P) gives E=|pM|<D=|pP|, and cosine difference
+  (D−E)/(2r)*(1−H/(DE))<0 forces H>DE. Thus passing tests exclude all
+  source-ray reversals. Two exact successes include four bad patches
+  outside BOTH inward-corner plane tests. Four exact two-pole failures
+  (one solved two-bad chain and three open three-bad classes) show limits.
+- BIPYRAMID_SWITCH_INSERTION: planar ring, q fixed, c=axis/base intersection,
+  p(t)=c+t(p1−c). If source q has the supporting plane, all t>0 are convex
+  and the max-distance-sum rule is safe. Each pair of distance sums can tie
+  at at most two values unless identical: their squared distances are
+  quadratics with a common leading coefficient. At most m(m−1) candidate
+  changes, twenty for n7. At t0 the marked flat fan rejoins the pyramid base.
+  Integer FCFFC example has inserted p least curved at target, hence at all t
+  by normal-cone monotonicity. 128 rational closed cells prove only slits 2/0
+  can win and d0−d2 strictly increases. Unique tie in rational bracket near
+  0.046733251299. Interactive switch demo and three exact whole-net checks.
+
+Latest full suite before insertion additions: 60 Python tests pass. Node
+switch test covers 101 finite frames, two cut choices, all controls, and
+3D rotation. Static exports inspected; initial viewing angle improved to
+show both pole fans. Final build/all tests still needed after final edits.
+
+No search is running. Temp searches to preserve before deadline:
+- n7_run_search: 1,485,096 attempts; 1,151,951 valid; no robust failed
+  ordered pole for FFFCC or FFFFC. Tiny boundary uncertainties prove nothing.
+- n7_run_profile_search: fixed-azimuth optimization found no valid conflict.
+- n7_source_plane_search: 199,783 attempts, 84,281 valid, 135,545 source
+  choices; all 15 classes sampled. One apparent overlap (5/6 adjacent fan
+  faces) was independently refuted as numerical error by exact replay.
+- n7_product_search: 2,000,000 attempts; 1,327,019 valid. Strict conflicts
+  in BBCBC, BCBFC, BBCFC; converted to exact certificates. No conflicts found
+  for the five contiguous-bad-block classes, which suggests a conjecture,
+  NOT a theorem. Pure-block variable-azimuth optimization was unsuccessful;
+  many returned candidates violate convexity and establish nothing.
+- n7_switch_insertion_three found the exact integer example in 262 attempts.
+
+Continue substantive work until 22:04 UTC. Suggested next target: prove or
+refute a common product-passing pole for a contiguous block of bad patches;
+this would settle five additional whole symbolic classes. Otherwise review
+new proof boundaries, preserve negative results, and improve presentation.
+At deadline validate, local checkpoint, pause heartbeat, and morning report.
+
+## Earlier checkpoint — all two-inward classes, around 20:30 UTC
 
 BIPYRAMID_ADJACENT.md proves FFCCC / BBCCC for ANYring sizewithonly2bad.
 Currentcount7/15, remaining8are3/4bad. Newlocaltools: Q0safeagainstENTIRE

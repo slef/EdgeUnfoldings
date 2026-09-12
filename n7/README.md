@@ -184,3 +184,11 @@ formal verification of the geometric arguments.
    N7-A1167/N7-A1104 as separate missing lemmas.
 5. Retain the initial overview history and keep graph counts distinct from
    conditional pattern counts, pair counts, and example certificates.
+
+- [Ordered runs](BIPYRAMID_RUNS.html): a conditional theorem for any run length, with exact three- and four-inward applications. Common-pole existence remains open.
+
+- [Source supporting plane](BIPYRAMID_SOURCE_PLANE.html): an any-ring-size theorem for every patch pattern under one geometric half-space condition; nonplanar examples included.
+
+- [Local diagonal-product rule](BIPYRAMID_PRODUCT_RULE.html): a stronger sufficient criterion at inward corners, with exact successful applications and strict conflicts between the two pole choices.
+
+- [Finite-switch insertion](BIPYRAMID_SWITCH_INSERTION.html): a whole tilted-axis family, a bound of twenty candidate slit changes at n=7, and an exact minimum-curvature three-inward example with one change. [Interactive model](bipyramid-switch-demo.html).
