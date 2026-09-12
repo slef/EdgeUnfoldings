@@ -163,6 +163,33 @@ def certificate(q,failed_cut=T,pair=(0,1),witness=None,successful_cut=T_OTHER,ep
     return result
 
 
+
+def corner_six_signs(p):
+    """Certify R6 without evaluating trigonometric functions.
+
+    A negative signed corner of the developed patch proves e6 > pi.
+    The other signs prove beta > pi/2 and 0 < h < pi/2; see A992_CONES.md.
+    """
+    net=develop(p,T)
+    v4,v0,v6=net[2][1],net[2][0],net[2][2]
+    v3=net[1][1]
+    orientation=cross2(sub(v0,v4),sub(v6,v4))
+    if orientation.lo>0:sgn=1
+    elif orientation.hi<0:sgn=-1
+    else:raise ValueError('Patch orientation not certified')
+    inward=-sgn*cross2(sub(v6,v3),sub(v4,v6))
+    obtuse=-dot(sub(p[4],p[3]),sub(p[0],p[3]))
+    u,v,w=sub(p[2],p[4]),sub(p[6],p[4]),sub(p[0],p[4])
+    a,b=dot(u,v),dot(v,w)
+    uv,vw=cross(u,v),cross(v,w)
+    c,d=dot(uv,uv).sqrt(),dot(vw,vw).sqrt()
+    vals={'inward_corner_6':inward,'negative_dot_at_3':obtuse,
+          'cos_h_positive_numerator':a*b-c*d,
+          'sin_h_positive_numerator':c*b+a*d}
+    if any(x.lo<=0 for x in vals.values()):raise ValueError('R6 signs not certified')
+    return {k:x.export() for k,x in vals.items()}
+
+
 def replay_saved():
     """Recompute every geometric sign; saved margins are outputs, never premises."""
     def replay_one(c):
@@ -186,7 +213,10 @@ def replay_saved():
         i,j=r['faces'];seps.append({'faces':[i,j],**separating_axis(good[i],good[j])})
     assert json.loads(json.dumps(audit))==both['successful_pair_audit']
     assert seps==both['residual_separators']
-    return {'certified_overlap_tests':5,'certified_successful_nets':4,
+    sharp=json.loads((ROOT/'results/a992-corner-six-counterexample.json').read_text())
+    p=replay_one(sharp)
+    assert corner_six_signs(p)==sharp['R6_sign_bounds']
+    return {'certified_overlap_tests':6,'certified_successful_nets':5,
             'counterexample_box_parameters':11,'counterexample_box_half_width':first['geometry']['parameter_half_width'],
             'universal_graph_status':'open'}
 

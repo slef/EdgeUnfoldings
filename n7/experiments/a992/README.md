@@ -19,9 +19,15 @@ floating `valid` predicates and tolerances are discovery filters only.
 | `length_search.py` | `a992-length-rule-search.json` |
 | `two_hinges_search.py` | `a992-two-hinges-search.json` |
 | `three_hinges_search.py` | `a992-three-hinges-search.json` |
+| `local_corner_search.py` | `a992-local-corner-search.json` |
+| `conditional_base_search.py` | `a992-conditional-base-search.json` |
 
 Reproducibility means the inputs, seeds, searches, and outputs are available;
 floating optimization may differ with library/platform versions. The exact
 counterexamples were separately rounded to rational parameters and certified.
 Their verifier, `python3 -B -m n7.a992_exact`, replays strict rational inequalities
 without depending on any optimizer result or tolerance.
+
+The [continuation notes](CONTINUATION_NOTES.md) record the projective roof-edge
+split, a potentially useful published truncation theorem, and the precise
+reason a tempting application does not yet finish the proof.

@@ -24,6 +24,7 @@
 </header>
 <h1 id="n7-a992-one-triangle-needs-the-right-attachment">N7-A992: one triangle needs the right attachment</h1>
 <p>12 September 2026. <strong>The whole graph remains open.</strong> The original one-pair reduction is correct, but its proposed fixed cut tree really can overlap. The results below replace that false candidate with a sharper question: <strong>can one of two attachments of triangle 036 always be made safe?</strong></p>
+<p><strong>Latest progress:</strong> a cone proof now confines failure of the first attachment to two explicit geometric regimes. Everything outside them is settled by Left. <a href="#cone-progress">See the case split and what is still missing</a>.</p>
 <p><a href="index.html#N7-A992">Back to the graph map</a> · <a href="ARGUMENTS.html#cofacial-core">General pair lemmas</a> · <a href="results/a992-exact-counterexample.json">Exact certificates</a></p>
 <h2 id="the-shape-and-the-proposed-rule">The shape and the proposed rule</h2>
 <p>Think of this polyhedron as a pentagonal base with a roof. Five roof faces share an edge with the base. Only <strong>one triangle, 036</strong>, has no base edge. Call it <strong>E</strong>. Call the quadrilateral 0324 <strong>Q</strong>, and the base 15246 <strong>P</strong>.</p>
@@ -60,6 +61,49 @@
 </tbody>
 </table>
 <p>Both lists are spanning cut trees. <strong>Left has 20/21 pairs settled; Right has 18/21.</strong> These are universally justified pair counts for those particular trees. They do not mean that the graph proof is 95% or 86% complete.</p>
+<h2 id="cone-progress">New: the first failure has only two possible forms</h2>
+<p>Flatten triangle 046 together with E along their common edge 06. The pair forms one patch. Its shape tells us where a proof is still needed:</p>
+<figure>
+<img src="figures/a992-patch-cases.svg" alt="The joined triangles can form a convex patch, an inward corner at 0, or an inward corner at 6."/>
+<figcaption>
+The sketches show the patch types. The exact conditions below settle all but two restricted regimes. They do not measure a fraction of shape space.
+</figcaption>
+</figure>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Patch type</th>
+<th>Proved for every realization meeting the condition</th>
+<th>Remaining regime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Convex</td>
+<td><strong>Left works</strong></td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td>Inward at 0</td>
+<td><strong>Left works</strong> if <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><msub><mi>κ</mi><mn>0</mn></msub><mo>+</mo><mn>2</mn><msub><mi>q</mi><mn>0</mn></msub><mo>+</mo><msub><mi>κ</mi><mn>4</mn></msub><mo>≥</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">2\kappa_0+2q_0+\kappa_4\ge\pi</annotation></semantics></math></td>
+<td><strong>R0:</strong> a more severe inward angle, exceeding <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>270</mn><mo>∘</mo></msup><mo>+</mo><msub><mi>κ</mi><mn>4</mn></msub><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">270^\circ+\kappa_4/2</annotation></semantics></math></td>
+</tr>
+<tr class="odd">
+<td>Inward at 6</td>
+<td><strong>Left works</strong> if <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>430</mn><mo>≤</mo><msup><mn>90</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">\angle430\le90^\circ</annotation></semantics></math> or <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>246</mn><mo>+</mo><mi>∠</mi><mn>640</mn><mo>≥</mo><msup><mn>90</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">\angle246+\angle640\ge90^\circ</annotation></semantics></math></td>
+<td><strong>R6:</strong> both conditions fail, forcing curvature at 4 above <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>180</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">180^\circ</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+<p>Here <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mn>0</mn></msub><annotation encoding="application/x-tex">q_0</annotation></semantics></math> is Q’s face angle at 0, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>κ</mi><mi>x</mi></msub><annotation encoding="application/x-tex">\kappa_x</annotation></semantics></math> is the curvature at a vertex: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>360</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">360^\circ</annotation></semantics></math> minus the sum of face angles there. Formulas use radians. The R0 regime forces curvature at 4 <strong>below</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>180</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">180^\circ</annotation></semantics></math>; R6 forces it <strong>above</strong>. <strong>At exactly <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>180</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">180^\circ</annotation></semantics></math>, Left always works.</strong></p>
+<p>The proof encloses each end piece in a cone at 4. For an inward corner at 6, a triangle comparison bounds how far the patch can reach. For an inward corner at 0, the cut edge 03 supplies a separating line. This extends a useful idea from the six-vertex work, with the new inequalities proved separately.</p>
+<p><a href="A992_CONES.html">Read the complete cone proof, including equality cases</a>. The second regime really occurs: a <a href="A992_CONES.html#r6-example">new exact example</a> has an inward corner at 6 and Left overlap; Right repairs that shape.</p>
+<p><strong>What this does not yet settle:</strong> for an actual Left failure in R0 or R6, we still need to prove that Right avoids Q, 135, and 235. The page below keeps the earlier exact failures and explains those <a href="#next-lemma">remaining implications</a>.</p>
 <h2 id="counterexample">A real failure, with a real repair</h2>
 <div class="a992-model" data-example="box">
 <svg viewBox="0 0 620 400" role="img" aria-label="Rotatable convex seven-vertex counterexample">
@@ -193,6 +237,7 @@ The highlighted intersection contains the rational point (1.291, −0.132). This
 <details><summary>Keep the experimental history: why the first sample was misleading</summary>
 <p>An initial survey tested 15 distinct cofacial cut trees on 1,200 valid samples, including five previously discovered Left failures. A source-4 candidate had no observed failures. Targeted optimization then found apparent failures for each of its four unresolved pairs. We therefore did not promote that candidate to a theorem.</p>
 <p>A later sample of 1,800 valid shapes found no failure of the longer-edge choice. Targeted optimization found one; it was then converted to the exact certificate linked above. The two-attachment and three-attachment searches also approached nearly flat shapes where floating signs became tiny. These are inconclusive boundary cases, not certified failures or successes.</p>
+<p>A new search deliberately sampled the sharp-4 regime missed by the first sampler. It extended 154 apparent Left failures to the full seven-vertex graph. One became the exact R6 certificate linked above. A second search froze each of 159 local obstructions and varied only vertices 1 and 5, as permitted by the localization lemma. It found no robust joint failure in 2,086 valid extensions. This strengthens the search strategy, not the universal claim; near-zero floating scores remain inconclusive.</p>
 <p>All discovery logs and their scripts are retained separately. None is used as a premise of a positive proof.</p>
 </details>
 <h2 id="localization">A useful proved reduction: only five vertices cause the first obstruction</h2>
@@ -208,24 +253,34 @@ The highlighted intersection contains the rational point (1.291, −0.132). This
 <p><strong>Two-attachment conjecture.</strong> For every convex realization of N7-A992, if Left has interior overlap, then Right has no interior overlap.</p>
 </blockquote>
 <p>By the universal pair reductions, its entire missing content is the following three implications. Here “Left fails” means its Q and E have intersecting interiors.</p>
+<p>The cone theorem lets us split each implication into R0 and R6. These six cells are explicit proof obligations; none of them is being marked solved because a finite search found no counterexample.</p>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th>Implication under the assumption “Left fails”</th>
-<th>Status</th>
+<th>Under actual Left overlap</th>
+<th>R0: severe inward corner at 0</th>
+<th>R6: inward at 6, sharp vertex 4</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Right keeps E disjoint from Q</td>
 <td>Open</td>
+<td>Open</td>
 </tr>
 <tr class="even">
 <td>Right keeps E disjoint from triangle 135</td>
 <td>Open</td>
+<td>Open</td>
 </tr>
 <tr class="odd">
 <td>Right keeps E disjoint from triangle 235</td>
+<td>Open</td>
 <td>Open</td>
 </tr>
 </tbody>

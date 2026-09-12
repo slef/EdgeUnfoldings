@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 330" role="img" aria-labelledby="title desc">
+<title id="title">Three flattened patch shapes</title>
+<desc id="desc">Blue triangle 046 and coral triangle 036 joined along 06; dashed rays enclose each patch at vertex 4. Explanatory planar sketches, not certified polyhedra.</desc>
+<rect width="960" height="330" fill="#fafbf8"/>
+<style>text{font-family:system-ui,sans-serif;fill:#243d4c}.title{font-size:18px;font-weight:650}.label{font-size:17px;font-weight:650}.note{font-size:14px;fill:#60707a}</style>
+<text class="title" x="160" y="34" text-anchor="middle">Convex patch</text>
+<path d="M44.00,229.00 L232.00,229.00" stroke="#81949d" stroke-dasharray="5 4" stroke-width="2"/>
+<path d="M44.00,229.00 L146.70,126.30" stroke="#81949d" stroke-dasharray="5 4" stroke-width="2"/>
+<polygon points="44.00,229.00 218.00,229.00 136.80,136.20" fill="#acd2df" fill-opacity=".82" stroke="#506674" stroke-width="1.7" stroke-linejoin="round"/>
+<polygon points="218.00,229.00 276.00,113.00 136.80,136.20" fill="#edb1a0" fill-opacity=".82" stroke="#506674" stroke-width="1.7" stroke-linejoin="round"/>
+<circle cx="44.00" cy="229.00" r="3" fill="#324d5c"/>
+<text class="label" x="32.00" y="247.00" text-anchor="middle">4</text>
+<circle cx="218.00" cy="229.00" r="3" fill="#324d5c"/>
+<text class="label" x="218.00" y="252.00" text-anchor="middle">0</text>
+<circle cx="136.80" cy="136.20" r="3" fill="#324d5c"/>
+<text class="label" x="121.80" y="128.20" text-anchor="middle">6</text>
+<circle cx="276.00" cy="113.00" r="3" fill="#324d5c"/>
+<text class="label" x="287.00" y="105.00" text-anchor="middle">3</text>
+<text class="note" x="160" y="302" text-anchor="middle">Left is always safe here</text>
+<text class="title" x="480" y="34" text-anchor="middle">Inward corner at 0</text>
+<path d="M320,55 V285" stroke="#dde4e1"/>
+<path d="M364.00,184.92 L609.73,234.07" stroke="#81949d" stroke-dasharray="5 4" stroke-width="2"/>
+<path d="M364.00,184.92 L448.14,100.78" stroke="#81949d" stroke-dasharray="5 4" stroke-width="2"/>
+<polygon points="364.00,184.92 503.20,184.92 438.24,110.68" fill="#acd2df" fill-opacity=".82" stroke="#506674" stroke-width="1.7" stroke-linejoin="round"/>
+<polygon points="503.20,184.92 596.00,231.32 438.24,110.68" fill="#edb1a0" fill-opacity=".82" stroke="#506674" stroke-width="1.7" stroke-linejoin="round"/>
+<circle cx="364.00" cy="184.92" r="3" fill="#324d5c"/>
+<text class="label" x="352.00" y="202.92" text-anchor="middle">4</text>
+<circle cx="503.20" cy="184.92" r="4.4" fill="#b7413a"/>
+<text class="label" x="503.20" y="207.92" text-anchor="middle">0</text>
+<circle cx="438.24" cy="110.68" r="3" fill="#324d5c"/>
+<text class="label" x="423.24" y="102.68" text-anchor="middle">6</text>
+<circle cx="596.00" cy="231.32" r="3" fill="#324d5c"/>
+<text class="label" x="607.00" y="223.32" text-anchor="middle">3</text>
+<text class="note" x="480" y="302" text-anchor="middle">Only the severe-angle part remains</text>
+<text class="title" x="800" y="34" text-anchor="middle">Inward corner at 6</text>
+<path d="M640,55 V285" stroke="#dde4e1"/>
+<path d="M737.00,255.00 L877.00,255.00" stroke="#81949d" stroke-dasharray="5 4" stroke-width="2"/>
+<path d="M737.00,255.00 L750.65,73.04" stroke="#81949d" stroke-dasharray="5 4" stroke-width="2"/>
+<polygon points="737.00,255.00 863.00,255.00 781.10,194.10" fill="#acd2df" fill-opacity=".82" stroke="#506674" stroke-width="1.7" stroke-linejoin="round"/>
+<polygon points="863.00,255.00 749.60,87.00 781.10,194.10" fill="#edb1a0" fill-opacity=".82" stroke="#506674" stroke-width="1.7" stroke-linejoin="round"/>
+<circle cx="737.00" cy="255.00" r="3" fill="#324d5c"/>
+<text class="label" x="725.00" y="273.00" text-anchor="middle">4</text>
+<circle cx="863.00" cy="255.00" r="3" fill="#324d5c"/>
+<text class="label" x="863.00" y="278.00" text-anchor="middle">0</text>
+<circle cx="781.10" cy="194.10" r="4.4" fill="#b7413a"/>
+<text class="label" x="797.10" y="199.10" text-anchor="middle">6</text>
+<circle cx="749.60" cy="87.00" r="3" fill="#324d5c"/>
+<text class="label" x="760.60" y="79.00" text-anchor="middle">3</text>
+<text class="note" x="800" y="302" text-anchor="middle">Only the sharp-4 part remains</text>
+</svg>

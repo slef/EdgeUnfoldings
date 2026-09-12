@@ -8,8 +8,8 @@ from n7.a992_exact import I,S,ROOT,T,T_OTHER,certificate,geometry,develop,inside
 class A992Checks(unittest.TestCase):
     def test_exact_certificates_replay(self):
         r=replay_saved()
-        self.assertEqual(r['certified_overlap_tests'],5)
-        self.assertEqual(r['certified_successful_nets'],4)
+        self.assertEqual(r['certified_overlap_tests'],6)
+        self.assertEqual(r['certified_successful_nets'],5)
         self.assertEqual(r['universal_graph_status'],'open')
     def test_invalid_or_uncertain_certificates_are_rejected(self):
         c=json.loads((ROOT/'results/a992-exact-counterexample.json').read_text())
@@ -36,6 +36,15 @@ class A992Checks(unittest.TestCase):
                 target=sum((exact[f[i]][k]-exact[f[j]][k])**2 for k in range(3))
                 got=sum((poly[i][k].mid()-poly[j][k].mid())**2 for k in range(2))
                 self.assertAlmostEqual(got,float(target),places=11)
+    def test_corner_six_requires_all_four_certified_signs(self):
+        from n7.a992_exact import corner_six_signs
+        c=json.loads((ROOT/'results/a992-corner-six-counterexample.json').read_text())
+        p,_=geometry(c['geometry']['parameters'])
+        self.assertEqual(corner_six_signs(p),c['R6_sign_bounds'])
+        other=json.loads((ROOT/'results/a992-exact-counterexample.json').read_text())
+        p,_=geometry(other['geometry']['parameters'])
+        with self.assertRaises(ValueError):corner_six_signs(p)
+
     def test_outward_rounding_of_nonlinear_arithmetic(self):
         def contains(i,x):return F(i.lo,S)<=x<=F(i.hi,S)
         for a,b in itertools.product([F(-7,3),F(-1,7),F(2,3),F(11,13)],repeat=2):
