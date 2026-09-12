@@ -23,7 +23,7 @@
 <h1 class="title">N7-A992: the R0 repair lemma</h1>
 </header>
 <h1 id="n7-a992-one-repair-obligation-is-now-proved">N7-A992: one repair obligation is now proved</h1>
-<p><strong>Written geometric proof, 12 September 2026.</strong> In the severe inward-corner regime R0, Right keeps triangle E = 036 disjoint from triangle 135. The whole graph remains open: Right versus Q and Right versus 235 still need proofs in R0, and the three R6 obligations remain open.</p>
+<p><strong>Written geometric proof, 12 September 2026.</strong> In the severe inward-corner regime R0, Right keeps triangle E = 036 disjoint from triangle 135. The whole graph remains open. A later <a href="A992_BASE_EDGES.html">base-edge extension proof</a> settles E/235 for converging and parallel hinges in R0; E/Q and the divergent E/235 case remain open there, as do the three R6 obligations.</p>
 <p><a href="A992.html#next-lemma">Back to the illustrated case</a> · <a href="A992_CONES.html">The earlier cone split</a> · <a href="index.html#N7-A992">Seven-vertex overview</a></p>
 <h2 id="result">What changed</h2>
 <p>The first attachment’s possible failures were already confined to R0 and R6. R0 forces both angles at vertex 0 in triangles 046 and 036 to be obtuse. We can now use just one of those consequences:</p>
@@ -52,7 +52,7 @@
 </tr>
 <tr class="odd">
 <td>E avoids 235</td>
-<td>Open</td>
+<td><a href="A992_BASE_EDGES.html">Partial: converging or parallel hinges</a></td>
 <td>Open</td>
 </tr>
 </tbody>
@@ -143,7 +143,7 @@ An illustrative triangular bipyramid for the general lemma, with an obtuse angle
 <p>Every term on the right is nonnegative, with L, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math> strictly positive, because <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mo>≥</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\nu\ge\pi/2</annotation></semantics></math>. This contradicts (1). It settles the narrow-fan branch and completes the theorem. □</p>
 <h2 id="scope">Scope and next step</h2>
 <p>The proof used only a convex triangular bipyramid and an angle of at least <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\pi/2</annotation></semantics></math> at one pole in the chosen petal. It proves that petal is disjoint from the opposite fan face for the stated slit; the other two fan faces are already safe by shared-vertex paths. It does <strong>not</strong> prove that all petals of an arbitrary triangular bipyramid are mutually disjoint.</p>
-<p>For A992, the auxiliary hull is a comparison only. The final net remains Right with cuts <strong>03, 04, 06, 13, 23, 35</strong>. No new diagonal is cut. R0 has <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>603</mn><mo>&gt;</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\angle603&gt;\pi/2</annotation></semantics></math>, so this closes its E/135 obligation outright. The next targets are E/Q and E/235; no universal conclusion about either is being inferred from this proof.</p>
+<p>For A992, the auxiliary hull is a comparison only. The final net remains Right with cuts <strong>03, 04, 06, 13, 23, 35</strong>. No new diagonal is cut. R0 has <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>603</mn><mo>&gt;</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\angle603&gt;\pi/2</annotation></semantics></math>, so this closes its E/135 obligation outright. The subsequent <a href="A992_BASE_EDGES.html">base-edge proof</a> uses this theorem to settle E/235 in the converging and parallel subcases. E/Q and the divergent E/235 case are the remaining R0 targets.</p>
 <p>The equal-copy containment idea is related to the earlier six-vertex chord argument, but the local containment premises and the new positive identity are established above. The n6 theorem and its Lean files are not modified or assumed as black boxes.</p>
 <p>The identity was found with linear exploration of angle constraints and then reduced to the three displayed equations. Its proof is that algebraic expansion and positivity, not the outcome of the optimizer. Numerical searches used during discovery are retained separately and are not proof premises. This is a written research argument with a boundary audit, not a Lean formalization or an independently reviewed proof.</p>
 <p>The <a href="results/a992-r0-angle-identity.json">integer coefficient check</a> expands the final identity exactly. Run <code>python3 -B -m n7.r0_identity</code> to replay it. This verifies the algebraic step; the containment and convexity arguments remain the written geometric proof above.</p>

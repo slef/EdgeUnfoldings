@@ -1,7 +1,9 @@
 # N7-A992: a proved split of the first obstruction
 
 12 September 2026. **Conditional geometric theorem; the whole graph remains open.**
-A subsequent [repair lemma](A992_R0.html) closes the E/135 obligation in R0.
+A subsequent [repair lemma](A992_R0.html) closes the E/135 obligation in R0,
+and a [base-edge extension](A992_BASE_EDGES.html) settles E/235 in its
+converging and parallel subcases.
 This argument proves that the Left unfolding works except in two explicitly
 described regimes. It does not yet prove that Right repairs those regimes.
 No sampling or interval certificate is a premise of the theorem.

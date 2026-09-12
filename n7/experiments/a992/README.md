@@ -25,6 +25,9 @@ floating `valid` predicates and tolerances are discovery filters only.
 | `obtuse_petal_survey.py` | `a992-obtuse-petal-survey.json` |
 | `unrestricted_petal_survey.py` | `a992-unrestricted-petal-survey.json` |
 | `obtuse_petal_target_search.py` | `a992-obtuse-petal-target-search.json` |
+| `e235_obtuse_search.py` | `a992-e235-obtuse-search.json` |
+| `e235_voronoi_search.py` | `a992-e235-voronoi-search.json` |
+| `make_base_edge_examples.py` | `a992-base-edge-examples.json` (all signs checked exactly) |
 | `r0_identity_discovery.py` | Prints a numerical linear-program dual; the exact check is `n7.r0_identity` |
 
 Reproducibility means the inputs, seeds, searches, and outputs are available;
@@ -39,3 +42,6 @@ reason a tempting application does not yet finish the proof.
 
 The [R0 continuation notes](R0_RESEARCH.md) explain the failed separator
 shortcuts and how the searches led to a separate positive geometric proof.
+
+The [base-edge continuation notes](BASE_EDGE_RESEARCH.md) explain the new
+converging/parallel proof and the remaining divergent family.

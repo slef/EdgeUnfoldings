@@ -2,8 +2,8 @@
 
 Start with the [overview](index.html), the [arguments](ARGUMENTS.md), or the
 [bipyramid patch proofs](BIPYRAMID_PATCHES.md), the dedicated [A992 case](A992.md),
-its [cone proof](A992_CONES.md), or the new [R0 repair lemma](A992_R0.md).
-The HTML versions of the five
+its [cone proof](A992_CONES.md), the [R0 repair lemma](A992_R0.md), or the
+[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the six
 proof documents contain rendered mathematics and work without network access.
 
 **Current result:** 34 graph types, 10 whole graph cases covered by established
@@ -16,7 +16,10 @@ hinge choices together, and a longer-edge heuristic. A full-dimensional
 obstruction localizes to a five-vertex pyramid; the two-attachment conjecture
 has three kinds of conditional pair implications. The new [cone proof](A992_CONES.md)
 confines any Left failure to two explicit regimes. The [R0 repair lemma](A992_R0.md)
-now proves E/135 throughout R0; the other five conditional implications remain open.
+now proves E/135 throughout R0. The [base-edge extension](A992_BASE_EDGES.md)
+also settles E/235 there when the two relevant hinges converge or are parallel.
+Only E/Q remains in that family; divergent E/235 and all three R6 implications
+remain open. Five of the six original cells are still not completely proved.
 New arguments are under self-review. Numerical experiments and individual
 coordinate certificates are never universal-proof premises.
 
@@ -38,7 +41,7 @@ this initial overview is a local research page.
 ## Reproduce
 
 Dependencies are listed in `requirements.txt`. Run from the worktree root,
-with a Python environment containing them. The build of the five reading
+with a Python environment containing them. The build of the six reading
 pages additionally needs Pandoc on the command path.
 
 ```sh
@@ -50,6 +53,8 @@ python3 -B -m n7.a992_cone_figures
 python3 -B -m n7.r0_identity
 python3 -B -m n7.r0_examples
 python3 -B -m n7.r0_figures
+python3 -B -m n7.base_edge_examples
+python3 -B -m n7.base_edge_figures
 python3 -B -m n7.build_overview
 python3 -B -m unittest discover -s n7/tests -v
 node n7/tests/overview.cjs
@@ -66,6 +71,7 @@ and explicit bijection of its 34 outputs to our catalogue are retained in
 | --- | --- |
 | `ARGUMENTS.md` | Complete graph decomposition; universal edge-star and dome cases; general cofacial-core proof; next targets |
 | `BIPYRAMID_PATCHES.md` | Patch-family proofs, a general local Lemma L with explicit hypotheses, and the remaining pattern partition |
+| `A992_BASE_EDGES.md` | E/235 proved for obtuse E and converging or parallel base hinges; divergent family still open |
 | `A992_R0.md` | Obtuse-petal proof closing E/135 throughout R0; five conditional obligations remain |
 | `r0_identity.py` | Exact coefficient check of the new positive angle identity |
 | `A992_CONES.md` | Geometric proof settling Left outside two explicit obstruction regimes; exact sharp-4 example |
@@ -92,7 +98,7 @@ formal verification of the geometric arguments.
 ## Next session
 
 1. Read `A992.md#next-lemma`. The fixed source-3 rule is refuted; do not
-   restart its universal proof. Read `A992_CONES.md` and `A992_R0.md`. Work on E/Q or E/235 in R0,
+   restart its universal proof. Read `A992_CONES.md`, `A992_R0.md`, and `A992_BASE_EDGES.md`. Work on E/Q in R0, E/235 with divergent hinges,
    or one of the three remaining R6 implications
    for the Left-to-Right triangle attachment, using the five-vertex
    localization of the initial obstruction.

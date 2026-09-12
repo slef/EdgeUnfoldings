@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>N7-A992: converging and parallel hinges</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body class="reading"><p class="back"><a href="index.html">← Seven-vertex overview</a></p>
+<header id="title-block-header">
+<h1 class="title">N7-A992: converging and parallel hinges</h1>
+</header>
+<h1 id="n7-a992-a-second-r0-obligation-now-has-a-proved-subcase">N7-A992: a second R0 obligation now has a proved subcase</h1>
+<p><strong>Written geometric proof, 12 September 2026.</strong> Right keeps E = 036 away from triangle 235 whenever E’s angle at 0 is at least 90° and the two relevant base edges converge, or are parallel, when extended. This settles a whole additional geometric family inside R0. The divergent-edge family and the complete graph remain open.</p>
+<p><a href="A992.html#next-lemma">Back to the case table</a> · <a href="A992_R0.html">The obtuse-petal proof used here</a> · <a href="index.html#N7-A992">Seven-vertex overview</a></p>
+<h2 id="idea">The geometric idea</h2>
+<p>The previous E/135 proof worked inside a triangular bipyramid on five vertices. E/235 initially seems harder: its path crosses a quadrilateral inside the pentagonal base, so the relevant hinges no longer meet.</p>
+<p>But sometimes their <strong>extensions</strong> meet. Extend edge 61 beyond 1 and edge 25 beyond 5. If they meet at a point x, the relevant base quadrilateral fits inside triangle <strong>x62</strong>. The roof triangles 136 and 235 fit inside the larger triangles <strong>x36</strong> and <strong>x23</strong>. The old five-vertex lemma can then be applied to these larger triangles. Disjoint larger pieces imply disjoint original pieces.</p>
+<p>This is a comparison construction. Vertex x and all added segments belong only to the proof. The final unfolding still uses the six original Right cuts <strong>03, 04, 06, 13, 23, 35</strong>.</p>
+<figure>
+<img src="figures/a992-base-edge-regimes.svg" alt="Converging, parallel, and diverging extensions of the two base hinges; the first two cases are proved and the third remains open."/>
+<figcaption>
+Schematic base quadrilaterals, viewed from above. Dashed lines extend the hinges. In the converging case, the larger triangle is a comparison surface; the original pentagon’s vertex 4 is outside this reduced picture.
+</figcaption>
+</figure>
+<h2 id="cases">Exactly which cases this settles</h2>
+<p>Set</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mi>∠</mi><mn>162</mn><mo>,</mo><mspace width="2.0em"></mspace><mi>β</mi><mo>=</mo><mi>∠</mi><mn>625</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\alpha=\angle162,\qquad \beta=\angle625,</annotation></semantics></math></p>
+<p>both measured in the base plane. These are the two angles next to diagonal 26 in the strictly convex quadrilateral <strong>6152</strong>. Each lies in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>π</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,\pi)</annotation></semantics></math>.</p>
+<blockquote>
+<p><strong>Base-edge extension theorem.</strong> For every convex realization of N7-A992, if <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>603</mn><mo>≥</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\angle603\ge\pi/2</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>≤</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta\le\pi</annotation></semantics></math>, then E and triangle 235 have disjoint interiors in Right.</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Base-edge geometry</th>
+<th>Angle test</th>
+<th>E/235, when <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>603</mn><mo>≥</mo><msup><mn>90</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">\angle603\ge90^\circ</annotation></semantics></math></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Extensions meet beyond 1 and 5</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>&lt;</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta&lt;\pi</annotation></semantics></math></td>
+<td><strong>Proved by the larger bipyramid</strong></td>
+</tr>
+<tr class="even">
+<td>Extensions are parallel</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>=</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta=\pi</annotation></semantics></math></td>
+<td><strong>Proved by continuity</strong></td>
+</tr>
+<tr class="odd">
+<td>Extensions diverge</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>&gt;</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta&gt;\pi</annotation></semantics></math></td>
+<td><strong>Open</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The test can also be made without evaluating angles. Orient the base plane so that 6, 1, 5, 2 occur counterclockwise, and put</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mo>=</mo><mo>det</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>p</mi><mn>1</mn></msub><mo>−</mo><msub><mi>p</mi><mn>6</mn></msub><mo>,</mo><mspace width="0.222em"></mspace><msub><mi>p</mi><mn>5</mn></msub><mo>−</mo><msub><mi>p</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\Delta=\det(p_1-p_6,\ p_5-p_2).</annotation></semantics></math></p>
+<p>Then <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\Delta&lt;0</annotation></semantics></math> means converging, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\Delta=0</annotation></semantics></math> means parallel, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\Delta&gt;0</annotation></semantics></math> means diverging. Indeed the directed angle between the two ray directions is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>−</mo><mi>π</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mo>−</mo><mi>π</mi><mo>,</mo><mi>π</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\alpha+\beta-\pi\in(-\pi,\pi)</annotation></semantics></math>, so its sine has the sign of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>−</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta-\pi</annotation></semantics></math>.</p>
+<p>R0 already forces <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>603</mn><mo>&gt;</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\angle603&gt;\pi/2</annotation></semantics></math>, so the extra test there is simply <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>≤</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta\le\pi</annotation></semantics></math>. This is a <strong>partial closure of the E/235 obligation</strong>, not a second completely closed cell in the original six-cell table.</p>
+<p>The original six-cell count is still <strong>one completely proved obligation and five not yet completely proved</strong>. One of those five now has the explicit proved subcase above. In this R0 subcase, Right has <strong>20 of 21 pairs settled</strong>; only E/Q remains. More explicitly:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Obligation</th>
+<th>R0</th>
+<th>R6</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>E avoids Q</td>
+<td>Open</td>
+<td>Open</td>
+</tr>
+<tr class="even">
+<td>E avoids 135</td>
+<td><strong>Proved throughout R0</strong></td>
+<td>Open</td>
+</tr>
+<tr class="odd">
+<td>E avoids 235</td>
+<td><strong>Proved for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>≤</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta\le\pi</annotation></semantics></math></strong>; divergent case open</td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+<p>No fraction of shape space or proof effort is being inferred from this table.</p>
+<h2 id="localization">1. Localize the pair without changing its placement</h2>
+<p>The hinge path in Right is</p>
+<p><strong>036 → 136 → P → 235</strong>, across <strong>36, 16, and 25</strong>.</p>
+<p>Replace P by its internal quadrilateral <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mo>=</mo><mo>conv</mo><mo stretchy="false" form="prefix">{</mo><mn>6</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>5</mn><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">B=\operatorname{conv}\{6,1,5,2\}</annotation></semantics></math>. The hinges 16 and 25 remain in the same relative position. The pair’s placement is unchanged. The discarded base triangle 246 and vertex 4 are not used in this placement argument.</p>
+<p>In the following proof x is a new point in the base plane. It is not one of the seven original vertices.</p>
+<h2 id="bipyramid">2. The converging case gives a genuine convex bipyramid</h2>
+<p>Suppose <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>&lt;</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta&lt;\pi</annotation></semantics></math>. Elementary planar geometry of the convex quadrilateral gives an intersection</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><msub><mi>p</mi><mn>6</mn></msub><mo>+</mo><mi>t</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>p</mi><mn>1</mn></msub><mo>−</mo><msub><mi>p</mi><mn>6</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>p</mi><mn>2</mn></msub><mo>+</mo><mi>s</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>p</mi><mn>5</mn></msub><mo>−</mo><msub><mi>p</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>t</mi><mo>&gt;</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><mi>s</mi><mo>&gt;</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">x=p_6+t(p_1-p_6)=p_2+s(p_5-p_2),\qquad t&gt;1,\quad s&gt;1.</annotation></semantics></math></p>
+<p>Thus 1 is strictly between 6 and x, and 5 strictly between 2 and x. In particular <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mo>⊂</mo><mi>△</mi><mi>x</mi><mn>62</mn></mrow><annotation encoding="application/x-tex">B\subset\triangle x62</annotation></semantics></math>.</p>
+<p>The convex hull of <strong>0, 3, 6, 2, x</strong> is a triangular bipyramid with poles 0 and x and equator 362. Its six facets are</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>036</mn><mo>,</mo><mspace width="1.0em"></mspace><mn>062</mn><mo>,</mo><mspace width="1.0em"></mspace><mn>023</mn><mo>,</mo><mspace width="2.0em"></mspace><mi>x</mi><mn>36</mn><mo>,</mo><mspace width="1.0em"></mspace><mi>x</mi><mn>62</mn><mo>,</mo><mspace width="1.0em"></mspace><mi>x</mi><mn>23</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">036,\quad 062,\quad 023,\qquad x36,\quad x62,\quad x23.</annotation></semantics></math></p>
+<p>Here is the supporting-plane check; convexity of this auxiliary solid is part of the proof, not an assumption.</p>
+<ul>
+<li>Plane x36 is the original plane 136. It supports 0 and 2 strictly. Plane x23 is the original plane 235 and supports 0 and 6 strictly.</li>
+<li>Plane x62 is the base plane and supports 0 and 3 strictly.</li>
+<li>Plane 036 supports 2 strictly. Since <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>−</mo><mn>6</mn><mo>=</mo><mi>t</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>6</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">x-6=t(1-6)</annotation></semantics></math> with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t&gt;0</annotation></semantics></math>, it supports x on the same strict side as original vertex 1.</li>
+<li>Plane 023 is the original plane of Q. It supports 6 strictly. Since <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>−</mo><mn>2</mn><mo>=</mo><mi>s</mi><mo stretchy="false" form="prefix">(</mo><mn>5</mn><mo>−</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">x-2=s(5-2)</annotation></semantics></math> with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">s&gt;0</annotation></semantics></math>, it supports x on the same strict side as 5.</li>
+<li>For plane 026, the intersection with the base plane is line 26. Vertices 1 and 5, and hence x, lie on the same side of that line; vertex 4 lies on the opposite side, by strict convexity of the original pentagon. Diagonal 02 of Q puts 3 and 4 on opposite sides of plane 026. Therefore 3 and x lie on the same strict side of plane 026.</li>
+</ul>
+<p>All six listed triangles are nondegenerate and strictly supporting. They close into the stated triangular bipyramid. Equivalently, each listed triangle is a facet of the hull, and a five-vertex convex three-polytope has at most six facets, so no additional facet is missing.</p>
+<h2 id="application">3. Apply the proved obtuse-petal theorem</h2>
+<p>Unfold the three faces <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mn>36</mn><mo>,</mo><mi>x</mi><mn>62</mn><mo>,</mo><mi>x</mi><mn>23</mn></mrow><annotation encoding="application/x-tex">x36,x62,x23</annotation></semantics></math> into a fan at x, with slit x3. Attach 036 along 36. This is precisely the placement in the <a href="A992_R0.html#setup">obtuse-petal theorem</a>, with labels</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="1.0em"></mspace><mi>w</mi><mo>=</mo><mi>x</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>a</mi><mo>=</mo><mn>3</mn><mo>,</mo><mspace width="1.0em"></mspace><mi>c</mi><mo>=</mo><mn>6</mn><mo>,</mo><mspace width="1.0em"></mspace><mi>d</mi><mo>=</mo><mn>2</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">v=0,\quad w=x,\quad a=3,\quad c=6,\quad d=2.</annotation></semantics></math></p>
+<p>The hypothesis on the petal is unchanged: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>603</mn><mo>≥</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\angle603\ge\pi/2</annotation></semantics></math>. The theorem makes <strong>036 disjoint from the whole triangle x23</strong>.</p>
+<p>To identify the original placement, first align the large base triangle x62 with B in the original base plane. Triangle 136 is a subtriangle of x36, with its hinge 16 on the same line as x6. Both are developed outward from the same base half-plane. Likewise triangle 235 is a subtriangle of x23, with hinge 25 on the line x2. These observations identify the placements without any additional rotation or hinge change.</p>
+<p>Attaching E across 36 consequently gives its exact Right placement. Since <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>235</mn><mo>⊂</mo><mi>x</mi><mn>23</mn></mrow><annotation encoding="application/x-tex">235\subset x23</annotation></semantics></math>, its interior cannot intersect E’s interior. This proves the strict converging case.</p>
+<h2 id="parallel">4. Include parallel hinges</h2>
+<p>Now suppose <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>=</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta=\pi</annotation></semantics></math>. The two outward rays are parallel, so there is no finite x to insert into the preceding proof.</p>
+<p>Keep vertices 0, 1, 2, 3, 4, and 6 fixed. Rotate the ray from 2 toward 5 slightly toward ray 26, keeping the length 25 fixed. This decreases beta. For all sufficiently small positive rotations, all strict support and corner inequalities of the original polyhedron remain strict. Both polygon planarity constraints remain exact: 5 stays in the base plane and Q is unchanged. Thus these nearby shapes still realize the same graph and satisfy <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>&lt;</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\alpha+\beta&lt;\pi</annotation></semantics></math>.</p>
+<p>E’s angle at 0 is unchanged, so the strict converging theorem applies to every member of this approximating sequence. The developed faces vary continuously with their coordinates because all relevant hinge lengths and face areas stay positive.</p>
+<p>Disjointness of interiors passes to this limit. If the two limit triangles had an interior intersection, a point strictly inside both would remain strictly inside both for all sufficiently close shapes, contradicting the proved nonoverlap. Boundary contact is allowed. This proves the parallel case, including <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∠</mi><mn>603</mn><mo>=</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\angle603=\pi/2</annotation></semantics></math>.</p>
+<h2 id="examples">Exact examples and the remaining obstruction</h2>
+<p>The <a href="results/a992-base-edge-examples.json">saved rational certificates</a> include two shapes with the same local Left obstruction. Both have <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>2</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p_2=(0,0,0)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>4</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p_4=(1,0,0)</annotation></semantics></math>,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>6</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1.8</mn><mo>,</mo><mn>.2</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>p</mi><mn>3</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mo>−</mo><mn>1.2</mn><mo>,</mo><mn>1.7</mn><mo>,</mo><mn>1.1</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1.34</mn><mo>,</mo><mn>.085</mn><mo>,</mo><mn>.055</mn><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">p_6=(1.8,.2,0),\quad p_3=(-1.2,1.7,1.1),\quad
+  p_0=(1.34,.085,.055).</annotation></semantics></math></p>
+<p>Terminating decimals here denote exact rationals. Their remaining vertices are:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Case</th>
+<th>Vertex 1</th>
+<th>Vertex 5</th>
+<th>Intersection x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Converging</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>.75</mn><mo>,</mo><mn>.4</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(.75,.4,0)</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mo>−</mo><mn>.15</mn><mo>,</mo><mn>.3</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-.15,.3,0)</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mo>−</mo><mn>.3</mn><mo>,</mo><mn>.6</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-.3,.6,0)</annotation></semantics></math>, with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mi>s</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">t=s=2</annotation></semantics></math></td>
+</tr>
+<tr class="even">
+<td>Parallel</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>.8</mn><mo>,</mo><mn>.8</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(.8,.8,0)</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mn>.6</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-1,.6,0)</annotation></semantics></math></td>
+<td>No finite intersection</td>
+</tr>
+</tbody>
+</table>
+<p>Each certificate checks all original facets, strict Left overlap and an inward corner at 0, and strict separation of all three residual Right pairs. The earlier cone theorem therefore places each example in R0. The new checker also verifies the obtuse angle and the exact determinant classifying the hinges. For the converging example it checks all six auxiliary supporting planes with rational arithmetic. These finite checks exercise the theorem; they are not its universal proof.</p>
+<p>The old <a href="A992.html#counterexample">counterexample</a> has divergent hinges and actual Left overlap in R0. It lies in the still-open family, although Right is independently certified safe for that particular shape. Thus the remaining family is nonempty, and this result does not settle the complete R0 repair.</p>
+<p>Run <code>python3 -B -m n7.base_edge_examples</code> to replay the new certificates. The geometric proof is a research manuscript under self-review; it has not been formalized in Lean or independently reviewed.</p>
+</body>
+</html>
