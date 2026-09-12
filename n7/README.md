@@ -1,13 +1,18 @@
 # Seven-vertex unfolding investigation
 
 Start with the [overview](index.html), the [arguments](ARGUMENTS.md), or the
-[bipyramid patch proofs](BIPYRAMID_PATCHES.md). The HTML versions of the two
+[bipyramid patch proofs](BIPYRAMID_PATCHES.md), or the dedicated [A992 case](A992.md). The HTML versions of the three
 proof documents contain rendered mathematics and work without network access.
 
 **Current result:** 34 graph types, 10 whole graph cases covered by established
 theorems, 24 open. Twenty of the open types have a cofacial-core reduction.
 For the pentagonal bipyramid, three of 15 necessary symbolic pattern classes
 have written conditional existence proofs; the full graph remains open.
+For N7-A992, exact certificates refute the first fixed rule, both source-3
+hinge choices together, and a longer-edge heuristic. A full-dimensional
+11-parameter family is repaired by the new triangle attachment. The first
+obstruction localizes to a five-vertex pyramid; the two-attachment conjecture
+still has three conditional pair implications open.
 New arguments are under self-review. Numerical experiments and individual
 coordinate certificates are never universal-proof premises.
 
@@ -29,12 +34,14 @@ this initial overview is a local research page.
 ## Reproduce
 
 Dependencies are listed in `requirements.txt`. Run from the worktree root,
-with a Python environment containing them. The build of the two reading
+with a Python environment containing them. The build of the three reading
 pages additionally needs Pandoc on the command path.
 
 ```sh
 python3 -B -m n7.catalogue --scan-trees
 python3 -B -m n7.checks
+python3 -B -m n7.a992_exact
+python3 -B -m n7.a992_figures
 python3 -B -m n7.build_overview
 python3 -B -m unittest discover -s n7/tests -v
 node n7/tests/overview.cjs
@@ -51,6 +58,10 @@ and explicit bijection of its 34 outputs to our catalogue are retained in
 | --- | --- |
 | `ARGUMENTS.md` | Complete graph decomposition; universal edge-star and dome cases; general cofacial-core proof; next targets |
 | `BIPYRAMID_PATCHES.md` | Patch-family proofs, a general local Lemma L with explicit hypotheses, and the remaining pattern partition |
+| `A992.md` | Exact failures, a five-vertex localization proof, and the three open implications of the two-attachment conjecture |
+| `a992_exact.py` | Strict rational interval replay of overlap and successful repair certificates |
+| `a992.py`, `a992_figures.py` | Floating discovery and figures; never proof predicates |
+| `experiments/a992/` | Reproducible archived searches and their limitations |
 | `catalogue.py` | Atlas filtering, original facet cycles, all cut trees, and finite pair-reduction witnesses |
 | `checks.py` | Independent tree counts, plantri matching, rational interval example, and exact symbolic-pattern census |
 | `build_overview.py` | Offline graph diagrams, summary page, and mathematical reading pages |
@@ -60,7 +71,7 @@ and explicit bijection of its 34 outputs to our catalogue are retained in
 | `results/acute-bipyramid-box.json` | Exact hypotheses for one 21-coordinate box, not the whole graph |
 | `results/validation.json` | 276 saved candidate audits replayed; 25,942 trees independently counted |
 
-The nine focused Python tests cover enumeration, nonisomorphic graphs with
+The focused Python tests cover enumeration, nonisomorphic graphs with
 identical degrees, witness replay and rejection, the one-pair target, patch
 counts, the exact box, every page link, and graph drawing crossings. The
 separate script checks overview filters, cut visibility, and deep links.
@@ -69,8 +80,10 @@ formal verification of the geometric arguments.
 
 ## Next session
 
-1. Read the single unresolved pair for N7-A992: quadrilateral 0324 against
-   triangle 036 in source-3 candidate with added cut 04.
+1. Read `A992.md#next-lemma`. The fixed source-3 rule is refuted; do not
+   restart its universal proof. Work on the three conditional implications
+   for the Left-to-Right triangle attachment, using the five-vertex
+   localization of the initial obstruction.
 2. Investigate the remaining two-inward-patch bipyramid patterns. The one-
    patch and single-intervening-convex-patch identities are particularly
    short starting points; no curvature ranking was needed for those proofs.

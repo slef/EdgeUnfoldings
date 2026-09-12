@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>N7-A992: two attachments</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body class="reading"><p class="back"><a href="index.html">← Seven-vertex overview</a></p>
+<header id="title-block-header">
+<h1 class="title">N7-A992: two attachments</h1>
+</header>
+<h1 id="n7-a992-one-triangle-needs-the-right-attachment">N7-A992: one triangle needs the right attachment</h1>
+<p>12 September 2026. <strong>The whole graph remains open.</strong> The original one-pair reduction is correct, but its proposed fixed cut tree really can overlap. The results below replace that false candidate with a sharper question: <strong>can one of two attachments of triangle 036 always be made safe?</strong></p>
+<p><a href="index.html#N7-A992">Back to the graph map</a> · <a href="ARGUMENTS.html#cofacial-core">General pair lemmas</a> · <a href="results/a992-exact-counterexample.json">Exact certificates</a></p>
+<h2 id="the-shape-and-the-proposed-rule">The shape and the proposed rule</h2>
+<p>Think of this polyhedron as a pentagonal base with a roof. Five roof faces share an edge with the base. Only <strong>one triangle, 036</strong>, has no base edge. Call it <strong>E</strong>. Call the quadrilateral 0324 <strong>Q</strong>, and the base 15246 <strong>P</strong>.</p>
+<p>Unfold P and its five edge neighbors first. That six-face arrangement is safe for every convex realization, by the established face-neighborhood theorem. We then have to place E. It can stay attached along 06 to triangle 046, along 36 to triangle 136, or along 03 to Q.</p>
+<p>The first two options are especially attractive: changing between them moves <strong>only E</strong>. The rest of the page uses these names:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rule</th>
+<th>Keep E attached along</th>
+<th>Cut these six original edges</th>
+<th>Pairs still needing a geometric argument</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Left</strong> (original candidate)</td>
+<td>06, to triangle 046</td>
+<td>03, 04, 13, 23, 35, 36</td>
+<td>E / Q</td>
+</tr>
+<tr class="even">
+<td><strong>Right</strong> (new fallback)</td>
+<td>36, to triangle 136</td>
+<td>03, 04, 06, 13, 23, 35</td>
+<td>E / Q; E / 135; E / 235</td>
+</tr>
+</tbody>
+</table>
+<p>Both lists are spanning cut trees. <strong>Left has 20/21 pairs settled; Right has 18/21.</strong> These are universally justified pair counts for those particular trees. They do not mean that the graph proof is 95% or 86% complete.</p>
+<h2 id="counterexample">A real failure, with a real repair</h2>
+<div class="a992-model" data-example="box">
+<svg viewBox="0 0 620 400" role="img" aria-label="Rotatable convex seven-vertex counterexample">
+</svg>
+<div class="model-controls">
+<button type="button" data-action="left">
+Left cuts
+</button>
+<button type="button" data-action="right">
+Right cuts
+</button>
+<button type="button" data-action="rotate">
+Rotate
+</button>
+<button type="button" data-action="reset">
+Reset view
+</button>
+</div>
+<p class="small">
+Drag to rotate the exact center shape. Red edges are cut. Amber: Q. Coral: E. Blue: pentagonal base P. Geometry is shown without stretching.
+</p>
+</div>
+<figure>
+<img src="figures/a992-nets.svg" alt="The same exact shape unfolded by Left and Right; only triangle E changes position."/>
+<figcaption>
+Left overlaps. Right unfolds the same polyhedron safely. The six-face arrangement around P is identical in both pictures.
+</figcaption>
+</figure>
+<figure>
+<img src="figures/a992-overlap.svg" alt="Magnified overlap of quadrilateral Q and triangle E, with a certified interior point marked."/>
+<figcaption>
+The highlighted intersection contains the rational point (1.291, −0.132). This is positive interior overlap, not just two boundaries touching.
+</figcaption>
+</figure>
+<p>Here are exact coordinates for the displayed solid. Terminating decimals in this table denote rational numbers, not rounded measurements.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Vertex</th>
+<th style="text-align: right;">x</th>
+<th style="text-align: right;">y</th>
+<th style="text-align: right;">z</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td style="text-align: right;">1.34</td>
+<td style="text-align: right;">0.085</td>
+<td style="text-align: right;">0.055</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td style="text-align: right;">−1.2</td>
+<td style="text-align: right;">1.7</td>
+<td style="text-align: right;">1.1</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td style="text-align: right;">−1.4</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>The check establishes the seven stated facets, their strict convexity, and the two unfolded placements. It proves that the marked point lies strictly inside <strong>both</strong> Q and E in Left. For Right, the three remaining pairs have strict separating lines; the other 18 use the written general pair lemmas.</p>
+<p>There is a stronger result than a single example: <strong>all these conclusions hold on an 11-parameter box of half-width 1/100000</strong> around this shape, in the coordinates described below. Thus Left fails and Right works throughout a full-dimensional family of this graph. This box preserves the required planarity identities. It is not a box of 21 independently perturbed vertex coordinates, which would generally destroy the polygonal faces.</p>
+<p>The arithmetic uses integer bounds rounded outward, including square roots. Every one of the seven inequalities putting the witness inside Q and E has lower bound greater than <strong>0.0136</strong> on this box. The three Right separators have projection gaps greater than <strong>0.1999</strong>, <strong>0.8246</strong>, and <strong>4.4338</strong>. The directions are not normalized, so these gaps are not Euclidean distances. The complete rational bounds are in the <a href="results/a992-exact-counterexample.json">certificate</a>. These are checked finite certificates with stated geometric-lemma dependencies; they are not Lean formalizations or universal graph proofs.</p>
+<h2 id="failed-rules">What has actually been ruled out</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Proposed rule</th>
+<th>Result</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Always use Left</td>
+<td><strong>False</strong></td>
+<td>Exact counterexample, and an 11-parameter failure box</td>
+</tr>
+<tr class="even">
+<td>Keep source 3 and merely switch Q between its two possible hinges</td>
+<td><strong>Insufficient</strong></td>
+<td>Both source-3 trees overlap on the same exact shape</td>
+</tr>
+<tr class="odd">
+<td>Attach E along the longer of 06 and 36</td>
+<td><strong>False</strong></td>
+<td>Exact rational shape with 36 strictly longer, but Right overlaps; Left works there</td>
+</tr>
+<tr class="even">
+<td>Try Left; if it overlaps, use Right</td>
+<td><strong>Open</strong></td>
+<td>No joint failure found in the recorded searches; the three implications below still need proof</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="results/a992-two-source3-counterexample.json">two-source-3 certificate</a> checks overlap in each tree and a successful tree from source 4 on that same shape. The <a href="results/a992-length-rule-counterexample.json">longer-edge certificate</a> checks the strict length ordering, the overlap, and the successful Left net. These failures disprove proposed <strong>rules</strong>, not edge unfoldability of the graph.</p>
+<details><summary>Keep the experimental history: why the first sample was misleading</summary>
+<p>An initial survey tested 15 distinct cofacial cut trees on 1,200 valid samples, including five previously discovered Left failures. A source-4 candidate had no observed failures. Targeted optimization then found apparent failures for each of its four unresolved pairs. We therefore did not promote that candidate to a theorem.</p>
+<p>A later sample of 1,800 valid shapes found no failure of the longer-edge choice. Targeted optimization found one; it was then converted to the exact certificate linked above. The two-attachment and three-attachment searches also approached nearly flat shapes where floating signs became tiny. These are inconclusive boundary cases, not certified failures or successes.</p>
+<p>All discovery logs and their scripts are retained separately. None is used as a premise of a positive proof.</p>
+</details>
+<h2 id="localization">A useful proved reduction: only five vertices cause the first obstruction</h2>
+<p><strong>Localization lemma.</strong> Whether Q overlaps E in Left depends only on vertices 0, 2, 3, 4, and 6. It is independent of where vertices 1 and 5 are placed, provided the full convex polyhedron still has the stated graph.</p>
+<p><strong>Proof.</strong> The unique hinge path from Q to E is</p>
+<p><strong>Q → P → triangle 046 → E</strong>, across hinges <strong>24, 46, and 06</strong>.</p>
+<p>Inside P retain just the triangle 246. It lies in P and keeps the two hinges 24 and 46 in exactly the same relative position. Replacing P by this triangle therefore leaves the relative placements of Q and E unchanged.</p>
+<p>The convex hull of 0, 2, 3, 4, and 6 is a quadrilateral pyramid: its base is Q and its apex is 6. Its other faces are 036, 046, 246, and 236. Its cut tree 03, 04, 23, 36 develops the displayed Q–246–046–E path exactly as Left does. Thus the unresolved pair is already a particular unfolding obstruction in that five-vertex pyramid. Vertices 1 and 5 never enter the calculation. □</p>
+<p>This reduces the first obstruction from <strong>11 metric parameters to seven</strong>. It also explains why knowing that every quadrilateral pyramid unfolds does not finish our problem: the easy pyramid star at 6 cuts the auxiliary segment 26. Segment 26 is a diagonal inside the original pentagonal face, not an allowed edge cut of N7-A992.</p>
+<h2 id="next-lemma">The precise next lemma</h2>
+<p>The next target is a conditional repair statement, rather than another fixed tree or an unproved length heuristic:</p>
+<blockquote>
+<p><strong>Two-attachment conjecture.</strong> For every convex realization of N7-A992, if Left has interior overlap, then Right has no interior overlap.</p>
+</blockquote>
+<p>By the universal pair reductions, its entire missing content is the following three implications. Here “Left fails” means its Q and E have intersecting interiors.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Implication under the assumption “Left fails”</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Right keeps E disjoint from Q</td>
+<td>Open</td>
+</tr>
+<tr class="even">
+<td>Right keeps E disjoint from triangle 135</td>
+<td>Open</td>
+</tr>
+<tr class="odd">
+<td>Right keeps E disjoint from triangle 235</td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why these three would suffice.</strong> All six faces other than E are edge neighbors of P, so their 15 pairs are safe. In Right, E, 136, P, and 046 form consecutive pieces around vertex 6 along their uncut paths, settling E against 136, P, and 046. Only the three pairs in the table remain. In Left, the cofacial-core theorem at source 3 additionally settles E against 135 and 235; only E/Q remains. Therefore the three conditional implications would prove an original-edge unfolding for every realization of this graph. □</p>
+<p>For a specified shape, an exact separating-axis test decides the initial pair: Q and E are convex polygons, so it suffices to examine the normals to their seven edges, in either orientation. Boundary contact is allowed; positive interior intersection is failure. The interval checker conservatively returns “not certified” if bounds straddle zero, rather than deciding a near-zero case from floating arithmetic.</p>
+<p>The recorded searches support investigating this conjecture but do not prove it. The fallback has a different purpose from switching Q’s hinge: it leaves Q in place and moves E. The exact failure of both source-3 trees therefore does not refute this conjecture.</p>
+<h2 id="verification">Coordinates, certificates, and reproducibility</h2>
+<p>After a rigid motion and uniform scaling, use</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>2</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>p</mi><mn>4</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>p</mi><mn>6</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mn>6</mn></msub><mo>,</mo><msub><mi>y</mi><mn>6</mn></msub><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>p</mi><mn>5</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mn>5</mn></msub><mo>,</mo><msub><mi>y</mi><mn>5</mn></msub><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">p_2=(0,0,0),\quad p_4=(1,0,0),\quad
+p_6=(x_6,y_6,0),\quad p_1=(x_1,y_1,0),\quad p_5=(x_5,y_5,0),</annotation></semantics></math> <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>3</mn></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo>,</mo><mi>Y</mi><mo>,</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><mi>a</mi><msub><mi>p</mi><mn>3</mn></msub><mo>+</mo><mi>b</mi><msub><mi>p</mi><mn>4</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">p_3=(X,Y,Z),\qquad p_0=a p_3+b p_4.</annotation></semantics></math></p>
+<p>There are eleven parameters. The quadrilateral requires <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">a&gt;0</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b&gt;0</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a+b&gt;1</annotation></semantics></math>; the base is strictly convex, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">Z&gt;0</annotation></semantics></math>, and all seven facets must support the other vertices strictly. These are tested directly, not assumed from approximate graph recognition. The displayed center parameters are</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mn>6</mn></msub><mo>,</mo><msub><mi>y</mi><mn>6</mn></msub><mo>,</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mn>5</mn></msub><mo>,</mo><msub><mi>y</mi><mn>5</mn></msub><mo>,</mo><mi>X</mi><mo>,</mo><mi>Y</mi><mo>,</mo><mi>Z</mi><mo>,</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1.8</mn><mo>,</mo><mn>.2</mn><mo>,</mo><mn>.8</mn><mo>,</mo><mn>.8</mn><mo>,</mo><mo>−</mo><mn>1.4</mn><mo>,</mo><mn>.4</mn><mo>,</mo><mo>−</mo><mn>1.2</mn><mo>,</mo><mn>1.7</mn><mo>,</mo><mn>1.1</mn><mo>,</mo><mn>.05</mn><mo>,</mo><mn>1.4</mn><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">(x_6,y_6,x_1,y_1,x_5,y_5,X,Y,Z,a,b)
+=(1.8,.2,.8,.8,-1.4,.4,-1.2,1.7,1.1,.05,1.4).</annotation></semantics></math></p>
+<p>The first obstruction omits <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mn>5</mn></msub><mo>,</mo><msub><mi>y</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">x_1,y_1,x_5,y_5</annotation></semantics></math>, leaving seven parameters.</p>
+<p>For completeness, the checker develops each child face without trigonometry. Let a hinge have planar endpoints <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>,</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A,B</annotation></semantics></math>, vector <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mi>B</mi><mo>−</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">d=B-A</annotation></semantics></math>, and squared length <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>L</mi><mn>2</mn></msup><annotation encoding="application/x-tex">L^2</annotation></semantics></math>. For a new corner with squared spatial distances <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>r</mi><mn>2</mn></msup><mo>,</mo><msup><mi>s</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">r^2,s^2</annotation></semantics></math> from the hinge endpoints, put <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><msup><mi>r</mi><mn>2</mn></msup><mo>−</mo><msup><mi>s</mi><mn>2</mn></msup><mo>+</mo><msup><mi>L</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">D=r^2-s^2+L^2</annotation></semantics></math>. Its developed position is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>+</mo><mfrac><mi>D</mi><mrow><mn>2</mn><msup><mi>L</mi><mn>2</mn></msup></mrow></mfrac><mi>d</mi><mspace width="0.222em"></mspace><mo>±</mo><mspace width="0.222em"></mspace><mfrac><msqrt><mrow><mn>4</mn><msup><mi>L</mi><mn>2</mn></msup><msup><mi>r</mi><mn>2</mn></msup><mo>−</mo><msup><mi>D</mi><mn>2</mn></msup></mrow></msqrt><mrow><mn>2</mn><msup><mi>L</mi><mn>2</mn></msup></mrow></mfrac><msub><mi>R</mi><mn>90</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">A+\frac{D}{2L^2}d
+\ \pm\ \frac{\sqrt{4L^2r^2-D^2}}{2L^2}R_{90}(d).</annotation></semantics></math></p>
+<p>Choose the sign opposite the parent face across the hinge. Strict convexity puts every nonhinge corner on that side. The formula is just the two squared-distance equations solved along and perpendicular to the hinge. Outward rational interval operations enclose the exact position. Supporting facet determinants, polygon corners, strict witness-point inequalities, and residual separating axes are then replayed from the input parameters.</p>
+<p>Run <code>python3 -B -m n7.a992_exact</code> from the n7 worktree to replay the saved certificates. <a href="a992_exact.py">The checker</a> uses rational integer arithmetic for geometric signs; the separate <a href="a992.py">discovery code</a> uses floating arithmetic to find examples and draw figures. The <a href="experiments/a992/README.md">experiment recipes</a> preserve the finite searches.</p>
+<p>All edits and results are confined to <code>n7/</code> in the separate worktree. The six-vertex proofs and their Lean formalization are unchanged by this work.</p>
+<script src="a992-model.js"></script>
+</body>
+</html>

@@ -1,0 +1,5419 @@
+{
+  "scope": "Numerical search only. A covering candidate list here is not a proof.",
+  "valid": 1200,
+  "attempts": 18691,
+  "candidates": [
+    {
+      "source": 3,
+      "changed_faces": [
+        0
+      ],
+      "cut": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          2,
+          4
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 20,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              5,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 4
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              5,
+              3
+            ],
+            "lemma": "face_neighborhood",
+            "base": 5
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              5,
+              4
+            ],
+            "lemma": "face_neighborhood",
+            "base": 5
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              5,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              2,
+              5,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              2,
+              5,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              2,
+              5,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              5,
+              3
+            ],
+            "lemma": "face_neighborhood",
+            "base": 5
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              5,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 4
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              5,
+              6
+            ],
+            "lemma": "face_neighborhood",
+            "base": 5
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              5,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              5,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              5,
+              6
+            ],
+            "lemma": "face_neighborhood",
+            "base": 5
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              5,
+              2,
+              1
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 2,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 19,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              5
+            ]
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              4,
+              3,
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 6,
+      "changed_faces": [
+        5
+      ],
+      "cut": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "audit": {
+        "safe_count": 19,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              0,
+              5
+            ],
+            "lemma": "face_neighborhood",
+            "base": 0
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              0,
+              6,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 6
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "cofacial_core",
+            "source": 6
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              0,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 4
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              0,
+              6
+            ],
+            "lemma": "face_neighborhood",
+            "base": 0
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              6,
+              0,
+              5
+            ]
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              3,
+              6,
+              0,
+              5
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 2,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          3
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 18,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 4
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              1,
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              1,
+              2,
+              5
+            ]
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              4,
+              1,
+              2,
+              5
+            ]
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              2,
+              1,
+              4,
+              3,
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 2,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 18,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3,
+              5
+            ]
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              5
+            ]
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              5
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 3,
+      "changed_faces": [
+        0
+      ],
+      "cut": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 18,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              2,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 4
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              2,
+              5,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              2,
+              5,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              2,
+              5,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              5,
+              3
+            ],
+            "lemma": "face_neighborhood",
+            "base": 5
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              5,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 4
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              5,
+              6
+            ],
+            "lemma": "face_neighborhood",
+            "base": 5
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              5,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              5,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              5,
+              6
+            ],
+            "lemma": "face_neighborhood",
+            "base": 5
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              2,
+              5,
+              3
+            ]
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              2,
+              5,
+              4
+            ]
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              2,
+              5,
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 4,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          2,
+          3
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "audit": {
+        "safe_count": 18,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 4
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 4
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4,
+              1,
+              2
+            ]
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              4,
+              3,
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 6,
+      "changed_faces": [
+        5
+      ],
+      "cut": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 18,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              6,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              0,
+              6,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 6
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "cofacial_core",
+            "source": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              0,
+              6
+            ],
+            "lemma": "face_neighborhood",
+            "base": 0
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              6,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              0,
+              6,
+              5
+            ]
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              0,
+              6,
+              5
+            ]
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              3,
+              6,
+              5
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 6,
+      "changed_faces": [
+        5
+      ],
+      "cut": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 18,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              0,
+              6,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 6
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "cofacial_core",
+            "source": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              0,
+              6
+            ],
+            "lemma": "face_neighborhood",
+            "base": 0
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              5
+            ]
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              0,
+              6,
+              3,
+              5
+            ]
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              0,
+              6,
+              3,
+              5
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 4,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          2,
+          3
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 17,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              6,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 4
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 4
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              6,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4,
+              1,
+              2
+            ]
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6,
+              5
+            ]
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6,
+              5
+            ]
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              3,
+              6,
+              5
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 4,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          2,
+          3
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 17,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              6,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 4
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 4
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              4,
+              1,
+              2
+            ]
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              6,
+              3,
+              5
+            ]
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              5
+            ]
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              5
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 4,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 17,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 4
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 4
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              6,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 2
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              1,
+              4,
+              3,
+              6,
+              5
+            ]
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6,
+              5
+            ]
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6,
+              5
+            ]
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              3,
+              6,
+              5
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 2,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          4
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 16,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              2,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 4
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 4
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              1,
+              2,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4,
+              3
+            ]
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4
+            ]
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4,
+              3,
+              6
+            ]
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              4,
+              1,
+              2,
+              5
+            ]
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              2,
+              1,
+              4,
+              3,
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 2,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 16,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              2,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4,
+              3
+            ]
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4
+            ]
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4,
+              5
+            ]
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4,
+              3,
+              6
+            ]
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              4,
+              3,
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "source": 2,
+      "changed_faces": [
+        0,
+        5
+      ],
+      "cut": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "retained_hinges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "audit": {
+        "safe_count": 15,
+        "total_pairs": 21,
+        "safe": [
+          {
+            "faces": [
+              0,
+              1
+            ],
+            "path": [
+              0,
+              2,
+              1
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              0,
+              2
+            ],
+            "path": [
+              0,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              2
+            ],
+            "path": [
+              1,
+              2
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 0
+          },
+          {
+            "faces": [
+              1,
+              3
+            ],
+            "path": [
+              1,
+              4,
+              3
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              4
+            ],
+            "path": [
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              1,
+              6
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              2,
+              3
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              2,
+              4
+            ],
+            "path": [
+              2,
+              1,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 6
+          },
+          {
+            "faces": [
+              2,
+              6
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              6
+            ],
+            "lemma": "cofacial_core",
+            "source": 2
+          },
+          {
+            "faces": [
+              3,
+              4
+            ],
+            "path": [
+              3,
+              4
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              5
+            ],
+            "path": [
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              3,
+              6
+            ],
+            "path": [
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              4,
+              5
+            ],
+            "path": [
+              4,
+              3,
+              5
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 1
+          },
+          {
+            "faces": [
+              4,
+              6
+            ],
+            "path": [
+              4,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 3
+          },
+          {
+            "faces": [
+              5,
+              6
+            ],
+            "path": [
+              5,
+              3,
+              6
+            ],
+            "lemma": "vertex_fan",
+            "vertex": 5
+          }
+        ],
+        "unresolved": [
+          {
+            "faces": [
+              0,
+              3
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4,
+              3
+            ]
+          },
+          {
+            "faces": [
+              0,
+              4
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4
+            ]
+          },
+          {
+            "faces": [
+              0,
+              5
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4,
+              3,
+              5
+            ]
+          },
+          {
+            "faces": [
+              0,
+              6
+            ],
+            "path": [
+              0,
+              2,
+              1,
+              4,
+              3,
+              6
+            ]
+          },
+          {
+            "faces": [
+              1,
+              5
+            ],
+            "path": [
+              1,
+              4,
+              3,
+              5
+            ]
+          },
+          {
+            "faces": [
+              2,
+              5
+            ],
+            "path": [
+              2,
+              1,
+              4,
+              3,
+              5
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "failure_counts": [
+    6,
+    2,
+    5,
+    20,
+    11,
+    190,
+    3,
+    36,
+    18,
+    0,
+    12,
+    31,
+    36,
+    48,
+    52
+  ],
+  "worst": [
+    {
+      "score": 0.010088355986281178,
+      "parameters": [
+        1.7834047112645386,
+        0.21265639957162863,
+        0.8476983596630436,
+        0.8373163308921201,
+        -1.4021490944883988,
+        0.4021257116215948,
+        -1.1865424011403218,
+        1.6622227446900975,
+        1.1452461395483373,
+        0.05100094737687387,
+        1.3886673352937307
+      ]
+    },
+    {
+      "score": 0.05135362427846977,
+      "parameters": [
+        1.5877147482512297,
+        0.3014239064670222,
+        0.7421106051085735,
+        0.8441747315561039,
+        -0.7183566929620006,
+        1.2818096222103357,
+        -0.9384129622130348,
+        1.4024237760562914,
+        0.0673839210644174,
+        0.6376371586235334,
+        0.39409264097449365
+      ]
+    },
+    {
+      "score": 0.017466998503973524,
+      "parameters": [
+        1.7362415513431952,
+        1.5318951452590828,
+        0.5614145448780534,
+        1.3397926107705969,
+        -0.7690540351147469,
+        0.2862422241960135,
+        -1.3169874071177077,
+        0.0932401745008895,
+        0.03789274843093928,
+        0.05244197887209729,
+        1.2448079771049119
+      ]
+    },
+    {
+      "score": 0.10701965155196168,
+      "parameters": [
+        1.5935144696076309,
+        0.3609425089151757,
+        0.21815114589261442,
+        1.2117561892760431,
+        -0.23558646001150585,
+        0.6956695809058442,
+        -0.4810961999562462,
+        -1.2312098617132043,
+        0.6330145588686126,
+        0.8344666389355686,
+        0.3289588283469004
+      ]
+    },
+    {
+      "score": 0.011172021396148412,
+      "parameters": [
+        1.6827723367073728,
+        0.7217920468136078,
+        0.1692438291453935,
+        1.4180689356337126,
+        -1.4627925892494025,
+        0.36618193622943274,
+        2.867530097222472,
+        2.9647111205800867,
+        0.07599445192819564,
+        0.2135160514925632,
+        1.2847476412569478
+      ]
+    },
+    {
+      "score": 0.1212139667958797,
+      "parameters": [
+        1.4930512459692398,
+        1.5913187844853154,
+        0.170425490160091,
+        1.1296109988454515,
+        -1.23534080380388,
+        0.1861143410209333,
+        1.4967232517787892,
+        0.5878878741792604,
+        0.015451292203509845,
+        0.7490673492939837,
+        0.6458875908453482
+      ]
+    },
+    {
+      "score": 0.08001300795273834,
+      "parameters": [
+        1.5877147482512297,
+        0.3014239064670222,
+        0.7421106051085735,
+        0.8441747315561039,
+        -0.7183566929620006,
+        1.2818096222103357,
+        -0.9384129622130348,
+        1.4024237760562914,
+        0.0673839210644174,
+        0.6376371586235334,
+        0.39409264097449365
+      ]
+    },
+    {
+      "score": 0.03233011633639272,
+      "parameters": [
+        0.3628066356466705,
+        0.8936476886928667,
+        0.10198782302145848,
+        0.8731704893215964,
+        -0.4530476907377403,
+        0.3185782751457981,
+        2.4208664529292045,
+        -1.4453368630528152,
+        0.3305815751307044,
+        0.42700819596927064,
+        1.523732520424019
+      ]
+    },
+    {
+      "score": 0.10338811733398175,
+      "parameters": [
+        1.6763666136708153,
+        3.707959758205253,
+        0.3541160016259858,
+        3.275938977473886,
+        -0.31613980196296865,
+        2.659577736900728,
+        -1.8864792410124025,
+        -1.2163012666925337,
+        0.0509447251994849,
+        1.1542157718351245,
+        3.6481080592995245
+      ]
+    },
+    {
+      "score": -3.293108948654779e-07,
+      "parameters": [
+        0.9798574470437487,
+        0.4193430639996276,
+        -0.0917195475906658,
+        1.0617288307408228,
+        -0.1685589665622378,
+        0.6609845217248776,
+        -1.9431010330639535,
+        1.473284593297354,
+        0.010606913961747854,
+        0.09362711816506059,
+        1.2020732913968186
+      ]
+    },
+    {
+      "score": 0.011172021396148412,
+      "parameters": [
+        1.6827723367073728,
+        0.7217920468136078,
+        0.1692438291453935,
+        1.4180689356337126,
+        -1.4627925892494025,
+        0.36618193622943274,
+        2.867530097222472,
+        2.9647111205800867,
+        0.07599445192819564,
+        0.2135160514925632,
+        1.2847476412569478
+      ]
+    },
+    {
+      "score": 0.1183839962214028,
+      "parameters": [
+        1.0923950366829092,
+        2.4379970760600407,
+        0.9265008504870167,
+        2.64478699398299,
+        -1.2266986304716034,
+        0.17742312891924344,
+        1.139154736846006,
+        0.3854835055745798,
+        0.04643267749491634,
+        0.24938220640567293,
+        0.757235048193677
+      ]
+    },
+    {
+      "score": 0.20384521809921247,
+      "parameters": [
+        1.4117447634802414,
+        1.7822521026523916,
+        0.1543751153372458,
+        4.603022425638795,
+        -0.7787884968939903,
+        1.981816677624445,
+        0.7410950763508706,
+        2.6002095693785696,
+        0.2796289610359123,
+        0.0909875488693414,
+        1.071741147562058
+      ]
+    },
+    {
+      "score": 0.20384521809921174,
+      "parameters": [
+        1.4117447634802414,
+        1.7822521026523916,
+        0.1543751153372458,
+        4.603022425638795,
+        -0.7787884968939903,
+        1.981816677624445,
+        0.7410950763508706,
+        2.6002095693785696,
+        0.2796289610359123,
+        0.0909875488693414,
+        1.071741147562058
+      ]
+    },
+    {
+      "score": 0.20384521809921208,
+      "parameters": [
+        1.4117447634802414,
+        1.7822521026523916,
+        0.1543751153372458,
+        4.603022425638795,
+        -0.7787884968939903,
+        1.981816677624445,
+        0.7410950763508706,
+        2.6002095693785696,
+        0.2796289610359123,
+        0.0909875488693414,
+        1.071741147562058
+      ]
+    }
+  ],
+  "observed_covers": [
+    [
+      9
+    ]
+  ],
+  "patterns": [
+    {
+      "failing_candidates": [
+        0
+      ],
+      "count": 3
+    },
+    {
+      "failing_candidates": [
+        0,
+        5
+      ],
+      "count": 2
+    },
+    {
+      "failing_candidates": [],
+      "count": 897
+    },
+    {
+      "failing_candidates": [
+        14
+      ],
+      "count": 4
+    },
+    {
+      "failing_candidates": [
+        5
+      ],
+      "count": 144
+    },
+    {
+      "failing_candidates": [
+        5,
+        7,
+        13
+      ],
+      "count": 5
+    },
+    {
+      "failing_candidates": [
+        8
+      ],
+      "count": 9
+    },
+    {
+      "failing_candidates": [
+        5,
+        11
+      ],
+      "count": 18
+    },
+    {
+      "failing_candidates": [
+        5,
+        13
+      ],
+      "count": 1
+    },
+    {
+      "failing_candidates": [
+        7
+      ],
+      "count": 9
+    },
+    {
+      "failing_candidates": [
+        13
+      ],
+      "count": 2
+    },
+    {
+      "failing_candidates": [
+        5,
+        7
+      ],
+      "count": 14
+    },
+    {
+      "failing_candidates": [
+        3,
+        5
+      ],
+      "count": 3
+    },
+    {
+      "failing_candidates": [
+        3
+      ],
+      "count": 16
+    },
+    {
+      "failing_candidates": [
+        0,
+        2
+      ],
+      "count": 1
+    },
+    {
+      "failing_candidates": [
+        12,
+        13,
+        14
+      ],
+      "count": 32
+    },
+    {
+      "failing_candidates": [
+        7,
+        8
+      ],
+      "count": 5
+    },
+    {
+      "failing_candidates": [
+        3,
+        12,
+        13,
+        14
+      ],
+      "count": 1
+    },
+    {
+      "failing_candidates": [
+        4,
+        10,
+        14
+      ],
+      "count": 9
+    },
+    {
+      "failing_candidates": [
+        1,
+        6,
+        13
+      ],
+      "count": 2
+    },
+    {
+      "failing_candidates": [
+        4,
+        5,
+        10,
+        14
+      ],
+      "count": 2
+    },
+    {
+      "failing_candidates": [
+        11
+      ],
+      "count": 10
+    },
+    {
+      "failing_candidates": [
+        2
+      ],
+      "count": 2
+    },
+    {
+      "failing_candidates": [
+        13,
+        14
+      ],
+      "count": 1
+    },
+    {
+      "failing_candidates": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "count": 3
+    },
+    {
+      "failing_candidates": [
+        5,
+        7,
+        8
+      ],
+      "count": 1
+    },
+    {
+      "failing_candidates": [
+        2,
+        6
+      ],
+      "count": 1
+    },
+    {
+      "failing_candidates": [
+        2,
+        7,
+        8
+      ],
+      "count": 1
+    },
+    {
+      "failing_candidates": [
+        7,
+        8,
+        13
+      ],
+      "count": 1
+    },
+    {
+      "failing_candidates": [
+        8,
+        10
+      ],
+      "count": 1
+    }
+  ]
+}

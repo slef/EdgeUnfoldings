@@ -191,11 +191,16 @@ hinged on 24. Exactly **20 of its 21 face-pair obligations** are settled
 by the preceding arguments. The one remaining pair is the quadrilateral
 (face 0) against triangle 036 (face 1), along hinge path 0–5–2–1.
 
-This is a particularly clean target for a separator or a switch of hinge/source.
-It is **not** a 20/21 proof of the full graph theorem in any measure of effort:
-one stubborn pair could require a different tree. Nor is a missing witness
-an example of actual overlap. No numerical geometry search has established
-failure or success of this particular residual pair in this investigation.
+**Follow-up:** the [dedicated A992 investigation](A992.html) now gives an
+exact counterexample to this fixed rule, and a certified family repaired by
+moving triangle 036 to its other base-neighbor attachment. Both source-3
+quadrilateral hinge choices can fail on the same shape. A longer-edge
+shortcut also fails. The graph remains open; the next two-attachment lemma
+has three explicit conditional pair obligations.
+
+The 20 settled pairs remain valid. The count was never a percentage of the
+whole graph proof: the last pair requires a different cut rule. The initial
+census and exploratory history are retained in the overview and case page.
 
 ## E. Two core graphs and two original-edge restrictions {#core-graphs}
 

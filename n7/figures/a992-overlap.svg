@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="518.4pt" height="316.8pt" viewBox="0 0 518.4 316.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 316.8
+L 518.4 316.8
+L 518.4 0
+L 0 0
+z
+" style="fill: #fafaf7"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 188.798491 189.885082
+L -1088.486038 1157.203526
+L -485.044528 138.973585
+L 17.823396 138.973585
+z
+" clip-path="url(#pef43308a31)" style="fill: #e6b257; opacity: 0.65; stroke: #44535b; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 195.506477 123.061756
+L -417.570882 1603.364729
+L 420.117736 38.4
+z
+" clip-path="url(#pef43308a31)" style="fill: #e78075; opacity: 0.65; stroke: #44535b; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 188.798491 189.885082
+L 158.249403 213.020645
+L 170.133048 184.327047
+z
+" clip-path="url(#pef43308a31)" style="fill: #b72c40; opacity: 0.75; stroke: #b72c40; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 258.676673 237.328522
+Q 212.36487 221.6609 167.112136 206.35157
+" style="fill: none; stroke: #172e41; stroke-linecap: round"/>
+    <path d="M 170.88987 210.163227
+L 167.112136 206.35157
+L 172.428102 205.616377
+" style="fill: none; stroke: #172e41; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; fill: #172e41" transform="translate(244.113962 250.288222)">Exact interior witness</text>
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; fill: #172e41" transform="translate(244.113962 264.690566)">(1.291, −0.132)</text>
+   </g>
+   <g id="text_2">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #705118" x="98.282264" y="171.66" transform="rotate(-0 98.282264 171.66)">Q</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #8d3340" x="259.2" y="93.715472" transform="rotate(-0 259.2 93.715472)">E</text>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle" x="259.2" y="23.4" transform="rotate(-0 259.2 23.4)">Magnified: a positive area of overlap</text>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="m5d850cc813" d="M 0 2.915476
+C 0.773193 2.915476 1.514823 2.608283 2.061553 2.061553
+C 2.608283 1.514823 2.915476 0.773193 2.915476 0
+C 2.915476 -0.773193 2.608283 -1.514823 2.061553 -2.061553
+C 1.514823 -2.608283 0.773193 -2.915476 0 -2.915476
+C -0.773193 -2.915476 -1.514823 -2.608283 -2.061553 -2.061553
+C -2.608283 -1.514823 -2.915476 -0.773193 -2.915476 0
+C -2.915476 0.773193 -2.608283 1.514823 -2.061553 2.061553
+C -1.514823 2.608283 -0.773193 2.915476 0 2.915476
+z
+" style="stroke: #172e41"/>
+    </defs>
+    <g clip-path="url(#pef43308a31)">
+     <use xlink:href="#m5d850cc813" x="164.157962" y="205.352151" style="fill: #172e41; stroke: #172e41"/>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pef43308a31">
+   <rect x="83.196226" y="38.4" width="352.007547" height="266.52"/>
+  </clipPath>
+ </defs>
+</svg>
