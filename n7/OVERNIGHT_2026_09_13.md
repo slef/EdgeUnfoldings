@@ -1,7 +1,7 @@
 # Pentagonal bipyramid overnight session — 13 September 2026
 
 Work window: **2026-09-12 16:04–22:04 UTC** (01:04–07:04 Tokyo).
-Checkpoint updated around 19:03 UTC; approximately 3 hours remain.
+Checkpoint updated around 19:43 UTC; approximately 2 hours 20 minutes remain.
 Continue substantive research until the deadline. The heartbeat automation
 `pentagonal-bipyramid-overnight` is active in this task every 5 minutes,
 with UNTIL 22:06 UTC so the final deadline run is included. At the deadline,
@@ -22,6 +22,30 @@ Research checkpoint: `40f7bae` (all first-pass proofs and exact checks).
 A temporary idle-sleep inhibitor runs until approximately the deadline
 (`caffeinate -i -t`, tool session 90334); no persistent power setting changed.
 No mathematical search is currently running.
+
+## Latest complete result — opposing chain, around 19:43 UTC
+
+`BIPYRAMID_CHAIN_RULE.md` proves the ENTIRE FCCBC / canonical BCFCC class.
+Whole symbolic count is now 4/15; eleven retain open parts. The graph is open.
+
+New local lemma: a long bad extension traps its convex receiver in triangle
+(a, fan, bad source copy). Equal cut-edge lengths give other-pole extension
+> (pi-kappa_a)/2, so the fan receiver apex is acute and the bad source apex
+< (pi+kappa_a)/2. Choose a combined-chain-eligible fan. If both extensions
+are short, use it. Otherwise the other pole makes that same patch short.
+If its other extension is short too, switch poles. Otherwise that second
+long extension makes the other outer source angle acute, so both wider
+apex bounds hold in the original net. The old short-cut argument finishes
+Case A; the base cones cover theta>=pi. Reflection handles the other side.
+
+No H>=0, auxiliary-hull, or pole-order assumption is needed. Six exact
+examples check all three decision branches, both orientations, and all45
+pairs independently. Earlier local/correction and auxiliary proofs retained.
+
+Next: try the long-receiver lemma on the remaining two-bad classes BBCCC,
+BCBCC, BFCCC. All large-pole cases and aligned-pole families already proved.
+Do not try to refute opposing receiver preferences: they exist and are now
+handled by the complete proof. No n6 or Lean changes.
 
 ## Latest checkpoint — second pass, around 18:45 UTC
 

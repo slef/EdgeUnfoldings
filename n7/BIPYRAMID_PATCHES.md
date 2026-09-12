@@ -6,11 +6,13 @@ arguments; the accompanying finite counts and examples have different scopes.
 
 **New route, 13 September:** [grow the solid from six vertices](BIPYRAMID_MORPH.html).
 Convexity and monotone curvature are proved; carrying a safe net throughout
-remains open. This does not change the three complete pattern classes below.
+remains open in general. The aligned-pole insertion is now proved, and the
+complete chain rule raises the count below to four.
 
 **Overnight extension:** [the length-sum slit theorem](BIPYRAMID_OVERNIGHT.html#length-slit)
 settles the local pairs for every convex bipyramid. The [two-patch rules](BIPYRAMID_OVERNIGHT.html#two-gap)
-prove larger curvature branches without changing the 3/15 whole-class count.
+prove larger curvature branches. The subsequent chain theorem raises the
+whole-class count to **4/15**.
 
 **Further family theorem:** [aligned poles](BIPYRAMID_ALIGNED.html) are now
 covered at every height, including four inward patches with low pole
@@ -137,7 +139,20 @@ is required, and the same proof works for any ring size at least four.
 This theorem concerns a **single** intervening convex patch. At five
 vertices on the ring there is also an opposing-direction pattern whose
 inward corners point toward a chain of two convex patches. The displayed
-identity does not settle that different case.
+identity does not by itself settle that different case; the following theorem does.
+
+## Two convex receivers: the complete opposing-chain rule {#theorem-chain}
+
+**Theorem Chain.** Pattern FCCBC (canonical BCFCC) has a safe star-plus-slit
+net for every convex realization, without a pole-curvature condition.
+Choose a pole whose two bad extensions sum to less than the two receiver
+angles. If the other pole has both extensions short, it may be used instead.
+Otherwise the first pole works: the long extensions force the exact apex
+bounds needed to separate the last petal pair.
+
+The [complete proof and finite rule](BIPYRAMID_CHAIN_RULE.html) explain
+why a long extension into a convex receiver forces an acute fan angle.
+This closes one further entire symbolic class, rather than just examples.
 
 ## 5. A further family when one pole has curvature at least pi {#theorem-gap}
 
@@ -249,14 +264,14 @@ has a convex realization. This is an exhaustive necessary partition.
 | --- | ---: | ---: | ---: |
 | 0 | 1 | 1 | 1, Theorem C |
 | 1 | 10 | 1 | 1, Theorem One |
-| 2 | 35 | 5 | 1, Theorem Toward; the other four now have proved curvature branches |
+| 2 | 35 | 5 | 2, Theorems Toward and Chain; the other three have proved curvature branches |
 | 3 | 50 | 5 | 0 |
 | 4 | 25 | 3 | 0 |
 | 5 | 0 | 0 | impossible |
 
-The three fully covered representatives are CCCCC, BCCCC, BCCFC in the
-catalogue's canonical convention. Thus **3/15 symbolic classes have whole
-conditional existence proofs**; 12 retain open parts. Theorem L7 settles
+The four fully covered representatives are CCCCC, BCCCC, BCCFC, BCFCC in the
+catalogue's canonical convention. Thus **4/15 symbolic classes have whole
+conditional existence proofs**; 11 retain open parts. Theorem L7 settles
 three local pairs under its additional inequalities across many of them.
 The [new local selection theorem](BIPYRAMID_OVERNIGHT.html#length-slit)
 removes the threshold when the slit may be chosen by the distance-sum rule.

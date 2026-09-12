@@ -1,5 +1,8 @@
 # The remaining receiver pair: two branches settle, one angle test remains
 
+**Later update, 13 September:** the [complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.html) now closes the entire FCCBC / BCFCC class. The current count is **4/15**; the earlier reductions and open questions below are preserved as the record of how that result was reached.
+The separator lemmas on this page remain part of the completed proof; its final unresolved row has been discharged by the new long-receiver lemma and pole-selection rule.
+
 **13 September 2026 · A further written reduction.** In the opposing-chain
 pattern, a long extension rules out the small-fan pocket altogether.
 The large-angle branch is therefore solved by a direct cone separator.

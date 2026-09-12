@@ -319,8 +319,9 @@ outside that family.
 | Arbitrary pentagonal bipyramid with both poles below $180^\circ$ | **Open in general**; earlier local and patch-family results still apply |
 | Arbitrary zero-curvature insertion chosen by minimum vertex curvature | **Open**; earlier exact failures show that a fixed initial tree can fail |
 
-No whole graph count or whole symbolic class count changes: **10/34 graph
-types** and **3/15 symbolic classes** remain completely covered. This page
+This family theorem does not change the whole-class count. With the
+subsequent [chain theorem](BIPYRAMID_CHAIN_RULE.html), the current totals
+are **10/34 graph types** and **4/15 symbolic classes** covered. This page
 adds a theorem for an explicitly described geometric subfamily extending
 across the symbolic partition, not a sampled percentage of shapes.
 

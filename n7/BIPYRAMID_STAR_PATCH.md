@@ -11,8 +11,9 @@ of equator vertices and without requiring a planar equator:
 
 For the pentagonal bipyramid this covers the large-pole part of **all
 15 patch-pattern classes**, including three and four inward patches.
-The whole graph remains open. There are still **3/15 whole symbolic
-classes proved**; curvature-restricted progress is counted separately.
+The whole graph remains open. The subsequent [chain theorem](BIPYRAMID_CHAIN_RULE.html) brings the count
+to **4/15 whole symbolic classes proved**; curvature-restricted progress
+is counted separately.
 
 [Overview](index.html#bipyramid) · [Earlier receiver analysis](BIPYRAMID_CHAIN_PAIR.html) ·
 [Insertion from six vertices](BIPYRAMID_MORPH.html)
@@ -312,7 +313,7 @@ This is a substantial reduction of the geometric region still needing
 work, not a percentage of all shapes: there is no uniform distribution
 on the space of convex realizations being used here. The original graph
 census stays **10/34 whole graphs covered**. The complete symbolic-pattern
-count stays **3/15**, while all twelve other classes now have their
+count is now **4/15** after the separate chain theorem; all eleven other classes have their
 large-pole branch covered, whenever that branch is geometrically realizable.
 
 A further [aligned-pole theorem](BIPYRAMID_ALIGNED.html) covers every
@@ -321,8 +322,8 @@ heights, and preserves one cut tree throughout the lower-pole insertion.
 It includes four-inward low-curvature examples outside the conditions here.
 
 For the opposing-receiver pattern, the separate
-[three-petal analysis](BIPYRAMID_CHAIN_PAIR.html#remaining) continues to
-reduce its remaining small-angle branch to one independent separation.
+[complete chain rule](BIPYRAMID_CHAIN_RULE.html) now settles the entire
+symbolic class, including its small-angle branch.
 These are complementary routes; neither makes the other obsolete.
 
 ## Exact examples and reproducibility {#checks}

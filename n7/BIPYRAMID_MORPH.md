@@ -1,5 +1,7 @@
 # Growing a pentagonal bipyramid from six vertices
 
+**Later update, 13 September:** the [complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.html) now closes the entire FCCBC / BCFCC class. The current count is **4/15**; the earlier reductions and open questions below are preserved as the record of how that result was reached.
+
 **13 September 2026 · New geometric lemmas and two exact example families.**
 The pentagonal bipyramid remains open in general. These arguments are
 separate from the six-vertex manuscript and its Lean formalization.

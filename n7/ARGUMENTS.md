@@ -221,7 +221,7 @@ six-vertex net. The replacement faces can collide with remote faces.
 A cap-attachment lemma would need to prove that missing geometric step.
 
 The separate [bipyramid arguments](BIPYRAMID_PATCHES.html) extend several
-of the old octahedral lemmas. They cover three complete conditional patch
+of the old octahedral lemmas. They cover four complete conditional patch
 patterns and additional curvature-restricted families. The bipyramid graph
 as a whole remains open here. The new [insertion arguments](BIPYRAMID_MORPH.html)
 prove a convex deformation from six vertices, nondecreasing inserted
@@ -268,3 +268,8 @@ one exact insertion path is also classified.
 Every later update should retain the earlier status in the overview history.
 New experiments must be labelled as examples; a whole graph changes status
 only after its universal argument and hypotheses are written down.
+
+The [complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.html) now closes
+one further bipyramid class. The [aligned-pole theorem](BIPYRAMID_ALIGNED.html)
+also proves an entire insertion family, and [large-pole replacement](BIPYRAMID_STAR_PATCH.html)
+covers every bipyramid with a pole curvature at least π.

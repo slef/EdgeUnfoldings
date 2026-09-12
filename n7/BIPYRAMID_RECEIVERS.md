@@ -1,5 +1,7 @@
 # Two inward patches: the genuine remaining obstruction
 
+**Later update, 13 September:** the [complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.html) now closes the entire FCCBC / BCFCC class. The current count is **4/15**; the earlier reductions and open questions below are preserved as the record of how that result was reached.
+
 **13 September 2026 · Exact example and a smaller proof target.** The
 two patches can prefer opposite poles, and both can extend beyond their
 receiving wedge plus the curvature gap. That situation is real, even for

@@ -2,7 +2,7 @@
   "scope": "Necessary symbolic patterns; not every admitted pattern is asserted realizable. Counts are not fractions of metric space.",
   "labelled_count": 121,
   "class_count": 15,
-  "proved_classes": 3,
+  "proved_classes": 4,
   "classes": [
     {
       "representative": "CCCCC",
@@ -106,8 +106,8 @@
         "BCFCC",
         "FCCBC"
       ],
-      "status": "open",
-      "theorem": null,
+      "status": "proved conditional family",
+      "theorem": "Chain",
       "large_pole_theorem": "Shortest-patch replacement (either pole curvature at least pi)",
       "extra_partial_theorem": "Receiver (weighted pole-curvature gate)"
     },
