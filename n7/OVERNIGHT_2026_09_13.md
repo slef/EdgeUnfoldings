@@ -3,7 +3,7 @@
 Work window: **2026-09-12 16:04–22:04 UTC** (01:04–07:04 Tokyo).
 Checkpoint written around 17:25 UTC; approximately 4.5 hours remain.
 Continue substantive research until the deadline. The heartbeat automation
-`pentagonal-bipyramid-overnight` is active in this task every 30 minutes,
+`pentagonal-bipyramid-overnight` is active in this task every 5 minutes,
 with UNTIL 22:06 UTC so the final deadline run is included. At the deadline,
 validate, give the morning report, and pause that automation.
 
@@ -17,6 +17,11 @@ Runtime: the main worktree's `durer_small_n/.venv/bin/python -B`, with
 `PYTHONPATH=.`. For Matplotlib set `MPLCONFIGDIR=/private/tmp/edge-n7-mpl`.
 Do not retry the previously denied browser opening via another surface or
 localhost. Use static SVG rendering and the existing Node UI tests.
+
+Research checkpoint: `40f7bae` (all first-pass proofs and exact checks).
+A temporary idle-sleep inhibitor runs until approximately the deadline
+(`caffeinate -i -t`, tool session 90334); no persistent power setting changed.
+No mathematical search is currently running.
 
 ## Starting point
 
