@@ -1,0 +1,7 @@
+{
+  "scope": "Floating discovery only; no conclusion from no conflict.",
+  "attempts": 2000000,
+  "numerically_valid": 999489,
+  "three_bad": 1180,
+  "conflicts": []
+}

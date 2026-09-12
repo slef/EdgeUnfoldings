@@ -99,3 +99,29 @@ The universal proofs are in BIPYRAMID_RADIAL, BIPYRAMID_ADJACENT,
 BIPYRAMID_RUNS, BIPYRAMID_SOURCE_PLANE, BIPYRAMID_PRODUCT_RULE, and
 BIPYRAMID_SWITCH_INSERTION. Drawing frames and these search counts are
 not used as universal proof premises.
+
+
+### Targeted counterexamples after the broad search
+
+The provisional common-product-pole conjecture for all consecutive blocks
+was refuted in BBFCC, BBBFC, and BBFFC by a targeted insertion into a
+six-vertex donor. The donor search examined 876,771 numerically accepted
+six-vertex shapes and 6,325 three-bad cases before finding its mixed-direction
+candidate. The resulting seven-vertex rational coordinates, rather than
+the numerical donor, are the certified objects. Both maximal-slit nets
+also pass exact checks for each new solid. The main product-rule report
+contains these strict failures and positive nets.
+
+The scripts named n6 here only read existing n6 files or perform scratch
+experiments. They do not alter n6 or Lean. The pure-direction conjecture
+for BBBCC and BBBBC remains separate and unproved.
+
+The source-plane floating-artifact audit now uses the unchanged decimal
+serializations of the original numerical input, without rounding: all
+45 pairs pass exact verification. Its apparent adjacent-face overlap
+was numerical error.
+
+A final pure-direction donor search examined 2,000,000 attempts, 999,489
+numerically accepted six-vertex shapes, and 1,180 pure three-inward cases.
+No product conflict was found. This is discovery data only and proves
+neither pure-run conjecture. The saved script and report are retained.

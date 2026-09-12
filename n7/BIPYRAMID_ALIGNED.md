@@ -1,5 +1,11 @@
 # Aligned poles: one fixed tree works throughout the insertion
 
+**Later simplification:** the [supporting-plane corollary](BIPYRAMID_SOURCE_PLANE.html#corollaries)
+proves the aligned family for either source and all positive heights.
+It keeps one fixed source and slit throughout insertion even after the
+new pole becomes taller than the old one. The auxiliary proof below and
+its quantitative neighborhood remain preserved.
+
 **13 September 2026 · A proved geometric family, for any equator size.**
 Let a convex polygon lie in a plane, and let its two poles lie on the same
 perpendicular line through an interior point of that polygon. The poles

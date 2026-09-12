@@ -48,10 +48,12 @@ one fixed slit in its entire family.
 ## Why every intermediate solid and net are valid {#proof}
 
 For $t>0$ the prescribed two pole fans are exactly the faces of a convex
-bipyramid. The lower-face supporting determinants scale linearly with $t$
-from zero, with the same strict signs as at $t=1$. For the fixed upper
-faces, the moving pole stays strictly on their interior sides by convexity
-of each half-space. All triangles are nondegenerate because $c$ lies
+bipyramid. For each moving face, the supporting determinants of the other ring
+vertices scale linearly with $t$ from zero, with the strict signs at
+$t=1$. Its determinant against the fixed pole $q$ is affine in $t$
+and has the same strict sign at both endpoints, including the base
+triangle at $t=0$. For each fixed face, the moving pole stays strictly
+on its interior side by convexity of that half-space. All triangles are nondegenerate because $c$ lies
 strictly inside the polygon.
 
 The vectors $p(t)-q$ are positive multiples of $p_1-q$. Therefore (1)

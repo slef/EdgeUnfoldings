@@ -3,7 +3,7 @@
 **13 September 2026 · A stronger proved sufficient rule.** The rule works
 for every convex bipyramid, with any number of ring vertices, provided
 its local tests pass at one pole. It includes cases outside both supporting
-half-spaces. Some exact examples fail the tests at both poles, so this is
+half-spaces. Exact examples in six of the eight open classes fail the tests at both poles, so this is
 not being presented as a complete solution.
 
 The pentagonal bipyramid remains open; **7/15 whole patch classes** are
@@ -120,22 +120,91 @@ patterns with strict failures at both poles. The two-inward example is
 covered by the separate complete chain proof. These are failures of
 **the sufficient test**, not counterexamples to edge unfoldability.
 
-The eight open classes now separate into two precise next targets:
+The eight open classes now separate into three precise next targets:
 
 | Still-open classes | Structure and next question |
 | --- | --- |
-| BBBCC, BBFCC, BBBBC, BBBFC, BBFFC | All inward patches form one consecutive block. Conjecture: at least one source always passes the product test. This is **not proved**. |
-| BBCBC, BBCFC, BCBFC | Two blocks of inward patches. Exact examples above show that both source tests can fail, so a repair or a different rule is necessary for this criterion to cover the whole class. |
+| BBBCC, BBBBC | All inward patches lean the same way in one consecutive run. A common product-passing source remains a conjecture, **not a theorem**. |
+| BBFCC, BBBFC, BBFFC | One consecutive block with mixed directions. The conjecture that a source always passes is **refuted exactly**. In all three new examples, both maximal-slit nets are nevertheless independently certified safe. |
+| BBCBC, BBCFC, BCBFC | Two blocks of inward patches. Exact examples also show that both source tests can fail; a repair or a broader proof is needed. |
 
-A floating search of 1,327,019 numerically accepted samples found strict conflicts
-in the latter three classes and none in the former five. The three
-conflicts were converted to exact certificates. The absence of a sampled
-conflict in the five single-block classes is only a reason to investigate
-the conjecture; it is not a coverage claim or part of a proof.
+### Why the earlier five-class conjecture was revised
+
+An initial floating search of 1,327,019 numerically accepted samples found
+strict conflicts only in the last three classes. That suggested a
+common-source conjecture for all five consecutive-block classes.
+A targeted construction then refuted it in **three** of those five.
+This is why the absence of a sampled conflict was never counted as proof.
+
+The construction starts from a six-vertex numerical donor, inserts a new
+ring vertex just outside its convex patch, and then independently verifies
+the resulting seven rational vertices. Inserting near the patch's shortest
+crossing gives CCBBF / BBFCC; inserting on either side gives FCBBF / BBFFC
+and CBBBF / BBBFC. Every final solid has 40 strict supporting determinants
+and strict product-test failures at both poles.
+
+For each of these three solids, the exact checker also proves that $u_4$
+is the unique maximum of the distance sum and checks all 45 pairs for
+**both** corresponding source-star nets. They are safe. Thus these are
+counterexamples to the proposed pole-selection criterion, not to the
+actual maximal-slit rule and not to edge unfoldability. The exact records
+retain both the failed tests and the successful nets. All supporting,
+pattern, failure, maximum, and nonlocal-separation inequalities there are
+strict. By continuity, each persists on a nonempty open neighborhood of
+its coordinates; no numerical neighborhood radius is claimed.
 
 A useful next step is to repair the two conflicting corners with the
 pocket-and-disk lemmas already used for two inward patches, while checking
 whether the additional third or fourth patch can reach that repair.
+
+## A failure needs a neighboring vertex farther beyond the pole {#axis-neighbor}
+
+There is another proved restriction. At an inward corner $a$, let $b$
+be the other ring endpoint of its bad patch. The distance sum is larger
+at $b$. If source $q$ fails the product test at $a$, then
+
+$$H_b>H_a>S_a>L^2. \qquad(2)$$
+
+Thus $b$ projects **even farther beyond $q$** than $a$ does. A failure
+at the opposite source gives $H_b<H_a<-S_a<-L^2$.
+
+To prove this, consider the function $f(x)=|px|+|qx|$ on the complete
+line through the bad ring edge $ab$. Its unique minimum is the developed
+pole distance $D_{ab}$. Indeed, flattening the two incident faces places
+the pole copies on opposite sides of that line; their straight joining
+segment meets the line and realizes this minimum.
+
+At the inward endpoint $a$, let the two face angles toward $b$ be
+$\alpha,\beta$. Their sum exceeds $\pi$, so
+
+$$\frac{d}{dt} f\bigl(a+t(b-a)\bigr)\bigg|_{t=0}
+=-|ab|(\cos\alpha+\cos\beta)>0.$$
+
+Strict convexity along the line therefore puts its minimizing point
+$x_*$ at a negative parameter, on the side of $a$ away from $b$.
+If $H_b\le H_a$, the affine function
+$H_x=|px|^2-|qx|^2$ would satisfy $H_{x_*}\ge H_a$.
+But the reverse triangle inequality gives
+
+$$H_x=(|px|-|qx|)f(x)\le L f(x).$$
+
+It follows that $D_{ab}\ge H_a/L$. The other incident developed
+pole diagonal is greater than $L$, so their product exceeds $H_a$,
+contrary to the claimed product-test failure. This proves (2).
+
+Consequently a two-pole conflict needs **four distinct ring vertices**:
+the two failing corners and their farther neighbors. The positive and
+negative axial inequalities make these four vertices distinct. This
+proves, as a small base-case corollary, that the product rule always has
+a passing pole for a triangular bipyramid, which has only three ring
+vertices.
+
+For the pentagonal bipyramid, exactly one ring vertex remains outside
+those four witnesses. A concrete next reduction is therefore to study
+how that extra vertex sits relative to the two failed patches. The
+[exact conflict records](results/bipyramid-product-rule.json) now also
+identify the required farther neighbor of every failed corner. This
+localization alone does not complete the remaining proof.
 
 ## Exact checks {#checks}
 

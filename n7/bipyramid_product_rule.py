@@ -13,7 +13,15 @@ def condition(row):
     good=[q for q in (5,6) if all(x.lo>=0 for x in tests[q].values())]
     failed={q:[a for a,x in tests[q].items() if x.hi<0] for q in (5,6)}
     planes={q:[dot(sub(a,ex[q]),sub(ex[11-q],ex[q])) for a in ex[:5]] for q in (5,6)}
-    out={'pattern':pattern,'bad_vertices':bad,'pole_diagonals':[x.export() for x in D],
+    directions={}
+    for q in (5,6):
+        directions[q]=[]
+        for a in failed[q]:
+            b=(a+1)%5 if pattern[a]=='B' else (a-1)%5
+            difference=(H[b]-H[a]) if q==6 else (H[a]-H[b])
+            if difference<=0:raise ValueError('Failed corner lacks the required farther axial neighbor')
+            directions[q].append({'corner':a,'neighbor':b,'positive_axial_difference':str(difference)})
+    out={'failed_corner_neighbors':directions,'pattern':pattern,'bad_vertices':bad,'pole_diagonals':[x.export() for x in D],
         'signed_squared_distance_differences':list(map(str,H)),
         'product_test_margins':{q:{a:x.export() for a,x in tests[q].items()} for q in (5,6)},
         'good_sources':good,'strictly_failed_vertices':failed,
@@ -26,6 +34,13 @@ def certify(row):
     ex,v,out=condition(row)
     if row.get('expect_both_tests_fail'):
         if not all(out['strictly_failed_vertices'][q] for q in (5,6)):raise ValueError('Both product tests must fail strictly')
+        if row.get('safe_maximal_slit') is not None:
+            slit=row['safe_maximal_slit'];dist=[sum(dot(sub(v[s],v[a]),sub(v[s],v[a])).sqrt() for s in (5,6)) for a in range(5)]
+            if any((dist[slit]-dist[a]).lo<=0 for a in range(5) if a!=slit):raise ValueError('Claimed maximal slit is not certified')
+            safe=[]
+            for q in (5,6):
+                n=check_net(v,cut_at(q,slit));safe.append({'source':q,'slit':slit,'shared_vertex_pairs':len(n['shared_vertex_pairs']),'strict_separators':n['strict_separators']})
+            out['independent_safe_maximal_slit_nets']=safe
         out['scope']='Exact failure of both sufficient product tests, not a proof of net overlap or nonexistence of an unfolding.'
         return out
     if not out['good_sources']:raise ValueError('No source certified by the sufficient product test')

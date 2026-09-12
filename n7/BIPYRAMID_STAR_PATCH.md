@@ -1,5 +1,10 @@
 # A shortest patch gives an edge unfolding when a pole is sharp enough
 
+**Later simplification:** the [supporting-plane corollary](BIPYRAMID_SOURCE_PLANE.html#corollaries)
+gives a shorter proof for every large-pole bipyramid, using that pole
+as source and a maximum-distance-sum slit. The shortest-patch proof below
+is retained, including its additional geometric criteria and exact failures.
+
 **13 September 2026 · Written proofs, with exact examples checked separately.**
 The following result applies to every convex bipyramid, with any number
 of equator vertices and without requiring a planar equator:

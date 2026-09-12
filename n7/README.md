@@ -3,7 +3,7 @@
 Start with the [overview](index.html), the [arguments](ARGUMENTS.md), or the
 [bipyramid patch proofs](BIPYRAMID_PATCHES.md), the dedicated [A992 case](A992.md),
 its [cone proof](A992_CONES.md), the [R0 repair lemma](A992_R0.md), or the
-[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the sixteen
+[base-edge extension](A992_BASE_EDGES.md). The HTML versions of the
 proof documents contain rendered mathematics and work without network access.
 
 **Current main result:** [the adjacent-run theorem](BIPYRAMID_ADJACENT.md)
@@ -12,13 +12,26 @@ most two inward patches is now covered: **7/15** necessary symbolic
 classes. Eight three/four-inward classes retain open parts. The adjacent
 argument also works for any ring size. Earlier proofs are preserved below.
 
-**Newest result:** [radial receiver lemmas](BIPYRAMID_RADIAL.md) close
+**Latest structural results:** the [supporting-plane theorem](BIPYRAMID_SOURCE_PLANE.md)
+and stronger [local product rule](BIPYRAMID_PRODUCT_RULE.md) give sufficient
+unfolding rules for any ring size and any patch pattern. The plane theorem
+also shortens the large-pole and aligned-pole proofs; either aligned source
+works at arbitrary heights. The [finite-switch insertion theorem](BIPYRAMID_SWITCH_INSERTION.md)
+proves a tilted-axis family, with an exact minimum-curvature example and
+one change of maximizing slit. [Explore the insertion](bipyramid-switch-demo.html).
+
+The eight open classes now split into two pure-run conjectures (BBBCC,
+BBBBC) and six classes with exact failures of the sufficient product test.
+Three new mixed-block failures still have both maximal-slit nets exactly
+certified safe. These are limits of the test, not counterexamples to unfolding.
+
+**Earlier step:** [radial receiver lemmas](BIPYRAMID_RADIAL.md) close
 FCFCC / BCBCC and FCCCB / BFCCC, and give a shorter proof of FCCBC.
 That radial step raised the count to six; the adjacent theorem raises it to seven.
 Four exact local examples check both lemmas in all three projection regimes;
 five complete-net applications verify the rules independently.
 
-**Latest result:** [the complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.md)
+**Earlier step:** [the complete opposing-chain rule](BIPYRAMID_CHAIN_RULE.md)
 closes FCCBC / BCFCC with no curvature-order hypothesis. The new local
 long-receiver lemma forces an acute fan apex and supplies the missing
 separation bounds. Six exact applications exercise all three pole choices.
@@ -27,7 +40,7 @@ with one fixed tree throughout a six-to-seven insertion. The
 [large-pole theorem](BIPYRAMID_STAR_PATCH.md) covers every pattern for any
 ring size when either pole has curvature at least π.
 
-**Overnight focus:** [new local and two-patch rules](BIPYRAMID_OVERNIGHT.md),
+**Earlier overnight step:** [new local and two-patch rules](BIPYRAMID_OVERNIGHT.md),
 plus the [exact first collision](BIPYRAMID_COLLISION.md). The length-sum slit
 settles all adjacent patch pairs universally. All two-inward-patch patterns
 are covered when a pole curvature is at least π; three receiver patterns
@@ -72,7 +85,7 @@ this initial overview is a local research page.
 ## Reproduce
 
 Dependencies are listed in `requirements.txt`. Run from the worktree root,
-with a Python environment containing them. The build of the sixteen reading
+with a Python environment containing them. The build of the reading
 pages additionally needs Pandoc on the command path.
 
 ```sh
@@ -161,25 +174,20 @@ formal verification of the geometric arguments.
 
 ## Next session
 
-1. Read `OVERNIGHT_2026_09_13.md` and `BIPYRAMID_OVERNIGHT.md#next`.
-   Read `BIPYRAMID_STAR_PATCH.md`: every pole-curvature-at-least-π case is now proved.
-   Four shortest-patch endpoint trees can all fail outside the proved gates;
-   do not assume that restricted rule universal. Work in the both-low-pole
-   region outside the aligned-pole family, now proved by the auxiliary-pyramid
-   comparison in `BIPYRAMID_ALIGNED.md`, while also pursuing the small-angle configurations in `BIPYRAMID_CHAIN_PAIR.md#remaining`.
-   Opposite receiver preferences and both receiver-plus-gap failures are
-   now realized by an exact integer example with six safe nets. Do not
-   try to prove those inequalities impossible. The original fixed
-   insertion collision is also completely classified for its specified
-   path. The other two receiver classes may admit stronger rules.
+1. Read the final checkpoint in `OVERNIGHT_2026_09_13.md`, then
+   `BIPYRAMID_PRODUCT_RULE.md`. Try the pure runs BBBCC and BBBBC first:
+   a common product-passing pole is conjectural. In the six other open
+   classes, work with the actual overlap obligations; exact conflicts
+   refute a universal common-passing-pole shortcut. The four-vertex
+   restriction localizes these conflicts. Review the new universal
+   proofs independently before treating them as established dependencies.
 2. Keep the A992 results as a secondary route. Read `A992.md#next-lemma`. The fixed source-3 rule is refuted; do not
    restart its universal proof. Read `A992_CONES.md`, `A992_R0.md`, and `A992_BASE_EDGES.md`. Work on E/Q in R0, E/235 with divergent hinges,
    or one of the three remaining R6 implications
    for the Left-to-Right triangle attachment, using the five-vertex
    localization of the initial obstruction.
-3. Investigate the remaining two-inward-patch bipyramid patterns. The one-
-   patch and single-intervening-convex-patch identities are particularly
-   short starting points; no curvature ranking was needed for those proofs.
+3. All two-inward bipyramid classes now have written complete proofs.
+   Preserve them and the earlier reductions; the whole-class count is 7/15.
 4. Treat cap attachment for N7-A1205 and uncut-diagonal restrictions for
    N7-A1167/N7-A1104 as separate missing lemmas.
 5. Retain the initial overview history and keep graph counts distinct from

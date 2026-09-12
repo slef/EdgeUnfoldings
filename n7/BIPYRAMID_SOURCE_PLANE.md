@@ -181,11 +181,46 @@ vertex; all nonadjacent combinations have just been covered. Boundary
 contacts are allowed, while interior overlap is excluded. This proves
 the theorem.
 
+## Two earlier families now have shorter proofs {#corollaries}
+
+**A pole of curvature at least $\pi$.** Choose that pole as source $q$.
+The closed spherical-link bound says that the angle from any incident
+edge direction $qu_i$ to the direction $qp$ is strictly less than
+$(2\pi-\kappa_q)/2\le\pi/2$. To see the bound, extend the
+spherical segment from the edge direction through the interior direction
+$qp$ until it meets the opposite boundary of the convex spherical link.
+Each of the two boundary arcs is at least the length of this segment,
+which is strictly longer than the initial segment to $qp$. Their sum is
+$2\pi-\kappa_q$. Thus every ring vertex is strictly behind
+the supporting plane in (1). The Source Plane rule applies directly.
+This is a shorter existence proof for the earlier large-pole family;
+the [shortest-patch construction](BIPYRAMID_STAR_PATCH.html) remains
+available as an alternative tree and as a source of its other criteria.
+
+**Aligned poles, arbitrary heights and either source.** Suppose a convex
+planar ring surrounds $c$, with poles $p=(c,h)$ and $q=(c,-H)$ for
+arbitrary $h,H>0$. Every ring vertex projects between the poles, so either
+source satisfies (1). Moreover
+
+$$|pu_i|+|qu_i|=\sqrt{|cu_i|^2+h^2}+\sqrt{|cu_i|^2+H^2}$$
+
+strictly increases with $|cu_i|$. Therefore either source can use a
+farthest ring vertex from $c$ as its slit.
+
+Keep $q$ fixed and grow $p(t)=(c,t h)$ from zero curvature. The same
+source star and same slit are safe for **every** $t>0$, even when the
+new pole grows farther from the equator than the old one. At $t=0$ the
+fan rejoins the base of the original pyramid. This removes the height
+ordering from the earlier fixed-source aligned construction. Its
+[auxiliary-pyramid proof](BIPYRAMID_ALIGNED.html) and exact neighborhood
+certificate are preserved.
+
 ## What this removes from the remaining problem {#remaining}
 
-The eight exact applications include seven low-pole examples in the
+The nine exact applications include seven low-pole examples in the
 remaining three- and four-inward classes, and one example with a ring
-vertex exactly on the source plane. Several satisfy the condition at only
+vertex exactly on the source plane, and one aligned example with the
+new fan pole much taller than the fixed source. Several satisfy the condition at only
 one pole, showing why a two-sided slab is not required. The four-inward
 example has a nonplanar equator.
 

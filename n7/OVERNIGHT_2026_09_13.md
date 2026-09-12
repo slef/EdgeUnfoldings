@@ -1,7 +1,7 @@
 # Pentagonal bipyramid overnight session — 13 September 2026
 
 Work window: **2026-09-12 16:04–22:04 UTC** (01:04–07:04 Tokyo).
-Checkpoint updated around 21:27 UTC; approximately 37 minutes remain.
+Final review checkpoint around 22:00 UTC; earlier checkpoints are preserved below.
 Continue substantive research until the deadline. The heartbeat automation
 `pentagonal-bipyramid-overnight` is active in this task every 5 minutes,
 with UNTIL 22:06 UTC so the final deadline run is included. At the deadline,
@@ -23,7 +23,47 @@ A temporary idle-sleep inhibitor runs until approximately the deadline
 (`caffeinate -i -t`, tool session 90334); no persistent power setting changed.
 No mathematical search is currently running.
 
-## Current checkpoint — general local rule and finite-switch insertion, around 21:27 UTC
+## Final review checkpoint — around 22:00 UTC
+
+The complete bipyramid graph remains OPEN. Written proofs cover all
+at-most-two-inward cases, 7/15 necessary symbolic classes. The general
+supporting-plane and local-product theorems cover further geometric
+families without changing that whole-class count. Independent review and
+formal verification of these arguments remain separate tasks.
+
+The earlier five-contiguous-block conjecture below was REFUTED in three
+mixed-direction classes: BBFCC, BBBFC, BBFFC. Rational seven-vertex
+examples fail both product tests, while both actual maximal-slit nets are
+exactly safe (45 face pairs each). Together with BBCBC, BBCFC, BCBFC,
+there are now six open classes with exact sufficient-test conflicts.
+Only pure runs BBBCC and BBBBC retain the common-product-pole conjecture.
+The failed tests require four distinct ring vertices: two inward corners
+and their distinct larger-distance-sum neighbors. This gives a useful
+structural target; it is not an unfolding counterexample.
+
+A final pure-direction six-vertex donor search found no conflict in
+1,180 numerically accepted pure-three-inward cases; this proves nothing.
+All discovery scripts, failures, and exact replays are archived under n7.
+
+The Source Plane theorem now has nine exact applications. Its corollaries
+give shorter proofs of every large-pole case and of aligned poles with
+arbitrary positive heights, either source. In particular, a fixed source
+and farthest-ring-vertex slit survive insertion to any positive height.
+The earlier auxiliary-pyramid proof is retained. The tilted-axis family
+and exact one-switch minimum-curvature example remain available in the
+interactive insertion page. Its continuum claim uses the family theorem
+and exact hypotheses, not drawing frames or sampled nets.
+
+Checkpoint 620120f contains the main universal rules and insertion work.
+The final counterexamples, corollaries, and presentation corrections
+passed 62 Python tests, all four Node interface checks, and a local link
+audit with zero missing files or anchors. A final wording correction
+distinguishes ring-vertex and fixed-pole support determinants during
+insertion. These arguments are self-reviewed, not formally verified. No n6 or Lean files were edited;
+no push or merge is being performed. At 22:04 UTC pause the heartbeat and
+provide the morning report.
+
+## Earlier checkpoint — general local rule and finite-switch insertion, around 21:27 UTC
 
 All work remains isolated under n7. The last committed checkpoint is
 30d17b0 (seven whole classes). The following further results are being
