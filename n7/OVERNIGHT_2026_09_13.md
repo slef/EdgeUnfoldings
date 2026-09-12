@@ -37,6 +37,9 @@ examples fail both product tests, while both actual maximal-slit nets are
 exactly safe (45 face pairs each). Together with BBCBC, BBCFC, BCBFC,
 there are now six open classes with exact sufficient-test conflicts.
 Only pure runs BBBCC and BBBBC retain the common-product-pole conjecture.
+The four-vertex restriction leaves only first/third-corner conflict for
+the three-run, and first/third, first/fourth, or second/fourth for the
+four-run (two pole orientations each). See Product Rule #pure-run-targets.
 The failed tests require four distinct ring vertices: two inward corners
 and their distinct larger-distance-sum neighbors. This gives a useful
 structural target; it is not an unfolding counterexample.

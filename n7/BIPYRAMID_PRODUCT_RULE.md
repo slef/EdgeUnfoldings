@@ -199,6 +199,31 @@ proves, as a small base-case corollary, that the product rule always has
 a passing pole for a triangular bipyramid, which has only three ring
 vertices.
 
+## The pure runs reduce to one or three possible corner pairs {#pure-run-targets}
+
+Label an all-forward run $Q_0,\ldots,Q_{k-1}$. Its inward corners are
+$u_1,\ldots,u_k$; the farther neighbor of $u_j$ is $u_{j-1}$.
+Opposite-source failures at consecutive corners would share one of the
+four vertices required above, which is impossible. Thus their indices
+must differ by at least two.
+
+| Remaining pure class | Run length | Possible pairs of conflicting inward corners |
+| --- | --- | --- |
+| BBBCC, reflected to FFFCC | 3 | $(u_1,u_3)$ only |
+| BBBBC, reflected to FFFFC | 4 | $(u_1,u_3)$, $(u_1,u_4)$, $(u_2,u_4)$ |
+
+Each listed pair still has two possible assignments of positive and
+negative failure. For example, the first orientation in the three-patch
+run forces $H_0>H_1>S_1$ and $H_2<H_3<-S_3$; reversing the pole
+roles reverses all axial signs. Excluding these endpoint conflicts would
+prove that a common passing pole exists and complete the corresponding
+whole class through the Product Rule. If a conflict is realizable, its
+actual net must instead be checked and, if needed, repaired.
+
+This is an exhaustive list of possible *sufficient-test conflicts* in
+these two pure runs, not a proof that any listed configuration exists or
+that its net overlaps. It does not change the 7/15 whole-class count.
+
 For the pentagonal bipyramid, exactly one ring vertex remains outside
 those four witnesses. A concrete next reduction is therefore to study
 how that extra vertex sits relative to the two failed patches. The
