@@ -16,6 +16,11 @@ The mathematical starting point is the revised manuscript in
 pass was checked was `5b21be4896f9e178626f1ca4fdcdc7e7458b93dc`.
 All changes for this work are confined to `lean_statement/`.
 
+[INTEGRATION.md](INTEGRATION.md) records the dedicated Lean worktree,
+checkpoint policy, build instructions, and planned links from the interactive
+paper. [STAR_NEXT.md](STAR_NEXT.md) is the current star-theorem checkpoint;
+read it before older continuation notes.
+
 ## Reading order
 
 [PROOF_GUIDE.md](PROOF_GUIDE.md) is a short overview of the proof and its exact
@@ -30,8 +35,8 @@ actual shortest-route tails and the cut rays between consecutive source copies.
 [CONE_BUDGET.md](CONE_BUDGET.md) maps the proved cone and simple-path angle bounds.
 [WEDGE_CHAINS.md](WEDGE_CHAINS.md) maps the checked initial, intermediate,
 terminal, and finite-chain wedge results.
-[GLOBAL_ASSEMBLY.md](GLOBAL_ASSEMBLY.md) states the next construction and
-its exact boundary-copy requirements; it is a plan, not a proved theorem.
+[GLOBAL_ASSEMBLY.md](GLOBAL_ASSEMBLY.md) describes the checked cofacial star
+construction in its canonical scope and the unfinished extension beyond it.
 
 1. [Definitions.lean](SixVertexUnfolding/Definitions.lean) contains the entire
    public mathematical vocabulary: the original definitions, moved verbatim.
