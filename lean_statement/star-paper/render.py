@@ -31,24 +31,33 @@ names={
 }
 def lean_code(key, field):
     """Keep the exact excerpt text; add only contextual definition controls."""
-    text=D['declarations'][key][field]
+    d=D['declarations'][key]; text=d[field]
+    # The declaration being introduced is already fully visible here.
+    head=re.match(r'(?:noncomputable\s+)?'+re.escape(d['kind'])+r'\s+('+re.escape(d['name'])+r')(?=\s|:)', text) if field=='signature' else None
+    assert field!='signature' or head, key
     pieces=[]; cursor=0
     for token in H['references'][key][field]:
         start,end=token['start'],token['end']
         assert cursor <= start < end <= len(text)
         pieces.append(esc(text[cursor:start]))
+        if head and head.start(1)<=start<end<=head.end(1):
+            pieces.append(esc(text[start:end]))
+            cursor=end
+            continue
         pieces.append(f'<button type="button" class="lean-symbol" data-symbol="{token["symbol"]}" aria-label="Definition of {esc(text[start:end])}" aria-haspopup="dialog" aria-controls="lean-hover" aria-expanded="false">{esc(text[start:end])}</button>')
         cursor=end
     pieces.append(esc(text[cursor:]))
     return ''.join(pieces)
 
-def declaration(ref, opened=False):
+def declaration(ref, block_id, opened=False):
     key=':'.join(ref); d=D['declarations'][key]
+    anchor='decl-'+block_id+'-'+key.replace(':','-').replace('.','-')
+    path=D['sources'][d['module']]['path']; end_line=d['line']+len(d['signature'].splitlines())-1
     theorem=d['kind']=='theorem'
     kind='Theorem' if theorem else 'Definition'
     state='Proof checked' if theorem else 'Formalized'
     context=(f'<details class="context"><summary>Hypotheses and surrounding Lean context</summary><pre data-excerpt="{key}:context"><code>{lean_code(key,"context")}</code></pre></details>' if d['context'] else '')
-    return (f'<details class="declaration" {"open" if opened else ""}>'
+    return (f'<details class="declaration" id="{anchor}" data-source-path="{esc(path)}" data-source-start="{d["line"]}" data-source-end="{end_line}" {"open" if opened else ""}>'
       f'<summary><span class="declaration-title">{esc(names.get(d["name"],d["name"]))}</span>'
       f'<span class="declaration-meta">{kind} · {state}</span></summary>'
       f'<div class="decl-content"><p class="code-path">{esc(d["qualified"])}</p>'
@@ -67,7 +76,7 @@ def inline_note(b,a):
     gap=(f'<div class="gap"><strong>Still needed</strong><p>{esc(a["gap"])}</p></div>' if a['gap'] else '')
     steps=('<h4>How the proof is split</h4><ol class="steps">'+''.join(f'<li>{esc(t)}</li>' for t in a['steps'])+'</ol>' if a['steps'] else '')
     explanation=f'<details class="correspondence"><summary>Explanation, scope and remaining work</summary><p>{esc(a["note"])}</p>{steps}{gap}</details>'
-    code=(''.join(declaration(r, i==0) for i,r in enumerate(refs)) if refs else '<p class="no-declaration">There is no matching Lean declaration yet.</p>')
+    code=(''.join(declaration(r, b["id"], i==0) for i,r in enumerate(refs)) if refs else '<p class="no-declaration">There is no matching Lean declaration yet.</p>')
     return (f'<details class="lean-note" id="lean-{b["id"]}" data-annotation="{a["id"]}">'
       f'<summary><img class="lean-logo" src="assets/lean-logo.svg" alt="Lean"><span>{label}</span><span class="coverage {a["status"]}">{status}</span><span class="disclosure" aria-hidden="true">+</span></summary>'
       f'<div class="lean-content"><dl class="status-grid"><div><dt>Formalization</dt><dd>{esc(a["statement"])}</dd></div>{proof}</dl>'
@@ -102,7 +111,7 @@ for section,title in sections.items():
 template='''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Kiazyk and Lubiw’s point star-unfolding proof, Sections 1.1–2, annotated with exact Lean statements, checked scope, and remaining obligations."><title>Star Unfolding — Paper & Lean</title><link rel="stylesheet" href="style.css"><script src="hovers.js" defer></script><script src="app.js" defer></script></head>
 <body><a class="skip" href="#paper">Skip to paper</a><header class="topbar"><a class="brand" href="#paper">Star unfolding / Lean</a><nav class="topnav" aria-label="Paper navigation"><a href="#section-1-1">§1.1</a><a href="#section-1-2">§1.2</a><a href="#section-2">§2 · Proof</a><a href="#proof-map-section">Proof map</a><label class="toggle"><input id="annotations-toggle" type="checkbox" checked>Lean annotations</label></nav></header>
-<main class="workspace"><article class="paper" id="paper"><header class="paper-header"><p class="eyebrow">KIAZYK–LUBIW · SECTIONS 1.1–2</p><h1>Star Unfolding from<br>a Geodesic Curve</h1><p class="authors">Stephen Kiazyk · Anna Lubiw</p><p class="citation"><i>Discrete & Computational Geometry</i> 56, 1018–1036 (2016).<br><a href="https://doi.org/10.1007/s00454-016-9795-1" target="_blank" rel="noopener">Journal article ↗</a> · excerpt pp. 1021–1026</p><p class="intro-note">Open a Lean insert beneath a passage to read its formalization in place. Definitions and proof status are labelled separately.</p><p class="hover-help">Hover over a name in the Lean code to see its type, definition and source. Click to keep the card open; keyboard users can Tab to a name and press Enter to explore its card. Escape closes it.</p></header>
+<main class="workspace"><article class="paper" id="paper"><header class="paper-header"><p class="eyebrow">KIAZYK–LUBIW · SECTIONS 1.1–2</p><h1>Star Unfolding from<br>a Geodesic Curve</h1><p class="authors">Stephen Kiazyk · Anna Lubiw</p><p class="citation"><i>Discrete & Computational Geometry</i> 56, 1018–1036 (2016).<br><a href="https://doi.org/10.1007/s00454-016-9795-1" target="_blank" rel="noopener">Journal article ↗</a> · excerpt pp. 1021–1026</p><p class="intro-note">Open a Lean insert beneath a passage to read its formalization in place. Definitions and proof status are labelled separately.</p><p class="hover-help">Hover over a name in the Lean code to see its type, definition and source. Click to keep the card open; keyboard users can Tab to a name and press Enter to explore its card. Escape closes it. Follow “View definition on this page” to open the corresponding insert; its full-source link remains there.</p></header>
 <div class="checkpoint"><strong>The full star theorem is still open in this formalization.</strong><p>A star embedding is checked for a restricted cofacial-source setting in nonuniversal six-vertex graphs. “Cofacial” means sharing a face, which is weaker than being joined by an edge; the universal-vertex case is still unfinished. The planar induction is checked; the broader geometric construction is incomplete.</p><a href="#theorem-1">Read the theorem</a> · <a href="#source-budget">Source-angle gap</a> · <a href="#lemma-3-internal">Internal-vertex gap</a></div>
 <details class="legend"><summary>What the Lean labels mean</summary><p><img class="lean-logo" src="assets/lean-logo.svg" alt="Lean"> opens an insert directly under the paper text. It means a correspondence is available, not that the passage has been proved.</p><ul><li><strong>Formalized:</strong> matching definitions or conditional statements are present.</li><li><strong>Partial coverage:</strong> the available formalization has narrower scope.</li><li><strong>Correspondence incomplete:</strong> some statements or connecting arguments are missing.</li><li><strong>Not formalized here:</strong> outside the current point-star project.</li></ul><p>Inside an insert, <strong>Definition · Formalized</strong> identifies a formal object; <strong>Theorem · Proof checked</strong> identifies a checked theorem under its displayed hypotheses. No displayed declaration contains a <code>sorry</code>. Missing general statements remain explicitly marked.</p></details>
 <!--ARTICLE-->

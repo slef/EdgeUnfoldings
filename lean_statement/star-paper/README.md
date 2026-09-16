@@ -46,7 +46,16 @@ Lean inserts expand directly below each paper passage using native HTML
 page. The inserts and declaration foldouts work without JavaScript. JavaScript adds the annotation visibility toggle and contextual definition cards.
 Hover or focus a named identifier in a statement or its surrounding context to
 inspect it. Click to pin the card; Enter also moves keyboard focus into it.
-Escape and the close button dismiss it without moving the paper.
+Escape and the close button dismiss it without moving the paper. Pointer
+hovers wait 450 ms; keyboard focus and clicks remain immediate. A declaration's
+own name at its head has no redundant hover card.
+
+When a referenced definition is displayed in the paper, its hover link opens
+the appropriate insert and scrolls to that declaration. The full-source link
+remains within the insert. Source locations distinguish same-named declarations;
+repeated declarations prefer the current insert. Library and other definitions
+without an inline counterpart retain their bundled-source links. Direct fragment
+links also open any enclosing foldouts.
 
 The official Lean logo (unmodified inline SVG from the navigation at
 <https://lean-lang.org/>, retrieved 16 September 2026) means “view the formalization,” not “proved.”

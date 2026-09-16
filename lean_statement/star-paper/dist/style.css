@@ -34,3 +34,5 @@
 .hover-location{font:13px/1.5 ui-monospace,monospace;border-top:1px solid #d8e1e8;padding-top:.6rem}
 @media(max-width:650px){.lean-hover{max-height:60vh}.lean-hover-top{font-size:13px}.lean-logo{width:63px;height:23px}}
 @media print{.lean-hover{display:none}.lean-symbol{color:inherit;background:none;box-shadow:none}}
+
+.declaration:target{border-color:#386ee0;box-shadow:0 0 0 2px #386ee025}

@@ -54,12 +54,21 @@ assert browser_hovers['symbols']==H['symbols']
 assert not H['unresolved']
 class Excerpts(HTMLParser):
     def __init__(self,text):
-        super().__init__(); self.current=None; self.text=[]; self.seen=set(); self.buttons=[]; self.feed(text)
+        super().__init__(); self.current=None; self.text=[]; self.seen=set(); self.buttons=[]; self.targets=[]; self.feed(text)
     def handle_starttag(self,tag,attrs):
         a=dict(attrs)
+        if tag=='details' and a.get('class')=='declaration':
+            self.targets.append(a)
         if tag=='pre' and 'data-excerpt' in a:
             self.current=a['data-excerpt']; self.text=[]
         if tag=='button' and 'data-symbol' in a:
+            assert self.current
+            key,field=self.current.rsplit(':',1); d=D['declarations'][key]
+            if field=='signature':
+                head=re.match(r'(?:noncomputable\s+)?'+re.escape(d['kind'])+r'\s+('+re.escape(d['name'])+r')(?=\s|:)',d['signature'])
+                assert head
+                position=len(''.join(self.text))
+                assert not head.start(1)<=position<head.end(1),(key,'redundant declaration-name hover')
             assert a['data-symbol'] in H['symbols']
             assert a['aria-controls']=='lean-hover' and a['aria-haspopup']=='dialog'
             self.buttons.append(a['data-symbol'])
@@ -71,6 +80,11 @@ class Excerpts(HTMLParser):
             assert ''.join(self.text)==D['declarations'][key][field],self.current
             self.seen.add(self.current); self.current=None
 excerpt_page=Excerpts((dist/'index.html').read_text())
+for key,d in D['declarations'].items():
+    matching=[t for t in excerpt_page.targets if t['data-source-path']==D['sources'][d['module']]['path'] and int(t['data-source-start'])==d['line']]
+    assert matching,(key,'missing in-page definition target')
+    assert all(int(t['data-source-end'])==d['line']+len(d['signature'].splitlines())-1 for t in matching)
+    assert all(t['id'] in pages[dist/'index.html'].ids for t in matching)
 keywords=set("theorem def abbrev structure inductive noncomputable private protected where extends variable variables open scoped include namespace end in fun let by if then else match with do return have show from forall Prop Type Type* Sort true false".split())
 for key,d in D['declarations'].items():
     for field in ('signature','context'):
@@ -107,4 +121,4 @@ logo=(dist/'assets/lean-logo.svg').read_text()
 assert '<svg ' in logo and '<script' not in logo and 'lean-mark' not in (dist/'index.html').read_text()
 for script in ('collect_hovers.py','build_hovers.py','render.py'):
     compile((site/script).read_text(),str(site/script),'exec')
-print(f'PASS: {len(H["symbols"])} contextual hover cards; all names covered, rendered excerpts unchanged, {len(H["sources"])} linked source snapshots verified.')
+print(f'PASS: {len(H["symbols"])} contextual hover cards; all name lookups covered, declaration-head hovers suppressed, in-page targets valid, excerpts unchanged, {len(H["sources"])} linked source snapshots verified.')
