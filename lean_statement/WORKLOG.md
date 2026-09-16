@@ -1,3 +1,52 @@
+## 2026-09-16 16:42 UTC — universal-source star theorem completed
+
+Completed `universal_star_embedding`: for six vertices, triangular or
+quadrilateral original faces, and a universal original source, the actual
+surface minus the five star cuts has a continuous open planar embedding,
+bounded path-connected image, exact finite straight-segment boundary, and
+exact local intrinsic distance preservation. All tree, chart, angle,
+nonoverlap, and gluing inputs are constructed from the solid.
+
+Transferred the existing canonical gluing arguments to the already proved
+broader route geometry. Triangle maps agree at retained shared points,
+including edge reversal and junction rays. Their finite closed cover glues
+continuously. Actual inverse disks cover triangle interiors, cut-edge
+bases, retained endpoint rays, and flat junctions; density supplies global
+uniqueness. The inverse and forward metric bounds give local intrinsic
+isometry. Retained rays and the cut tree with original leaves removed give
+connectivity; the cut-copy characterization gives the polygonal boundary.
+
+The inverse-map lemmas use an explicit `CutTreeCharts.KitesSeparated`
+property. The final universal theorem discharges it with the checked
+universal-source angle and separation results. It is not assumed in the
+final theorem and no canonical graph assumption is introduced.
+
+`UniversalStarUnfolding` applies the generic whole-face conversion to give
+the unchanged public `HasEdgeUnfolding`. Its short final corollary also
+uses the earlier reductions to cover all universal-vertex polyhedra with
+at most six vertices, without a face-size assumption. `Statement.lean`
+now closes that branch; the sole remaining `sorry` belongs only to the
+prism-with-diagonal branch. Its public theorem signature and the complete
+public definitions file are unchanged.
+
+Added 37 modules with 58 explicitly written proved theorems and 63 new
+audited theorem declarations including private/generated ones. Full build
+and axiom audit: **992 Lean files / 4,544 audited project theorem
+declarations**, only `propext`, `Classical.choice`, and `Quot.sound`.
+All modules are root-imported. No new proof hole or axiom.
+
+Bounded progress: the six universal-source star obligations (angle budget,
+kite separation, gluing/inverses, metric, connectivity, polygonal boundary)
+are **6/6 complete (100%)**; the whole-face conversion is complete as well.
+This is not a claim to the arbitrary-source or arbitrary-polyhedron star
+theorem, nor an overall percentage for the main six-vertex proof. Internal
+original-vertex junctions at arbitrary sources remain outside the milestone.
+No separate prism-with-diagonal proof work was undertaken.
+
+The interactive paper remains its explicitly dated source snapshot; it was
+not regenerated during this proof checkpoint. Current proof scope is in
+`STAR_NEXT.md`. All edits remain in the isolated Lean worktree.
+
 ## 2026-09-16 16:24 UTC — universal-source angle budget and kite separation
 
 Added eight proof modules, containing 28 explicitly written theorems and

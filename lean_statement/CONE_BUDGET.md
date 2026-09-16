@@ -3,7 +3,8 @@
 The source-angle budget is now proved both in the canonical graph scope
 and for six-vertex polyhedra with a universal source and triangular or
 quadrilateral faces. See [STAR_NEXT.md](STAR_NEXT.md) for the current
-checkpoint. The full universal-source star embedding remains unfinished.
+checkpoint. The full universal-source star embedding and its whole-face unfolding
+consequence are now complete.
 
 The universal-source extension uses `SmallPolyhedronSourceBudget`.
 Original face angles are summed directly; the face count gives total

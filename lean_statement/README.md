@@ -1,13 +1,14 @@
 # Lean formalization of the six-vertex edge-unfolding theorem
 
 The public definitions and target proposition remain unchanged. The target
-proof now invokes the stronger reduction to the two outstanding families. **The main
+proof now closes the universal-vertex branch using the completed star construction. **The main
 six-vertex theorem is not yet proved in Lean.** The complete theorem for **at
 most five vertices**, the theorem for **every convex pyramid**, and the
 **octahedron**, **octahedron-minus-edge**, and **ordinary triangular-prism**
 cases are proved. Every convex dome is also proved edge-unfoldable.
-The single remaining `sorry` in [Statement.lean](Statement.lean) concerns exactly
-six vertices with triangular or quadrilateral facets. None of the proved modules
+Every polyhedron with at most six vertices and a universal vertex is now
+proved edge-unfoldable as well. The single remaining `sorry` in
+[Statement.lean](Statement.lean) concerns the prism-with-diagonal branch. None of the proved modules
 imports that unfinished theorem.
 
 The mathematical starting point is the revised manuscript in
@@ -36,7 +37,7 @@ actual shortest-route tails and the cut rays between consecutive source copies.
 [WEDGE_CHAINS.md](WEDGE_CHAINS.md) maps the checked initial, intermediate,
 terminal, and finite-chain wedge results.
 [GLOBAL_ASSEMBLY.md](GLOBAL_ASSEMBLY.md) describes the checked cofacial star
-construction in its canonical scope and the unfinished extension beyond it.
+construction in the canonical and universal-source scopes, with arbitrary-source limitations.
 
 1. [Definitions.lean](SixVertexUnfolding/Definitions.lean) contains the entire
    public mathematical vocabulary: the original definitions, moved verbatim.
@@ -116,7 +117,7 @@ For arbitrary vertex count,
 proves that every public polyhedron has a spanning tree of original face
 hinges and simultaneous rigid planar placements agreeing along those hinges.
 These placements may overlap. Choosing a development without overlaps for the
-remaining six-vertex families is the central unfinished task.
+remaining prism-with-diagonal family is the central unfinished task.
 
 For the eventual case constructions,
 [`hasEdgeUnfolding_of_vertex_certificate`](SixVertexUnfolding/Geometry/VertexCertificate.lean)
@@ -178,7 +179,7 @@ Continuation checkpoint, 16 September 2026 (Europe/Brussels):
 | Remote finite-cut exclusions | 2/2 complete (100%) for every selected source/slit, including endpoints and curvature-threshold equalities. |
 | General shortest-path milestone | 3/3 complete: existence among all continuous surface paths, finite straight face subdivision, and a simple constant-speed parametrization for distinct endpoints. This is a prerequisite, not star nonoverlap. |
 | Local shortest-path geometry | Flat metric charts and local nonbranching are proved for every polyhedron. Vertex avoidance, finite route fibers, and global disjointness now hold for every polyhedron with at most six vertices and triangular/quadrilateral faces, without a canonical graph premise. |
-| Extension to universal-vertex solids | The actual cut tree, complete radial triangle charts, and original-vertex leaves are proved. The actual curvature bound, source-angle budget, and global kite separation are now checked. Retained-surface gluing and the full star embedding remain. |
+| Extension to universal-vertex solids | The actual cut tree, complete radial triangle charts, and original-vertex leaves are proved. The full universal-source star embedding is now proved, including local metric, connectivity, and polygonal boundary. Its whole-face conversion gives the public edge unfolding. |
 | Finite route structure | For at most six vertices and triangular/quadrilateral faces, intrinsic distance is locally the minimum over actual active sources, both in faces and across original edges. These sources count actual routes bijectively, and their Voronoi boundary is exactly the nearby multiple-route locus. |
 | Face-interior cut-locus milestone | 4/4 checked: actual nearby competitors, finite local minimum, exact Voronoi description, and ordinary two-route points with finitely many junctions. This is a local prerequisite, not the global tree theorem. |
 | Edge-interior cut-locus milestone | 4/4 checked: actual nearby competitors, finite local minimum, exact Voronoi description, and full two-route bisectors. Both incident original faces are covered. |
@@ -189,20 +190,20 @@ Continuation checkpoint, 16 September 2026 (Europe/Brussels):
 | Tree properties | Connectedness and acyclicity are now proved for at most six vertices with triangular/quadrilateral faces, without a canonical graph premise. All junctions and original cut vertices are marked, and every open edge has exactly two shortest routes. |
 | Route stability | For at most six vertices with triangular/quadrilateral faces, uniqueness persists and route counts cannot increase near any nonvertex target, including original edge interiors. The multiple-route locus is closed there. For every public polyhedron, it cannot accumulate at the source. |
 | Radial surface partition | For at most six vertices with triangular/quadrilateral faces, every cut-tree edge has two continuous closed route families and actual triangle developments. Their regions cover the entire boundary, for any surface source. |
-| Radial triangle geometry | Actual triangle developments, open strips, metric compatibility, flat junction fans, and coherent tree frames are checked without a canonical graph. Cofacial sources give complete CutTreeCharts. The global star embedding remains checked only in the canonical cofacial scope. |
+| Radial triangle geometry | Actual triangle developments, open strips, metric compatibility, flat junction fans, and coherent tree frames are checked without a canonical graph. Cofacial sources give complete CutTreeCharts. The global star embedding is checked both for canonical cofacial sources and for the six-vertex universal-source family. |
 | Successive radial triangles | Actual strips sharing an endpoint route align outward. The broader cofacial chart construction now includes the actual flat fans and coherent frames. Global kite separation is now proved for six vertices with a universal source. |
 | Original nonsource cone inequalities | All original vertices are covered for at most six vertices with triangular/quadrilateral faces; no canonical graph premise. Global source-angle budgets are now also proved for six vertices with a universal source, using actual face angles. |
-| Wedge-chain geometry | The planar chain engine and its complete canonical cofacial star application are checked. The universal-source angle budget now also proves separation of all actual kites in their common plane; retained-surface gluing remains. |
-| Overall formalization effort completed | No reliable percentage. The previous 80% estimate and 65–90% range are withdrawn: global star nonoverlap and its application to the remaining cases still contain substantial unproved constructions. |
-| Exact checked inventory | 955 Lean files; 4,481 audited theorem declarations including generated and private declarations. |
+| Wedge-chain geometry | The planar chain engine and its complete canonical cofacial star application are checked. The universal-source angle budget also supplies global kite separation and the complete retained-surface embedding. |
+| Overall formalization effort completed | No reliable percentage. The previous 80% estimate and 65–90% range are withdrawn: the universal-source star construction is complete, but the remaining prism-with-diagonal branch is not. |
+| Exact checked inventory | 992 Lean files; 4,544 audited theorem declarations including generated and private declarations. |
 
-The 16 September, 16:24 UTC checkpoint checks **955 files / 4,481 audited
+The 16 September, 16:42 UTC checkpoint checks **992 files / 4,544 audited
 declarations**. These counts measure checked work, not the percentage of
-the main theorem proved. The cofacial canonical star embedding and the
-generic whole-face conversion are proved. The universal family now has
-checked source-angle accounting and global kite separation; its full star embedding and arbitrary-source singular
-junctions remain unfinished.
-See [STAR_NEXT.md](STAR_NEXT.md) for the exact remaining dependencies.
+the main theorem proved. The universal-source star embedding and its
+whole-face edge-unfolding consequence are now complete. Arbitrary-source
+singular junctions are outside that milestone. The main target's only
+unfinished branch is the prism with a diagonal.
+See [STAR_NEXT.md](STAR_NEXT.md) for the exact proved scope.
 
 [OctahedronComplete](SixVertexUnfolding/OctahedronComplete.lean) proves the
 complete original-edge octahedron case. A sharper pole and a maximum-curvature
@@ -243,8 +244,11 @@ face paths are shortest among all surface paths.
 proves that any shortest path between cofacial points stays on their straight
 segment. [SixVertexStarCuts](SixVertexUnfolding/Geometry/SixVertexStarCuts.lean)
 constructs the five-edge spanning cut tree at a universal vertex and proves
-that its shortest cut segments meet only at the source. The nonoverlap theorem
-after these cuts remains unproved.
+that its shortest cut segments meet only at the source. The complete
+nonoverlapping star development after these cuts is now proved in
+[UniversalStarEmbedding](SixVertexUnfolding/Geometry/UniversalStarEmbedding.lean),
+and its whole-face consequence is in
+[UniversalStarUnfolding](SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean).
 
 [ShortestSurfacePaths](SixVertexUnfolding/Geometry/ShortestSurfacePaths.lean)
 now proves existence of finite shortest routes between arbitrary boundary
@@ -269,17 +273,15 @@ remaining family without a universal vertex. This is a specific geometric
 exclusion. Together with the subsequent finite and facet-incidence arguments,
 it completes the classification of the remaining family without a universal vertex.
 
-The main remaining proof obligations are:
+The main remaining proof obligation is the prism-with-diagonal branch:
+geometric switch arguments, original-face comparisons, and original-edge
+cut choices outside the already proved regions. Closing that branch will
+eliminate the target theorem's last `sorry`.
 
-- the six-vertex universal-vertex case, for which the manuscript uses the shortest-path star theorem;
-- the prism-with-diagonal geometric switch arguments, original-face comparisons, and original-edge cut choices;
-- equivalence of the retained dual hinge tree with cutting an original-edge
-  spanning tree to obtain an abstract disk;
-- completing these remaining families and eliminating the target theorem’s last `sorry`.
-
-These are unfinished mathematical developments, not additional axioms or
-hypotheses added to the main theorem. In particular, the single remaining
-`sorry` does not mean there is only one small lemma left.
+The equivalence between the public retained dual hinge tree and cutting an
+original-edge spanning tree to obtain an abstract disk is a separate
+possible strengthening. It is not an additional hypothesis of the public
+target, nor a gap in the completed universal-source star construction.
 
 ## Checking
 

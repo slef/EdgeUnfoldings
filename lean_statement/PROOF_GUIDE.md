@@ -3,7 +3,7 @@
 The target theorem is still unfinished. The public vocabulary is only
 [55 lines](SixVertexUnfolding/Definitions.lean), and the target is in
 [Statement.lean](Statement.lean). Neither statement nor definition layer has been enlarged to accommodate the
-proof machinery. The target proof invokes the current two-family reduction. You do not need to read the geometric helper modules to read
+proof machinery. The target proof closes the universal branch of the two-family reduction. You do not need to read the geometric helper modules to read
 the statement.
 
 `ConvexPolyhedron` is the convex hull of finitely many genuine extreme points
@@ -15,8 +15,8 @@ these are requirements proved by a construction.
 
 For the current star-unfolding scope and next gap, read
 [STAR_NEXT.md](STAR_NEXT.md). The six-vertex universal-source case now has
-an actual cut tree, covering charts, a checked source-angle budget, and
-global kite separation. Its retained-surface embedding is still unfinished.
+a complete retained-surface embedding, with connectivity, local metric,
+and polygonal boundary, and its whole-face edge-unfolding consequence.
 
 ## The main proof, from top to bottom
 
@@ -30,7 +30,8 @@ global kite separation. Its retained-surface embedding is still unfinished.
 | [MinusEdge.lean](SixVertexUnfolding/MinusEdge.lean) | The octahedron-minus-edge case, with its sole quadrilateral kept as one rigid original facet. Complete. |
 | [PrismDiagonalSelection.lean](SixVertexUnfolding/PrismDiagonalSelection.lean) | Prism-with-diagonal when both degree-four endpoints are sharper than their opposite poles. Complete for this region. |
 | [PrismComplete.lean](SixVertexUnfolding/PrismComplete.lean) | Every ordinary triangular prism. Complete, without parallelism assumptions, using the general dome theorem. |
-| [SixVertexRemaining.lean](SixVertexUnfolding/SixVertexRemaining.lean) | The main target is reduced to universal-vertex solids and the prism with a diagonal. |
+| [UniversalStarUnfolding.lean](SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean) | Every convex polyhedron with at most six vertices and a universal vertex has an edge unfolding. Complete. |
+| [SixVertexRemaining.lean](SixVertexUnfolding/SixVertexRemaining.lean) | Supplies the two-family reduction; the universal branch is now closed by UniversalStarUnfolding. |
 
 ## The geometric core
 
@@ -89,8 +90,8 @@ contain both whole facets in separated corner cones. Rigidity, hinge agreement,
 and outwardness are proved on the extended planes. This completes all ten
 ordinary-prism face comparisons. [DOMES_NEXT.md](DOMES_NEXT.md) gives the map.
 
-The remaining tasks are the six-vertex universal-vertex case and the
-prism-with-diagonal case outside its proved curvature region. The flat-diagonal consistency and whole-face reassembly are
+The universal-vertex case is now proved through `UniversalStarUnfolding`.
+The remaining task is the prism-with-diagonal case outside its proved curvature regions. The flat-diagonal consistency and whole-face reassembly are
 proved and applied to the minus-edge graph. The remaining prism cut choices
 and geometric comparisons must still retain every original facet.
 
@@ -100,7 +101,7 @@ length. Straight paths within a face are shortest among all such paths.
 [SixVertexStarCuts.lean](SixVertexUnfolding/Geometry/SixVertexStarCuts.lean)
 proves that the five cuts at a universal vertex form a spanning tree of
 shortest original edges and meet only at their source. Nonoverlap after these
-cuts remains to be proved; it is not hidden in the path definition.
+cuts is now proved by `UniversalStarEmbedding`, independently of the path definition.
 
 [ShortestSurfacePaths.lean](SixVertexUnfolding/Geometry/ShortestSurfacePaths.lean)
 proves that any two boundary points have a finite shortest route, minimizing
@@ -110,7 +111,7 @@ face entry and exit times give a subdivision into straight face portions.
 For distinct endpoints the route can be parametrized at constant arc speed
 without self-intersections. [SHORTEST_PATHS.md](SHORTEST_PATHS.md) maps these
 checked results. The cut-locus tree is now proved in the broader small-face
-scope; the full universal-source star embedding remains open.
+scope, and the universal-source star embedding is complete.
 
 [LOCAL_GEODESICS.md](LOCAL_GEODESICS.md) maps the flat metric charts now
 constructed at every nonvertex boundary point. The affine shortest-path
@@ -166,10 +167,10 @@ are now constructed. The original cone inequalities and total/simple-path
 source-angle budgets are proved. Wedge frame compatibility, first-kite
 containment, finite region iteration, and terminal exclusion are checked,
 with actual applications at one and two junctions. See
-[WEDGE_CHAINS.md](WEDGE_CHAINS.md). The global cut surface, internal original-vertex
-junctions, full path application with surface correspondence, and whole-face
-transfer remain open; [GLOBAL_ASSEMBLY.md](GLOBAL_ASSEMBLY.md) states the next
-construction without assuming those conclusions.
+[WEDGE_CHAINS.md](WEDGE_CHAINS.md). The complete global surface construction
+and whole-face transfer are now proved for the universal-source case; see
+[GLOBAL_ASSEMBLY.md](GLOBAL_ASSEMBLY.md) and [STAR_NEXT.md](STAR_NEXT.md).
+Internal original-vertex junctions for arbitrary sources remain outside that scope.
 
 [SIX_VERTEX_STATUS.md](SIX_VERTEX_STATUS.md) gives the detailed map.
 [Audit.lean](Audit.lean) checks every proved-library declaration and rejects any

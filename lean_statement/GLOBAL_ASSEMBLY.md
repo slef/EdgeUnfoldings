@@ -1,9 +1,12 @@
 # Checked assembly of the cofacial star
 
-Current status: 16 September 2026. This construction is proved for the
-cofacial vertex sources satisfying `CofacialStarEmbedding`'s canonical
-nonuniversal graph hypotheses. Extension to universal-vertex solids and
-arbitrary-source singular junctions is unfinished.
+Current status: 16 September 2026. This construction is proved both for
+canonical cofacial vertex sources and for the six-vertex universal-source
+family with triangular or quadrilateral faces. The latter now yields the
+public whole-face edge unfolding. Arbitrary-source singular junctions
+remain outside this scope. Read
+[UniversalStarEmbedding.lean](SixVertexUnfolding/Geometry/UniversalStarEmbedding.lean)
+for the short completed star theorem.
 
 ## Actual pieces and one placement
 
@@ -67,9 +70,9 @@ Accidental planar boundary contacts are permitted by the public definition.
 The proof does not require unrelated boundary copies to have identical
 original preimages.
 
-## Remaining geometry
+## Broader geometry and remaining scope
 
-The generic conversion does not construct a universal-source development.
+The universal-source development is now constructed and passed to the generic conversion.
 The universal five-cycle, actual supported five-ray figure, and complete
 local surface coverage and strict total-angle bound are now proved.
 The local angle bounds, shorter detours, and shortest-route avoidance are
@@ -86,6 +89,8 @@ leaves, and the complete `CutTreeCharts` collection is constructed. Local
 cone coverage and the flat-junction full-turn sum are also checked without
 a canonical graph. For six vertices with a universal source, a directly proved curvature upper
 bound now supplies the source-angle budget and global kite separation.
-The transfer of retained-surface gluing, inverse disks, connectivity, and
-polygonal boundary remains unfinished.
+Retained-surface gluing, inverse disks, local metric, connectivity, and
+polygonal boundary have now been transferred as well. Only the extension
+to arbitrary sources with singular internal junctions remains outside
+this star milestone.
 See [STAR_NEXT.md](STAR_NEXT.md) for the exact next obligation and scope.

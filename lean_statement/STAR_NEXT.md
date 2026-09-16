@@ -1,14 +1,14 @@
 # Star unfolding: current proved result and next gap
 
-Checkpoint: 16 September 2026, 16:24 UTC. The full star theorem is unfinished.
-The public definitions and theorem statement are unchanged.
+Checkpoint: 16 September 2026, 16:42 UTC.
+**The six-vertex universal-source star theorem is proved.**
+The arbitrary-source star theorem is not claimed. Public definitions and
+the target theorem statement are unchanged.
 
-The actual cut tree, its radial triangles, and local cone-angle coverage
-are now proved without a canonical graph assumption. For a cofacial source,
-including a universal vertex, the complete chart collection is constructed.
-For six vertices with a universal source, the actual source-angle budget
-and global kite separation are now proved. The retained-surface embedding
-still needs to be transferred to this broader scope.
+The actual cut tree, covering triangles, source-angle budget, global
+nonoverlap, retained-surface gluing, inverse disks, local intrinsic metric,
+connectivity, and polygonal boundary are all checked. The whole-face
+conversion now also produces the public `HasEdgeUnfolding` object.
 
 The supplied 2016 journal version has now been compared with the thesis:
 see [KIAZYK_2016_REVIEW.md](KIAZYK_2016_REVIEW.md). Its Section 2 is the
@@ -16,20 +16,29 @@ preferred proof reference; this review does not change the proved scope.
 
 ## Read this theorem first
 
-[CofacialStarEmbedding.lean](SixVertexUnfolding/Geometry/CofacialStarEmbedding.lean)
-constructs a continuous open embedding of the actual surface outside the
-specified star cuts into the plane. Its image is bounded and path connected,
-its boundary is a finite union of closed straight segments, and the map
-preserves the local intrinsic distance.
+[UniversalStarEmbedding.lean](SixVertexUnfolding/Geometry/UniversalStarEmbedding.lean)
+proves `universal_star_embedding`. Its inputs are six original vertices,
+triangular or quadrilateral original faces, and an original source adjacent
+to every other vertex. Its conclusion is a continuous open embedding of the
+actual surface outside the five star cuts into the plane, with bounded,
+path-connected image, finite straight-segment boundary, and exact local
+intrinsic distance preservation. The tree, charts, angle bounds, and
+separation are constructed, not supplied as assumptions.
 
-Its hypotheses matter: it uses `SixVertexGraph`, triangular or quadrilateral
-faces, and a source vertex sharing a face with every original vertex.
-`SixVertexGraph` comprises the four nonuniversal canonical graph models.
-This does not cover universal-vertex solids or arbitrary sources. The
-cofacial-source condition is impossible for the all-triangular octahedron;
-this theorem is not a claim that all four models have such a source.
+[UniversalStarUnfolding.lean](SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean)
+then applies the existing whole-face conversion. Its short final corollary,
+`hasEdgeUnfolding_of_universal_vertex`, uses the earlier small-solid and
+large-face reductions to cover **every convex polyhedron with at most six
+vertices having a universal vertex**, with no separate face-size assumption.
+The main theorem's proof script now closes this branch. Its sole remaining
+`sorry` is confined to the prism-with-diagonal branch.
 
-## Checked construction
+The earlier [CofacialStarEmbedding.lean](SixVertexUnfolding/Geometry/CofacialStarEmbedding.lean)
+remains the corresponding result for the four canonical nonuniversal graph
+models with a cofacial original source. The cofacial hypothesis is impossible
+for the all-triangular octahedron; no such source is asserted there.
+
+## Earlier canonical construction
 
 1. The actual shortest-path cut locus is a finite tree. Cofacial original
    targets are its leaves; internal junctions have flat surface charts.
@@ -62,8 +71,7 @@ spanning tree, and agreement along each complete hinge.
 
 [UniversalStarInteriors](SixVertexUnfolding/Geometry/UniversalStarInteriors.lean)
 proves the face-interior condition for a universal source. The actual
-universal-source planar development is still missing; the conversion
-must not be mistaken for that construction.
+universal-source development and its application to this conversion are now proved in `UniversalStarUnfolding`.
 
 ## Universal-vertex geometry: checked angle deficit, detours, and avoidance
 
@@ -187,8 +195,8 @@ junction fans and consistent frames then assemble into `CutTreeCharts` in
 Its short `small_exists_universal_star_charts` theorem constructs both the
 tree and the charts from a universal source. Coverage, flat junction
 compatibility, original leaves, and reverse-edge frames are all proved.
-Global kite separation is now proved below; injectivity of the assembled
-retained-surface map is a separate remaining step.
+Global kite separation and injectivity of the assembled retained-surface
+map are now proved as described below.
 
 ## Local angle accounting without a canonical graph: proved
 
@@ -248,38 +256,55 @@ constructs the actual covering charts with this property. These results
 assume six vertices, triangular/quadrilateral faces, and a universal source;
 no canonical graph, numerical angle inequality, or nonoverlap premise is supplied.
 
-## Next proof obligation
+## Retained-surface assembly: proved
 
-Transfer the existing **retained-surface gluing and embedding** construction
-to the broader charts. Kite-interior separation is now available, but it
-does not by itself identify shared boundary copies correctly or prove an
-open embedding of the uncut surface.
+1. `SmallPolyhedronStarCutEndpoints` identifies the star cuts with rays
+   ending at original vertices. The `SmallPolyhedron*MapAgreement` modules
+   prove full agreement of overlapping triangle maps, including edge
+   reversal and junction rays. `SmallPolyhedronStarDevelopmentContinuity`
+   glues the finite closed cover continuously.
+2. `SmallPolyhedronStarInverseDisks` constructs actual inverse disks in
+   triangle interiors, cut-edge bases, retained endpoint rays, and flat
+   junctions. `SmallPolyhedronStarOpenEmbedding` proves global injectivity
+   and openness; `SmallPolyhedronStarLocalMetric` proves exact local
+   intrinsic isometry.
+3. `SmallPolyhedronRetainedCutConnectivity` joins retained rays through
+   the cut tree after its original leaves are removed.
+   `SmallPolyhedronStarPolygonBoundary` identifies the entire planar
+   boundary with the finite union of actual straight cut-side segments.
+4. `UniversalStarEmbedding` supplies the proved chart separation from the
+   actual universal-source angle budget and packages the complete result.
+   `UniversalStarUnfolding` keeps every original face whole and derives an
+   original-edge hinge tree and nonoverlap in the public definition.
 
-1. Transfer the terminal-ray/star-cut characterization and agreement of
-   overlapping triangle maps to the broader shortest-route lemmas.
-2. Assemble the continuous map and transfer its inverse disks, including
-   cut-edge bases, retained endpoint rays, and flat junctions. These prove
-   global injectivity, openness, and local intrinsic isometry.
-3. Transfer retained-surface connectivity and the finite polygonal boundary
-   description, then invoke the existing whole-original-face conversion.
+The intermediate inverse-map results explicitly assume
+`CutTreeCharts.KitesSeparated`. This is a geometric property, not an axiom:
+`UniversalStarKiteSeparation` proves it from the original solid, and the
+final universal theorem discharges that input. The broader gluing and
+connectivity results need only at most six vertices, small faces, and a
+cofacial source; they do not assume a canonical graph.
 
-The canonical implementations begin at `StarCutEndpoints`,
-`GlobalMapAgreement`, and `StarDevelopmentMap`; the resulting checkpoint
-is `CofacialStarEmbedding`. Reuse the generic planar and chart lemmas rather
-than introducing a canonical graph assumption for the universal family.
+Bounded progress for the universal-source star milestone: angle budget,
+global kite separation, gluing/inverse maps, local metric, connectivity,
+and polygonal boundary are **6/6 complete (100%)**. Its conversion to a
+whole-face edge unfolding is also complete. This percentage refers to this
+specified star case, not to the full six-vertex theorem or the general paper.
 
-Bounded progress: universal-source angle budget **1/1 complete (100%)**;
-global kite separation **1/1 complete (100%)**; full universal-source star
-embedding **0/1 complete**. These are milestone counts, not an overall
-proof-effort percentage.
+## Remaining scope
 
-For a fully arbitrary-source star theorem, internal original-vertex
-junctions also remain to be handled. They are unnecessary for the current
-cofacial/universal-source milestone. The full theorem is still unfinished.
+The fully arbitrary-source star theorem still requires internal
+original-vertex junctions; the current cofacial construction does not
+claim to handle these. Arbitrary vertex counts and general geodesic-curve
+sources from the paper are also outside this completed milestone.
+
+For the main six-vertex edge-unfolding theorem, the universal-vertex branch
+is now closed. The single unfinished target branch is the prism with a
+diagonal outside its already proved regions. No new proof of that separate
+branch was attempted in this star-only checkpoint.
 
 ## Validation
 
-The latest full checkpoint checks 955 Lean files and audits 4,481 project
+The latest full checkpoint checks 992 Lean files and audits 4,544 project
 theorem declarations using only `propext`, `Classical.choice`, and
 `Quot.sound`. Later checkpoints are recorded in [WORKLOG.md](WORKLOG.md).
 The sole original main-theorem `sorry` remains in `Statement.lean`;

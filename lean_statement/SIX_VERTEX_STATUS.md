@@ -3,17 +3,19 @@
 The main theorem is unfinished. Complete Lean proofs now cover every convex
 polyhedron with at most five vertices, every convex pyramid, every convex
 octahedron, every octahedron-minus-edge polyhedron, and every ordinary triangular
-prism. The more general theorem for every convex dome is also proved. The definitions and
+prism. The more general theorem for every convex dome is also proved. The completed
+universal-source star construction now covers every polyhedron with at most
+six vertices having a universal vertex. The definitions and
 statement are unchanged. The sole `sorry` is in the target Statement file.
 
 ## Exact remaining cases
 
-[SixVertexRemaining.lean](SixVertexUnfolding/SixVertexRemaining.lean) proves that
-an input with at most six vertices either already unfolds or has exactly six
-vertices, triangular or quadrilateral facets, and one of these properties:
-
-1. An original vertex is adjacent to all five other vertices.
-2. The original graph is a triangular prism with one diagonal.
+[SixVertexRemaining.lean](SixVertexUnfolding/SixVertexRemaining.lean) supplies
+the earlier two-family reduction. The proof in `Statement.lean` now closes
+its universal-vertex branch using
+[UniversalStarUnfolding.lean](SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean).
+Only the prism-with-diagonal branch remains unfinished: exactly six
+vertices, with triangular or quadrilateral original facets.
 
 The prism-with-diagonal case is also proved in the curvature region
 `κ₁ ≤ κ₀` and `κ₄ ≤ κ₅`, including equality. Its degree-four sources are 0 and 5
@@ -126,11 +128,10 @@ all continuous surface paths, including paths of infinite length.
 [SixVertexStarCuts.lean](SixVertexUnfolding/Geometry/SixVertexStarCuts.lean)
 proves that a universal vertex supplies a spanning tree of five original
 shortest cuts, whose segments intersect only at their common source.
-Nonoverlap of the complete star development is still unproved. For the four
-canonical models, the actual cut-locus partition, nonvertex junction steps,
-source-angle budgets, and finite planar kite-chain argument are now checked.
-Their full global surface application and the universal family's five-ray
-avoidance remain open.
+The complete universal-source star development, including nonoverlap,
+local metric, connectivity, polygonal boundary, and whole-face conversion,
+is now proved. Read `UniversalStarEmbedding` and `UniversalStarUnfolding`;
+[STAR_NEXT.md](STAR_NEXT.md) records the exact scope.
 
 ## General shortest routes: existence and finite subdivision complete
 
@@ -153,10 +154,10 @@ are handled. See [SHORTEST_PATHS.md](SHORTEST_PATHS.md).
 Local continuation across edges is now also proved, together with flat metric
 charts at all nonvertex points, affine coordinate formulas for shortest
 routes, and local nonbranching. [LOCAL_GEODESICS.md](LOCAL_GEODESICS.md) gives
-the proof map. Intermediate vertices are excluded for all four canonical
-six-vertex models, so global nonbranching for them has no avoidance premise.
-General vertex avoidance, including the universal-vertex family, remains
-open. [CUT_LOCUS_FOUNDATIONS.md](CUT_LOCUS_FOUNDATIONS.md) maps the actual
+the proof map. Intermediate vertices are excluded for all polyhedra with
+at most six vertices and triangular/quadrilateral faces, including the
+universal-vertex family, so global nonbranching has no avoidance premise
+in this scope. [CUT_LOCUS_FOUNDATIONS.md](CUT_LOCUS_FOUNDATIONS.md) maps the actual
 local distance minimum and exact Voronoi description in faces and across
 original edges. Junctions are now proved finite globally. Outside them and
 original vertices, the cut has actual local intervals that preserve intrinsic
@@ -182,11 +183,10 @@ are now constructed. The original cone inequalities and total/simple-path
 source-angle budgets are proved. Wedge frame compatibility, first-kite
 containment, finite region iteration, and terminal exclusion are checked,
 with actual applications at one and two junctions. See
-[WEDGE_CHAINS.md](WEDGE_CHAINS.md). The global cut surface, internal original-vertex
-junctions, full path application with surface correspondence, and whole-face
-transfer remain open; [GLOBAL_ASSEMBLY.md](GLOBAL_ASSEMBLY.md) states the next
-construction without assuming those conclusions. These milestones close no additional six-vertex graph family and do
-not justify a large change in the overall percentage.
+[WEDGE_CHAINS.md](WEDGE_CHAINS.md). The complete global surface construction
+and whole-face transfer are now proved for the universal-source case; see
+[GLOBAL_ASSEMBLY.md](GLOBAL_ASSEMBLY.md) and [STAR_NEXT.md](STAR_NEXT.md).
+Internal original-vertex junctions for arbitrary sources remain outside that scope. This closes the universal-vertex family; no overall effort percentage is asserted.
 
 ## Verification and remaining work
 
@@ -196,7 +196,7 @@ including private helpers, and accepts only `propext`, `Classical.choice`, and
 `Quot.sound`. The unfinished Statement is checked separately. README records
 the final verified counts for this run.
 
-The remaining work is the universal-vertex nonoverlap construction and the
-prism-with-diagonal comparisons outside the proved curvature regions. The manuscript's shortest-path star theorem has not been
-imported as an axiom. These are substantial geometric obligations; one `sorry`
-does not mean that only one short lemma remains.
+The remaining main-theorem work is the prism-with-diagonal branch outside
+the proved curvature regions. The required universal-source star theorem
+is now proved rather than imported as an axiom. The single remaining
+`sorry` represents that separate unfinished branch.
