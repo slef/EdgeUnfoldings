@@ -69,6 +69,10 @@ class Excerpts(HTMLParser):
                 assert head
                 position=len(''.join(self.text))
                 assert not head.start(1)<=position<head.end(1),(key,'redundant declaration-name hover')
+                if d['kind'] in ('structure','inductive'):
+                    pattern=r"^  ([^\W\d][\w']*)[ \t]*:" if d['kind']=='structure' else r"^  \| ([^\W\d][\w']*)"
+                    for introduced in re.finditer(pattern,d['signature'],re.M):
+                        assert not introduced.start(1)<=position<introduced.end(1),(key,'redundant field/constructor hover')
             assert a['data-symbol'] in H['symbols']
             assert a['aria-controls']=='lean-hover' and a['aria-haspopup']=='dialog'
             self.buttons.append(a['data-symbol'])
@@ -121,4 +125,4 @@ logo=(dist/'assets/lean-logo.svg').read_text()
 assert '<svg ' in logo and '<script' not in logo and 'lean-mark' not in (dist/'index.html').read_text()
 for script in ('collect_hovers.py','build_hovers.py','render.py'):
     compile((site/script).read_text(),str(site/script),'exec')
-print(f'PASS: {len(H["symbols"])} contextual hover cards; all name lookups covered, declaration-head hovers suppressed, in-page targets valid, excerpts unchanged, {len(H["sources"])} linked source snapshots verified.')
+print(f'PASS: {len(H["symbols"])} contextual hover cards; all name lookups covered, declaration, field and constructor head hovers suppressed, in-page targets valid, excerpts unchanged, {len(H["sources"])} linked source snapshots verified.')

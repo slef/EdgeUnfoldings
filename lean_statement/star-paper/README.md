@@ -48,7 +48,9 @@ Hover or focus a named identifier in a statement or its surrounding context to
 inspect it. Click to pin the card; Enter also moves keyboard focus into it.
 Escape and the close button dismiss it without moving the paper. Pointer
 hovers wait 450 ms; keyboard focus and clicks remain immediate. A declaration's
-own name at its head has no redundant hover card.
+own name at its head has no redundant hover card. This also applies to names
+being introduced as structure fields or inductive constructors; references to
+those names retain their hover cards.
 
 When a referenced definition is displayed in the paper, its hover link opens
 the appropriate insert and scrolls to that declaration. The full-source link

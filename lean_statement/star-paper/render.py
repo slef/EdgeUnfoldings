@@ -35,12 +35,17 @@ def lean_code(key, field):
     # The declaration being introduced is already fully visible here.
     head=re.match(r'(?:noncomputable\s+)?'+re.escape(d['kind'])+r'\s+('+re.escape(d['name'])+r')(?=\s|:)', text) if field=='signature' else None
     assert field!='signature' or head, key
+    introductions=[head.span(1)] if head else []
+    if field=='signature' and d['kind']=='structure':
+        introductions.extend(m.span(1) for m in re.finditer(r"^  ([^\W\d][\w']*)[ \t]*:",text,re.M))
+    if field=='signature' and d['kind']=='inductive':
+        introductions.extend(m.span(1) for m in re.finditer(r"^  \| ([^\W\d][\w']*)",text,re.M))
     pieces=[]; cursor=0
     for token in H['references'][key][field]:
         start,end=token['start'],token['end']
         assert cursor <= start < end <= len(text)
         pieces.append(esc(text[cursor:start]))
-        if head and head.start(1)<=start<end<=head.end(1):
+        if any(left<=start<end<=right for left,right in introductions):
             pieces.append(esc(text[start:end]))
             cursor=end
             continue
