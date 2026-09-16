@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/GlobalKiteSeparation.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/GlobalKiteSeparation.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.CutTreeChainPaths</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! All distinct kites in the one chosen global development are</span>
+<span id="L4" class="line"><a href="#L4">4</a> nonoverlapping. The numerical budget comes from the actual source cone. -/</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> open Set</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L11" class="line"><a href="#L11">11</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L12" class="line"><a href="#L12">12</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> include small_faces</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> /-- Every distinct pair of tree-edge kites is separated in the fixed common plane. -/</span>
+<span id="L17" class="line"><a href="#L17">17</a> theorem global_kites_nonoverlap {a : frontier P.body} (T : P.CutLocusTree a)</span>
+<span id="L18" class="line"><a href="#L18">18</a>     (charts : CutTreeCharts T) (source : Fin 6)</span>
+<span id="L19" class="line"><a href="#L19">19</a>     (at_source : (a : Space) = (graph.vertex source : Space))</span>
+<span id="L20" class="line"><a href="#L20">20</a>     {u v w z : T.vertices} (first : T.graph.Adj u v) (last : T.graph.Adj w z)</span>
+<span id="L21" class="line"><a href="#L21">21</a>     (different : s(u, v) ≠ s(w, z)) :</span>
+<span id="L22" class="line"><a href="#L22">22</a>     Disjoint (charts.kite first) (interior (charts.kite last)) := by</span>
+<span id="L23" class="line"><a href="#L23">23</a>   obtain ⟨n, chain, first_same, last_same⟩ := T.exists_chain_between_edges first last different</span>
+<span id="L24" class="line"><a href="#L24">24</a>   have first_image : charts.kite (chain.edge 0) = charts.kite first :=</span>
+<span id="L25" class="line"><a href="#L25">25</a>     charts.kite_eq_of_same_edge _ first first_same</span>
+<span id="L26" class="line"><a href="#L26">26</a>   have last_image : charts.kite (chain.edge (Fin.last n).succ) = charts.kite last :=</span>
+<span id="L27" class="line"><a href="#L27">27</a>     charts.kite_eq_of_same_edge _ last last_same</span>
+<span id="L28" class="line"><a href="#L28">28</a>   rw [← first_image, ← last_image]</span>
+<span id="L29" class="line"><a href="#L29">29</a>   exact graph.cut_tree_chain_end_kites_nonoverlap small_faces T charts chain source at_source</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> /-- Construct the actual, covering chart collection with all its kites separated. -/</span>
+<span id="L32" class="line"><a href="#L32">32</a> theorem exists_separated_cut_tree_charts {a : frontier P.body} (T : P.CutLocusTree a)</span>
+<span id="L33" class="line"><a href="#L33">33</a>     (source : Fin 6) (at_source : (a : Space) = (graph.vertex source : Space))</span>
+<span id="L34" class="line"><a href="#L34">34</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :</span>
+<span id="L35" class="line"><a href="#L35">35</a>     ∃ charts : CutTreeCharts T,</span>
+<span id="L36" class="line"><a href="#L36">36</a>       ∀ {u v w z : T.vertices} (first : T.graph.Adj u v) (last : T.graph.Adj w z),</span>
+<span id="L37" class="line"><a href="#L37">37</a>         s(u, v) ≠ s(w, z) → Disjoint (charts.kite first) (interior (charts.kite last)) := by</span>
+<span id="L38" class="line"><a href="#L38">38</a>   obtain ⟨charts⟩ := graph.exists_cut_tree_charts small_faces a T cofacial</span>
+<span id="L39" class="line"><a href="#L39">39</a>   exact ⟨charts, fun first last different =&gt;</span>
+<span id="L40" class="line"><a href="#L40">40</a>     graph.global_kites_nonoverlap small_faces T charts source at_source first last different⟩</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span></pre></html>

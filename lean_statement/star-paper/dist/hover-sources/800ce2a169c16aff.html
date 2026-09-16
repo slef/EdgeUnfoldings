@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/CutTreeTargets.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/CutTreeTargets.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.CutEdgeRouteBranches</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Tree vertices and closed tree edges as points and paths on the actual boundary. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding.ConvexPolyhedron.CutLocusTree</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> open Set</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> variable {P : ConvexPolyhedron} {a : frontier P.body} (T : P.CutLocusTree a)</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- A graph vertex regarded as its actual surface point. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> def vertexTarget (u : T.vertices) : frontier P.body :=</span>
+<span id="L13" class="line"><a href="#L13">13</a>   ⟨u, P.cutSetInSpace_subset_boundary a (T.toEmbeddedCutGraph.vertex_in_trace u)⟩</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> theorem vertexTarget_cut (u : T.vertices) : T.vertexTarget u ∈ P.cutSet a :=</span>
+<span id="L16" class="line"><a href="#L16">16</a>   (P.mem_cutSetInSpace a _).mp (T.toEmbeddedCutGraph.vertex_in_trace u)</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> theorem vertexTarget_different (u : T.vertices) : a ≠ T.vertexTarget u := by</span>
+<span id="L19" class="line"><a href="#L19">19</a>   intro same</span>
+<span id="L20" class="line"><a href="#L20">20</a>   have cut := T.vertexTarget_cut u</span>
+<span id="L21" class="line"><a href="#L21">21</a>   rw [← same] at cut</span>
+<span id="L22" class="line"><a href="#L22">22</a>   exact P.source_not_cutSet a cut</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> /-- The affine parametrization of a closed cut-tree edge, including its endpoints. -/</span>
+<span id="L25" class="line"><a href="#L25">25</a> noncomputable def closedEdgeTarget {u v : T.vertices} (edge : T.graph.Adj u v) :</span>
+<span id="L26" class="line"><a href="#L26">26</a>     C(unitInterval, frontier P.body) :=</span>
+<span id="L27" class="line"><a href="#L27">27</a>   ⟨fun t =&gt; ⟨T.toEmbeddedCutGraph.edgePath edge t,</span>
+<span id="L28" class="line"><a href="#L28">28</a>     P.cutSetInSpace_subset_boundary a (T.toEmbeddedCutGraph.edgePath edge t).property⟩,</span>
+<span id="L29" class="line"><a href="#L29">29</a>     (continuous_subtype_val.comp (T.toEmbeddedCutGraph.edgePath edge).continuous).subtype_mk _⟩</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> theorem closedEdgeTarget_zero {u v : T.vertices} (edge : T.graph.Adj u v) :</span>
+<span id="L32" class="line"><a href="#L32">32</a>     T.closedEdgeTarget edge 0 = T.vertexTarget u := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>   apply Subtype.ext</span>
+<span id="L34" class="line"><a href="#L34">34</a>   exact AffineMap.lineMap_apply_zero _ _</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> theorem closedEdgeTarget_one {u v : T.vertices} (edge : T.graph.Adj u v) :</span>
+<span id="L37" class="line"><a href="#L37">37</a>     T.closedEdgeTarget edge 1 = T.vertexTarget v := by</span>
+<span id="L38" class="line"><a href="#L38">38</a>   apply Subtype.ext</span>
+<span id="L39" class="line"><a href="#L39">39</a>   exact AffineMap.lineMap_apply_one _ _</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> theorem closedEdgeTarget_interior {u v : T.vertices} (edge : T.graph.Adj u v) (t : Ioo (0 : ℝ) 1) :</span>
+<span id="L42" class="line"><a href="#L42">42</a>     T.closedEdgeTarget edge ⟨t, t.property.1.le, t.property.2.le⟩ = T.openEdgeTarget edge t := rfl</span>
+<span id="L43" class="line"><a href="#L43">43</a> </span>
+<span id="L44" class="line"><a href="#L44">44</a> theorem closedEdgeTarget_cut {u v : T.vertices} (edge : T.graph.Adj u v) (t : unitInterval) :</span>
+<span id="L45" class="line"><a href="#L45">45</a>     T.closedEdgeTarget edge t ∈ P.cutSet a :=</span>
+<span id="L46" class="line"><a href="#L46">46</a>   (P.mem_cutSetInSpace a _).mp (T.toEmbeddedCutGraph.edgePath edge t).property</span>
+<span id="L47" class="line"><a href="#L47">47</a> </span>
+<span id="L48" class="line"><a href="#L48">48</a> end SixVertexUnfolding.ConvexPolyhedron.CutLocusTree</span></pre></html>

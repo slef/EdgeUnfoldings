@@ -1,0 +1,293 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Data/Fintype/Defs.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Data/Fintype/Defs.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2017 Mario Carneiro. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Mario Carneiro</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Data.Finset.Filter</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Data.Finite.Defs</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Order.Lex</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-!</span>
+<span id="L13" class="line"><a href="#L13">13</a> # Finite types</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> This file defines a typeclass to state that a type is finite.</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> ## Main declarations</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> * `Fintype α`:  Typeclass saying that a type is finite. It takes as fields a `Finset` and a proof</span>
+<span id="L20" class="line"><a href="#L20">20</a>   that all terms of type `α` are in it.</span>
+<span id="L21" class="line"><a href="#L21">21</a> * `Finset.univ`: The finset of all elements of a fintype.</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> See `Data.Fintype.Basic` for elementary results,</span>
+<span id="L24" class="line"><a href="#L24">24</a> `Data.Fintype.Card` for the cardinality of a fintype,</span>
+<span id="L25" class="line"><a href="#L25">25</a> the equivalence with `Fin (Fintype.card α)`, and pigeonhole principles.</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> ## Instances</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> Instances for `Fintype` for</span>
+<span id="L30" class="line"><a href="#L30">30</a> * `{x // p x}` are in this file as `Fintype.subtype`</span>
+<span id="L31" class="line"><a href="#L31">31</a> * `Option α` are in `Data.Fintype.Option`</span>
+<span id="L32" class="line"><a href="#L32">32</a> * `α × β` are in `Data.Fintype.Prod`</span>
+<span id="L33" class="line"><a href="#L33">33</a> * `α ⊕ β` are in `Data.Fintype.Sum`</span>
+<span id="L34" class="line"><a href="#L34">34</a> * `Σ (a : α), β a` are in `Data.Fintype.Sigma`</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> These files also contain appropriate `Infinite` instances for these types.</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> `Infinite` instances for `ℕ`, `ℤ`, `Multiset α`, and `List α` are in `Data.Fintype.Lattice`.</span>
+<span id="L39" class="line"><a href="#L39">39</a> -/</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> @[expose] public section</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> assert_not_exists Monoid</span>
+<span id="L44" class="line"><a href="#L44">44</a> </span>
+<span id="L45" class="line"><a href="#L45">45</a> open Function</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> open Nat</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> universe u v</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> variable {α β γ : Type*}</span>
+<span id="L52" class="line"><a href="#L52">52</a> </span>
+<span id="L53" class="line"><a href="#L53">53</a> /-- `Fintype α` means that `α` is finite, i.e. there are only</span>
+<span id="L54" class="line"><a href="#L54">54</a>   finitely many distinct elements of type `α`. The evidence of this</span>
+<span id="L55" class="line"><a href="#L55">55</a>   is a finset `elems` (a list up to permutation without duplicates),</span>
+<span id="L56" class="line"><a href="#L56">56</a>   together with a proof that everything of type `α` is in the list. -/</span>
+<span id="L57" class="line"><a href="#L57">57</a> class Fintype (α : Type*) where</span>
+<span id="L58" class="line"><a href="#L58">58</a>   /-- The `Finset` containing all elements of a `Fintype` -/</span>
+<span id="L59" class="line"><a href="#L59">59</a>   elems : Finset α</span>
+<span id="L60" class="line"><a href="#L60">60</a>   /-- A proof that `elems` contains every element of the type -/</span>
+<span id="L61" class="line"><a href="#L61">61</a>   complete : ∀ x : α, x ∈ elems</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> /-! ### Preparatory lemmas -/</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> namespace Finset</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> theorem nodup_map_iff_injOn {f : α → β} {s : Finset α} :</span>
+<span id="L68" class="line"><a href="#L68">68</a>     (Multiset.map f s.val).Nodup ↔ Set.InjOn f s := by</span>
+<span id="L69" class="line"><a href="#L69">69</a>   simp [Multiset.nodup_map_iff_inj_on s.nodup, Set.InjOn]</span>
+<span id="L70" class="line"><a href="#L70">70</a> </span>
+<span id="L71" class="line"><a href="#L71">71</a> end Finset</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> namespace List</span>
+<span id="L74" class="line"><a href="#L74">74</a> </span>
+<span id="L75" class="line"><a href="#L75">75</a> variable [DecidableEq α] {a : α} {f : α → β} {s : Finset α} {t : Set β} {t&#x27; : Finset β}</span>
+<span id="L76" class="line"><a href="#L76">76</a> </span>
+<span id="L77" class="line"><a href="#L77">77</a> instance [DecidableEq β] : Decidable (Set.InjOn f s) :=</span>
+<span id="L78" class="line"><a href="#L78">78</a>   -- Use custom implementation for better performance.</span>
+<span id="L79" class="line"><a href="#L79">79</a>   decidable_of_iff ((Multiset.map f s.val).Nodup) Finset.nodup_map_iff_injOn</span>
+<span id="L80" class="line"><a href="#L80">80</a> </span>
+<span id="L81" class="line"><a href="#L81">81</a> instance [DecidableEq β] : Decidable (Set.BijOn f s t&#x27;) :=</span>
+<span id="L82" class="line"><a href="#L82">82</a>   inferInstanceAs (Decidable (_ ∧ _ ∧ _))</span>
+<span id="L83" class="line"><a href="#L83">83</a> </span>
+<span id="L84" class="line"><a href="#L84">84</a> end List</span>
+<span id="L85" class="line"><a href="#L85">85</a> </span>
+<span id="L86" class="line"><a href="#L86">86</a> namespace Finset</span>
+<span id="L87" class="line"><a href="#L87">87</a> </span>
+<span id="L88" class="line"><a href="#L88">88</a> variable [Fintype α] {s t : Finset α}</span>
+<span id="L89" class="line"><a href="#L89">89</a> </span>
+<span id="L90" class="line"><a href="#L90">90</a> /-- `univ` is the universal finite set of type `Finset α` implied from</span>
+<span id="L91" class="line"><a href="#L91">91</a>   the assumption `Fintype α`. -/</span>
+<span id="L92" class="line"><a href="#L92">92</a> def univ : Finset α :=</span>
+<span id="L93" class="line"><a href="#L93">93</a>   @Fintype.elems α _</span>
+<span id="L94" class="line"><a href="#L94">94</a> </span>
+<span id="L95" class="line"><a href="#L95">95</a> @[simp, grind ←]</span>
+<span id="L96" class="line"><a href="#L96">96</a> theorem mem_univ (x : α) : x ∈ (univ : Finset α) :=</span>
+<span id="L97" class="line"><a href="#L97">97</a>   Fintype.complete x</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> theorem mem_univ_val : ∀ x, x ∈ (univ : Finset α).1 := by simp</span>
+<span id="L100" class="line"><a href="#L100">100</a> </span>
+<span id="L101" class="line"><a href="#L101">101</a> theorem eq_univ_iff_forall : s = univ ↔ ∀ x, x ∈ s := by simp [Finset.ext_iff]</span>
+<span id="L102" class="line"><a href="#L102">102</a> </span>
+<span id="L103" class="line"><a href="#L103">103</a> theorem eq_univ_of_forall : (∀ x, x ∈ s) → s = univ :=</span>
+<span id="L104" class="line"><a href="#L104">104</a>   eq_univ_iff_forall.2</span>
+<span id="L105" class="line"><a href="#L105">105</a> </span>
+<span id="L106" class="line"><a href="#L106">106</a> @[simp, norm_cast]</span>
+<span id="L107" class="line"><a href="#L107">107</a> theorem coe_univ : ↑(univ : Finset α) = (Set.univ : Set α) := by ext; simp</span>
+<span id="L108" class="line"><a href="#L108">108</a> </span>
+<span id="L109" class="line"><a href="#L109">109</a> @[simp, norm_cast]</span>
+<span id="L110" class="line"><a href="#L110">110</a> theorem coe_eq_univ : (s : Set α) = Set.univ ↔ s = univ := by rw [← coe_univ, coe_inj]</span>
+<span id="L111" class="line"><a href="#L111">111</a> </span>
+<span id="L112" class="line"><a href="#L112">112</a> @[simp]</span>
+<span id="L113" class="line"><a href="#L113">113</a> theorem subset_univ (s : Finset α) : s ⊆ univ := fun a _ =&gt; mem_univ a</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> theorem mem_filter_univ {p : α → Prop} [DecidablePred p] : ∀ x, x ∈ univ.filter p ↔ p x := by simp</span>
+<span id="L116" class="line"><a href="#L116">116</a> </span>
+<span id="L117" class="line"><a href="#L117">117</a> end Finset</span>
+<span id="L118" class="line"><a href="#L118">118</a> </span>
+<span id="L119" class="line"><a href="#L119">119</a> namespace Mathlib.Meta</span>
+<span id="L120" class="line"><a href="#L120">120</a> open Lean Elab Term Meta Batteries.ExtendedBinder Parser.Term PrettyPrinter.Delaborator SubExpr</span>
+<span id="L121" class="line"><a href="#L121">121</a> </span>
+<span id="L122" class="line"><a href="#L122">122</a> /-- Elaborate set builder notation for `Finset`.</span>
+<span id="L123" class="line"><a href="#L123">123</a> </span>
+<span id="L124" class="line"><a href="#L124">124</a> * `{x | p x}` is elaborated as `Finset.filter (fun x ↦ p x) Finset.univ` if the expected type is</span>
+<span id="L125" class="line"><a href="#L125">125</a>   `Finset ?α`.</span>
+<span id="L126" class="line"><a href="#L126">126</a> * `{x : α | p x}` is elaborated as `Finset.filter (fun x : α ↦ p x) Finset.univ` if the expected</span>
+<span id="L127" class="line"><a href="#L127">127</a>   type is `Finset ?α`.</span>
+<span id="L128" class="line"><a href="#L128">128</a> * `{x ∉ s | p x}` is elaborated as `Finset.filter (fun x ↦ p x) sᶜ` if either the expected type is</span>
+<span id="L129" class="line"><a href="#L129">129</a>   `Finset ?α` or the expected type is not `Set ?α` and `s` has expected type `Finset ?α`.</span>
+<span id="L130" class="line"><a href="#L130">130</a> * `{x ≠ a | p x}` is elaborated as `Finset.filter (fun x ↦ p x) {a}ᶜ` if the expected type is</span>
+<span id="L131" class="line"><a href="#L131">131</a>   `Finset ?α`.</span>
+<span id="L132" class="line"><a href="#L132">132</a> </span>
+<span id="L133" class="line"><a href="#L133">133</a> See also</span>
+<span id="L134" class="line"><a href="#L134">134</a> * `Data.Set.Defs` for the `Set` builder notation elaborator that this elaborator partly overrides.</span>
+<span id="L135" class="line"><a href="#L135">135</a> * `Data.Finset.Basic` for the `Finset` builder notation elaborator partly overriding this one for</span>
+<span id="L136" class="line"><a href="#L136">136</a>   syntax of the form `{x ∈ s | p x}`.</span>
+<span id="L137" class="line"><a href="#L137">137</a> * `Data.Fintype.Basic` for the `Finset` builder notation elaborator handling syntax of the form</span>
+<span id="L138" class="line"><a href="#L138">138</a>   `{x | p x}`, `{x : α | p x}`, `{x ∉ s | p x}`, `{x ≠ a | p x}`.</span>
+<span id="L139" class="line"><a href="#L139">139</a> * `Order.LocallyFinite.Basic` for the `Finset` builder notation elaborator handling syntax of the</span>
+<span id="L140" class="line"><a href="#L140">140</a>   form `{x ≤ a | p x}`, `{x ≥ a | p x}`, `{x &lt; a | p x}`, `{x &gt; a | p x}`.</span>
+<span id="L141" class="line"><a href="#L141">141</a> -/</span>
+<span id="L142" class="line"><a href="#L142">142</a> @[term_elab setBuilder]</span>
+<span id="L143" class="line"><a href="#L143">143</a> meta def elabFinsetBuilderSetOf : TermElab</span>
+<span id="L144" class="line"><a href="#L144">144</a>   | `({ $x:ident | $p }), expectedType? =&gt; do</span>
+<span id="L145" class="line"><a href="#L145">145</a>     -- If the expected type is not known to be `Finset ?α`, give up.</span>
+<span id="L146" class="line"><a href="#L146">146</a>     unless ← knownToBeFinsetNotSet expectedType? do throwUnsupportedSyntax</span>
+<span id="L147" class="line"><a href="#L147">147</a>     elabTerm (← `(Finset.filter (fun $x:ident ↦ $p) Finset.univ)) expectedType?</span>
+<span id="L148" class="line"><a href="#L148">148</a>   | `({ $x:ident : $t | $p }), expectedType? =&gt; do</span>
+<span id="L149" class="line"><a href="#L149">149</a>     -- If the expected type is not known to be `Finset ?α`, give up.</span>
+<span id="L150" class="line"><a href="#L150">150</a>     unless ← knownToBeFinsetNotSet expectedType? do throwUnsupportedSyntax</span>
+<span id="L151" class="line"><a href="#L151">151</a>     elabTerm (← `(Finset.filter (fun $x:ident : $t ↦ $p) Finset.univ)) expectedType?</span>
+<span id="L152" class="line"><a href="#L152">152</a>   | `({ $x:ident ∉ $s:term | $p }), expectedType? =&gt; do</span>
+<span id="L153" class="line"><a href="#L153">153</a>     -- If the expected type is known to be `Set ?α`, give up. If it is not known to be `Set ?α` or</span>
+<span id="L154" class="line"><a href="#L154">154</a>     -- `Finset ?α`, check the expected type of `s`.</span>
+<span id="L155" class="line"><a href="#L155">155</a>     unless ← knownToBeFinsetNotSet expectedType? do</span>
+<span id="L156" class="line"><a href="#L156">156</a>       let ty ← try whnfR (← inferType (← elabTerm s none)) catch _ =&gt; throwUnsupportedSyntax</span>
+<span id="L157" class="line"><a href="#L157">157</a>       -- If the expected type of `s` is not known to be `Finset ?α`, give up.</span>
+<span id="L158" class="line"><a href="#L158">158</a>       match_expr ty with</span>
+<span id="L159" class="line"><a href="#L159">159</a>       | Finset _ =&gt; pure ()</span>
+<span id="L160" class="line"><a href="#L160">160</a>       | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L161" class="line"><a href="#L161">161</a>     -- Finally, we can elaborate the syntax as a finset.</span>
+<span id="L162" class="line"><a href="#L162">162</a>     -- TODO: Seems a bit wasteful to have computed the expected type but still use `expectedType?`.</span>
+<span id="L163" class="line"><a href="#L163">163</a>     elabTerm (← `(Finset.filter (fun $x:ident ↦ $p) $sᶜ)) expectedType?</span>
+<span id="L164" class="line"><a href="#L164">164</a>   | `({ $x:ident ≠ $a | $p }), expectedType? =&gt; do</span>
+<span id="L165" class="line"><a href="#L165">165</a>     -- If the expected type is not known to be `Finset ?α`, give up.</span>
+<span id="L166" class="line"><a href="#L166">166</a>     unless ← knownToBeFinsetNotSet expectedType? do throwUnsupportedSyntax</span>
+<span id="L167" class="line"><a href="#L167">167</a>     elabTerm (← `(Finset.filter (fun $x:ident ↦ $p) (singleton $a)ᶜ)) expectedType?</span>
+<span id="L168" class="line"><a href="#L168">168</a>   | _, _ =&gt; throwUnsupportedSyntax</span>
+<span id="L169" class="line"><a href="#L169">169</a> </span>
+<span id="L170" class="line"><a href="#L170">170</a> /-- Delaborator for `Finset.filter`. The `pp.funBinderTypes` option controls whether</span>
+<span id="L171" class="line"><a href="#L171">171</a> to show the domain type when the filter is over `Finset.univ`. -/</span>
+<span id="L172" class="line"><a href="#L172">172</a> @[app_delab Finset.filter] meta def delabFinsetFilter : Delab :=</span>
+<span id="L173" class="line"><a href="#L173">173</a>   whenPPOption getPPNotation do</span>
+<span id="L174" class="line"><a href="#L174">174</a>   let #[_, p, _, t] := (← getExpr).getAppArgs | failure</span>
+<span id="L175" class="line"><a href="#L175">175</a>   guard p.isLambda</span>
+<span id="L176" class="line"><a href="#L176">176</a>   let i ← withNaryArg 1 &lt;| withBindingBodyUnusedName (pure ⟨·⟩)</span>
+<span id="L177" class="line"><a href="#L177">177</a>   let p ← withNaryArg 1 &lt;| withBindingBody i.getId delab</span>
+<span id="L178" class="line"><a href="#L178">178</a>   if t.isAppOfArity ``Finset.univ 2 then</span>
+<span id="L179" class="line"><a href="#L179">179</a>     if ← getPPOption getPPFunBinderTypes then</span>
+<span id="L180" class="line"><a href="#L180">180</a>       let ty ← withNaryArg 0 delab</span>
+<span id="L181" class="line"><a href="#L181">181</a>       `({$i:ident : $ty | $p})</span>
+<span id="L182" class="line"><a href="#L182">182</a>     else</span>
+<span id="L183" class="line"><a href="#L183">183</a>       `({$i:ident | $p})</span>
+<span id="L184" class="line"><a href="#L184">184</a>   -- check if `t` is of the form `s₀ᶜ`, in which case we display `x ∉ s₀` instead</span>
+<span id="L185" class="line"><a href="#L185">185</a>   else if t.isAppOfArity ``Compl.compl 3 then</span>
+<span id="L186" class="line"><a href="#L186">186</a>     let #[_, _, s₀] := t.getAppArgs | failure</span>
+<span id="L187" class="line"><a href="#L187">187</a>     -- if `s₀` is a singleton, we can even use the notation `x ≠ a`</span>
+<span id="L188" class="line"><a href="#L188">188</a>     if s₀.isAppOfArity ``Singleton.singleton 4 then</span>
+<span id="L189" class="line"><a href="#L189">189</a>       let t ← withNaryArg 3 &lt;| withNaryArg 2 &lt;| withNaryArg 3 delab</span>
+<span id="L190" class="line"><a href="#L190">190</a>       `({$i:ident ≠ $t | $p})</span>
+<span id="L191" class="line"><a href="#L191">191</a>     else</span>
+<span id="L192" class="line"><a href="#L192">192</a>       let t ← withNaryArg 3 &lt;| withNaryArg 2 delab</span>
+<span id="L193" class="line"><a href="#L193">193</a>       `({$i:ident ∉ $t | $p})</span>
+<span id="L194" class="line"><a href="#L194">194</a>   else</span>
+<span id="L195" class="line"><a href="#L195">195</a>     let t ← withNaryArg 3 delab</span>
+<span id="L196" class="line"><a href="#L196">196</a>     `({$i:ident ∈ $t | $p})</span>
+<span id="L197" class="line"><a href="#L197">197</a> </span>
+<span id="L198" class="line"><a href="#L198">198</a> end Mathlib.Meta</span>
+<span id="L199" class="line"><a href="#L199">199</a> </span>
+<span id="L200" class="line"><a href="#L200">200</a> open Finset</span>
+<span id="L201" class="line"><a href="#L201">201</a> </span>
+<span id="L202" class="line"><a href="#L202">202</a> namespace Fintype</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> instance decidablePiFintype {α} {β : α → Type*} [∀ a, DecidableEq (β a)] [Fintype α] :</span>
+<span id="L205" class="line"><a href="#L205">205</a>     DecidableEq (∀ a, β a) := fun f g =&gt;</span>
+<span id="L206" class="line"><a href="#L206">206</a>   decidable_of_iff (∀ a ∈ @univ α _, f a = g a)</span>
+<span id="L207" class="line"><a href="#L207">207</a>     (by simp [funext_iff])</span>
+<span id="L208" class="line"><a href="#L208">208</a> </span>
+<span id="L209" class="line"><a href="#L209">209</a> instance decidableForallFintype {p : α → Prop} [DecidablePred p] [Fintype α] :</span>
+<span id="L210" class="line"><a href="#L210">210</a>     Decidable (∀ a, p a) :=</span>
+<span id="L211" class="line"><a href="#L211">211</a>   decidable_of_iff (∀ a ∈ @univ α _, p a) (by simp)</span>
+<span id="L212" class="line"><a href="#L212">212</a> </span>
+<span id="L213" class="line"><a href="#L213">213</a> instance decidableExistsFintype {p : α → Prop} [DecidablePred p] [Fintype α] :</span>
+<span id="L214" class="line"><a href="#L214">214</a>     Decidable (∃ a, p a) :=</span>
+<span id="L215" class="line"><a href="#L215">215</a>   decidable_of_iff (∃ a ∈ @univ α _, p a) (by simp)</span>
+<span id="L216" class="line"><a href="#L216">216</a> </span>
+<span id="L217" class="line"><a href="#L217">217</a> instance decidableMemRangeFintype [Fintype α] [DecidableEq β] (f : α → β) :</span>
+<span id="L218" class="line"><a href="#L218">218</a>     DecidablePred (· ∈ Set.range f) := fun _ =&gt; Fintype.decidableExistsFintype</span>
+<span id="L219" class="line"><a href="#L219">219</a> </span>
+<span id="L220" class="line"><a href="#L220">220</a> instance decidableSubsingleton [Fintype α] [DecidableEq α] {s : Set α} [DecidablePred (· ∈ s)] :</span>
+<span id="L221" class="line"><a href="#L221">221</a>     Decidable s.Subsingleton := decidable_of_iff (∀ a ∈ s, ∀ b ∈ s, a = b) Iff.rfl</span>
+<span id="L222" class="line"><a href="#L222">222</a> </span>
+<span id="L223" class="line"><a href="#L223">223</a> section BundledHoms</span>
+<span id="L224" class="line"><a href="#L224">224</a> </span>
+<span id="L225" class="line"><a href="#L225">225</a> instance decidableEqEquivFintype [DecidableEq β] [Fintype α] : DecidableEq (α ≃ β) := fun a b =&gt;</span>
+<span id="L226" class="line"><a href="#L226">226</a>   decidable_of_iff (a.1 = b.1) Equiv.coe_fn_injective.eq_iff</span>
+<span id="L227" class="line"><a href="#L227">227</a> </span>
+<span id="L228" class="line"><a href="#L228">228</a> instance decidableEqEmbeddingFintype [DecidableEq β] [Fintype α] : DecidableEq (α ↪ β) := fun a b =&gt;</span>
+<span id="L229" class="line"><a href="#L229">229</a>   decidable_of_iff ((a : α → β) = b) Function.Embedding.coe_injective.eq_iff</span>
+<span id="L230" class="line"><a href="#L230">230</a> </span>
+<span id="L231" class="line"><a href="#L231">231</a> end BundledHoms</span>
+<span id="L232" class="line"><a href="#L232">232</a> </span>
+<span id="L233" class="line"><a href="#L233">233</a> theorem nodup_map_univ_iff_injective [Fintype α] {f : α → β} :</span>
+<span id="L234" class="line"><a href="#L234">234</a>     (Multiset.map f univ.val).Nodup ↔ Function.Injective f := by</span>
+<span id="L235" class="line"><a href="#L235">235</a>   rw [nodup_map_iff_injOn, coe_univ, Set.injOn_univ]</span>
+<span id="L236" class="line"><a href="#L236">236</a> </span>
+<span id="L237" class="line"><a href="#L237">237</a> instance decidableInjectiveFintype [DecidableEq β] [Fintype α] :</span>
+<span id="L238" class="line"><a href="#L238">238</a>     DecidablePred (Injective : (α → β) → Prop) :=</span>
+<span id="L239" class="line"><a href="#L239">239</a>   -- Use custom implementation for better performance.</span>
+<span id="L240" class="line"><a href="#L240">240</a>   fun f =&gt; decidable_of_iff ((Multiset.map f univ.val).Nodup) nodup_map_univ_iff_injective</span>
+<span id="L241" class="line"><a href="#L241">241</a> </span>
+<span id="L242" class="line"><a href="#L242">242</a> instance decidableSurjectiveFintype [DecidableEq β] [Fintype α] [Fintype β] :</span>
+<span id="L243" class="line"><a href="#L243">243</a>     DecidablePred (Surjective : (α → β) → Prop) :=</span>
+<span id="L244" class="line"><a href="#L244">244</a>   fun x ↦ inferInstanceAs &lt;| Decidable (∀ b, ∃ a, x a = b)</span>
+<span id="L245" class="line"><a href="#L245">245</a> </span>
+<span id="L246" class="line"><a href="#L246">246</a> instance decidableBijectiveFintype [DecidableEq β] [Fintype α] [Fintype β] :</span>
+<span id="L247" class="line"><a href="#L247">247</a>     DecidablePred (Bijective : (α → β) → Prop) :=</span>
+<span id="L248" class="line"><a href="#L248">248</a>   fun x ↦ inferInstanceAs &lt;| Decidable (Injective x ∧ Surjective x)</span>
+<span id="L249" class="line"><a href="#L249">249</a> </span>
+<span id="L250" class="line"><a href="#L250">250</a> instance decidableRightInverseFintype [DecidableEq α] [Fintype α] (f : α → β) (g : β → α) :</span>
+<span id="L251" class="line"><a href="#L251">251</a>     Decidable (Function.RightInverse f g) :=</span>
+<span id="L252" class="line"><a href="#L252">252</a>   inferInstanceAs &lt;| Decidable (∀ x, g (f x) = x)</span>
+<span id="L253" class="line"><a href="#L253">253</a> </span>
+<span id="L254" class="line"><a href="#L254">254</a> instance decidableLeftInverseFintype [DecidableEq β] [Fintype β] (f : α → β) (g : β → α) :</span>
+<span id="L255" class="line"><a href="#L255">255</a>     Decidable (Function.LeftInverse f g) :=</span>
+<span id="L256" class="line"><a href="#L256">256</a>   inferInstanceAs &lt;| Decidable (∀ x, f (g x) = x)</span>
+<span id="L257" class="line"><a href="#L257">257</a> </span>
+<span id="L258" class="line"><a href="#L258">258</a> instance subsingleton (α : Type*) : Subsingleton (Fintype α) :=</span>
+<span id="L259" class="line"><a href="#L259">259</a>   ⟨fun ⟨s₁, h₁⟩ ⟨s₂, h₂⟩ =&gt; by congr; simp [Finset.ext_iff, h₁, h₂]⟩</span>
+<span id="L260" class="line"><a href="#L260">260</a> </span>
+<span id="L261" class="line"><a href="#L261">261</a> instance (α : Type*) : Lean.Meta.FastSubsingleton (Fintype α) := {}</span>
+<span id="L262" class="line"><a href="#L262">262</a> </span>
+<span id="L263" class="line"><a href="#L263">263</a> -- adding `@[implicit_reducible]` causes downstream breakage</span>
+<span id="L264" class="line"><a href="#L264">264</a> set_option warn.classDefReducibility false in</span>
+<span id="L265" class="line"><a href="#L265">265</a> /-- Given a predicate that can be represented by a finset, the subtype</span>
+<span id="L266" class="line"><a href="#L266">266</a> associated to the predicate is a fintype. -/</span>
+<span id="L267" class="line"><a href="#L267">267</a> protected def subtype {p : α → Prop} (s : Finset α) (H : ∀ x : α, x ∈ s ↔ p x) :</span>
+<span id="L268" class="line"><a href="#L268">268</a>     Fintype { x // p x } :=</span>
+<span id="L269" class="line"><a href="#L269">269</a>   ⟨⟨s.1.pmap Subtype.mk fun x =&gt; (H x).1, s.nodup.pmap fun _ _ _ _ =&gt; congr_arg Subtype.val⟩,</span>
+<span id="L270" class="line"><a href="#L270">270</a>     fun ⟨x, px⟩ =&gt; Multiset.mem_pmap.2 ⟨x, (H x).2 px, rfl⟩⟩</span>
+<span id="L271" class="line"><a href="#L271">271</a> </span>
+<span id="L272" class="line"><a href="#L272">272</a> -- adding `@[implicit_reducible]` causes downstream breakage</span>
+<span id="L273" class="line"><a href="#L273">273</a> set_option warn.classDefReducibility false in</span>
+<span id="L274" class="line"><a href="#L274">274</a> /-- Construct a fintype from a finset with the same elements. -/</span>
+<span id="L275" class="line"><a href="#L275">275</a> def ofFinset {p : Set α} (s : Finset α) (H : ∀ x, x ∈ s ↔ x ∈ p) : Fintype p :=</span>
+<span id="L276" class="line"><a href="#L276">276</a>   Fintype.subtype s H</span>
+<span id="L277" class="line"><a href="#L277">277</a> </span>
+<span id="L278" class="line"><a href="#L278">278</a> end Fintype</span>
+<span id="L279" class="line"><a href="#L279">279</a> </span>
+<span id="L280" class="line"><a href="#L280">280</a> instance Bool.fintype : Fintype Bool :=</span>
+<span id="L281" class="line"><a href="#L281">281</a>   ⟨⟨{true, false}, by simp⟩, fun x =&gt; by cases x &lt;;&gt; simp⟩</span>
+<span id="L282" class="line"><a href="#L282">282</a> </span>
+<span id="L283" class="line"><a href="#L283">283</a> instance Ordering.fintype : Fintype Ordering :=</span>
+<span id="L284" class="line"><a href="#L284">284</a>   ⟨⟨{.lt, .eq, .gt}, by simp⟩, fun x =&gt; by cases x &lt;;&gt; simp⟩</span>
+<span id="L285" class="line"><a href="#L285">285</a> </span>
+<span id="L286" class="line"><a href="#L286">286</a> instance OrderDual.fintype (α : Type*) [Fintype α] : Fintype αᵒᵈ :=</span>
+<span id="L287" class="line"><a href="#L287">287</a>   ‹Fintype α›</span>
+<span id="L288" class="line"><a href="#L288">288</a> </span>
+<span id="L289" class="line"><a href="#L289">289</a> instance OrderDual.finite (α : Type*) [Finite α] : Finite αᵒᵈ :=</span>
+<span id="L290" class="line"><a href="#L290">290</a>   ‹Finite α›</span>
+<span id="L291" class="line"><a href="#L291">291</a> </span>
+<span id="L292" class="line"><a href="#L292">292</a> instance Lex.fintype (α : Type*) [Fintype α] : Fintype (Lex α) :=</span>
+<span id="L293" class="line"><a href="#L293">293</a>   ‹Fintype α›</span></pre></html>

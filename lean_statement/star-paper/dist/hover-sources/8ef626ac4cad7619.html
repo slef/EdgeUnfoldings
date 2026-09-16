@@ -1,0 +1,119 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/GlobalCutTreeKites.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/GlobalCutTreeKites.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.CutTreeCharts</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! The paired triangle images are well defined in the chosen global</span>
+<span id="L4" class="line"><a href="#L4">4</a> plane, independently of which orientation names their cut-tree edge. -/</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> open Set</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> namespace RadialStripTriangle</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-- Agreement of full surface maps identifies the entire planar triangle image. -/</span>
+<span id="L13" class="line"><a href="#L13">13</a> theorem AgreesAfter.image_triangle {P : ConvexPolyhedron}</span>
+<span id="L14" class="line"><a href="#L14">14</a>     {routes other : C(unitInterval, P.BoundaryCurve)} {p l r q u v : Plane}</span>
+<span id="L15" class="line"><a href="#L15">15</a>     {D : RadialStripTriangle routes p l r} {E : RadialStripTriangle other q u v}</span>
+<span id="L16" class="line"><a href="#L16">16</a>     {motion : Plane ≃ᵃⁱ[ℝ] Plane} (agrees : D.AgreesAfter E motion) :</span>
+<span id="L17" class="line"><a href="#L17">17</a>     motion &#x27;&#x27; convexHull ℝ ({p, l, r} : Set Plane) = convexHull ℝ ({q, u, v} : Set Plane) := by</span>
+<span id="L18" class="line"><a href="#L18">18</a>   have included {routes other : C(unitInterval, P.BoundaryCurve)} {p l r q u v : Plane}</span>
+<span id="L19" class="line"><a href="#L19">19</a>       {D : RadialStripTriangle routes p l r} {E : RadialStripTriangle other q u v}</span>
+<span id="L20" class="line"><a href="#L20">20</a>       {motion : Plane ≃ᵃⁱ[ℝ] Plane} (agrees : D.AgreesAfter E motion) :</span>
+<span id="L21" class="line"><a href="#L21">21</a>       motion &#x27;&#x27; convexHull ℝ ({p, l, r} : Set Plane) ⊆ convexHull ℝ ({q, u, v} : Set Plane) := by</span>
+<span id="L22" class="line"><a href="#L22">22</a>     rintro _ ⟨x, hx, rfl⟩</span>
+<span id="L23" class="line"><a href="#L23">23</a>     let b := D.homeomorph.symm ⟨x, hx⟩</span>
+<span id="L24" class="line"><a href="#L24">24</a>     have other_member : b.val ∈ range (closedRouteStripMap other) := agrees.1 ▸ b.property</span>
+<span id="L25" class="line"><a href="#L25">25</a>     have same := agrees.2 b.val b.property other_member</span>
+<span id="L26" class="line"><a href="#L26">26</a>     change motion (D.homeomorph (D.homeomorph.symm ⟨x, hx⟩)) =</span>
+<span id="L27" class="line"><a href="#L27">27</a>       (E.homeomorph ⟨b.val, other_member⟩ : Plane) at same</span>
+<span id="L28" class="line"><a href="#L28">28</a>     rw [D.homeomorph.apply_symm_apply] at same</span>
+<span id="L29" class="line"><a href="#L29">29</a>     exact same.symm ▸ (E.homeomorph ⟨b.val, other_member⟩).property</span>
+<span id="L30" class="line"><a href="#L30">30</a>   apply Subset.antisymm (included agrees)</span>
+<span id="L31" class="line"><a href="#L31">31</a>   intro y hy</span>
+<span id="L32" class="line"><a href="#L32">32</a>   exact ⟨motion.symm y, included agrees.symm ⟨y, hy, rfl⟩, motion.apply_symm_apply y⟩</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> end RadialStripTriangle</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> namespace PlacedCutEdgeTriangles</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L39" class="line"><a href="#L39">39</a>     {u v w z : T.vertices} {edge : T.graph.Adj u v} {other : T.graph.Adj w z}</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> /-- The union of the two actual placed triangles of a cut edge. -/</span>
+<span id="L42" class="line"><a href="#L42">42</a> def kite (D : PlacedCutEdgeTriangles T edge) : Set Plane :=</span>
+<span id="L43" class="line"><a href="#L43">43</a>   convexHull ℝ ({D.motion D.model.first, D.motion D.model.left, D.motion D.model.right} : Set Plane) ∪</span>
+<span id="L44" class="line"><a href="#L44">44</a>   convexHull ℝ ({D.motion D.model.second, D.motion D.model.left, D.motion D.model.right} : Set Plane)</span>
+<span id="L45" class="line"><a href="#L45">45</a> </span>
+<span id="L46" class="line"><a href="#L46">46</a> theorem AgreesAfter.image_kite {D : PlacedCutEdgeTriangles T edge} {E : PlacedCutEdgeTriangles T other}</span>
+<span id="L47" class="line"><a href="#L47">47</a>     {transition : Plane ≃ᵃⁱ[ℝ] Plane} (agrees : D.AgreesAfter E transition) :</span>
+<span id="L48" class="line"><a href="#L48">48</a>     transition &#x27;&#x27; D.kite = E.kite := by</span>
+<span id="L49" class="line"><a href="#L49">49</a>   rw [kite, image_union]</span>
+<span id="L50" class="line"><a href="#L50">50</a>   rcases agrees with same | swapped</span>
+<span id="L51" class="line"><a href="#L51">51</a>   · rw [same.1.image_triangle, same.2.image_triangle]</span>
+<span id="L52" class="line"><a href="#L52">52</a>     rfl</span>
+<span id="L53" class="line"><a href="#L53">53</a>   · rw [swapped.1.image_triangle, swapped.2.image_triangle, union_comm]</span>
+<span id="L54" class="line"><a href="#L54">54</a>     rfl</span>
+<span id="L55" class="line"><a href="#L55">55</a> </span>
+<span id="L56" class="line"><a href="#L56">56</a> /-- Changing the coordinate frame moves the complete paired image by that one motion. -/</span>
+<span id="L57" class="line"><a href="#L57">57</a> theorem kite_inFrame (D : PlacedCutEdgeTriangles T edge) (frame : Plane ≃ᵃⁱ[ℝ] Plane) :</span>
+<span id="L58" class="line"><a href="#L58">58</a>     (D.inFrame frame).kite = frame &#x27;&#x27; D.kite := by</span>
+<span id="L59" class="line"><a href="#L59">59</a>   have triangle (p l r : Plane) : frame &#x27;&#x27; convexHull ℝ ({p, l, r} : Set Plane) =</span>
+<span id="L60" class="line"><a href="#L60">60</a>       convexHull ℝ ({frame p, frame l, frame r} : Set Plane) := by</span>
+<span id="L61" class="line"><a href="#L61">61</a>     change frame.toAffineMap &#x27;&#x27; convexHull ℝ ({p, l, r} : Set Plane) = _</span>
+<span id="L62" class="line"><a href="#L62">62</a>     rw [frame.toAffineMap.image_convexHull]</span>
+<span id="L63" class="line"><a href="#L63">63</a>     simp only [image_insert_eq, image_singleton]</span>
+<span id="L64" class="line"><a href="#L64">64</a>     rfl</span>
+<span id="L65" class="line"><a href="#L65">65</a>   simp only [kite, image_union, triangle]</span>
+<span id="L66" class="line"><a href="#L66">66</a>   rfl</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> end PlacedCutEdgeTriangles</span>
+<span id="L69" class="line"><a href="#L69">69</a> </span>
+<span id="L70" class="line"><a href="#L70">70</a> namespace CutTreeCharts</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a} (charts : CutTreeCharts T)</span>
+<span id="L73" class="line"><a href="#L73">73</a> </span>
+<span id="L74" class="line"><a href="#L74">74</a> /-- The actual kite in the one global plane chosen for the whole tree. -/</span>
+<span id="L75" class="line"><a href="#L75">75</a> noncomputable def kite {u v : T.vertices} (edge : T.graph.Adj u v) : Set Plane :=</span>
+<span id="L76" class="line"><a href="#L76">76</a>   ((charts.triangles edge).inFrame (charts.frames.frame u)).kite</span>
+<span id="L77" class="line"><a href="#L77">77</a> </span>
+<span id="L78" class="line"><a href="#L78">78</a> theorem kite_reverse {u v : T.vertices} (edge : T.graph.Adj u v) :</span>
+<span id="L79" class="line"><a href="#L79">79</a>     charts.kite edge = charts.kite edge.symm := by</span>
+<span id="L80" class="line"><a href="#L80">80</a>   have same := (charts.frames.global_reversal edge).2.2.image_kite</span>
+<span id="L81" class="line"><a href="#L81">81</a>   simpa only [AffineIsometryEquiv.coe_refl, image_id] using same</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> /-- At a nonvertex junction the global kite is exactly the image of its fixed fan kite. -/</span>
+<span id="L84" class="line"><a href="#L84">84</a> theorem kite_at_fan {u v : T.vertices} (edge : T.graph.Adj u v) (nonvertex : (u : Space) ∉ P.vertices) :</span>
+<span id="L85" class="line"><a href="#L85">85</a>     charts.kite edge = charts.frames.frame u &#x27;&#x27;</span>
+<span id="L86" class="line"><a href="#L86">86</a>       ((charts.fan u nonvertex).edgeTriangles edge).developedKite := by</span>
+<span id="L87" class="line"><a href="#L87">87</a>   unfold kite</span>
+<span id="L88" class="line"><a href="#L88">88</a>   rw [PlacedCutEdgeTriangles.kite_inFrame, charts.at_fan edge nonvertex]</span>
+<span id="L89" class="line"><a href="#L89">89</a>   rfl</span>
+<span id="L90" class="line"><a href="#L90">90</a> </span>
+<span id="L91" class="line"><a href="#L91">91</a> include charts in</span>
+<span id="L92" class="line"><a href="#L92">92</a> /-- Every actual internal passage has a flat chart in this fixed collection. -/</span>
+<span id="L93" class="line"><a href="#L93">93</a> theorem internal_nonvertex {u v w : T.vertices} (first : T.graph.Adj u v) (second : T.graph.Adj u w)</span>
+<span id="L94" class="line"><a href="#L94">94</a>     (different : v ≠ w) : (u : Space) ∉ P.vertices := by</span>
+<span id="L95" class="line"><a href="#L95">95</a>   intro original</span>
+<span id="L96" class="line"><a href="#L96">96</a>   obtain ⟨q, _, only⟩ := charts.original_leaves u original</span>
+<span id="L97" class="line"><a href="#L97">97</a>   exact different ((only v first).trans (only w second).symm)</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> /-- The chosen global edge transition swaps the actual roots of the two fixed fans. -/</span>
+<span id="L100" class="line"><a href="#L100">100</a> theorem transition_at_fans {u v : T.vertices} (edge : T.graph.Adj u v)</span>
+<span id="L101" class="line"><a href="#L101">101</a>     (nonvertex_u : (u : Space) ∉ P.vertices) (nonvertex_v : (v : Space) ∉ P.vertices) :</span>
+<span id="L102" class="line"><a href="#L102">102</a>     let first := charts.fan u nonvertex_u</span>
+<span id="L103" class="line"><a href="#L103">103</a>     let second := charts.fan v nonvertex_v</span>
+<span id="L104" class="line"><a href="#L104">104</a>     charts.frames.transition edge first.order.chart.origin = second.order.chart.origin +</span>
+<span id="L105" class="line"><a href="#L105">105</a>       dist (v : Space) (u : Space) • direction (second.edgeIndex edge.symm) ∧</span>
+<span id="L106" class="line"><a href="#L106">106</a>     charts.frames.transition edge (first.order.chart.origin +</span>
+<span id="L107" class="line"><a href="#L107">107</a>       dist (u : Space) (v : Space) • direction (first.edgeIndex edge)) = second.order.chart.origin := by</span>
+<span id="L108" class="line"><a href="#L108">108</a>   have same := charts.frames.reverses edge</span>
+<span id="L109" class="line"><a href="#L109">109</a>   rw [charts.at_fan edge nonvertex_u, charts.at_fan edge.symm nonvertex_v] at same</span>
+<span id="L110" class="line"><a href="#L110">110</a>   let D := (charts.fan u nonvertex_u).edgeTriangles edge</span>
+<span id="L111" class="line"><a href="#L111">111</a>   let E := (charts.fan v nonvertex_v).edgeTriangles edge.symm</span>
+<span id="L112" class="line"><a href="#L112">112</a>   have left : charts.frames.transition edge (D.motion D.model.left) = E.motion E.model.right := same.1</span>
+<span id="L113" class="line"><a href="#L113">113</a>   have right : charts.frames.transition edge (D.motion D.model.right) = E.motion E.model.left := same.2.1</span>
+<span id="L114" class="line"><a href="#L114">114</a>   rw [D.at_junction, E.at_neighbor] at left</span>
+<span id="L115" class="line"><a href="#L115">115</a>   rw [D.at_neighbor, E.at_junction] at right</span>
+<span id="L116" class="line"><a href="#L116">116</a>   exact ⟨left, right⟩</span>
+<span id="L117" class="line"><a href="#L117">117</a> </span>
+<span id="L118" class="line"><a href="#L118">118</a> end CutTreeCharts</span>
+<span id="L119" class="line"><a href="#L119">119</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

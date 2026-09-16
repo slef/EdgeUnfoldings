@@ -1,0 +1,221 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Analysis/Convex/Hull.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Analysis/Convex/Hull.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2020 Yury Kudryashov. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Yury Kudryashov, Yaël Dillies</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Analysis.Convex.Basic</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Order.Closure</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-!</span>
+<span id="L12" class="line"><a href="#L12">12</a> # Convex hull</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> This file defines the convex hull of a set `s` in a module. `convexHull 𝕜 s` is the smallest convex</span>
+<span id="L15" class="line"><a href="#L15">15</a> set containing `s`. In order theory speak, this is a closure operator.</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> ## Implementation notes</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> `convexHull` is defined as a closure operator. This gives access to the `ClosureOperator` API</span>
+<span id="L20" class="line"><a href="#L20">20</a> while the impact on writing code is minimal as `convexHull 𝕜 s` is automatically elaborated as</span>
+<span id="L21" class="line"><a href="#L21">21</a> `(convexHull 𝕜) s`.</span>
+<span id="L22" class="line"><a href="#L22">22</a> -/</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> @[expose] public section</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> open Set</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> open Pointwise</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> variable {𝕜 E F : Type*}</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> section convexHull</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> section OrderedSemiring</span>
+<span id="L36" class="line"><a href="#L36">36</a> </span>
+<span id="L37" class="line"><a href="#L37">37</a> variable [Semiring 𝕜] [PartialOrder 𝕜]</span>
+<span id="L38" class="line"><a href="#L38">38</a> </span>
+<span id="L39" class="line"><a href="#L39">39</a> section AddCommMonoid</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> variable (𝕜)</span>
+<span id="L42" class="line"><a href="#L42">42</a> variable [AddCommMonoid E] [AddCommMonoid F] [Module 𝕜 E] [Module 𝕜 F]</span>
+<span id="L43" class="line"><a href="#L43">43</a> </span>
+<span id="L44" class="line"><a href="#L44">44</a> /-- The convex hull of a set `s` is the minimal convex set that includes `s`. -/</span>
+<span id="L45" class="line"><a href="#L45">45</a> @[simps! isClosed]</span>
+<span id="L46" class="line"><a href="#L46">46</a> def convexHull : ClosureOperator (Set E) := .ofCompletePred (Convex 𝕜) fun _ ↦ convex_sInter</span>
+<span id="L47" class="line"><a href="#L47">47</a> </span>
+<span id="L48" class="line"><a href="#L48">48</a> variable (s : Set E)</span>
+<span id="L49" class="line"><a href="#L49">49</a> </span>
+<span id="L50" class="line"><a href="#L50">50</a> theorem subset_convexHull : s ⊆ convexHull 𝕜 s :=</span>
+<span id="L51" class="line"><a href="#L51">51</a>   (convexHull 𝕜).le_closure s</span>
+<span id="L52" class="line"><a href="#L52">52</a> </span>
+<span id="L53" class="line"><a href="#L53">53</a> theorem convex_convexHull : Convex 𝕜 (convexHull 𝕜 s) := (convexHull 𝕜).isClosed_closure s</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> theorem convexHull_eq_iInter : convexHull 𝕜 s = ⋂ (t : Set E) (_ : s ⊆ t) (_ : Convex 𝕜 t), t := by</span>
+<span id="L56" class="line"><a href="#L56">56</a>   simp [convexHull, iInter_subtype, iInter_and]</span>
+<span id="L57" class="line"><a href="#L57">57</a> </span>
+<span id="L58" class="line"><a href="#L58">58</a> variable {𝕜 s} {t : Set E} {x y : E}</span>
+<span id="L59" class="line"><a href="#L59">59</a> </span>
+<span id="L60" class="line"><a href="#L60">60</a> theorem mem_convexHull_iff : x ∈ convexHull 𝕜 s ↔ ∀ t, s ⊆ t → Convex 𝕜 t → x ∈ t := by</span>
+<span id="L61" class="line"><a href="#L61">61</a>   simp_rw [convexHull_eq_iInter, mem_iInter]</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> theorem convexHull_min : s ⊆ t → Convex 𝕜 t → convexHull 𝕜 s ⊆ t := (convexHull 𝕜).closure_min</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> theorem Convex.convexHull_subset_iff (ht : Convex 𝕜 t) : convexHull 𝕜 s ⊆ t ↔ s ⊆ t :=</span>
+<span id="L66" class="line"><a href="#L66">66</a>   (show (convexHull 𝕜).IsClosed t from ht).closure_le_iff</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> @[mono, gcongr]</span>
+<span id="L69" class="line"><a href="#L69">69</a> theorem convexHull_mono (hst : s ⊆ t) : convexHull 𝕜 s ⊆ convexHull 𝕜 t :=</span>
+<span id="L70" class="line"><a href="#L70">70</a>   (convexHull 𝕜).monotone hst</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> lemma convexHull_eq_self : convexHull 𝕜 s = s ↔ Convex 𝕜 s := (convexHull 𝕜).isClosed_iff.symm</span>
+<span id="L73" class="line"><a href="#L73">73</a> </span>
+<span id="L74" class="line"><a href="#L74">74</a> alias ⟨_, Convex.convexHull_eq⟩ := convexHull_eq_self</span>
+<span id="L75" class="line"><a href="#L75">75</a> </span>
+<span id="L76" class="line"><a href="#L76">76</a> @[simp]</span>
+<span id="L77" class="line"><a href="#L77">77</a> theorem convexHull_univ : convexHull 𝕜 (univ : Set E) = univ :=</span>
+<span id="L78" class="line"><a href="#L78">78</a>   ClosureOperator.closure_top (convexHull 𝕜)</span>
+<span id="L79" class="line"><a href="#L79">79</a> </span>
+<span id="L80" class="line"><a href="#L80">80</a> @[simp]</span>
+<span id="L81" class="line"><a href="#L81">81</a> theorem convexHull_empty : convexHull 𝕜 (∅ : Set E) = ∅ :=</span>
+<span id="L82" class="line"><a href="#L82">82</a>   convex_empty.convexHull_eq</span>
+<span id="L83" class="line"><a href="#L83">83</a> </span>
+<span id="L84" class="line"><a href="#L84">84</a> @[simp]</span>
+<span id="L85" class="line"><a href="#L85">85</a> theorem convexHull_eq_empty : convexHull 𝕜 s = ∅ ↔ s = ∅ := by</span>
+<span id="L86" class="line"><a href="#L86">86</a>   constructor</span>
+<span id="L87" class="line"><a href="#L87">87</a>   · intro h</span>
+<span id="L88" class="line"><a href="#L88">88</a>     rw [← Set.subset_empty_iff, ← h]</span>
+<span id="L89" class="line"><a href="#L89">89</a>     exact subset_convexHull 𝕜 _</span>
+<span id="L90" class="line"><a href="#L90">90</a>   · rintro rfl</span>
+<span id="L91" class="line"><a href="#L91">91</a>     exact convexHull_empty</span>
+<span id="L92" class="line"><a href="#L92">92</a> </span>
+<span id="L93" class="line"><a href="#L93">93</a> @[simp]</span>
+<span id="L94" class="line"><a href="#L94">94</a> theorem convexHull_nonempty_iff : (convexHull 𝕜 s).Nonempty ↔ s.Nonempty := by</span>
+<span id="L95" class="line"><a href="#L95">95</a>   rw [nonempty_iff_ne_empty, nonempty_iff_ne_empty, Ne, Ne]</span>
+<span id="L96" class="line"><a href="#L96">96</a>   exact not_congr convexHull_eq_empty</span>
+<span id="L97" class="line"><a href="#L97">97</a> </span>
+<span id="L98" class="line"><a href="#L98">98</a> protected alias ⟨_, Set.Nonempty.convexHull⟩ := convexHull_nonempty_iff</span>
+<span id="L99" class="line"><a href="#L99">99</a> </span>
+<span id="L100" class="line"><a href="#L100">100</a> theorem segment_subset_convexHull (hx : x ∈ s) (hy : y ∈ s) : segment 𝕜 x y ⊆ convexHull 𝕜 s :=</span>
+<span id="L101" class="line"><a href="#L101">101</a>   (convex_convexHull _ _).segment_subset (subset_convexHull _ _ hx) (subset_convexHull _ _ hy)</span>
+<span id="L102" class="line"><a href="#L102">102</a> </span>
+<span id="L103" class="line"><a href="#L103">103</a> @[simp]</span>
+<span id="L104" class="line"><a href="#L104">104</a> theorem convexHull_singleton (x : E) : convexHull 𝕜 ({x} : Set E) = {x} :=</span>
+<span id="L105" class="line"><a href="#L105">105</a>   (convex_singleton x).convexHull_eq</span>
+<span id="L106" class="line"><a href="#L106">106</a> </span>
+<span id="L107" class="line"><a href="#L107">107</a> @[simp] lemma convexHull_eq_singleton : convexHull 𝕜 s = {x} ↔ s = {x} where</span>
+<span id="L108" class="line"><a href="#L108">108</a>   mp hs := by</span>
+<span id="L109" class="line"><a href="#L109">109</a>     rw [← Set.Nonempty.subset_singleton_iff, ← hs]</span>
+<span id="L110" class="line"><a href="#L110">110</a>     · exact subset_convexHull ..</span>
+<span id="L111" class="line"><a href="#L111">111</a>     · by_contra! hs</span>
+<span id="L112" class="line"><a href="#L112">112</a>       simp_all [eq_comm (a := ∅)]</span>
+<span id="L113" class="line"><a href="#L113">113</a>   mpr hs := by simp [hs]</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> @[simp]</span>
+<span id="L116" class="line"><a href="#L116">116</a> theorem convexHull_zero : convexHull 𝕜 (0 : Set E) = 0 :=</span>
+<span id="L117" class="line"><a href="#L117">117</a>   convexHull_singleton 0</span>
+<span id="L118" class="line"><a href="#L118">118</a> </span>
+<span id="L119" class="line"><a href="#L119">119</a> @[simp] lemma convexHull_eq_zero : convexHull 𝕜 s = 0 ↔ s = 0 := convexHull_eq_singleton</span>
+<span id="L120" class="line"><a href="#L120">120</a> </span>
+<span id="L121" class="line"><a href="#L121">121</a> @[simp]</span>
+<span id="L122" class="line"><a href="#L122">122</a> theorem convexHull_pair [IsOrderedRing 𝕜] (x y : E) : convexHull 𝕜 {x, y} = segment 𝕜 x y := by</span>
+<span id="L123" class="line"><a href="#L123">123</a>   refine (convexHull_min ?_ &lt;| convex_segment _ _).antisymm</span>
+<span id="L124" class="line"><a href="#L124">124</a>     (segment_subset_convexHull (mem_insert _ _) &lt;| subset_insert _ _ &lt;| mem_singleton _)</span>
+<span id="L125" class="line"><a href="#L125">125</a>   rw [insert_subset_iff, singleton_subset_iff]</span>
+<span id="L126" class="line"><a href="#L126">126</a>   exact ⟨left_mem_segment _ _ _, right_mem_segment _ _ _⟩</span>
+<span id="L127" class="line"><a href="#L127">127</a> </span>
+<span id="L128" class="line"><a href="#L128">128</a> theorem convexHull_convexHull_union_left (s t : Set E) :</span>
+<span id="L129" class="line"><a href="#L129">129</a>     convexHull 𝕜 (convexHull 𝕜 s ∪ t) = convexHull 𝕜 (s ∪ t) :=</span>
+<span id="L130" class="line"><a href="#L130">130</a>   ClosureOperator.closure_sup_closure_left _ _ _</span>
+<span id="L131" class="line"><a href="#L131">131</a> </span>
+<span id="L132" class="line"><a href="#L132">132</a> theorem convexHull_convexHull_union_right (s t : Set E) :</span>
+<span id="L133" class="line"><a href="#L133">133</a>     convexHull 𝕜 (s ∪ convexHull 𝕜 t) = convexHull 𝕜 (s ∪ t) :=</span>
+<span id="L134" class="line"><a href="#L134">134</a>   ClosureOperator.closure_sup_closure_right _ _ _</span>
+<span id="L135" class="line"><a href="#L135">135</a> </span>
+<span id="L136" class="line"><a href="#L136">136</a> theorem Convex.convex_remove_iff_notMem_convexHull_remove {s : Set E} (hs : Convex 𝕜 s) (x : E) :</span>
+<span id="L137" class="line"><a href="#L137">137</a>     Convex 𝕜 (s \ {x}) ↔ x ∉ convexHull 𝕜 (s \ {x}) := by</span>
+<span id="L138" class="line"><a href="#L138">138</a>   constructor</span>
+<span id="L139" class="line"><a href="#L139">139</a>   · rintro hsx hx</span>
+<span id="L140" class="line"><a href="#L140">140</a>     rw [hsx.convexHull_eq] at hx</span>
+<span id="L141" class="line"><a href="#L141">141</a>     exact hx.2 (mem_singleton _)</span>
+<span id="L142" class="line"><a href="#L142">142</a>   rintro hx</span>
+<span id="L143" class="line"><a href="#L143">143</a>   suffices h : s \ {x} = convexHull 𝕜 (s \ {x}) by</span>
+<span id="L144" class="line"><a href="#L144">144</a>     rw [h]</span>
+<span id="L145" class="line"><a href="#L145">145</a>     exact convex_convexHull 𝕜 _</span>
+<span id="L146" class="line"><a href="#L146">146</a>   exact</span>
+<span id="L147" class="line"><a href="#L147">147</a>     Subset.antisymm (subset_convexHull 𝕜 _) fun y hy =&gt;</span>
+<span id="L148" class="line"><a href="#L148">148</a>       ⟨convexHull_min diff_subset hs hy, by</span>
+<span id="L149" class="line"><a href="#L149">149</a>         rintro (rfl : y = x)</span>
+<span id="L150" class="line"><a href="#L150">150</a>         exact hx hy⟩</span>
+<span id="L151" class="line"><a href="#L151">151</a> </span>
+<span id="L152" class="line"><a href="#L152">152</a> theorem IsLinearMap.image_convexHull {f : E → F} (hf : IsLinearMap 𝕜 f) (s : Set E) :</span>
+<span id="L153" class="line"><a href="#L153">153</a>     f &#x27;&#x27; convexHull 𝕜 s = convexHull 𝕜 (f &#x27;&#x27; s) :=</span>
+<span id="L154" class="line"><a href="#L154">154</a>   Set.Subset.antisymm</span>
+<span id="L155" class="line"><a href="#L155">155</a>     (image_subset_iff.2 &lt;|</span>
+<span id="L156" class="line"><a href="#L156">156</a>       convexHull_min (image_subset_iff.1 &lt;| subset_convexHull 𝕜 _)</span>
+<span id="L157" class="line"><a href="#L157">157</a>         ((convex_convexHull 𝕜 _).is_linear_preimage hf))</span>
+<span id="L158" class="line"><a href="#L158">158</a>     (convexHull_min (image_mono (subset_convexHull 𝕜 s)) &lt;|</span>
+<span id="L159" class="line"><a href="#L159">159</a>       (convex_convexHull 𝕜 s).is_linear_image hf)</span>
+<span id="L160" class="line"><a href="#L160">160</a> </span>
+<span id="L161" class="line"><a href="#L161">161</a> theorem LinearMap.image_convexHull (f : E →ₗ[𝕜] F) (s : Set E) :</span>
+<span id="L162" class="line"><a href="#L162">162</a>     f &#x27;&#x27; convexHull 𝕜 s = convexHull 𝕜 (f &#x27;&#x27; s) :=</span>
+<span id="L163" class="line"><a href="#L163">163</a>   f.isLinear.image_convexHull s</span>
+<span id="L164" class="line"><a href="#L164">164</a> </span>
+<span id="L165" class="line"><a href="#L165">165</a> theorem convexHull_add_subset {s t : Set E} :</span>
+<span id="L166" class="line"><a href="#L166">166</a>     convexHull 𝕜 (s + t) ⊆ convexHull 𝕜 s + convexHull 𝕜 t :=</span>
+<span id="L167" class="line"><a href="#L167">167</a>   convexHull_min (add_subset_add (subset_convexHull _ _) (subset_convexHull _ _))</span>
+<span id="L168" class="line"><a href="#L168">168</a>     (Convex.add (convex_convexHull 𝕜 s) (convex_convexHull 𝕜 t))</span>
+<span id="L169" class="line"><a href="#L169">169</a> </span>
+<span id="L170" class="line"><a href="#L170">170</a> end AddCommMonoid</span>
+<span id="L171" class="line"><a href="#L171">171</a> </span>
+<span id="L172" class="line"><a href="#L172">172</a> end OrderedSemiring</span>
+<span id="L173" class="line"><a href="#L173">173</a> </span>
+<span id="L174" class="line"><a href="#L174">174</a> section CommSemiring</span>
+<span id="L175" class="line"><a href="#L175">175</a> </span>
+<span id="L176" class="line"><a href="#L176">176</a> variable [CommSemiring 𝕜] [PartialOrder 𝕜] [AddCommMonoid E] [Module 𝕜 E]</span>
+<span id="L177" class="line"><a href="#L177">177</a> </span>
+<span id="L178" class="line"><a href="#L178">178</a> theorem convexHull_smul (a : 𝕜) (s : Set E) : convexHull 𝕜 (a • s) = a • convexHull 𝕜 s :=</span>
+<span id="L179" class="line"><a href="#L179">179</a>   (LinearMap.lsmul _ _ a).image_convexHull _ |&gt;.symm</span>
+<span id="L180" class="line"><a href="#L180">180</a> </span>
+<span id="L181" class="line"><a href="#L181">181</a> end CommSemiring</span>
+<span id="L182" class="line"><a href="#L182">182</a> </span>
+<span id="L183" class="line"><a href="#L183">183</a> section OrderedRing</span>
+<span id="L184" class="line"><a href="#L184">184</a> </span>
+<span id="L185" class="line"><a href="#L185">185</a> variable [Ring 𝕜] [PartialOrder 𝕜]</span>
+<span id="L186" class="line"><a href="#L186">186</a> </span>
+<span id="L187" class="line"><a href="#L187">187</a> section AddCommGroup</span>
+<span id="L188" class="line"><a href="#L188">188</a> </span>
+<span id="L189" class="line"><a href="#L189">189</a> variable [AddCommGroup E] [AddCommGroup F] [Module 𝕜 E] [Module 𝕜 F]</span>
+<span id="L190" class="line"><a href="#L190">190</a> </span>
+<span id="L191" class="line"><a href="#L191">191</a> theorem AffineMap.image_convexHull (f : E →ᵃ[𝕜] F) (s : Set E) :</span>
+<span id="L192" class="line"><a href="#L192">192</a>     f &#x27;&#x27; convexHull 𝕜 s = convexHull 𝕜 (f &#x27;&#x27; s) := by</span>
+<span id="L193" class="line"><a href="#L193">193</a>   apply Set.Subset.antisymm</span>
+<span id="L194" class="line"><a href="#L194">194</a>   · rw [Set.image_subset_iff]</span>
+<span id="L195" class="line"><a href="#L195">195</a>     refine convexHull_min ?_ ((convex_convexHull 𝕜 (f &#x27;&#x27; s)).affine_preimage f)</span>
+<span id="L196" class="line"><a href="#L196">196</a>     rw [← Set.image_subset_iff]</span>
+<span id="L197" class="line"><a href="#L197">197</a>     exact subset_convexHull 𝕜 (f &#x27;&#x27; s)</span>
+<span id="L198" class="line"><a href="#L198">198</a>   · exact convexHull_min (Set.image_mono (subset_convexHull 𝕜 s))</span>
+<span id="L199" class="line"><a href="#L199">199</a>       ((convex_convexHull 𝕜 s).affine_image f)</span>
+<span id="L200" class="line"><a href="#L200">200</a> </span>
+<span id="L201" class="line"><a href="#L201">201</a> theorem convexHull_subset_affineSpan (s : Set E) : convexHull 𝕜 s ⊆ (affineSpan 𝕜 s : Set E) :=</span>
+<span id="L202" class="line"><a href="#L202">202</a>   convexHull_min (subset_affineSpan 𝕜 s) (affineSpan 𝕜 s).convex</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> @[simp]</span>
+<span id="L205" class="line"><a href="#L205">205</a> theorem affineSpan_convexHull (s : Set E) : affineSpan 𝕜 (convexHull 𝕜 s) = affineSpan 𝕜 s := by</span>
+<span id="L206" class="line"><a href="#L206">206</a>   refine le_antisymm ?_ (affineSpan_mono 𝕜 (subset_convexHull 𝕜 s))</span>
+<span id="L207" class="line"><a href="#L207">207</a>   rw [affineSpan_le]</span>
+<span id="L208" class="line"><a href="#L208">208</a>   exact convexHull_subset_affineSpan s</span>
+<span id="L209" class="line"><a href="#L209">209</a> </span>
+<span id="L210" class="line"><a href="#L210">210</a> theorem convexHull_neg (s : Set E) : convexHull 𝕜 (-s) = -convexHull 𝕜 s := by</span>
+<span id="L211" class="line"><a href="#L211">211</a>   simp_rw [← image_neg_eq_neg]</span>
+<span id="L212" class="line"><a href="#L212">212</a>   exact AffineMap.image_convexHull (-1) _ |&gt;.symm</span>
+<span id="L213" class="line"><a href="#L213">213</a> </span>
+<span id="L214" class="line"><a href="#L214">214</a> lemma convexHull_vadd (x : E) (s : Set E) : convexHull 𝕜 (x +ᵥ s) = x +ᵥ convexHull 𝕜 s :=</span>
+<span id="L215" class="line"><a href="#L215">215</a>   (AffineEquiv.constVAdd 𝕜 _ x).toAffineMap.image_convexHull s |&gt;.symm</span>
+<span id="L216" class="line"><a href="#L216">216</a> </span>
+<span id="L217" class="line"><a href="#L217">217</a> end AddCommGroup</span>
+<span id="L218" class="line"><a href="#L218">218</a> </span>
+<span id="L219" class="line"><a href="#L219">219</a> end OrderedRing</span>
+<span id="L220" class="line"><a href="#L220">220</a> </span>
+<span id="L221" class="line"><a href="#L221">221</a> end convexHull</span></pre></html>

@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/SmallPolyhedronCutTree.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/SmallPolyhedronCutTree.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutSegments</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutRetraction</span>
+<span id="L3" class="line"><a href="#L3">3</a> import SixVertexUnfolding.Geometry.SmallPolyhedronJunctions</span>
+<span id="L4" class="line"><a href="#L4">4</a> import SixVertexUnfolding.Geometry.RegularCutTree</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> /-! The actual cut locus is a finite tree, without choosing a canonical</span>
+<span id="L7" class="line"><a href="#L7">7</a> polyhedron graph. Every junction and original cut vertex is marked, so an</span>
+<span id="L8" class="line"><a href="#L8">8</a> open tree edge contains exactly two shortest routes to each of its points. -/</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> open Set</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> variable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)</span>
+<span id="L15" class="line"><a href="#L15">15</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L16" class="line"><a href="#L16">16</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> include size small_faces in</span>
+<span id="L19" class="line"><a href="#L19">19</a> /-- Every exact embedded graph of the actual cut set is a tree. -/</span>
+<span id="L20" class="line"><a href="#L20">20</a> theorem small_embedded_cut_graph_isTree (a : frontier P.body)</span>
+<span id="L21" class="line"><a href="#L21">21</a>     (K : P.EmbeddedCutGraph a) : K.graph.IsTree := by</span>
+<span id="L22" class="line"><a href="#L22">22</a>   letI : ContractibleSpace (P.cutSetInSpace a) :=</span>
+<span id="L23" class="line"><a href="#L23">23</a>     small_cutSetInSpace_contractible size small_faces a</span>
+<span id="L24" class="line"><a href="#L24">24</a>   exact ⟨K.connected_of_trace_connected (isConnected_iff_connectedSpace.mpr inferInstance),</span>
+<span id="L25" class="line"><a href="#L25">25</a>     K.acyclic_of_contractible_trace⟩</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> include size small_faces in</span>
+<span id="L28" class="line"><a href="#L28">28</a> /-- The actual finite cut tree, subdivided at every junction and original cut vertex. -/</span>
+<span id="L29" class="line"><a href="#L29">29</a> theorem small_exists_regular_cut_tree (a : frontier P.body) : Nonempty (P.CutLocusTree a) := by</span>
+<span id="L30" class="line"><a href="#L30">30</a>   let marks : Set Space := Subtype.val &#x27;&#x27; P.cutExceptions a</span>
+<span id="L31" class="line"><a href="#L31">31</a>   have finite_marks : marks.Finite := (small_cutExceptions_finite size small_faces a).image Subtype.val</span>
+<span id="L32" class="line"><a href="#L32">32</a>   have marks_cut : marks ⊆ P.cutSetInSpace a := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>     rintro _ ⟨b, exceptional, rfl⟩</span>
+<span id="L34" class="line"><a href="#L34">34</a>     exact ⟨b, P.cutExceptions_subset_cutSet a exceptional, rfl⟩</span>
+<span id="L35" class="line"><a href="#L35">35</a>   obtain ⟨K, contains⟩ := small_exists_cut_graph_containing size small_faces a marks finite_marks marks_cut</span>
+<span id="L36" class="line"><a href="#L36">36</a>   exact ⟨{</span>
+<span id="L37" class="line"><a href="#L37">37</a>     toEmbeddedCutGraph := K</span>
+<span id="L38" class="line"><a href="#L38">38</a>     tree := small_embedded_cut_graph_isTree size small_faces a K</span>
+<span id="L39" class="line"><a href="#L39">39</a>     exceptional_vertices := fun b exceptional =&gt; contains ⟨b, exceptional, rfl⟩ }⟩</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> include size small_faces in</span>
+<span id="L42" class="line"><a href="#L42">42</a> /-- Every open tree edge consists of targets with exactly two shortest routes. -/</span>
+<span id="L43" class="line"><a href="#L43">43</a> theorem small_cut_tree_open_edge_two_routes (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L44" class="line"><a href="#L44">44</a>     {u v : T.vertices} (edge : T.graph.Adj u v) (b : frontier P.body)</span>
+<span id="L45" class="line"><a href="#L45">45</a>     (inside : (b : Space) ∈ openSegment ℝ (u : Space) (v : Space)) :</span>
+<span id="L46" class="line"><a href="#L46">46</a>     Nat.card (P.geodesicFiber a b) = 2 := by</span>
+<span id="L47" class="line"><a href="#L47">47</a>   have cut := T.open_edge_cut edge b inside</span>
+<span id="L48" class="line"><a href="#L48">48</a>   have regular := T.open_edge_regular edge b inside</span>
+<span id="L49" class="line"><a href="#L49">49</a>   have different : a ≠ b := by</span>
+<span id="L50" class="line"><a href="#L50">50</a>     rintro rfl</span>
+<span id="L51" class="line"><a href="#L51">51</a>     exact P.source_not_cutSet a cut</span>
+<span id="L52" class="line"><a href="#L52">52</a>   have not_vertex : (b : Space) ∉ P.vertices :=</span>
+<span id="L53" class="line"><a href="#L53">53</a>     fun vertex =&gt; regular (Or.inr ⟨vertex, different.symm⟩)</span>
+<span id="L54" class="line"><a href="#L54">54</a>   have multiple : (b : Space) ∈ P.multipleRouteLocus a :=</span>
+<span id="L55" class="line"><a href="#L55">55</a>     cut.resolve_right (fun h =&gt; not_vertex h.1)</span>
+<span id="L56" class="line"><a href="#L56">56</a>   have not_unique := ((P.multiple_routes_iff_fiber a b).mp multiple).2</span>
+<span id="L57" class="line"><a href="#L57">57</a>   have lower : ¬ (P.geodesicFiber a b).ncard ≤ 1 := by</span>
+<span id="L58" class="line"><a href="#L58">58</a>     intro bound</span>
+<span id="L59" class="line"><a href="#L59">59</a>     exact not_unique ((ncard_le_one (small_geodesicFiber_finite size small_faces a b different)).mp bound)</span>
+<span id="L60" class="line"><a href="#L60">60</a>   have upper : ¬ 2 &lt; Nat.card (P.geodesicFiber a b) := fun many =&gt;</span>
+<span id="L61" class="line"><a href="#L61">61</a>     regular (Or.inl ((small_junction_iff_route_count size small_faces a b different).mpr many))</span>
+<span id="L62" class="line"><a href="#L62">62</a>   change ¬ Nat.card (P.geodesicFiber a b) ≤ 1 at lower</span>
+<span id="L63" class="line"><a href="#L63">63</a>   omega</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

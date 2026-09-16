@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/GeodesicFibers.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/GeodesicFibers.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.GeodesicEndpointStability</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.FinitelyManyShortestRoutes</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! For prescribed endpoints, the compact family consists of exactly the</span>
+<span id="L5" class="line"><a href="#L5">5</a> actual normalized shortest paths. In the canonical models its fibers are finite. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set BoundedContinuousFunction</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- All normalized shortest curves with these prescribed boundary endpoints. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> def geodesicFiber (P : ConvexPolyhedron) (a b : frontier P.body) : Set P.BoundaryCurve :=</span>
+<span id="L13" class="line"><a href="#L13">13</a>   {f | f ∈ P.geodesicCurves ∧ P.curveEndpoints f = (a, b)}</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> theorem geodesicFiber_compact (P : ConvexPolyhedron) (a b : frontier P.body) :</span>
+<span id="L16" class="line"><a href="#L16">16</a>     IsCompact (P.geodesicFiber a b) :=</span>
+<span id="L17" class="line"><a href="#L17">17</a>   P.geodesicCurves_compact.inter_right (isClosed_eq P.curveEndpoints_continuous continuous_const)</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> /-- Every member of the fiber is the boundary curve of a genuine optimal surface path. -/</span>
+<span id="L20" class="line"><a href="#L20">20</a> theorem geodesicFiber_path (P : ConvexPolyhedron) (a b : frontier P.body)</span>
+<span id="L21" class="line"><a href="#L21">21</a>     (f : P.BoundaryCurve) (member : f ∈ P.geodesicFiber a b) :</span>
+<span id="L22" class="line"><a href="#L22">22</a>     ∃ path : P.SurfacePath a b, path.IsShortest ∧ path.length ≠ ⊤ ∧</span>
+<span id="L23" class="line"><a href="#L23">23</a>       LipschitzWith path.length.toNNReal path.curve ∧ path.boundaryCurve = f := by</span>
+<span id="L24" class="line"><a href="#L24">24</a>   have first : (a : Space) = (f 0 : Space) := congrArg Subtype.val (congrArg Prod.fst member.2).symm</span>
+<span id="L25" class="line"><a href="#L25">25</a>   have last : (b : Space) = (f 1 : Space) := congrArg Subtype.val (congrArg Prod.snd member.2).symm</span>
+<span id="L26" class="line"><a href="#L26">26</a>   obtain ⟨shortest, finite, speed⟩ := P.surfacePathOfCurve_shortest f member.1</span>
+<span id="L27" class="line"><a href="#L27">27</a>   refine ⟨(P.surfacePathOfCurve f).cast first last, ?_, finite, speed, ?_⟩</span>
+<span id="L28" class="line"><a href="#L28">28</a>   · exact SurfacePath.cast_shortest _ first last shortest</span>
+<span id="L29" class="line"><a href="#L29">29</a>   · exact P.surfacePathOfCurve_boundaryCurve f</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> theorem geodesicFiber_nonempty (P : ConvexPolyhedron) (a b : frontier P.body) :</span>
+<span id="L32" class="line"><a href="#L32">32</a>     (P.geodesicFiber a b).Nonempty := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>   obtain ⟨path, shortest, finite, speed⟩ := P.exists_shortest_lipschitz_surface_path a.property b.property</span>
+<span id="L34" class="line"><a href="#L34">34</a>   refine ⟨path.boundaryCurve, path.boundaryCurve_geodesic shortest finite speed, ?_⟩</span>
+<span id="L35" class="line"><a href="#L35">35</a>   apply Prod.ext &lt;;&gt; apply Subtype.ext</span>
+<span id="L36" class="line"><a href="#L36">36</a>   · exact path.curve.source</span>
+<span id="L37" class="line"><a href="#L37">37</a>   · exact path.curve.target</span>
+<span id="L38" class="line"><a href="#L38">38</a> </span>
+<span id="L39" class="line"><a href="#L39">39</a> namespace SixVertexGraph</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L42" class="line"><a href="#L42">42</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L44" class="line"><a href="#L44">44</a> </span>
+<span id="L45" class="line"><a href="#L45">45</a> include graph small_faces in</span>
+<span id="L46" class="line"><a href="#L46">46</a> /-- Distinct endpoints in a canonical model have a finite, nonempty compact geodesic fiber. -/</span>
+<span id="L47" class="line"><a href="#L47">47</a> theorem geodesicFiber_finite (a b : frontier P.body) (different : a ≠ b) :</span>
+<span id="L48" class="line"><a href="#L48">48</a>     (P.geodesicFiber a b).Finite := by</span>
+<span id="L49" class="line"><a href="#L49">49</a>   have paths := graph.finite_shortest_routes small_faces a b (fun h =&gt; different (Subtype.ext h))</span>
+<span id="L50" class="line"><a href="#L50">50</a>   apply (paths.image SurfacePath.boundaryCurve).subset</span>
+<span id="L51" class="line"><a href="#L51">51</a>   intro f hf</span>
+<span id="L52" class="line"><a href="#L52">52</a>   obtain ⟨path, shortest, finite, speed, same⟩ := P.geodesicFiber_path a b f hf</span>
+<span id="L53" class="line"><a href="#L53">53</a>   exact ⟨path, ⟨shortest, finite, speed⟩, same⟩</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> end SixVertexGraph</span>
+<span id="L56" class="line"><a href="#L56">56</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

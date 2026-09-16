@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/IncidentWedgeTransitions.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/IncidentWedgeTransitions.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.NextWedgeParameters</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.JunctionEdgeTransitions</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! The incoming wedge of an incident edge is determined by the actual</span>
+<span id="L5" class="line"><a href="#L5">5</a> metric triangle. Every transition preserving the two roots carries the</span>
+<span id="L6" class="line"><a href="#L6">6</a> returned wedge to this same incoming wedge, including reflected charts. -/</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> namespace SixVertexUnfolding.ConvexPolyhedron.IncidentTriangles</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> open Real Set EuclideanGeometry Wedge</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L13" class="line"><a href="#L13">13</a>     {u v : T.vertices} {edge : T.graph.Adj u v}</span>
+<span id="L14" class="line"><a href="#L14">14</a>     {first_chart : P.CutVoronoiChart a (T.vertexTarget u)}</span>
+<span id="L15" class="line"><a href="#L15">15</a>     {second_chart : P.CutVoronoiChart a (T.vertexTarget v)} {θ φ : ℝ}</span>
+<span id="L16" class="line"><a href="#L16">16</a>     (D : IncidentTriangles T edge first_chart θ)</span>
+<span id="L17" class="line"><a href="#L17">17</a>     (E : IncidentTriangles T edge.symm second_chart φ)</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> /-- The symmetric wedge for entering along this actual incident edge. -/</span>
+<span id="L20" class="line"><a href="#L20">20</a> def incomingWedge (ω : ℝ) : Set Plane :=</span>
+<span id="L21" class="line"><a href="#L21">21</a>   {x | x - first_chart.origin ∈ polarRegion (P.surfaceDist a (T.vertexTarget u)) ω</span>
+<span id="L22" class="line"><a href="#L22">22</a>     (θ - angle D.model.first D.model.left D.model.right)</span>
+<span id="L23" class="line"><a href="#L23">23</a>     (θ + angle D.model.first D.model.left D.model.right)}</span>
+<span id="L24" class="line"><a href="#L24">24</a> </span>
+<span id="L25" class="line"><a href="#L25">25</a> /-- Triangle corner agreement identifies the entire returned wedge across</span>
+<span id="L26" class="line"><a href="#L26">26</a> an edge. This works for the same motion that aligns the full triangle maps. -/</span>
+<span id="L27" class="line"><a href="#L27">27</a> theorem next_wedge_image (motion : Plane ≃ᵃⁱ[ℝ] Plane)</span>
+<span id="L28" class="line"><a href="#L28">28</a>     (old_root : motion first_chart.origin =</span>
+<span id="L29" class="line"><a href="#L29">29</a>       second_chart.origin + dist (v : Space) (u : Space) • direction φ)</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (next_root : motion (first_chart.origin + dist (u : Space) (v : Space) • direction θ) =</span>
+<span id="L31" class="line"><a href="#L31">31</a>       second_chart.origin)</span>
+<span id="L32" class="line"><a href="#L32">32</a>     {radius Θ : ℝ} (radius_eq : radius = P.surfaceDist a (T.vertexTarget v))</span>
+<span id="L33" class="line"><a href="#L33">33</a>     (corner_eq : π - Θ = angle D.model.first D.model.right D.model.left) (ω : ℝ) :</span>
+<span id="L34" class="line"><a href="#L34">34</a>     motion &#x27;&#x27; {x | x - (first_chart.origin + dist (u : Space) (v : Space) • direction θ) ∈</span>
+<span id="L35" class="line"><a href="#L35">35</a>       polarRegion radius ω (Θ + θ) (2 * π - Θ + θ)} = E.incomingWedge ω := by</span>
+<span id="L36" class="line"><a href="#L36">36</a>   have length_positive : 0 &lt; dist (u : Space) (v : Space) := by</span>
+<span id="L37" class="line"><a href="#L37">37</a>     apply dist_pos.mpr</span>
+<span id="L38" class="line"><a href="#L38">38</a>     intro same</span>
+<span id="L39" class="line"><a href="#L39">39</a>     exact edge.ne (Subtype.ext same)</span>
+<span id="L40" class="line"><a href="#L40">40</a>   have half : π - Θ = angle E.model.first E.model.left E.model.right :=</span>
+<span id="L41" class="line"><a href="#L41">41</a>     corner_eq.trans (D.model.reverse_angles E.model).2.2</span>
+<span id="L42" class="line"><a href="#L42">42</a>   have on_axis : motion ((first_chart.origin + dist (u : Space) (v : Space) • direction θ) +</span>
+<span id="L43" class="line"><a href="#L43">43</a>       dist (u : Space) (v : Space) • direction (θ + π)) =</span>
+<span id="L44" class="line"><a href="#L44">44</a>         second_chart.origin + dist (u : Space) (v : Space) • direction φ := by</span>
+<span id="L45" class="line"><a href="#L45">45</a>     rw [next_root_back_ray, old_root, dist_comm (v : Space) (u : Space)]</span>
+<span id="L46" class="line"><a href="#L46">46</a>   have result := centered_wedge_image motion</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (first_chart.origin + dist (u : Space) (v : Space) • direction θ) second_chart.origin</span>
+<span id="L48" class="line"><a href="#L48">48</a>     length_positive next_root on_axis radius ω (π - Θ)</span>
+<span id="L49" class="line"><a href="#L49">49</a>   rw [show θ + π - (π - Θ) = Θ + θ by ring,</span>
+<span id="L50" class="line"><a href="#L50">50</a>     show θ + π + (π - Θ) = 2 * π - Θ + θ by ring, radius_eq, half] at result</span>
+<span id="L51" class="line"><a href="#L51">51</a>   simpa only [radius_eq, incomingWedge] using result</span>
+<span id="L52" class="line"><a href="#L52">52</a> </span>
+<span id="L53" class="line"><a href="#L53">53</a> end SixVertexUnfolding.ConvexPolyhedron.IncidentTriangles</span></pre></html>

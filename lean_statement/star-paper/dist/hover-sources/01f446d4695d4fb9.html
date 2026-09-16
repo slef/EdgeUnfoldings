@@ -1,0 +1,120 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/PlacedCutEdgeTriangles.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/PlacedCutEdgeTriangles.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.JunctionEdgeTransitions</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! A pair of actual radial triangles with one chosen planar placement.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Compatibility always concerns the complete maps of their surface points. -/</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> open Set</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> namespace RadialStripTriangle</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-- Reverse an agreement without changing its actual surface correspondence. -/</span>
+<span id="L13" class="line"><a href="#L13">13</a> theorem AgreesAfter.symm {P : ConvexPolyhedron}</span>
+<span id="L14" class="line"><a href="#L14">14</a>     {routes other : C(unitInterval, P.BoundaryCurve)} {p l r q u v : Plane}</span>
+<span id="L15" class="line"><a href="#L15">15</a>     {D : RadialStripTriangle routes p l r} {E : RadialStripTriangle other q u v}</span>
+<span id="L16" class="line"><a href="#L16">16</a>     {motion : Plane ≃ᵃⁱ[ℝ] Plane} (agrees : D.AgreesAfter E motion) :</span>
+<span id="L17" class="line"><a href="#L17">17</a>     E.AgreesAfter D motion.symm := by</span>
+<span id="L18" class="line"><a href="#L18">18</a>   refine ⟨agrees.1.symm, ?_⟩</span>
+<span id="L19" class="line"><a href="#L19">19</a>   intro x hx hy</span>
+<span id="L20" class="line"><a href="#L20">20</a>   rw [← agrees.2 x hy hx, motion.symm_apply_apply]</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> end RadialStripTriangle</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> /-- Both sides of a cut edge share this one local coordinate change. -/</span>
+<span id="L25" class="line"><a href="#L25">25</a> structure PlacedCutEdgeTriangles {P : ConvexPolyhedron} {a : frontier P.body}</span>
+<span id="L26" class="line"><a href="#L26">26</a>     (T : P.CutLocusTree a) {u v : T.vertices} (edge : T.graph.Adj u v)</span>
+<span id="L27" class="line"><a href="#L27">27</a>     extends CutEdgeTriangles T edge where</span>
+<span id="L28" class="line"><a href="#L28">28</a>   motion : Plane ≃ᵃⁱ[ℝ] Plane</span>
+<span id="L29" class="line"><a href="#L29">29</a> </span>
+<span id="L30" class="line"><a href="#L30">30</a> namespace PlacedCutEdgeTriangles</span>
+<span id="L31" class="line"><a href="#L31">31</a> </span>
+<span id="L32" class="line"><a href="#L32">32</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L33" class="line"><a href="#L33">33</a>     {u v w z : T.vertices} {edge : T.graph.Adj u v} {other : T.graph.Adj w z}</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> /-- Put the existing local placement into a selected global frame. -/</span>
+<span id="L36" class="line"><a href="#L36">36</a> noncomputable def inFrame (D : PlacedCutEdgeTriangles T edge) (frame : Plane ≃ᵃⁱ[ℝ] Plane) :</span>
+<span id="L37" class="line"><a href="#L37">37</a>     PlacedCutEdgeTriangles T edge :=</span>
+<span id="L38" class="line"><a href="#L38">38</a>   ⟨D.toCutEdgeTriangles, D.motion.trans frame⟩</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> /-- The whole paired development agrees, allowing a consistent exchange of its two labels. -/</span>
+<span id="L41" class="line"><a href="#L41">41</a> def AgreesAfter (D : PlacedCutEdgeTriangles T edge) (E : PlacedCutEdgeTriangles T other)</span>
+<span id="L42" class="line"><a href="#L42">42</a>     (transition : Plane ≃ᵃⁱ[ℝ] Plane) : Prop :=</span>
+<span id="L43" class="line"><a href="#L43">43</a>   (((D.first_triangle.move D.motion).AgreesAfter (E.first_triangle.move E.motion) transition ∧</span>
+<span id="L44" class="line"><a href="#L44">44</a>     (D.second_triangle.move D.motion).AgreesAfter (E.second_triangle.move E.motion) transition) ∨</span>
+<span id="L45" class="line"><a href="#L45">45</a>    ((D.first_triangle.move D.motion).AgreesAfter (E.second_triangle.move E.motion) transition ∧</span>
+<span id="L46" class="line"><a href="#L46">46</a>     (D.second_triangle.move D.motion).AgreesAfter (E.first_triangle.move E.motion) transition))</span>
+<span id="L47" class="line"><a href="#L47">47</a> </span>
+<span id="L48" class="line"><a href="#L48">48</a> /-- Reversing an edge swaps its base endpoints and preserves both full triangle maps. -/</span>
+<span id="L49" class="line"><a href="#L49">49</a> def Reverses (D : PlacedCutEdgeTriangles T edge) (E : PlacedCutEdgeTriangles T other)</span>
+<span id="L50" class="line"><a href="#L50">50</a>     (transition : Plane ≃ᵃⁱ[ℝ] Plane) : Prop :=</span>
+<span id="L51" class="line"><a href="#L51">51</a>   transition (D.motion D.model.left) = E.motion E.model.right ∧</span>
+<span id="L52" class="line"><a href="#L52">52</a>   transition (D.motion D.model.right) = E.motion E.model.left ∧</span>
+<span id="L53" class="line"><a href="#L53">53</a>   D.AgreesAfter E transition</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> theorem AgreesAfter.symm {D : PlacedCutEdgeTriangles T edge} {E : PlacedCutEdgeTriangles T other}</span>
+<span id="L56" class="line"><a href="#L56">56</a>     {transition : Plane ≃ᵃⁱ[ℝ] Plane} (agrees : D.AgreesAfter E transition) :</span>
+<span id="L57" class="line"><a href="#L57">57</a>     E.AgreesAfter D transition.symm := by</span>
+<span id="L58" class="line"><a href="#L58">58</a>   rcases agrees with same | swapped</span>
+<span id="L59" class="line"><a href="#L59">59</a>   · exact Or.inl ⟨same.1.symm, same.2.symm⟩</span>
+<span id="L60" class="line"><a href="#L60">60</a>   · exact Or.inr ⟨swapped.2.symm, swapped.1.symm⟩</span>
+<span id="L61" class="line"><a href="#L61">61</a> </span>
+<span id="L62" class="line"><a href="#L62">62</a> theorem Reverses.symm {D : PlacedCutEdgeTriangles T edge} {E : PlacedCutEdgeTriangles T other}</span>
+<span id="L63" class="line"><a href="#L63">63</a>     {transition : Plane ≃ᵃⁱ[ℝ] Plane} (reverses : D.Reverses E transition) :</span>
+<span id="L64" class="line"><a href="#L64">64</a>     E.Reverses D transition.symm := by</span>
+<span id="L65" class="line"><a href="#L65">65</a>   refine ⟨?_, ?_, reverses.2.2.symm⟩</span>
+<span id="L66" class="line"><a href="#L66">66</a>   · rw [← reverses.2.1, transition.symm_apply_apply]</span>
+<span id="L67" class="line"><a href="#L67">67</a>   · rw [← reverses.1, transition.symm_apply_apply]</span>
+<span id="L68" class="line"><a href="#L68">68</a> </span>
+<span id="L69" class="line"><a href="#L69">69</a> /-- Full triangle agreement persists in any compatible pair of global frames. -/</span>
+<span id="L70" class="line"><a href="#L70">70</a> theorem AgreesAfter.in_common_frame {D : PlacedCutEdgeTriangles T edge}</span>
+<span id="L71" class="line"><a href="#L71">71</a>     {E : PlacedCutEdgeTriangles T other} {transition : Plane ≃ᵃⁱ[ℝ] Plane}</span>
+<span id="L72" class="line"><a href="#L72">72</a>     (agrees : D.AgreesAfter E transition) (first second : Plane ≃ᵃⁱ[ℝ] Plane)</span>
+<span id="L73" class="line"><a href="#L73">73</a>     (compatible : ∀ x, second (transition x) = first x) :</span>
+<span id="L74" class="line"><a href="#L74">74</a>     (D.inFrame first).AgreesAfter (E.inFrame second) (AffineIsometryEquiv.refl ℝ Plane) := by</span>
+<span id="L75" class="line"><a href="#L75">75</a>   rcases agrees with same | swapped</span>
+<span id="L76" class="line"><a href="#L76">76</a>   · exact Or.inl ⟨same.1.in_common_frame first second compatible,</span>
+<span id="L77" class="line"><a href="#L77">77</a>       same.2.in_common_frame first second compatible⟩</span>
+<span id="L78" class="line"><a href="#L78">78</a>   · exact Or.inr ⟨swapped.1.in_common_frame first second compatible,</span>
+<span id="L79" class="line"><a href="#L79">79</a>       swapped.2.in_common_frame first second compatible⟩</span>
+<span id="L80" class="line"><a href="#L80">80</a> </span>
+<span id="L81" class="line"><a href="#L81">81</a> theorem Reverses.in_common_frame {D : PlacedCutEdgeTriangles T edge}</span>
+<span id="L82" class="line"><a href="#L82">82</a>     {E : PlacedCutEdgeTriangles T other} {transition : Plane ≃ᵃⁱ[ℝ] Plane}</span>
+<span id="L83" class="line"><a href="#L83">83</a>     (reverses : D.Reverses E transition) (first second : Plane ≃ᵃⁱ[ℝ] Plane)</span>
+<span id="L84" class="line"><a href="#L84">84</a>     (compatible : ∀ x, second (transition x) = first x) :</span>
+<span id="L85" class="line"><a href="#L85">85</a>     (D.inFrame first).Reverses (E.inFrame second) (AffineIsometryEquiv.refl ℝ Plane) := by</span>
+<span id="L86" class="line"><a href="#L86">86</a>   refine ⟨?_, ?_, reverses.2.2.in_common_frame first second compatible⟩</span>
+<span id="L87" class="line"><a href="#L87">87</a>   · change first (D.motion D.model.left) = second (E.motion E.model.right)</span>
+<span id="L88" class="line"><a href="#L88">88</a>     rw [← compatible, reverses.1]</span>
+<span id="L89" class="line"><a href="#L89">89</a>   · change first (D.motion D.model.right) = second (E.motion E.model.left)</span>
+<span id="L90" class="line"><a href="#L90">90</a>     rw [← compatible, reverses.2.1]</span>
+<span id="L91" class="line"><a href="#L91">91</a> </span>
+<span id="L92" class="line"><a href="#L92">92</a> /-- The genuine reverse development provides both base positions and full surface agreement. -/</span>
+<span id="L93" class="line"><a href="#L93">93</a> theorem exists_reversal (D : PlacedCutEdgeTriangles T edge)</span>
+<span id="L94" class="line"><a href="#L94">94</a>     (E : PlacedCutEdgeTriangles T edge.symm) : ∃ transition, D.Reverses E transition := by</span>
+<span id="L95" class="line"><a href="#L95">95</a>   obtain ⟨motion, left, right, cases⟩ := D.toCutEdgeTriangles.reversal_agreement E.toCutEdgeTriangles</span>
+<span id="L96" class="line"><a href="#L96">96</a>   refine ⟨D.motion.symm.trans (motion.trans E.motion), ?_, ?_, ?_⟩</span>
+<span id="L97" class="line"><a href="#L97">97</a>   · change E.motion (motion (D.motion.symm (D.motion D.model.left))) = E.motion E.model.right</span>
+<span id="L98" class="line"><a href="#L98">98</a>     rw [D.motion.symm_apply_apply, left]</span>
+<span id="L99" class="line"><a href="#L99">99</a>   · change E.motion (motion (D.motion.symm (D.motion D.model.right))) = E.motion E.model.left</span>
+<span id="L100" class="line"><a href="#L100">100</a>     rw [D.motion.symm_apply_apply, right]</span>
+<span id="L101" class="line"><a href="#L101">101</a>   · rcases cases with same | swapped</span>
+<span id="L102" class="line"><a href="#L102">102</a>     · exact Or.inl ⟨same.2.2.2.2.1.move D.motion E.motion, same.2.2.2.2.2.move D.motion E.motion⟩</span>
+<span id="L103" class="line"><a href="#L103">103</a>     · exact Or.inr ⟨swapped.2.2.2.2.1.move D.motion E.motion, swapped.2.2.2.2.2.move D.motion E.motion⟩</span>
+<span id="L104" class="line"><a href="#L104">104</a> </span>
+<span id="L105" class="line"><a href="#L105">105</a> /-- Opposite orientations of an actual cut edge admit such a complete agreement. -/</span>
+<span id="L106" class="line"><a href="#L106">106</a> theorem exists_reversal_agreement (D : PlacedCutEdgeTriangles T edge)</span>
+<span id="L107" class="line"><a href="#L107">107</a>     (E : PlacedCutEdgeTriangles T edge.symm) : ∃ transition, D.AgreesAfter E transition := by</span>
+<span id="L108" class="line"><a href="#L108">108</a>   obtain ⟨transition, reverses⟩ := D.exists_reversal E</span>
+<span id="L109" class="line"><a href="#L109">109</a>   exact ⟨transition, reverses.2.2⟩</span>
+<span id="L110" class="line"><a href="#L110">110</a> </span>
+<span id="L111" class="line"><a href="#L111">111</a> end PlacedCutEdgeTriangles</span>
+<span id="L112" class="line"><a href="#L112">112</a> </span>
+<span id="L113" class="line"><a href="#L113">113</a> /-- Forget only the angular chart labels, retaining the actual triangles and their placement. -/</span>
+<span id="L114" class="line"><a href="#L114">114</a> def IncidentTriangles.placed {P : ConvexPolyhedron} {a : frontier P.body}</span>
+<span id="L115" class="line"><a href="#L115">115</a>     {T : P.CutLocusTree a} {u v : T.vertices} {edge : T.graph.Adj u v}</span>
+<span id="L116" class="line"><a href="#L116">116</a>     {chart : P.CutVoronoiChart a (T.vertexTarget u)} {angle : ℝ}</span>
+<span id="L117" class="line"><a href="#L117">117</a>     (D : IncidentTriangles T edge chart angle) : PlacedCutEdgeTriangles T edge :=</span>
+<span id="L118" class="line"><a href="#L118">118</a>   ⟨D.toCutEdgeTriangles, D.motion⟩</span>
+<span id="L119" class="line"><a href="#L119">119</a> </span>
+<span id="L120" class="line"><a href="#L120">120</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

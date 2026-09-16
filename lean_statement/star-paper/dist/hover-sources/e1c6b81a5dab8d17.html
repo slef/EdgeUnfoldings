@@ -1,0 +1,289 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Analysis/Convex/Extreme.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Analysis/Convex/Extreme.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2021 Yaël Dillies, Bhavik Mehta. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Yaël Dillies, Bhavik Mehta</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Analysis.Convex.Hull</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> /-!</span>
+<span id="L11" class="line"><a href="#L11">11</a> # Extreme sets</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> This file defines extreme sets and extreme points for sets in a module.</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> An extreme set of `A` is a subset of `A` that is as far as it can get in any outward direction: If</span>
+<span id="L16" class="line"><a href="#L16">16</a> point `x` is in it and point `y ∈ A`, then the line passing through `x` and `y` leaves `A` at `x`.</span>
+<span id="L17" class="line"><a href="#L17">17</a> This is an analytic notion of &quot;being on the side of&quot;. It is weaker than being exposed (see</span>
+<span id="L18" class="line"><a href="#L18">18</a> `IsExposed.isExtreme`).</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> ## Main declarations</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> * `IsExtreme 𝕜 A B`: States that `B` is an extreme set of `A` (in the literature, `A` is often</span>
+<span id="L23" class="line"><a href="#L23">23</a>   implicit).</span>
+<span id="L24" class="line"><a href="#L24">24</a> * `Set.extremePoints 𝕜 A`: Set of extreme points of `A` (corresponding to extreme singletons).</span>
+<span id="L25" class="line"><a href="#L25">25</a> * `Convex.mem_extremePoints_iff_convex_diff`: A useful equivalent condition to being an extreme</span>
+<span id="L26" class="line"><a href="#L26">26</a>   point: `x` is an extreme point iff `A \ {x}` is convex.</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> ## Implementation notes</span>
+<span id="L29" class="line"><a href="#L29">29</a> </span>
+<span id="L30" class="line"><a href="#L30">30</a> The exact definition of extremeness has been carefully chosen so as to make as many lemmas</span>
+<span id="L31" class="line"><a href="#L31">31</a> unconditional (in particular, the Krein-Milman theorem doesn&#x27;t need the set to be convex!).</span>
+<span id="L32" class="line"><a href="#L32">32</a> In practice, `A` is often assumed to be a convex set.</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> ## References</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> See chapter 8 of [Barry Simon, *Convexity*][simon2011]</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> ## TODO</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> Prove lemmas relating extreme sets and points to the intrinsic frontier.</span>
+<span id="L41" class="line"><a href="#L41">41</a> -/</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> @[expose] public section</span>
+<span id="L44" class="line"><a href="#L44">44</a> </span>
+<span id="L45" class="line"><a href="#L45">45</a> </span>
+<span id="L46" class="line"><a href="#L46">46</a> open Function Module Set Affine</span>
+<span id="L47" class="line"><a href="#L47">47</a> </span>
+<span id="L48" class="line"><a href="#L48">48</a> variable {𝕜 E F ι : Type*} {M : ι → Type*}</span>
+<span id="L49" class="line"><a href="#L49">49</a> </span>
+<span id="L50" class="line"><a href="#L50">50</a> section SMul</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> variable (𝕜) [Semiring 𝕜] [PartialOrder 𝕜] [AddCommMonoid E] [SMul 𝕜 E]</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> /-- A set `B` is an extreme subset of `A` if `B ⊆ A` and all points of `B` only belong to open</span>
+<span id="L55" class="line"><a href="#L55">55</a> segments whose ends are in `B`.</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> Our definition only requires that the left endpoint of the segment lies in `B`,</span>
+<span id="L58" class="line"><a href="#L58">58</a> but by symmetry of open segments, the right endpoint must also lie in `B`.</span>
+<span id="L59" class="line"><a href="#L59">59</a> See `IsExtreme.right_mem_of_mem_openSegment`. -/</span>
+<span id="L60" class="line"><a href="#L60">60</a> @[mk_iff]</span>
+<span id="L61" class="line"><a href="#L61">61</a> structure IsExtreme (A B : Set E) : Prop where</span>
+<span id="L62" class="line"><a href="#L62">62</a>   subset : B ⊆ A</span>
+<span id="L63" class="line"><a href="#L63">63</a>   left_mem_of_mem_openSegment : ∀ ⦃x⦄, x ∈ A → ∀ ⦃y⦄, y ∈ A →</span>
+<span id="L64" class="line"><a href="#L64">64</a>     ∀ ⦃z⦄, z ∈ B → z ∈ openSegment 𝕜 x y → x ∈ B</span>
+<span id="L65" class="line"><a href="#L65">65</a> </span>
+<span id="L66" class="line"><a href="#L66">66</a> /-- A point `x` is an extreme point of a set `A` if `x` belongs to no open segment with ends in</span>
+<span id="L67" class="line"><a href="#L67">67</a> `A`, except for the obvious `openSegment x x`. -/</span>
+<span id="L68" class="line"><a href="#L68">68</a> def Set.extremePoints (A : Set E) : Set E :=</span>
+<span id="L69" class="line"><a href="#L69">69</a>   {x ∈ A | ∀ ⦃x₁⦄, x₁ ∈ A → ∀ ⦃x₂⦄, x₂ ∈ A → x ∈ openSegment 𝕜 x₁ x₂ → x₁ = x}</span>
+<span id="L70" class="line"><a href="#L70">70</a> </span>
+<span id="L71" class="line"><a href="#L71">71</a> @[refl]</span>
+<span id="L72" class="line"><a href="#L72">72</a> protected theorem IsExtreme.refl (A : Set E) : IsExtreme 𝕜 A A :=</span>
+<span id="L73" class="line"><a href="#L73">73</a>   ⟨Subset.rfl, fun _ hx₁A _ _ _ _ _ ↦ hx₁A⟩</span>
+<span id="L74" class="line"><a href="#L74">74</a> </span>
+<span id="L75" class="line"><a href="#L75">75</a> variable {𝕜} {A B C : Set E} {x : E}</span>
+<span id="L76" class="line"><a href="#L76">76</a> </span>
+<span id="L77" class="line"><a href="#L77">77</a> protected theorem IsExtreme.rfl : IsExtreme 𝕜 A A :=</span>
+<span id="L78" class="line"><a href="#L78">78</a>   IsExtreme.refl 𝕜 A</span>
+<span id="L79" class="line"><a href="#L79">79</a> </span>
+<span id="L80" class="line"><a href="#L80">80</a> theorem IsExtreme.right_mem_of_mem_openSegment (h : IsExtreme 𝕜 A B) {y z : E} (hx : x ∈ A)</span>
+<span id="L81" class="line"><a href="#L81">81</a>     (hy : y ∈ A) (hz : z ∈ B) (hzxy : z ∈ openSegment 𝕜 x y) : y ∈ B :=</span>
+<span id="L82" class="line"><a href="#L82">82</a>   h.left_mem_of_mem_openSegment hy hx hz &lt;| by rwa [openSegment_symm]</span>
+<span id="L83" class="line"><a href="#L83">83</a> </span>
+<span id="L84" class="line"><a href="#L84">84</a> @[trans]</span>
+<span id="L85" class="line"><a href="#L85">85</a> protected theorem IsExtreme.trans (hAB : IsExtreme 𝕜 A B) (hBC : IsExtreme 𝕜 B C) :</span>
+<span id="L86" class="line"><a href="#L86">86</a>     IsExtreme 𝕜 A C := by</span>
+<span id="L87" class="line"><a href="#L87">87</a>   refine ⟨hBC.subset.trans hAB.subset, fun x₁ hx₁A x₂ hx₂A x hxC hx ↦ ?_⟩</span>
+<span id="L88" class="line"><a href="#L88">88</a>   exact hBC.left_mem_of_mem_openSegment</span>
+<span id="L89" class="line"><a href="#L89">89</a>     (hAB.left_mem_of_mem_openSegment hx₁A hx₂A (hBC.subset hxC) hx)</span>
+<span id="L90" class="line"><a href="#L90">90</a>     (hAB.right_mem_of_mem_openSegment hx₁A hx₂A (hBC.subset hxC) hx) hxC hx</span>
+<span id="L91" class="line"><a href="#L91">91</a> </span>
+<span id="L92" class="line"><a href="#L92">92</a> protected theorem IsExtreme.antisymm : Std.Antisymm (IsExtreme 𝕜 : Set E → Set E → Prop) :=</span>
+<span id="L93" class="line"><a href="#L93">93</a>   ⟨fun _ _ hAB hBA ↦ Subset.antisymm hBA.1 hAB.1⟩</span>
+<span id="L94" class="line"><a href="#L94">94</a> </span>
+<span id="L95" class="line"><a href="#L95">95</a> instance : IsPartialOrder (Set E) (IsExtreme 𝕜) where</span>
+<span id="L96" class="line"><a href="#L96">96</a>   refl := IsExtreme.refl 𝕜</span>
+<span id="L97" class="line"><a href="#L97">97</a>   trans _ _ _ := IsExtreme.trans</span>
+<span id="L98" class="line"><a href="#L98">98</a>   __ := IsExtreme.antisymm</span>
+<span id="L99" class="line"><a href="#L99">99</a> </span>
+<span id="L100" class="line"><a href="#L100">100</a> theorem IsExtreme.inter (hAB : IsExtreme 𝕜 A B) (hAC : IsExtreme 𝕜 A C) :</span>
+<span id="L101" class="line"><a href="#L101">101</a>     IsExtreme 𝕜 A (B ∩ C) := by</span>
+<span id="L102" class="line"><a href="#L102">102</a>   use Subset.trans inter_subset_left hAB.1</span>
+<span id="L103" class="line"><a href="#L103">103</a>   rintro x₁ hx₁A x₂ hx₂A x ⟨hxB, hxC⟩ hx</span>
+<span id="L104" class="line"><a href="#L104">104</a>   exact ⟨hAB.left_mem_of_mem_openSegment hx₁A hx₂A hxB hx,</span>
+<span id="L105" class="line"><a href="#L105">105</a>     hAC.left_mem_of_mem_openSegment hx₁A hx₂A hxC hx⟩</span>
+<span id="L106" class="line"><a href="#L106">106</a> </span>
+<span id="L107" class="line"><a href="#L107">107</a> protected theorem IsExtreme.mono (hAC : IsExtreme 𝕜 A C) (hBA : B ⊆ A) (hCB : C ⊆ B) :</span>
+<span id="L108" class="line"><a href="#L108">108</a>     IsExtreme 𝕜 B C :=</span>
+<span id="L109" class="line"><a href="#L109">109</a>   ⟨hCB, fun _ hx₁B _ hx₂B _ hxC hx ↦ hAC.2 (hBA hx₁B) (hBA hx₂B) hxC hx⟩</span>
+<span id="L110" class="line"><a href="#L110">110</a> </span>
+<span id="L111" class="line"><a href="#L111">111</a> theorem isExtreme_iInter {ι : Sort*} [Nonempty ι] {F : ι → Set E}</span>
+<span id="L112" class="line"><a href="#L112">112</a>     (hAF : ∀ i : ι, IsExtreme 𝕜 A (F i)) : IsExtreme 𝕜 A (⋂ i : ι, F i) := by</span>
+<span id="L113" class="line"><a href="#L113">113</a>   inhabit ι</span>
+<span id="L114" class="line"><a href="#L114">114</a>   refine ⟨iInter_subset_of_subset default (hAF default).1, fun x₁ hx₁A x₂ hx₂A x hxF hx ↦ ?_⟩</span>
+<span id="L115" class="line"><a href="#L115">115</a>   rw [mem_iInter] at hxF ⊢</span>
+<span id="L116" class="line"><a href="#L116">116</a>   exact fun i ↦ (hAF i).2 hx₁A hx₂A (hxF i) hx</span>
+<span id="L117" class="line"><a href="#L117">117</a> </span>
+<span id="L118" class="line"><a href="#L118">118</a> theorem isExtreme_biInter {F : Set (Set E)} (hF : F.Nonempty) (hA : ∀ B ∈ F, IsExtreme 𝕜 A B) :</span>
+<span id="L119" class="line"><a href="#L119">119</a>     IsExtreme 𝕜 A (⋂ B ∈ F, B) := by</span>
+<span id="L120" class="line"><a href="#L120">120</a>   haveI := hF.to_subtype</span>
+<span id="L121" class="line"><a href="#L121">121</a>   simpa only [iInter_subtype] using isExtreme_iInter fun i : F ↦ hA _ i.2</span>
+<span id="L122" class="line"><a href="#L122">122</a> </span>
+<span id="L123" class="line"><a href="#L123">123</a> theorem isExtreme_sInter {F : Set (Set E)} (hF : F.Nonempty) (hAF : ∀ B ∈ F, IsExtreme 𝕜 A B) :</span>
+<span id="L124" class="line"><a href="#L124">124</a>     IsExtreme 𝕜 A (⋂₀ F) := by simpa [sInter_eq_biInter] using isExtreme_biInter hF hAF</span>
+<span id="L125" class="line"><a href="#L125">125</a> </span>
+<span id="L126" class="line"><a href="#L126">126</a> /-- A point `x` is an extreme point of a set `A`</span>
+<span id="L127" class="line"><a href="#L127">127</a> iff `x ∈ A` and for any `x₁`, `x₂` such that `x` belongs to the open segment `(x₁, x₂)`,</span>
+<span id="L128" class="line"><a href="#L128">128</a> we have `x₁ = x` and `x₂ = x`.</span>
+<span id="L129" class="line"><a href="#L129">129</a> </span>
+<span id="L130" class="line"><a href="#L130">130</a> We used to use the RHS as the definition of `extremePoints`.</span>
+<span id="L131" class="line"><a href="#L131">131</a> However, the conclusion `x₂ = x` is redundant,</span>
+<span id="L132" class="line"><a href="#L132">132</a> so we changed the definition to the RHS of `mem_extremePoints_iff_left`. -/</span>
+<span id="L133" class="line"><a href="#L133">133</a> theorem mem_extremePoints : x ∈ A.extremePoints 𝕜 ↔</span>
+<span id="L134" class="line"><a href="#L134">134</a>     x ∈ A ∧ ∀ᵉ (x₁ ∈ A) (x₂ ∈ A), x ∈ openSegment 𝕜 x₁ x₂ → x₁ = x ∧ x₂ = x := by</span>
+<span id="L135" class="line"><a href="#L135">135</a>   refine ⟨fun h ↦ ⟨h.1, fun x₁ hx₁ x₂ hx₂ hx ↦ ⟨h.2 hx₁ hx₂ hx, ?_⟩⟩,</span>
+<span id="L136" class="line"><a href="#L136">136</a>     fun h ↦ ⟨h.1, fun x₁ hx₁ x₂ hx₂ hx ↦ (h.2 x₁ hx₁ x₂ hx₂ hx).1⟩⟩</span>
+<span id="L137" class="line"><a href="#L137">137</a>   apply h.2 hx₂ hx₁</span>
+<span id="L138" class="line"><a href="#L138">138</a>   rwa [openSegment_symm]</span>
+<span id="L139" class="line"><a href="#L139">139</a> </span>
+<span id="L140" class="line"><a href="#L140">140</a> /-- A point `x` is an extreme point of a set `A`</span>
+<span id="L141" class="line"><a href="#L141">141</a> iff `x ∈ A` and for any `x₁`, `x₂` such that `x` belongs to the open segment `(x₁, x₂)`,</span>
+<span id="L142" class="line"><a href="#L142">142</a> we have `x₁ = x`. -/</span>
+<span id="L143" class="line"><a href="#L143">143</a> theorem mem_extremePoints_iff_left : x ∈ A.extremePoints 𝕜 ↔</span>
+<span id="L144" class="line"><a href="#L144">144</a>     x ∈ A ∧ ∀ x₁ ∈ A, ∀ x₂ ∈ A, x ∈ openSegment 𝕜 x₁ x₂ → x₁ = x :=</span>
+<span id="L145" class="line"><a href="#L145">145</a>   .rfl</span>
+<span id="L146" class="line"><a href="#L146">146</a> </span>
+<span id="L147" class="line"><a href="#L147">147</a> /-- x is an extreme point to A iff {x} is an extreme set of A. -/</span>
+<span id="L148" class="line"><a href="#L148">148</a> @[simp] lemma isExtreme_singleton : IsExtreme 𝕜 A {x} ↔ x ∈ A.extremePoints 𝕜 := by</span>
+<span id="L149" class="line"><a href="#L149">149</a>   simp [isExtreme_iff, extremePoints]</span>
+<span id="L150" class="line"><a href="#L150">150</a> </span>
+<span id="L151" class="line"><a href="#L151">151</a> alias ⟨IsExtreme.mem_extremePoints, _⟩ := isExtreme_singleton</span>
+<span id="L152" class="line"><a href="#L152">152</a> </span>
+<span id="L153" class="line"><a href="#L153">153</a> theorem extremePoints_subset : A.extremePoints 𝕜 ⊆ A :=</span>
+<span id="L154" class="line"><a href="#L154">154</a>   fun _ hx ↦ hx.1</span>
+<span id="L155" class="line"><a href="#L155">155</a> </span>
+<span id="L156" class="line"><a href="#L156">156</a> @[simp]</span>
+<span id="L157" class="line"><a href="#L157">157</a> theorem extremePoints_empty : (∅ : Set E).extremePoints 𝕜 = ∅ :=</span>
+<span id="L158" class="line"><a href="#L158">158</a>   subset_empty_iff.1 extremePoints_subset</span>
+<span id="L159" class="line"><a href="#L159">159</a> </span>
+<span id="L160" class="line"><a href="#L160">160</a> @[simp]</span>
+<span id="L161" class="line"><a href="#L161">161</a> theorem extremePoints_singleton : ({x} : Set E).extremePoints 𝕜 = {x} :=</span>
+<span id="L162" class="line"><a href="#L162">162</a>   extremePoints_subset.antisymm &lt;| singleton_subset_iff.2 ⟨mem_singleton x, fun _ hx₁ _ _ _ ↦ hx₁⟩</span>
+<span id="L163" class="line"><a href="#L163">163</a> </span>
+<span id="L164" class="line"><a href="#L164">164</a> theorem inter_extremePoints_subset_extremePoints_of_subset (hBA : B ⊆ A) :</span>
+<span id="L165" class="line"><a href="#L165">165</a>     B ∩ A.extremePoints 𝕜 ⊆ B.extremePoints 𝕜 :=</span>
+<span id="L166" class="line"><a href="#L166">166</a>   fun _ ⟨hxB, hxA⟩ ↦ ⟨hxB, fun _ hx₁ _ hx₂ hx ↦ hxA.2 (hBA hx₁) (hBA hx₂) hx⟩</span>
+<span id="L167" class="line"><a href="#L167">167</a> </span>
+<span id="L168" class="line"><a href="#L168">168</a> theorem IsExtreme.extremePoints_subset_extremePoints (hAB : IsExtreme 𝕜 A B) :</span>
+<span id="L169" class="line"><a href="#L169">169</a>     B.extremePoints 𝕜 ⊆ A.extremePoints 𝕜 :=</span>
+<span id="L170" class="line"><a href="#L170">170</a>   fun _ ↦ by simpa only [← isExtreme_singleton] using hAB.trans</span>
+<span id="L171" class="line"><a href="#L171">171</a> </span>
+<span id="L172" class="line"><a href="#L172">172</a> theorem IsExtreme.extremePoints_eq (hAB : IsExtreme 𝕜 A B) :</span>
+<span id="L173" class="line"><a href="#L173">173</a>     B.extremePoints 𝕜 = B ∩ A.extremePoints 𝕜 :=</span>
+<span id="L174" class="line"><a href="#L174">174</a>   Subset.antisymm (fun _ hx ↦ ⟨hx.1, hAB.extremePoints_subset_extremePoints hx⟩)</span>
+<span id="L175" class="line"><a href="#L175">175</a>     (inter_extremePoints_subset_extremePoints_of_subset hAB.1)</span>
+<span id="L176" class="line"><a href="#L176">176</a> </span>
+<span id="L177" class="line"><a href="#L177">177</a> @[nontriviality]</span>
+<span id="L178" class="line"><a href="#L178">178</a> lemma Set.extremePoints_eq_self [Subsingleton E] (A : Set E) : Set.extremePoints 𝕜 A = A :=</span>
+<span id="L179" class="line"><a href="#L179">179</a>   subset_antisymm extremePoints_subset fun _ h ↦ ⟨h, fun _ _ _ _ _ ↦ Subsingleton.elim ..⟩</span>
+<span id="L180" class="line"><a href="#L180">180</a> </span>
+<span id="L181" class="line"><a href="#L181">181</a> end SMul</span>
+<span id="L182" class="line"><a href="#L182">182</a> </span>
+<span id="L183" class="line"><a href="#L183">183</a> section OrderedSemiring</span>
+<span id="L184" class="line"><a href="#L184">184</a> </span>
+<span id="L185" class="line"><a href="#L185">185</a> variable [Semiring 𝕜] [PartialOrder 𝕜] [AddCommGroup E] [AddCommGroup F] [∀ i, AddCommGroup (M i)]</span>
+<span id="L186" class="line"><a href="#L186">186</a>   [Module 𝕜 E] [Module 𝕜 F] [∀ i, Module 𝕜 (M i)] {A B : Set E}</span>
+<span id="L187" class="line"><a href="#L187">187</a> </span>
+<span id="L188" class="line"><a href="#L188">188</a> theorem IsExtreme.convex_diff [IsOrderedRing 𝕜] (hA : Convex 𝕜 A) (hAB : IsExtreme 𝕜 A B) :</span>
+<span id="L189" class="line"><a href="#L189">189</a>     Convex 𝕜 (A \ B) :=</span>
+<span id="L190" class="line"><a href="#L190">190</a>   convex_iff_openSegment_subset.2 fun _ ⟨hx₁A, hx₁B⟩ _ ⟨hx₂A, _⟩ _ hx ↦</span>
+<span id="L191" class="line"><a href="#L191">191</a>     ⟨hA.openSegment_subset hx₁A hx₂A hx, fun hxB ↦ hx₁B (hAB.2 hx₁A hx₂A hxB hx)⟩</span>
+<span id="L192" class="line"><a href="#L192">192</a> </span>
+<span id="L193" class="line"><a href="#L193">193</a> @[simp]</span>
+<span id="L194" class="line"><a href="#L194">194</a> theorem extremePoints_prod (s : Set E) (t : Set F) :</span>
+<span id="L195" class="line"><a href="#L195">195</a>     (s ×ˢ t).extremePoints 𝕜 = s.extremePoints 𝕜 ×ˢ t.extremePoints 𝕜 := by</span>
+<span id="L196" class="line"><a href="#L196">196</a>   ext ⟨x, y⟩</span>
+<span id="L197" class="line"><a href="#L197">197</a>   refine (and_congr_right fun hx ↦ ⟨fun h ↦ ⟨?_, ?_⟩, fun h ↦ ?_⟩).trans and_and_and_comm</span>
+<span id="L198" class="line"><a href="#L198">198</a>   · rintro x₁ hx₁ x₂ hx₂ ⟨a, b, ha, hb, hab, hx&#x27;⟩</span>
+<span id="L199" class="line"><a href="#L199">199</a>     ext</span>
+<span id="L200" class="line"><a href="#L200">200</a>     · exact h.1 hx₁.1 hx₂.1 ⟨a, b, ha, hb, hab, congrArg Prod.fst hx&#x27;⟩</span>
+<span id="L201" class="line"><a href="#L201">201</a>     · exact h.2 hx₁.2 hx₂.2 ⟨a, b, ha, hb, hab, congrArg Prod.snd hx&#x27;⟩</span>
+<span id="L202" class="line"><a href="#L202">202</a>   · rintro x₁ hx₁ x₂ hx₂ hx_fst</span>
+<span id="L203" class="line"><a href="#L203">203</a>     refine congrArg Prod.fst (h (mk_mem_prod hx₁ hx.2) (mk_mem_prod hx₂ hx.2) ?_)</span>
+<span id="L204" class="line"><a href="#L204">204</a>     rw [← Prod.image_mk_openSegment_left]</span>
+<span id="L205" class="line"><a href="#L205">205</a>     exact mem_image_of_mem _ hx_fst</span>
+<span id="L206" class="line"><a href="#L206">206</a>   · rintro x₁ hx₁ x₂ hx₂ hx_snd</span>
+<span id="L207" class="line"><a href="#L207">207</a>     refine congrArg Prod.snd (h (mk_mem_prod hx.1 hx₁) (mk_mem_prod hx.1 hx₂) ?_)</span>
+<span id="L208" class="line"><a href="#L208">208</a>     rw [← Prod.image_mk_openSegment_right]</span>
+<span id="L209" class="line"><a href="#L209">209</a>     exact mem_image_of_mem _ hx_snd</span>
+<span id="L210" class="line"><a href="#L210">210</a> </span>
+<span id="L211" class="line"><a href="#L211">211</a> @[simp]</span>
+<span id="L212" class="line"><a href="#L212">212</a> theorem extremePoints_pi (s : ∀ i, Set (M i)) :</span>
+<span id="L213" class="line"><a href="#L213">213</a>     (univ.pi s).extremePoints 𝕜 = univ.pi fun i ↦ (s i).extremePoints 𝕜 := by</span>
+<span id="L214" class="line"><a href="#L214">214</a>   classical</span>
+<span id="L215" class="line"><a href="#L215">215</a>   ext x</span>
+<span id="L216" class="line"><a href="#L216">216</a>   simp only [mem_extremePoints_iff_left, mem_univ_pi, @forall_and ι]</span>
+<span id="L217" class="line"><a href="#L217">217</a>   refine and_congr_right fun hx ↦ ⟨fun h i ↦ ?_, fun h ↦ ?_⟩</span>
+<span id="L218" class="line"><a href="#L218">218</a>   · rintro x₁ hx₁ x₂ hx₂ hi</span>
+<span id="L219" class="line"><a href="#L219">219</a>     rw [← update_self i x₁ x, h (update x i x₁) _ (update x i x₂)]</span>
+<span id="L220" class="line"><a href="#L220">220</a>     · rintro j</span>
+<span id="L221" class="line"><a href="#L221">221</a>       obtain rfl | hji := eq_or_ne j i &lt;;&gt; simp [*]</span>
+<span id="L222" class="line"><a href="#L222">222</a>     · rw [← Pi.image_update_openSegment]</span>
+<span id="L223" class="line"><a href="#L223">223</a>       exact ⟨_, hi, update_eq_self _ _⟩</span>
+<span id="L224" class="line"><a href="#L224">224</a>     · rintro j</span>
+<span id="L225" class="line"><a href="#L225">225</a>       obtain rfl | hji := eq_or_ne j i &lt;;&gt; simp [*]</span>
+<span id="L226" class="line"><a href="#L226">226</a>   · rintro x₁ hx₁ x₂ hx₂ ⟨a, b, ha, hb, hab, rfl⟩</span>
+<span id="L227" class="line"><a href="#L227">227</a>     ext i</span>
+<span id="L228" class="line"><a href="#L228">228</a>     exact h _ _ (hx₁ _) _ (hx₂ _) ⟨a, b, ha, hb, hab, rfl⟩</span>
+<span id="L229" class="line"><a href="#L229">229</a> </span>
+<span id="L230" class="line"><a href="#L230">230</a> end OrderedSemiring</span>
+<span id="L231" class="line"><a href="#L231">231</a> </span>
+<span id="L232" class="line"><a href="#L232">232</a> section OrderedRing</span>
+<span id="L233" class="line"><a href="#L233">233</a> variable {L : Type*} [Ring 𝕜] [PartialOrder 𝕜] [IsOrderedRing 𝕜]</span>
+<span id="L234" class="line"><a href="#L234">234</a>   [AddCommGroup E] [Module 𝕜 E] [AddCommGroup F] [Module 𝕜 F]</span>
+<span id="L235" class="line"><a href="#L235">235</a>   [EquivLike L E F] [LinearEquivClass L 𝕜 E F]</span>
+<span id="L236" class="line"><a href="#L236">236</a> </span>
+<span id="L237" class="line"><a href="#L237">237</a> lemma image_extremePoints (f : L) (s : Set E) :</span>
+<span id="L238" class="line"><a href="#L238">238</a>     f &#x27;&#x27; extremePoints 𝕜 s = extremePoints 𝕜 (f &#x27;&#x27; s) := by</span>
+<span id="L239" class="line"><a href="#L239">239</a>   ext b</span>
+<span id="L240" class="line"><a href="#L240">240</a>   obtain ⟨a, rfl⟩ := EquivLike.surjective f b</span>
+<span id="L241" class="line"><a href="#L241">241</a>   have : ∀ x y, f &#x27;&#x27; openSegment 𝕜 x y = openSegment 𝕜 (f x) (f y) :=</span>
+<span id="L242" class="line"><a href="#L242">242</a>     image_openSegment _ (LinearMapClass.linearMap f).toAffineMap</span>
+<span id="L243" class="line"><a href="#L243">243</a>   simp only [mem_extremePoints, (EquivLike.surjective f).forall,</span>
+<span id="L244" class="line"><a href="#L244">244</a>     (EquivLike.injective f).mem_set_image, (EquivLike.injective f).eq_iff, ← this]</span>
+<span id="L245" class="line"><a href="#L245">245</a> </span>
+<span id="L246" class="line"><a href="#L246">246</a> end OrderedRing</span>
+<span id="L247" class="line"><a href="#L247">247</a> </span>
+<span id="L248" class="line"><a href="#L248">248</a> section LinearOrderedRing</span>
+<span id="L249" class="line"><a href="#L249">249</a> </span>
+<span id="L250" class="line"><a href="#L250">250</a> variable [Ring 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [AddCommGroup E] [Module 𝕜 E]</span>
+<span id="L251" class="line"><a href="#L251">251</a> variable [DenselyOrdered 𝕜] [IsTorsionFree 𝕜 E] {A : Set E} {x : E}</span>
+<span id="L252" class="line"><a href="#L252">252</a> </span>
+<span id="L253" class="line"><a href="#L253">253</a> /-- A useful restatement using `segment`: `x` is an extreme point iff the only (closed) segments</span>
+<span id="L254" class="line"><a href="#L254">254</a> that contain it are those with `x` as one of their endpoints. -/</span>
+<span id="L255" class="line"><a href="#L255">255</a> theorem mem_extremePoints_iff_forall_segment : x ∈ A.extremePoints 𝕜 ↔</span>
+<span id="L256" class="line"><a href="#L256">256</a>     x ∈ A ∧ ∀ᵉ (x₁ ∈ A) (x₂ ∈ A), x ∈ segment 𝕜 x₁ x₂ → x₁ = x ∨ x₂ = x := by</span>
+<span id="L257" class="line"><a href="#L257">257</a>   rw [mem_extremePoints]</span>
+<span id="L258" class="line"><a href="#L258">258</a>   refine and_congr_right fun hxA ↦ forall₄_congr fun x₁ h₁ x₂ h₂ ↦ ?_</span>
+<span id="L259" class="line"><a href="#L259">259</a>   constructor</span>
+<span id="L260" class="line"><a href="#L260">260</a>   · rw [← insert_endpoints_openSegment]</span>
+<span id="L261" class="line"><a href="#L261">261</a>     rintro H (rfl | rfl | hx)</span>
+<span id="L262" class="line"><a href="#L262">262</a>     exacts [Or.inl rfl, Or.inr rfl, Or.inl &lt;| (H hx).1]</span>
+<span id="L263" class="line"><a href="#L263">263</a>   · intro H hx</span>
+<span id="L264" class="line"><a href="#L264">264</a>     rcases H (openSegment_subset_segment _ _ _ hx) with (rfl | rfl)</span>
+<span id="L265" class="line"><a href="#L265">265</a>     exacts [⟨rfl, (left_mem_openSegment_iff.1 hx).symm⟩, ⟨right_mem_openSegment_iff.1 hx, rfl⟩]</span>
+<span id="L266" class="line"><a href="#L266">266</a> </span>
+<span id="L267" class="line"><a href="#L267">267</a> theorem Convex.mem_extremePoints_iff_convex_diff (hA : Convex 𝕜 A) :</span>
+<span id="L268" class="line"><a href="#L268">268</a>     x ∈ A.extremePoints 𝕜 ↔ x ∈ A ∧ Convex 𝕜 (A \ {x}) := by</span>
+<span id="L269" class="line"><a href="#L269">269</a>   use fun hx ↦ ⟨hx.1, (isExtreme_singleton.2 hx).convex_diff hA⟩</span>
+<span id="L270" class="line"><a href="#L270">270</a>   rintro ⟨hxA, hAx⟩</span>
+<span id="L271" class="line"><a href="#L271">271</a>   refine mem_extremePoints_iff_forall_segment.2 ⟨hxA, fun x₁ hx₁ x₂ hx₂ hx ↦ ?_⟩</span>
+<span id="L272" class="line"><a href="#L272">272</a>   rw [convex_iff_segment_subset] at hAx</span>
+<span id="L273" class="line"><a href="#L273">273</a>   by_contra! h</span>
+<span id="L274" class="line"><a href="#L274">274</a>   exact (hAx ⟨hx₁, fun hx₁ ↦ h.1 (mem_singleton_iff.2 hx₁)⟩</span>
+<span id="L275" class="line"><a href="#L275">275</a>       ⟨hx₂, fun hx₂ ↦ h.2 (mem_singleton_iff.2 hx₂)⟩ hx).2 rfl</span>
+<span id="L276" class="line"><a href="#L276">276</a> </span>
+<span id="L277" class="line"><a href="#L277">277</a> theorem Convex.mem_extremePoints_iff_mem_diff_convexHull_diff (hA : Convex 𝕜 A) :</span>
+<span id="L278" class="line"><a href="#L278">278</a>     x ∈ A.extremePoints 𝕜 ↔ x ∈ A \ convexHull 𝕜 (A \ {x}) := by</span>
+<span id="L279" class="line"><a href="#L279">279</a>   rw [hA.mem_extremePoints_iff_convex_diff, hA.convex_remove_iff_notMem_convexHull_remove,</span>
+<span id="L280" class="line"><a href="#L280">280</a>     mem_diff]</span>
+<span id="L281" class="line"><a href="#L281">281</a> </span>
+<span id="L282" class="line"><a href="#L282">282</a> theorem extremePoints_convexHull_subset : (convexHull 𝕜 A).extremePoints 𝕜 ⊆ A := by</span>
+<span id="L283" class="line"><a href="#L283">283</a>   rintro x hx</span>
+<span id="L284" class="line"><a href="#L284">284</a>   rw [(convex_convexHull 𝕜 _).mem_extremePoints_iff_convex_diff] at hx</span>
+<span id="L285" class="line"><a href="#L285">285</a>   by_contra h</span>
+<span id="L286" class="line"><a href="#L286">286</a>   exact (convexHull_min (subset_diff.2 ⟨subset_convexHull 𝕜 _, disjoint_singleton_right.2 h⟩) hx.2</span>
+<span id="L287" class="line"><a href="#L287">287</a>     hx.1).2 rfl</span>
+<span id="L288" class="line"><a href="#L288">288</a> </span>
+<span id="L289" class="line"><a href="#L289">289</a> end LinearOrderedRing</span></pre></html>

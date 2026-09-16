@@ -1,0 +1,913 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Data/Finset/Card.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Data/Finset/Card.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2015 Microsoft Corporation. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Leonardo de Moura, Jeremy Avigad</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Data.Finset.Basic</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Data.Finset.Image</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Data.Finset.Lattice.Lemmas</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-!</span>
+<span id="L13" class="line"><a href="#L13">13</a> # Cardinality of a finite set</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> This defines the cardinality of a `Finset` and provides induction principles for finsets.</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> ## Main declarations</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> * `Finset.card`: `#s : ℕ` returns the cardinality of `s : Finset α`.</span>
+<span id="L20" class="line"><a href="#L20">20</a> </span>
+<span id="L21" class="line"><a href="#L21">21</a> ### Induction principles</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> * `Finset.strongInduction`: Strong induction</span>
+<span id="L24" class="line"><a href="#L24">24</a> * `Finset.strongInductionOn`</span>
+<span id="L25" class="line"><a href="#L25">25</a> * `Finset.strongDownwardInduction`</span>
+<span id="L26" class="line"><a href="#L26">26</a> * `Finset.strongDownwardInductionOn`</span>
+<span id="L27" class="line"><a href="#L27">27</a> * `Finset.case_strong_induction_on`</span>
+<span id="L28" class="line"><a href="#L28">28</a> * `Finset.Nonempty.strong_induction`</span>
+<span id="L29" class="line"><a href="#L29">29</a> * `Finset.eraseInduction`</span>
+<span id="L30" class="line"><a href="#L30">30</a> -/</span>
+<span id="L31" class="line"><a href="#L31">31</a> </span>
+<span id="L32" class="line"><a href="#L32">32</a> @[expose] public section</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> assert_not_exists Monoid</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> open Function Multiset Nat</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> variable {α β R : Type*}</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> namespace Finset</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> variable {s t : Finset α} {a b : α}</span>
+<span id="L43" class="line"><a href="#L43">43</a> </span>
+<span id="L44" class="line"><a href="#L44">44</a> /-- `s.card` is the number of elements of `s`, aka its cardinality.</span>
+<span id="L45" class="line"><a href="#L45">45</a> </span>
+<span id="L46" class="line"><a href="#L46">46</a> The notation `#s` can be accessed in the `Finset` locale. -/</span>
+<span id="L47" class="line"><a href="#L47">47</a> def card (s : Finset α) : ℕ :=</span>
+<span id="L48" class="line"><a href="#L48">48</a>   Multiset.card s.1</span>
+<span id="L49" class="line"><a href="#L49">49</a> </span>
+<span id="L50" class="line"><a href="#L50">50</a> @[inherit_doc] scoped prefix:arg &quot;#&quot; =&gt; Finset.card</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> theorem card_def (s : Finset α) : #s = Multiset.card s.1 :=</span>
+<span id="L53" class="line"><a href="#L53">53</a>   rfl</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> @[simp] lemma card_val (s : Finset α) : Multiset.card s.1 = #s := rfl</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> @[simp]</span>
+<span id="L58" class="line"><a href="#L58">58</a> theorem card_mk {m nodup} : #(⟨m, nodup⟩ : Finset α) = Multiset.card m :=</span>
+<span id="L59" class="line"><a href="#L59">59</a>   rfl</span>
+<span id="L60" class="line"><a href="#L60">60</a> </span>
+<span id="L61" class="line"><a href="#L61">61</a> @[simp, grind =]</span>
+<span id="L62" class="line"><a href="#L62">62</a> theorem card_empty : #(∅ : Finset α) = 0 :=</span>
+<span id="L63" class="line"><a href="#L63">63</a>   rfl</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> @[gcongr]</span>
+<span id="L66" class="line"><a href="#L66">66</a> theorem card_le_card : s ⊆ t → #s ≤ #t :=</span>
+<span id="L67" class="line"><a href="#L67">67</a>   Multiset.card_le_card ∘ val_le_iff.mpr</span>
+<span id="L68" class="line"><a href="#L68">68</a> </span>
+<span id="L69" class="line"><a href="#L69">69</a> -- This pattern is unreasonable to use generally, but it&#x27;s convenient in this file.</span>
+<span id="L70" class="line"><a href="#L70">70</a> -- (Note that we turn it on again later in this file.)</span>
+<span id="L71" class="line"><a href="#L71">71</a> local grind_pattern card_le_card =&gt; #s, #t</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> @[mono]</span>
+<span id="L74" class="line"><a href="#L74">74</a> theorem card_mono : Monotone (@card α) := by apply card_le_card</span>
+<span id="L75" class="line"><a href="#L75">75</a> </span>
+<span id="L76" class="line"><a href="#L76">76</a> @[simp] lemma card_eq_zero : #s = 0 ↔ s = ∅ := Multiset.card_eq_zero.trans val_eq_zero</span>
+<span id="L77" class="line"><a href="#L77">77</a> lemma card_ne_zero : #s ≠ 0 ↔ s.Nonempty := card_eq_zero.ne.trans nonempty_iff_ne_empty.symm</span>
+<span id="L78" class="line"><a href="#L78">78</a> @[simp] lemma card_pos : 0 &lt; #s ↔ s.Nonempty := Nat.pos_iff_ne_zero.trans card_ne_zero</span>
+<span id="L79" class="line"><a href="#L79">79</a> @[simp] lemma one_le_card : 1 ≤ #s ↔ s.Nonempty := card_pos</span>
+<span id="L80" class="line"><a href="#L80">80</a> </span>
+<span id="L81" class="line"><a href="#L81">81</a> alias ⟨_, Nonempty.card_pos⟩ := card_pos</span>
+<span id="L82" class="line"><a href="#L82">82</a> alias ⟨_, Nonempty.card_ne_zero⟩ := card_ne_zero</span>
+<span id="L83" class="line"><a href="#L83">83</a> </span>
+<span id="L84" class="line"><a href="#L84">84</a> theorem card_ne_zero_of_mem (h : a ∈ s) : #s ≠ 0 :=</span>
+<span id="L85" class="line"><a href="#L85">85</a>   (not_congr card_eq_zero).2 &lt;| ne_empty_of_mem h</span>
+<span id="L86" class="line"><a href="#L86">86</a> </span>
+<span id="L87" class="line"><a href="#L87">87</a> grind_pattern card_ne_zero_of_mem =&gt; a ∈ s, #s</span>
+<span id="L88" class="line"><a href="#L88">88</a> </span>
+<span id="L89" class="line"><a href="#L89">89</a> @[simp, grind =]</span>
+<span id="L90" class="line"><a href="#L90">90</a> theorem card_singleton (a : α) : #{a} = 1 :=</span>
+<span id="L91" class="line"><a href="#L91">91</a>   Multiset.card_singleton _</span>
+<span id="L92" class="line"><a href="#L92">92</a> </span>
+<span id="L93" class="line"><a href="#L93">93</a> theorem card_singleton_inter [DecidableEq α] : #({a} ∩ s) ≤ 1 := by grind</span>
+<span id="L94" class="line"><a href="#L94">94</a> </span>
+<span id="L95" class="line"><a href="#L95">95</a> @[simp, grind =]</span>
+<span id="L96" class="line"><a href="#L96">96</a> theorem card_cons (h : a ∉ s) : #(s.cons a h) = #s + 1 :=</span>
+<span id="L97" class="line"><a href="#L97">97</a>   Multiset.card_cons _ _</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> section InsertErase</span>
+<span id="L100" class="line"><a href="#L100">100</a> </span>
+<span id="L101" class="line"><a href="#L101">101</a> variable [DecidableEq α]</span>
+<span id="L102" class="line"><a href="#L102">102</a> </span>
+<span id="L103" class="line"><a href="#L103">103</a> @[simp, grind =]</span>
+<span id="L104" class="line"><a href="#L104">104</a> theorem card_insert_of_notMem (h : a ∉ s) : #(insert a s) = #s + 1 := by</span>
+<span id="L105" class="line"><a href="#L105">105</a>   grind [=_ cons_eq_insert]</span>
+<span id="L106" class="line"><a href="#L106">106</a> </span>
+<span id="L107" class="line"><a href="#L107">107</a> theorem card_insert_of_mem (h : a ∈ s) : #(insert a s) = #s := by rw [insert_eq_of_mem h]</span>
+<span id="L108" class="line"><a href="#L108">108</a> </span>
+<span id="L109" class="line"><a href="#L109">109</a> theorem card_insert_le (a : α) (s : Finset α) : #(insert a s) ≤ #s + 1 := by grind</span>
+<span id="L110" class="line"><a href="#L110">110</a> </span>
+<span id="L111" class="line"><a href="#L111">111</a> section</span>
+<span id="L112" class="line"><a href="#L112">112</a> </span>
+<span id="L113" class="line"><a href="#L113">113</a> variable {a b c d e f : α}</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> theorem card_le_two : #{a, b} ≤ 2 := card_insert_le _ _</span>
+<span id="L116" class="line"><a href="#L116">116</a> </span>
+<span id="L117" class="line"><a href="#L117">117</a> theorem card_le_three : #{a, b, c} ≤ 3 :=</span>
+<span id="L118" class="line"><a href="#L118">118</a>   (card_insert_le _ _).trans (Nat.succ_le_succ card_le_two)</span>
+<span id="L119" class="line"><a href="#L119">119</a> </span>
+<span id="L120" class="line"><a href="#L120">120</a> theorem card_le_four : #{a, b, c, d} ≤ 4 :=</span>
+<span id="L121" class="line"><a href="#L121">121</a>   (card_insert_le _ _).trans (Nat.succ_le_succ card_le_three)</span>
+<span id="L122" class="line"><a href="#L122">122</a> </span>
+<span id="L123" class="line"><a href="#L123">123</a> theorem card_le_five : #{a, b, c, d, e} ≤ 5 :=</span>
+<span id="L124" class="line"><a href="#L124">124</a>   (card_insert_le _ _).trans (Nat.succ_le_succ card_le_four)</span>
+<span id="L125" class="line"><a href="#L125">125</a> </span>
+<span id="L126" class="line"><a href="#L126">126</a> theorem card_le_six : #{a, b, c, d, e, f} ≤ 6 :=</span>
+<span id="L127" class="line"><a href="#L127">127</a>   (card_insert_le _ _).trans (Nat.succ_le_succ card_le_five)</span>
+<span id="L128" class="line"><a href="#L128">128</a> </span>
+<span id="L129" class="line"><a href="#L129">129</a> end</span>
+<span id="L130" class="line"><a href="#L130">130</a> </span>
+<span id="L131" class="line"><a href="#L131">131</a> /-- If `a ∈ s` is known, see also `Finset.card_insert_of_mem` and `Finset.card_insert_of_notMem`.</span>
+<span id="L132" class="line"><a href="#L132">132</a> -/</span>
+<span id="L133" class="line"><a href="#L133">133</a> theorem card_insert_eq_ite : #(insert a s) = if a ∈ s then #s else #s + 1 := by grind</span>
+<span id="L134" class="line"><a href="#L134">134</a> </span>
+<span id="L135" class="line"><a href="#L135">135</a> @[simp]</span>
+<span id="L136" class="line"><a href="#L136">136</a> theorem card_pair_eq_one_or_two : #{a, b} = 1 ∨ #{a, b} = 2 := by grind</span>
+<span id="L137" class="line"><a href="#L137">137</a> </span>
+<span id="L138" class="line"><a href="#L138">138</a> theorem card_pair (h : a ≠ b) : #{a, b} = 2 := by</span>
+<span id="L139" class="line"><a href="#L139">139</a>   simp [h]</span>
+<span id="L140" class="line"><a href="#L140">140</a> </span>
+<span id="L141" class="line"><a href="#L141">141</a> /-- $\#(s \setminus \{a\}) = \#s - 1$ if $a \in s$. -/</span>
+<span id="L142" class="line"><a href="#L142">142</a> @[simp, grind =]</span>
+<span id="L143" class="line"><a href="#L143">143</a> theorem card_erase_of_mem : a ∈ s → #(s.erase a) = #s - 1 :=</span>
+<span id="L144" class="line"><a href="#L144">144</a>   Multiset.card_erase_of_mem</span>
+<span id="L145" class="line"><a href="#L145">145</a> </span>
+<span id="L146" class="line"><a href="#L146">146</a> -- @[simp] -- removed because LHS is not in simp normal form</span>
+<span id="L147" class="line"><a href="#L147">147</a> theorem card_erase_add_one : a ∈ s → #(s.erase a) + 1 = #s :=</span>
+<span id="L148" class="line"><a href="#L148">148</a>   Multiset.card_erase_add_one</span>
+<span id="L149" class="line"><a href="#L149">149</a> </span>
+<span id="L150" class="line"><a href="#L150">150</a> theorem card_erase_lt_of_mem : a ∈ s → #(s.erase a) &lt; #s :=</span>
+<span id="L151" class="line"><a href="#L151">151</a>   Multiset.card_erase_lt_of_mem</span>
+<span id="L152" class="line"><a href="#L152">152</a> </span>
+<span id="L153" class="line"><a href="#L153">153</a> theorem card_erase_le : #(s.erase a) ≤ #s :=</span>
+<span id="L154" class="line"><a href="#L154">154</a>   Multiset.card_erase_le</span>
+<span id="L155" class="line"><a href="#L155">155</a> </span>
+<span id="L156" class="line"><a href="#L156">156</a> theorem pred_card_le_card_erase : #s - 1 ≤ #(s.erase a) := by grind</span>
+<span id="L157" class="line"><a href="#L157">157</a> </span>
+<span id="L158" class="line"><a href="#L158">158</a> /-- If `a ∈ s` is known, see also `Finset.card_erase_of_mem` and `Finset.erase_eq_of_notMem`. -/</span>
+<span id="L159" class="line"><a href="#L159">159</a> theorem card_erase_eq_ite : #(s.erase a) = if a ∈ s then #s - 1 else #s :=</span>
+<span id="L160" class="line"><a href="#L160">160</a>   Multiset.card_erase_eq_ite</span>
+<span id="L161" class="line"><a href="#L161">161</a> </span>
+<span id="L162" class="line"><a href="#L162">162</a> end InsertErase</span>
+<span id="L163" class="line"><a href="#L163">163</a> </span>
+<span id="L164" class="line"><a href="#L164">164</a> @[simp, grind =]</span>
+<span id="L165" class="line"><a href="#L165">165</a> theorem card_range (n : ℕ) : #(range n) = n :=</span>
+<span id="L166" class="line"><a href="#L166">166</a>   Multiset.card_range n</span>
+<span id="L167" class="line"><a href="#L167">167</a> </span>
+<span id="L168" class="line"><a href="#L168">168</a> @[simp, grind =]</span>
+<span id="L169" class="line"><a href="#L169">169</a> theorem card_attach : #s.attach = #s :=</span>
+<span id="L170" class="line"><a href="#L170">170</a>   Multiset.card_attach</span>
+<span id="L171" class="line"><a href="#L171">171</a> </span>
+<span id="L172" class="line"><a href="#L172">172</a> end Finset</span>
+<span id="L173" class="line"><a href="#L173">173</a> </span>
+<span id="L174" class="line"><a href="#L174">174</a> open scoped Finset</span>
+<span id="L175" class="line"><a href="#L175">175</a> </span>
+<span id="L176" class="line"><a href="#L176">176</a> section ToMultiset</span>
+<span id="L177" class="line"><a href="#L177">177</a> </span>
+<span id="L178" class="line"><a href="#L178">178</a> variable [DecidableEq α] (m : Multiset α) (l : List α)</span>
+<span id="L179" class="line"><a href="#L179">179</a> </span>
+<span id="L180" class="line"><a href="#L180">180</a> theorem Multiset.card_toFinset : #m.toFinset = Multiset.card m.dedup :=</span>
+<span id="L181" class="line"><a href="#L181">181</a>   rfl</span>
+<span id="L182" class="line"><a href="#L182">182</a> </span>
+<span id="L183" class="line"><a href="#L183">183</a> theorem Multiset.toFinset_card_le : #m.toFinset ≤ Multiset.card m :=</span>
+<span id="L184" class="line"><a href="#L184">184</a>   card_le_card &lt;| dedup_le _</span>
+<span id="L185" class="line"><a href="#L185">185</a> </span>
+<span id="L186" class="line"><a href="#L186">186</a> theorem Multiset.toFinset_card_of_nodup {m : Multiset α} (h : m.Nodup) :</span>
+<span id="L187" class="line"><a href="#L187">187</a>     #m.toFinset = Multiset.card m :=</span>
+<span id="L188" class="line"><a href="#L188">188</a>   congr_arg card &lt;| Multiset.dedup_eq_self.mpr h</span>
+<span id="L189" class="line"><a href="#L189">189</a> </span>
+<span id="L190" class="line"><a href="#L190">190</a> theorem Multiset.dedup_card_eq_card_iff_nodup {m : Multiset α} :</span>
+<span id="L191" class="line"><a href="#L191">191</a>     card m.dedup = card m ↔ m.Nodup :=</span>
+<span id="L192" class="line"><a href="#L192">192</a>   .trans ⟨fun h ↦ eq_of_le_of_card_le (dedup_le m) h.ge, congr_arg _⟩ dedup_eq_self</span>
+<span id="L193" class="line"><a href="#L193">193</a> </span>
+<span id="L194" class="line"><a href="#L194">194</a> theorem Multiset.toFinset_card_eq_card_iff_nodup {m : Multiset α} :</span>
+<span id="L195" class="line"><a href="#L195">195</a>     #m.toFinset = card m ↔ m.Nodup := dedup_card_eq_card_iff_nodup</span>
+<span id="L196" class="line"><a href="#L196">196</a> </span>
+<span id="L197" class="line"><a href="#L197">197</a> theorem List.card_toFinset : #l.toFinset = l.dedup.length :=</span>
+<span id="L198" class="line"><a href="#L198">198</a>   rfl</span>
+<span id="L199" class="line"><a href="#L199">199</a> </span>
+<span id="L200" class="line"><a href="#L200">200</a> theorem List.toFinset_card_le : #l.toFinset ≤ l.length :=</span>
+<span id="L201" class="line"><a href="#L201">201</a>   Multiset.toFinset_card_le ⟦l⟧</span>
+<span id="L202" class="line"><a href="#L202">202</a> </span>
+<span id="L203" class="line"><a href="#L203">203</a> theorem List.toFinset_card_of_nodup {l : List α} (h : l.Nodup) : #l.toFinset = l.length :=</span>
+<span id="L204" class="line"><a href="#L204">204</a>   Multiset.toFinset_card_of_nodup h</span>
+<span id="L205" class="line"><a href="#L205">205</a> </span>
+<span id="L206" class="line"><a href="#L206">206</a> end ToMultiset</span>
+<span id="L207" class="line"><a href="#L207">207</a> </span>
+<span id="L208" class="line"><a href="#L208">208</a> namespace Finset</span>
+<span id="L209" class="line"><a href="#L209">209</a> </span>
+<span id="L210" class="line"><a href="#L210">210</a> variable {s t u : Finset α} {f : α → β} {n : ℕ}</span>
+<span id="L211" class="line"><a href="#L211">211</a> </span>
+<span id="L212" class="line"><a href="#L212">212</a> @[simp, grind =]</span>
+<span id="L213" class="line"><a href="#L213">213</a> theorem length_toList (s : Finset α) : s.toList.length = #s := by</span>
+<span id="L214" class="line"><a href="#L214">214</a>   rw [toList, ← Multiset.coe_card, Multiset.coe_toList, card_def]</span>
+<span id="L215" class="line"><a href="#L215">215</a> </span>
+<span id="L216" class="line"><a href="#L216">216</a> theorem card_image_le [DecidableEq β] : #(s.image f) ≤ #s := by</span>
+<span id="L217" class="line"><a href="#L217">217</a>   simpa only [card_map] using (s.1.map f).toFinset_card_le</span>
+<span id="L218" class="line"><a href="#L218">218</a> </span>
+<span id="L219" class="line"><a href="#L219">219</a> grind_pattern card_image_le =&gt; #(s.image f)</span>
+<span id="L220" class="line"><a href="#L220">220</a> grind_pattern card_image_le =&gt; s.image f, #s</span>
+<span id="L221" class="line"><a href="#L221">221</a> </span>
+<span id="L222" class="line"><a href="#L222">222</a> theorem card_image_of_injOn [DecidableEq β] (H : Set.InjOn f s) : #(s.image f) = #s := by</span>
+<span id="L223" class="line"><a href="#L223">223</a>   simp only [card, image_val_of_injOn H, card_map]</span>
+<span id="L224" class="line"><a href="#L224">224</a> </span>
+<span id="L225" class="line"><a href="#L225">225</a> theorem injOn_of_card_image_eq [DecidableEq β] (H : #(s.image f) = #s) : Set.InjOn f s := by</span>
+<span id="L226" class="line"><a href="#L226">226</a>   rw [card_def, card_def, image, toFinset] at H</span>
+<span id="L227" class="line"><a href="#L227">227</a>   dsimp only at H</span>
+<span id="L228" class="line"><a href="#L228">228</a>   have : (s.1.map f).dedup = s.1.map f := by</span>
+<span id="L229" class="line"><a href="#L229">229</a>     refine Multiset.eq_of_le_of_card_le (Multiset.dedup_le _) ?_</span>
+<span id="L230" class="line"><a href="#L230">230</a>     simp only [H, Multiset.card_map, le_rfl]</span>
+<span id="L231" class="line"><a href="#L231">231</a>   rw [Multiset.dedup_eq_self] at this</span>
+<span id="L232" class="line"><a href="#L232">232</a>   exact inj_on_of_nodup_map this</span>
+<span id="L233" class="line"><a href="#L233">233</a> </span>
+<span id="L234" class="line"><a href="#L234">234</a> theorem card_image_iff [DecidableEq β] : #(s.image f) = #s ↔ Set.InjOn f s :=</span>
+<span id="L235" class="line"><a href="#L235">235</a>   ⟨injOn_of_card_image_eq, card_image_of_injOn⟩</span>
+<span id="L236" class="line"><a href="#L236">236</a> </span>
+<span id="L237" class="line"><a href="#L237">237</a> grind_pattern card_image_iff =&gt; #(s.image f)</span>
+<span id="L238" class="line"><a href="#L238">238</a> grind_pattern card_image_iff =&gt; s.image f, #s</span>
+<span id="L239" class="line"><a href="#L239">239</a> </span>
+<span id="L240" class="line"><a href="#L240">240</a> theorem card_image_of_injective [DecidableEq β] (s : Finset α) (H : Injective f) :</span>
+<span id="L241" class="line"><a href="#L241">241</a>     #(s.image f) = #s :=</span>
+<span id="L242" class="line"><a href="#L242">242</a>   card_image_of_injOn fun _ _ _ _ h =&gt; H h</span>
+<span id="L243" class="line"><a href="#L243">243</a> </span>
+<span id="L244" class="line"><a href="#L244">244</a> theorem fiber_card_ne_zero_iff_mem_image (s : Finset α) (f : α → β) [DecidableEq β] (y : β) :</span>
+<span id="L245" class="line"><a href="#L245">245</a>     #(s.filter fun x ↦ f x = y) ≠ 0 ↔ y ∈ s.image f := by</span>
+<span id="L246" class="line"><a href="#L246">246</a>   rw [← Nat.pos_iff_ne_zero, card_pos, fiber_nonempty_iff_mem_image]</span>
+<span id="L247" class="line"><a href="#L247">247</a> </span>
+<span id="L248" class="line"><a href="#L248">248</a> lemma card_filter_le_iff (s : Finset α) (P : α → Prop) [DecidablePred P] (n : ℕ) :</span>
+<span id="L249" class="line"><a href="#L249">249</a>     #(s.filter P) ≤ n ↔ ∀ s&#x27; ⊆ s, n &lt; #s&#x27; → ∃ a ∈ s&#x27;, ¬ P a :=</span>
+<span id="L250" class="line"><a href="#L250">250</a>   (s.1.card_filter_le_iff P n).trans ⟨fun H s&#x27; hs&#x27; h ↦ H s&#x27;.1 (by simp_all) h,</span>
+<span id="L251" class="line"><a href="#L251">251</a>     fun H s&#x27; hs&#x27; h ↦ H ⟨s&#x27;, nodup_of_le hs&#x27; s.2⟩ (fun _ hx ↦ Multiset.subset_of_le hs&#x27; hx) h⟩</span>
+<span id="L252" class="line"><a href="#L252">252</a> </span>
+<span id="L253" class="line"><a href="#L253">253</a> @[simp, grind =]</span>
+<span id="L254" class="line"><a href="#L254">254</a> theorem card_map (f : α ↪ β) : #(s.map f) = #s :=</span>
+<span id="L255" class="line"><a href="#L255">255</a>   Multiset.card_map _ _</span>
+<span id="L256" class="line"><a href="#L256">256</a> </span>
+<span id="L257" class="line"><a href="#L257">257</a> @[simp, grind =]</span>
+<span id="L258" class="line"><a href="#L258">258</a> theorem card_subtype (p : α → Prop) [DecidablePred p] (s : Finset α) :</span>
+<span id="L259" class="line"><a href="#L259">259</a>     #(s.subtype p) = #(s.filter p) := by simp [Finset.subtype]</span>
+<span id="L260" class="line"><a href="#L260">260</a> </span>
+<span id="L261" class="line"><a href="#L261">261</a> theorem card_filter_le (s : Finset α) (p : α → Prop) [DecidablePred p] :</span>
+<span id="L262" class="line"><a href="#L262">262</a>     #(s.filter p) ≤ #s :=</span>
+<span id="L263" class="line"><a href="#L263">263</a>   card_le_card &lt;| filter_subset _ _</span>
+<span id="L264" class="line"><a href="#L264">264</a> </span>
+<span id="L265" class="line"><a href="#L265">265</a> grind_pattern card_filter_le =&gt; #(s.filter p)</span>
+<span id="L266" class="line"><a href="#L266">266</a> grind_pattern card_filter_le =&gt; s.filter p, #s</span>
+<span id="L267" class="line"><a href="#L267">267</a> </span>
+<span id="L268" class="line"><a href="#L268">268</a> theorem eq_of_subset_of_card_le {s t : Finset α} (h : s ⊆ t) (h₂ : #t ≤ #s) : s = t :=</span>
+<span id="L269" class="line"><a href="#L269">269</a>   eq_of_veq &lt;| Multiset.eq_of_le_of_card_le (val_le_iff.mpr h) h₂</span>
+<span id="L270" class="line"><a href="#L270">270</a> </span>
+<span id="L271" class="line"><a href="#L271">271</a> theorem eq_iff_card_le_of_subset (hst : s ⊆ t) : #t ≤ #s ↔ s = t :=</span>
+<span id="L272" class="line"><a href="#L272">272</a>   ⟨eq_of_subset_of_card_le hst, (ge_of_eq &lt;| congr_arg _ ·)⟩</span>
+<span id="L273" class="line"><a href="#L273">273</a> </span>
+<span id="L274" class="line"><a href="#L274">274</a> theorem eq_of_superset_of_card_ge (hst : s ⊆ t) (hts : #t ≤ #s) : t = s :=</span>
+<span id="L275" class="line"><a href="#L275">275</a>   (eq_of_subset_of_card_le hst hts).symm</span>
+<span id="L276" class="line"><a href="#L276">276</a> </span>
+<span id="L277" class="line"><a href="#L277">277</a> theorem eq_iff_card_ge_of_superset (hst : s ⊆ t) : #t ≤ #s ↔ t = s :=</span>
+<span id="L278" class="line"><a href="#L278">278</a>   (eq_iff_card_le_of_subset hst).trans eq_comm</span>
+<span id="L279" class="line"><a href="#L279">279</a> </span>
+<span id="L280" class="line"><a href="#L280">280</a> theorem subset_iff_eq_of_card_le (h : #t ≤ #s) : s ⊆ t ↔ s = t :=</span>
+<span id="L281" class="line"><a href="#L281">281</a>   ⟨fun hst =&gt; eq_of_subset_of_card_le hst h, Eq.subset⟩</span>
+<span id="L282" class="line"><a href="#L282">282</a> </span>
+<span id="L283" class="line"><a href="#L283">283</a> theorem map_eq_of_subset {f : α ↪ α} (hs : s.map f ⊆ s) : s.map f = s :=</span>
+<span id="L284" class="line"><a href="#L284">284</a>   eq_of_subset_of_card_le hs (card_map _).ge</span>
+<span id="L285" class="line"><a href="#L285">285</a> </span>
+<span id="L286" class="line"><a href="#L286">286</a> theorem card_filter_eq_iff {p : α → Prop} [DecidablePred p] :</span>
+<span id="L287" class="line"><a href="#L287">287</a>     #(s.filter p) = #s ↔ ∀ x ∈ s, p x := by</span>
+<span id="L288" class="line"><a href="#L288">288</a>   rw [← (card_filter_le s p).ge_iff_eq, eq_iff_card_le_of_subset (filter_subset p s),</span>
+<span id="L289" class="line"><a href="#L289">289</a>     filter_eq_self]</span>
+<span id="L290" class="line"><a href="#L290">290</a> </span>
+<span id="L291" class="line"><a href="#L291">291</a> alias ⟨filter_card_eq, _⟩ := card_filter_eq_iff</span>
+<span id="L292" class="line"><a href="#L292">292</a> </span>
+<span id="L293" class="line"><a href="#L293">293</a> theorem card_filter_eq_zero_iff {p : α → Prop} [DecidablePred p] :</span>
+<span id="L294" class="line"><a href="#L294">294</a>     #(s.filter p) = 0 ↔ ∀ x ∈ s, ¬ p x := by</span>
+<span id="L295" class="line"><a href="#L295">295</a>   rw [card_eq_zero, filter_eq_empty_iff]</span>
+<span id="L296" class="line"><a href="#L296">296</a> </span>
+<span id="L297" class="line"><a href="#L297">297</a> @[gcongr]</span>
+<span id="L298" class="line"><a href="#L298">298</a> nonrec lemma card_lt_card (h : s ⊂ t) : #s &lt; #t := card_lt_card &lt;| val_lt_iff.2 h</span>
+<span id="L299" class="line"><a href="#L299">299</a> </span>
+<span id="L300" class="line"><a href="#L300">300</a> lemma card_strictMono : StrictMono (card : Finset α → ℕ) := fun _ _ ↦ card_lt_card</span>
+<span id="L301" class="line"><a href="#L301">301</a> </span>
+<span id="L302" class="line"><a href="#L302">302</a> section bij</span>
+<span id="L303" class="line"><a href="#L303">303</a> </span>
+<span id="L304" class="line"><a href="#L304">304</a> /--</span>
+<span id="L305" class="line"><a href="#L305">305</a> See also `card_bij`.</span>
+<span id="L306" class="line"><a href="#L306">306</a> TODO: consider deprecating, since this has been unused in mathlib for a long time and is just a</span>
+<span id="L307" class="line"><a href="#L307">307</a> special case of `card_bij`.</span>
+<span id="L308" class="line"><a href="#L308">308</a> -/</span>
+<span id="L309" class="line"><a href="#L309">309</a> theorem card_eq_of_bijective (f : ∀ i, i &lt; n → α) (hf : ∀ a ∈ s, ∃ i, ∃ h : i &lt; n, f i h = a)</span>
+<span id="L310" class="line"><a href="#L310">310</a>     (hf&#x27; : ∀ i (h : i &lt; n), f i h ∈ s)</span>
+<span id="L311" class="line"><a href="#L311">311</a>     (f_inj : ∀ i j (hi : i &lt; n) (hj : j &lt; n), f i hi = f j hj → i = j) : #s = n := by</span>
+<span id="L312" class="line"><a href="#L312">312</a>   classical</span>
+<span id="L313" class="line"><a href="#L313">313</a>   have : s = (range n).attach.image fun i =&gt; f i.1 (mem_range.1 i.2) := by</span>
+<span id="L314" class="line"><a href="#L314">314</a>     ext a</span>
+<span id="L315" class="line"><a href="#L315">315</a>     suffices _ : a ∈ s ↔ ∃ (i : _) (hi : i ∈ range n), f i (mem_range.1 hi) = a by</span>
+<span id="L316" class="line"><a href="#L316">316</a>       simpa only [mem_image, mem_attach, true_and, Subtype.exists]</span>
+<span id="L317" class="line"><a href="#L317">317</a>     constructor</span>
+<span id="L318" class="line"><a href="#L318">318</a>     · intro ha; obtain ⟨i, hi, rfl⟩ := hf a ha; use i, mem_range.2 hi</span>
+<span id="L319" class="line"><a href="#L319">319</a>     · rintro ⟨i, hi, rfl⟩; apply hf&#x27;</span>
+<span id="L320" class="line"><a href="#L320">320</a>   calc</span>
+<span id="L321" class="line"><a href="#L321">321</a>     #s = #((range n).attach.image fun i =&gt; f i.1 (mem_range.1 i.2)) := by rw [this]</span>
+<span id="L322" class="line"><a href="#L322">322</a>     _ = #(range n).attach := ?_</span>
+<span id="L323" class="line"><a href="#L323">323</a>     _ = #(range n) := card_attach</span>
+<span id="L324" class="line"><a href="#L324">324</a>     _ = n := card_range n</span>
+<span id="L325" class="line"><a href="#L325">325</a>   apply card_image_of_injective</span>
+<span id="L326" class="line"><a href="#L326">326</a>   intro ⟨i, hi⟩ ⟨j, hj⟩ eq</span>
+<span id="L327" class="line"><a href="#L327">327</a>   exact Subtype.ext &lt;| f_inj i j (mem_range.1 hi) (mem_range.1 hj) eq</span>
+<span id="L328" class="line"><a href="#L328">328</a> </span>
+<span id="L329" class="line"><a href="#L329">329</a> variable {t : Finset β}</span>
+<span id="L330" class="line"><a href="#L330">330</a> </span>
+<span id="L331" class="line"><a href="#L331">331</a> /-- Given a bijection from a finite set `s` to a finite set `t`, the cardinalities of `s` and `t`</span>
+<span id="L332" class="line"><a href="#L332">332</a> are equal.</span>
+<span id="L333" class="line"><a href="#L333">333</a> </span>
+<span id="L334" class="line"><a href="#L334">334</a> The difference with `Finset.card_bij&#x27;` is that the bijection is specified as a surjective injection,</span>
+<span id="L335" class="line"><a href="#L335">335</a> rather than by an inverse function.</span>
+<span id="L336" class="line"><a href="#L336">336</a> </span>
+<span id="L337" class="line"><a href="#L337">337</a> The difference with `Finset.card_nbij` is that the bijection is allowed to use membership of the</span>
+<span id="L338" class="line"><a href="#L338">338</a> domain, rather than being a non-dependent function. -/</span>
+<span id="L339" class="line"><a href="#L339">339</a> lemma card_bij (i : ∀ a ∈ s, β) (hi : ∀ a ha, i a ha ∈ t)</span>
+<span id="L340" class="line"><a href="#L340">340</a>     (i_inj : ∀ a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ → a₁ = a₂)</span>
+<span id="L341" class="line"><a href="#L341">341</a>     (i_surj : ∀ b ∈ t, ∃ a ha, i a ha = b) : #s = #t := by</span>
+<span id="L342" class="line"><a href="#L342">342</a>   classical</span>
+<span id="L343" class="line"><a href="#L343">343</a>   calc</span>
+<span id="L344" class="line"><a href="#L344">344</a>     #s = #s.attach := card_attach.symm</span>
+<span id="L345" class="line"><a href="#L345">345</a>     _ = #(s.attach.image fun a ↦ i a.1 a.2) := Eq.symm ?_</span>
+<span id="L346" class="line"><a href="#L346">346</a>     _ = #t := ?_</span>
+<span id="L347" class="line"><a href="#L347">347</a>   · apply card_image_of_injective</span>
+<span id="L348" class="line"><a href="#L348">348</a>     intro ⟨_, _⟩ ⟨_, _⟩ h</span>
+<span id="L349" class="line"><a href="#L349">349</a>     simpa using i_inj _ _ _ _ h</span>
+<span id="L350" class="line"><a href="#L350">350</a>   · congr 1</span>
+<span id="L351" class="line"><a href="#L351">351</a>     ext b</span>
+<span id="L352" class="line"><a href="#L352">352</a>     constructor &lt;;&gt; intro h</span>
+<span id="L353" class="line"><a href="#L353">353</a>     · obtain ⟨_, _, rfl⟩ := mem_image.1 h; apply hi</span>
+<span id="L354" class="line"><a href="#L354">354</a>     · obtain ⟨a, ha, rfl⟩ := i_surj b h; exact mem_image.2 ⟨⟨a, ha⟩, by simp⟩</span>
+<span id="L355" class="line"><a href="#L355">355</a> </span>
+<span id="L356" class="line"><a href="#L356">356</a> /-- Given a bijection from a finite set `s` to a finite set `t`, the cardinalities of `s` and `t`</span>
+<span id="L357" class="line"><a href="#L357">357</a> are equal.</span>
+<span id="L358" class="line"><a href="#L358">358</a> </span>
+<span id="L359" class="line"><a href="#L359">359</a> The difference with `Finset.card_bij` is that the bijection is specified with an inverse, rather</span>
+<span id="L360" class="line"><a href="#L360">360</a> than as a surjective injection.</span>
+<span id="L361" class="line"><a href="#L361">361</a> </span>
+<span id="L362" class="line"><a href="#L362">362</a> The difference with `Finset.card_nbij&#x27;` is that the bijection and its inverse are allowed to use</span>
+<span id="L363" class="line"><a href="#L363">363</a> membership of the domains, rather than being non-dependent functions. -/</span>
+<span id="L364" class="line"><a href="#L364">364</a> lemma card_bij&#x27; (i : ∀ a ∈ s, β) (j : ∀ a ∈ t, α) (hi : ∀ a ha, i a ha ∈ t)</span>
+<span id="L365" class="line"><a href="#L365">365</a>     (hj : ∀ a ha, j a ha ∈ s) (left_inv : ∀ a ha, j (i a ha) (hi a ha) = a)</span>
+<span id="L366" class="line"><a href="#L366">366</a>     (right_inv : ∀ a ha, i (j a ha) (hj a ha) = a) : #s = #t := by</span>
+<span id="L367" class="line"><a href="#L367">367</a>   refine card_bij i hi (fun a1 h1 a2 h2 eq ↦ ?_) (fun b hb ↦ ⟨_, hj b hb, right_inv b hb⟩)</span>
+<span id="L368" class="line"><a href="#L368">368</a>   rw [← left_inv a1 h1, ← left_inv a2 h2]</span>
+<span id="L369" class="line"><a href="#L369">369</a>   simp only [eq]</span>
+<span id="L370" class="line"><a href="#L370">370</a> </span>
+<span id="L371" class="line"><a href="#L371">371</a> /-- Given a bijection from a finite set `s` to a finite set `t`, the cardinalities of `s` and `t`</span>
+<span id="L372" class="line"><a href="#L372">372</a> are equal.</span>
+<span id="L373" class="line"><a href="#L373">373</a> </span>
+<span id="L374" class="line"><a href="#L374">374</a> The difference with `Finset.card_nbij&#x27;` is that the bijection is specified as a surjective</span>
+<span id="L375" class="line"><a href="#L375">375</a> injection, rather than by an inverse function.</span>
+<span id="L376" class="line"><a href="#L376">376</a> </span>
+<span id="L377" class="line"><a href="#L377">377</a> The difference with `Finset.card_bij` is that the bijection is a non-dependent function, rather than</span>
+<span id="L378" class="line"><a href="#L378">378</a> being allowed to use membership of the domain. -/</span>
+<span id="L379" class="line"><a href="#L379">379</a> lemma card_nbij (i : α → β) (hi : Set.MapsTo i s t) (i_inj : (s : Set α).InjOn i)</span>
+<span id="L380" class="line"><a href="#L380">380</a>     (i_surj : (s : Set α).SurjOn i t) : #s = #t :=</span>
+<span id="L381" class="line"><a href="#L381">381</a>   card_bij (fun a _ ↦ i a) hi i_inj (by simpa using i_surj)</span>
+<span id="L382" class="line"><a href="#L382">382</a> </span>
+<span id="L383" class="line"><a href="#L383">383</a> /-- Given a bijection from a finite set `s` to a finite set `t`, the cardinalities of `s` and `t`</span>
+<span id="L384" class="line"><a href="#L384">384</a> are equal.</span>
+<span id="L385" class="line"><a href="#L385">385</a> </span>
+<span id="L386" class="line"><a href="#L386">386</a> The difference with `Finset.card_nbij` is that the bijection is specified with an inverse, rather</span>
+<span id="L387" class="line"><a href="#L387">387</a> than as a surjective injection.</span>
+<span id="L388" class="line"><a href="#L388">388</a> </span>
+<span id="L389" class="line"><a href="#L389">389</a> The difference with `Finset.card_bij&#x27;` is that the bijection and its inverse are non-dependent</span>
+<span id="L390" class="line"><a href="#L390">390</a> functions, rather than being allowed to use membership of the domains.</span>
+<span id="L391" class="line"><a href="#L391">391</a> </span>
+<span id="L392" class="line"><a href="#L392">392</a> The difference with `Finset.card_equiv` is that bijectivity is only required to hold on the domains,</span>
+<span id="L393" class="line"><a href="#L393">393</a> rather than on the entire types. -/</span>
+<span id="L394" class="line"><a href="#L394">394</a> lemma card_nbij&#x27; (i : α → β) (j : β → α) (hi : Set.MapsTo i s t) (hj : Set.MapsTo j t s)</span>
+<span id="L395" class="line"><a href="#L395">395</a>     (left_inv : Set.LeftInvOn j i s) (right_inv : Set.RightInvOn j i t) : #s = #t :=</span>
+<span id="L396" class="line"><a href="#L396">396</a>   card_bij&#x27; (fun a _ ↦ i a) (fun b _ ↦ j b) hi hj left_inv right_inv</span>
+<span id="L397" class="line"><a href="#L397">397</a> </span>
+<span id="L398" class="line"><a href="#L398">398</a> /-- Specialization of `Finset.card_nbij&#x27;` that automatically fills in most arguments.</span>
+<span id="L399" class="line"><a href="#L399">399</a> </span>
+<span id="L400" class="line"><a href="#L400">400</a> See `Fintype.card_equiv` for the version where `s` and `t` are `univ`. -/</span>
+<span id="L401" class="line"><a href="#L401">401</a> lemma card_equiv (e : α ≃ β) (hst : ∀ i, i ∈ s ↔ e i ∈ t) : #s = #t := by</span>
+<span id="L402" class="line"><a href="#L402">402</a>   refine card_nbij&#x27; e e.symm ?_ ?_ ?_ ?_ &lt;;&gt; simp [hst, Set.MapsTo, Set.LeftInvOn, Set.RightInvOn]</span>
+<span id="L403" class="line"><a href="#L403">403</a> </span>
+<span id="L404" class="line"><a href="#L404">404</a> /-- Specialization of `Finset.card_nbij` that automatically fills in most arguments.</span>
+<span id="L405" class="line"><a href="#L405">405</a> </span>
+<span id="L406" class="line"><a href="#L406">406</a> See `Fintype.card_bijective` for the version where `s` and `t` are `univ`. -/</span>
+<span id="L407" class="line"><a href="#L407">407</a> lemma card_bijective (e : α → β) (he : e.Bijective) (hst : ∀ i, i ∈ s ↔ e i ∈ t) :</span>
+<span id="L408" class="line"><a href="#L408">408</a>     #s = #t := card_equiv (.ofBijective e he) hst</span>
+<span id="L409" class="line"><a href="#L409">409</a> </span>
+<span id="L410" class="line"><a href="#L410">410</a> lemma _root_.Set.BijOn.finsetCard_eq (e : α → β) (he : Set.BijOn e s t) : #s = #t :=</span>
+<span id="L411" class="line"><a href="#L411">411</a>   card_nbij e he.mapsTo he.injOn he.surjOn</span>
+<span id="L412" class="line"><a href="#L412">412</a> </span>
+<span id="L413" class="line"><a href="#L413">413</a> lemma card_le_card_of_injOn (f : α → β) (hf : Set.MapsTo f s t) (f_inj : (s : Set α).InjOn f) :</span>
+<span id="L414" class="line"><a href="#L414">414</a>     #s ≤ #t := by</span>
+<span id="L415" class="line"><a href="#L415">415</a>   classical</span>
+<span id="L416" class="line"><a href="#L416">416</a>   calc</span>
+<span id="L417" class="line"><a href="#L417">417</a>     #s = #(s.image f) := (card_image_of_injOn f_inj).symm</span>
+<span id="L418" class="line"><a href="#L418">418</a>     _ ≤ #t := card_le_card &lt;| image_subset_iff.2 hf</span>
+<span id="L419" class="line"><a href="#L419">419</a> </span>
+<span id="L420" class="line"><a href="#L420">420</a> lemma card_le_card_of_injective {f : s → t} (hf : f.Injective) : #s ≤ #t := by</span>
+<span id="L421" class="line"><a href="#L421">421</a>   rcases s.eq_empty_or_nonempty with rfl | ⟨a₀, ha₀⟩</span>
+<span id="L422" class="line"><a href="#L422">422</a>   · simp</span>
+<span id="L423" class="line"><a href="#L423">423</a>   · classical</span>
+<span id="L424" class="line"><a href="#L424">424</a>     let f&#x27; : α → β := fun a =&gt; f (if ha : a ∈ s then ⟨a, ha⟩ else ⟨a₀, ha₀⟩)</span>
+<span id="L425" class="line"><a href="#L425">425</a>     apply card_le_card_of_injOn f&#x27;</span>
+<span id="L426" class="line"><a href="#L426">426</a>     · aesop (add safe unfold Set.MapsTo)</span>
+<span id="L427" class="line"><a href="#L427">427</a>     · intro a₁ ha₁ a₂ ha₂ haa</span>
+<span id="L428" class="line"><a href="#L428">428</a>       rw [mem_coe] at ha₁ ha₂</span>
+<span id="L429" class="line"><a href="#L429">429</a>       simp only [f&#x27;, ha₁, ha₂, ← Subtype.ext_iff] at haa</span>
+<span id="L430" class="line"><a href="#L430">430</a>       exact Subtype.ext_iff.mp (hf haa)</span>
+<span id="L431" class="line"><a href="#L431">431</a> </span>
+<span id="L432" class="line"><a href="#L432">432</a> grind_pattern card_le_card_of_injective =&gt; f.Injective, #s</span>
+<span id="L433" class="line"><a href="#L433">433</a> grind_pattern card_le_card_of_injective =&gt; f.Injective, #t</span>
+<span id="L434" class="line"><a href="#L434">434</a> </span>
+<span id="L435" class="line"><a href="#L435">435</a> lemma card_le_card_of_surjOn (f : α → β) (hf : Set.SurjOn f s t) : #t ≤ #s := by</span>
+<span id="L436" class="line"><a href="#L436">436</a>   classical unfold Set.SurjOn at hf; exact (card_le_card (mod_cast hf)).trans card_image_le</span>
+<span id="L437" class="line"><a href="#L437">437</a> </span>
+<span id="L438" class="line"><a href="#L438">438</a> /-- If there are more pigeons than pigeonholes, then there are two pigeons in the same pigeonhole.</span>
+<span id="L439" class="line"><a href="#L439">439</a> </span>
+<span id="L440" class="line"><a href="#L440">440</a> See also `Set.exists_ne_map_eq_of_encard_lt_of_maps_to` and</span>
+<span id="L441" class="line"><a href="#L441">441</a> `Set.exists_ne_map_eq_of_ncard_lt_of_maps_to`. -/</span>
+<span id="L442" class="line"><a href="#L442">442</a> theorem exists_ne_map_eq_of_card_lt_of_maps_to (hc : #t &lt; #s) {f : α → β}</span>
+<span id="L443" class="line"><a href="#L443">443</a>     (hf : Set.MapsTo f s t) : ∃ x ∈ s, ∃ y ∈ s, x ≠ y ∧ f x = f y := by</span>
+<span id="L444" class="line"><a href="#L444">444</a>   classical</span>
+<span id="L445" class="line"><a href="#L445">445</a>   by_contra! hz</span>
+<span id="L446" class="line"><a href="#L446">446</a>   refine hc.not_ge (card_le_card_of_injOn f hf ?_)</span>
+<span id="L447" class="line"><a href="#L447">447</a>   intro x hx y hy</span>
+<span id="L448" class="line"><a href="#L448">448</a>   contrapose</span>
+<span id="L449" class="line"><a href="#L449">449</a>   exact hz x hx y hy</span>
+<span id="L450" class="line"><a href="#L450">450</a> </span>
+<span id="L451" class="line"><a href="#L451">451</a> /-- a special case of `Finset.exists_ne_map_eq_of_card_lt_of_maps_to` where `t` is `s.image f` -/</span>
+<span id="L452" class="line"><a href="#L452">452</a> theorem exists_ne_map_eq_of_card_image_lt [DecidableEq β] {f : α → β} (hc : #(s.image f) &lt; #s) :</span>
+<span id="L453" class="line"><a href="#L453">453</a>     ∃ x ∈ s, ∃ y ∈ s, x ≠ y ∧ f x = f y :=</span>
+<span id="L454" class="line"><a href="#L454">454</a>   exists_ne_map_eq_of_card_lt_of_maps_to hc (coe_image (β := β) ▸ Set.mapsTo_image f s)</span>
+<span id="L455" class="line"><a href="#L455">455</a> </span>
+<span id="L456" class="line"><a href="#L456">456</a> /-- a variant of `Finset.exists_ne_map_eq_of_card_image_lt` using `Set.InjOn` -/</span>
+<span id="L457" class="line"><a href="#L457">457</a> theorem not_injOn_of_card_image_lt [DecidableEq β] {f : α → β} (hc : #(s.image f) &lt; #s) :</span>
+<span id="L458" class="line"><a href="#L458">458</a>     ¬ Set.InjOn f s :=</span>
+<span id="L459" class="line"><a href="#L459">459</a>   mt card_image_of_injOn hc.ne</span>
+<span id="L460" class="line"><a href="#L460">460</a> </span>
+<span id="L461" class="line"><a href="#L461">461</a> /--</span>
+<span id="L462" class="line"><a href="#L462">462</a> See also `Finset.card_le_card_of_injOn`, which is a more general version of this lemma.</span>
+<span id="L463" class="line"><a href="#L463">463</a> TODO: consider deprecating, since this is just a special case of `Finset.card_le_card_of_injOn`.</span>
+<span id="L464" class="line"><a href="#L464">464</a> -/</span>
+<span id="L465" class="line"><a href="#L465">465</a> lemma le_card_of_inj_on_range (f : ℕ → α) (hf : ∀ i &lt; n, f i ∈ s)</span>
+<span id="L466" class="line"><a href="#L466">466</a>     (f_inj : ∀ i &lt; n, ∀ j &lt; n, f i = f j → i = j) : n ≤ #s :=</span>
+<span id="L467" class="line"><a href="#L467">467</a>   calc</span>
+<span id="L468" class="line"><a href="#L468">468</a>     n = #(range n) := (card_range n).symm</span>
+<span id="L469" class="line"><a href="#L469">469</a>     _ ≤ #s := card_le_card_of_injOn f (by simpa [Set.MapsTo, mem_range] using hf) (by simpa)</span>
+<span id="L470" class="line"><a href="#L470">470</a> </span>
+<span id="L471" class="line"><a href="#L471">471</a> /--</span>
+<span id="L472" class="line"><a href="#L472">472</a> Given an injective map `f` from a finite set `s` to another finite set `t`, if `t` is no larger</span>
+<span id="L473" class="line"><a href="#L473">473</a> than `s`, then `f` is surjective to `t` when restricted to `s`.</span>
+<span id="L474" class="line"><a href="#L474">474</a> See `Finset.surj_on_of_inj_on_of_card_le` for the version where `f` is a dependent function.</span>
+<span id="L475" class="line"><a href="#L475">475</a> -/</span>
+<span id="L476" class="line"><a href="#L476">476</a> lemma surjOn_of_injOn_of_card_le (f : α → β) (hf : Set.MapsTo f s t) (hinj : Set.InjOn f s)</span>
+<span id="L477" class="line"><a href="#L477">477</a>     (hst : #t ≤ #s) : Set.SurjOn f s t := by</span>
+<span id="L478" class="line"><a href="#L478">478</a>   classical</span>
+<span id="L479" class="line"><a href="#L479">479</a>   suffices s.image f = t by simp [← this, Set.SurjOn]</span>
+<span id="L480" class="line"><a href="#L480">480</a>   have : s.image f ⊆ t := by aesop (add simp Finset.subset_iff)</span>
+<span id="L481" class="line"><a href="#L481">481</a>   exact eq_of_subset_of_card_le this (hst.trans_eq (card_image_of_injOn hinj).symm)</span>
+<span id="L482" class="line"><a href="#L482">482</a> </span>
+<span id="L483" class="line"><a href="#L483">483</a> /--</span>
+<span id="L484" class="line"><a href="#L484">484</a> Given an injective map `f` defined on a finite set `s` to another finite set `t`, if `t` is no</span>
+<span id="L485" class="line"><a href="#L485">485</a> larger than `s`, then `f` is surjective to `t` when restricted to `s`.</span>
+<span id="L486" class="line"><a href="#L486">486</a> See `Finset.surjOn_of_injOn_of_card_le` for the version where `f` is a non-dependent function.</span>
+<span id="L487" class="line"><a href="#L487">487</a> -/</span>
+<span id="L488" class="line"><a href="#L488">488</a> lemma surj_on_of_inj_on_of_card_le (f : ∀ a ∈ s, β) (hf : ∀ a ha, f a ha ∈ t)</span>
+<span id="L489" class="line"><a href="#L489">489</a>     (hinj : ∀ a₁ a₂ ha₁ ha₂, f a₁ ha₁ = f a₂ ha₂ → a₁ = a₂) (hst : #t ≤ #s) :</span>
+<span id="L490" class="line"><a href="#L490">490</a>     ∀ b ∈ t, ∃ a ha, b = f a ha := by</span>
+<span id="L491" class="line"><a href="#L491">491</a>   let f&#x27; : s → β := fun a ↦ f a a.2</span>
+<span id="L492" class="line"><a href="#L492">492</a>   have hinj&#x27; : Set.InjOn f&#x27; s.attach := fun x hx y hy hxy ↦ Subtype.ext (hinj _ _ x.2 y.2 hxy)</span>
+<span id="L493" class="line"><a href="#L493">493</a>   have hmapsto&#x27; : Set.MapsTo f&#x27; s.attach t := fun x hx ↦ hf _ _</span>
+<span id="L494" class="line"><a href="#L494">494</a>   intro b hb</span>
+<span id="L495" class="line"><a href="#L495">495</a>   obtain ⟨a, ha, rfl⟩ := surjOn_of_injOn_of_card_le _ hmapsto&#x27; hinj&#x27; (by rwa [card_attach]) hb</span>
+<span id="L496" class="line"><a href="#L496">496</a>   exact ⟨a, a.2, rfl⟩</span>
+<span id="L497" class="line"><a href="#L497">497</a> </span>
+<span id="L498" class="line"><a href="#L498">498</a> /--</span>
+<span id="L499" class="line"><a href="#L499">499</a> Given a surjective map `f` from a finite set `s` to another finite set `t`, if `s` is no larger</span>
+<span id="L500" class="line"><a href="#L500">500</a> than `t`, then `f` is injective when restricted to `s`.</span>
+<span id="L501" class="line"><a href="#L501">501</a> See `Finset.inj_on_of_surj_on_of_card_le` for the version where `f` is a dependent function.</span>
+<span id="L502" class="line"><a href="#L502">502</a> -/</span>
+<span id="L503" class="line"><a href="#L503">503</a> lemma injOn_of_surjOn_of_card_le (f : α → β) (hf : Set.MapsTo f s t) (hsurj : Set.SurjOn f s t)</span>
+<span id="L504" class="line"><a href="#L504">504</a>     (hst : #s ≤ #t) : Set.InjOn f s := by</span>
+<span id="L505" class="line"><a href="#L505">505</a>   classical</span>
+<span id="L506" class="line"><a href="#L506">506</a>   have : s.image f = t := Finset.coe_injective &lt;| by simp [hsurj.image_eq_of_mapsTo hf]</span>
+<span id="L507" class="line"><a href="#L507">507</a>   have : #(s.image f) = #t := by rw [this]</span>
+<span id="L508" class="line"><a href="#L508">508</a>   have : #(s.image f) ≤ #s := card_image_le</span>
+<span id="L509" class="line"><a href="#L509">509</a>   rw [← card_image_iff]</span>
+<span id="L510" class="line"><a href="#L510">510</a>   lia</span>
+<span id="L511" class="line"><a href="#L511">511</a> </span>
+<span id="L512" class="line"><a href="#L512">512</a> /--</span>
+<span id="L513" class="line"><a href="#L513">513</a> Given a surjective map `f` defined on a finite set `s` to another finite set `t`, if `s` is no</span>
+<span id="L514" class="line"><a href="#L514">514</a> larger than `t`, then `f` is injective when restricted to `s`.</span>
+<span id="L515" class="line"><a href="#L515">515</a> See `Finset.injOn_of_surjOn_of_card_le` for the version where `f` is a non-dependent function.</span>
+<span id="L516" class="line"><a href="#L516">516</a> -/</span>
+<span id="L517" class="line"><a href="#L517">517</a> theorem inj_on_of_surj_on_of_card_le (f : ∀ a ∈ s, β) (hf : ∀ a ha, f a ha ∈ t)</span>
+<span id="L518" class="line"><a href="#L518">518</a>     (hsurj : ∀ b ∈ t, ∃ a ha, f a ha = b) (hst : #s ≤ #t) ⦃a₁⦄ (ha₁ : a₁ ∈ s) ⦃a₂⦄</span>
+<span id="L519" class="line"><a href="#L519">519</a>     (ha₂ : a₂ ∈ s) (ha₁a₂ : f a₁ ha₁ = f a₂ ha₂) : a₁ = a₂ := by</span>
+<span id="L520" class="line"><a href="#L520">520</a>   let f&#x27; : s → β := fun a ↦ f a a.2</span>
+<span id="L521" class="line"><a href="#L521">521</a>   have hsurj&#x27; : Set.SurjOn f&#x27; s.attach t := fun x hx ↦ by simpa [f&#x27;] using hsurj x hx</span>
+<span id="L522" class="line"><a href="#L522">522</a>   have hinj&#x27; := injOn_of_surjOn_of_card_le f&#x27; (fun x hx ↦ hf _ _) hsurj&#x27; (by simpa)</span>
+<span id="L523" class="line"><a href="#L523">523</a>   exact congrArg Subtype.val (@hinj&#x27; ⟨a₁, ha₁⟩ (by simp) ⟨a₂, ha₂⟩ (by simp) ha₁a₂)</span>
+<span id="L524" class="line"><a href="#L524">524</a> </span>
+<span id="L525" class="line"><a href="#L525">525</a> end bij</span>
+<span id="L526" class="line"><a href="#L526">526</a> </span>
+<span id="L527" class="line"><a href="#L527">527</a> @[simp, grind =]</span>
+<span id="L528" class="line"><a href="#L528">528</a> theorem card_disjUnion (s t : Finset α) (h) : #(s.disjUnion t h) = #s + #t :=</span>
+<span id="L529" class="line"><a href="#L529">529</a>   Multiset.card_add _ _</span>
+<span id="L530" class="line"><a href="#L530">530</a> </span>
+<span id="L531" class="line"><a href="#L531">531</a> /-! ### Lattice structure -/</span>
+<span id="L532" class="line"><a href="#L532">532</a> </span>
+<span id="L533" class="line"><a href="#L533">533</a> -- This pattern is unreasonable to use generally, but it&#x27;s convenient in this file.</span>
+<span id="L534" class="line"><a href="#L534">534</a> -- (Note that we&#x27;ve already turned it on earlier in this file, but need to redo it now.)</span>
+<span id="L535" class="line"><a href="#L535">535</a> local grind_pattern card_le_card =&gt; #s, #t</span>
+<span id="L536" class="line"><a href="#L536">536</a> </span>
+<span id="L537" class="line"><a href="#L537">537</a> section Lattice</span>
+<span id="L538" class="line"><a href="#L538">538</a> </span>
+<span id="L539" class="line"><a href="#L539">539</a> variable [DecidableEq α]</span>
+<span id="L540" class="line"><a href="#L540">540</a> </span>
+<span id="L541" class="line"><a href="#L541">541</a> theorem card_union_add_card_inter (s t : Finset α) :</span>
+<span id="L542" class="line"><a href="#L542">542</a>     #(s ∪ t) + #(s ∩ t) = #s + #t :=</span>
+<span id="L543" class="line"><a href="#L543">543</a>   Finset.induction_on t (by simp) (by grind)</span>
+<span id="L544" class="line"><a href="#L544">544</a> </span>
+<span id="L545" class="line"><a href="#L545">545</a> grind_pattern card_union_add_card_inter =&gt; #(s ∪ t), s ∩ t</span>
+<span id="L546" class="line"><a href="#L546">546</a> grind_pattern card_union_add_card_inter =&gt; s ∪ t, #(s ∩ t)</span>
+<span id="L547" class="line"><a href="#L547">547</a> grind_pattern card_union_add_card_inter =&gt; #(s ∪ t), #s</span>
+<span id="L548" class="line"><a href="#L548">548</a> grind_pattern card_union_add_card_inter =&gt; #(s ∪ t), #t</span>
+<span id="L549" class="line"><a href="#L549">549</a> grind_pattern card_union_add_card_inter =&gt; #(s ∩ t), #s</span>
+<span id="L550" class="line"><a href="#L550">550</a> grind_pattern card_union_add_card_inter =&gt; #(s ∩ t), #t</span>
+<span id="L551" class="line"><a href="#L551">551</a> </span>
+<span id="L552" class="line"><a href="#L552">552</a> theorem card_inter_add_card_union (s t : Finset α) :</span>
+<span id="L553" class="line"><a href="#L553">553</a>     #(s ∩ t) + #(s ∪ t) = #s + #t := by grind</span>
+<span id="L554" class="line"><a href="#L554">554</a> </span>
+<span id="L555" class="line"><a href="#L555">555</a> lemma card_union (s t : Finset α) : #(s ∪ t) = #s + #t - #(s ∩ t) := by grind</span>
+<span id="L556" class="line"><a href="#L556">556</a> </span>
+<span id="L557" class="line"><a href="#L557">557</a> lemma card_inter (s t : Finset α) : #(s ∩ t) = #s + #t - #(s ∪ t) := by grind</span>
+<span id="L558" class="line"><a href="#L558">558</a> </span>
+<span id="L559" class="line"><a href="#L559">559</a> theorem card_union_le (s t : Finset α) : #(s ∪ t) ≤ #s + #t := by grind</span>
+<span id="L560" class="line"><a href="#L560">560</a> </span>
+<span id="L561" class="line"><a href="#L561">561</a> lemma card_union_eq_card_add_card : #(s ∪ t) = #s + #t ↔ Disjoint s t := by</span>
+<span id="L562" class="line"><a href="#L562">562</a>   rw [← card_union_add_card_inter]; simp [disjoint_iff_inter_eq_empty]</span>
+<span id="L563" class="line"><a href="#L563">563</a> </span>
+<span id="L564" class="line"><a href="#L564">564</a> @[simp] alias ⟨_, card_union_of_disjoint⟩ := card_union_eq_card_add_card</span>
+<span id="L565" class="line"><a href="#L565">565</a> </span>
+<span id="L566" class="line"><a href="#L566">566</a> @[grind =]</span>
+<span id="L567" class="line"><a href="#L567">567</a> theorem card_sdiff_of_subset (h : s ⊆ t) : #(t \ s) = #t - #s := by</span>
+<span id="L568" class="line"><a href="#L568">568</a>   suffices #(t \ s) = #(t \ s ∪ s) - #s by rwa [sdiff_union_of_subset h] at this</span>
+<span id="L569" class="line"><a href="#L569">569</a>   rw [card_union_of_disjoint sdiff_disjoint, Nat.add_sub_cancel_right]</span>
+<span id="L570" class="line"><a href="#L570">570</a> </span>
+<span id="L571" class="line"><a href="#L571">571</a> @[grind =]</span>
+<span id="L572" class="line"><a href="#L572">572</a> theorem card_sdiff : #(t \ s) = #t - #(s ∩ t) := by</span>
+<span id="L573" class="line"><a href="#L573">573</a>   rw [← card_sdiff_of_subset] &lt;;&gt; grind</span>
+<span id="L574" class="line"><a href="#L574">574</a> </span>
+<span id="L575" class="line"><a href="#L575">575</a> theorem card_sdiff_add_card_eq_card {s t : Finset α} (h : s ⊆ t) : #(t \ s) + #s = #t := by grind</span>
+<span id="L576" class="line"><a href="#L576">576</a> </span>
+<span id="L577" class="line"><a href="#L577">577</a> lemma card_sub_card_eq (s t : Finset α) : #t - #s = #(t \ s) - #(s \ t) :=</span>
+<span id="L578" class="line"><a href="#L578">578</a>   calc</span>
+<span id="L579" class="line"><a href="#L579">579</a>     #t - #s = #t - #(s ∩ t) - #(s \ t) := by grind</span>
+<span id="L580" class="line"><a href="#L580">580</a>     _ = #(t \ (s ∩ t)) - #(s \ t) := by grind</span>
+<span id="L581" class="line"><a href="#L581">581</a>     _ = #(t \ s) - #(s \ t) := by grind</span>
+<span id="L582" class="line"><a href="#L582">582</a> </span>
+<span id="L583" class="line"><a href="#L583">583</a> theorem le_card_sdiff (s t : Finset α) : #t - #s ≤ #(t \ s) := by grind</span>
+<span id="L584" class="line"><a href="#L584">584</a> </span>
+<span id="L585" class="line"><a href="#L585">585</a> grind_pattern le_card_sdiff =&gt; #(t \ s), #t</span>
+<span id="L586" class="line"><a href="#L586">586</a> grind_pattern le_card_sdiff =&gt; #(t \ s), #s</span>
+<span id="L587" class="line"><a href="#L587">587</a> </span>
+<span id="L588" class="line"><a href="#L588">588</a> theorem card_le_card_sdiff_add_card : #s ≤ #(s \ t) + #t := by grind</span>
+<span id="L589" class="line"><a href="#L589">589</a> </span>
+<span id="L590" class="line"><a href="#L590">590</a> theorem card_sdiff_add_card (s t : Finset α) : #(s \ t) + #t = #(s ∪ t) := by</span>
+<span id="L591" class="line"><a href="#L591">591</a>   rw [← card_union_of_disjoint sdiff_disjoint, sdiff_union_self_eq_union]</span>
+<span id="L592" class="line"><a href="#L592">592</a> </span>
+<span id="L593" class="line"><a href="#L593">593</a> theorem sdiff_nonempty_of_card_lt_card (h : #s &lt; #t) : (t \ s).Nonempty := by</span>
+<span id="L594" class="line"><a href="#L594">594</a>   grind</span>
+<span id="L595" class="line"><a href="#L595">595</a> </span>
+<span id="L596" class="line"><a href="#L596">596</a> omit [DecidableEq α] in</span>
+<span id="L597" class="line"><a href="#L597">597</a> theorem exists_mem_notMem_of_card_lt_card (h : #s &lt; #t) : ∃ e, e ∈ t ∧ e ∉ s := by</span>
+<span id="L598" class="line"><a href="#L598">598</a>   classical simpa [Finset.Nonempty] using sdiff_nonempty_of_card_lt_card h</span>
+<span id="L599" class="line"><a href="#L599">599</a> </span>
+<span id="L600" class="line"><a href="#L600">600</a> @[simp]</span>
+<span id="L601" class="line"><a href="#L601">601</a> lemma card_sdiff_add_card_inter (s t : Finset α) :</span>
+<span id="L602" class="line"><a href="#L602">602</a>     #(s \ t) + #(s ∩ t) = #s := by</span>
+<span id="L603" class="line"><a href="#L603">603</a>   rw [← card_union_of_disjoint (disjoint_sdiff_inter _ _), sdiff_union_inter]</span>
+<span id="L604" class="line"><a href="#L604">604</a> </span>
+<span id="L605" class="line"><a href="#L605">605</a> grind_pattern card_sdiff_add_card_inter =&gt; #(s \ t), #(s ∩ t)</span>
+<span id="L606" class="line"><a href="#L606">606</a> grind_pattern card_sdiff_add_card_inter =&gt; #(s \ t), #s</span>
+<span id="L607" class="line"><a href="#L607">607</a> </span>
+<span id="L608" class="line"><a href="#L608">608</a> @[simp]</span>
+<span id="L609" class="line"><a href="#L609">609</a> lemma card_inter_add_card_sdiff (s t : Finset α) :</span>
+<span id="L610" class="line"><a href="#L610">610</a>     #(s ∩ t) + #(s \ t) = #s := by grind</span>
+<span id="L611" class="line"><a href="#L611">611</a> </span>
+<span id="L612" class="line"><a href="#L612">612</a> lemma card_sdiff_le_card_sdiff_iff : #(s \ t) ≤ #(t \ s) ↔ #s ≤ #t := by grind</span>
+<span id="L613" class="line"><a href="#L613">613</a> </span>
+<span id="L614" class="line"><a href="#L614">614</a> lemma card_sdiff_lt_card_sdiff_iff : #(s \ t) &lt; #(t \ s) ↔ #s &lt; #t := by grind</span>
+<span id="L615" class="line"><a href="#L615">615</a> </span>
+<span id="L616" class="line"><a href="#L616">616</a> lemma card_sdiff_eq_card_sdiff_iff : #(s \ t) = #(t \ s) ↔ #s = #t := by grind</span>
+<span id="L617" class="line"><a href="#L617">617</a> </span>
+<span id="L618" class="line"><a href="#L618">618</a> alias ⟨_, card_sdiff_comm⟩ := card_sdiff_eq_card_sdiff_iff</span>
+<span id="L619" class="line"><a href="#L619">619</a> </span>
+<span id="L620" class="line"><a href="#L620">620</a> /-- **Pigeonhole principle** for two finsets inside an ambient finset. -/</span>
+<span id="L621" class="line"><a href="#L621">621</a> theorem inter_nonempty_of_card_lt_card_add_card (hts : t ⊆ s) (hus : u ⊆ s)</span>
+<span id="L622" class="line"><a href="#L622">622</a>     (hstu : #s &lt; #t + #u) : (t ∩ u).Nonempty := by</span>
+<span id="L623" class="line"><a href="#L623">623</a>   contrapose! hstu</span>
+<span id="L624" class="line"><a href="#L624">624</a>   calc</span>
+<span id="L625" class="line"><a href="#L625">625</a>     _ = #(t ∪ u) := by simp [← card_union_add_card_inter, hstu]</span>
+<span id="L626" class="line"><a href="#L626">626</a>     _ ≤ #s := by gcongr; exact union_subset hts hus</span>
+<span id="L627" class="line"><a href="#L627">627</a> </span>
+<span id="L628" class="line"><a href="#L628">628</a> end Lattice</span>
+<span id="L629" class="line"><a href="#L629">629</a> </span>
+<span id="L630" class="line"><a href="#L630">630</a> theorem card_filter_add_card_filter_not</span>
+<span id="L631" class="line"><a href="#L631">631</a>     (p : α → Prop) [DecidablePred p] [∀ x, Decidable (¬p x)] :</span>
+<span id="L632" class="line"><a href="#L632">632</a>     #(s.filter p) + #(s.filter fun a ↦ ¬ p a) = #s := by</span>
+<span id="L633" class="line"><a href="#L633">633</a>   classical</span>
+<span id="L634" class="line"><a href="#L634">634</a>   rw [← card_union_of_disjoint (disjoint_filter_filter_not _ _ _), filter_union_filter_not_eq]</span>
+<span id="L635" class="line"><a href="#L635">635</a> </span>
+<span id="L636" class="line"><a href="#L636">636</a> @[deprecated (since := &quot;2025-12-12&quot;)]</span>
+<span id="L637" class="line"><a href="#L637">637</a> alias filter_card_add_filter_neg_card_eq_card := card_filter_add_card_filter_not</span>
+<span id="L638" class="line"><a href="#L638">638</a> </span>
+<span id="L639" class="line"><a href="#L639">639</a> /-- Given a subset `s` of a set `t`, of sizes at most and at least `n` respectively, there exists a</span>
+<span id="L640" class="line"><a href="#L640">640</a> set `u` of size `n` which is both a superset of `s` and a subset of `t`. -/</span>
+<span id="L641" class="line"><a href="#L641">641</a> lemma exists_subsuperset_card_eq (hst : s ⊆ t) (hsn : #s ≤ n) (hnt : n ≤ #t) :</span>
+<span id="L642" class="line"><a href="#L642">642</a>     ∃ u, s ⊆ u ∧ u ⊆ t ∧ #u = n := by</span>
+<span id="L643" class="line"><a href="#L643">643</a>   classical</span>
+<span id="L644" class="line"><a href="#L644">644</a>   refine Nat.decreasingInduction&#x27; ?_ hnt ⟨t, by simp [hst]⟩</span>
+<span id="L645" class="line"><a href="#L645">645</a>   intro k _ hnk ⟨u, hu₁, hu₂, hu₃⟩</span>
+<span id="L646" class="line"><a href="#L646">646</a>   obtain ⟨a, ha⟩ : (u \ s).Nonempty := by grind</span>
+<span id="L647" class="line"><a href="#L647">647</a>   exact ⟨u.erase a, by grind⟩</span>
+<span id="L648" class="line"><a href="#L648">648</a> </span>
+<span id="L649" class="line"><a href="#L649">649</a> /-- We can shrink a set to any smaller size. -/</span>
+<span id="L650" class="line"><a href="#L650">650</a> lemma exists_subset_card_eq (hns : n ≤ #s) : ∃ t ⊆ s, #t = n := by</span>
+<span id="L651" class="line"><a href="#L651">651</a>   simpa using exists_subsuperset_card_eq s.empty_subset (by simp) hns</span>
+<span id="L652" class="line"><a href="#L652">652</a> </span>
+<span id="L653" class="line"><a href="#L653">653</a> theorem le_card_iff_exists_subset_card : n ≤ #s ↔ ∃ t ⊆ s, #t = n := by</span>
+<span id="L654" class="line"><a href="#L654">654</a>   refine ⟨fun h =&gt; ?_, fun ⟨t, hst, ht⟩ =&gt; ht ▸ card_le_card hst⟩</span>
+<span id="L655" class="line"><a href="#L655">655</a>   exact exists_subset_card_eq h</span>
+<span id="L656" class="line"><a href="#L656">656</a> </span>
+<span id="L657" class="line"><a href="#L657">657</a> theorem exists_subset_or_subset_of_two_mul_lt_card [DecidableEq α] {X Y : Finset α} {n : ℕ}</span>
+<span id="L658" class="line"><a href="#L658">658</a>     (hXY : 2 * n &lt; #(X ∪ Y)) : ∃ C : Finset α, n &lt; #C ∧ (C ⊆ X ∨ C ⊆ Y) := by</span>
+<span id="L659" class="line"><a href="#L659">659</a>   grind =&gt;</span>
+<span id="L660" class="line"><a href="#L660">660</a>     have : #(X ∪ Y) = #X + #(Y \ X)</span>
+<span id="L661" class="line"><a href="#L661">661</a>     finish</span>
+<span id="L662" class="line"><a href="#L662">662</a> </span>
+<span id="L663" class="line"><a href="#L663">663</a> /-! ### Explicit description of a finset from its card -/</span>
+<span id="L664" class="line"><a href="#L664">664</a> </span>
+<span id="L665" class="line"><a href="#L665">665</a> </span>
+<span id="L666" class="line"><a href="#L666">666</a> theorem card_eq_one : #s = 1 ↔ ∃ a, s = {a} := by</span>
+<span id="L667" class="line"><a href="#L667">667</a>   cases s</span>
+<span id="L668" class="line"><a href="#L668">668</a>   simp only [Multiset.card_eq_one, Finset.card, ← val_inj, singleton_val]</span>
+<span id="L669" class="line"><a href="#L669">669</a> </span>
+<span id="L670" class="line"><a href="#L670">670</a> theorem exists_eq_insert_iff [DecidableEq α] {s t : Finset α} :</span>
+<span id="L671" class="line"><a href="#L671">671</a>     (∃ a ∉ s, insert a s = t) ↔ s ⊆ t ∧ #s + 1 = #t := by</span>
+<span id="L672" class="line"><a href="#L672">672</a>   constructor</span>
+<span id="L673" class="line"><a href="#L673">673</a>   · grind</span>
+<span id="L674" class="line"><a href="#L674">674</a>   · rintro ⟨hst, h⟩</span>
+<span id="L675" class="line"><a href="#L675">675</a>     obtain ⟨a, ha⟩ : ∃ a, t \ s = {a} := card_eq_one.mp (by grind)</span>
+<span id="L676" class="line"><a href="#L676">676</a>     grind =&gt;</span>
+<span id="L677" class="line"><a href="#L677">677</a>       have : a ∈ t \ s</span>
+<span id="L678" class="line"><a href="#L678">678</a>       have h : insert a s ⊆ t</span>
+<span id="L679" class="line"><a href="#L679">679</a>       have := eq_of_subset_of_card_le h</span>
+<span id="L680" class="line"><a href="#L680">680</a>       instantiate</span>
+<span id="L681" class="line"><a href="#L681">681</a> </span>
+<span id="L682" class="line"><a href="#L682">682</a> theorem card_le_one : #s ≤ 1 ↔ ∀ a ∈ s, ∀ b ∈ s, a = b := by</span>
+<span id="L683" class="line"><a href="#L683">683</a>   obtain rfl | ⟨x, hx⟩ := s.eq_empty_or_nonempty</span>
+<span id="L684" class="line"><a href="#L684">684</a>   · simp</span>
+<span id="L685" class="line"><a href="#L685">685</a>   refine (Nat.succ_le_of_lt (card_pos.2 ⟨x, hx⟩)).ge_iff_eq&#x27;.trans (card_eq_one.trans ⟨?_, ?_⟩)</span>
+<span id="L686" class="line"><a href="#L686">686</a>   · grind</span>
+<span id="L687" class="line"><a href="#L687">687</a>   · exact fun h =&gt; ⟨x, by grind⟩</span>
+<span id="L688" class="line"><a href="#L688">688</a> </span>
+<span id="L689" class="line"><a href="#L689">689</a> theorem card_le_one_iff : #s ≤ 1 ↔ ∀ {a b}, a ∈ s → b ∈ s → a = b := by</span>
+<span id="L690" class="line"><a href="#L690">690</a>   grind [card_le_one]</span>
+<span id="L691" class="line"><a href="#L691">691</a> </span>
+<span id="L692" class="line"><a href="#L692">692</a> theorem card_le_one_iff_subsingleton_coe : #s ≤ 1 ↔ Subsingleton (s : Type _) :=</span>
+<span id="L693" class="line"><a href="#L693">693</a>   card_le_one.trans (s : Set α).subsingleton_coe.symm</span>
+<span id="L694" class="line"><a href="#L694">694</a> </span>
+<span id="L695" class="line"><a href="#L695">695</a> /-- A finset has cardinality at most 1 iff its underlying set is subsingleton. -/</span>
+<span id="L696" class="line"><a href="#L696">696</a> theorem card_le_one_iff_subsingleton : #s ≤ 1 ↔ (s : Set α).Subsingleton := by</span>
+<span id="L697" class="line"><a href="#L697">697</a>   rw [card_le_one_iff_subsingleton_coe, ← Set.subsingleton_coe, SetLike.coe_sort_coe]</span>
+<span id="L698" class="line"><a href="#L698">698</a> </span>
+<span id="L699" class="line"><a href="#L699">699</a> theorem card_le_one_iff_subset_singleton [Nonempty α] : #s ≤ 1 ↔ ∃ x : α, s ⊆ {x} := by</span>
+<span id="L700" class="line"><a href="#L700">700</a>   refine ⟨fun H =&gt; ?_, ?_⟩</span>
+<span id="L701" class="line"><a href="#L701">701</a>   · obtain rfl | ⟨x, hx⟩ := s.eq_empty_or_nonempty</span>
+<span id="L702" class="line"><a href="#L702">702</a>     · exact ⟨Classical.arbitrary α, empty_subset _⟩</span>
+<span id="L703" class="line"><a href="#L703">703</a>     · exact ⟨x, fun y hy =&gt; by rw [card_le_one.1 H y hy x hx, mem_singleton]⟩</span>
+<span id="L704" class="line"><a href="#L704">704</a>   · rintro ⟨x, hx⟩</span>
+<span id="L705" class="line"><a href="#L705">705</a>     rw [← card_singleton x]</span>
+<span id="L706" class="line"><a href="#L706">706</a>     exact card_le_card hx</span>
+<span id="L707" class="line"><a href="#L707">707</a> </span>
+<span id="L708" class="line"><a href="#L708">708</a> lemma exists_mem_ne (hs : 1 &lt; #s) (a : α) : ∃ b ∈ s, b ≠ a := by</span>
+<span id="L709" class="line"><a href="#L709">709</a>   have : Nonempty α := ⟨a⟩</span>
+<span id="L710" class="line"><a href="#L710">710</a>   by_contra!</span>
+<span id="L711" class="line"><a href="#L711">711</a>   exact hs.not_ge (card_le_one_iff_subset_singleton.2 ⟨a, subset_singleton_iff&#x27;.2 this⟩)</span>
+<span id="L712" class="line"><a href="#L712">712</a> </span>
+<span id="L713" class="line"><a href="#L713">713</a> /-- A `Finset` of a subsingleton type has cardinality at most one. -/</span>
+<span id="L714" class="line"><a href="#L714">714</a> theorem card_le_one_of_subsingleton [Subsingleton α] (s : Finset α) : #s ≤ 1 :=</span>
+<span id="L715" class="line"><a href="#L715">715</a>   Finset.card_le_one_iff.2 fun {_ _ _ _} =&gt; Subsingleton.elim _ _</span>
+<span id="L716" class="line"><a href="#L716">716</a> </span>
+<span id="L717" class="line"><a href="#L717">717</a> theorem one_lt_card : 1 &lt; #s ↔ ∃ a ∈ s, ∃ b ∈ s, a ≠ b := by</span>
+<span id="L718" class="line"><a href="#L718">718</a>   contrapose!; exact card_le_one</span>
+<span id="L719" class="line"><a href="#L719">719</a> </span>
+<span id="L720" class="line"><a href="#L720">720</a> theorem one_lt_card_iff : 1 &lt; #s ↔ ∃ a b, a ∈ s ∧ b ∈ s ∧ a ≠ b := by</span>
+<span id="L721" class="line"><a href="#L721">721</a>   rw [one_lt_card]</span>
+<span id="L722" class="line"><a href="#L722">722</a>   simp only [exists_and_left]</span>
+<span id="L723" class="line"><a href="#L723">723</a> </span>
+<span id="L724" class="line"><a href="#L724">724</a> theorem one_lt_card_iff_nontrivial : 1 &lt; #s ↔ s.Nontrivial := by</span>
+<span id="L725" class="line"><a href="#L725">725</a>   rw [← not_iff_not, not_lt, Finset.Nontrivial, ← Set.nontrivial_coe_sort,</span>
+<span id="L726" class="line"><a href="#L726">726</a>     not_nontrivial_iff_subsingleton, card_le_one_iff_subsingleton_coe, coe_sort_coe]</span>
+<span id="L727" class="line"><a href="#L727">727</a> </span>
+<span id="L728" class="line"><a href="#L728">728</a> /-- If a Finset in a Pi type is nontrivial (has at least two elements), then</span>
+<span id="L729" class="line"><a href="#L729">729</a>   its projection to some factor is nontrivial, and the fibers of the projection</span>
+<span id="L730" class="line"><a href="#L730">730</a>   are proper subsets. -/</span>
+<span id="L731" class="line"><a href="#L731">731</a> lemma exists_of_one_lt_card_pi {ι : Type*} {α : ι → Type*} [∀ i, DecidableEq (α i)]</span>
+<span id="L732" class="line"><a href="#L732">732</a>     {s : Finset (∀ i, α i)} (h : 1 &lt; #s) :</span>
+<span id="L733" class="line"><a href="#L733">733</a>     ∃ i, 1 &lt; #(s.image (· i)) ∧ ∀ ai, s.filter (· i = ai) ⊂ s := by</span>
+<span id="L734" class="line"><a href="#L734">734</a>   simp_rw [one_lt_card_iff, Function.ne_iff] at h ⊢</span>
+<span id="L735" class="line"><a href="#L735">735</a>   obtain ⟨a1, a2, h1, h2, i, hne⟩ := h</span>
+<span id="L736" class="line"><a href="#L736">736</a>   refine ⟨i, ⟨_, _, mem_image_of_mem _ h1, mem_image_of_mem _ h2, hne⟩, fun ai =&gt; ?_⟩</span>
+<span id="L737" class="line"><a href="#L737">737</a>   rw [filter_ssubset]</span>
+<span id="L738" class="line"><a href="#L738">738</a>   obtain rfl | hne := eq_or_ne (a2 i) ai</span>
+<span id="L739" class="line"><a href="#L739">739</a>   exacts [⟨a1, h1, hne⟩, ⟨a2, h2, hne⟩]</span>
+<span id="L740" class="line"><a href="#L740">740</a> </span>
+<span id="L741" class="line"><a href="#L741">741</a> theorem card_eq_succ_iff_cons :</span>
+<span id="L742" class="line"><a href="#L742">742</a>     #s = n + 1 ↔ ∃ a t, ∃ (h : a ∉ t), cons a t h = s ∧ #t = n :=</span>
+<span id="L743" class="line"><a href="#L743">743</a>   ⟨cons_induction_on s (by simp) fun a s _ _ _ =&gt; ⟨a, s, by simp_all⟩,</span>
+<span id="L744" class="line"><a href="#L744">744</a>    fun ⟨a, t, _, hs, _⟩ =&gt; by simpa [← hs]⟩</span>
+<span id="L745" class="line"><a href="#L745">745</a> </span>
+<span id="L746" class="line"><a href="#L746">746</a> section DecidableEq</span>
+<span id="L747" class="line"><a href="#L747">747</a> variable [DecidableEq α]</span>
+<span id="L748" class="line"><a href="#L748">748</a> </span>
+<span id="L749" class="line"><a href="#L749">749</a> theorem card_eq_succ : #s = n + 1 ↔ ∃ a t, a ∉ t ∧ insert a t = s ∧ #t = n :=</span>
+<span id="L750" class="line"><a href="#L750">750</a>   ⟨fun h =&gt;</span>
+<span id="L751" class="line"><a href="#L751">751</a>     let ⟨a, has⟩ := card_pos.mp (h.symm ▸ Nat.zero_lt_succ _ : 0 &lt; #s)</span>
+<span id="L752" class="line"><a href="#L752">752</a>     ⟨a, s.erase a, s.notMem_erase a, insert_erase has, by</span>
+<span id="L753" class="line"><a href="#L753">753</a>       simp only [h, card_erase_of_mem has, Nat.add_sub_cancel_right]⟩,</span>
+<span id="L754" class="line"><a href="#L754">754</a>     fun ⟨_, _, hat, s_eq, n_eq⟩ =&gt; s_eq ▸ n_eq ▸ card_insert_of_notMem hat⟩</span>
+<span id="L755" class="line"><a href="#L755">755</a> </span>
+<span id="L756" class="line"><a href="#L756">756</a> theorem card_eq_two : #s = 2 ↔ ∃ x y, x ≠ y ∧ s = {x, y} := by</span>
+<span id="L757" class="line"><a href="#L757">757</a>   constructor</span>
+<span id="L758" class="line"><a href="#L758">758</a>   · rw [card_eq_succ]</span>
+<span id="L759" class="line"><a href="#L759">759</a>     grind [card_eq_one]</span>
+<span id="L760" class="line"><a href="#L760">760</a>   · grind</span>
+<span id="L761" class="line"><a href="#L761">761</a> </span>
+<span id="L762" class="line"><a href="#L762">762</a> theorem card_eq_three : #s = 3 ↔ ∃ x y z, x ≠ y ∧ x ≠ z ∧ y ≠ z ∧ s = {x, y, z} := by</span>
+<span id="L763" class="line"><a href="#L763">763</a>   constructor</span>
+<span id="L764" class="line"><a href="#L764">764</a>   · rw [card_eq_succ]</span>
+<span id="L765" class="line"><a href="#L765">765</a>     grind [card_eq_two]</span>
+<span id="L766" class="line"><a href="#L766">766</a>   · grind</span>
+<span id="L767" class="line"><a href="#L767">767</a> </span>
+<span id="L768" class="line"><a href="#L768">768</a> theorem card_eq_four : #s = 4 ↔</span>
+<span id="L769" class="line"><a href="#L769">769</a>     ∃ x y z w, x ≠ y ∧ x ≠ z ∧ x ≠ w ∧ y ≠ z ∧ y ≠ w ∧ z ≠ w ∧ s = {x, y, z, w} := by</span>
+<span id="L770" class="line"><a href="#L770">770</a>   constructor</span>
+<span id="L771" class="line"><a href="#L771">771</a>   · rw [card_eq_succ]</span>
+<span id="L772" class="line"><a href="#L772">772</a>     grind [card_eq_three]</span>
+<span id="L773" class="line"><a href="#L773">773</a>   · grind</span>
+<span id="L774" class="line"><a href="#L774">774</a> </span>
+<span id="L775" class="line"><a href="#L775">775</a> end DecidableEq</span>
+<span id="L776" class="line"><a href="#L776">776</a> </span>
+<span id="L777" class="line"><a href="#L777">777</a> theorem two_lt_card_iff : 2 &lt; #s ↔ ∃ a b c, a ∈ s ∧ b ∈ s ∧ c ∈ s ∧ a ≠ b ∧ a ≠ c ∧ b ≠ c := by</span>
+<span id="L778" class="line"><a href="#L778">778</a>   classical</span>
+<span id="L779" class="line"><a href="#L779">779</a>     simp_rw [lt_iff_add_one_le, le_card_iff_exists_subset_card, reduceAdd, card_eq_three,</span>
+<span id="L780" class="line"><a href="#L780">780</a>       ← exists_and_left, exists_comm (α := Finset α)]</span>
+<span id="L781" class="line"><a href="#L781">781</a>     constructor</span>
+<span id="L782" class="line"><a href="#L782">782</a>     · rintro ⟨a, b, c, t, hsub, hab, hac, hbc, rfl⟩</span>
+<span id="L783" class="line"><a href="#L783">783</a>       exact ⟨a, b, c, by simp_all [insert_subset_iff]⟩</span>
+<span id="L784" class="line"><a href="#L784">784</a>     · rintro ⟨a, b, c, ha, hb, hc, hab, hac, hbc⟩</span>
+<span id="L785" class="line"><a href="#L785">785</a>       exact ⟨a, b, c, {a, b, c}, by simp_all [insert_subset_iff]⟩</span>
+<span id="L786" class="line"><a href="#L786">786</a> </span>
+<span id="L787" class="line"><a href="#L787">787</a> theorem two_lt_card : 2 &lt; #s ↔ ∃ a ∈ s, ∃ b ∈ s, ∃ c ∈ s, a ≠ b ∧ a ≠ c ∧ b ≠ c := by</span>
+<span id="L788" class="line"><a href="#L788">788</a>   simp_rw [two_lt_card_iff, exists_and_left]</span>
+<span id="L789" class="line"><a href="#L789">789</a> </span>
+<span id="L790" class="line"><a href="#L790">790</a> theorem three_lt_card_iff : 3 &lt; #s ↔</span>
+<span id="L791" class="line"><a href="#L791">791</a>     ∃ a b c d, a ∈ s ∧ b ∈ s ∧ c ∈ s ∧ d ∈ s ∧</span>
+<span id="L792" class="line"><a href="#L792">792</a>     a ≠ b ∧ a ≠ c ∧ a ≠ d ∧ b ≠ c ∧ b ≠ d ∧ c ≠ d := by</span>
+<span id="L793" class="line"><a href="#L793">793</a>   classical</span>
+<span id="L794" class="line"><a href="#L794">794</a>     simp_rw [lt_iff_add_one_le, le_card_iff_exists_subset_card, reduceAdd, card_eq_four,</span>
+<span id="L795" class="line"><a href="#L795">795</a>       ← exists_and_left, exists_comm (α := Finset α)]</span>
+<span id="L796" class="line"><a href="#L796">796</a>     constructor</span>
+<span id="L797" class="line"><a href="#L797">797</a>     · rintro ⟨a, b, c, d, t, hsub, hab, hac, had, hbc, hbd, hcd, rfl⟩</span>
+<span id="L798" class="line"><a href="#L798">798</a>       exact ⟨a, b, c, d, by simp_all [insert_subset_iff]⟩</span>
+<span id="L799" class="line"><a href="#L799">799</a>     · rintro ⟨a, b, c, d, ha, hb, hc, hd, hab, hac, had, hbc, hbd, hcd⟩</span>
+<span id="L800" class="line"><a href="#L800">800</a>       exact ⟨a, b, c, d, {a, b, c, d}, by simp_all [insert_subset_iff]⟩</span>
+<span id="L801" class="line"><a href="#L801">801</a> </span>
+<span id="L802" class="line"><a href="#L802">802</a> theorem three_lt_card : 3 &lt; #s ↔ ∃ a ∈ s, ∃ b ∈ s, ∃ c ∈ s, ∃ d ∈ s,</span>
+<span id="L803" class="line"><a href="#L803">803</a>     a ≠ b ∧ a ≠ c ∧ a ≠ d ∧ b ≠ c ∧ b ≠ d ∧ c ≠ d := by</span>
+<span id="L804" class="line"><a href="#L804">804</a>   simp_rw [three_lt_card_iff, exists_and_left]</span>
+<span id="L805" class="line"><a href="#L805">805</a> </span>
+<span id="L806" class="line"><a href="#L806">806</a> /-! ### Inductions -/</span>
+<span id="L807" class="line"><a href="#L807">807</a> </span>
+<span id="L808" class="line"><a href="#L808">808</a> </span>
+<span id="L809" class="line"><a href="#L809">809</a> /-- Suppose that, given objects defined on all strict subsets of any finset `s`, one knows how to</span>
+<span id="L810" class="line"><a href="#L810">810</a> define an object on `s`. Then one can inductively define an object on all finsets, starting from</span>
+<span id="L811" class="line"><a href="#L811">811</a> the empty set and iterating. This can be used either to define data, or to prove properties. -/</span>
+<span id="L812" class="line"><a href="#L812">812</a> def strongInduction {p : Finset α → Sort*} (H : ∀ s, (∀ t ⊂ s, p t) → p s) :</span>
+<span id="L813" class="line"><a href="#L813">813</a>     ∀ s : Finset α, p s</span>
+<span id="L814" class="line"><a href="#L814">814</a>   | s =&gt;</span>
+<span id="L815" class="line"><a href="#L815">815</a>     H s fun t h =&gt;</span>
+<span id="L816" class="line"><a href="#L816">816</a>       have : #t &lt; #s := card_lt_card h</span>
+<span id="L817" class="line"><a href="#L817">817</a>       strongInduction H t</span>
+<span id="L818" class="line"><a href="#L818">818</a>   termination_by s =&gt; #s</span>
+<span id="L819" class="line"><a href="#L819">819</a> </span>
+<span id="L820" class="line"><a href="#L820">820</a> theorem strongInduction_eq {p : Finset α → Sort*} (H : ∀ s, (∀ t ⊂ s, p t) → p s)</span>
+<span id="L821" class="line"><a href="#L821">821</a>     (s : Finset α) : strongInduction H s = H s fun t _ =&gt; strongInduction H t := by</span>
+<span id="L822" class="line"><a href="#L822">822</a>   rw [strongInduction]</span>
+<span id="L823" class="line"><a href="#L823">823</a> </span>
+<span id="L824" class="line"><a href="#L824">824</a> /-- Analogue of `strongInduction` with order of arguments swapped. -/</span>
+<span id="L825" class="line"><a href="#L825">825</a> @[elab_as_elim]</span>
+<span id="L826" class="line"><a href="#L826">826</a> def strongInductionOn {p : Finset α → Sort*} (s : Finset α) :</span>
+<span id="L827" class="line"><a href="#L827">827</a>     (∀ s, (∀ t ⊂ s, p t) → p s) → p s := fun H =&gt; strongInduction H s</span>
+<span id="L828" class="line"><a href="#L828">828</a> </span>
+<span id="L829" class="line"><a href="#L829">829</a> theorem strongInductionOn_eq {p : Finset α → Sort*} (s : Finset α)</span>
+<span id="L830" class="line"><a href="#L830">830</a>     (H : ∀ s, (∀ t ⊂ s, p t) → p s) :</span>
+<span id="L831" class="line"><a href="#L831">831</a>     s.strongInductionOn H = H s fun t _ =&gt; t.strongInductionOn H := by</span>
+<span id="L832" class="line"><a href="#L832">832</a>   dsimp only [strongInductionOn]</span>
+<span id="L833" class="line"><a href="#L833">833</a>   rw [strongInduction]</span>
+<span id="L834" class="line"><a href="#L834">834</a> </span>
+<span id="L835" class="line"><a href="#L835">835</a> @[elab_as_elim]</span>
+<span id="L836" class="line"><a href="#L836">836</a> theorem case_strong_induction_on [DecidableEq α] {p : Finset α → Prop} (s : Finset α) (h₀ : p ∅)</span>
+<span id="L837" class="line"><a href="#L837">837</a>     (h₁ : ∀ a s, a ∉ s → (∀ t ⊆ s, p t) → p (insert a s)) : p s :=</span>
+<span id="L838" class="line"><a href="#L838">838</a>   Finset.strongInductionOn s fun s =&gt;</span>
+<span id="L839" class="line"><a href="#L839">839</a>     Finset.induction_on s (fun _ =&gt; h₀) fun a s n _ ih =&gt;</span>
+<span id="L840" class="line"><a href="#L840">840</a>       (h₁ a s n) fun t ss =&gt; ih _ (lt_of_le_of_lt ss (ssubset_insert n) : t &lt; _)</span>
+<span id="L841" class="line"><a href="#L841">841</a> </span>
+<span id="L842" class="line"><a href="#L842">842</a> /-- Suppose that, given objects defined on all nonempty strict subsets of any nontrivial finset `s`,</span>
+<span id="L843" class="line"><a href="#L843">843</a> one knows how to define an object on `s`. Then one can inductively define an object on all finsets,</span>
+<span id="L844" class="line"><a href="#L844">844</a> starting from singletons and iterating.</span>
+<span id="L845" class="line"><a href="#L845">845</a> </span>
+<span id="L846" class="line"><a href="#L846">846</a> TODO: Currently this can only be used to prove properties.</span>
+<span id="L847" class="line"><a href="#L847">847</a> Replace `Finset.Nonempty.exists_eq_singleton_or_nontrivial` with computational content</span>
+<span id="L848" class="line"><a href="#L848">848</a> in order to let `p` be `Sort`-valued. -/</span>
+<span id="L849" class="line"><a href="#L849">849</a> @[elab_as_elim]</span>
+<span id="L850" class="line"><a href="#L850">850</a> protected lemma Nonempty.strong_induction {p : ∀ s, s.Nonempty → Prop}</span>
+<span id="L851" class="line"><a href="#L851">851</a>     (h₀ : ∀ a, p {a} (singleton_nonempty _))</span>
+<span id="L852" class="line"><a href="#L852">852</a>     (h₁ : ∀ ⦃s⦄ (hs : s.Nontrivial), (∀ t ht, t ⊂ s → p t ht) → p s hs.nonempty) :</span>
+<span id="L853" class="line"><a href="#L853">853</a>     ∀ ⦃s : Finset α⦄ (hs), p s hs</span>
+<span id="L854" class="line"><a href="#L854">854</a>   | s, hs =&gt; by</span>
+<span id="L855" class="line"><a href="#L855">855</a>     obtain ⟨a, rfl⟩ | hs := hs.exists_eq_singleton_or_nontrivial</span>
+<span id="L856" class="line"><a href="#L856">856</a>     · exact h₀ _</span>
+<span id="L857" class="line"><a href="#L857">857</a>     · refine h₁ hs fun t ht hts ↦ ?_</span>
+<span id="L858" class="line"><a href="#L858">858</a>       have := card_lt_card hts</span>
+<span id="L859" class="line"><a href="#L859">859</a>       exact ht.strong_induction h₀ h₁</span>
+<span id="L860" class="line"><a href="#L860">860</a> termination_by s =&gt; #s</span>
+<span id="L861" class="line"><a href="#L861">861</a> </span>
+<span id="L862" class="line"><a href="#L862">862</a> /-- Suppose that, given that `p t` can be defined on all supersets of `s` of cardinality less than</span>
+<span id="L863" class="line"><a href="#L863">863</a> `n`, one knows how to define `p s`. Then one can inductively define `p s` for all finsets `s` of</span>
+<span id="L864" class="line"><a href="#L864">864</a> cardinality less than `n`, starting from finsets of card `n` and iterating. This</span>
+<span id="L865" class="line"><a href="#L865">865</a> can be used either to define data, or to prove properties. -/</span>
+<span id="L866" class="line"><a href="#L866">866</a> def strongDownwardInduction {p : Finset α → Sort*} {n : ℕ}</span>
+<span id="L867" class="line"><a href="#L867">867</a>     (H : ∀ t₁, (∀ {t₂ : Finset α}, #t₂ ≤ n → t₁ ⊂ t₂ → p t₂) → #t₁ ≤ n → p t₁) :</span>
+<span id="L868" class="line"><a href="#L868">868</a>     ∀ s : Finset α, #s ≤ n → p s</span>
+<span id="L869" class="line"><a href="#L869">869</a>   | s =&gt;</span>
+<span id="L870" class="line"><a href="#L870">870</a>     H s fun {t} ht h =&gt;</span>
+<span id="L871" class="line"><a href="#L871">871</a>       have := Finset.card_lt_card h</span>
+<span id="L872" class="line"><a href="#L872">872</a>       have : n - #t &lt; n - #s := by lia</span>
+<span id="L873" class="line"><a href="#L873">873</a>       strongDownwardInduction H t ht</span>
+<span id="L874" class="line"><a href="#L874">874</a>   termination_by s =&gt; n - #s</span>
+<span id="L875" class="line"><a href="#L875">875</a> </span>
+<span id="L876" class="line"><a href="#L876">876</a> theorem strongDownwardInduction_eq {p : Finset α → Sort*}</span>
+<span id="L877" class="line"><a href="#L877">877</a>     (H : ∀ t₁, (∀ {t₂ : Finset α}, #t₂ ≤ n → t₁ ⊂ t₂ → p t₂) → #t₁ ≤ n → p t₁)</span>
+<span id="L878" class="line"><a href="#L878">878</a>     (s : Finset α) :</span>
+<span id="L879" class="line"><a href="#L879">879</a>     strongDownwardInduction H s = H s fun {t} ht _ =&gt; strongDownwardInduction H t ht := by</span>
+<span id="L880" class="line"><a href="#L880">880</a>   rw [strongDownwardInduction]</span>
+<span id="L881" class="line"><a href="#L881">881</a> </span>
+<span id="L882" class="line"><a href="#L882">882</a> /-- Analogue of `strongDownwardInduction` with order of arguments swapped. -/</span>
+<span id="L883" class="line"><a href="#L883">883</a> @[elab_as_elim]</span>
+<span id="L884" class="line"><a href="#L884">884</a> def strongDownwardInductionOn {p : Finset α → Sort*} (s : Finset α)</span>
+<span id="L885" class="line"><a href="#L885">885</a>     (H : ∀ t₁, (∀ {t₂ : Finset α}, #t₂ ≤ n → t₁ ⊂ t₂ → p t₂) → #t₁ ≤ n → p t₁) :</span>
+<span id="L886" class="line"><a href="#L886">886</a>     #s ≤ n → p s :=</span>
+<span id="L887" class="line"><a href="#L887">887</a>   strongDownwardInduction H s</span>
+<span id="L888" class="line"><a href="#L888">888</a> </span>
+<span id="L889" class="line"><a href="#L889">889</a> theorem strongDownwardInductionOn_eq {p : Finset α → Sort*} (s : Finset α)</span>
+<span id="L890" class="line"><a href="#L890">890</a>     (H : ∀ t₁, (∀ {t₂ : Finset α}, #t₂ ≤ n → t₁ ⊂ t₂ → p t₂) → #t₁ ≤ n → p t₁) :</span>
+<span id="L891" class="line"><a href="#L891">891</a>     s.strongDownwardInductionOn H = H s fun {t} ht _ =&gt; t.strongDownwardInductionOn H ht := by</span>
+<span id="L892" class="line"><a href="#L892">892</a>   dsimp only [strongDownwardInductionOn]</span>
+<span id="L893" class="line"><a href="#L893">893</a>   rw [strongDownwardInduction]</span>
+<span id="L894" class="line"><a href="#L894">894</a> </span>
+<span id="L895" class="line"><a href="#L895">895</a> theorem lt_wf {α} : WellFounded (@LT.lt (Finset α) _) :=</span>
+<span id="L896" class="line"><a href="#L896">896</a>   have H : Subrelation (@LT.lt (Finset α) _) (InvImage (· &lt; ·) card) := fun {_ _} hxy =&gt;</span>
+<span id="L897" class="line"><a href="#L897">897</a>     card_lt_card hxy</span>
+<span id="L898" class="line"><a href="#L898">898</a>   Subrelation.wf H &lt;| InvImage.wf _ &lt;| (Nat.lt_wfRel).2</span>
+<span id="L899" class="line"><a href="#L899">899</a> </span>
+<span id="L900" class="line"><a href="#L900">900</a> /--</span>
+<span id="L901" class="line"><a href="#L901">901</a> To prove a proposition for an arbitrary `Finset α`,</span>
+<span id="L902" class="line"><a href="#L902">902</a> it suffices to prove that for any `S : Finset α`, the following is true:</span>
+<span id="L903" class="line"><a href="#L903">903</a> the property is true for S with any element `s` removed, then the property holds for `S`.</span>
+<span id="L904" class="line"><a href="#L904">904</a> </span>
+<span id="L905" class="line"><a href="#L905">905</a> This is a weaker version of `Finset.strongInduction`.</span>
+<span id="L906" class="line"><a href="#L906">906</a> But it can be more precise when the induction argument</span>
+<span id="L907" class="line"><a href="#L907">907</a> only requires removing single elements at a time.</span>
+<span id="L908" class="line"><a href="#L908">908</a> -/</span>
+<span id="L909" class="line"><a href="#L909">909</a> theorem eraseInduction [DecidableEq α] {p : Finset α → Prop}</span>
+<span id="L910" class="line"><a href="#L910">910</a>     (H : (S : Finset α) → (∀ s ∈ S, p (S.erase s)) → p S) (S : Finset α) : p S :=</span>
+<span id="L911" class="line"><a href="#L911">911</a>   S.strongInduction fun S ih =&gt; H S fun _ hs =&gt; ih _ (erase_ssubset hs)</span>
+<span id="L912" class="line"><a href="#L912">912</a> </span>
+<span id="L913" class="line"><a href="#L913">913</a> end Finset</span></pre></html>

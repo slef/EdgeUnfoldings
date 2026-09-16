@@ -1,0 +1,593 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lean/Elab/BuiltinNotation.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Lean/Elab/BuiltinNotation.lean</h1><p>Lean core · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2019 Microsoft Corporation. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Leonardo de Moura, Gabriel Ebner</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> prelude</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Lean.Compiler.ImplementedByAttr</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Lean.Elab.Eval</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Lean.Elab.Binders</span>
+<span id="L12" class="line"><a href="#L12">12</a> public import Lean.IdentifierSuggestion</span>
+<span id="L13" class="line"><a href="#L13">13</a> meta import Lean.Parser.Do</span>
+<span id="L14" class="line"><a href="#L14">14</a> import Lean.Compiler.BorrowedAnnotation</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> public section</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> namespace Lean.Elab.Term</span>
+<span id="L19" class="line"><a href="#L19">19</a> open Meta</span>
+<span id="L20" class="line"><a href="#L20">20</a> </span>
+<span id="L21" class="line"><a href="#L21">21</a> @[builtin_term_elab coeNotation] def elabCoe : TermElab := fun stx expectedType? =&gt; do</span>
+<span id="L22" class="line"><a href="#L22">22</a>   let stx := stx[1]</span>
+<span id="L23" class="line"><a href="#L23">23</a>   tryPostponeIfNoneOrMVar expectedType?</span>
+<span id="L24" class="line"><a href="#L24">24</a>   let e ← elabTerm stx none</span>
+<span id="L25" class="line"><a href="#L25">25</a>   if expectedType?.isNone then</span>
+<span id="L26" class="line"><a href="#L26">26</a>     throwError &quot;invalid coercion notation, expected type is not known&quot;</span>
+<span id="L27" class="line"><a href="#L27">27</a>   ensureHasType expectedType? e</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> @[builtin_term_elab coeFunNotation] def elabCoeFunNotation : TermElab := fun stx _ =&gt; do</span>
+<span id="L30" class="line"><a href="#L30">30</a>   let x ← elabTerm stx[1] none</span>
+<span id="L31" class="line"><a href="#L31">31</a>   if let some ty ← coerceToFunction? x then</span>
+<span id="L32" class="line"><a href="#L32">32</a>     return ty</span>
+<span id="L33" class="line"><a href="#L33">33</a>   else</span>
+<span id="L34" class="line"><a href="#L34">34</a>     throwError &quot;cannot coerce to function{indentExpr x}&quot;</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> @[builtin_term_elab coeSortNotation] def elabCoeSortNotation : TermElab := fun stx _ =&gt; do</span>
+<span id="L37" class="line"><a href="#L37">37</a>   let x ← elabTerm stx[1] none</span>
+<span id="L38" class="line"><a href="#L38">38</a>   if let some ty ← coerceToSort? x then</span>
+<span id="L39" class="line"><a href="#L39">39</a>     return ty</span>
+<span id="L40" class="line"><a href="#L40">40</a>   else</span>
+<span id="L41" class="line"><a href="#L41">41</a>     throwError &quot;cannot coerce to sort{indentExpr x}&quot;</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> @[builtin_term_elab anonymousCtor] def elabAnonymousCtor : TermElab := fun stx expectedType? =&gt;</span>
+<span id="L44" class="line"><a href="#L44">44</a>   match stx with</span>
+<span id="L45" class="line"><a href="#L45">45</a>   | `(⟨$args,*⟩) =&gt; do</span>
+<span id="L46" class="line"><a href="#L46">46</a>     tryPostponeIfNoneOrMVar expectedType?</span>
+<span id="L47" class="line"><a href="#L47">47</a>     let throwExpTypeUnknown {α} : TermElabM α :=</span>
+<span id="L48" class="line"><a href="#L48">48</a>       throwError &quot;Invalid `⟨...⟩` notation: The expected type of this term could not be determined&quot;</span>
+<span id="L49" class="line"><a href="#L49">49</a>     let usageNote := .note m!&quot;\</span>
+<span id="L50" class="line"><a href="#L50">50</a>       This notation can only be used when the expected type is an inductive type with a single constructor&quot;</span>
+<span id="L51" class="line"><a href="#L51">51</a>     match expectedType? with</span>
+<span id="L52" class="line"><a href="#L52">52</a>     | some expectedType =&gt;</span>
+<span id="L53" class="line"><a href="#L53">53</a>       let expectedType ← whnf expectedType</span>
+<span id="L54" class="line"><a href="#L54">54</a>       if expectedType.getAppFn.isMVar then throwExpTypeUnknown</span>
+<span id="L55" class="line"><a href="#L55">55</a>       matchConstInduct expectedType.getAppFn</span>
+<span id="L56" class="line"><a href="#L56">56</a>         (fun _ =&gt; throwError m!&quot;Invalid `⟨...⟩` notation: The expected type{inlineExpr expectedType}is not an inductive type&quot;</span>
+<span id="L57" class="line"><a href="#L57">57</a>                     ++ usageNote)</span>
+<span id="L58" class="line"><a href="#L58">58</a>         (fun ival _ =&gt; do</span>
+<span id="L59" class="line"><a href="#L59">59</a>           match ival.ctors with</span>
+<span id="L60" class="line"><a href="#L60">60</a>           | [ctor] =&gt;</span>
+<span id="L61" class="line"><a href="#L61">61</a>             if (← isInaccessiblePrivateName ctor) then</span>
+<span id="L62" class="line"><a href="#L62">62</a>               throwError &quot;Invalid `⟨...⟩` notation: Constructor for `{ival.name}` is marked as private&quot;</span>
+<span id="L63" class="line"><a href="#L63">63</a>             let cinfo ← getConstInfoCtor ctor</span>
+<span id="L64" class="line"><a href="#L64">64</a>             let numExplicitFields ← forallTelescopeReducing cinfo.type fun xs _ =&gt; do</span>
+<span id="L65" class="line"><a href="#L65">65</a>               let mut n := 0</span>
+<span id="L66" class="line"><a href="#L66">66</a>               for h : i in cinfo.numParams...xs.size do</span>
+<span id="L67" class="line"><a href="#L67">67</a>                 if (← getFVarLocalDecl xs[i]).binderInfo.isExplicit then</span>
+<span id="L68" class="line"><a href="#L68">68</a>                   n := n + 1</span>
+<span id="L69" class="line"><a href="#L69">69</a>               return n</span>
+<span id="L70" class="line"><a href="#L70">70</a>             let mut args := args.getElems</span>
+<span id="L71" class="line"><a href="#L71">71</a>             if args.size &lt; numExplicitFields then</span>
+<span id="L72" class="line"><a href="#L72">72</a>               let fieldsStr := if numExplicitFields == 1 then &quot;fields&quot; else &quot;field&quot;</span>
+<span id="L73" class="line"><a href="#L73">73</a>               let providedStr :=</span>
+<span id="L74" class="line"><a href="#L74">74</a>                 if args.size == 0 then &quot;none were&quot;</span>
+<span id="L75" class="line"><a href="#L75">75</a>                 else if args.size == 1 then &quot;only 1 was&quot;</span>
+<span id="L76" class="line"><a href="#L76">76</a>                 else s!&quot;only {args.size} were&quot;</span>
+<span id="L77" class="line"><a href="#L77">77</a>               let errMsg := m!&quot;Insufficient number of fields for `⟨...⟩` constructor: Constructor \</span>
+<span id="L78" class="line"><a href="#L78">78</a>                 `{ctor}` has {numExplicitFields} explicit {fieldsStr}, but {providedStr} provided&quot;</span>
+<span id="L79" class="line"><a href="#L79">79</a>               if (← read).errToSorry then</span>
+<span id="L80" class="line"><a href="#L80">80</a>                 logError errMsg</span>
+<span id="L81" class="line"><a href="#L81">81</a>               else</span>
+<span id="L82" class="line"><a href="#L82">82</a>                 throwError errMsg</span>
+<span id="L83" class="line"><a href="#L83">83</a>               for _ in args.size...numExplicitFields do</span>
+<span id="L84" class="line"><a href="#L84">84</a>                 let s ← mkLabeledSorry (← mkFreshTypeMVar) (synthetic := true) (unique := false)</span>
+<span id="L85" class="line"><a href="#L85">85</a>                 args := args.push &lt;| ← exprToSyntax s</span>
+<span id="L86" class="line"><a href="#L86">86</a>             let newStx ← if args.size == numExplicitFields then</span>
+<span id="L87" class="line"><a href="#L87">87</a>               `($(mkCIdentFrom stx ctor (canonical := true)) $(args)*)</span>
+<span id="L88" class="line"><a href="#L88">88</a>             else if numExplicitFields == 0 then</span>
+<span id="L89" class="line"><a href="#L89">89</a>               throwError &quot;Insufficient number of fields for `⟨...⟩` constructor: Constructor \</span>
+<span id="L90" class="line"><a href="#L90">90</a>                 `{ctor}` does not have explicit fields, but {args.size} \</span>
+<span id="L91" class="line"><a href="#L91">91</a>                 {if args.size == 1 then &quot;was&quot; else &quot;were&quot;} provided&quot;</span>
+<span id="L92" class="line"><a href="#L92">92</a>             else</span>
+<span id="L93" class="line"><a href="#L93">93</a>               let extra := args[(numExplicitFields-1)...args.size]</span>
+<span id="L94" class="line"><a href="#L94">94</a>               let newLast ← `(⟨$[$extra],*⟩)</span>
+<span id="L95" class="line"><a href="#L95">95</a>               let newArgs := args[*...(numExplicitFields-1)].toArray.push newLast</span>
+<span id="L96" class="line"><a href="#L96">96</a>               `($(mkCIdentFrom stx ctor (canonical := true)) $(newArgs)*)</span>
+<span id="L97" class="line"><a href="#L97">97</a>             withMacroExpansion stx newStx $ elabTerm newStx expectedType?</span>
+<span id="L98" class="line"><a href="#L98">98</a>           | [] =&gt; throwError &quot;Invalid `⟨...⟩` notation: The expected type{inlineExpr expectedType}has no constructors&quot;</span>
+<span id="L99" class="line"><a href="#L99">99</a>           | _ =&gt; throwError m!&quot;Invalid `⟨...⟩` notation: The expected type{inlineExpr expectedType}has more than one constructor&quot;</span>
+<span id="L100" class="line"><a href="#L100">100</a>                   ++ usageNote)</span>
+<span id="L101" class="line"><a href="#L101">101</a>     | none =&gt; throwExpTypeUnknown</span>
+<span id="L102" class="line"><a href="#L102">102</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L103" class="line"><a href="#L103">103</a> </span>
+<span id="L104" class="line"><a href="#L104">104</a> @[builtin_term_elab borrowed] def elabBorrowed : TermElab := fun stx expectedType? =&gt;</span>
+<span id="L105" class="line"><a href="#L105">105</a>   match stx with</span>
+<span id="L106" class="line"><a href="#L106">106</a>   | `(@&amp; $e) =&gt; return markBorrowed (← elabTerm e expectedType?)</span>
+<span id="L107" class="line"><a href="#L107">107</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L108" class="line"><a href="#L108">108</a> </span>
+<span id="L109" class="line"><a href="#L109">109</a> @[builtin_macro Lean.Parser.Term.show] def expandShow : Macro := fun stx =&gt;</span>
+<span id="L110" class="line"><a href="#L110">110</a>   match stx with</span>
+<span id="L111" class="line"><a href="#L111">111</a>   | `(show $type by%$b $tac) =&gt; `(show $type from by%$b $tac)</span>
+<span id="L112" class="line"><a href="#L112">112</a>   | _                        =&gt; Macro.throwUnsupported</span>
+<span id="L113" class="line"><a href="#L113">113</a> </span>
+<span id="L114" class="line"><a href="#L114">114</a> @[builtin_term_elab Lean.Parser.Term.show] def elabShow : TermElab := fun stx expectedType? =&gt; do</span>
+<span id="L115" class="line"><a href="#L115">115</a>   match stx with</span>
+<span id="L116" class="line"><a href="#L116">116</a>   | `(show $type from $val)  =&gt;</span>
+<span id="L117" class="line"><a href="#L117">117</a>     /-</span>
+<span id="L118" class="line"><a href="#L118">118</a>     We first elaborate the type and try to unify it with the expected type if available.</span>
+<span id="L119" class="line"><a href="#L119">119</a>     Note that, we should not throw an error if the types do not unify. Recall that we have coercions and</span>
+<span id="L120" class="line"><a href="#L120">120</a>     the following is supported in Lean 3 and 4.</span>
+<span id="L121" class="line"><a href="#L121">121</a>     ```</span>
+<span id="L122" class="line"><a href="#L122">122</a>     example : Int :=</span>
+<span id="L123" class="line"><a href="#L123">123</a>       show Nat from 0</span>
+<span id="L124" class="line"><a href="#L124">124</a>     ```</span>
+<span id="L125" class="line"><a href="#L125">125</a>     -/</span>
+<span id="L126" class="line"><a href="#L126">126</a>     let type ← withSynthesize (postpone := .yes) do</span>
+<span id="L127" class="line"><a href="#L127">127</a>       let type ← elabType type</span>
+<span id="L128" class="line"><a href="#L128">128</a>       if let some expectedType := expectedType? then</span>
+<span id="L129" class="line"><a href="#L129">129</a>         -- Recall that a similar approach is used when elaborating applications</span>
+<span id="L130" class="line"><a href="#L130">130</a>         discard &lt;| isDefEq expectedType type</span>
+<span id="L131" class="line"><a href="#L131">131</a>       return type</span>
+<span id="L132" class="line"><a href="#L132">132</a>     /-</span>
+<span id="L133" class="line"><a href="#L133">133</a>     Recall that we do not use the same approach used to elaborate type ascriptions.</span>
+<span id="L134" class="line"><a href="#L134">134</a>     For the `($val : $type)` notation, we just elaborate `val` using `type` and</span>
+<span id="L135" class="line"><a href="#L135">135</a>     ensure it has type `type`. This approach only ensure the type resulting expression</span>
+<span id="L136" class="line"><a href="#L136">136</a>     is definitionally equal to `type`. For the `show` notation we use `have` to ensure the type</span>
+<span id="L137" class="line"><a href="#L137">137</a>     of the resulting expression is *structurally equal* `type`. Structural equality is important,</span>
+<span id="L138" class="line"><a href="#L138">138</a>     for example, if the resulting expression is a `simp`/`rw` parameter. Here is an example:</span>
+<span id="L139" class="line"><a href="#L139">139</a>     ```</span>
+<span id="L140" class="line"><a href="#L140">140</a>     example (x : Nat) : (x + 0) + y = x + y := by</span>
+<span id="L141" class="line"><a href="#L141">141</a>       rw [show x + 0 = x from rfl]</span>
+<span id="L142" class="line"><a href="#L142">142</a>     ```</span>
+<span id="L143" class="line"><a href="#L143">143</a>     -/</span>
+<span id="L144" class="line"><a href="#L144">144</a>     let thisId := mkIdentFrom stx `this</span>
+<span id="L145" class="line"><a href="#L145">145</a>     let valNew ← `(have $thisId:ident : $(← exprToSyntax type) := $val; $thisId)</span>
+<span id="L146" class="line"><a href="#L146">146</a>     elabTerm valNew expectedType?</span>
+<span id="L147" class="line"><a href="#L147">147</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L148" class="line"><a href="#L148">148</a> </span>
+<span id="L149" class="line"><a href="#L149">149</a> @[builtin_macro Lean.Parser.Term.suffices] def expandSuffices : Macro</span>
+<span id="L150" class="line"><a href="#L150">150</a>   | `(suffices%$tk $x:ident      : $type from $val; $body)   =&gt; `(have%$tk $x:ident : $type := $body; $val)</span>
+<span id="L151" class="line"><a href="#L151">151</a>   | `(suffices%$tk _%$x          : $type from $val; $body)   =&gt; `(have%$tk _%$x : $type := $body; $val)</span>
+<span id="L152" class="line"><a href="#L152">152</a>   | `(suffices%$tk $hy:hygieneInfo $type from $val; $body)   =&gt; `(have%$tk $hy:hygieneInfo : $type := $body; $val)</span>
+<span id="L153" class="line"><a href="#L153">153</a>   | `(suffices%$tk $x:ident      : $type $b:byTactic&#x27;; $body) =&gt;</span>
+<span id="L154" class="line"><a href="#L154">154</a>     -- Pass on `SourceInfo` of `b` to `have`. This is necessary to display the goal state in the</span>
+<span id="L155" class="line"><a href="#L155">155</a>     -- trailing whitespace of `by` and sound since `byTactic` and `byTactic&#x27;` are identical.</span>
+<span id="L156" class="line"><a href="#L156">156</a>     let b := ⟨b.raw.setKind `Lean.Parser.Term.byTactic⟩</span>
+<span id="L157" class="line"><a href="#L157">157</a>     `(have%$tk $x:ident : $type := $body; $b:byTactic)</span>
+<span id="L158" class="line"><a href="#L158">158</a>   | `(suffices%$tk _%$x          : $type $b:byTactic&#x27;; $body) =&gt;</span>
+<span id="L159" class="line"><a href="#L159">159</a>     let b := ⟨b.raw.setKind `Lean.Parser.Term.byTactic⟩</span>
+<span id="L160" class="line"><a href="#L160">160</a>     `(have%$tk _%$x : $type := $body; $b:byTactic)</span>
+<span id="L161" class="line"><a href="#L161">161</a>   | `(suffices%$tk $hy:hygieneInfo $type $b:byTactic&#x27;; $body) =&gt;</span>
+<span id="L162" class="line"><a href="#L162">162</a>     let b := ⟨b.raw.setKind `Lean.Parser.Term.byTactic⟩</span>
+<span id="L163" class="line"><a href="#L163">163</a>     `(have%$tk $hy:hygieneInfo : $type := $body; $b:byTactic)</span>
+<span id="L164" class="line"><a href="#L164">164</a>   | _ =&gt; Macro.throwUnsupported</span>
+<span id="L165" class="line"><a href="#L165">165</a> </span>
+<span id="L166" class="line"><a href="#L166">166</a> open Lean.Parser in</span>
+<span id="L167" class="line"><a href="#L167">167</a> private def elabParserMacroAux (prec e : Term) (withAnonymousAntiquot : Bool) : TermElabM Syntax := do</span>
+<span id="L168" class="line"><a href="#L168">168</a>   let (some declName) ← getDeclName?</span>
+<span id="L169" class="line"><a href="#L169">169</a>     | throwError &quot;invalid `leading_parser` macro, it must be used in definitions&quot;</span>
+<span id="L170" class="line"><a href="#L170">170</a>   match extractMacroScopes declName with</span>
+<span id="L171" class="line"><a href="#L171">171</a>   | { name := .str _ s, .. } =&gt;</span>
+<span id="L172" class="line"><a href="#L172">172</a>     let kind := quote declName</span>
+<span id="L173" class="line"><a href="#L173">173</a>     let mut p ← ``(withAntiquot</span>
+<span id="L174" class="line"><a href="#L174">174</a>       (mkAntiquot $(quote s) $kind $(quote withAnonymousAntiquot))</span>
+<span id="L175" class="line"><a href="#L175">175</a>       (leadingNode $kind $prec $e))</span>
+<span id="L176" class="line"><a href="#L176">176</a>     -- cache only unparameterized parsers</span>
+<span id="L177" class="line"><a href="#L177">177</a>     if (← getLCtx).all (·.isAuxDecl) then</span>
+<span id="L178" class="line"><a href="#L178">178</a>       p ← ``(withCache $kind $p)</span>
+<span id="L179" class="line"><a href="#L179">179</a>     return p</span>
+<span id="L180" class="line"><a href="#L180">180</a>   | _  =&gt; throwError &quot;invalid `leading_parser` macro, unexpected declaration name&quot;</span>
+<span id="L181" class="line"><a href="#L181">181</a> </span>
+<span id="L182" class="line"><a href="#L182">182</a> @[builtin_term_elab «leading_parser»] def elabLeadingParserMacro : TermElab :=</span>
+<span id="L183" class="line"><a href="#L183">183</a>   adaptExpander fun</span>
+<span id="L184" class="line"><a href="#L184">184</a>     | `(leading_parser $[: $prec?]? $[(withAnonymousAntiquot := $anon?)]? $e) =&gt;</span>
+<span id="L185" class="line"><a href="#L185">185</a>         elabParserMacroAux (prec?.getD (quote Parser.maxPrec)) e (anon?.all (·.raw.isOfKind ``Parser.Term.trueVal))</span>
+<span id="L186" class="line"><a href="#L186">186</a>     | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L187" class="line"><a href="#L187">187</a> </span>
+<span id="L188" class="line"><a href="#L188">188</a> private def elabTParserMacroAux (prec lhsPrec e : Term) : TermElabM Syntax := do</span>
+<span id="L189" class="line"><a href="#L189">189</a>   let declName? ← getDeclName?</span>
+<span id="L190" class="line"><a href="#L190">190</a>   match declName? with</span>
+<span id="L191" class="line"><a href="#L191">191</a>   | some declName =&gt; let kind := quote declName; ``(Lean.Parser.trailingNode $kind $prec $lhsPrec $e)</span>
+<span id="L192" class="line"><a href="#L192">192</a>   | none          =&gt; throwError &quot;invalid `trailing_parser` macro, it must be used in definitions&quot;</span>
+<span id="L193" class="line"><a href="#L193">193</a> </span>
+<span id="L194" class="line"><a href="#L194">194</a> @[builtin_term_elab «trailing_parser»] def elabTrailingParserMacro : TermElab :=</span>
+<span id="L195" class="line"><a href="#L195">195</a>   adaptExpander fun stx =&gt; match stx with</span>
+<span id="L196" class="line"><a href="#L196">196</a>   | `(trailing_parser$[:$prec?]?$[:$lhsPrec?]? $e) =&gt;</span>
+<span id="L197" class="line"><a href="#L197">197</a>     elabTParserMacroAux (prec?.getD &lt;| quote Parser.maxPrec) (lhsPrec?.getD &lt;| quote 0) e</span>
+<span id="L198" class="line"><a href="#L198">198</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L199" class="line"><a href="#L199">199</a> </span>
+<span id="L200" class="line"><a href="#L200">200</a> @[builtin_term_elab Lean.Parser.Term.panic] def elabPanic : TermElab := fun stx expectedType? =&gt; do</span>
+<span id="L201" class="line"><a href="#L201">201</a>   match stx with</span>
+<span id="L202" class="line"><a href="#L202">202</a>   | `(panic! $arg) =&gt;</span>
+<span id="L203" class="line"><a href="#L203">203</a>     let pos ← getRefPosition</span>
+<span id="L204" class="line"><a href="#L204">204</a>     let env ← getEnv</span>
+<span id="L205" class="line"><a href="#L205">205</a>     let stxNew ← match (← getDeclName?) with</span>
+<span id="L206" class="line"><a href="#L206">206</a>     | some declName =&gt; `(panicWithPosWithDecl $(quote (toString env.mainModule)) $(quote (toString declName)) $(quote pos.line) $(quote pos.column) $arg)</span>
+<span id="L207" class="line"><a href="#L207">207</a>     | none =&gt; `(panicWithPos $(quote (toString env.mainModule)) $(quote pos.line) $(quote pos.column) $arg)</span>
+<span id="L208" class="line"><a href="#L208">208</a>     withMacroExpansion stx stxNew $ elabTerm stxNew expectedType?</span>
+<span id="L209" class="line"><a href="#L209">209</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L210" class="line"><a href="#L210">210</a> </span>
+<span id="L211" class="line"><a href="#L211">211</a> @[builtin_macro Lean.Parser.Term.unreachable]  def expandUnreachable : Macro := fun _ =&gt;</span>
+<span id="L212" class="line"><a href="#L212">212</a>   `(panic! &quot;unreachable code has been reached&quot;)</span>
+<span id="L213" class="line"><a href="#L213">213</a> </span>
+<span id="L214" class="line"><a href="#L214">214</a> @[builtin_macro Lean.Parser.Term.assert]  def expandAssert : Macro</span>
+<span id="L215" class="line"><a href="#L215">215</a>   | `(assert! $cond; $body) =&gt;</span>
+<span id="L216" class="line"><a href="#L216">216</a>     match cond.raw.reprint with</span>
+<span id="L217" class="line"><a href="#L217">217</a>     | some code =&gt; `(if $cond then $body else panic! (&quot;assertion violation: &quot; ++ $(quote code)))</span>
+<span id="L218" class="line"><a href="#L218">218</a>     | none =&gt; `(if $cond then $body else panic! (&quot;assertion violation&quot;))</span>
+<span id="L219" class="line"><a href="#L219">219</a>   | _ =&gt; Macro.throwUnsupported</span>
+<span id="L220" class="line"><a href="#L220">220</a> </span>
+<span id="L221" class="line"><a href="#L221">221</a> register_builtin_option debugAssertions : Bool := {</span>
+<span id="L222" class="line"><a href="#L222">222</a>   defValue := false</span>
+<span id="L223" class="line"><a href="#L223">223</a>   descr := &quot;enable `debug_assert!` statements\</span>
+<span id="L224" class="line"><a href="#L224">224</a>     \n\</span>
+<span id="L225" class="line"><a href="#L225">225</a>     \nDefaults to `false` unless the Lake `buildType` is `debug`.&quot;</span>
+<span id="L226" class="line"><a href="#L226">226</a> }</span>
+<span id="L227" class="line"><a href="#L227">227</a> </span>
+<span id="L228" class="line"><a href="#L228">228</a> @[builtin_term_elab Lean.Parser.Term.debugAssert]  def elabDebugAssert : TermElab :=</span>
+<span id="L229" class="line"><a href="#L229">229</a>   adaptExpander fun</span>
+<span id="L230" class="line"><a href="#L230">230</a>     | `(Parser.Term.debugAssert| debug_assert! $cond; $body) =&gt; do</span>
+<span id="L231" class="line"><a href="#L231">231</a>       if debugAssertions.get (← getOptions) then</span>
+<span id="L232" class="line"><a href="#L232">232</a>         `(assert! $cond; $body)</span>
+<span id="L233" class="line"><a href="#L233">233</a>       else</span>
+<span id="L234" class="line"><a href="#L234">234</a>         return body</span>
+<span id="L235" class="line"><a href="#L235">235</a>     | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L236" class="line"><a href="#L236">236</a> </span>
+<span id="L237" class="line"><a href="#L237">237</a> @[builtin_macro Lean.Parser.Term.dbgTrace]  def expandDbgTrace : Macro</span>
+<span id="L238" class="line"><a href="#L238">238</a>   | `(dbg_trace $arg:interpolatedStr; $body) =&gt; `(dbgTrace (s! $arg) fun _ =&gt; $body)</span>
+<span id="L239" class="line"><a href="#L239">239</a>   | `(dbg_trace $arg:term; $body)            =&gt; `(dbgTrace (toString $arg) fun _ =&gt; $body)</span>
+<span id="L240" class="line"><a href="#L240">240</a>   | _                                        =&gt; Macro.throwUnsupported</span>
+<span id="L241" class="line"><a href="#L241">241</a> </span>
+<span id="L242" class="line"><a href="#L242">242</a> @[builtin_term_elab «sorry»] def elabSorry : TermElab := fun _ expectedType? =&gt; do</span>
+<span id="L243" class="line"><a href="#L243">243</a>   let type ← expectedType?.getDM mkFreshTypeMVar</span>
+<span id="L244" class="line"><a href="#L244">244</a>   mkLabeledSorry type (synthetic := false) (unique := true)</span>
+<span id="L245" class="line"><a href="#L245">245</a> </span>
+<span id="L246" class="line"><a href="#L246">246</a> /-- Return syntax `Prod.mk elems[0] (Prod.mk elems[1] ... (Prod.mk elems[elems.size - 2] elems[elems.size - 1])))` -/</span>
+<span id="L247" class="line"><a href="#L247">247</a> partial def mkPairs (elems : Array Term) : MacroM Term :=</span>
+<span id="L248" class="line"><a href="#L248">248</a>   let rec loop (i : Nat) (acc : Term) := do</span>
+<span id="L249" class="line"><a href="#L249">249</a>     if i &gt; 0 then</span>
+<span id="L250" class="line"><a href="#L250">250</a>       let i    := i - 1</span>
+<span id="L251" class="line"><a href="#L251">251</a>       let elem := elems[i]!</span>
+<span id="L252" class="line"><a href="#L252">252</a>       let acc ← `(Prod.mk $elem $acc)</span>
+<span id="L253" class="line"><a href="#L253">253</a>       loop i acc</span>
+<span id="L254" class="line"><a href="#L254">254</a>     else</span>
+<span id="L255" class="line"><a href="#L255">255</a>       pure acc</span>
+<span id="L256" class="line"><a href="#L256">256</a>   loop (elems.size - 1) elems.back!</span>
+<span id="L257" class="line"><a href="#L257">257</a> </span>
+<span id="L258" class="line"><a href="#L258">258</a> /-- Return syntax `PProd.mk elems[0] (PProd.mk elems[1] ... (PProd.mk elems[elems.size - 2] elems[elems.size - 1])))` -/</span>
+<span id="L259" class="line"><a href="#L259">259</a> partial def mkPPairs (elems : Array Term) : MacroM Term :=</span>
+<span id="L260" class="line"><a href="#L260">260</a>   let rec loop (i : Nat) (acc : Term) := do</span>
+<span id="L261" class="line"><a href="#L261">261</a>     if i &gt; 0 then</span>
+<span id="L262" class="line"><a href="#L262">262</a>       let i    := i - 1</span>
+<span id="L263" class="line"><a href="#L263">263</a>       let elem := elems[i]!</span>
+<span id="L264" class="line"><a href="#L264">264</a>       let acc ← `(PProd.mk $elem $acc)</span>
+<span id="L265" class="line"><a href="#L265">265</a>       loop i acc</span>
+<span id="L266" class="line"><a href="#L266">266</a>     else</span>
+<span id="L267" class="line"><a href="#L267">267</a>       pure acc</span>
+<span id="L268" class="line"><a href="#L268">268</a>   loop (elems.size - 1) elems.back!</span>
+<span id="L269" class="line"><a href="#L269">269</a> </span>
+<span id="L270" class="line"><a href="#L270">270</a> /-- Return syntax `MProd.mk elems[0] (MProd.mk elems[1] ... (MProd.mk elems[elems.size - 2] elems[elems.size - 1])))` -/</span>
+<span id="L271" class="line"><a href="#L271">271</a> partial def mkMPairs (elems : Array Term) : MacroM Term :=</span>
+<span id="L272" class="line"><a href="#L272">272</a>   let rec loop (i : Nat) (acc : Term) := do</span>
+<span id="L273" class="line"><a href="#L273">273</a>     if i &gt; 0 then</span>
+<span id="L274" class="line"><a href="#L274">274</a>       let i    := i - 1</span>
+<span id="L275" class="line"><a href="#L275">275</a>       let elem := elems[i]!</span>
+<span id="L276" class="line"><a href="#L276">276</a>       let acc ← `(MProd.mk $elem $acc)</span>
+<span id="L277" class="line"><a href="#L277">277</a>       loop i acc</span>
+<span id="L278" class="line"><a href="#L278">278</a>     else</span>
+<span id="L279" class="line"><a href="#L279">279</a>       pure acc</span>
+<span id="L280" class="line"><a href="#L280">280</a>   loop (elems.size - 1) elems.back!</span>
+<span id="L281" class="line"><a href="#L281">281</a> </span>
+<span id="L282" class="line"><a href="#L282">282</a> section</span>
+<span id="L283" class="line"><a href="#L283">283</a> open Parser</span>
+<span id="L284" class="line"><a href="#L284">284</a> </span>
+<span id="L285" class="line"><a href="#L285">285</a> def isCDotBinderKind (k : SyntaxNodeKind) : Bool :=</span>
+<span id="L286" class="line"><a href="#L286">286</a>   k == ``Term.paren || k == ``Term.typeAscription || k == ``Term.tuple</span>
+<span id="L287" class="line"><a href="#L287">287</a> </span>
+<span id="L288" class="line"><a href="#L288">288</a> /--</span>
+<span id="L289" class="line"><a href="#L289">289</a> Returns whether or not this cdot is for the given `HygieneInfo` name;</span>
+<span id="L290" class="line"><a href="#L290">290</a> if no hygiene info is given, then matches any cdot, no matter its hygieneInfo.</span>
+<span id="L291" class="line"><a href="#L291">291</a> -/</span>
+<span id="L292" class="line"><a href="#L292">292</a> def isCDotForInfo (s : Syntax) (hygieneInfo? : Option Name) : Bool :=</span>
+<span id="L293" class="line"><a href="#L293">293</a>   match s with</span>
+<span id="L294" class="line"><a href="#L294">294</a>   | `(· $h:hygieneInfo) =&gt;</span>
+<span id="L295" class="line"><a href="#L295">295</a>     if let some info := hygieneInfo? then</span>
+<span id="L296" class="line"><a href="#L296">296</a>       h.getHygieneInfo == info</span>
+<span id="L297" class="line"><a href="#L297">297</a>     else</span>
+<span id="L298" class="line"><a href="#L298">298</a>       true</span>
+<span id="L299" class="line"><a href="#L299">299</a>   | _ =&gt; false</span>
+<span id="L300" class="line"><a href="#L300">300</a> </span>
+<span id="L301" class="line"><a href="#L301">301</a> /--</span>
+<span id="L302" class="line"><a href="#L302">302</a> Returns true if the given expression contains a cdot for the given `HygieneInfo` name.</span>
+<span id="L303" class="line"><a href="#L303">303</a> If no `HygieneInfo` name is given, then returns true if there is any cdot.</span>
+<span id="L304" class="line"><a href="#L304">304</a> The search is delimited by cdot binders (any syntax satisfying `isCDotBinderKind`).</span>
+<span id="L305" class="line"><a href="#L305">305</a> -/</span>
+<span id="L306" class="line"><a href="#L306">306</a> partial def hasCDot : Syntax → Option Name → Bool</span>
+<span id="L307" class="line"><a href="#L307">307</a>   | s@(Syntax.node _ k args), info? =&gt;</span>
+<span id="L308" class="line"><a href="#L308">308</a>     if isCDotBinderKind k then false</span>
+<span id="L309" class="line"><a href="#L309">309</a>     else if isCDotForInfo s info? then true</span>
+<span id="L310" class="line"><a href="#L310">310</a>     else args.any (fun s =&gt; hasCDot s info?)</span>
+<span id="L311" class="line"><a href="#L311">311</a>   | _, _ =&gt; false</span>
+<span id="L312" class="line"><a href="#L312">312</a> </span>
+<span id="L313" class="line"><a href="#L313">313</a> end</span>
+<span id="L314" class="line"><a href="#L314">314</a> </span>
+<span id="L315" class="line"><a href="#L315">315</a> /--</span>
+<span id="L316" class="line"><a href="#L316">316</a> If the term contains any cdots that match the given `HygieneInfo` name (see `isCDotForInfo`),</span>
+<span id="L317" class="line"><a href="#L317">317</a> then returns `some` with the expanded syntax, otherwise returns `none`.</span>
+<span id="L318" class="line"><a href="#L318">318</a> </span>
+<span id="L319" class="line"><a href="#L319">319</a> Examples:</span>
+<span id="L320" class="line"><a href="#L320">320</a> - `· + 1` =&gt; `fun x =&gt; x + 1`</span>
+<span id="L321" class="line"><a href="#L321">321</a> - `f · · b` =&gt; `fun x1 x2 =&gt; f x1 x2 b`</span>
+<span id="L322" class="line"><a href="#L322">322</a> -/</span>
+<span id="L323" class="line"><a href="#L323">323</a> partial def expandCDot? (stx : Term) (hygieneInfo? : Option Name) : MacroM (Option Term) := do</span>
+<span id="L324" class="line"><a href="#L324">324</a>   if hasCDot stx hygieneInfo? then</span>
+<span id="L325" class="line"><a href="#L325">325</a>     withFreshMacroScope do</span>
+<span id="L326" class="line"><a href="#L326">326</a>       let mut (newStx, binders) ← (go stx).run #[]</span>
+<span id="L327" class="line"><a href="#L327">327</a>       if binders.size == 1 then</span>
+<span id="L328" class="line"><a href="#L328">328</a>         -- It is nicer using `x` over `x1` if there is only a single binder.</span>
+<span id="L329" class="line"><a href="#L329">329</a>         let x1 := binders[0]!</span>
+<span id="L330" class="line"><a href="#L330">330</a>         let x ← mkVarFrom x1 &quot;x&quot;</span>
+<span id="L331" class="line"><a href="#L331">331</a>         binders := binders.set! 0 x</span>
+<span id="L332" class="line"><a href="#L332">332</a>         newStx ← newStx.replaceM fun s =&gt; pure (if s == x1 then x else none)</span>
+<span id="L333" class="line"><a href="#L333">333</a>       `(fun $binders* =&gt; $(⟨newStx⟩))</span>
+<span id="L334" class="line"><a href="#L334">334</a>   else</span>
+<span id="L335" class="line"><a href="#L335">335</a>     pure none</span>
+<span id="L336" class="line"><a href="#L336">336</a> where</span>
+<span id="L337" class="line"><a href="#L337">337</a>   mkVarFrom (ref : Syntax) (s : String) : MacroM Ident := do</span>
+<span id="L338" class="line"><a href="#L338">338</a>     -- We do not incorporate the hygieneInfo macro scopes into the variable name.</span>
+<span id="L339" class="line"><a href="#L339">339</a>     -- We could, but since cdot function binders identifiers are not supposed to cross stages it would not enable anything.</span>
+<span id="L340" class="line"><a href="#L340">340</a>     let name ← MonadQuotation.addMacroScope &lt;| Name.mkSimple s</span>
+<span id="L341" class="line"><a href="#L341">341</a>     return mkIdentFrom ref name (canonical := true)</span>
+<span id="L342" class="line"><a href="#L342">342</a>   /--</span>
+<span id="L343" class="line"><a href="#L343">343</a>   Auxiliary function for expanding the `·` notation.</span>
+<span id="L344" class="line"><a href="#L344">344</a>   The extra state `Array Syntax` contains the new binder names.</span>
+<span id="L345" class="line"><a href="#L345">345</a>   If `stx` is a `·`, we create a fresh identifier, store it in the</span>
+<span id="L346" class="line"><a href="#L346">346</a>   extra state, and return it. Otherwise, we just return `stx`.</span>
+<span id="L347" class="line"><a href="#L347">347</a>   -/</span>
+<span id="L348" class="line"><a href="#L348">348</a>   go (stx : Syntax) : StateT (Array Ident) MacroM Syntax :=</span>
+<span id="L349" class="line"><a href="#L349">349</a>     match stx with</span>
+<span id="L350" class="line"><a href="#L350">350</a>     | .node _ k args =&gt; do</span>
+<span id="L351" class="line"><a href="#L351">351</a>       if isCDotForInfo stx hygieneInfo? then</span>
+<span id="L352" class="line"><a href="#L352">352</a>         let id ← mkVarFrom stx s!&quot;x{(← get).size + 1}&quot;</span>
+<span id="L353" class="line"><a href="#L353">353</a>         modify (fun s =&gt; s.push id)</span>
+<span id="L354" class="line"><a href="#L354">354</a>         pure id</span>
+<span id="L355" class="line"><a href="#L355">355</a>       else if isCDotBinderKind k then</span>
+<span id="L356" class="line"><a href="#L356">356</a>         pure stx</span>
+<span id="L357" class="line"><a href="#L357">357</a>       else</span>
+<span id="L358" class="line"><a href="#L358">358</a>         let args ←</span>
+<span id="L359" class="line"><a href="#L359">359</a>           if k == choiceKind then</span>
+<span id="L360" class="line"><a href="#L360">360</a>             if args.isEmpty then</span>
+<span id="L361" class="line"><a href="#L361">361</a>               return stx</span>
+<span id="L362" class="line"><a href="#L362">362</a>             let s ← get</span>
+<span id="L363" class="line"><a href="#L363">363</a>             let args&#x27; ← args.mapM (fun arg =&gt; go arg |&gt;.run s)</span>
+<span id="L364" class="line"><a href="#L364">364</a>             let s&#x27; := args&#x27;[0]!.2</span>
+<span id="L365" class="line"><a href="#L365">365</a>             unless args&#x27;.all (fun (_, s&#x27;&#x27;) =&gt; s&#x27;&#x27;.size == s&#x27;.size) do</span>
+<span id="L366" class="line"><a href="#L366">366</a>               Macro.throwErrorAt stx &quot;Ambiguous notation in cdot function has different numbers of &#x27;·&#x27; arguments in each alternative.&quot;</span>
+<span id="L367" class="line"><a href="#L367">367</a>             set s&#x27;</span>
+<span id="L368" class="line"><a href="#L368">368</a>             pure &lt;| args&#x27;.map Prod.fst</span>
+<span id="L369" class="line"><a href="#L369">369</a>           else</span>
+<span id="L370" class="line"><a href="#L370">370</a>             args.mapM go</span>
+<span id="L371" class="line"><a href="#L371">371</a>         return .node (.fromRef stx (canonical := true)) k args</span>
+<span id="L372" class="line"><a href="#L372">372</a>     | _ =&gt; pure stx</span>
+<span id="L373" class="line"><a href="#L373">373</a> </span>
+<span id="L374" class="line"><a href="#L374">374</a> /--</span>
+<span id="L375" class="line"><a href="#L375">375</a>   Helper method for elaborating terms such as `(.+.)` where a constant name is expected.</span>
+<span id="L376" class="line"><a href="#L376">376</a>   This method is usually used to implement tactics that take function names as arguments</span>
+<span id="L377" class="line"><a href="#L377">377</a>   (e.g., `simp`).</span>
+<span id="L378" class="line"><a href="#L378">378</a> -/</span>
+<span id="L379" class="line"><a href="#L379">379</a> def elabCDotFunctionAlias? (stx : Term) : TermElabM (Option Expr) := do</span>
+<span id="L380" class="line"><a href="#L380">380</a>   let some stx ← liftMacroM &lt;| expandCDotArg? stx | pure none</span>
+<span id="L381" class="line"><a href="#L381">381</a>   let stx ← liftMacroM &lt;| expandMacros stx</span>
+<span id="L382" class="line"><a href="#L382">382</a>   match stx with</span>
+<span id="L383" class="line"><a href="#L383">383</a>   | `(fun $binders* =&gt; $f $args*) =&gt;</span>
+<span id="L384" class="line"><a href="#L384">384</a>     if binders.raw.toList.isPerm args.raw.toList then</span>
+<span id="L385" class="line"><a href="#L385">385</a>       try Term.resolveId? f catch _ =&gt; return none</span>
+<span id="L386" class="line"><a href="#L386">386</a>     else</span>
+<span id="L387" class="line"><a href="#L387">387</a>       return none</span>
+<span id="L388" class="line"><a href="#L388">388</a>   | `(fun $binders* =&gt; binop% $f $a $b)</span>
+<span id="L389" class="line"><a href="#L389">389</a>   | `(fun $binders* =&gt; binop_lazy% $f $a $b)</span>
+<span id="L390" class="line"><a href="#L390">390</a>   | `(fun $binders* =&gt; leftact% $f $a $b)</span>
+<span id="L391" class="line"><a href="#L391">391</a>   | `(fun $binders* =&gt; rightact% $f $a $b)</span>
+<span id="L392" class="line"><a href="#L392">392</a>   | `(fun $binders* =&gt; binrel% $f $a $b)</span>
+<span id="L393" class="line"><a href="#L393">393</a>   | `(fun $binders* =&gt; binrel_no_prop% $f $a $b) =&gt;</span>
+<span id="L394" class="line"><a href="#L394">394</a>     if binders == #[a, b] || binders == #[b, a] then</span>
+<span id="L395" class="line"><a href="#L395">395</a>       try Term.resolveId? f catch _ =&gt; return none</span>
+<span id="L396" class="line"><a href="#L396">396</a>     else</span>
+<span id="L397" class="line"><a href="#L397">397</a>       return none</span>
+<span id="L398" class="line"><a href="#L398">398</a>   | `(fun $binders* =&gt; unop% $f $a) =&gt;</span>
+<span id="L399" class="line"><a href="#L399">399</a>     if binders == #[a] then</span>
+<span id="L400" class="line"><a href="#L400">400</a>       try Term.resolveId? f catch _ =&gt; return none</span>
+<span id="L401" class="line"><a href="#L401">401</a>     else</span>
+<span id="L402" class="line"><a href="#L402">402</a>       return none</span>
+<span id="L403" class="line"><a href="#L403">403</a>   | _ =&gt; return none</span>
+<span id="L404" class="line"><a href="#L404">404</a> where</span>
+<span id="L405" class="line"><a href="#L405">405</a>   expandCDotArg? (stx : Term) : MacroM (Option Term) :=</span>
+<span id="L406" class="line"><a href="#L406">406</a>     match stx with</span>
+<span id="L407" class="line"><a href="#L407">407</a>     | `(($h:hygieneInfo $e)) =&gt; Term.expandCDot? e h.getHygieneInfo</span>
+<span id="L408" class="line"><a href="#L408">408</a>     | _ =&gt; Term.expandCDot? stx none</span>
+<span id="L409" class="line"><a href="#L409">409</a> </span>
+<span id="L410" class="line"><a href="#L410">410</a> @[builtin_macro Lean.Parser.Term.paren] def expandParen : Macro</span>
+<span id="L411" class="line"><a href="#L411">411</a>   | `(($h:hygieneInfo $e)) =&gt; return (← expandCDot? e h.getHygieneInfo).getD e</span>
+<span id="L412" class="line"><a href="#L412">412</a>   | _       =&gt; Macro.throwUnsupported</span>
+<span id="L413" class="line"><a href="#L413">413</a> </span>
+<span id="L414" class="line"><a href="#L414">414</a> @[builtin_macro Lean.Parser.Term.tuple] def expandTuple : Macro</span>
+<span id="L415" class="line"><a href="#L415">415</a>   | `(()) =&gt; ``(Unit.unit)</span>
+<span id="L416" class="line"><a href="#L416">416</a>   | `(($h:hygieneInfo $e, $es,*)) =&gt; do</span>
+<span id="L417" class="line"><a href="#L417">417</a>     let pairs ← mkPairs (#[e] ++ es)</span>
+<span id="L418" class="line"><a href="#L418">418</a>     return (← expandCDot? pairs h.getHygieneInfo).getD pairs</span>
+<span id="L419" class="line"><a href="#L419">419</a>   | _ =&gt; Macro.throwUnsupported</span>
+<span id="L420" class="line"><a href="#L420">420</a> </span>
+<span id="L421" class="line"><a href="#L421">421</a> @[builtin_macro Lean.Parser.Term.typeAscription] def expandTypeAscription : Macro</span>
+<span id="L422" class="line"><a href="#L422">422</a>   | `(($h:hygieneInfo $e : $(type)?)) =&gt; do</span>
+<span id="L423" class="line"><a href="#L423">423</a>     match (← expandCDot? e h.getHygieneInfo) with</span>
+<span id="L424" class="line"><a href="#L424">424</a>     | some e =&gt; `(($e : $(type)?))</span>
+<span id="L425" class="line"><a href="#L425">425</a>     | none   =&gt; Macro.throwUnsupported</span>
+<span id="L426" class="line"><a href="#L426">426</a>   | _ =&gt; Macro.throwUnsupported</span>
+<span id="L427" class="line"><a href="#L427">427</a> </span>
+<span id="L428" class="line"><a href="#L428">428</a> @[builtin_term_elab typeAscription] def elabTypeAscription : TermElab</span>
+<span id="L429" class="line"><a href="#L429">429</a>   | `(($e : $type)), _ =&gt; do</span>
+<span id="L430" class="line"><a href="#L430">430</a>     let type ← withSynthesize (postpone := .yes) &lt;| elabType type</span>
+<span id="L431" class="line"><a href="#L431">431</a>     let e ← elabTerm e type</span>
+<span id="L432" class="line"><a href="#L432">432</a>     ensureHasType type e</span>
+<span id="L433" class="line"><a href="#L433">433</a>   | `(($e :)), expectedType? =&gt; do</span>
+<span id="L434" class="line"><a href="#L434">434</a>     let e ← withSynthesize (postpone := .no) &lt;| elabTerm e none</span>
+<span id="L435" class="line"><a href="#L435">435</a>     ensureHasType expectedType? e</span>
+<span id="L436" class="line"><a href="#L436">436</a>   | _, _ =&gt; throwUnsupportedSyntax</span>
+<span id="L437" class="line"><a href="#L437">437</a> </span>
+<span id="L438" class="line"><a href="#L438">438</a> /-- Return `true` if `lhs` is a free variable and `rhs` does not depend on it. -/</span>
+<span id="L439" class="line"><a href="#L439">439</a> private def isSubstCandidate (lhs rhs : Expr) : MetaM Bool :=</span>
+<span id="L440" class="line"><a href="#L440">440</a>   if lhs.isFVar then</span>
+<span id="L441" class="line"><a href="#L441">441</a>     return !(← dependsOn rhs lhs.fvarId!)</span>
+<span id="L442" class="line"><a href="#L442">442</a>   else</span>
+<span id="L443" class="line"><a href="#L443">443</a>     return false</span>
+<span id="L444" class="line"><a href="#L444">444</a> </span>
+<span id="L445" class="line"><a href="#L445">445</a> /--</span>
+<span id="L446" class="line"><a href="#L446">446</a>   Given an expression `e` that is the elaboration of `stx`, if `e` is a free variable, then return `k stx`.</span>
+<span id="L447" class="line"><a href="#L447">447</a>   Otherwise, return `(fun x =&gt; k x) e`</span>
+<span id="L448" class="line"><a href="#L448">448</a> -/</span>
+<span id="L449" class="line"><a href="#L449">449</a> private def withLocalIdentFor (stx : Term) (e : Expr) (k : Term → TermElabM Expr) : TermElabM Expr := do</span>
+<span id="L450" class="line"><a href="#L450">450</a>   if e.isFVar then</span>
+<span id="L451" class="line"><a href="#L451">451</a>     k stx</span>
+<span id="L452" class="line"><a href="#L452">452</a>   else</span>
+<span id="L453" class="line"><a href="#L453">453</a>     let id ← mkFreshUserName `h</span>
+<span id="L454" class="line"><a href="#L454">454</a>     let aux ← withLocalDeclD id (← inferType e) fun x =&gt; do mkLambdaFVars #[x] (← k (mkIdentFrom stx id))</span>
+<span id="L455" class="line"><a href="#L455">455</a>     return mkApp aux e</span>
+<span id="L456" class="line"><a href="#L456">456</a> </span>
+<span id="L457" class="line"><a href="#L457">457</a> @[builtin_term_elab subst] def elabSubst : TermElab := fun stx expectedType? =&gt; do</span>
+<span id="L458" class="line"><a href="#L458">458</a>   let expectedType? ← tryPostponeIfHasMVars? expectedType?</span>
+<span id="L459" class="line"><a href="#L459">459</a>   match stx with</span>
+<span id="L460" class="line"><a href="#L460">460</a>   | `($heqStx ▸ $hStx) =&gt; do</span>
+<span id="L461" class="line"><a href="#L461">461</a>      synthesizeSyntheticMVars</span>
+<span id="L462" class="line"><a href="#L462">462</a>      let mut heq ← withSynthesize &lt;| elabTerm heqStx none</span>
+<span id="L463" class="line"><a href="#L463">463</a>      let heqType ← inferType heq</span>
+<span id="L464" class="line"><a href="#L464">464</a>      let heqType ← instantiateMVars heqType</span>
+<span id="L465" class="line"><a href="#L465">465</a>      match (← Meta.matchEq? heqType) with</span>
+<span id="L466" class="line"><a href="#L466">466</a>      | none =&gt; throwError &quot;invalid `▸` notation, argument{indentExpr heq}\n\</span>
+<span id="L467" class="line"><a href="#L467">467</a>         has type{indentExpr heqType}\n\</span>
+<span id="L468" class="line"><a href="#L468">468</a>         equality expected\</span>
+<span id="L469" class="line"><a href="#L469">469</a>         {← Term.hintAutoImplicitFailure heq (expected := &quot;an equality&quot;)}&quot;</span>
+<span id="L470" class="line"><a href="#L470">470</a>      | some (α, lhs, rhs) =&gt;</span>
+<span id="L471" class="line"><a href="#L471">471</a>        let mut lhs := lhs</span>
+<span id="L472" class="line"><a href="#L472">472</a>        let mut rhs := rhs</span>
+<span id="L473" class="line"><a href="#L473">473</a>        let mkMotive (lhs typeWithLooseBVar : Expr) := do</span>
+<span id="L474" class="line"><a href="#L474">474</a>          withLocalDeclD (← mkFreshUserName `x) α fun x =&gt; do</span>
+<span id="L475" class="line"><a href="#L475">475</a>            withLocalDeclD (← mkFreshUserName `h) (← mkEq lhs x) fun h =&gt; do</span>
+<span id="L476" class="line"><a href="#L476">476</a>              mkLambdaFVars #[x, h] $ typeWithLooseBVar.instantiate1 x</span>
+<span id="L477" class="line"><a href="#L477">477</a>        match expectedType? with</span>
+<span id="L478" class="line"><a href="#L478">478</a>        | some expectedType =&gt;</span>
+<span id="L479" class="line"><a href="#L479">479</a>          let mut expectedAbst ← kabstract expectedType rhs</span>
+<span id="L480" class="line"><a href="#L480">480</a>          unless expectedAbst.hasLooseBVars do</span>
+<span id="L481" class="line"><a href="#L481">481</a>            expectedAbst ← kabstract expectedType lhs</span>
+<span id="L482" class="line"><a href="#L482">482</a>            unless expectedAbst.hasLooseBVars do</span>
+<span id="L483" class="line"><a href="#L483">483</a>              throwError &quot;invalid `▸` notation, expected result type of cast is {indentExpr expectedType}\nhowever, the equality {indentExpr heq}\nof type {indentExpr heqType}\ndoes not contain the expected result type on either the left or the right hand side&quot;</span>
+<span id="L484" class="line"><a href="#L484">484</a>            heq ← mkEqSymm heq</span>
+<span id="L485" class="line"><a href="#L485">485</a>            (lhs, rhs) := (rhs, lhs)</span>
+<span id="L486" class="line"><a href="#L486">486</a>          let hExpectedType := expectedAbst.instantiate1 lhs</span>
+<span id="L487" class="line"><a href="#L487">487</a>          let (h, badMotive?) ← withRef hStx do</span>
+<span id="L488" class="line"><a href="#L488">488</a>            let h ← elabTerm hStx hExpectedType</span>
+<span id="L489" class="line"><a href="#L489">489</a>            try</span>
+<span id="L490" class="line"><a href="#L490">490</a>              return (← ensureHasType hExpectedType h, none)</span>
+<span id="L491" class="line"><a href="#L491">491</a>            catch ex =&gt;</span>
+<span id="L492" class="line"><a href="#L492">492</a>              -- if `rhs` occurs in `hType`, we try to apply `heq` to `h` too</span>
+<span id="L493" class="line"><a href="#L493">493</a>              let hType ← inferType h</span>
+<span id="L494" class="line"><a href="#L494">494</a>              let hTypeAbst ← kabstract hType rhs</span>
+<span id="L495" class="line"><a href="#L495">495</a>              unless hTypeAbst.hasLooseBVars do</span>
+<span id="L496" class="line"><a href="#L496">496</a>                throw ex</span>
+<span id="L497" class="line"><a href="#L497">497</a>              let hTypeNew := hTypeAbst.instantiate1 lhs</span>
+<span id="L498" class="line"><a href="#L498">498</a>              unless (← isDefEq hExpectedType hTypeNew) do</span>
+<span id="L499" class="line"><a href="#L499">499</a>                throw ex</span>
+<span id="L500" class="line"><a href="#L500">500</a>              let motive ← mkMotive rhs hTypeAbst</span>
+<span id="L501" class="line"><a href="#L501">501</a>              if !(← isTypeCorrect motive) then</span>
+<span id="L502" class="line"><a href="#L502">502</a>                return (h, some motive)</span>
+<span id="L503" class="line"><a href="#L503">503</a>              else</span>
+<span id="L504" class="line"><a href="#L504">504</a>                return (← mkEqRec motive h (← mkEqSymm heq), none)</span>
+<span id="L505" class="line"><a href="#L505">505</a>          let motive ← mkMotive lhs expectedAbst</span>
+<span id="L506" class="line"><a href="#L506">506</a>          if badMotive?.isSome || !(← isTypeCorrect motive) then</span>
+<span id="L507" class="line"><a href="#L507">507</a>            -- Before failing try to use `subst`</span>
+<span id="L508" class="line"><a href="#L508">508</a>            if ← (isSubstCandidate lhs rhs &lt;||&gt; isSubstCandidate rhs lhs) then</span>
+<span id="L509" class="line"><a href="#L509">509</a>              withLocalIdentFor heqStx heq fun heqStx =&gt; do</span>
+<span id="L510" class="line"><a href="#L510">510</a>                let h ← instantiateMVars h</span>
+<span id="L511" class="line"><a href="#L511">511</a>                if h.hasMVar then</span>
+<span id="L512" class="line"><a href="#L512">512</a>                  -- If `h` has metavariables, we try to elaborate `hStx` again after we substitute `heqStx`</span>
+<span id="L513" class="line"><a href="#L513">513</a>                  -- Remark: re-elaborating `hStx` may be problematic if `hStx` contains the `lhs` of `heqStx` which will be eliminated by `subst`</span>
+<span id="L514" class="line"><a href="#L514">514</a>                  let stxNew ← `(by subst $heqStx; exact $hStx)</span>
+<span id="L515" class="line"><a href="#L515">515</a>                  withMacroExpansion stx stxNew (elabTerm stxNew expectedType)</span>
+<span id="L516" class="line"><a href="#L516">516</a>                else</span>
+<span id="L517" class="line"><a href="#L517">517</a>                  withLocalIdentFor hStx h fun hStx =&gt; do</span>
+<span id="L518" class="line"><a href="#L518">518</a>                    let stxNew ← `(by subst $heqStx; exact $hStx)</span>
+<span id="L519" class="line"><a href="#L519">519</a>                    withMacroExpansion stx stxNew (elabTerm stxNew expectedType)</span>
+<span id="L520" class="line"><a href="#L520">520</a>            else</span>
+<span id="L521" class="line"><a href="#L521">521</a>              throwError &quot;invalid `▸` notation, failed to compute motive for the substitution&quot;</span>
+<span id="L522" class="line"><a href="#L522">522</a>          else</span>
+<span id="L523" class="line"><a href="#L523">523</a>            mkEqRec motive h heq</span>
+<span id="L524" class="line"><a href="#L524">524</a>        | none =&gt;</span>
+<span id="L525" class="line"><a href="#L525">525</a>          let h ← elabTerm hStx none</span>
+<span id="L526" class="line"><a href="#L526">526</a>          let hType ← inferType h</span>
+<span id="L527" class="line"><a href="#L527">527</a>          let mut hTypeAbst ← kabstract hType lhs</span>
+<span id="L528" class="line"><a href="#L528">528</a>          unless hTypeAbst.hasLooseBVars do</span>
+<span id="L529" class="line"><a href="#L529">529</a>            hTypeAbst ← kabstract hType rhs</span>
+<span id="L530" class="line"><a href="#L530">530</a>            unless hTypeAbst.hasLooseBVars do</span>
+<span id="L531" class="line"><a href="#L531">531</a>              throwError &quot;invalid `▸` notation, the equality{indentExpr heq}\nhas type {indentExpr heqType}\nbut neither side of the equality is mentioned in the type{indentExpr hType}&quot;</span>
+<span id="L532" class="line"><a href="#L532">532</a>            heq ← mkEqSymm heq</span>
+<span id="L533" class="line"><a href="#L533">533</a>            (lhs, rhs) := (rhs, lhs)</span>
+<span id="L534" class="line"><a href="#L534">534</a>          let motive ← mkMotive lhs hTypeAbst</span>
+<span id="L535" class="line"><a href="#L535">535</a>          unless (← isTypeCorrect motive) do</span>
+<span id="L536" class="line"><a href="#L536">536</a>            throwError &quot;invalid `▸` notation, failed to compute motive for the substitution&quot;</span>
+<span id="L537" class="line"><a href="#L537">537</a>          mkEqRec motive h heq</span>
+<span id="L538" class="line"><a href="#L538">538</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L539" class="line"><a href="#L539">539</a> </span>
+<span id="L540" class="line"><a href="#L540">540</a> @[builtin_term_elab stateRefT] def elabStateRefT : TermElab := fun stx _ =&gt; do</span>
+<span id="L541" class="line"><a href="#L541">541</a>   let σ ← elabType stx[1]</span>
+<span id="L542" class="line"><a href="#L542">542</a>   let mut mStx := stx[2]</span>
+<span id="L543" class="line"><a href="#L543">543</a>   if mStx.getKind == ``Lean.Parser.Term.macroDollarArg then</span>
+<span id="L544" class="line"><a href="#L544">544</a>     mStx := mStx[1]</span>
+<span id="L545" class="line"><a href="#L545">545</a>   let m ← elabTerm mStx (← mkArrow (mkSort levelOne) (mkSort levelOne))</span>
+<span id="L546" class="line"><a href="#L546">546</a>   let ω ← mkFreshExprMVar (mkSort levelOne)</span>
+<span id="L547" class="line"><a href="#L547">547</a>   let stWorld ← mkAppM ``STWorld #[ω, m]</span>
+<span id="L548" class="line"><a href="#L548">548</a>   discard &lt;| mkInstMVar stWorld</span>
+<span id="L549" class="line"><a href="#L549">549</a>   mkAppM ``StateRefT&#x27; #[ω, σ, m]</span>
+<span id="L550" class="line"><a href="#L550">550</a> </span>
+<span id="L551" class="line"><a href="#L551">551</a> @[builtin_term_elab noindex] def elabNoindex : TermElab := fun stx expectedType? =&gt; do</span>
+<span id="L552" class="line"><a href="#L552">552</a>   let e ← elabTerm stx[1] expectedType?</span>
+<span id="L553" class="line"><a href="#L553">553</a>   return DiscrTree.mkNoindexAnnotation e</span>
+<span id="L554" class="line"><a href="#L554">554</a> </span>
+<span id="L555" class="line"><a href="#L555">555</a> @[builtin_term_elab «unsafe»]</span>
+<span id="L556" class="line"><a href="#L556">556</a> def elabUnsafe : TermElab := fun stx expectedType? =&gt;</span>
+<span id="L557" class="line"><a href="#L557">557</a>   match stx with</span>
+<span id="L558" class="line"><a href="#L558">558</a>   | `(unsafe $t) =&gt; do</span>
+<span id="L559" class="line"><a href="#L559">559</a>     let t ← elabTermAndSynthesize t expectedType?</span>
+<span id="L560" class="line"><a href="#L560">560</a>     if (← logUnassignedUsingErrorInfos (← getMVars t)) then</span>
+<span id="L561" class="line"><a href="#L561">561</a>       throwAbortTerm</span>
+<span id="L562" class="line"><a href="#L562">562</a>     let t ← mkAuxDefinitionFor (← mkAuxName `unsafe) t</span>
+<span id="L563" class="line"><a href="#L563">563</a>     let .const unsafeFn unsafeLvls .. := t.getAppFn | unreachable!</span>
+<span id="L564" class="line"><a href="#L564">564</a>     let .defnInfo unsafeDefn ← getConstInfo unsafeFn | unreachable!</span>
+<span id="L565" class="line"><a href="#L565">565</a>     let implName ← mkAuxName `unsafe_impl</span>
+<span id="L566" class="line"><a href="#L566">566</a>     addDecl &lt;| Declaration.opaqueDecl {</span>
+<span id="L567" class="line"><a href="#L567">567</a>       name        := implName</span>
+<span id="L568" class="line"><a href="#L568">568</a>       type        := unsafeDefn.type</span>
+<span id="L569" class="line"><a href="#L569">569</a>       levelParams := unsafeDefn.levelParams</span>
+<span id="L570" class="line"><a href="#L570">570</a>       value       := (← mkOfNonempty unsafeDefn.type)</span>
+<span id="L571" class="line"><a href="#L571">571</a>       isUnsafe    := false</span>
+<span id="L572" class="line"><a href="#L572">572</a>     }</span>
+<span id="L573" class="line"><a href="#L573">573</a>     setImplementedBy implName unsafeFn</span>
+<span id="L574" class="line"><a href="#L574">574</a>     return mkAppN (Lean.mkConst implName unsafeLvls) t.getAppArgs</span>
+<span id="L575" class="line"><a href="#L575">575</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L576" class="line"><a href="#L576">576</a> </span>
+<span id="L577" class="line"><a href="#L577">577</a> /-- Elaborator for `by_elab`. -/</span>
+<span id="L578" class="line"><a href="#L578">578</a> @[builtin_term_elab byElab] def elabRunElab : TermElab := fun stx expectedType? =&gt;</span>
+<span id="L579" class="line"><a href="#L579">579</a>   match stx with</span>
+<span id="L580" class="line"><a href="#L580">580</a>   | `(by_elab $cmds:doSeq) =&gt; do</span>
+<span id="L581" class="line"><a href="#L581">581</a>     if let `(Lean.Parser.Term.doSeq| $e:term) := cmds then</span>
+<span id="L582" class="line"><a href="#L582">582</a>       if e matches `(Lean.Parser.Term.doSeq| fun $[$_args]* =&gt; $_) then</span>
+<span id="L583" class="line"><a href="#L583">583</a>         let tac ← unsafe evalTerm</span>
+<span id="L584" class="line"><a href="#L584">584</a>           (Option Expr → TermElabM Expr)</span>
+<span id="L585" class="line"><a href="#L585">585</a>           (Lean.mkForall `x .default</span>
+<span id="L586" class="line"><a href="#L586">586</a>             (mkApp (Lean.mkConst ``Option) (Lean.mkConst ``Expr))</span>
+<span id="L587" class="line"><a href="#L587">587</a>             (mkApp (Lean.mkConst ``TermElabM) (Lean.mkConst ``Expr))) e</span>
+<span id="L588" class="line"><a href="#L588">588</a>         return ← tac expectedType?</span>
+<span id="L589" class="line"><a href="#L589">589</a>     (← unsafe evalTerm (TermElabM Expr) (mkApp (Lean.mkConst ``TermElabM) (Lean.mkConst ``Expr))</span>
+<span id="L590" class="line"><a href="#L590">590</a>       (← `(do $cmds)))</span>
+<span id="L591" class="line"><a href="#L591">591</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L592" class="line"><a href="#L592">592</a> </span>
+<span id="L593" class="line"><a href="#L593">593</a> end Lean.Elab.Term</span></pre></html>

@@ -1,0 +1,412 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Data/Finset/Defs.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Data/Finset/Defs.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2015 Microsoft Corporation. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Leonardo de Moura, Jeremy Avigad, Minchao Wu, Mario Carneiro</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Data.Multiset.Defs</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Data.Set.Pairwise.Basic</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Data.SetLike.Basic</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Mathlib.Order.Hom.Basic</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> /-!</span>
+<span id="L14" class="line"><a href="#L14">14</a> # Finite sets</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> Terms of type `Finset α` are one way of talking about finite subsets of `α` in Mathlib.</span>
+<span id="L17" class="line"><a href="#L17">17</a> Below, `Finset α` is defined as a structure with 2 fields:</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a>   1. `val` is a `Multiset α` of elements;</span>
+<span id="L20" class="line"><a href="#L20">20</a>   2. `nodup` is a proof that `val` has no duplicates.</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> Finsets in Lean are constructive in that they have an underlying `List` that enumerates their</span>
+<span id="L23" class="line"><a href="#L23">23</a> elements. In particular, any function that uses the data of the underlying list cannot depend on its</span>
+<span id="L24" class="line"><a href="#L24">24</a> ordering. This is handled on the `Multiset` level by multiset API, so in most cases one needn&#x27;t</span>
+<span id="L25" class="line"><a href="#L25">25</a> worry about it explicitly.</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> Finsets give a basic foundation for defining finite sums and products over types:</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a>   1. `∑ i ∈ (s : Finset α), f i`;</span>
+<span id="L30" class="line"><a href="#L30">30</a>   2. `∏ i ∈ (s : Finset α), f i`.</span>
+<span id="L31" class="line"><a href="#L31">31</a> </span>
+<span id="L32" class="line"><a href="#L32">32</a> Lean refers to these operations as big operators.</span>
+<span id="L33" class="line"><a href="#L33">33</a> More information can be found in `Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean`.</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> Finsets are directly used to define fintypes in Lean.</span>
+<span id="L36" class="line"><a href="#L36">36</a> A `Fintype α` instance for a type `α` consists of a universal `Finset α` containing every term of</span>
+<span id="L37" class="line"><a href="#L37">37</a> `α`, called `univ`. See `Mathlib/Data/Fintype/Basic.lean`.</span>
+<span id="L38" class="line"><a href="#L38">38</a> </span>
+<span id="L39" class="line"><a href="#L39">39</a> `Finset.card`, the size of a finset is defined in `Mathlib/Data/Finset/Card.lean`.</span>
+<span id="L40" class="line"><a href="#L40">40</a> This is then used to define `Fintype.card`, the size of a type.</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> ## File structure</span>
+<span id="L43" class="line"><a href="#L43">43</a> </span>
+<span id="L44" class="line"><a href="#L44">44</a> This file defines the `Finset` type and the membership and subset relations between finsets.</span>
+<span id="L45" class="line"><a href="#L45">45</a> Most constructions involving `Finset`s have been split off to their own files.</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> ## Main definitions</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> * `Finset`: Defines a type for the finite subsets of `α`.</span>
+<span id="L50" class="line"><a href="#L50">50</a>   Constructing a `Finset` requires two pieces of data: `val`, a `Multiset α` of elements,</span>
+<span id="L51" class="line"><a href="#L51">51</a>   and `nodup`, a proof that `val` has no duplicates.</span>
+<span id="L52" class="line"><a href="#L52">52</a> * `a ∈ (s : Finset α)` is defined through coercion to `Set α`.</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> ## Tags</span>
+<span id="L55" class="line"><a href="#L55">55</a> </span>
+<span id="L56" class="line"><a href="#L56">56</a> finite sets, finset</span>
+<span id="L57" class="line"><a href="#L57">57</a> </span>
+<span id="L58" class="line"><a href="#L58">58</a> -/</span>
+<span id="L59" class="line"><a href="#L59">59</a> </span>
+<span id="L60" class="line"><a href="#L60">60</a> @[expose] public section</span>
+<span id="L61" class="line"><a href="#L61">61</a> </span>
+<span id="L62" class="line"><a href="#L62">62</a> -- Assert that we define `Finset` without the material on `List.sublists`.</span>
+<span id="L63" class="line"><a href="#L63">63</a> -- Note that we cannot use `List.sublists` itself as that is defined very early.</span>
+<span id="L64" class="line"><a href="#L64">64</a> assert_not_exists List.sublistsLen Multiset.powerset DirectedSystem CompleteLattice Monoid</span>
+<span id="L65" class="line"><a href="#L65">65</a> </span>
+<span id="L66" class="line"><a href="#L66">66</a> open Multiset Subtype Function</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> universe u</span>
+<span id="L69" class="line"><a href="#L69">69</a> </span>
+<span id="L70" class="line"><a href="#L70">70</a> variable {α : Type*} {β : Type*} {γ : Type*}</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> /-- `Finset α` is the type of finite sets of elements of `α`. It is implemented</span>
+<span id="L73" class="line"><a href="#L73">73</a>   as a multiset (a list up to permutation) which has no duplicate elements. -/</span>
+<span id="L74" class="line"><a href="#L74">74</a> structure Finset (α : Type*) where</span>
+<span id="L75" class="line"><a href="#L75">75</a>   /-- The underlying multiset -/</span>
+<span id="L76" class="line"><a href="#L76">76</a>   val : Multiset α</span>
+<span id="L77" class="line"><a href="#L77">77</a>   /-- `val` contains no duplicates -/</span>
+<span id="L78" class="line"><a href="#L78">78</a>   nodup : Nodup val</span>
+<span id="L79" class="line"><a href="#L79">79</a> </span>
+<span id="L80" class="line"><a href="#L80">80</a> instance Multiset.canLiftFinset {α} : CanLift (Multiset α) (Finset α) Finset.val Multiset.Nodup :=</span>
+<span id="L81" class="line"><a href="#L81">81</a>   ⟨fun m hm =&gt; ⟨⟨m, hm⟩, rfl⟩⟩</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> namespace Finset</span>
+<span id="L84" class="line"><a href="#L84">84</a> </span>
+<span id="L85" class="line"><a href="#L85">85</a> theorem eq_of_veq : ∀ {s t : Finset α}, s.1 = t.1 → s = t</span>
+<span id="L86" class="line"><a href="#L86">86</a>   | ⟨s, _⟩, ⟨t, _⟩, h =&gt; by cases h; rfl</span>
+<span id="L87" class="line"><a href="#L87">87</a> </span>
+<span id="L88" class="line"><a href="#L88">88</a> theorem val_injective : Injective (val : Finset α → Multiset α) := fun _ _ =&gt; eq_of_veq</span>
+<span id="L89" class="line"><a href="#L89">89</a> </span>
+<span id="L90" class="line"><a href="#L90">90</a> @[simp]</span>
+<span id="L91" class="line"><a href="#L91">91</a> theorem val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t :=</span>
+<span id="L92" class="line"><a href="#L92">92</a>   val_injective.eq_iff</span>
+<span id="L93" class="line"><a href="#L93">93</a> </span>
+<span id="L94" class="line"><a href="#L94">94</a> instance decidableEq [DecidableEq α] : DecidableEq (Finset α)</span>
+<span id="L95" class="line"><a href="#L95">95</a>   | _, _ =&gt; decidable_of_iff _ val_inj</span>
+<span id="L96" class="line"><a href="#L96">96</a> </span>
+<span id="L97" class="line"><a href="#L97">97</a> /-! ### set coercion -/</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> /-- Convert a finset to a set in the natural way. -/</span>
+<span id="L100" class="line"><a href="#L100">100</a> instance : SetLike (Finset α) α where</span>
+<span id="L101" class="line"><a href="#L101">101</a>   coe s := {a | a ∈ s.1}</span>
+<span id="L102" class="line"><a href="#L102">102</a>   coe_injective&#x27; s₁ s₂ h := (val_inj.symm.trans &lt;| s₁.nodup.ext s₂.nodup).2 &lt;| Set.ext_iff.mp h</span>
+<span id="L103" class="line"><a href="#L103">103</a> </span>
+<span id="L104" class="line"><a href="#L104">104</a> theorem mem_def {a : α} {s : Finset α} : a ∈ s ↔ a ∈ s.1 :=</span>
+<span id="L105" class="line"><a href="#L105">105</a>   Iff.rfl</span>
+<span id="L106" class="line"><a href="#L106">106</a> </span>
+<span id="L107" class="line"><a href="#L107">107</a> -- If https://github.com/leanprover/lean4/issues/2678 is resolved-</span>
+<span id="L108" class="line"><a href="#L108">108</a> -- this can be changed back to an `Iff`, but for now we would like `dsimp` to use it.</span>
+<span id="L109" class="line"><a href="#L109">109</a> @[simp, grind =]</span>
+<span id="L110" class="line"><a href="#L110">110</a> theorem mem_val {a : α} {s : Finset α} : (a ∈ s.1) = (a ∈ s) := rfl</span>
+<span id="L111" class="line"><a href="#L111">111</a> </span>
+<span id="L112" class="line"><a href="#L112">112</a> @[simp, grind =]</span>
+<span id="L113" class="line"><a href="#L113">113</a> theorem mem_mk {a : α} {s nd} : a ∈ @Finset.mk α s nd ↔ a ∈ s :=</span>
+<span id="L114" class="line"><a href="#L114">114</a>   Iff.rfl</span>
+<span id="L115" class="line"><a href="#L115">115</a> </span>
+<span id="L116" class="line"><a href="#L116">116</a> instance decidableMem [_h : DecidableEq α] (a : α) (s : Finset α) : Decidable (a ∈ s) :=</span>
+<span id="L117" class="line"><a href="#L117">117</a>   Multiset.decidableMem _ _</span>
+<span id="L118" class="line"><a href="#L118">118</a> </span>
+<span id="L119" class="line"><a href="#L119">119</a> @[simp] lemma forall_mem_not_eq {s : Finset α} {a : α} : (∀ b ∈ s, ¬ a = b) ↔ a ∉ s := by grind</span>
+<span id="L120" class="line"><a href="#L120">120</a> @[simp] lemma forall_mem_not_eq&#x27; {s : Finset α} {a : α} : (∀ b ∈ s, ¬ b = a) ↔ a ∉ s := by grind</span>
+<span id="L121" class="line"><a href="#L121">121</a> </span>
+<span id="L122" class="line"><a href="#L122">122</a> instance : PartialOrder (Finset α) := .ofSetLike (Finset α) α</span>
+<span id="L123" class="line"><a href="#L123">123</a> </span>
+<span id="L124" class="line"><a href="#L124">124</a> /-- Convert a finset to a set in the natural way. -/</span>
+<span id="L125" class="line"><a href="#L125">125</a> @[deprecated SetLike.coe (since := &quot;2025-10-22&quot;)]</span>
+<span id="L126" class="line"><a href="#L126">126</a> abbrev toSet (s : Finset α) : Set α := s</span>
+<span id="L127" class="line"><a href="#L127">127</a> </span>
+<span id="L128" class="line"><a href="#L128">128</a> @[norm_cast, grind =]</span>
+<span id="L129" class="line"><a href="#L129">129</a> theorem mem_coe {a : α} {s : Finset α} : a ∈ (s : Set α) ↔ a ∈ (s : Finset α) :=</span>
+<span id="L130" class="line"><a href="#L130">130</a>   Iff.rfl</span>
+<span id="L131" class="line"><a href="#L131">131</a> </span>
+<span id="L132" class="line"><a href="#L132">132</a> @[simp]</span>
+<span id="L133" class="line"><a href="#L133">133</a> theorem setOf_mem {α} {s : Finset α} : { a | a ∈ s } = s :=</span>
+<span id="L134" class="line"><a href="#L134">134</a>   rfl</span>
+<span id="L135" class="line"><a href="#L135">135</a> </span>
+<span id="L136" class="line"><a href="#L136">136</a> theorem coe_mem {s : Finset α} (x : (s : Set α)) : ↑x ∈ s :=</span>
+<span id="L137" class="line"><a href="#L137">137</a>   x.2</span>
+<span id="L138" class="line"><a href="#L138">138</a> </span>
+<span id="L139" class="line"><a href="#L139">139</a> theorem mk_coe {s : Finset α} (x : (s : Set α)) {h} : (⟨x, h⟩ : (s : Set α)) = x :=</span>
+<span id="L140" class="line"><a href="#L140">140</a>   Subtype.coe_eta _ _</span>
+<span id="L141" class="line"><a href="#L141">141</a> </span>
+<span id="L142" class="line"><a href="#L142">142</a> instance decidableMem&#x27; [DecidableEq α] (a : α) (s : Finset α) : Decidable (a ∈ (s : Set α)) :=</span>
+<span id="L143" class="line"><a href="#L143">143</a>   s.decidableMem _</span>
+<span id="L144" class="line"><a href="#L144">144</a> </span>
+<span id="L145" class="line"><a href="#L145">145</a> /-! ### extensionality -/</span>
+<span id="L146" class="line"><a href="#L146">146</a> </span>
+<span id="L147" class="line"><a href="#L147">147</a> @[ext, grind ext]</span>
+<span id="L148" class="line"><a href="#L148">148</a> theorem ext {s₁ s₂ : Finset α} (h : ∀ a, a ∈ s₁ ↔ a ∈ s₂) : s₁ = s₂ :=</span>
+<span id="L149" class="line"><a href="#L149">149</a>   SetLike.ext h</span>
+<span id="L150" class="line"><a href="#L150">150</a> </span>
+<span id="L151" class="line"><a href="#L151">151</a> @[norm_cast]</span>
+<span id="L152" class="line"><a href="#L152">152</a> theorem coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂ :=</span>
+<span id="L153" class="line"><a href="#L153">153</a>   SetLike.coe_set_eq</span>
+<span id="L154" class="line"><a href="#L154">154</a> </span>
+<span id="L155" class="line"><a href="#L155">155</a> @[grind inj]</span>
+<span id="L156" class="line"><a href="#L156">156</a> theorem coe_injective {α} : Injective ((↑) : Finset α → Set α) := fun _s _t =&gt; coe_inj.1</span>
+<span id="L157" class="line"><a href="#L157">157</a> </span>
+<span id="L158" class="line"><a href="#L158">158</a> /-! ### type coercion -/</span>
+<span id="L159" class="line"><a href="#L159">159</a> </span>
+<span id="L160" class="line"><a href="#L160">160</a> </span>
+<span id="L161" class="line"><a href="#L161">161</a> protected theorem forall_coe {α : Type*} (s : Finset α) (p : s → Prop) :</span>
+<span id="L162" class="line"><a href="#L162">162</a>     (∀ x : s, p x) ↔ ∀ (x : α) (h : x ∈ s), p ⟨x, h⟩ :=</span>
+<span id="L163" class="line"><a href="#L163">163</a>   Subtype.forall</span>
+<span id="L164" class="line"><a href="#L164">164</a> </span>
+<span id="L165" class="line"><a href="#L165">165</a> protected theorem exists_coe {α : Type*} (s : Finset α) (p : s → Prop) :</span>
+<span id="L166" class="line"><a href="#L166">166</a>     (∃ x : s, p x) ↔ ∃ (x : α) (h : x ∈ s), p ⟨x, h⟩ :=</span>
+<span id="L167" class="line"><a href="#L167">167</a>   Subtype.exists</span>
+<span id="L168" class="line"><a href="#L168">168</a> </span>
+<span id="L169" class="line"><a href="#L169">169</a> instance PiFinsetCoe.canLift (ι : Type*) (α : ι → Type*) [_ne : ∀ i, Nonempty (α i)]</span>
+<span id="L170" class="line"><a href="#L170">170</a>     (s : Finset ι) : CanLift (∀ i : s, α i) (∀ i, α i) (fun f i =&gt; f i) fun _ =&gt; True :=</span>
+<span id="L171" class="line"><a href="#L171">171</a>   PiSubtype.canLift ι α (· ∈ s)</span>
+<span id="L172" class="line"><a href="#L172">172</a> </span>
+<span id="L173" class="line"><a href="#L173">173</a> instance PiFinsetCoe.canLift&#x27; (ι α : Type*) [_ne : Nonempty α] (s : Finset ι) :</span>
+<span id="L174" class="line"><a href="#L174">174</a>     CanLift (s → α) (ι → α) (fun f i =&gt; f i) fun _ =&gt; True :=</span>
+<span id="L175" class="line"><a href="#L175">175</a>   PiFinsetCoe.canLift ι (fun _ =&gt; α) s</span>
+<span id="L176" class="line"><a href="#L176">176</a> </span>
+<span id="L177" class="line"><a href="#L177">177</a> instance FinsetCoe.canLift (s : Finset α) : CanLift α s (↑) fun a =&gt; a ∈ s where</span>
+<span id="L178" class="line"><a href="#L178">178</a>   prf a ha := ⟨⟨a, ha⟩, rfl⟩</span>
+<span id="L179" class="line"><a href="#L179">179</a> </span>
+<span id="L180" class="line"><a href="#L180">180</a> @[norm_cast]</span>
+<span id="L181" class="line"><a href="#L181">181</a> theorem coe_sort_coe (s : Finset α) : ((s : Set α) : Sort _) = s :=</span>
+<span id="L182" class="line"><a href="#L182">182</a>   rfl</span>
+<span id="L183" class="line"><a href="#L183">183</a> </span>
+<span id="L184" class="line"><a href="#L184">184</a> /-! ### Subset and strict subset relations -/</span>
+<span id="L185" class="line"><a href="#L185">185</a> </span>
+<span id="L186" class="line"><a href="#L186">186</a> </span>
+<span id="L187" class="line"><a href="#L187">187</a> section Subset</span>
+<span id="L188" class="line"><a href="#L188">188</a> </span>
+<span id="L189" class="line"><a href="#L189">189</a> variable {s t : Finset α}</span>
+<span id="L190" class="line"><a href="#L190">190</a> </span>
+<span id="L191" class="line"><a href="#L191">191</a> instance : HasSubset (Finset α) :=</span>
+<span id="L192" class="line"><a href="#L192">192</a>   ⟨fun s t =&gt; ∀ ⦃a⦄, a ∈ s → a ∈ t⟩</span>
+<span id="L193" class="line"><a href="#L193">193</a> </span>
+<span id="L194" class="line"><a href="#L194">194</a> instance : HasSSubset (Finset α) :=</span>
+<span id="L195" class="line"><a href="#L195">195</a>   ⟨fun s t =&gt; s ⊆ t ∧ ¬t ⊆ s⟩</span>
+<span id="L196" class="line"><a href="#L196">196</a> </span>
+<span id="L197" class="line"><a href="#L197">197</a> instance partialOrder : PartialOrder (Finset α) := inferInstance</span>
+<span id="L198" class="line"><a href="#L198">198</a> </span>
+<span id="L199" class="line"><a href="#L199">199</a> theorem subset_of_le : s ≤ t → s ⊆ t := id</span>
+<span id="L200" class="line"><a href="#L200">200</a> </span>
+<span id="L201" class="line"><a href="#L201">201</a> instance : @Std.Refl (Finset α) (· ⊆ ·) :=</span>
+<span id="L202" class="line"><a href="#L202">202</a>   inferInstanceAs &lt;| Std.Refl (· ≤ ·)</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> instance : IsTrans (Finset α) (· ⊆ ·) :=</span>
+<span id="L205" class="line"><a href="#L205">205</a>   inferInstanceAs &lt;| IsTrans (Finset α) (· ≤ ·)</span>
+<span id="L206" class="line"><a href="#L206">206</a> </span>
+<span id="L207" class="line"><a href="#L207">207</a> instance : @Std.Antisymm (Finset α) (· ⊆ ·) :=</span>
+<span id="L208" class="line"><a href="#L208">208</a>   inferInstanceAs &lt;| Std.Antisymm (· ≤ ·)</span>
+<span id="L209" class="line"><a href="#L209">209</a> </span>
+<span id="L210" class="line"><a href="#L210">210</a> instance : @Std.Irrefl (Finset α) (· ⊂ ·) :=</span>
+<span id="L211" class="line"><a href="#L211">211</a>   inferInstanceAs &lt;| Std.Irrefl (· &lt; ·)</span>
+<span id="L212" class="line"><a href="#L212">212</a> </span>
+<span id="L213" class="line"><a href="#L213">213</a> instance : IsTrans (Finset α) (· ⊂ ·) :=</span>
+<span id="L214" class="line"><a href="#L214">214</a>   inferInstanceAs &lt;| IsTrans (Finset α) (· &lt; ·)</span>
+<span id="L215" class="line"><a href="#L215">215</a> </span>
+<span id="L216" class="line"><a href="#L216">216</a> instance : Std.Asymm (α := Finset α) (· ⊂ ·) :=</span>
+<span id="L217" class="line"><a href="#L217">217</a>   inferInstanceAs &lt;| Std.Asymm (· &lt; ·)</span>
+<span id="L218" class="line"><a href="#L218">218</a> </span>
+<span id="L219" class="line"><a href="#L219">219</a> instance : IsNonstrictStrictOrder (Finset α) (· ⊆ ·) (· ⊂ ·) :=</span>
+<span id="L220" class="line"><a href="#L220">220</a>   ⟨fun _ _ =&gt; Iff.rfl⟩</span>
+<span id="L221" class="line"><a href="#L221">221</a> </span>
+<span id="L222" class="line"><a href="#L222">222</a> theorem subset_def : s ⊆ t ↔ s.1 ⊆ t.1 :=</span>
+<span id="L223" class="line"><a href="#L223">223</a>   Iff.rfl</span>
+<span id="L224" class="line"><a href="#L224">224</a> </span>
+<span id="L225" class="line"><a href="#L225">225</a> theorem ssubset_def : s ⊂ t ↔ s ⊆ t ∧ ¬t ⊆ s :=</span>
+<span id="L226" class="line"><a href="#L226">226</a>   Iff.rfl</span>
+<span id="L227" class="line"><a href="#L227">227</a> </span>
+<span id="L228" class="line"><a href="#L228">228</a> theorem Subset.refl (s : Finset α) : s ⊆ s :=</span>
+<span id="L229" class="line"><a href="#L229">229</a>   Multiset.Subset.refl _</span>
+<span id="L230" class="line"><a href="#L230">230</a> </span>
+<span id="L231" class="line"><a href="#L231">231</a> protected theorem Subset.rfl {s : Finset α} : s ⊆ s :=</span>
+<span id="L232" class="line"><a href="#L232">232</a>   Subset.refl _</span>
+<span id="L233" class="line"><a href="#L233">233</a> </span>
+<span id="L234" class="line"><a href="#L234">234</a> protected theorem subset_of_eq {s t : Finset α} (h : s = t) : s ⊆ t :=</span>
+<span id="L235" class="line"><a href="#L235">235</a>   h ▸ Subset.refl _</span>
+<span id="L236" class="line"><a href="#L236">236</a> </span>
+<span id="L237" class="line"><a href="#L237">237</a> theorem Subset.trans {s₁ s₂ s₃ : Finset α} : s₁ ⊆ s₂ → s₂ ⊆ s₃ → s₁ ⊆ s₃ :=</span>
+<span id="L238" class="line"><a href="#L238">238</a>   Multiset.Subset.trans</span>
+<span id="L239" class="line"><a href="#L239">239</a> </span>
+<span id="L240" class="line"><a href="#L240">240</a> theorem Superset.trans {s₁ s₂ s₃ : Finset α} : s₁ ⊇ s₂ → s₂ ⊇ s₃ → s₁ ⊇ s₃ := fun h&#x27; h =&gt;</span>
+<span id="L241" class="line"><a href="#L241">241</a>   Subset.trans h h&#x27;</span>
+<span id="L242" class="line"><a href="#L242">242</a> </span>
+<span id="L243" class="line"><a href="#L243">243</a> @[gcongr]</span>
+<span id="L244" class="line"><a href="#L244">244</a> theorem mem_of_subset {s₁ s₂ : Finset α} {a : α} : s₁ ⊆ s₂ → a ∈ s₁ → a ∈ s₂ :=</span>
+<span id="L245" class="line"><a href="#L245">245</a>   Multiset.mem_of_subset</span>
+<span id="L246" class="line"><a href="#L246">246</a> </span>
+<span id="L247" class="line"><a href="#L247">247</a> theorem notMem_mono {s t : Finset α} (h : s ⊆ t) {a : α} : a ∉ t → a ∉ s :=</span>
+<span id="L248" class="line"><a href="#L248">248</a>   mt &lt;| @h _</span>
+<span id="L249" class="line"><a href="#L249">249</a> </span>
+<span id="L250" class="line"><a href="#L250">250</a> alias not_mem_subset := notMem_mono</span>
+<span id="L251" class="line"><a href="#L251">251</a> </span>
+<span id="L252" class="line"><a href="#L252">252</a> theorem Subset.antisymm {s₁ s₂ : Finset α} (H₁ : s₁ ⊆ s₂) (H₂ : s₂ ⊆ s₁) : s₁ = s₂ :=</span>
+<span id="L253" class="line"><a href="#L253">253</a>   ext fun a =&gt; ⟨@H₁ a, @H₂ a⟩</span>
+<span id="L254" class="line"><a href="#L254">254</a> </span>
+<span id="L255" class="line"><a href="#L255">255</a> @[grind =]</span>
+<span id="L256" class="line"><a href="#L256">256</a> theorem subset_iff {s₁ s₂ : Finset α} : s₁ ⊆ s₂ ↔ ∀ ⦃x⦄, x ∈ s₁ → x ∈ s₂ :=</span>
+<span id="L257" class="line"><a href="#L257">257</a>   Iff.rfl</span>
+<span id="L258" class="line"><a href="#L258">258</a> </span>
+<span id="L259" class="line"><a href="#L259">259</a> theorem subset_iff_notMem : s ⊆ t ↔ ∀ ⦃a⦄, a ∉ t → a ∉ s := by</span>
+<span id="L260" class="line"><a href="#L260">260</a>   simp only [subset_iff, not_imp_not]</span>
+<span id="L261" class="line"><a href="#L261">261</a> </span>
+<span id="L262" class="line"><a href="#L262">262</a> @[norm_cast, gcongr]</span>
+<span id="L263" class="line"><a href="#L263">263</a> theorem coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) ⊆ s₂ ↔ s₁ ⊆ s₂ :=</span>
+<span id="L264" class="line"><a href="#L264">264</a>   Iff.rfl</span>
+<span id="L265" class="line"><a href="#L265">265</a> </span>
+<span id="L266" class="line"><a href="#L266">266</a> @[simp]</span>
+<span id="L267" class="line"><a href="#L267">267</a> theorem val_le_iff {s₁ s₂ : Finset α} : s₁.1 ≤ s₂.1 ↔ s₁ ⊆ s₂ :=</span>
+<span id="L268" class="line"><a href="#L268">268</a>   le_iff_subset s₁.2</span>
+<span id="L269" class="line"><a href="#L269">269</a> </span>
+<span id="L270" class="line"><a href="#L270">270</a> theorem Subset.antisymm_iff {s₁ s₂ : Finset α} : s₁ = s₂ ↔ s₁ ⊆ s₂ ∧ s₂ ⊆ s₁ :=</span>
+<span id="L271" class="line"><a href="#L271">271</a>   le_antisymm_iff</span>
+<span id="L272" class="line"><a href="#L272">272</a> </span>
+<span id="L273" class="line"><a href="#L273">273</a> theorem not_subset : ¬s ⊆ t ↔ ∃ x ∈ s, x ∉ t := by simp only [← coe_subset, Set.not_subset, mem_coe]</span>
+<span id="L274" class="line"><a href="#L274">274</a> </span>
+<span id="L275" class="line"><a href="#L275">275</a> @[simp]</span>
+<span id="L276" class="line"><a href="#L276">276</a> theorem le_eq_subset : ((· ≤ ·) : Finset α → Finset α → Prop) = (· ⊆ ·) :=</span>
+<span id="L277" class="line"><a href="#L277">277</a>   rfl</span>
+<span id="L278" class="line"><a href="#L278">278</a> </span>
+<span id="L279" class="line"><a href="#L279">279</a> @[simp]</span>
+<span id="L280" class="line"><a href="#L280">280</a> theorem lt_eq_subset : ((· &lt; ·) : Finset α → Finset α → Prop) = (· ⊂ ·) :=</span>
+<span id="L281" class="line"><a href="#L281">281</a>   rfl</span>
+<span id="L282" class="line"><a href="#L282">282</a> </span>
+<span id="L283" class="line"><a href="#L283">283</a> theorem le_iff_subset {s₁ s₂ : Finset α} : s₁ ≤ s₂ ↔ s₁ ⊆ s₂ :=</span>
+<span id="L284" class="line"><a href="#L284">284</a>   Iff.rfl</span>
+<span id="L285" class="line"><a href="#L285">285</a> </span>
+<span id="L286" class="line"><a href="#L286">286</a> theorem lt_iff_ssubset {s₁ s₂ : Finset α} : s₁ &lt; s₂ ↔ s₁ ⊂ s₂ :=</span>
+<span id="L287" class="line"><a href="#L287">287</a>   Iff.rfl</span>
+<span id="L288" class="line"><a href="#L288">288</a> </span>
+<span id="L289" class="line"><a href="#L289">289</a> @[norm_cast]</span>
+<span id="L290" class="line"><a href="#L290">290</a> theorem coe_ssubset {s₁ s₂ : Finset α} : (s₁ : Set α) ⊂ s₂ ↔ s₁ ⊂ s₂ := by</span>
+<span id="L291" class="line"><a href="#L291">291</a>   simp</span>
+<span id="L292" class="line"><a href="#L292">292</a> </span>
+<span id="L293" class="line"><a href="#L293">293</a> @[simp]</span>
+<span id="L294" class="line"><a href="#L294">294</a> theorem val_lt_iff {s₁ s₂ : Finset α} : s₁.1 &lt; s₂.1 ↔ s₁ ⊂ s₂ :=</span>
+<span id="L295" class="line"><a href="#L295">295</a>   and_congr val_le_iff &lt;| not_congr val_le_iff</span>
+<span id="L296" class="line"><a href="#L296">296</a> </span>
+<span id="L297" class="line"><a href="#L297">297</a> lemma val_strictMono : StrictMono (val : Finset α → Multiset α) := fun _ _ ↦ val_lt_iff.2</span>
+<span id="L298" class="line"><a href="#L298">298</a> </span>
+<span id="L299" class="line"><a href="#L299">299</a> @[grind =]</span>
+<span id="L300" class="line"><a href="#L300">300</a> theorem ssubset_iff_subset_ne {s t : Finset α} : s ⊂ t ↔ s ⊆ t ∧ s ≠ t :=</span>
+<span id="L301" class="line"><a href="#L301">301</a>   @lt_iff_le_and_ne _ _ s t</span>
+<span id="L302" class="line"><a href="#L302">302</a> </span>
+<span id="L303" class="line"><a href="#L303">303</a> theorem ssubset_iff_of_subset {s₁ s₂ : Finset α} (h : s₁ ⊆ s₂) : s₁ ⊂ s₂ ↔ ∃ x ∈ s₂, x ∉ s₁ :=</span>
+<span id="L304" class="line"><a href="#L304">304</a>   Set.ssubset_iff_of_subset h</span>
+<span id="L305" class="line"><a href="#L305">305</a> </span>
+<span id="L306" class="line"><a href="#L306">306</a> theorem ssubset_of_ssubset_of_subset {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ ⊂ s₂) (hs₂s₃ : s₂ ⊆ s₃) :</span>
+<span id="L307" class="line"><a href="#L307">307</a>     s₁ ⊂ s₃ :=</span>
+<span id="L308" class="line"><a href="#L308">308</a>   Set.ssubset_of_ssubset_of_subset hs₁s₂ hs₂s₃</span>
+<span id="L309" class="line"><a href="#L309">309</a> </span>
+<span id="L310" class="line"><a href="#L310">310</a> theorem ssubset_of_subset_of_ssubset {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ ⊆ s₂) (hs₂s₃ : s₂ ⊂ s₃) :</span>
+<span id="L311" class="line"><a href="#L311">311</a>     s₁ ⊂ s₃ :=</span>
+<span id="L312" class="line"><a href="#L312">312</a>   Set.ssubset_of_subset_of_ssubset hs₁s₂ hs₂s₃</span>
+<span id="L313" class="line"><a href="#L313">313</a> </span>
+<span id="L314" class="line"><a href="#L314">314</a> theorem exists_of_ssubset {s₁ s₂ : Finset α} (h : s₁ ⊂ s₂) : ∃ x ∈ s₂, x ∉ s₁ :=</span>
+<span id="L315" class="line"><a href="#L315">315</a>   Set.exists_of_ssubset h</span>
+<span id="L316" class="line"><a href="#L316">316</a> </span>
+<span id="L317" class="line"><a href="#L317">317</a> instance isWellFounded_ssubset : IsWellFounded (Finset α) (· ⊂ ·) :=</span>
+<span id="L318" class="line"><a href="#L318">318</a>   Subrelation.isWellFounded (InvImage _ _) val_lt_iff.2</span>
+<span id="L319" class="line"><a href="#L319">319</a> </span>
+<span id="L320" class="line"><a href="#L320">320</a> instance wellFoundedLT : WellFoundedLT (Finset α) :=</span>
+<span id="L321" class="line"><a href="#L321">321</a>   Finset.isWellFounded_ssubset</span>
+<span id="L322" class="line"><a href="#L322">322</a> </span>
+<span id="L323" class="line"><a href="#L323">323</a> end Subset</span>
+<span id="L324" class="line"><a href="#L324">324</a> </span>
+<span id="L325" class="line"><a href="#L325">325</a> -- TODO: these should be global attributes, but this will require fixing other files</span>
+<span id="L326" class="line"><a href="#L326">326</a> attribute [local trans] Subset.trans Superset.trans</span>
+<span id="L327" class="line"><a href="#L327">327</a> </span>
+<span id="L328" class="line"><a href="#L328">328</a> /-! ### Order embedding from `Finset α` to `Set α` -/</span>
+<span id="L329" class="line"><a href="#L329">329</a> </span>
+<span id="L330" class="line"><a href="#L330">330</a> </span>
+<span id="L331" class="line"><a href="#L331">331</a> /-- Coercion to `Set α` as an `OrderEmbedding`. -/</span>
+<span id="L332" class="line"><a href="#L332">332</a> def coeEmb : Finset α ↪o Set α :=</span>
+<span id="L333" class="line"><a href="#L333">333</a>   ⟨⟨(↑), coe_injective⟩, coe_subset⟩</span>
+<span id="L334" class="line"><a href="#L334">334</a> </span>
+<span id="L335" class="line"><a href="#L335">335</a> @[simp]</span>
+<span id="L336" class="line"><a href="#L336">336</a> theorem coe_coeEmb : ⇑(coeEmb : Finset α ↪o Set α) = ((↑) : Finset α → Set α) :=</span>
+<span id="L337" class="line"><a href="#L337">337</a>   rfl</span>
+<span id="L338" class="line"><a href="#L338">338</a> </span>
+<span id="L339" class="line"><a href="#L339">339</a> /-! ### Assorted results</span>
+<span id="L340" class="line"><a href="#L340">340</a> </span>
+<span id="L341" class="line"><a href="#L341">341</a> These results can be defined using the current imports, but deserve to be given a nicer home.</span>
+<span id="L342" class="line"><a href="#L342">342</a> -/</span>
+<span id="L343" class="line"><a href="#L343">343</a> </span>
+<span id="L344" class="line"><a href="#L344">344</a> section DecidablePiExists</span>
+<span id="L345" class="line"><a href="#L345">345</a> </span>
+<span id="L346" class="line"><a href="#L346">346</a> variable {s : Finset α}</span>
+<span id="L347" class="line"><a href="#L347">347</a> </span>
+<span id="L348" class="line"><a href="#L348">348</a> instance decidableDforallFinset {p : ∀ a ∈ s, Prop} [_hp : ∀ (a) (h : a ∈ s), Decidable (p a h)] :</span>
+<span id="L349" class="line"><a href="#L349">349</a>     Decidable (∀ (a) (h : a ∈ s), p a h) :=</span>
+<span id="L350" class="line"><a href="#L350">350</a>   Multiset.decidableDforallMultiset</span>
+<span id="L351" class="line"><a href="#L351">351</a> </span>
+<span id="L352" class="line"><a href="#L352">352</a> instance instDecidableRelSubset [DecidableEq α] : DecidableRel (α := Finset α) (· ⊆ ·) :=</span>
+<span id="L353" class="line"><a href="#L353">353</a>   fun _ _ ↦ decidableDforallFinset</span>
+<span id="L354" class="line"><a href="#L354">354</a> </span>
+<span id="L355" class="line"><a href="#L355">355</a> instance instDecidableRelSSubset [DecidableEq α] : DecidableRel (α := Finset α) (· ⊂ ·) :=</span>
+<span id="L356" class="line"><a href="#L356">356</a>   fun _ _ ↦ instDecidableAnd</span>
+<span id="L357" class="line"><a href="#L357">357</a> </span>
+<span id="L358" class="line"><a href="#L358">358</a> instance instDecidableLE [DecidableEq α] : DecidableLE (Finset α) :=</span>
+<span id="L359" class="line"><a href="#L359">359</a>   instDecidableRelSubset</span>
+<span id="L360" class="line"><a href="#L360">360</a> </span>
+<span id="L361" class="line"><a href="#L361">361</a> instance instDecidableLT [DecidableEq α] : DecidableLT (Finset α) :=</span>
+<span id="L362" class="line"><a href="#L362">362</a>   instDecidableRelSSubset</span>
+<span id="L363" class="line"><a href="#L363">363</a> </span>
+<span id="L364" class="line"><a href="#L364">364</a> instance decidableDExistsFinset {p : ∀ a ∈ s, Prop} [_hp : ∀ (a) (h : a ∈ s), Decidable (p a h)] :</span>
+<span id="L365" class="line"><a href="#L365">365</a>     Decidable (∃ (a : _) (h : a ∈ s), p a h) :=</span>
+<span id="L366" class="line"><a href="#L366">366</a>   Multiset.decidableDexistsMultiset</span>
+<span id="L367" class="line"><a href="#L367">367</a> </span>
+<span id="L368" class="line"><a href="#L368">368</a> instance decidableExistsAndFinset {p : α → Prop} [_hp : ∀ (a), Decidable (p a)] :</span>
+<span id="L369" class="line"><a href="#L369">369</a>     Decidable (∃ a ∈ s, p a) :=</span>
+<span id="L370" class="line"><a href="#L370">370</a>   decidable_of_iff (∃ (a : _) (_ : a ∈ s), p a) (by simp)</span>
+<span id="L371" class="line"><a href="#L371">371</a> </span>
+<span id="L372" class="line"><a href="#L372">372</a> instance decidableExistsAndFinsetCoe {p : α → Prop} [DecidablePred p] :</span>
+<span id="L373" class="line"><a href="#L373">373</a>     Decidable (∃ a ∈ (s : Set α), p a) := decidableExistsAndFinset</span>
+<span id="L374" class="line"><a href="#L374">374</a> </span>
+<span id="L375" class="line"><a href="#L375">375</a> /-- decidable equality for functions whose domain is bounded by finsets -/</span>
+<span id="L376" class="line"><a href="#L376">376</a> instance decidableEqPiFinset {β : α → Type*} [_h : ∀ a, DecidableEq (β a)] :</span>
+<span id="L377" class="line"><a href="#L377">377</a>     DecidableEq (∀ a ∈ s, β a) :=</span>
+<span id="L378" class="line"><a href="#L378">378</a>   Multiset.decidableEqPiMultiset</span>
+<span id="L379" class="line"><a href="#L379">379</a> </span>
+<span id="L380" class="line"><a href="#L380">380</a> end DecidablePiExists</span>
+<span id="L381" class="line"><a href="#L381">381</a> </span>
+<span id="L382" class="line"><a href="#L382">382</a> end Finset</span>
+<span id="L383" class="line"><a href="#L383">383</a> </span>
+<span id="L384" class="line"><a href="#L384">384</a> namespace List</span>
+<span id="L385" class="line"><a href="#L385">385</a> </span>
+<span id="L386" class="line"><a href="#L386">386</a> variable [DecidableEq α] {a : α} {f : α → β} {s : Finset α} {t : Set β} {t&#x27; : Finset β}</span>
+<span id="L387" class="line"><a href="#L387">387</a> </span>
+<span id="L388" class="line"><a href="#L388">388</a> instance [DecidablePred (· ∈ t)] : Decidable (Set.MapsTo f s t) :=</span>
+<span id="L389" class="line"><a href="#L389">389</a>   inferInstanceAs (Decidable (∀ x ∈ s, f x ∈ t))</span>
+<span id="L390" class="line"><a href="#L390">390</a> </span>
+<span id="L391" class="line"><a href="#L391">391</a> instance [DecidableEq β] : Decidable (Set.SurjOn f s t&#x27;) :=</span>
+<span id="L392" class="line"><a href="#L392">392</a>   inferInstanceAs (Decidable (∀ x ∈ t&#x27;, ∃ y ∈ s, f y = x))</span>
+<span id="L393" class="line"><a href="#L393">393</a> </span>
+<span id="L394" class="line"><a href="#L394">394</a> end List</span>
+<span id="L395" class="line"><a href="#L395">395</a> </span>
+<span id="L396" class="line"><a href="#L396">396</a> namespace Finset</span>
+<span id="L397" class="line"><a href="#L397">397</a> </span>
+<span id="L398" class="line"><a href="#L398">398</a> section Pairwise</span>
+<span id="L399" class="line"><a href="#L399">399</a> </span>
+<span id="L400" class="line"><a href="#L400">400</a> variable {s : Finset α}</span>
+<span id="L401" class="line"><a href="#L401">401</a> </span>
+<span id="L402" class="line"><a href="#L402">402</a> theorem pairwise_subtype_iff_pairwise_finset&#x27; (r : β → β → Prop) (f : α → β) :</span>
+<span id="L403" class="line"><a href="#L403">403</a>     Pairwise (r on fun x : s =&gt; f x) ↔ (s : Set α).Pairwise (r on f) :=</span>
+<span id="L404" class="line"><a href="#L404">404</a>   pairwise_subtype_iff_pairwise_set (s : Set α) (r on f)</span>
+<span id="L405" class="line"><a href="#L405">405</a> </span>
+<span id="L406" class="line"><a href="#L406">406</a> theorem pairwise_subtype_iff_pairwise_finset (r : α → α → Prop) :</span>
+<span id="L407" class="line"><a href="#L407">407</a>     Pairwise (r on fun x : s =&gt; x) ↔ (s : Set α).Pairwise r :=</span>
+<span id="L408" class="line"><a href="#L408">408</a>   pairwise_subtype_iff_pairwise_finset&#x27; r id</span>
+<span id="L409" class="line"><a href="#L409">409</a> </span>
+<span id="L410" class="line"><a href="#L410">410</a> end Pairwise</span>
+<span id="L411" class="line"><a href="#L411">411</a> </span>
+<span id="L412" class="line"><a href="#L412">412</a> end Finset</span></pre></html>

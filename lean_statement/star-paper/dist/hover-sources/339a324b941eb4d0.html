@@ -1,0 +1,193 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/WedgeCircleZeros.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/WedgeCircleZeros.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.WedgeLevel</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! On each upper semicircle there is exactly the boundary angle predicted</span>
+<span id="L4" class="line"><a href="#L4">4</a> by the polar description. This identifies all possible sign changes.</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.Wedge</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Real Set</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- Coordinates for the same upper arm in the chord and root frames. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> structure ArmCoordinates (h r a b d θ γ : ℝ) : Prop where</span>
+<span id="L13" class="line"><a href="#L13">13</a>   radius_pos : 0 &lt; d</span>
+<span id="L14" class="line"><a href="#L14">14</a>   angle_pos : 0 &lt; θ</span>
+<span id="L15" class="line"><a href="#L15">15</a>   angle_lt_pi : θ &lt; π</span>
+<span id="L16" class="line"><a href="#L16">16</a>   lower : π / 2 ≤ γ</span>
+<span id="L17" class="line"><a href="#L17">17</a>   upper : γ ≤ 3 * π / 2</span>
+<span id="L18" class="line"><a href="#L18">18</a>   source_x : -r = d * cos θ</span>
+<span id="L19" class="line"><a href="#L19">19</a>   source_y : h = d * sin θ</span>
+<span id="L20" class="line"><a href="#L20">20</a>   ray_x : a = d * cos (θ + (π - γ))</span>
+<span id="L21" class="line"><a href="#L21">21</a>   ray_y : b = d * sin (θ + (π - γ))</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> namespace ArmCoordinates</span>
+<span id="L24" class="line"><a href="#L24">24</a> </span>
+<span id="L25" class="line"><a href="#L25">25</a> variable {h r a b d θ γ : ℝ} (C : ArmCoordinates h r a b d θ γ)</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> include C</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> theorem height_pos : 0 &lt; h := by</span>
+<span id="L30" class="line"><a href="#L30">30</a>   rw [C.source_y]</span>
+<span id="L31" class="line"><a href="#L31">31</a>   exact mul_pos C.radius_pos (sin_pos_of_pos_of_lt_pi C.angle_pos C.angle_lt_pi)</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> theorem source_square : r ^ 2 + h ^ 2 = d ^ 2 := by</span>
+<span id="L34" class="line"><a href="#L34">34</a>   have scaled := congrArg (fun x : ℝ =&gt; d ^ 2 * x) (cos_sq_add_sin_sq θ)</span>
+<span id="L35" class="line"><a href="#L35">35</a>   nlinarith [congrArg (fun x : ℝ =&gt; x ^ 2) C.source_x,</span>
+<span id="L36" class="line"><a href="#L36">36</a>     congrArg (fun x : ℝ =&gt; x ^ 2) C.source_y]</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> theorem ray_square : a ^ 2 + b ^ 2 = d ^ 2 := by</span>
+<span id="L39" class="line"><a href="#L39">39</a>   have scaled := congrArg (fun x : ℝ =&gt; d ^ 2 * x) (cos_sq_add_sin_sq (θ + (π - γ)))</span>
+<span id="L40" class="line"><a href="#L40">40</a>   nlinarith [congrArg (fun x : ℝ =&gt; x ^ 2) C.ray_x,</span>
+<span id="L41" class="line"><a href="#L41">41</a>     congrArg (fun x : ℝ =&gt; x ^ 2) C.ray_y]</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> theorem outward_eq : h * b - r * a = d ^ 2 * cos (π - γ) := by</span>
+<span id="L44" class="line"><a href="#L44">44</a>   have cosine := congrArg (fun x : ℝ =&gt; d ^ 2 * x) (cos_sub (θ + (π - γ)) θ)</span>
+<span id="L45" class="line"><a href="#L45">45</a>   rw [add_sub_cancel_left] at cosine</span>
+<span id="L46" class="line"><a href="#L46">46</a>   rw [C.source_y, show r = -(d * cos θ) by linarith [C.source_x], C.ray_x, C.ray_y]</span>
+<span id="L47" class="line"><a href="#L47">47</a>   nlinarith</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> theorem outward : 0 ≤ h * b - r * a := by</span>
+<span id="L50" class="line"><a href="#L50">50</a>   rw [C.outward_eq]</span>
+<span id="L51" class="line"><a href="#L51">51</a>   exact mul_nonneg (sq_nonneg d) (cos_nonneg_of_mem_Icc ⟨by linarith [C.lower, C.upper], by linarith [C.lower, C.upper]⟩)</span>
+<span id="L52" class="line"><a href="#L52">52</a> </span>
+<span id="L53" class="line"><a href="#L53">53</a> theorem ray_nonzero : a ≠ 0 ∨ b ≠ 0 := by</span>
+<span id="L54" class="line"><a href="#L54">54</a>   by_contra missing</span>
+<span id="L55" class="line"><a href="#L55">55</a>   push Not at missing</span>
+<span id="L56" class="line"><a href="#L56">56</a>   have square := C.ray_square</span>
+<span id="L57" class="line"><a href="#L57">57</a>   rw [missing.1, missing.2] at square</span>
+<span id="L58" class="line"><a href="#L58">58</a>   nlinarith [C.radius_pos]</span>
+<span id="L59" class="line"><a href="#L59">59</a> </span>
+<span id="L60" class="line"><a href="#L60">60</a> omit C in</span>
+<span id="L61" class="line"><a href="#L61">61</a> theorem circle_square (ρ φ : ℝ) :</span>
+<span id="L62" class="line"><a href="#L62">62</a>     (r + ρ * cos φ - r) ^ 2 + (ρ * sin φ) ^ 2 = ρ ^ 2 := by</span>
+<span id="L63" class="line"><a href="#L63">63</a>   have scaled := congrArg (fun x : ℝ =&gt; ρ ^ 2 * x) (cos_sq_add_sin_sq φ)</span>
+<span id="L64" class="line"><a href="#L64">64</a>   nlinarith</span>
+<span id="L65" class="line"><a href="#L65">65</a> </span>
+<span id="L66" class="line"><a href="#L66">66</a> /-- The whole possible angular displacement is less than a quarter turn. -/</span>
+<span id="L67" class="line"><a href="#L67">67</a> theorem boundary_angle_bounds (ρ : ℝ) :</span>
+<span id="L68" class="line"><a href="#L68">68</a>     -π / 2 &lt; θ + offset d γ ρ ∧ θ + offset d γ ρ &lt; 3 * π / 2 := by</span>
+<span id="L69" class="line"><a href="#L69">69</a>   unfold offset</span>
+<span id="L70" class="line"><a href="#L70">70</a>   split_ifs</span>
+<span id="L71" class="line"><a href="#L71">71</a>   · constructor &lt;;&gt; linarith [C.angle_pos, C.angle_lt_pi, pi_pos]</span>
+<span id="L72" class="line"><a href="#L72">72</a>   · have low := neg_pi_div_two_le_arcsin</span>
+<span id="L73" class="line"><a href="#L73">73</a>       (travel d (cos (π - γ)) (sin (π - γ)) ρ * sin (π - γ) / ρ)</span>
+<span id="L74" class="line"><a href="#L74">74</a>     have high := arcsin_le_pi_div_two</span>
+<span id="L75" class="line"><a href="#L75">75</a>       (travel d (cos (π - γ)) (sin (π - γ)) ρ * sin (π - γ) / ρ)</span>
+<span id="L76" class="line"><a href="#L76">76</a>     constructor &lt;;&gt; linarith [C.angle_pos, C.angle_lt_pi]</span>
+<span id="L77" class="line"><a href="#L77">77</a> </span>
+<span id="L78" class="line"><a href="#L78">78</a> private theorem boundary_angle_in_half {ρ : ℝ}</span>
+<span id="L79" class="line"><a href="#L79">79</a>     (positive_sine : 0 ≤ sin (θ + offset d γ ρ)) : θ + offset d γ ρ ∈ Icc 0 π := by</span>
+<span id="L80" class="line"><a href="#L80">80</a>   have bounds := C.boundary_angle_bounds ρ</span>
+<span id="L81" class="line"><a href="#L81">81</a>   constructor</span>
+<span id="L82" class="line"><a href="#L82">82</a>   · by_contra negative</span>
+<span id="L83" class="line"><a href="#L83">83</a>     have bad := sin_neg_of_neg_of_neg_pi_lt (lt_of_not_ge negative) (by linarith [pi_pos])</span>
+<span id="L84" class="line"><a href="#L84">84</a>     linarith</span>
+<span id="L85" class="line"><a href="#L85">85</a>   · by_contra after</span>
+<span id="L86" class="line"><a href="#L86">86</a>     have bad := sin_neg_of_neg_of_neg_pi_lt</span>
+<span id="L87" class="line"><a href="#L87">87</a>       (show θ + offset d γ ρ - 2 * π &lt; 0 by linarith [pi_pos])</span>
+<span id="L88" class="line"><a href="#L88">88</a>       (show -π &lt; θ + offset d γ ρ - 2 * π by linarith)</span>
+<span id="L89" class="line"><a href="#L89">89</a>     rw [sin_sub_two_pi] at bad</span>
+<span id="L90" class="line"><a href="#L90">90</a>     linarith</span>
+<span id="L91" class="line"><a href="#L91">91</a> </span>
+<span id="L92" class="line"><a href="#L92">92</a> /-- A zero on an inner leg has the original source direction. -/</span>
+<span id="L93" class="line"><a href="#L93">93</a> private theorem inner_zero_angle {ρ φ : ℝ} (rp : 0 &lt; ρ) (ph : φ ∈ Icc 0 π)</span>
+<span id="L94" class="line"><a href="#L94">94</a>     (inner : h * (r + ρ * cos φ) = r * (h - ρ * sin φ)) : φ = θ := by</span>
+<span id="L95" class="line"><a href="#L95">95</a>   have sine : sin (θ - φ) = 0 := by</span>
+<span id="L96" class="line"><a href="#L96">96</a>     rw [sin_sub]</span>
+<span id="L97" class="line"><a href="#L97">97</a>     have product : d * ρ * (sin θ * cos φ - cos θ * sin φ) = 0 := by</span>
+<span id="L98" class="line"><a href="#L98">98</a>       rw [C.source_y, show r = -(d * cos θ) by linarith [C.source_x]] at inner</span>
+<span id="L99" class="line"><a href="#L99">99</a>       nlinarith</span>
+<span id="L100" class="line"><a href="#L100">100</a>     exact (mul_eq_zero.mp product).resolve_left (ne_of_gt (mul_pos C.radius_pos rp))</span>
+<span id="L101" class="line"><a href="#L101">101</a>   have equal := (sin_eq_zero_iff_of_lt_of_lt</span>
+<span id="L102" class="line"><a href="#L102">102</a>     (by linarith [C.angle_pos, ph.2]) (by linarith [C.angle_lt_pi, ph.1])).mp sine</span>
+<span id="L103" class="line"><a href="#L103">103</a>   linarith</span>
+<span id="L104" class="line"><a href="#L104">104</a> </span>
+<span id="L105" class="line"><a href="#L105">105</a> /-- Recover the unique distance along the outer ray from any point on its circle. -/</span>
+<span id="L106" class="line"><a href="#L106">106</a> private theorem outer_parameter {ρ t : ℝ} (rp : 0 &lt; ρ) (tp : 0 ≤ t)</span>
+<span id="L107" class="line"><a href="#L107">107</a>     (circle : (t * a - r) ^ 2 + (h + t * b) ^ 2 = ρ ^ 2) :</span>
+<span id="L108" class="line"><a href="#L108">108</a>     d ≤ ρ ∧ t * d = travel d (cos (π - γ)) (sin (π - γ)) ρ := by</span>
+<span id="L109" class="line"><a href="#L109">109</a>   have source := C.source_square</span>
+<span id="L110" class="line"><a href="#L110">110</a>   have ray := C.ray_square</span>
+<span id="L111" class="line"><a href="#L111">111</a>   have dot := C.outward_eq</span>
+<span id="L112" class="line"><a href="#L112">112</a>   have w := C.outward</span>
+<span id="L113" class="line"><a href="#L113">113</a>   have expanded : d ^ 2 + t ^ 2 * d ^ 2 + 2 * t * (h * b - r * a) = ρ ^ 2 := by</span>
+<span id="L114" class="line"><a href="#L114">114</a>     nlinarith [congrArg (fun x : ℝ =&gt; t ^ 2 * x) ray]</span>
+<span id="L115" class="line"><a href="#L115">115</a>   have outside : d ≤ ρ := by</span>
+<span id="L116" class="line"><a href="#L116">116</a>     nlinarith [mul_nonneg tp w, mul_nonneg (sq_nonneg t) (sq_nonneg d), C.radius_pos]</span>
+<span id="L117" class="line"><a href="#L117">117</a>   refine ⟨outside, ?_⟩</span>
+<span id="L118" class="line"><a href="#L118">118</a>   apply ray_circle_unique C.radius_pos</span>
+<span id="L119" class="line"><a href="#L119">119</a>     (cos_nonneg_of_mem_Icc ⟨by linarith [C.lower, C.upper], by linarith [C.lower, C.upper]⟩)</span>
+<span id="L120" class="line"><a href="#L120">120</a>     (cos_sq_add_sin_sq (π - γ)) outside (mul_nonneg tp C.radius_pos.le)</span>
+<span id="L121" class="line"><a href="#L121">121</a>   have unit := congrArg (fun x : ℝ =&gt; (t * d) ^ 2 * x) (cos_sq_add_sin_sq (π - γ))</span>
+<span id="L122" class="line"><a href="#L122">122</a>   nlinarith [congrArg (fun x : ℝ =&gt; 2 * t * x) dot]</span>
+<span id="L123" class="line"><a href="#L123">123</a> </span>
+<span id="L124" class="line"><a href="#L124">124</a> /-- The predicted outer boundary point is on the physical ray in the chord frame. -/</span>
+<span id="L125" class="line"><a href="#L125">125</a> theorem boundary_ray_point {ρ : ℝ} (outside : d ≤ ρ) :</span>
+<span id="L126" class="line"><a href="#L126">126</a>     ∃ t : ℝ, 0 ≤ t ∧ r + ρ * cos (θ + offset d γ ρ) = t * a ∧</span>
+<span id="L127" class="line"><a href="#L127">127</a>       ρ * sin (θ + offset d γ ρ) = h + t * b := by</span>
+<span id="L128" class="line"><a href="#L128">128</a>   let t := travel d (cos (π - γ)) (sin (π - γ)) ρ / d</span>
+<span id="L129" class="line"><a href="#L129">129</a>   have tp : 0 ≤ t := div_nonneg</span>
+<span id="L130" class="line"><a href="#L130">130</a>     (travel_spec C.radius_pos (cos_nonneg_of_mem_Icc</span>
+<span id="L131" class="line"><a href="#L131">131</a>       ⟨by linarith [C.lower, C.upper], by linarith [C.lower, C.upper]⟩)</span>
+<span id="L132" class="line"><a href="#L132">132</a>       (cos_sq_add_sin_sq (π - γ)) outside).1 C.radius_pos.le</span>
+<span id="L133" class="line"><a href="#L133">133</a>   have td : t * d = travel d (cos (π - γ)) (sin (π - γ)) ρ := by</span>
+<span id="L134" class="line"><a href="#L134">134</a>     dsimp [t]; field_simp [ne_of_gt C.radius_pos]</span>
+<span id="L135" class="line"><a href="#L135">135</a>   have position := outer_arm C.radius_pos C.lower C.upper outside θ</span>
+<span id="L136" class="line"><a href="#L136">136</a>   have posx := congrArg (fun z : Plane =&gt; z 0) position</span>
+<span id="L137" class="line"><a href="#L137">137</a>   have posy := congrArg (fun z : Plane =&gt; z 1) position</span>
+<span id="L138" class="line"><a href="#L138">138</a>   simp only [PiLp.smul_apply, PiLp.add_apply, smul_eq_mul, direction_x, direction_y] at posx posy</span>
+<span id="L139" class="line"><a href="#L139">139</a>   rw [← td] at posx posy</span>
+<span id="L140" class="line"><a href="#L140">140</a>   refine ⟨t, tp, ?_, ?_⟩</span>
+<span id="L141" class="line"><a href="#L141">141</a>   · nlinarith [congrArg (fun x : ℝ =&gt; t * x) C.ray_x, C.source_x]</span>
+<span id="L142" class="line"><a href="#L142">142</a>   · nlinarith [congrArg (fun x : ℝ =&gt; t * x) C.ray_y, C.source_y]</span>
+<span id="L143" class="line"><a href="#L143">143</a> </span>
+<span id="L144" class="line"><a href="#L144">144</a> /-- Exactly one angular location on the upper semicircle can be a zero.</span>
+<span id="L145" class="line"><a href="#L145">145</a> If the predicted angle has passed either end of that semicircle, there is none. -/</span>
+<span id="L146" class="line"><a href="#L146">146</a> theorem zero_iff_boundary_angle {ρ φ : ℝ} (rp : 0 &lt; ρ) (ph : φ ∈ Icc 0 π) :</span>
+<span id="L147" class="line"><a href="#L147">147</a>     level h r a b (r + ρ * cos φ) (ρ * sin φ) = 0 ↔ φ = θ + offset d γ ρ := by</span>
+<span id="L148" class="line"><a href="#L148">148</a>   have vp : 0 ≤ ρ * sin φ := mul_nonneg rp.le (sin_nonneg_of_nonneg_of_le_pi ph.1 ph.2)</span>
+<span id="L149" class="line"><a href="#L149">149</a>   constructor</span>
+<span id="L150" class="line"><a href="#L150">150</a>   · intro zero</span>
+<span id="L151" class="line"><a href="#L151">151</a>     rcases level_zero_on_arm C.height_pos vp C.outward C.ray_nonzero zero with inner | outer</span>
+<span id="L152" class="line"><a href="#L152">152</a>     · have angle := C.inner_zero_angle rp ph inner.2</span>
+<span id="L153" class="line"><a href="#L153">153</a>       have outside : ρ ≤ d := by</span>
+<span id="L154" class="line"><a href="#L154">154</a>         rw [angle, C.source_y] at inner</span>
+<span id="L155" class="line"><a href="#L155">155</a>         by_contra after</span>
+<span id="L156" class="line"><a href="#L156">156</a>         have product := mul_pos (sub_pos.mpr (lt_of_not_ge after))</span>
+<span id="L157" class="line"><a href="#L157">157</a>           (sin_pos_of_pos_of_lt_pi C.angle_pos C.angle_lt_pi)</span>
+<span id="L158" class="line"><a href="#L158">158</a>         linarith [inner.1.2]</span>
+<span id="L159" class="line"><a href="#L159">159</a>       by_cases strict : ρ &lt; d</span>
+<span id="L160" class="line"><a href="#L160">160</a>       · simpa [offset, strict] using angle</span>
+<span id="L161" class="line"><a href="#L161">161</a>       · have same : ρ = d := le_antisymm outside (le_of_not_gt strict)</span>
+<span id="L162" class="line"><a href="#L162">162</a>         rw [same, offset_at_elbow C.radius_pos C.lower C.upper, add_zero]</span>
+<span id="L163" class="line"><a href="#L163">163</a>         exact angle</span>
+<span id="L164" class="line"><a href="#L164">164</a>     · obtain ⟨t, tp, px, py⟩ := outer</span>
+<span id="L165" class="line"><a href="#L165">165</a>       have circle := circle_square (r := r) ρ φ</span>
+<span id="L166" class="line"><a href="#L166">166</a>       rw [px, py] at circle</span>
+<span id="L167" class="line"><a href="#L167">167</a>       obtain ⟨outside, travel_eq⟩ := C.outer_parameter rp tp circle</span>
+<span id="L168" class="line"><a href="#L168">168</a>       have position := outer_arm C.radius_pos C.lower C.upper outside θ</span>
+<span id="L169" class="line"><a href="#L169">169</a>       have posx := congrArg (fun z : Plane =&gt; z 0) position</span>
+<span id="L170" class="line"><a href="#L170">170</a>       have posy := congrArg (fun z : Plane =&gt; z 1) position</span>
+<span id="L171" class="line"><a href="#L171">171</a>       simp only [PiLp.smul_apply, PiLp.add_apply, smul_eq_mul, direction_x, direction_y] at posx posy</span>
+<span id="L172" class="line"><a href="#L172">172</a>       rw [← travel_eq] at posx posy</span>
+<span id="L173" class="line"><a href="#L173">173</a>       have cosine : cos φ = cos (θ + offset d γ ρ) := by</span>
+<span id="L174" class="line"><a href="#L174">174</a>         nlinarith [congrArg (fun x : ℝ =&gt; t * x) C.ray_x, C.source_x]</span>
+<span id="L175" class="line"><a href="#L175">175</a>       have sine : sin φ = sin (θ + offset d γ ρ) := by</span>
+<span id="L176" class="line"><a href="#L176">176</a>         nlinarith [congrArg (fun x : ℝ =&gt; t * x) C.ray_y, C.source_y]</span>
+<span id="L177" class="line"><a href="#L177">177</a>       have beta := C.boundary_angle_in_half (by rw [← sine]; exact sin_nonneg_of_nonneg_of_le_pi ph.1 ph.2)</span>
+<span id="L178" class="line"><a href="#L178">178</a>       exact strictAntiOn_cos.injOn ph beta cosine</span>
+<span id="L179" class="line"><a href="#L179">179</a>   · intro angle</span>
+<span id="L180" class="line"><a href="#L180">180</a>     by_cases inside : ρ &lt; d</span>
+<span id="L181" class="line"><a href="#L181">181</a>     · have same : φ = θ := by simpa [offset, inside] using angle</span>
+<span id="L182" class="line"><a href="#L182">182</a>       apply level_zero_of_inner C.height_pos C.outward</span>
+<span id="L183" class="line"><a href="#L183">183</a>       · rw [same, C.source_y]</span>
+<span id="L184" class="line"><a href="#L184">184</a>         exact mul_le_mul_of_nonneg_right inside.le (sin_nonneg_of_nonneg_of_le_pi C.angle_pos.le C.angle_lt_pi.le)</span>
+<span id="L185" class="line"><a href="#L185">185</a>       · rw [same, C.source_y, show r = -(d * cos θ) by linarith [C.source_x]]</span>
+<span id="L186" class="line"><a href="#L186">186</a>         ring</span>
+<span id="L187" class="line"><a href="#L187">187</a>     · have outside : d ≤ ρ := le_of_not_gt inside</span>
+<span id="L188" class="line"><a href="#L188">188</a>       obtain ⟨t, tp, px, py⟩ := C.boundary_ray_point outside</span>
+<span id="L189" class="line"><a href="#L189">189</a>       rw [angle, px, py]</span>
+<span id="L190" class="line"><a href="#L190">190</a>       exact level_zero_of_outer C.height_pos C.outward tp</span>
+<span id="L191" class="line"><a href="#L191">191</a> </span>
+<span id="L192" class="line"><a href="#L192">192</a> end ArmCoordinates</span>
+<span id="L193" class="line"><a href="#L193">193</a> end SixVertexUnfolding.Wedge</span></pre></html>

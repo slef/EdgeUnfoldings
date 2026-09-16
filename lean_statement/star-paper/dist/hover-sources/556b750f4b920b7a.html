@@ -1,0 +1,606 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Topology/Connected/PathConnected.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Topology/Connected/PathConnected.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2020 Patrick Massot. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Patrick Massot</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Topology.Path</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> /-!</span>
+<span id="L11" class="line"><a href="#L11">11</a> # Path connectedness</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> Continuing from `Mathlib/Topology/Path.lean`, this file defines path components and path-connected</span>
+<span id="L14" class="line"><a href="#L14">14</a> spaces.</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> ## Main definitions</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> In the file the unit interval `[0, 1]` in `ℝ` is denoted by `I`, and `X` is a topological space.</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> * `Joined (x y : X)` means there is a path between `x` and `y`.</span>
+<span id="L21" class="line"><a href="#L21">21</a> * `Joined.somePath (h : Joined x y)` selects some path between two points `x` and `y`.</span>
+<span id="L22" class="line"><a href="#L22">22</a> * `pathComponent (x : X)` is the set of points joined to `x`.</span>
+<span id="L23" class="line"><a href="#L23">23</a> * `PathConnectedSpace X` is a predicate class asserting that `X` is non-empty and every two</span>
+<span id="L24" class="line"><a href="#L24">24</a>   points of `X` are joined.</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> Then there are corresponding relative notions for `F : Set X`.</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> * `JoinedIn F (x y : X)` means there is a path `γ` joining `x` to `y` with values in `F`.</span>
+<span id="L29" class="line"><a href="#L29">29</a> * `JoinedIn.somePath (h : JoinedIn F x y)` selects a path from `x` to `y` inside `F`.</span>
+<span id="L30" class="line"><a href="#L30">30</a> * `pathComponentIn F (x : X)` is the set of points joined to `x` in `F`.</span>
+<span id="L31" class="line"><a href="#L31">31</a> * `IsPathConnected F` asserts that `F` is non-empty and every two</span>
+<span id="L32" class="line"><a href="#L32">32</a>   points of `F` are joined in `F`.</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> ## Main theorems</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> * `Joined` is an equivalence relation, while `JoinedIn F` is at least symmetric and transitive.</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> One can link the absolute and relative version in two directions, using `(univ : Set X)` or the</span>
+<span id="L39" class="line"><a href="#L39">39</a> subtype `↥F`.</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> * `pathConnectedSpace_iff_univ : PathConnectedSpace X ↔ IsPathConnected (univ : Set X)`</span>
+<span id="L42" class="line"><a href="#L42">42</a> * `isPathConnected_iff_pathConnectedSpace : IsPathConnected F ↔ PathConnectedSpace ↥F`</span>
+<span id="L43" class="line"><a href="#L43">43</a> </span>
+<span id="L44" class="line"><a href="#L44">44</a> Furthermore, it is shown that continuous images and quotients of path-connected sets/spaces are</span>
+<span id="L45" class="line"><a href="#L45">45</a> path-connected, and that every path-connected set/space is also connected. (See</span>
+<span id="L46" class="line"><a href="#L46">46</a> `Counterexamples.TopologistsSineCurve` for an example of a set in `ℝ × ℝ` that is connected but not</span>
+<span id="L47" class="line"><a href="#L47">47</a> path-connected.)</span>
+<span id="L48" class="line"><a href="#L48">48</a> -/</span>
+<span id="L49" class="line"><a href="#L49">49</a> </span>
+<span id="L50" class="line"><a href="#L50">50</a> @[expose] public section</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> noncomputable section</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> open Topology Filter unitInterval Set Function Pointwise Fin</span>
+<span id="L55" class="line"><a href="#L55">55</a> </span>
+<span id="L56" class="line"><a href="#L56">56</a> variable {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {x y z : X} {ι : Type*}</span>
+<span id="L57" class="line"><a href="#L57">57</a> </span>
+<span id="L58" class="line"><a href="#L58">58</a> /-! ### Being joined by a path -/</span>
+<span id="L59" class="line"><a href="#L59">59</a> </span>
+<span id="L60" class="line"><a href="#L60">60</a> </span>
+<span id="L61" class="line"><a href="#L61">61</a> /-- The relation &quot;being joined by a path&quot;. This is an equivalence relation. -/</span>
+<span id="L62" class="line"><a href="#L62">62</a> def Joined (x y : X) : Prop :=</span>
+<span id="L63" class="line"><a href="#L63">63</a>   Nonempty (Path x y)</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> @[refl]</span>
+<span id="L66" class="line"><a href="#L66">66</a> theorem Joined.refl (x : X) : Joined x x :=</span>
+<span id="L67" class="line"><a href="#L67">67</a>   ⟨Path.refl x⟩</span>
+<span id="L68" class="line"><a href="#L68">68</a> </span>
+<span id="L69" class="line"><a href="#L69">69</a> /-- When two points are joined, choose some path from `x` to `y`. -/</span>
+<span id="L70" class="line"><a href="#L70">70</a> def Joined.somePath (h : Joined x y) : Path x y :=</span>
+<span id="L71" class="line"><a href="#L71">71</a>   Nonempty.some h</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> @[symm]</span>
+<span id="L74" class="line"><a href="#L74">74</a> theorem Joined.symm {x y : X} (h : Joined x y) : Joined y x :=</span>
+<span id="L75" class="line"><a href="#L75">75</a>   ⟨h.somePath.symm⟩</span>
+<span id="L76" class="line"><a href="#L76">76</a> </span>
+<span id="L77" class="line"><a href="#L77">77</a> @[trans]</span>
+<span id="L78" class="line"><a href="#L78">78</a> theorem Joined.trans {x y z : X} (hxy : Joined x y) (hyz : Joined y z) : Joined x z :=</span>
+<span id="L79" class="line"><a href="#L79">79</a>   ⟨hxy.somePath.trans hyz.somePath⟩</span>
+<span id="L80" class="line"><a href="#L80">80</a> </span>
+<span id="L81" class="line"><a href="#L81">81</a> @[to_additive]</span>
+<span id="L82" class="line"><a href="#L82">82</a> theorem Joined.mul {M : Type*} [Mul M] [TopologicalSpace M] [ContinuousMul M]</span>
+<span id="L83" class="line"><a href="#L83">83</a>     {a b c d : M} (hs : Joined a b) (ht : Joined c d) : Joined (a * c) (b * d) :=</span>
+<span id="L84" class="line"><a href="#L84">84</a>   ⟨hs.somePath.mul ht.somePath⟩</span>
+<span id="L85" class="line"><a href="#L85">85</a> </span>
+<span id="L86" class="line"><a href="#L86">86</a> @[to_additive]</span>
+<span id="L87" class="line"><a href="#L87">87</a> theorem Joined.listProd {M : Type*} [MulOneClass M] [TopologicalSpace M] [ContinuousMul M]</span>
+<span id="L88" class="line"><a href="#L88">88</a>     {l l&#x27; : List M} (h : List.Forall₂ Joined l l&#x27;) :</span>
+<span id="L89" class="line"><a href="#L89">89</a>     Joined l.prod l&#x27;.prod := by</span>
+<span id="L90" class="line"><a href="#L90">90</a>   induction h with</span>
+<span id="L91" class="line"><a href="#L91">91</a>   | nil =&gt; rfl</span>
+<span id="L92" class="line"><a href="#L92">92</a>   | cons h₁ _ h₂ =&gt; exact h₁.mul h₂</span>
+<span id="L93" class="line"><a href="#L93">93</a> </span>
+<span id="L94" class="line"><a href="#L94">94</a> @[to_additive]</span>
+<span id="L95" class="line"><a href="#L95">95</a> theorem Joined.inv {G : Type*} [Inv G] [TopologicalSpace G] [ContinuousInv G]</span>
+<span id="L96" class="line"><a href="#L96">96</a>     {x y : G} (h : Joined x y) : Joined x⁻¹ y⁻¹ :=</span>
+<span id="L97" class="line"><a href="#L97">97</a>   ⟨h.somePath.inv⟩</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> variable (X)</span>
+<span id="L100" class="line"><a href="#L100">100</a> </span>
+<span id="L101" class="line"><a href="#L101">101</a> /-- The setoid corresponding the equivalence relation of being joined by a continuous path. -/</span>
+<span id="L102" class="line"><a href="#L102">102</a> @[implicit_reducible]</span>
+<span id="L103" class="line"><a href="#L103">103</a> def pathSetoid : Setoid X where</span>
+<span id="L104" class="line"><a href="#L104">104</a>   r := Joined</span>
+<span id="L105" class="line"><a href="#L105">105</a>   iseqv := Equivalence.mk Joined.refl Joined.symm Joined.trans</span>
+<span id="L106" class="line"><a href="#L106">106</a> </span>
+<span id="L107" class="line"><a href="#L107">107</a> /-- The quotient type of points of a topological space modulo being joined by a continuous path. -/</span>
+<span id="L108" class="line"><a href="#L108">108</a> def ZerothHomotopy :=</span>
+<span id="L109" class="line"><a href="#L109">109</a>   Quotient (pathSetoid X)</span>
+<span id="L110" class="line"><a href="#L110">110</a> </span>
+<span id="L111" class="line"><a href="#L111">111</a> /-- The quotient topology on path components. -/</span>
+<span id="L112" class="line"><a href="#L112">112</a> instance : TopologicalSpace &lt;| ZerothHomotopy X :=</span>
+<span id="L113" class="line"><a href="#L113">113</a>   inferInstanceAs &lt;| TopologicalSpace &lt;| Quotient _</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> instance ZerothHomotopy.inhabited : Inhabited (ZerothHomotopy ℝ) :=</span>
+<span id="L116" class="line"><a href="#L116">116</a>   ⟨@Quotient.mk&#x27; ℝ (pathSetoid ℝ) 0⟩</span>
+<span id="L117" class="line"><a href="#L117">117</a> </span>
+<span id="L118" class="line"><a href="#L118">118</a> variable {X}</span>
+<span id="L119" class="line"><a href="#L119">119</a> </span>
+<span id="L120" class="line"><a href="#L120">120</a> /-! ### Being joined by a path inside a set -/</span>
+<span id="L121" class="line"><a href="#L121">121</a> </span>
+<span id="L122" class="line"><a href="#L122">122</a> </span>
+<span id="L123" class="line"><a href="#L123">123</a> /-- The relation &quot;being joined by a path in `F`&quot;. Not quite an equivalence relation since it&#x27;s not</span>
+<span id="L124" class="line"><a href="#L124">124</a> reflexive for points that do not belong to `F`. -/</span>
+<span id="L125" class="line"><a href="#L125">125</a> def JoinedIn (F : Set X) (x y : X) : Prop :=</span>
+<span id="L126" class="line"><a href="#L126">126</a>   ∃ γ : Path x y, ∀ t, γ t ∈ F</span>
+<span id="L127" class="line"><a href="#L127">127</a> </span>
+<span id="L128" class="line"><a href="#L128">128</a> variable {F : Set X}</span>
+<span id="L129" class="line"><a href="#L129">129</a> </span>
+<span id="L130" class="line"><a href="#L130">130</a> theorem JoinedIn.mem (h : JoinedIn F x y) : x ∈ F ∧ y ∈ F := by</span>
+<span id="L131" class="line"><a href="#L131">131</a>   rcases h with ⟨γ, γ_in⟩</span>
+<span id="L132" class="line"><a href="#L132">132</a>   have : γ 0 ∈ F ∧ γ 1 ∈ F := by constructor &lt;;&gt; apply γ_in</span>
+<span id="L133" class="line"><a href="#L133">133</a>   simpa using this</span>
+<span id="L134" class="line"><a href="#L134">134</a> </span>
+<span id="L135" class="line"><a href="#L135">135</a> theorem JoinedIn.source_mem (h : JoinedIn F x y) : x ∈ F :=</span>
+<span id="L136" class="line"><a href="#L136">136</a>   h.mem.1</span>
+<span id="L137" class="line"><a href="#L137">137</a> </span>
+<span id="L138" class="line"><a href="#L138">138</a> theorem JoinedIn.target_mem (h : JoinedIn F x y) : y ∈ F :=</span>
+<span id="L139" class="line"><a href="#L139">139</a>   h.mem.2</span>
+<span id="L140" class="line"><a href="#L140">140</a> </span>
+<span id="L141" class="line"><a href="#L141">141</a> /-- When `x` and `y` are joined in `F`, choose a path from `x` to `y` inside `F` -/</span>
+<span id="L142" class="line"><a href="#L142">142</a> def JoinedIn.somePath (h : JoinedIn F x y) : Path x y :=</span>
+<span id="L143" class="line"><a href="#L143">143</a>   Classical.choose h</span>
+<span id="L144" class="line"><a href="#L144">144</a> </span>
+<span id="L145" class="line"><a href="#L145">145</a> theorem JoinedIn.somePath_mem (h : JoinedIn F x y) (t : I) : h.somePath t ∈ F :=</span>
+<span id="L146" class="line"><a href="#L146">146</a>   Classical.choose_spec h t</span>
+<span id="L147" class="line"><a href="#L147">147</a> </span>
+<span id="L148" class="line"><a href="#L148">148</a> /-- If `x` and `y` are joined in the set `F`, then they are joined in the subtype `F`. -/</span>
+<span id="L149" class="line"><a href="#L149">149</a> theorem JoinedIn.joined_subtype (h : JoinedIn F x y) :</span>
+<span id="L150" class="line"><a href="#L150">150</a>     Joined (⟨x, h.source_mem⟩ : F) (⟨y, h.target_mem⟩ : F) :=</span>
+<span id="L151" class="line"><a href="#L151">151</a>   ⟨{  toFun := fun t =&gt; ⟨h.somePath t, h.somePath_mem t⟩</span>
+<span id="L152" class="line"><a href="#L152">152</a>       continuous_toFun := by fun_prop</span>
+<span id="L153" class="line"><a href="#L153">153</a>       source&#x27; := by simp</span>
+<span id="L154" class="line"><a href="#L154">154</a>       target&#x27; := by simp }⟩</span>
+<span id="L155" class="line"><a href="#L155">155</a> </span>
+<span id="L156" class="line"><a href="#L156">156</a> theorem JoinedIn.ofLine {f : ℝ → X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y)</span>
+<span id="L157" class="line"><a href="#L157">157</a>     (hF : f &#x27;&#x27; I ⊆ F) : JoinedIn F x y :=</span>
+<span id="L158" class="line"><a href="#L158">158</a>   ⟨Path.ofLine hf h₀ h₁, fun t =&gt; hF &lt;| Path.ofLine_mem hf h₀ h₁ t⟩</span>
+<span id="L159" class="line"><a href="#L159">159</a> </span>
+<span id="L160" class="line"><a href="#L160">160</a> theorem JoinedIn.joined (h : JoinedIn F x y) : Joined x y :=</span>
+<span id="L161" class="line"><a href="#L161">161</a>   ⟨h.somePath⟩</span>
+<span id="L162" class="line"><a href="#L162">162</a> </span>
+<span id="L163" class="line"><a href="#L163">163</a> theorem joinedIn_iff_joined (x_in : x ∈ F) (y_in : y ∈ F) :</span>
+<span id="L164" class="line"><a href="#L164">164</a>     JoinedIn F x y ↔ Joined (⟨x, x_in⟩ : F) (⟨y, y_in⟩ : F) :=</span>
+<span id="L165" class="line"><a href="#L165">165</a>   ⟨fun h =&gt; h.joined_subtype, fun h =&gt; ⟨h.somePath.map continuous_subtype_val, by simp⟩⟩</span>
+<span id="L166" class="line"><a href="#L166">166</a> </span>
+<span id="L167" class="line"><a href="#L167">167</a> @[simp]</span>
+<span id="L168" class="line"><a href="#L168">168</a> theorem joinedIn_univ : JoinedIn univ x y ↔ Joined x y := by</span>
+<span id="L169" class="line"><a href="#L169">169</a>   simp [JoinedIn, Joined, exists_true_iff_nonempty]</span>
+<span id="L170" class="line"><a href="#L170">170</a> </span>
+<span id="L171" class="line"><a href="#L171">171</a> theorem JoinedIn.mono {U V : Set X} (h : JoinedIn U x y) (hUV : U ⊆ V) : JoinedIn V x y :=</span>
+<span id="L172" class="line"><a href="#L172">172</a>   ⟨h.somePath, fun t =&gt; hUV (h.somePath_mem t)⟩</span>
+<span id="L173" class="line"><a href="#L173">173</a> </span>
+<span id="L174" class="line"><a href="#L174">174</a> theorem JoinedIn.refl (h : x ∈ F) : JoinedIn F x x :=</span>
+<span id="L175" class="line"><a href="#L175">175</a>   ⟨Path.refl x, fun _t =&gt; h⟩</span>
+<span id="L176" class="line"><a href="#L176">176</a> </span>
+<span id="L177" class="line"><a href="#L177">177</a> @[symm]</span>
+<span id="L178" class="line"><a href="#L178">178</a> theorem JoinedIn.symm (h : JoinedIn F x y) : JoinedIn F y x := by</span>
+<span id="L179" class="line"><a href="#L179">179</a>   obtain ⟨hx, hy⟩ := h.mem</span>
+<span id="L180" class="line"><a href="#L180">180</a>   simp_all only [joinedIn_iff_joined]</span>
+<span id="L181" class="line"><a href="#L181">181</a>   exact h.symm</span>
+<span id="L182" class="line"><a href="#L182">182</a> </span>
+<span id="L183" class="line"><a href="#L183">183</a> theorem JoinedIn.trans (hxy : JoinedIn F x y) (hyz : JoinedIn F y z) : JoinedIn F x z := by</span>
+<span id="L184" class="line"><a href="#L184">184</a>   obtain ⟨hx, hy⟩ := hxy.mem</span>
+<span id="L185" class="line"><a href="#L185">185</a>   obtain ⟨hx, hy⟩ := hyz.mem</span>
+<span id="L186" class="line"><a href="#L186">186</a>   simp_all only [joinedIn_iff_joined]</span>
+<span id="L187" class="line"><a href="#L187">187</a>   exact hxy.trans hyz</span>
+<span id="L188" class="line"><a href="#L188">188</a> </span>
+<span id="L189" class="line"><a href="#L189">189</a> theorem Specializes.joinedIn (h : x ⤳ y) (hx : x ∈ F) (hy : y ∈ F) : JoinedIn F x y := by</span>
+<span id="L190" class="line"><a href="#L190">190</a>   refine ⟨⟨⟨Set.piecewise {1} (const I y) (const I x), ?_⟩, by simp, by simp⟩, fun t ↦ ?_⟩</span>
+<span id="L191" class="line"><a href="#L191">191</a>   · exact isClosed_singleton.continuous_piecewise_of_specializes continuous_const continuous_const</span>
+<span id="L192" class="line"><a href="#L192">192</a>       fun _ ↦ h</span>
+<span id="L193" class="line"><a href="#L193">193</a>   · simp only [Path.coe_mk_mk, piecewise]</span>
+<span id="L194" class="line"><a href="#L194">194</a>     split_ifs &lt;;&gt; assumption</span>
+<span id="L195" class="line"><a href="#L195">195</a> </span>
+<span id="L196" class="line"><a href="#L196">196</a> theorem Inseparable.joinedIn (h : Inseparable x y) (hx : x ∈ F) (hy : y ∈ F) : JoinedIn F x y :=</span>
+<span id="L197" class="line"><a href="#L197">197</a>   h.specializes.joinedIn hx hy</span>
+<span id="L198" class="line"><a href="#L198">198</a> </span>
+<span id="L199" class="line"><a href="#L199">199</a> theorem JoinedIn.map_continuousOn (h : JoinedIn F x y) {f : X → Y} (hf : ContinuousOn f F) :</span>
+<span id="L200" class="line"><a href="#L200">200</a>     JoinedIn (f &#x27;&#x27; F) (f x) (f y) :=</span>
+<span id="L201" class="line"><a href="#L201">201</a>   let ⟨γ, hγ⟩ := h</span>
+<span id="L202" class="line"><a href="#L202">202</a>   ⟨γ.map&#x27; &lt;| hf.mono (range_subset_iff.mpr hγ), fun t ↦ mem_image_of_mem _ (hγ t)⟩</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> theorem JoinedIn.map (h : JoinedIn F x y) {f : X → Y} (hf : Continuous f) :</span>
+<span id="L205" class="line"><a href="#L205">205</a>     JoinedIn (f &#x27;&#x27; F) (f x) (f y) :=</span>
+<span id="L206" class="line"><a href="#L206">206</a>   h.map_continuousOn hf.continuousOn</span>
+<span id="L207" class="line"><a href="#L207">207</a> </span>
+<span id="L208" class="line"><a href="#L208">208</a> theorem Topology.IsInducing.joinedIn_image {f : X → Y} (hf : IsInducing f) (hx : x ∈ F)</span>
+<span id="L209" class="line"><a href="#L209">209</a>     (hy : y ∈ F) : JoinedIn (f &#x27;&#x27; F) (f x) (f y) ↔ JoinedIn F x y := by</span>
+<span id="L210" class="line"><a href="#L210">210</a>   refine ⟨?_, (.map · hf.continuous)⟩</span>
+<span id="L211" class="line"><a href="#L211">211</a>   rintro ⟨γ, hγ⟩</span>
+<span id="L212" class="line"><a href="#L212">212</a>   choose γ&#x27; hγ&#x27;F hγ&#x27; using hγ</span>
+<span id="L213" class="line"><a href="#L213">213</a>   have h₀ : x ⤳ γ&#x27; 0 := by rw [← hf.specializes_iff, hγ&#x27;, γ.source]</span>
+<span id="L214" class="line"><a href="#L214">214</a>   have h₁ : γ&#x27; 1 ⤳ y := by rw [← hf.specializes_iff, hγ&#x27;, γ.target]</span>
+<span id="L215" class="line"><a href="#L215">215</a>   have h : JoinedIn F (γ&#x27; 0) (γ&#x27; 1) := by</span>
+<span id="L216" class="line"><a href="#L216">216</a>     refine ⟨⟨⟨γ&#x27;, ?_⟩, rfl, rfl⟩, hγ&#x27;F⟩</span>
+<span id="L217" class="line"><a href="#L217">217</a>     simpa only [hf.continuous_iff, comp_def, hγ&#x27;] using map_continuous γ</span>
+<span id="L218" class="line"><a href="#L218">218</a>   exact (h₀.joinedIn hx (hγ&#x27;F _)).trans &lt;| h.trans &lt;| h₁.joinedIn (hγ&#x27;F _) hy</span>
+<span id="L219" class="line"><a href="#L219">219</a> </span>
+<span id="L220" class="line"><a href="#L220">220</a> @[to_additive]</span>
+<span id="L221" class="line"><a href="#L221">221</a> theorem JoinedIn.mul {M : Type*} [Mul M] [TopologicalSpace M] [ContinuousMul M]</span>
+<span id="L222" class="line"><a href="#L222">222</a>     {s t : Set M} {a b c d : M} (hs : JoinedIn s a b) (ht : JoinedIn t c d) :</span>
+<span id="L223" class="line"><a href="#L223">223</a>     JoinedIn (s * t) (a * c) (b * d) :=</span>
+<span id="L224" class="line"><a href="#L224">224</a>   ⟨hs.somePath.mul ht.somePath, fun t ↦ Set.mul_mem_mul (hs.somePath_mem t) (ht.somePath_mem t)⟩</span>
+<span id="L225" class="line"><a href="#L225">225</a> </span>
+<span id="L226" class="line"><a href="#L226">226</a> @[to_additive]</span>
+<span id="L227" class="line"><a href="#L227">227</a> theorem JoinedIn.inv {G : Type*} [InvolutiveInv G] [TopologicalSpace G] [ContinuousInv G]</span>
+<span id="L228" class="line"><a href="#L228">228</a>     {s : Set G} {a b : G} (hs : JoinedIn s a b) :</span>
+<span id="L229" class="line"><a href="#L229">229</a>     JoinedIn s⁻¹ a⁻¹ b⁻¹ :=</span>
+<span id="L230" class="line"><a href="#L230">230</a>   ⟨hs.somePath.inv, fun t ↦ Set.inv_mem_inv.mpr (hs.somePath_mem t)⟩</span>
+<span id="L231" class="line"><a href="#L231">231</a> </span>
+<span id="L232" class="line"><a href="#L232">232</a> /-! ### Path component -/</span>
+<span id="L233" class="line"><a href="#L233">233</a> </span>
+<span id="L234" class="line"><a href="#L234">234</a> /-- The path component of `x` is the set of points that can be joined to `x`. -/</span>
+<span id="L235" class="line"><a href="#L235">235</a> def pathComponent (x : X) :=</span>
+<span id="L236" class="line"><a href="#L236">236</a>   { y | Joined x y }</span>
+<span id="L237" class="line"><a href="#L237">237</a> </span>
+<span id="L238" class="line"><a href="#L238">238</a> theorem mem_pathComponent_iff : x ∈ pathComponent y ↔ Joined y x := .rfl</span>
+<span id="L239" class="line"><a href="#L239">239</a> </span>
+<span id="L240" class="line"><a href="#L240">240</a> @[simp]</span>
+<span id="L241" class="line"><a href="#L241">241</a> theorem mem_pathComponent_self (x : X) : x ∈ pathComponent x :=</span>
+<span id="L242" class="line"><a href="#L242">242</a>   Joined.refl x</span>
+<span id="L243" class="line"><a href="#L243">243</a> </span>
+<span id="L244" class="line"><a href="#L244">244</a> @[simp]</span>
+<span id="L245" class="line"><a href="#L245">245</a> theorem pathComponent.nonempty (x : X) : (pathComponent x).Nonempty :=</span>
+<span id="L246" class="line"><a href="#L246">246</a>   ⟨x, mem_pathComponent_self x⟩</span>
+<span id="L247" class="line"><a href="#L247">247</a> </span>
+<span id="L248" class="line"><a href="#L248">248</a> theorem mem_pathComponent_of_mem (h : x ∈ pathComponent y) : y ∈ pathComponent x :=</span>
+<span id="L249" class="line"><a href="#L249">249</a>   Joined.symm h</span>
+<span id="L250" class="line"><a href="#L250">250</a> </span>
+<span id="L251" class="line"><a href="#L251">251</a> theorem pathComponent_symm : x ∈ pathComponent y ↔ y ∈ pathComponent x :=</span>
+<span id="L252" class="line"><a href="#L252">252</a>   ⟨fun h =&gt; mem_pathComponent_of_mem h, fun h =&gt; mem_pathComponent_of_mem h⟩</span>
+<span id="L253" class="line"><a href="#L253">253</a> </span>
+<span id="L254" class="line"><a href="#L254">254</a> theorem pathComponent_congr (h : x ∈ pathComponent y) : pathComponent x = pathComponent y := by</span>
+<span id="L255" class="line"><a href="#L255">255</a>   ext z</span>
+<span id="L256" class="line"><a href="#L256">256</a>   constructor</span>
+<span id="L257" class="line"><a href="#L257">257</a>   · intro h&#x27;</span>
+<span id="L258" class="line"><a href="#L258">258</a>     rw [pathComponent_symm]</span>
+<span id="L259" class="line"><a href="#L259">259</a>     exact (h.trans h&#x27;).symm</span>
+<span id="L260" class="line"><a href="#L260">260</a>   · intro h&#x27;</span>
+<span id="L261" class="line"><a href="#L261">261</a>     rw [pathComponent_symm] at h&#x27; ⊢</span>
+<span id="L262" class="line"><a href="#L262">262</a>     exact h&#x27;.trans h</span>
+<span id="L263" class="line"><a href="#L263">263</a> </span>
+<span id="L264" class="line"><a href="#L264">264</a> theorem pathComponent_subset_component (x : X) : pathComponent x ⊆ connectedComponent x :=</span>
+<span id="L265" class="line"><a href="#L265">265</a>   fun y h =&gt;</span>
+<span id="L266" class="line"><a href="#L266">266</a>   (isConnected_range h.somePath.continuous).subset_connectedComponent ⟨0, by simp⟩ ⟨1, by simp⟩</span>
+<span id="L267" class="line"><a href="#L267">267</a> </span>
+<span id="L268" class="line"><a href="#L268">268</a> /-- Every connected component is a union of path connected components -/</span>
+<span id="L269" class="line"><a href="#L269">269</a> theorem biUnion_connectedComponent_pathComponent_eq (x : X) :</span>
+<span id="L270" class="line"><a href="#L270">270</a>     (⋃ y ∈ connectedComponent x, pathComponent y) = connectedComponent x := by</span>
+<span id="L271" class="line"><a href="#L271">271</a>   simp only [Set.ext_iff, mem_iUnion₂]</span>
+<span id="L272" class="line"><a href="#L272">272</a>   exact fun z ↦ ⟨fun ⟨y, hy, hz⟩ ↦ connectedComponent_eq hy ▸ pathComponent_subset_component _ hz,</span>
+<span id="L273" class="line"><a href="#L273">273</a>     (⟨z, ·, mem_pathComponent_self z⟩)⟩</span>
+<span id="L274" class="line"><a href="#L274">274</a> </span>
+<span id="L275" class="line"><a href="#L275">275</a> /-- The canonical map which sends a path component of `X` (as a term of `ZerothHomotopy X`) to the</span>
+<span id="L276" class="line"><a href="#L276">276</a> connected component containing it (as a term of `ConnectedComponents X`). -/</span>
+<span id="L277" class="line"><a href="#L277">277</a> def ZerothHomotopy.toConnectedComponents : ZerothHomotopy X → ConnectedComponents X :=</span>
+<span id="L278" class="line"><a href="#L278">278</a>   Quotient.map id fun x _ h ↦ connectedComponent_eq &lt;| pathComponent_subset_component x h</span>
+<span id="L279" class="line"><a href="#L279">279</a> </span>
+<span id="L280" class="line"><a href="#L280">280</a> @[simp]</span>
+<span id="L281" class="line"><a href="#L281">281</a> theorem ZerothHomotopy.toConnectedComponents_apply (x : X) : toConnectedComponents ⟦x⟧ = ⟦x⟧ :=</span>
+<span id="L282" class="line"><a href="#L282">282</a>   rfl</span>
+<span id="L283" class="line"><a href="#L283">283</a> </span>
+<span id="L284" class="line"><a href="#L284">284</a> /-- There are at least as many path connected components as there are connected components -/</span>
+<span id="L285" class="line"><a href="#L285">285</a> theorem ZerothHomotopy.toConnectedComponents_surjective :</span>
+<span id="L286" class="line"><a href="#L286">286</a>     toConnectedComponents (X := X) |&gt;.Surjective :=</span>
+<span id="L287" class="line"><a href="#L287">287</a>   Quotient.map_surjective _ surjective_id</span>
+<span id="L288" class="line"><a href="#L288">288</a> </span>
+<span id="L289" class="line"><a href="#L289">289</a> /-- The path component of `x` in `F` is the set of points that can be joined to `x` in `F`. -/</span>
+<span id="L290" class="line"><a href="#L290">290</a> def pathComponentIn (F : Set X) (x : X) :=</span>
+<span id="L291" class="line"><a href="#L291">291</a>   { y | JoinedIn F x y }</span>
+<span id="L292" class="line"><a href="#L292">292</a> </span>
+<span id="L293" class="line"><a href="#L293">293</a> @[simp]</span>
+<span id="L294" class="line"><a href="#L294">294</a> theorem pathComponentIn_univ (x : X) : pathComponentIn univ x = pathComponent x := by</span>
+<span id="L295" class="line"><a href="#L295">295</a>   simp [pathComponentIn, pathComponent, JoinedIn, Joined, exists_true_iff_nonempty]</span>
+<span id="L296" class="line"><a href="#L296">296</a> </span>
+<span id="L297" class="line"><a href="#L297">297</a> theorem Joined.mem_pathComponent (hyz : Joined y z) (hxy : y ∈ pathComponent x) :</span>
+<span id="L298" class="line"><a href="#L298">298</a>     z ∈ pathComponent x :=</span>
+<span id="L299" class="line"><a href="#L299">299</a>   hxy.trans hyz</span>
+<span id="L300" class="line"><a href="#L300">300</a> </span>
+<span id="L301" class="line"><a href="#L301">301</a> theorem mem_pathComponentIn_self (h : x ∈ F) : x ∈ pathComponentIn F x :=</span>
+<span id="L302" class="line"><a href="#L302">302</a>   JoinedIn.refl h</span>
+<span id="L303" class="line"><a href="#L303">303</a> </span>
+<span id="L304" class="line"><a href="#L304">304</a> theorem pathComponentIn_subset : pathComponentIn F x ⊆ F :=</span>
+<span id="L305" class="line"><a href="#L305">305</a>   fun _ hy ↦ hy.target_mem</span>
+<span id="L306" class="line"><a href="#L306">306</a> </span>
+<span id="L307" class="line"><a href="#L307">307</a> theorem pathComponentIn_nonempty_iff : (pathComponentIn F x).Nonempty ↔ x ∈ F :=</span>
+<span id="L308" class="line"><a href="#L308">308</a>   ⟨fun ⟨_, ⟨γ, hγ⟩⟩ ↦ γ.source ▸ hγ 0, fun hx ↦ ⟨x, mem_pathComponentIn_self hx⟩⟩</span>
+<span id="L309" class="line"><a href="#L309">309</a> </span>
+<span id="L310" class="line"><a href="#L310">310</a> theorem pathComponentIn_congr (h : x ∈ pathComponentIn F y) :</span>
+<span id="L311" class="line"><a href="#L311">311</a>     pathComponentIn F x = pathComponentIn F y := by</span>
+<span id="L312" class="line"><a href="#L312">312</a>   ext; exact ⟨h.trans, h.symm.trans⟩</span>
+<span id="L313" class="line"><a href="#L313">313</a> </span>
+<span id="L314" class="line"><a href="#L314">314</a> @[gcongr]</span>
+<span id="L315" class="line"><a href="#L315">315</a> theorem pathComponentIn_mono {G : Set X} (h : F ⊆ G) :</span>
+<span id="L316" class="line"><a href="#L316">316</a>     pathComponentIn F x ⊆ pathComponentIn G x :=</span>
+<span id="L317" class="line"><a href="#L317">317</a>   fun _ ⟨γ, hγ⟩ ↦ ⟨γ, fun t ↦ h (hγ t)⟩</span>
+<span id="L318" class="line"><a href="#L318">318</a> </span>
+<span id="L319" class="line"><a href="#L319">319</a> /-! ### Path component of the identity in a group -/</span>
+<span id="L320" class="line"><a href="#L320">320</a> </span>
+<span id="L321" class="line"><a href="#L321">321</a> /-- The path component of the identity in a topological monoid, as a submonoid. -/</span>
+<span id="L322" class="line"><a href="#L322">322</a> @[to_additive (attr := simps) /-- The path component of the identity in an additive topological</span>
+<span id="L323" class="line"><a href="#L323">323</a> monoid, as an additive submonoid. -/]</span>
+<span id="L324" class="line"><a href="#L324">324</a> def Submonoid.pathComponentOne (M : Type*) [Monoid M] [TopologicalSpace M] [ContinuousMul M] :</span>
+<span id="L325" class="line"><a href="#L325">325</a>     Submonoid M where</span>
+<span id="L326" class="line"><a href="#L326">326</a>   carrier := pathComponent (1 : M)</span>
+<span id="L327" class="line"><a href="#L327">327</a>   mul_mem&#x27; {m₁ m₂} hm₁ hm₂ := by simpa using hm₁.mul hm₂</span>
+<span id="L328" class="line"><a href="#L328">328</a>   one_mem&#x27; := mem_pathComponent_self 1</span>
+<span id="L329" class="line"><a href="#L329">329</a> </span>
+<span id="L330" class="line"><a href="#L330">330</a> /-- The path component of the identity in a topological group, as a subgroup. -/</span>
+<span id="L331" class="line"><a href="#L331">331</a> @[to_additive (attr := simps!) /-- The path component of the identity in an additive topological</span>
+<span id="L332" class="line"><a href="#L332">332</a> group, as an additive subgroup. -/]</span>
+<span id="L333" class="line"><a href="#L333">333</a> def Subgroup.pathComponentOne (G : Type*) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] :</span>
+<span id="L334" class="line"><a href="#L334">334</a>     Subgroup G where</span>
+<span id="L335" class="line"><a href="#L335">335</a>   toSubmonoid := .pathComponentOne G</span>
+<span id="L336" class="line"><a href="#L336">336</a>   inv_mem&#x27; {g} hg := by simpa using hg.inv</span>
+<span id="L337" class="line"><a href="#L337">337</a> </span>
+<span id="L338" class="line"><a href="#L338">338</a> /-- The path component of the identity in a topological group is normal. -/</span>
+<span id="L339" class="line"><a href="#L339">339</a> @[to_additive]</span>
+<span id="L340" class="line"><a href="#L340">340</a> instance Subgroup.Normal.pathComponentOne (G : Type*) [Group G] [TopologicalSpace G]</span>
+<span id="L341" class="line"><a href="#L341">341</a>     [IsTopologicalGroup G] : (Subgroup.pathComponentOne G).Normal where</span>
+<span id="L342" class="line"><a href="#L342">342</a>   conj_mem _ := fun ⟨γ⟩ g ↦ ⟨⟨⟨(g * γ · * g⁻¹), by fun_prop⟩, by simp, by simp⟩⟩</span>
+<span id="L343" class="line"><a href="#L343">343</a> </span>
+<span id="L344" class="line"><a href="#L344">344</a> /-! ### Path connected sets -/</span>
+<span id="L345" class="line"><a href="#L345">345</a> </span>
+<span id="L346" class="line"><a href="#L346">346</a> </span>
+<span id="L347" class="line"><a href="#L347">347</a> /-- A set `F` is path connected if it contains a point that can be joined to all other in `F`. -/</span>
+<span id="L348" class="line"><a href="#L348">348</a> def IsPathConnected (F : Set X) : Prop :=</span>
+<span id="L349" class="line"><a href="#L349">349</a>   ∃ x ∈ F, ∀ ⦃y⦄, y ∈ F → JoinedIn F x y</span>
+<span id="L350" class="line"><a href="#L350">350</a> </span>
+<span id="L351" class="line"><a href="#L351">351</a> theorem isPathConnected_iff_eq : IsPathConnected F ↔ ∃ x ∈ F, pathComponentIn F x = F := by</span>
+<span id="L352" class="line"><a href="#L352">352</a>   constructor &lt;;&gt; rintro ⟨x, x_in, h⟩ &lt;;&gt; use x, x_in</span>
+<span id="L353" class="line"><a href="#L353">353</a>   · ext y</span>
+<span id="L354" class="line"><a href="#L354">354</a>     exact ⟨fun hy =&gt; hy.mem.2, @h _⟩</span>
+<span id="L355" class="line"><a href="#L355">355</a>   · intro y y_in</span>
+<span id="L356" class="line"><a href="#L356">356</a>     rwa [← h] at y_in</span>
+<span id="L357" class="line"><a href="#L357">357</a> </span>
+<span id="L358" class="line"><a href="#L358">358</a> theorem IsPathConnected.joinedIn (h : IsPathConnected F) :</span>
+<span id="L359" class="line"><a href="#L359">359</a>     ∀ᵉ (x ∈ F) (y ∈ F), JoinedIn F x y := fun _x x_in _y y_in =&gt;</span>
+<span id="L360" class="line"><a href="#L360">360</a>   let ⟨_b, _b_in, hb⟩ := h</span>
+<span id="L361" class="line"><a href="#L361">361</a>   (hb x_in).symm.trans (hb y_in)</span>
+<span id="L362" class="line"><a href="#L362">362</a> </span>
+<span id="L363" class="line"><a href="#L363">363</a> theorem isPathConnected_iff :</span>
+<span id="L364" class="line"><a href="#L364">364</a>     IsPathConnected F ↔ F.Nonempty ∧ ∀ᵉ (x ∈ F) (y ∈ F), JoinedIn F x y :=</span>
+<span id="L365" class="line"><a href="#L365">365</a>   ⟨fun h =&gt;</span>
+<span id="L366" class="line"><a href="#L366">366</a>     ⟨let ⟨b, b_in, _hb⟩ := h; ⟨b, b_in⟩, h.joinedIn⟩,</span>
+<span id="L367" class="line"><a href="#L367">367</a>     fun ⟨⟨b, b_in⟩, h⟩ =&gt; ⟨b, b_in, h _ b_in⟩⟩</span>
+<span id="L368" class="line"><a href="#L368">368</a> </span>
+<span id="L369" class="line"><a href="#L369">369</a> theorem IsPathConnected.nonempty (h : IsPathConnected F) : F.Nonempty :=</span>
+<span id="L370" class="line"><a href="#L370">370</a>   isPathConnected_iff.mp h |&gt;.1</span>
+<span id="L371" class="line"><a href="#L371">371</a> </span>
+<span id="L372" class="line"><a href="#L372">372</a> /-- If `f` is continuous on `F` and `F` is path-connected, so is `f(F)`. -/</span>
+<span id="L373" class="line"><a href="#L373">373</a> theorem IsPathConnected.image&#x27; (hF : IsPathConnected F)</span>
+<span id="L374" class="line"><a href="#L374">374</a>     {f : X → Y} (hf : ContinuousOn f F) : IsPathConnected (f &#x27;&#x27; F) := by</span>
+<span id="L375" class="line"><a href="#L375">375</a>   rcases hF with ⟨x, x_in, hx⟩</span>
+<span id="L376" class="line"><a href="#L376">376</a>   use f x, mem_image_of_mem f x_in</span>
+<span id="L377" class="line"><a href="#L377">377</a>   rintro _ ⟨y, y_in, rfl⟩</span>
+<span id="L378" class="line"><a href="#L378">378</a>   refine ⟨(hx y_in).somePath.map&#x27; ?_, fun t ↦ ⟨_, (hx y_in).somePath_mem t, rfl⟩⟩</span>
+<span id="L379" class="line"><a href="#L379">379</a>   exact hf.mono (range_subset_iff.2 (hx y_in).somePath_mem)</span>
+<span id="L380" class="line"><a href="#L380">380</a> </span>
+<span id="L381" class="line"><a href="#L381">381</a> /-- If `f` is continuous and `F` is path-connected, so is `f(F)`. -/</span>
+<span id="L382" class="line"><a href="#L382">382</a> theorem IsPathConnected.image (hF : IsPathConnected F) {f : X → Y} (hf : Continuous f) :</span>
+<span id="L383" class="line"><a href="#L383">383</a>     IsPathConnected (f &#x27;&#x27; F) :=</span>
+<span id="L384" class="line"><a href="#L384">384</a>   hF.image&#x27; hf.continuousOn</span>
+<span id="L385" class="line"><a href="#L385">385</a> </span>
+<span id="L386" class="line"><a href="#L386">386</a> @[to_additive]</span>
+<span id="L387" class="line"><a href="#L387">387</a> theorem IsPathConnected.mul {M : Type*} [Mul M] [TopologicalSpace M] [ContinuousMul M]</span>
+<span id="L388" class="line"><a href="#L388">388</a>     {s t : Set M} (hs : IsPathConnected s) (ht : IsPathConnected t) :</span>
+<span id="L389" class="line"><a href="#L389">389</a>     IsPathConnected (s * t) :=</span>
+<span id="L390" class="line"><a href="#L390">390</a>   let ⟨a, ha_mem, ha⟩ := hs; let ⟨b, hb_mem, hb⟩ := ht</span>
+<span id="L391" class="line"><a href="#L391">391</a>   ⟨a * b, mul_mem_mul ha_mem hb_mem, Set.forall_mem_image2.2 fun _x hx _y hy ↦ (ha hx).mul (hb hy)⟩</span>
+<span id="L392" class="line"><a href="#L392">392</a> </span>
+<span id="L393" class="line"><a href="#L393">393</a> @[to_additive]</span>
+<span id="L394" class="line"><a href="#L394">394</a> theorem IsPathConnected.inv {G : Type*} [InvolutiveInv G] [TopologicalSpace G] [ContinuousInv G]</span>
+<span id="L395" class="line"><a href="#L395">395</a>     {s : Set G} (hs : IsPathConnected s) :</span>
+<span id="L396" class="line"><a href="#L396">396</a>     IsPathConnected s⁻¹ :=</span>
+<span id="L397" class="line"><a href="#L397">397</a>   let ⟨a, ha_mem, ha⟩ := hs</span>
+<span id="L398" class="line"><a href="#L398">398</a>   ⟨a⁻¹, inv_mem_inv.mpr ha_mem, fun x hx ↦ by simpa using ha (mem_inv.mp hx) |&gt;.map continuous_inv⟩</span>
+<span id="L399" class="line"><a href="#L399">399</a> </span>
+<span id="L400" class="line"><a href="#L400">400</a> /-- If `f : X → Y` is an inducing map, `f(F)` is path-connected iff `F` is. -/</span>
+<span id="L401" class="line"><a href="#L401">401</a> nonrec theorem Topology.IsInducing.isPathConnected_iff {f : X → Y} (hf : IsInducing f) :</span>
+<span id="L402" class="line"><a href="#L402">402</a>     IsPathConnected F ↔ IsPathConnected (f &#x27;&#x27; F) := by</span>
+<span id="L403" class="line"><a href="#L403">403</a>   simp only [IsPathConnected, forall_mem_image, exists_mem_image]</span>
+<span id="L404" class="line"><a href="#L404">404</a>   refine exists_congr fun x ↦ and_congr_right fun hx ↦ forall₂_congr fun y hy ↦ ?_</span>
+<span id="L405" class="line"><a href="#L405">405</a>   rw [hf.joinedIn_image hx hy]</span>
+<span id="L406" class="line"><a href="#L406">406</a> </span>
+<span id="L407" class="line"><a href="#L407">407</a> /-- If `h : X → Y` is a homeomorphism, `h(s)` is path-connected iff `s` is. -/</span>
+<span id="L408" class="line"><a href="#L408">408</a> @[simp]</span>
+<span id="L409" class="line"><a href="#L409">409</a> theorem Homeomorph.isPathConnected_image {s : Set X} (h : X ≃ₜ Y) :</span>
+<span id="L410" class="line"><a href="#L410">410</a>     IsPathConnected (h &#x27;&#x27; s) ↔ IsPathConnected s :=</span>
+<span id="L411" class="line"><a href="#L411">411</a>   h.isInducing.isPathConnected_iff.symm</span>
+<span id="L412" class="line"><a href="#L412">412</a> </span>
+<span id="L413" class="line"><a href="#L413">413</a> /-- If `h : X → Y` is a homeomorphism, `h⁻¹(s)` is path-connected iff `s` is. -/</span>
+<span id="L414" class="line"><a href="#L414">414</a> @[simp]</span>
+<span id="L415" class="line"><a href="#L415">415</a> theorem Homeomorph.isPathConnected_preimage {s : Set Y} (h : X ≃ₜ Y) :</span>
+<span id="L416" class="line"><a href="#L416">416</a>     IsPathConnected (h ⁻¹&#x27; s) ↔ IsPathConnected s := by</span>
+<span id="L417" class="line"><a href="#L417">417</a>   rw [← Homeomorph.image_symm]; exact h.symm.isPathConnected_image</span>
+<span id="L418" class="line"><a href="#L418">418</a> </span>
+<span id="L419" class="line"><a href="#L419">419</a> theorem IsPathConnected.mem_pathComponent (h : IsPathConnected F) (x_in : x ∈ F) (y_in : y ∈ F) :</span>
+<span id="L420" class="line"><a href="#L420">420</a>     y ∈ pathComponent x :=</span>
+<span id="L421" class="line"><a href="#L421">421</a>   (h.joinedIn x x_in y y_in).joined</span>
+<span id="L422" class="line"><a href="#L422">422</a> </span>
+<span id="L423" class="line"><a href="#L423">423</a> theorem IsPathConnected.subset_pathComponent (h : IsPathConnected F) (x_in : x ∈ F) :</span>
+<span id="L424" class="line"><a href="#L424">424</a>     F ⊆ pathComponent x := fun _y y_in =&gt; h.mem_pathComponent x_in y_in</span>
+<span id="L425" class="line"><a href="#L425">425</a> </span>
+<span id="L426" class="line"><a href="#L426">426</a> theorem IsPathConnected.subset_pathComponentIn {s : Set X} (hs : IsPathConnected s)</span>
+<span id="L427" class="line"><a href="#L427">427</a>     (hxs : x ∈ s) (hsF : s ⊆ F) : s ⊆ pathComponentIn F x :=</span>
+<span id="L428" class="line"><a href="#L428">428</a>   fun y hys ↦ (hs.joinedIn x hxs y hys).mono hsF</span>
+<span id="L429" class="line"><a href="#L429">429</a> </span>
+<span id="L430" class="line"><a href="#L430">430</a> theorem isPathConnected_singleton (x : X) : IsPathConnected ({x} : Set X) := by</span>
+<span id="L431" class="line"><a href="#L431">431</a>   refine ⟨x, rfl, ?_⟩</span>
+<span id="L432" class="line"><a href="#L432">432</a>   rintro y rfl</span>
+<span id="L433" class="line"><a href="#L433">433</a>   exact JoinedIn.refl rfl</span>
+<span id="L434" class="line"><a href="#L434">434</a> </span>
+<span id="L435" class="line"><a href="#L435">435</a> theorem isPathConnected_pathComponentIn (h : x ∈ F) : IsPathConnected (pathComponentIn F x) :=</span>
+<span id="L436" class="line"><a href="#L436">436</a>   ⟨x, mem_pathComponentIn_self h, fun _ ⟨γ, hγ⟩ ↦ by</span>
+<span id="L437" class="line"><a href="#L437">437</a>     refine ⟨γ, fun t ↦</span>
+<span id="L438" class="line"><a href="#L438">438</a>       ⟨(γ.truncateOfLE t.2.1).cast (γ.extend_zero.symm) (γ.extend_extends&#x27; t).symm, fun t&#x27; ↦ ?_⟩⟩</span>
+<span id="L439" class="line"><a href="#L439">439</a>     dsimp [Path.truncateOfLE, Path.truncate]</span>
+<span id="L440" class="line"><a href="#L440">440</a>     exact γ.extend_extends&#x27; ⟨min (max t&#x27;.1 0) t.1, by simp [t.2.1, t.2.2]⟩ ▸ hγ _⟩</span>
+<span id="L441" class="line"><a href="#L441">441</a> </span>
+<span id="L442" class="line"><a href="#L442">442</a> theorem isPathConnected_pathComponent : IsPathConnected (pathComponent x) := by</span>
+<span id="L443" class="line"><a href="#L443">443</a>   rw [← pathComponentIn_univ]</span>
+<span id="L444" class="line"><a href="#L444">444</a>   exact isPathConnected_pathComponentIn (mem_univ x)</span>
+<span id="L445" class="line"><a href="#L445">445</a> </span>
+<span id="L446" class="line"><a href="#L446">446</a> theorem IsPathConnected.union {U V : Set X} (hU : IsPathConnected U) (hV : IsPathConnected V)</span>
+<span id="L447" class="line"><a href="#L447">447</a>     (hUV : (U ∩ V).Nonempty) : IsPathConnected (U ∪ V) := by</span>
+<span id="L448" class="line"><a href="#L448">448</a>   rcases hUV with ⟨x, xU, xV⟩</span>
+<span id="L449" class="line"><a href="#L449">449</a>   use x, Or.inl xU</span>
+<span id="L450" class="line"><a href="#L450">450</a>   rintro y (yU | yV)</span>
+<span id="L451" class="line"><a href="#L451">451</a>   · exact (hU.joinedIn x xU y yU).mono subset_union_left</span>
+<span id="L452" class="line"><a href="#L452">452</a>   · exact (hV.joinedIn x xV y yV).mono subset_union_right</span>
+<span id="L453" class="line"><a href="#L453">453</a> </span>
+<span id="L454" class="line"><a href="#L454">454</a> /-- If a set `W` is path-connected, then it is also path-connected when seen as a set in a smaller</span>
+<span id="L455" class="line"><a href="#L455">455</a> ambient type `U` (when `U` contains `W`). -/</span>
+<span id="L456" class="line"><a href="#L456">456</a> theorem IsPathConnected.preimage_coe {U W : Set X} (hW : IsPathConnected W) (hWU : W ⊆ U) :</span>
+<span id="L457" class="line"><a href="#L457">457</a>     IsPathConnected (((↑) : U → X) ⁻¹&#x27; W) := by</span>
+<span id="L458" class="line"><a href="#L458">458</a>   rwa [IsInducing.subtypeVal.isPathConnected_iff, Subtype.image_preimage_val, inter_eq_right.2 hWU]</span>
+<span id="L459" class="line"><a href="#L459">459</a> </span>
+<span id="L460" class="line"><a href="#L460">460</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L461" class="line"><a href="#L461">461</a> theorem IsPathConnected.exists_path_through_family {n : ℕ}</span>
+<span id="L462" class="line"><a href="#L462">462</a>     {s : Set X} (h : IsPathConnected s) (p : Fin (n + 1) → X) (hp : ∀ i, p i ∈ s) :</span>
+<span id="L463" class="line"><a href="#L463">463</a>     ∃ γ : Path (p 0) (p (last n)), range γ ⊆ s ∧ ∀ i, p i ∈ range γ := by</span>
+<span id="L464" class="line"><a href="#L464">464</a>   cases p using snocCases with | _ p x =&gt; ?_</span>
+<span id="L465" class="line"><a href="#L465">465</a>   simp only [forall_fin_succ&#x27;, snoc_castSucc, snoc_last, Path.cast_coe,</span>
+<span id="L466" class="line"><a href="#L466">466</a>     Path.target_mem_range, and_true] at hp ⊢</span>
+<span id="L467" class="line"><a href="#L467">467</a>   obtain ⟨hp, hx⟩ := hp</span>
+<span id="L468" class="line"><a href="#L468">468</a>   induction p using snocInduction generalizing x with</span>
+<span id="L469" class="line"><a href="#L469">469</a>   | elim0 =&gt;</span>
+<span id="L470" class="line"><a href="#L470">470</a>     simp only [snoc_zero]</span>
+<span id="L471" class="line"><a href="#L471">471</a>     use Path.refl x</span>
+<span id="L472" class="line"><a href="#L472">472</a>     simp [hx]</span>
+<span id="L473" class="line"><a href="#L473">473</a>   | @snoc n p y hp₂ =&gt;</span>
+<span id="L474" class="line"><a href="#L474">474</a>     simp only [forall_fin_succ&#x27;, snoc_castSucc, snoc_last, snoc_apply_zero, Path.cast_coe] at hp ⊢</span>
+<span id="L475" class="line"><a href="#L475">475</a>     obtain ⟨hp, hy⟩ := hp</span>
+<span id="L476" class="line"><a href="#L476">476</a>     specialize hp₂ y hp hy</span>
+<span id="L477" class="line"><a href="#L477">477</a>     obtain ⟨γ₀, hγ₀s, hγ₀p⟩ := hp₂</span>
+<span id="L478" class="line"><a href="#L478">478</a>     obtain ⟨γ₁, hγ₁⟩ := h.joinedIn y hy x hx</span>
+<span id="L479" class="line"><a href="#L479">479</a>     rw [← range_subset_iff] at hγ₁</span>
+<span id="L480" class="line"><a href="#L480">480</a>     use γ₀.trans γ₁</span>
+<span id="L481" class="line"><a href="#L481">481</a>     simp only [Path.trans_range, mem_union, Path.source_mem_range, or_true, and_true,</span>
+<span id="L482" class="line"><a href="#L482">482</a>       union_subset_iff]</span>
+<span id="L483" class="line"><a href="#L483">483</a>     tauto</span>
+<span id="L484" class="line"><a href="#L484">484</a> </span>
+<span id="L485" class="line"><a href="#L485">485</a> theorem IsPathConnected.exists_path_through_family&#x27; {n : ℕ}</span>
+<span id="L486" class="line"><a href="#L486">486</a>     {s : Set X} (h : IsPathConnected s) (p : Fin (n + 1) → X) (hp : ∀ i, p i ∈ s) :</span>
+<span id="L487" class="line"><a href="#L487">487</a>     ∃ (γ : Path (p 0) (p (last n))) (t : Fin (n + 1) → I), (∀ t, γ t ∈ s) ∧ ∀ i, γ (t i) = p i := by</span>
+<span id="L488" class="line"><a href="#L488">488</a>   rcases h.exists_path_through_family p hp with ⟨γ, hγ⟩</span>
+<span id="L489" class="line"><a href="#L489">489</a>   rcases hγ with ⟨h₁, h₂⟩</span>
+<span id="L490" class="line"><a href="#L490">490</a>   simp only [range, mem_setOf_eq] at h₂</span>
+<span id="L491" class="line"><a href="#L491">491</a>   rw [range_subset_iff] at h₁</span>
+<span id="L492" class="line"><a href="#L492">492</a>   choose! t ht using h₂</span>
+<span id="L493" class="line"><a href="#L493">493</a>   exact ⟨γ, t, h₁, ht⟩</span>
+<span id="L494" class="line"><a href="#L494">494</a> </span>
+<span id="L495" class="line"><a href="#L495">495</a> /-! ### Path connected spaces -/</span>
+<span id="L496" class="line"><a href="#L496">496</a> </span>
+<span id="L497" class="line"><a href="#L497">497</a> </span>
+<span id="L498" class="line"><a href="#L498">498</a> /-- A topological space is path-connected if it is non-empty and every two points can be</span>
+<span id="L499" class="line"><a href="#L499">499</a> joined by a continuous path. -/</span>
+<span id="L500" class="line"><a href="#L500">500</a> @[mk_iff]</span>
+<span id="L501" class="line"><a href="#L501">501</a> class PathConnectedSpace (X : Type*) [TopologicalSpace X] : Prop where</span>
+<span id="L502" class="line"><a href="#L502">502</a>   /-- A path-connected space must be nonempty. -/</span>
+<span id="L503" class="line"><a href="#L503">503</a>   nonempty : Nonempty X</span>
+<span id="L504" class="line"><a href="#L504">504</a>   /-- Any two points in a path-connected space must be joined by a continuous path. -/</span>
+<span id="L505" class="line"><a href="#L505">505</a>   joined : ∀ x y : X, Joined x y</span>
+<span id="L506" class="line"><a href="#L506">506</a> </span>
+<span id="L507" class="line"><a href="#L507">507</a> theorem pathConnectedSpace_iff_zerothHomotopy :</span>
+<span id="L508" class="line"><a href="#L508">508</a>     PathConnectedSpace X ↔ Nonempty (ZerothHomotopy X) ∧ Subsingleton (ZerothHomotopy X) := by</span>
+<span id="L509" class="line"><a href="#L509">509</a>   letI := pathSetoid X</span>
+<span id="L510" class="line"><a href="#L510">510</a>   constructor</span>
+<span id="L511" class="line"><a href="#L511">511</a>   · intro h</span>
+<span id="L512" class="line"><a href="#L512">512</a>     refine ⟨(nonempty_quotient_iff _).mpr h.1, ⟨?_⟩⟩</span>
+<span id="L513" class="line"><a href="#L513">513</a>     rintro ⟨x⟩ ⟨y⟩</span>
+<span id="L514" class="line"><a href="#L514">514</a>     exact Quotient.sound (PathConnectedSpace.joined x y)</span>
+<span id="L515" class="line"><a href="#L515">515</a>   · unfold ZerothHomotopy</span>
+<span id="L516" class="line"><a href="#L516">516</a>     rintro ⟨h, h&#x27;⟩</span>
+<span id="L517" class="line"><a href="#L517">517</a>     exact ⟨(nonempty_quotient_iff _).mp h, fun x y =&gt; Quotient.exact &lt;| Subsingleton.elim ⟦x⟧ ⟦y⟧⟩</span>
+<span id="L518" class="line"><a href="#L518">518</a> </span>
+<span id="L519" class="line"><a href="#L519">519</a> namespace PathConnectedSpace</span>
+<span id="L520" class="line"><a href="#L520">520</a> </span>
+<span id="L521" class="line"><a href="#L521">521</a> variable [PathConnectedSpace X]</span>
+<span id="L522" class="line"><a href="#L522">522</a> </span>
+<span id="L523" class="line"><a href="#L523">523</a> /-- Use path-connectedness to build a path between two points. -/</span>
+<span id="L524" class="line"><a href="#L524">524</a> def somePath (x y : X) : Path x y :=</span>
+<span id="L525" class="line"><a href="#L525">525</a>   Nonempty.some (joined x y)</span>
+<span id="L526" class="line"><a href="#L526">526</a> </span>
+<span id="L527" class="line"><a href="#L527">527</a> end PathConnectedSpace</span>
+<span id="L528" class="line"><a href="#L528">528</a> </span>
+<span id="L529" class="line"><a href="#L529">529</a> theorem pathConnectedSpace_iff_univ : PathConnectedSpace X ↔ IsPathConnected (univ : Set X) := by</span>
+<span id="L530" class="line"><a href="#L530">530</a>   simp [pathConnectedSpace_iff, isPathConnected_iff, nonempty_iff_univ_nonempty]</span>
+<span id="L531" class="line"><a href="#L531">531</a> </span>
+<span id="L532" class="line"><a href="#L532">532</a> theorem isPathConnected_iff_pathConnectedSpace : IsPathConnected F ↔ PathConnectedSpace F := by</span>
+<span id="L533" class="line"><a href="#L533">533</a>   rw [pathConnectedSpace_iff_univ, IsInducing.subtypeVal.isPathConnected_iff, image_univ,</span>
+<span id="L534" class="line"><a href="#L534">534</a>     Subtype.range_val_subtype, setOf_mem_eq]</span>
+<span id="L535" class="line"><a href="#L535">535</a> </span>
+<span id="L536" class="line"><a href="#L536">536</a> theorem isPathConnected_univ [PathConnectedSpace X] : IsPathConnected (univ : Set X) :=</span>
+<span id="L537" class="line"><a href="#L537">537</a>   pathConnectedSpace_iff_univ.mp inferInstance</span>
+<span id="L538" class="line"><a href="#L538">538</a> </span>
+<span id="L539" class="line"><a href="#L539">539</a> theorem isPathConnected_range [PathConnectedSpace X] {f : X → Y} (hf : Continuous f) :</span>
+<span id="L540" class="line"><a href="#L540">540</a>     IsPathConnected (range f) := by</span>
+<span id="L541" class="line"><a href="#L541">541</a>   rw [← image_univ]</span>
+<span id="L542" class="line"><a href="#L542">542</a>   exact isPathConnected_univ.image hf</span>
+<span id="L543" class="line"><a href="#L543">543</a> </span>
+<span id="L544" class="line"><a href="#L544">544</a> theorem Function.Surjective.pathConnectedSpace [PathConnectedSpace X]</span>
+<span id="L545" class="line"><a href="#L545">545</a>     {f : X → Y} (hf : Surjective f) (hf&#x27; : Continuous f) : PathConnectedSpace Y := by</span>
+<span id="L546" class="line"><a href="#L546">546</a>   rw [pathConnectedSpace_iff_univ, ← hf.range_eq]</span>
+<span id="L547" class="line"><a href="#L547">547</a>   exact isPathConnected_range hf&#x27;</span>
+<span id="L548" class="line"><a href="#L548">548</a> </span>
+<span id="L549" class="line"><a href="#L549">549</a> instance Quotient.instPathConnectedSpace {s : Setoid X} [PathConnectedSpace X] :</span>
+<span id="L550" class="line"><a href="#L550">550</a>     PathConnectedSpace (Quotient s) :=</span>
+<span id="L551" class="line"><a href="#L551">551</a>   Quotient.mk&#x27;_surjective.pathConnectedSpace continuous_coinduced_rng</span>
+<span id="L552" class="line"><a href="#L552">552</a> </span>
+<span id="L553" class="line"><a href="#L553">553</a> /-- This is a special case of `NormedSpace.instPathConnectedSpace` (and</span>
+<span id="L554" class="line"><a href="#L554">554</a> `IsTopologicalAddGroup.pathConnectedSpace`). It exists only to simplify dependencies. -/</span>
+<span id="L555" class="line"><a href="#L555">555</a> instance Real.instPathConnectedSpace : PathConnectedSpace ℝ where</span>
+<span id="L556" class="line"><a href="#L556">556</a>   joined x y := ⟨⟨⟨fun (t : I) ↦ (1 - t) * x + t * y, by fun_prop⟩, by simp, by simp⟩⟩</span>
+<span id="L557" class="line"><a href="#L557">557</a>   nonempty := inferInstance</span>
+<span id="L558" class="line"><a href="#L558">558</a> </span>
+<span id="L559" class="line"><a href="#L559">559</a> theorem pathConnectedSpace_iff_eq : PathConnectedSpace X ↔ ∃ x : X, pathComponent x = univ := by</span>
+<span id="L560" class="line"><a href="#L560">560</a>   simp [pathConnectedSpace_iff_univ, isPathConnected_iff_eq]</span>
+<span id="L561" class="line"><a href="#L561">561</a> </span>
+<span id="L562" class="line"><a href="#L562">562</a> -- see Note [lower instance priority]</span>
+<span id="L563" class="line"><a href="#L563">563</a> instance (priority := 100) PathConnectedSpace.connectedSpace [PathConnectedSpace X] :</span>
+<span id="L564" class="line"><a href="#L564">564</a>     ConnectedSpace X := by</span>
+<span id="L565" class="line"><a href="#L565">565</a>   rw [connectedSpace_iff_connectedComponent]</span>
+<span id="L566" class="line"><a href="#L566">566</a>   rcases isPathConnected_iff_eq.mp (pathConnectedSpace_iff_univ.mp ‹_›) with ⟨x, _x_in, hx⟩</span>
+<span id="L567" class="line"><a href="#L567">567</a>   use x</span>
+<span id="L568" class="line"><a href="#L568">568</a>   rw [← univ_subset_iff]</span>
+<span id="L569" class="line"><a href="#L569">569</a>   exact (by simpa using hx : pathComponent x = univ) ▸ pathComponent_subset_component x</span>
+<span id="L570" class="line"><a href="#L570">570</a> </span>
+<span id="L571" class="line"><a href="#L571">571</a> /-- A path-connected set is connected.</span>
+<span id="L572" class="line"><a href="#L572">572</a> </span>
+<span id="L573" class="line"><a href="#L573">573</a> (See `Counterexamples.TopologistsSineCurve` for the standard counterexample showing that the</span>
+<span id="L574" class="line"><a href="#L574">574</a> converse is false.) -/</span>
+<span id="L575" class="line"><a href="#L575">575</a> theorem IsPathConnected.isConnected (hF : IsPathConnected F) : IsConnected F := by</span>
+<span id="L576" class="line"><a href="#L576">576</a>   rw [isConnected_iff_connectedSpace]</span>
+<span id="L577" class="line"><a href="#L577">577</a>   rw [isPathConnected_iff_pathConnectedSpace] at hF</span>
+<span id="L578" class="line"><a href="#L578">578</a>   exact @PathConnectedSpace.connectedSpace _ _ hF</span>
+<span id="L579" class="line"><a href="#L579">579</a> </span>
+<span id="L580" class="line"><a href="#L580">580</a> namespace PathConnectedSpace</span>
+<span id="L581" class="line"><a href="#L581">581</a> </span>
+<span id="L582" class="line"><a href="#L582">582</a> variable [PathConnectedSpace X]</span>
+<span id="L583" class="line"><a href="#L583">583</a> </span>
+<span id="L584" class="line"><a href="#L584">584</a> theorem exists_path_through_family {n : ℕ} (p : Fin (n + 1) → X) :</span>
+<span id="L585" class="line"><a href="#L585">585</a>     ∃ γ : Path (p 0) (p (last n)), ∀ i, p i ∈ range γ := by</span>
+<span id="L586" class="line"><a href="#L586">586</a>   have : IsPathConnected (univ : Set X) := pathConnectedSpace_iff_univ.mp (by infer_instance)</span>
+<span id="L587" class="line"><a href="#L587">587</a>   rcases this.exists_path_through_family p fun _i =&gt; True.intro with ⟨γ, -, h⟩</span>
+<span id="L588" class="line"><a href="#L588">588</a>   exact ⟨γ, h⟩</span>
+<span id="L589" class="line"><a href="#L589">589</a> </span>
+<span id="L590" class="line"><a href="#L590">590</a> theorem exists_path_through_family&#x27; {n : ℕ} (p : Fin (n + 1) → X) :</span>
+<span id="L591" class="line"><a href="#L591">591</a>     ∃ (γ : Path (p 0) (p (last n))) (t : Fin (n + 1) → I), ∀ i, γ (t i) = p i := by</span>
+<span id="L592" class="line"><a href="#L592">592</a>   have : IsPathConnected (univ : Set X) := pathConnectedSpace_iff_univ.mp (by infer_instance)</span>
+<span id="L593" class="line"><a href="#L593">593</a>   rcases this.exists_path_through_family&#x27; p fun _i =&gt; True.intro with ⟨γ, t, -, h⟩</span>
+<span id="L594" class="line"><a href="#L594">594</a>   exact ⟨γ, t, h⟩</span>
+<span id="L595" class="line"><a href="#L595">595</a> </span>
+<span id="L596" class="line"><a href="#L596">596</a> end PathConnectedSpace</span>
+<span id="L597" class="line"><a href="#L597">597</a> </span>
+<span id="L598" class="line"><a href="#L598">598</a> /-- The preimage of a singleton in `ZerothHomotopy` is the path component of an element in the</span>
+<span id="L599" class="line"><a href="#L599">599</a> equivalence class. -/</span>
+<span id="L600" class="line"><a href="#L600">600</a> theorem ZerothHomotopy.preimage_singleton_eq_pathComponent (x : X) :</span>
+<span id="L601" class="line"><a href="#L601">601</a>     Quotient.mk&#x27; (s := pathSetoid X) ⁻¹&#x27; {⟦x⟧} = pathComponent x := by</span>
+<span id="L602" class="line"><a href="#L602">602</a>   ext y</span>
+<span id="L603" class="line"><a href="#L603">603</a>   rw [mem_preimage, mem_singleton_iff, eq_comm, mem_pathComponent_iff]</span>
+<span id="L604" class="line"><a href="#L604">604</a>   exact Quotient.eq</span>
+<span id="L605" class="line"><a href="#L605">605</a> </span>
+<span id="L606" class="line"><a href="#L606">606</a> instance [CompactSpace X] : CompactSpace &lt;| ZerothHomotopy X := Quotient.compactSpace</span></pre></html>

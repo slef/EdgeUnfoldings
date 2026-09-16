@@ -1,0 +1,114 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/JunctionWedgeStep.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/JunctionWedgeStep.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.JunctionFan</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.JunctionGapAngles</span>
+<span id="L3" class="line"><a href="#L3">3</a> import SixVertexUnfolding.Geometry.GapKiteStep</span>
+<span id="L4" class="line"><a href="#L4">4</a> import SixVertexUnfolding.Geometry.NextWedgeParameters</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> /-! The actual ordered fan supplies the geometric premises of a wedge step.</span>
+<span id="L7" class="line"><a href="#L7">7</a> Only the cumulative source-angle budget remains a premise for the global</span>
+<span id="L8" class="line"><a href="#L8">8</a> argument. No independent arm-order or coordinate assumptions are required.</span>
+<span id="L9" class="line"><a href="#L9">9</a> -/</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> namespace SixVertexUnfolding.ConvexPolyhedron.JunctionFan</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> open Real Set EuclideanGeometry Wedge</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L16" class="line"><a href="#L16">16</a>   {u : T.vertices} (fan : JunctionFan T u)</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> /-- Move through any chosen outgoing edge after entering along a different</span>
+<span id="L19" class="line"><a href="#L19">19</a> incident edge. The angle increment is the actual metric kite&#x27;s source angle. -/</span>
+<span id="L20" class="line"><a href="#L20">20</a> theorem wedge_step_with_parameters</span>
+<span id="L21" class="line"><a href="#L21">21</a>     (incoming outgoing : circularGapMidpoints fan.order.angles fan.order.first fan.order.last)</span>
+<span id="L22" class="line"><a href="#L22">22</a>     (distinct : incoming ≠ outgoing) (ω : ℝ) (outer_lower : π / 2 ≤ ω)</span>
+<span id="L23" class="line"><a href="#L23">23</a>     (budget : ω + (fan.triangles outgoing).model.sourceAngle ≤ 3 * π / 2) :</span>
+<span id="L24" class="line"><a href="#L24">24</a>     let z := fan.order.chart.origin</span>
+<span id="L25" class="line"><a href="#L25">25</a>     let d := P.surfaceDist a (T.vertexTarget u)</span>
+<span id="L26" class="line"><a href="#L26">26</a>     let L := dist (u : Space) ((fan.order.neighbors outgoing).val : Space)</span>
+<span id="L27" class="line"><a href="#L27">27</a>     let y := z + L • direction outgoing</span>
+<span id="L28" class="line"><a href="#L28">28</a>     ∃ α β γ δ : ℝ,</span>
+<span id="L29" class="line"><a href="#L29">29</a>       IsCircularGap fan.order.angles fan.order.first fan.order.last α β ∧</span>
+<span id="L30" class="line"><a href="#L30">30</a>       IsCircularGap fan.order.angles fan.order.first fan.order.last γ δ ∧</span>
+<span id="L31" class="line"><a href="#L31">31</a>       (incoming : ℝ) = (α + β) / 2 ∧ (outgoing : ℝ) = (γ + δ) / 2 ∧</span>
+<span id="L32" class="line"><a href="#L32">32</a>       ∃ D Θ : ℝ, 0 &lt; D ∧ 0 &lt; Θ ∧ Θ &lt; π ∧</span>
+<span id="L33" class="line"><a href="#L33">33</a>         D = P.surfaceDist a (T.vertexTarget (fan.order.neighbors outgoing).val) ∧</span>
+<span id="L34" class="line"><a href="#L34">34</a>         π - Θ = angle (fan.triangles outgoing).model.first</span>
+<span id="L35" class="line"><a href="#L35">35</a>           (fan.triangles outgoing).model.right (fan.triangles outgoing).model.left ∧</span>
+<span id="L36" class="line"><a href="#L36">36</a>         let W := {x | x - z ∈ polarRegion d ω α β}</span>
+<span id="L37" class="line"><a href="#L37">37</a>         let V := {x | x - z ∈ polarRegion d ω δ (γ + 2 * π)}</span>
+<span id="L38" class="line"><a href="#L38">38</a>         let W&#x27; := {x | x - y ∈ polarRegion D (ω + (fan.triangles outgoing).model.sourceAngle)</span>
+<span id="L39" class="line"><a href="#L39">39</a>           (Θ + (γ + δ) / 2) (2 * π - Θ + (γ + δ) / 2)}</span>
+<span id="L40" class="line"><a href="#L40">40</a>         W ⊆ V ∧ Disjoint V (interior (gapKite z d L γ δ)) ∧ W&#x27; = V ∪ gapKite z d L γ δ := by</span>
+<span id="L41" class="line"><a href="#L41">41</a>   dsimp only</span>
+<span id="L42" class="line"><a href="#L42">42</a>   obtain ⟨α, β, incoming_gap, incoming_midpoint⟩ :=</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (mem_circularGapMidpoints_iff fan.order.angles fan.order.first fan.order.last incoming).mp incoming.property</span>
+<span id="L44" class="line"><a href="#L44">44</a>   obtain ⟨γ, δ, outgoing_gap, outgoing_midpoint⟩ :=</span>
+<span id="L45" class="line"><a href="#L45">45</a>     (mem_circularGapMidpoints_iff fan.order.angles fan.order.first fan.order.last outgoing).mp outgoing.property</span>
+<span id="L46" class="line"><a href="#L46">46</a>   have midpoint_distinct : (α + β) / 2 ≠ (γ + δ) / 2 := by</span>
+<span id="L47" class="line"><a href="#L47">47</a>     intro equal</span>
+<span id="L48" class="line"><a href="#L48">48</a>     exact distinct (Subtype.ext (incoming_midpoint.trans (equal.trans outgoing_midpoint.symm)))</span>
+<span id="L49" class="line"><a href="#L49">49</a>   have separated : (β ≤ γ ∧ δ ≤ α + 2 * π) ∨ (δ ≤ α ∧ β ≤ γ + 2 * π) := by</span>
+<span id="L50" class="line"><a href="#L50">50</a>     rcases lt_or_gt_of_ne midpoint_distinct with before | after</span>
+<span id="L51" class="line"><a href="#L51">51</a>     · exact Or.inl (circular_gaps_separated fan.order.angles fan.order.increasing fan.order.bounds</span>
+<span id="L52" class="line"><a href="#L52">52</a>         fan.order.first fan.order.last fan.order.at_first fan.order.at_last incoming_gap outgoing_gap before)</span>
+<span id="L53" class="line"><a href="#L53">53</a>     · exact Or.inr (circular_gaps_separated fan.order.angles fan.order.increasing fan.order.bounds</span>
+<span id="L54" class="line"><a href="#L54">54</a>         fan.order.first fan.order.last fan.order.at_first fan.order.at_last outgoing_gap incoming_gap after)</span>
+<span id="L55" class="line"><a href="#L55">55</a>   obtain ⟨ordered, width, _, _, first_source, second_source, empty_gap⟩ := circular_gap_spec</span>
+<span id="L56" class="line"><a href="#L56">56</a>     fan.order.sites fan.order.angles fan.order.increasing fan.order.bounds fan.order.chart.origin</span>
+<span id="L57" class="line"><a href="#L57">57</a>     (P.surfaceDist a (T.vertexTarget u)) fan.order.position fan.order.first fan.order.last</span>
+<span id="L58" class="line"><a href="#L58">58</a>     fan.order.at_first fan.order.at_last fan.order.two outgoing_gap</span>
+<span id="L59" class="line"><a href="#L59">59</a>   have on_ray (ρ : ℝ) (hr : ρ ∈ Ioo (0 : ℝ) fan.order.radius) :</span>
+<span id="L60" class="line"><a href="#L60">60</a>       fan.order.chart.map (fan.order.chart.origin + ρ • direction ((γ + δ) / 2)) ∈</span>
+<span id="L61" class="line"><a href="#L61">61</a>         openSegment ℝ (T.vertexTarget u : Space) ((fan.order.neighbors outgoing).val : Space) := by</span>
+<span id="L62" class="line"><a href="#L62">62</a>     rw [← outgoing_midpoint]</span>
+<span id="L63" class="line"><a href="#L63">63</a>     exact fan.order.rays outgoing ρ hr</span>
+<span id="L64" class="line"><a href="#L64">64</a>   have source_positive : 0 &lt; P.surfaceDist a (T.vertexTarget u) := by</span>
+<span id="L65" class="line"><a href="#L65">65</a>     simpa using CutVoronoiChart.tail_radius_pos (T.vertexTarget_different u) (0 : unitInterval)</span>
+<span id="L66" class="line"><a href="#L66">66</a>       (by change (0 : ℝ) &lt; 1; norm_num)</span>
+<span id="L67" class="line"><a href="#L67">67</a>   have length_positive : 0 &lt; dist (u : Space) ((fan.order.neighbors outgoing).val : Space) := by</span>
+<span id="L68" class="line"><a href="#L68">68</a>     apply dist_pos.mpr</span>
+<span id="L69" class="line"><a href="#L69">69</a>     intro same</span>
+<span id="L70" class="line"><a href="#L70">70</a>     exact (fan.order.neighbors outgoing).property.ne (Subtype.ext same)</span>
+<span id="L71" class="line"><a href="#L71">71</a>   have angle_eq := fan.order.chart.incident_gap_source_angle T (fan.order.neighbors outgoing).property</span>
+<span id="L72" class="line"><a href="#L72">72</a>     rfl (fan.triangles outgoing).model ordered width first_source second_source empty_gap</span>
+<span id="L73" class="line"><a href="#L73">73</a>     fan.order.radius_positive on_ray</span>
+<span id="L74" class="line"><a href="#L74">74</a>   change angle fan.order.chart.origin</span>
+<span id="L75" class="line"><a href="#L75">75</a>     (fan.order.chart.origin + P.surfaceDist a (T.vertexTarget u) • direction δ)</span>
+<span id="L76" class="line"><a href="#L76">76</a>     (fan.order.chart.origin + dist (u : Space) ((fan.order.neighbors outgoing).val : Space) •</span>
+<span id="L77" class="line"><a href="#L77">77</a>       direction ((γ + δ) / 2)) = (fan.triangles outgoing).model.sourceAngle at angle_eq</span>
+<span id="L78" class="line"><a href="#L78">78</a>   have step := gap_rotate_and_move_with_sources fan.order.chart.origin source_positive length_positive</span>
+<span id="L79" class="line"><a href="#L79">79</a>     ordered width separated outer_lower (by rw [angle_eq]; exact budget)</span>
+<span id="L80" class="line"><a href="#L80">80</a>   dsimp only at step</span>
+<span id="L81" class="line"><a href="#L81">81</a>   rw [angle_eq] at step</span>
+<span id="L82" class="line"><a href="#L82">82</a>   obtain ⟨D, Θ, dp, tp, ts, source_position, _, step⟩ := step</span>
+<span id="L83" class="line"><a href="#L83">83</a>   have parameters := fan.order.chart.next_wedge_parameters T (fan.order.neighbors outgoing).property</span>
+<span id="L84" class="line"><a href="#L84">84</a>     rfl (fan.triangles outgoing).model ordered width first_source second_source empty_gap</span>
+<span id="L85" class="line"><a href="#L85">85</a>     fan.order.radius_positive on_ray dp tp ts source_position</span>
+<span id="L86" class="line"><a href="#L86">86</a>   refine ⟨α, β, γ, δ, incoming_gap, outgoing_gap, incoming_midpoint, outgoing_midpoint,</span>
+<span id="L87" class="line"><a href="#L87">87</a>     D, Θ, dp, tp, ts, parameters.1, parameters.2, ?_⟩</span>
+<span id="L88" class="line"><a href="#L88">88</a>   simpa only [outgoing_midpoint] using step</span>
+<span id="L89" class="line"><a href="#L89">89</a> </span>
+<span id="L90" class="line"><a href="#L90">90</a> </span>
+<span id="L91" class="line"><a href="#L91">91</a> /-- The set-theoretic form of the step, with its identified parameters omitted. -/</span>
+<span id="L92" class="line"><a href="#L92">92</a> theorem wedge_step</span>
+<span id="L93" class="line"><a href="#L93">93</a>     (incoming outgoing : circularGapMidpoints fan.order.angles fan.order.first fan.order.last)</span>
+<span id="L94" class="line"><a href="#L94">94</a>     (distinct : incoming ≠ outgoing) (ω : ℝ) (outer_lower : π / 2 ≤ ω)</span>
+<span id="L95" class="line"><a href="#L95">95</a>     (budget : ω + (fan.triangles outgoing).model.sourceAngle ≤ 3 * π / 2) :</span>
+<span id="L96" class="line"><a href="#L96">96</a>     let z := fan.order.chart.origin</span>
+<span id="L97" class="line"><a href="#L97">97</a>     let d := P.surfaceDist a (T.vertexTarget u)</span>
+<span id="L98" class="line"><a href="#L98">98</a>     let L := dist (u : Space) ((fan.order.neighbors outgoing).val : Space)</span>
+<span id="L99" class="line"><a href="#L99">99</a>     let y := z + L • direction outgoing</span>
+<span id="L100" class="line"><a href="#L100">100</a>     ∃ α β γ δ : ℝ,</span>
+<span id="L101" class="line"><a href="#L101">101</a>       IsCircularGap fan.order.angles fan.order.first fan.order.last α β ∧</span>
+<span id="L102" class="line"><a href="#L102">102</a>       IsCircularGap fan.order.angles fan.order.first fan.order.last γ δ ∧</span>
+<span id="L103" class="line"><a href="#L103">103</a>       (incoming : ℝ) = (α + β) / 2 ∧ (outgoing : ℝ) = (γ + δ) / 2 ∧</span>
+<span id="L104" class="line"><a href="#L104">104</a>       ∃ D Θ : ℝ, 0 &lt; D ∧ 0 &lt; Θ ∧ Θ &lt; π ∧</span>
+<span id="L105" class="line"><a href="#L105">105</a>         let W := {x | x - z ∈ polarRegion d ω α β}</span>
+<span id="L106" class="line"><a href="#L106">106</a>         let V := {x | x - z ∈ polarRegion d ω δ (γ + 2 * π)}</span>
+<span id="L107" class="line"><a href="#L107">107</a>         let W&#x27; := {x | x - y ∈ polarRegion D (ω + (fan.triangles outgoing).model.sourceAngle)</span>
+<span id="L108" class="line"><a href="#L108">108</a>           (Θ + (γ + δ) / 2) (2 * π - Θ + (γ + δ) / 2)}</span>
+<span id="L109" class="line"><a href="#L109">109</a>         W ⊆ V ∧ Disjoint V (interior (gapKite z d L γ δ)) ∧ W&#x27; = V ∪ gapKite z d L γ δ := by</span>
+<span id="L110" class="line"><a href="#L110">110</a>   obtain ⟨α, β, γ, δ, ig, og, im, om, D, Θ, dp, tp, ts, _, _, step⟩ :=</span>
+<span id="L111" class="line"><a href="#L111">111</a>     fan.wedge_step_with_parameters incoming outgoing distinct ω outer_lower budget</span>
+<span id="L112" class="line"><a href="#L112">112</a>   exact ⟨α, β, γ, δ, ig, og, im, om, D, Θ, dp, tp, ts, step⟩</span>
+<span id="L113" class="line"><a href="#L113">113</a> </span>
+<span id="L114" class="line"><a href="#L114">114</a> end SixVertexUnfolding.ConvexPolyhedron.JunctionFan</span></pre></html>

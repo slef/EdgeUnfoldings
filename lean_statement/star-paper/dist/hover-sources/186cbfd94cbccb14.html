@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/CanonicalSixGraphs.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/CanonicalSixGraphs.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.PairedGraphCases</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! The four canonical graph forms in the six-vertex case without a universal vertex. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding.SmallGraphs</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> /-- Names for the four remaining original vertex-edge graphs. -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> inductive SixGraphKind where</span>
+<span id="L9" class="line"><a href="#L9">9</a>   | octahedron</span>
+<span id="L10" class="line"><a href="#L10">10</a>   | minusEdge</span>
+<span id="L11" class="line"><a href="#L11">11</a>   | prismDiagonal</span>
+<span id="L12" class="line"><a href="#L12">12</a>   | prism</span>
+<span id="L13" class="line"><a href="#L13">13</a>   deriving DecidableEq, Fintype</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-- The complementary edges: three pairs, a four-vertex path and a pair, a six-vertex path, or a six-cycle. -/</span>
+<span id="L16" class="line"><a href="#L16">16</a> def SixGraphKind.missingEdges : SixGraphKind → Finset (Sym2 (Fin 6))</span>
+<span id="L17" class="line"><a href="#L17">17</a>   | .octahedron =&gt; {s(0, 1), s(2, 3), s(4, 5)}</span>
+<span id="L18" class="line"><a href="#L18">18</a>   | .minusEdge =&gt; {s(0, 1), s(1, 2), s(2, 3), s(4, 5)}</span>
+<span id="L19" class="line"><a href="#L19">19</a>   | .prismDiagonal =&gt; {s(0, 1), s(1, 2), s(2, 3), s(3, 4), s(4, 5)}</span>
+<span id="L20" class="line"><a href="#L20">20</a>   | .prism =&gt; {s(0, 1), s(1, 2), s(2, 3), s(3, 4), s(4, 5), s(0, 5)}</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> /-- A canonical type and a relabeling for each of the 45 permitted extra-edge patterns. -/</span>
+<span id="L23" class="line"><a href="#L23">23</a> def pairedGraphChoices : Fin 45 → SixGraphKind × (Fin 6 → Fin 6) :=</span>
+<span id="L24" class="line"><a href="#L24">24</a>   ![(.octahedron, ![0, 1, 2, 3, 4, 5]),</span>
+<span id="L25" class="line"><a href="#L25">25</a>     (.minusEdge, ![1, 0, 2, 3, 4, 5]),</span>
+<span id="L26" class="line"><a href="#L26">26</a>     (.minusEdge, ![1, 0, 3, 2, 4, 5]),</span>
+<span id="L27" class="line"><a href="#L27">27</a>     (.minusEdge, ![1, 0, 4, 5, 2, 3]),</span>
+<span id="L28" class="line"><a href="#L28">28</a>     (.minusEdge, ![1, 0, 5, 4, 2, 3]),</span>
+<span id="L29" class="line"><a href="#L29">29</a>     (.minusEdge, ![0, 1, 2, 3, 4, 5]),</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (.minusEdge, ![0, 1, 3, 2, 4, 5]),</span>
+<span id="L31" class="line"><a href="#L31">31</a>     (.minusEdge, ![0, 1, 4, 5, 2, 3]),</span>
+<span id="L32" class="line"><a href="#L32">32</a>     (.minusEdge, ![0, 1, 5, 4, 2, 3]),</span>
+<span id="L33" class="line"><a href="#L33">33</a>     (.minusEdge, ![3, 2, 4, 5, 0, 1]),</span>
+<span id="L34" class="line"><a href="#L34">34</a>     (.minusEdge, ![3, 2, 5, 4, 0, 1]),</span>
+<span id="L35" class="line"><a href="#L35">35</a>     (.minusEdge, ![2, 3, 4, 5, 0, 1]),</span>
+<span id="L36" class="line"><a href="#L36">36</a>     (.minusEdge, ![2, 3, 5, 4, 0, 1]),</span>
+<span id="L37" class="line"><a href="#L37">37</a>     (.prismDiagonal, ![3, 2, 0, 1, 4, 5]),</span>
+<span id="L38" class="line"><a href="#L38">38</a>     (.prismDiagonal, ![3, 2, 0, 1, 5, 4]),</span>
+<span id="L39" class="line"><a href="#L39">39</a>     (.prismDiagonal, ![1, 0, 2, 3, 4, 5]),</span>
+<span id="L40" class="line"><a href="#L40">40</a>     (.prismDiagonal, ![1, 0, 2, 3, 5, 4]),</span>
+<span id="L41" class="line"><a href="#L41">41</a>     (.prismDiagonal, ![2, 3, 0, 1, 4, 5]),</span>
+<span id="L42" class="line"><a href="#L42">42</a>     (.prismDiagonal, ![2, 3, 0, 1, 5, 4]),</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (.prismDiagonal, ![1, 0, 3, 2, 4, 5]),</span>
+<span id="L44" class="line"><a href="#L44">44</a>     (.prismDiagonal, ![1, 0, 3, 2, 5, 4]),</span>
+<span id="L45" class="line"><a href="#L45">45</a>     (.prismDiagonal, ![3, 2, 1, 0, 4, 5]),</span>
+<span id="L46" class="line"><a href="#L46">46</a>     (.prismDiagonal, ![2, 3, 1, 0, 4, 5]),</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (.prismDiagonal, ![1, 0, 4, 5, 2, 3]),</span>
+<span id="L48" class="line"><a href="#L48">48</a>     (.prismDiagonal, ![1, 0, 4, 5, 3, 2]),</span>
+<span id="L49" class="line"><a href="#L49">49</a>     (.prismDiagonal, ![3, 2, 1, 0, 5, 4]),</span>
+<span id="L50" class="line"><a href="#L50">50</a>     (.prismDiagonal, ![2, 3, 1, 0, 5, 4]),</span>
+<span id="L51" class="line"><a href="#L51">51</a>     (.prismDiagonal, ![1, 0, 5, 4, 2, 3]),</span>
+<span id="L52" class="line"><a href="#L52">52</a>     (.prismDiagonal, ![1, 0, 5, 4, 3, 2]),</span>
+<span id="L53" class="line"><a href="#L53">53</a>     (.prismDiagonal, ![0, 1, 2, 3, 4, 5]),</span>
+<span id="L54" class="line"><a href="#L54">54</a>     (.prismDiagonal, ![0, 1, 2, 3, 5, 4]),</span>
+<span id="L55" class="line"><a href="#L55">55</a>     (.prismDiagonal, ![0, 1, 3, 2, 4, 5]),</span>
+<span id="L56" class="line"><a href="#L56">56</a>     (.prismDiagonal, ![0, 1, 3, 2, 5, 4]),</span>
+<span id="L57" class="line"><a href="#L57">57</a>     (.prismDiagonal, ![0, 1, 4, 5, 2, 3]),</span>
+<span id="L58" class="line"><a href="#L58">58</a>     (.prismDiagonal, ![0, 1, 4, 5, 3, 2]),</span>
+<span id="L59" class="line"><a href="#L59">59</a>     (.prismDiagonal, ![0, 1, 5, 4, 2, 3]),</span>
+<span id="L60" class="line"><a href="#L60">60</a>     (.prismDiagonal, ![0, 1, 5, 4, 3, 2]),</span>
+<span id="L61" class="line"><a href="#L61">61</a>     (.prism, ![0, 1, 4, 5, 3, 2]),</span>
+<span id="L62" class="line"><a href="#L62">62</a>     (.prism, ![0, 1, 5, 4, 3, 2]),</span>
+<span id="L63" class="line"><a href="#L63">63</a>     (.prism, ![0, 1, 4, 5, 2, 3]),</span>
+<span id="L64" class="line"><a href="#L64">64</a>     (.prism, ![0, 1, 5, 4, 2, 3]),</span>
+<span id="L65" class="line"><a href="#L65">65</a>     (.prism, ![0, 1, 2, 3, 5, 4]),</span>
+<span id="L66" class="line"><a href="#L66">66</a>     (.prism, ![0, 1, 3, 2, 5, 4]),</span>
+<span id="L67" class="line"><a href="#L67">67</a>     (.prism, ![0, 1, 2, 3, 4, 5]),</span>
+<span id="L68" class="line"><a href="#L68">68</a>     (.prism, ![0, 1, 3, 2, 4, 5])]</span>
+<span id="L69" class="line"><a href="#L69">69</a> </span>
+<span id="L70" class="line"><a href="#L70">70</a> theorem pairedGraphChoices_bijective : ∀ k, Function.Bijective (pairedGraphChoices k).2 := by decide</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> end SixVertexUnfolding.SmallGraphs</span></pre></html>

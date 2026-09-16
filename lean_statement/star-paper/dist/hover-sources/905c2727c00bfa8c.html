@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/CutTreeFrames.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/CutTreeFrames.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.TreeTransitionChoice</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.PlacedCutEdgeTriangles</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! One global choice of frames aligns both whole radial triangle maps</span>
+<span id="L5" class="line"><a href="#L5">5</a> across every cut-tree edge. No pairwise re-selection of coordinates occurs. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- Frames for a fixed collection of local cut-edge triangle placements. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> structure CutTreeFrames {P : ConvexPolyhedron} {a : frontier P.body}</span>
+<span id="L13" class="line"><a href="#L13">13</a>     (T : P.CutLocusTree a)</span>
+<span id="L14" class="line"><a href="#L14">14</a>     (charts : ∀ {u v : T.vertices} (edge : T.graph.Adj u v), PlacedCutEdgeTriangles T edge) where</span>
+<span id="L15" class="line"><a href="#L15">15</a>   transition : ∀ {u v : T.vertices}, T.graph.Adj u v → Plane ≃ᵃⁱ[ℝ] Plane</span>
+<span id="L16" class="line"><a href="#L16">16</a>   frame : T.vertices → Plane ≃ᵃⁱ[ℝ] Plane</span>
+<span id="L17" class="line"><a href="#L17">17</a>   reverses : ∀ {u v : T.vertices} (edge : T.graph.Adj u v),</span>
+<span id="L18" class="line"><a href="#L18">18</a>     (charts edge).Reverses (charts edge.symm) (transition edge)</span>
+<span id="L19" class="line"><a href="#L19">19</a>   compatible : ∀ {u v : T.vertices} (edge : T.graph.Adj u v) (x : Plane),</span>
+<span id="L20" class="line"><a href="#L20">20</a>     frame v (transition edge x) = frame u x</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> namespace CutTreeFrames</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L25" class="line"><a href="#L25">25</a>     {charts : ∀ {u v : T.vertices} (edge : T.graph.Adj u v), PlacedCutEdgeTriangles T edge}</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> /-- The same globally placed triangle pair is obtained from either edge orientation. -/</span>
+<span id="L28" class="line"><a href="#L28">28</a> theorem global_reversal (frames : CutTreeFrames T charts)</span>
+<span id="L29" class="line"><a href="#L29">29</a>     {u v : T.vertices} (edge : T.graph.Adj u v) :</span>
+<span id="L30" class="line"><a href="#L30">30</a>     ((charts edge).inFrame (frames.frame u)).Reverses</span>
+<span id="L31" class="line"><a href="#L31">31</a>       ((charts edge.symm).inFrame (frames.frame v)) (AffineIsometryEquiv.refl ℝ Plane) :=</span>
+<span id="L32" class="line"><a href="#L32">32</a>   (frames.reverses edge).in_common_frame (frames.frame u) (frames.frame v) (frames.compatible edge)</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> end CutTreeFrames</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> /-- Arbitrarily chosen genuine local triangle charts have coherent reverse-edge frames. -/</span>
+<span id="L37" class="line"><a href="#L37">37</a> theorem exists_cut_tree_frames {P : ConvexPolyhedron} {a : frontier P.body}</span>
+<span id="L38" class="line"><a href="#L38">38</a>     (T : P.CutLocusTree a)</span>
+<span id="L39" class="line"><a href="#L39">39</a>     (charts : ∀ {u v : T.vertices} (edge : T.graph.Adj u v), PlacedCutEdgeTriangles T edge) :</span>
+<span id="L40" class="line"><a href="#L40">40</a>     Nonempty (CutTreeFrames T charts) := by</span>
+<span id="L41" class="line"><a href="#L41">41</a>   classical</span>
+<span id="L42" class="line"><a href="#L42">42</a>   letI : Fintype T.vertices := T.finite_vertices.fintype</span>
+<span id="L43" class="line"><a href="#L43">43</a>   let root : T.vertices := Classical.choice T.tree.connected.nonempty</span>
+<span id="L44" class="line"><a href="#L44">44</a>   obtain ⟨motion, frame, valid, _, compatible⟩ := TreeFrames.exists_frames_for_transitions</span>
+<span id="L45" class="line"><a href="#L45">45</a>     T.graph T.tree root (fun {_ _} edge transition =&gt; (charts edge).Reverses (charts edge.symm) transition)</span>
+<span id="L46" class="line"><a href="#L46">46</a>     (fun {_ _} edge =&gt; (charts edge).exists_reversal (charts edge.symm))</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (fun {_ _} _ _ valid =&gt; valid.symm)</span>
+<span id="L48" class="line"><a href="#L48">48</a>   exact ⟨⟨@motion, frame, valid, compatible⟩⟩</span>
+<span id="L49" class="line"><a href="#L49">49</a> </span>
+<span id="L50" class="line"><a href="#L50">50</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

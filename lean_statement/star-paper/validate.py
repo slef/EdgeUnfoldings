@@ -41,8 +41,70 @@ for module,s in D['sources'].items():
 for b in D['paper']:
     assert not re.search(r'\b102[1-6]\b',b['text']),'page header inside paragraph'
     assert not any(ord(c)<32 for c in b['text'])
-for js in ('app.js','data.js'):subprocess.run(['node','--check',str(dist/js)],check=True)
+for js in ('app.js','data.js','hovers.js'):subprocess.run(['node','--check',str(dist/js)],check=True)
 v=json.loads((site/'verification.json').read_text())
 assert v['result']=='passed' and v['theorems']==sum(d['kind']=='theorem' for d in D['declarations'].values())
 assert 'sorryAx' not in (dist/'verification.txt').read_text()
 print(f'PASS: {len(D["paper"])} passages, {len(D["annotations"])} annotations, {len(D["declarations"])} exact declarations; all local assets, anchors, source hashes and JavaScript syntax valid.')
+
+# Hover markup must preserve every character of the checked excerpts.
+H=json.loads((site/'hover-index.json').read_text())
+browser_hovers=json.loads((dist/'hovers.js').read_text().removeprefix('window.LEAN_HOVERS = ').rstrip(';\n'))
+assert browser_hovers['symbols']==H['symbols']
+assert not H['unresolved']
+class Excerpts(HTMLParser):
+    def __init__(self,text):
+        super().__init__(); self.current=None; self.text=[]; self.seen=set(); self.buttons=[]; self.feed(text)
+    def handle_starttag(self,tag,attrs):
+        a=dict(attrs)
+        if tag=='pre' and 'data-excerpt' in a:
+            self.current=a['data-excerpt']; self.text=[]
+        if tag=='button' and 'data-symbol' in a:
+            assert a['data-symbol'] in H['symbols']
+            assert a['aria-controls']=='lean-hover' and a['aria-haspopup']=='dialog'
+            self.buttons.append(a['data-symbol'])
+    def handle_data(self,data):
+        if self.current:self.text.append(data)
+    def handle_endtag(self,tag):
+        if tag=='pre' and self.current:
+            key,field=self.current.rsplit(':',1)
+            assert ''.join(self.text)==D['declarations'][key][field],self.current
+            self.seen.add(self.current); self.current=None
+excerpt_page=Excerpts((dist/'index.html').read_text())
+keywords=set("theorem def abbrev structure inductive noncomputable private protected where extends variable variables open scoped include namespace end in fun let by if then else match with do return have show from forall Prop Type Type* Sort true false".split())
+for key,d in D['declarations'].items():
+    for field in ('signature','context'):
+        if d[field]: assert key+':'+field in excerpt_page.seen
+        expected=[(m.start(),m.end()) for m in re.finditer(r"[^\W\d][\w']*",d[field]) if m[0] not in keywords and m[0]!='_']
+        spans=H['references'][key][field]
+        assert expected==[(t['start'],t['end']) for t in spans],(key,field)
+        assert all(t['symbol'] in H['symbols'] for t in spans)
+for card in H['symbols'].values():
+    assert card['hover'] and card['definition'] and card['location'],card
+    assert card['origin'] in ('This project','Mathlib','Lean core')
+    location=card['location']; u=urlsplit(location['href']); target=dist/u.path
+    assert target in pages and u.fragment in pages[target].ids,location
+    assert u.fragment=='L'+str(location['line'])
+for name,origin,path in [('Finset','Mathlib','Mathlib/Data/Finset/Defs.lean'),('convexHull','Mathlib','Mathlib/Analysis/Convex/Hull.lean'),('Fin','Lean core','Init/Prelude.lean')]:
+    matches=[c for c in H['symbols'].values() if re.match(r'```lean\n'+name+r'(?:\.\{| |:)',c['hover'])]
+    assert matches and all(c['origin']==origin and c['location']['path']==path for c in matches),name
+class SourceLines(HTMLParser):
+    def __init__(self,text):
+        super().__init__(); self.in_line=False;self.in_link=False;self.lines=[];self.feed(text)
+    def handle_starttag(self,tag,attrs):
+        if tag=='span' and dict(attrs).get('class')=='line':self.in_line=True;self.lines.append('')
+        if tag=='a':self.in_link=True
+    def handle_endtag(self,tag):
+        if tag=='span':self.in_line=False
+        if tag=='a':self.in_link=False
+    def handle_data(self,data):
+        if self.in_line and not self.in_link:self.lines[-1]+=data
+for key,source in H['sources'].items():
+    lines=SourceLines((dist/'hover-sources'/f'{key}.html').read_text()).lines
+    reconstructed='\n'.join(line.removeprefix(' ') for line in lines)
+    assert source['sha256'] in {hashlib.sha256((reconstructed+end).encode()).hexdigest() for end in ('','\n')},source['path']
+logo=(dist/'assets/lean-logo.svg').read_text()
+assert '<svg ' in logo and '<script' not in logo and 'lean-mark' not in (dist/'index.html').read_text()
+for script in ('collect_hovers.py','build_hovers.py','render.py'):
+    compile((site/script).read_text(),str(site/script),'exec')
+print(f'PASS: {len(H["symbols"])} contextual hover cards; all names covered, rendered excerpts unchanged, {len(H["sources"])} linked source snapshots verified.')

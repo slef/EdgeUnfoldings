@@ -1,0 +1,269 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/CutVoronoiCharts.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/CutVoronoiCharts.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.EdgeCutLocusStructure</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.FaceCutLocusStructure</span>
+<span id="L3" class="line"><a href="#L3">3</a> import SixVertexUnfolding.Geometry.SurfaceFlatCharts</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> /-! Every nonvertex target has a flat chart in which the actual cut locus</span>
+<span id="L6" class="line"><a href="#L6">6</a> is the Voronoi boundary of finitely many active shortest-route sources. -/</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> open Set</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-- A flat chart with the exact finite nearest-source description of the cut locus. -/</span>
+<span id="L13" class="line"><a href="#L13">13</a> structure CutVoronoiChart (P : ConvexPolyhedron) (a b : frontier P.body) extends P.FlatChart b where</span>
+<span id="L14" class="line"><a href="#L14">14</a>   sources : Set Plane</span>
+<span id="L15" class="line"><a href="#L15">15</a>   finite_sources : sources.Finite</span>
+<span id="L16" class="line"><a href="#L16">16</a>   source_distance : ∀ p ∈ sources, dist p origin = P.surfaceDist a b</span>
+<span id="L17" class="line"><a href="#L17">17</a>   route_count : sources.ncard = Nat.card (P.geodesicFiber a b)</span>
+<span id="L18" class="line"><a href="#L18">18</a>   local_distance : ∀ x ∈ domain,</span>
+<span id="L19" class="line"><a href="#L19">19</a>     (∀ p ∈ sources, P.surfaceDist a (map x) ≤ dist p x) ∧</span>
+<span id="L20" class="line"><a href="#L20">20</a>       ∃ p ∈ sources, P.surfaceDist a (map x) = dist p x</span>
+<span id="L21" class="line"><a href="#L21">21</a>   cut_diagram : ∀ x ∈ domain, map x ∈ P.multipleRouteLocus a ↔ x ∈ voronoiBoundary sources</span>
+<span id="L22" class="line"><a href="#L22">22</a>   source_routes : ∀ p, p ∈ sources ↔ ∃ f ∈ P.geodesicFiber a b,</span>
+<span id="L23" class="line"><a href="#L23">23</a>     ∃ start : unitInterval, start &lt; 1 ∧ ∀ t ∈ Icc start 1,</span>
+<span id="L24" class="line"><a href="#L24">24</a>       AffineMap.lineMap p origin (t : ℝ) ∈ domain ∧</span>
+<span id="L25" class="line"><a href="#L25">25</a>       map (AffineMap.lineMap p origin (t : ℝ)) = (f t : Space)</span>
+<span id="L26" class="line"><a href="#L26">26</a>   route_stability : ∀ (p : Plane) (f : P.BoundaryCurve), f ∈ P.geodesicFiber a b →</span>
+<span id="L27" class="line"><a href="#L27">27</a>     (∃ start : unitInterval, start &lt; 1 ∧ ∀ t ∈ Icc start 1,</span>
+<span id="L28" class="line"><a href="#L28">28</a>       AffineMap.lineMap p origin (t : ℝ) ∈ domain ∧</span>
+<span id="L29" class="line"><a href="#L29">29</a>       map (AffineMap.lineMap p origin (t : ℝ)) = (f t : Space)) →</span>
+<span id="L30" class="line"><a href="#L30">30</a>     ∃ W : Set P.BoundaryCurve, IsOpen W ∧ f ∈ W ∧</span>
+<span id="L31" class="line"><a href="#L31">31</a>       ∀ g ∈ W, g ∈ P.geodesicCurves → g 0 = a →</span>
+<span id="L32" class="line"><a href="#L32">32</a>         ∀ x ∈ domain, map x = (g 1 : Space) → P.surfaceDist a (map x) = dist p x</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> /-- A straight segment eventually stays in any open neighborhood of its endpoint. -/</span>
+<span id="L35" class="line"><a href="#L35">35</a> private theorem lineMap_tail_in_open (p z : Plane) {D : Set Plane}</span>
+<span id="L36" class="line"><a href="#L36">36</a>     (openD : IsOpen D) (zD : z ∈ D) :</span>
+<span id="L37" class="line"><a href="#L37">37</a>     ∃ start : unitInterval, start &lt; 1 ∧ ∀ t ∈ Icc start 1,</span>
+<span id="L38" class="line"><a href="#L38">38</a>       AffineMap.lineMap p z (t : ℝ) ∈ D := by</span>
+<span id="L39" class="line"><a href="#L39">39</a>   have continuous : Continuous (fun t : ℝ =&gt; AffineMap.lineMap p z t) := by</span>
+<span id="L40" class="line"><a href="#L40">40</a>     simp only [AffineMap.lineMap_apply_module]</span>
+<span id="L41" class="line"><a href="#L41">41</a>     exact ((continuous_const.sub continuous_id).smul continuous_const).add</span>
+<span id="L42" class="line"><a href="#L42">42</a>       (continuous_id.smul continuous_const)</span>
+<span id="L43" class="line"><a href="#L43">43</a>   have open_preimage : IsOpen ((fun t : ℝ =&gt; AffineMap.lineMap p z t) ⁻¹&#x27; D) :=</span>
+<span id="L44" class="line"><a href="#L44">44</a>     openD.preimage continuous</span>
+<span id="L45" class="line"><a href="#L45">45</a>   obtain ⟨ε, positive, interval⟩ := Metric.isOpen_iff.mp open_preimage 1 (by simpa using zD)</span>
+<span id="L46" class="line"><a href="#L46">46</a>   obtain ⟨s, after, before⟩ := exists_between</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (show max (0 : ℝ) (1 - ε) &lt; 1 from max_lt (by norm_num) (by linarith))</span>
+<span id="L48" class="line"><a href="#L48">48</a>   refine ⟨⟨s, (le_max_left _ _).trans after.le, before.le⟩, before, ?_⟩</span>
+<span id="L49" class="line"><a href="#L49">49</a>   intro t ht</span>
+<span id="L50" class="line"><a href="#L50">50</a>   apply interval</span>
+<span id="L51" class="line"><a href="#L51">51</a>   change dist (t : ℝ) 1 &lt; ε</span>
+<span id="L52" class="line"><a href="#L52">52</a>   rw [Real.dist_eq, abs_of_nonpos (sub_nonpos.mpr t.property.2)]</span>
+<span id="L53" class="line"><a href="#L53">53</a>   have lower : s ≤ (t : ℝ) := ht.1</span>
+<span id="L54" class="line"><a href="#L54">54</a>   have := (le_max_right (0 : ℝ) (1 - ε)).trans_lt after</span>
+<span id="L55" class="line"><a href="#L55">55</a>   linarith</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> namespace SixVertexGraph</span>
+<span id="L58" class="line"><a href="#L58">58</a> </span>
+<span id="L59" class="line"><a href="#L59">59</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L60" class="line"><a href="#L60">60</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L61" class="line"><a href="#L61">61</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> include graph small_faces in</span>
+<span id="L64" class="line"><a href="#L64">64</a> theorem cut_voronoi_chart_in_face (a b : frontier P.body) (different : a ≠ b)</span>
+<span id="L65" class="line"><a href="#L65">65</a>     (F : P.Face) (bF : (b : Space) ∈ F.val)</span>
+<span id="L66" class="line"><a href="#L66">66</a>     (unique : ∀ G : P.Face, (b : Space) ∈ G.val → G = F) : Nonempty (P.CutVoronoiChart a b) := by</span>
+<span id="L67" class="line"><a href="#L67">67</a>   obtain ⟨V₀, openV₀, bV₀, diagram₀⟩ :=</span>
+<span id="L68" class="line"><a href="#L68">68</a>     graph.local_voronoi_cut_locus small_faces a b different F unique</span>
+<span id="L69" class="line"><a href="#L69">69</a>   obtain ⟨W, openW, bW, minimum₀⟩ :=</span>
+<span id="L70" class="line"><a href="#L70">70</a>     graph.local_minimum_distance small_faces a b different F unique</span>
+<span id="L71" class="line"><a href="#L71">71</a>   let V := V₀ ∩ W</span>
+<span id="L72" class="line"><a href="#L72">72</a>   have openV : IsOpen V := openV₀.inter openW</span>
+<span id="L73" class="line"><a href="#L73">73</a>   have bV : (b : Space) ∈ V := ⟨bV₀, bW⟩</span>
+<span id="L74" class="line"><a href="#L74">74</a>   have diagram (x : Space) (hx : x ∈ V ∩ F.val) := diagram₀ x ⟨hx.1.1, hx.2⟩</span>
+<span id="L75" class="line"><a href="#L75">75</a>   have minimum (x : Space) (hx : x ∈ V ∩ F.val) := minimum₀ x ⟨hx.1.2, hx.2⟩</span>
+<span id="L76" class="line"><a href="#L76">76</a>   obtain ⟨center, inside⟩ := P.solid</span>
+<span id="L77" class="line"><a href="#L77">77</a>   obtain ⟨facets⟩ := P.exists_normalized_facets inside</span>
+<span id="L78" class="line"><a href="#L78">78</a>   obtain ⟨O, openO, bO, plane⟩ := facets.single_face_local_plane F bF unique</span>
+<span id="L79" class="line"><a href="#L79">79</a>   obtain ⟨lift, in_plane, coordinate, inverse, rigid⟩ :=</span>
+<span id="L80" class="line"><a href="#L80">80</a>     F.exists_rigid_plane_inverse (P.faceCoordinates F) (P.faceCoordinates_rigid F)</span>
+<span id="L81" class="line"><a href="#L81">81</a>   let D : Set Plane := lift ⁻¹&#x27; (V ∩ O)</span>
+<span id="L82" class="line"><a href="#L82">82</a>   have origin : P.faceCoordinates F b ∈ D := by</span>
+<span id="L83" class="line"><a href="#L83">83</a>     change lift (P.faceCoordinates F b) ∈ V ∩ O</span>
+<span id="L84" class="line"><a href="#L84">84</a>     rw [inverse b (subset_affineSpan ℝ _ bF)]</span>
+<span id="L85" class="line"><a href="#L85">85</a>     exact ⟨bV, bO⟩</span>
+<span id="L86" class="line"><a href="#L86">86</a>   have in_face (x : Plane) (hx : x ∈ D) : lift x ∈ F.val := by</span>
+<span id="L87" class="line"><a href="#L87">87</a>     have member : lift x ∈ O ∩ (affineSpan ℝ F.val : Set Space) := ⟨hx.2, in_plane x⟩</span>
+<span id="L88" class="line"><a href="#L88">88</a>     rw [← plane] at member</span>
+<span id="L89" class="line"><a href="#L89">89</a>     exact member.2</span>
+<span id="L90" class="line"><a href="#L90">90</a>   obtain ⟨U, openU, bU, covered⟩ := P.unique_face_neighborhood F unique</span>
+<span id="L91" class="line"><a href="#L91">91</a>   refine ⟨{</span>
+<span id="L92" class="line"><a href="#L92">92</a>     domain := D</span>
+<span id="L93" class="line"><a href="#L93">93</a>     open_domain := (openV.inter openO).preimage lift.continuous_of_finiteDimensional</span>
+<span id="L94" class="line"><a href="#L94">94</a>     origin := P.faceCoordinates F b</span>
+<span id="L95" class="line"><a href="#L95">95</a>     origin_mem := origin</span>
+<span id="L96" class="line"><a href="#L96">96</a>     map := lift</span>
+<span id="L97" class="line"><a href="#L97">97</a>     continuous := lift.continuous_of_finiteDimensional</span>
+<span id="L98" class="line"><a href="#L98">98</a>     at_origin := inverse b (subset_affineSpan ℝ _ bF)</span>
+<span id="L99" class="line"><a href="#L99">99</a>     on_surface := fun x hx =&gt; F.subset_frontier (in_face x hx)</span>
+<span id="L100" class="line"><a href="#L100">100</a>     distance := fun x hx y hy =&gt; (P.surfaceDist_eq_dist_in_face F (in_face x hx) (in_face y hy)).trans (rigid x y)</span>
+<span id="L101" class="line"><a href="#L101">101</a>     covers := ⟨U ∩ (V ∩ O), openU.inter (openV.inter openO), ⟨bU, bV, bO⟩, ?_⟩</span>
+<span id="L102" class="line"><a href="#L102">102</a>     sources := P.activeSources a b F</span>
+<span id="L103" class="line"><a href="#L103">103</a>     finite_sources := graph.activeSources_finite small_faces a b different F unique</span>
+<span id="L104" class="line"><a href="#L104">104</a>     source_distance := fun p hp =&gt; (P.activeSource_distance a b F p hp).symm</span>
+<span id="L105" class="line"><a href="#L105">105</a>     route_count := graph.activeSources_ncard small_faces a b different F unique</span>
+<span id="L106" class="line"><a href="#L106">106</a>     local_distance := ?_</span>
+<span id="L107" class="line"><a href="#L107">107</a>     cut_diagram := ?_</span>
+<span id="L108" class="line"><a href="#L108">108</a>     source_routes := ?_</span>
+<span id="L109" class="line"><a href="#L109">109</a>     route_stability := ?_ }⟩</span>
+<span id="L110" class="line"><a href="#L110">110</a>   · intro x hx</span>
+<span id="L111" class="line"><a href="#L111">111</a>     have xF := (covered x ⟨hx.1.1, hx.2⟩).1</span>
+<span id="L112" class="line"><a href="#L112">112</a>     refine ⟨P.faceCoordinates F x, ?_, inverse x (subset_affineSpan ℝ _ xF)⟩</span>
+<span id="L113" class="line"><a href="#L113">113</a>     change lift (P.faceCoordinates F x) ∈ V ∩ O</span>
+<span id="L114" class="line"><a href="#L114">114</a>     rw [inverse x (subset_affineSpan ℝ _ xF)]</span>
+<span id="L115" class="line"><a href="#L115">115</a>     exact hx.1.2</span>
+<span id="L116" class="line"><a href="#L116">116</a>   · intro x hx</span>
+<span id="L117" class="line"><a href="#L117">117</a>     simpa only [coordinate x] using minimum (lift x) ⟨hx.1, in_face x hx⟩</span>
+<span id="L118" class="line"><a href="#L118">118</a>   · intro x hx</span>
+<span id="L119" class="line"><a href="#L119">119</a>     rw [diagram (lift x) ⟨hx.1, in_face x hx⟩, coordinate x]</span>
+<span id="L120" class="line"><a href="#L120">120</a>   · intro p</span>
+<span id="L121" class="line"><a href="#L121">121</a>     constructor</span>
+<span id="L122" class="line"><a href="#L122">122</a>     · rintro ⟨f, hf, s, before, tail⟩</span>
+<span id="L123" class="line"><a href="#L123">123</a>       have last : f 1 = b := congrArg Prod.snd hf.2</span>
+<span id="L124" class="line"><a href="#L124">124</a>       obtain ⟨u, ub, near⟩ := lineMap_tail_in_open p (P.faceCoordinates F b)</span>
+<span id="L125" class="line"><a href="#L125">125</a>         ((openV.inter openO).preimage lift.continuous_of_finiteDimensional) origin</span>
+<span id="L126" class="line"><a href="#L126">126</a>       refine ⟨f, hf, max s u, max_lt before ub, ?_⟩</span>
+<span id="L127" class="line"><a href="#L127">127</a>       intro t ht</span>
+<span id="L128" class="line"><a href="#L128">128</a>       have position := tail t ⟨(le_max_left s u).trans ht.1, ht.2⟩</span>
+<span id="L129" class="line"><a href="#L129">129</a>       rw [last] at position</span>
+<span id="L130" class="line"><a href="#L130">130</a>       refine ⟨near t ⟨(le_max_right s u).trans ht.1, ht.2⟩, ?_⟩</span>
+<span id="L131" class="line"><a href="#L131">131</a>       rw [← position.2, inverse _ (subset_affineSpan ℝ _ position.1)]</span>
+<span id="L132" class="line"><a href="#L132">132</a>     · rintro ⟨f, hf, s, before, tail⟩</span>
+<span id="L133" class="line"><a href="#L133">133</a>       have last : f 1 = b := congrArg Prod.snd hf.2</span>
+<span id="L134" class="line"><a href="#L134">134</a>       refine ⟨f, hf, s, before, ?_⟩</span>
+<span id="L135" class="line"><a href="#L135">135</a>       intro t ht</span>
+<span id="L136" class="line"><a href="#L136">136</a>       have position := tail t ht</span>
+<span id="L137" class="line"><a href="#L137">137</a>       refine ⟨position.2 ▸ in_face _ position.1, ?_⟩</span>
+<span id="L138" class="line"><a href="#L138">138</a>       rw [last, ← position.2, coordinate]</span>
+<span id="L139" class="line"><a href="#L139">139</a>   · intro p f hf represented</span>
+<span id="L140" class="line"><a href="#L140">140</a>     have first : f 0 = a := congrArg Prod.fst hf.2</span>
+<span id="L141" class="line"><a href="#L141">141</a>     have last : f 1 = b := congrArg Prod.snd hf.2</span>
+<span id="L142" class="line"><a href="#L142">142</a>     have actual : P.HasTerminalSource f F p := by</span>
+<span id="L143" class="line"><a href="#L143">143</a>       obtain ⟨s, before, tail⟩ := represented</span>
+<span id="L144" class="line"><a href="#L144">144</a>       refine ⟨s, before, ?_⟩</span>
+<span id="L145" class="line"><a href="#L145">145</a>       intro t ht</span>
+<span id="L146" class="line"><a href="#L146">146</a>       have position := tail t ht</span>
+<span id="L147" class="line"><a href="#L147">147</a>       refine ⟨position.2 ▸ in_face _ position.1, ?_⟩</span>
+<span id="L148" class="line"><a href="#L148">148</a>       rw [last, ← position.2, coordinate]</span>
+<span id="L149" class="line"><a href="#L149">149</a>     obtain ⟨q, _, terminal, W, openW, fW, formula⟩ :=</span>
+<span id="L150" class="line"><a href="#L150">150</a>       graph.geodesic_branch_distance small_faces f hf.1</span>
+<span id="L151" class="line"><a href="#L151">151</a>         (by simpa only [first, last] using different) F (by simpa only [last] using unique)</span>
+<span id="L152" class="line"><a href="#L152">152</a>     have same : q = p := terminal.unique actual</span>
+<span id="L153" class="line"><a href="#L153">153</a>     refine ⟨W, openW, fW, ?_⟩</span>
+<span id="L154" class="line"><a href="#L154">154</a>     intro g hg geodesic starts x hx mapped</span>
+<span id="L155" class="line"><a href="#L155">155</a>     have value := formula g hg geodesic (starts.trans first.symm)</span>
+<span id="L156" class="line"><a href="#L156">156</a>     rw [starts, same, ← mapped, coordinate] at value</span>
+<span id="L157" class="line"><a href="#L157">157</a>     exact value</span>
+<span id="L158" class="line"><a href="#L158">158</a> </span>
+<span id="L159" class="line"><a href="#L159">159</a> include graph small_faces in</span>
+<span id="L160" class="line"><a href="#L160">160</a> theorem cut_voronoi_chart_at_edge (a b : frontier P.body) (different : a ≠ b)</span>
+<span id="L161" class="line"><a href="#L161">161</a>     (F G : P.Face) (shared : P.ShareEdge F G) (target : (b : Space) ∈ F.val ∩ G.val)</span>
+<span id="L162" class="line"><a href="#L162">162</a>     (not_vertex : (b : Space) ∉ P.vertices) :</span>
+<span id="L163" class="line"><a href="#L163">163</a>     Nonempty (P.CutVoronoiChart a b) := by</span>
+<span id="L164" class="line"><a href="#L164">164</a>   obtain ⟨center, inside⟩ := P.solid</span>
+<span id="L165" class="line"><a href="#L165">165</a>   obtain ⟨facets⟩ := P.exists_normalized_facets inside</span>
+<span id="L166" class="line"><a href="#L166">166</a>   obtain ⟨chart⟩ := exists_edge_folding facets F G shared</span>
+<span id="L167" class="line"><a href="#L167">167</a>   obtain ⟨patch⟩ := chart.exists_metric_patch shared target not_vertex</span>
+<span id="L168" class="line"><a href="#L168">168</a>   obtain ⟨V₀, openV₀, bV₀, contained₀, diagram₀⟩ :=</span>
+<span id="L169" class="line"><a href="#L169">169</a>     patch.local_voronoi_cut_locus graph small_faces a b different patch.center_mem</span>
+<span id="L170" class="line"><a href="#L170">170</a>   obtain ⟨W, openW, bW, _, minimum₀⟩ :=</span>
+<span id="L171" class="line"><a href="#L171">171</a>     patch.local_minimum_distance graph small_faces a b different patch.center_mem</span>
+<span id="L172" class="line"><a href="#L172">172</a>   let V := V₀ ∩ W</span>
+<span id="L173" class="line"><a href="#L173">173</a>   have openV : IsOpen V := openV₀.inter openW</span>
+<span id="L174" class="line"><a href="#L174">174</a>   have bV : (b : Space) ∈ V := ⟨bV₀, bW⟩</span>
+<span id="L175" class="line"><a href="#L175">175</a>   have contained : V ⊆ patch.domain := fun _ hx =&gt; contained₀ hx.1</span>
+<span id="L176" class="line"><a href="#L176">176</a>   have diagram (x : Space) (hx : x ∈ V ∩ frontier P.body) := diagram₀ x ⟨hx.1.1, hx.2⟩</span>
+<span id="L177" class="line"><a href="#L177">177</a>   have minimum (x : Space) (hx : x ∈ V ∩ frontier P.body) := minimum₀ x ⟨hx.1.2, hx.2⟩</span>
+<span id="L178" class="line"><a href="#L178">178</a>   let D := patch.sheet.domain ∩ chart.fold.map ⁻¹&#x27; V</span>
+<span id="L179" class="line"><a href="#L179">179</a>   have origin : chart.unfold b ∈ D := by</span>
+<span id="L180" class="line"><a href="#L180">180</a>     refine ⟨patch.unfold_mem ⟨patch.center_mem, b.property⟩, ?_⟩</span>
+<span id="L181" class="line"><a href="#L181">181</a>     change chart.fold.map (chart.unfold b) ∈ V</span>
+<span id="L182" class="line"><a href="#L182">182</a>     rwa [chart.fold_unfold (Or.inl target.1)]</span>
+<span id="L183" class="line"><a href="#L183">183</a>   have on_surface (x : Plane) (hx : x ∈ D) : chart.fold.map x ∈ frontier P.body :=</span>
+<span id="L184" class="line"><a href="#L184">184</a>     patch.sheet.on_surface ⟨x, hx.1, rfl⟩</span>
+<span id="L185" class="line"><a href="#L185">185</a>   refine ⟨{</span>
+<span id="L186" class="line"><a href="#L186">186</a>     domain := D</span>
+<span id="L187" class="line"><a href="#L187">187</a>     open_domain := patch.sheet.open_domain.inter (openV.preimage chart.fold.continuous)</span>
+<span id="L188" class="line"><a href="#L188">188</a>     origin := chart.unfold b</span>
+<span id="L189" class="line"><a href="#L189">189</a>     origin_mem := origin</span>
+<span id="L190" class="line"><a href="#L190">190</a>     map := chart.fold.map</span>
+<span id="L191" class="line"><a href="#L191">191</a>     continuous := chart.fold.continuous</span>
+<span id="L192" class="line"><a href="#L192">192</a>     at_origin := chart.fold_unfold (Or.inl target.1)</span>
+<span id="L193" class="line"><a href="#L193">193</a>     on_surface := on_surface</span>
+<span id="L194" class="line"><a href="#L194">194</a>     distance := ?_</span>
+<span id="L195" class="line"><a href="#L195">195</a>     covers := ⟨V, openV, bV, ?_⟩</span>
+<span id="L196" class="line"><a href="#L196">196</a>     sources := chart.activeSources a b</span>
+<span id="L197" class="line"><a href="#L197">197</a>     finite_sources := patch.activeSources_finite graph small_faces a b different patch.center_mem</span>
+<span id="L198" class="line"><a href="#L198">198</a>     source_distance := fun p hp =&gt; (chart.activeSource_distance patch a b patch.center_mem p hp).symm</span>
+<span id="L199" class="line"><a href="#L199">199</a>     route_count := patch.activeSources_ncard graph small_faces a b different patch.center_mem</span>
+<span id="L200" class="line"><a href="#L200">200</a>     local_distance := ?_</span>
+<span id="L201" class="line"><a href="#L201">201</a>     cut_diagram := ?_</span>
+<span id="L202" class="line"><a href="#L202">202</a>     source_routes := ?_</span>
+<span id="L203" class="line"><a href="#L203">203</a>     route_stability := ?_ }⟩</span>
+<span id="L204" class="line"><a href="#L204">204</a>   · intro x hx y hy</span>
+<span id="L205" class="line"><a href="#L205">205</a>     rw [patch.metric _ ⟨contained hx.2, on_surface x hx⟩ _ ⟨contained hy.2, on_surface y hy⟩,</span>
+<span id="L206" class="line"><a href="#L206">206</a>       EdgeFolding.Neighborhood.unfold_fold chart patch.sheet hx.1,</span>
+<span id="L207" class="line"><a href="#L207">207</a>       EdgeFolding.Neighborhood.unfold_fold chart patch.sheet hy.1]</span>
+<span id="L208" class="line"><a href="#L208">208</a>   · intro x hx</span>
+<span id="L209" class="line"><a href="#L209">209</a>     have xpatch : x ∈ patch.domain ∩ frontier P.body := ⟨contained hx.1, hx.2⟩</span>
+<span id="L210" class="line"><a href="#L210">210</a>     refine ⟨chart.unfold x, ⟨patch.unfold_mem xpatch, ?_⟩, chart.fold_unfold (patch.on_facets xpatch)⟩</span>
+<span id="L211" class="line"><a href="#L211">211</a>     change chart.fold.map (chart.unfold x) ∈ V</span>
+<span id="L212" class="line"><a href="#L212">212</a>     rw [chart.fold_unfold (patch.on_facets xpatch)]</span>
+<span id="L213" class="line"><a href="#L213">213</a>     exact hx.1</span>
+<span id="L214" class="line"><a href="#L214">214</a>   · intro x hx</span>
+<span id="L215" class="line"><a href="#L215">215</a>     simpa only [EdgeFolding.Neighborhood.unfold_fold chart patch.sheet hx.1] using</span>
+<span id="L216" class="line"><a href="#L216">216</a>       minimum _ ⟨hx.2, on_surface x hx⟩</span>
+<span id="L217" class="line"><a href="#L217">217</a>   · intro x hx</span>
+<span id="L218" class="line"><a href="#L218">218</a>     rw [diagram _ ⟨hx.2, on_surface x hx⟩, EdgeFolding.Neighborhood.unfold_fold chart patch.sheet hx.1]</span>
+<span id="L219" class="line"><a href="#L219">219</a>   · intro p</span>
+<span id="L220" class="line"><a href="#L220">220</a>     constructor</span>
+<span id="L221" class="line"><a href="#L221">221</a>     · rintro ⟨f, hf, s, before, tail⟩</span>
+<span id="L222" class="line"><a href="#L222">222</a>       have last : f 1 = b := congrArg Prod.snd hf.2</span>
+<span id="L223" class="line"><a href="#L223">223</a>       obtain ⟨u, ub, near⟩ := lineMap_tail_in_open p (chart.unfold b)</span>
+<span id="L224" class="line"><a href="#L224">224</a>         (patch.sheet.open_domain.inter (openV.preimage chart.fold.continuous)) origin</span>
+<span id="L225" class="line"><a href="#L225">225</a>       refine ⟨f, hf, max s u, max_lt before ub, ?_⟩</span>
+<span id="L226" class="line"><a href="#L226">226</a>       intro t ht</span>
+<span id="L227" class="line"><a href="#L227">227</a>       have position := tail t ⟨(le_max_left s u).trans ht.1, ht.2⟩</span>
+<span id="L228" class="line"><a href="#L228">228</a>       rw [last] at position</span>
+<span id="L229" class="line"><a href="#L229">229</a>       refine ⟨near t ⟨(le_max_right s u).trans ht.1, ht.2⟩, ?_⟩</span>
+<span id="L230" class="line"><a href="#L230">230</a>       rw [← position.2, chart.fold_unfold position.1]</span>
+<span id="L231" class="line"><a href="#L231">231</a>     · rintro ⟨f, hf, s, before, tail⟩</span>
+<span id="L232" class="line"><a href="#L232">232</a>       have last : f 1 = b := congrArg Prod.snd hf.2</span>
+<span id="L233" class="line"><a href="#L233">233</a>       refine ⟨f, hf, s, before, ?_⟩</span>
+<span id="L234" class="line"><a href="#L234">234</a>       intro t ht</span>
+<span id="L235" class="line"><a href="#L235">235</a>       have position := tail t ht</span>
+<span id="L236" class="line"><a href="#L236">236</a>       refine ⟨position.2 ▸ patch.sheet.on_facets position.1.1, ?_⟩</span>
+<span id="L237" class="line"><a href="#L237">237</a>       rw [last, ← position.2, EdgeFolding.Neighborhood.unfold_fold chart patch.sheet position.1.1]</span>
+<span id="L238" class="line"><a href="#L238">238</a>   · intro p f hf represented</span>
+<span id="L239" class="line"><a href="#L239">239</a>     have first : f 0 = a := congrArg Prod.fst hf.2</span>
+<span id="L240" class="line"><a href="#L240">240</a>     have last : f 1 = b := congrArg Prod.snd hf.2</span>
+<span id="L241" class="line"><a href="#L241">241</a>     have actual : chart.HasTerminalSource f p := by</span>
+<span id="L242" class="line"><a href="#L242">242</a>       obtain ⟨s, before, tail⟩ := represented</span>
+<span id="L243" class="line"><a href="#L243">243</a>       refine ⟨s, before, ?_⟩</span>
+<span id="L244" class="line"><a href="#L244">244</a>       intro t ht</span>
+<span id="L245" class="line"><a href="#L245">245</a>       have position := tail t ht</span>
+<span id="L246" class="line"><a href="#L246">246</a>       refine ⟨position.2 ▸ patch.sheet.on_facets position.1.1, ?_⟩</span>
+<span id="L247" class="line"><a href="#L247">247</a>       rw [last, ← position.2, EdgeFolding.Neighborhood.unfold_fold chart patch.sheet position.1.1]</span>
+<span id="L248" class="line"><a href="#L248">248</a>     obtain ⟨q, _, terminal, W, openW, fW, formula⟩ :=</span>
+<span id="L249" class="line"><a href="#L249">249</a>       patch.geodesic_branch_source graph small_faces f hf.1</span>
+<span id="L250" class="line"><a href="#L250">250</a>         (by simpa only [first, last] using different) (by simpa only [last] using patch.center_mem)</span>
+<span id="L251" class="line"><a href="#L251">251</a>     have same : q = p := chart.terminal_source_unique f q p terminal actual</span>
+<span id="L252" class="line"><a href="#L252">252</a>     refine ⟨W, openW, fW, ?_⟩</span>
+<span id="L253" class="line"><a href="#L253">253</a>     intro g hg geodesic starts x hx mapped</span>
+<span id="L254" class="line"><a href="#L254">254</a>     have value := (formula g hg geodesic (starts.trans first.symm)).2</span>
+<span id="L255" class="line"><a href="#L255">255</a>     rw [starts, same, ← mapped, EdgeFolding.Neighborhood.unfold_fold chart patch.sheet hx.1] at value</span>
+<span id="L256" class="line"><a href="#L256">256</a>     exact value</span>
+<span id="L257" class="line"><a href="#L257">257</a> </span>
+<span id="L258" class="line"><a href="#L258">258</a> include graph small_faces in</span>
+<span id="L259" class="line"><a href="#L259">259</a> /-- Every nonsource nonvertex point has a flat chart of its actual finite Voronoi diagram. -/</span>
+<span id="L260" class="line"><a href="#L260">260</a> theorem cut_voronoi_chart (a b : frontier P.body) (different : a ≠ b)</span>
+<span id="L261" class="line"><a href="#L261">261</a>     (not_vertex : (b : Space) ∉ P.vertices) :</span>
+<span id="L262" class="line"><a href="#L262">262</a>     Nonempty (P.CutVoronoiChart a b) := by</span>
+<span id="L263" class="line"><a href="#L263">263</a>   rcases P.nonvertex_incident_facets b.property not_vertex with</span>
+<span id="L264" class="line"><a href="#L264">264</a>     ⟨F, target, unique⟩ | ⟨F, G, shared, target, _⟩</span>
+<span id="L265" class="line"><a href="#L265">265</a>   · exact graph.cut_voronoi_chart_in_face small_faces a b different F target unique</span>
+<span id="L266" class="line"><a href="#L266">266</a>   · exact graph.cut_voronoi_chart_at_edge small_faces a b different F G shared target not_vertex</span>
+<span id="L267" class="line"><a href="#L267">267</a> </span>
+<span id="L268" class="line"><a href="#L268">268</a> end SixVertexGraph</span>
+<span id="L269" class="line"><a href="#L269">269</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

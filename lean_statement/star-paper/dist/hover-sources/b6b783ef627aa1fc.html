@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/EmbeddedCutGraph.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/EmbeddedCutGraph.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.FiniteCutSegments</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.SegmentGraphEmbedding</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! A finite graph embedded in the actual polyhedral boundary, whose</span>
+<span id="L5" class="line"><a href="#L5">5</a> vertices and straight edges form exactly the compact cut set. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- The finite embedded graph data. Connectivity and acyclicity are deliberately separate conclusions. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> structure EmbeddedCutGraph (P : ConvexPolyhedron) (a : frontier P.body) where</span>
+<span id="L13" class="line"><a href="#L13">13</a>   vertices : Set Space</span>
+<span id="L14" class="line"><a href="#L14">14</a>   finite_vertices : vertices.Finite</span>
+<span id="L15" class="line"><a href="#L15">15</a>   graph : SimpleGraph vertices</span>
+<span id="L16" class="line"><a href="#L16">16</a>   trace : ∀ x, x ∈ P.cutSetInSpace a ↔ x ∈ vertices ∨</span>
+<span id="L17" class="line"><a href="#L17">17</a>     ∃ u v : vertices, graph.Adj u v ∧ x ∈ openSegment ℝ (u : Space) (v : Space)</span>
+<span id="L18" class="line"><a href="#L18">18</a>   cofacial_edges : ∀ u v : vertices, graph.Adj u v →</span>
+<span id="L19" class="line"><a href="#L19">19</a>     ∃ F : P.Face, segment ℝ (u : Space) (v : Space) ⊆ F.val</span>
+<span id="L20" class="line"><a href="#L20">20</a>   no_vertex_inside : ∀ u v : vertices, graph.Adj u v →</span>
+<span id="L21" class="line"><a href="#L21">21</a>     Disjoint (openSegment ℝ (u : Space) (v : Space)) vertices</span>
+<span id="L22" class="line"><a href="#L22">22</a>   open_edges_meet : ∀ u v w z : vertices, graph.Adj u v → graph.Adj w z →</span>
+<span id="L23" class="line"><a href="#L23">23</a>     ∀ x ∈ openSegment ℝ (u : Space) (v : Space), x ∈ openSegment ℝ (w : Space) (z : Space) →</span>
+<span id="L24" class="line"><a href="#L24">24</a>       (u = w ∧ v = z) ∨ (u = z ∧ v = w)</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> namespace SixVertexGraph</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L29" class="line"><a href="#L29">29</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L31" class="line"><a href="#L31">31</a> </span>
+<span id="L32" class="line"><a href="#L32">32</a> include graph small_faces in</span>
+<span id="L33" class="line"><a href="#L33">33</a> /-- The actual cut set of every canonical model is a finite embedded graph of cofacial straight edges. -/</span>
+<span id="L34" class="line"><a href="#L34">34</a> theorem exists_embedded_cut_graph (a : frontier P.body) : Nonempty (P.EmbeddedCutGraph a) := by</span>
+<span id="L35" class="line"><a href="#L35">35</a>   obtain ⟨segments, finite, exact_segments⟩ := graph.cutSet_finite_segments small_faces a</span>
+<span id="L36" class="line"><a href="#L36">36</a>   refine ⟨{</span>
+<span id="L37" class="line"><a href="#L37">37</a>     vertices := segmentVertices segments</span>
+<span id="L38" class="line"><a href="#L38">38</a>     finite_vertices := segmentVertices_finite segments finite</span>
+<span id="L39" class="line"><a href="#L39">39</a>     graph := segmentGraph segments</span>
+<span id="L40" class="line"><a href="#L40">40</a>     trace := ?_</span>
+<span id="L41" class="line"><a href="#L41">41</a>     cofacial_edges := ?_</span>
+<span id="L42" class="line"><a href="#L42">42</a>     no_vertex_inside := fun _ _ edge =&gt; edge.2.2</span>
+<span id="L43" class="line"><a href="#L43">43</a>     open_edges_meet := fun _ _ _ _ first second _ hx hy =&gt;</span>
+<span id="L44" class="line"><a href="#L44">44</a>       segmentGraph_open_edges_meet segments first second hx hy }⟩</span>
+<span id="L45" class="line"><a href="#L45">45</a>   · intro x</span>
+<span id="L46" class="line"><a href="#L46">46</a>     rw [exact_segments]</span>
+<span id="L47" class="line"><a href="#L47">47</a>     exact segmentGraph_trace segments finite x</span>
+<span id="L48" class="line"><a href="#L48">48</a>   · intro u v edge</span>
+<span id="L49" class="line"><a href="#L49">49</a>     obtain ⟨s, _, hu, hv⟩ := edge.2.1</span>
+<span id="L50" class="line"><a href="#L50">50</a>     exact ⟨s.face, (s.convex.segment_subset hu hv).trans s.in_face⟩</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> end SixVertexGraph</span>
+<span id="L53" class="line"><a href="#L53">53</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

@@ -1,0 +1,1010 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Analysis/Complex/Trigonometric.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Analysis/Complex/Trigonometric.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2018 Chris Hughes. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Chris Hughes, Abhimanyu Pallavi Sudhir</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Analysis.Complex.Exponential</span>
+<span id="L9" class="line"><a href="#L9">9</a> import Mathlib.Tactic.NormNum.NatFactorial</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-!</span>
+<span id="L12" class="line"><a href="#L12">12</a> # Trigonometric and hyperbolic trigonometric functions</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> This file contains the definitions of the sine, cosine, tangent,</span>
+<span id="L15" class="line"><a href="#L15">15</a> hyperbolic sine, hyperbolic cosine, and hyperbolic tangent functions.</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> -/</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> @[expose] public section</span>
+<span id="L20" class="line"><a href="#L20">20</a> </span>
+<span id="L21" class="line"><a href="#L21">21</a> open CauSeq Finset IsAbsoluteValue</span>
+<span id="L22" class="line"><a href="#L22">22</a> open scoped ComplexConjugate</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> namespace Complex</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> noncomputable section</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> /-- The complex sine function, defined via `exp` -/</span>
+<span id="L29" class="line"><a href="#L29">29</a> @[pp_nodot]</span>
+<span id="L30" class="line"><a href="#L30">30</a> def sin (z : ℂ) : ℂ :=</span>
+<span id="L31" class="line"><a href="#L31">31</a>   (exp (-z * I) - exp (z * I)) * I / 2</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> /-- The complex cosine function, defined via `exp` -/</span>
+<span id="L34" class="line"><a href="#L34">34</a> @[pp_nodot]</span>
+<span id="L35" class="line"><a href="#L35">35</a> def cos (z : ℂ) : ℂ :=</span>
+<span id="L36" class="line"><a href="#L36">36</a>   (exp (z * I) + exp (-z * I)) / 2</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> /-- The complex tangent function, defined as `sin z / cos z` -/</span>
+<span id="L39" class="line"><a href="#L39">39</a> @[pp_nodot]</span>
+<span id="L40" class="line"><a href="#L40">40</a> def tan (z : ℂ) : ℂ :=</span>
+<span id="L41" class="line"><a href="#L41">41</a>   sin z / cos z</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> /-- The complex cotangent function, defined as `cos z / sin z` -/</span>
+<span id="L44" class="line"><a href="#L44">44</a> def cot (z : ℂ) : ℂ :=</span>
+<span id="L45" class="line"><a href="#L45">45</a>   cos z / sin z</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> /-- The complex hyperbolic sine function, defined via `exp` -/</span>
+<span id="L48" class="line"><a href="#L48">48</a> @[pp_nodot]</span>
+<span id="L49" class="line"><a href="#L49">49</a> def sinh (z : ℂ) : ℂ :=</span>
+<span id="L50" class="line"><a href="#L50">50</a>   (exp z - exp (-z)) / 2</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> /-- The complex hyperbolic cosine function, defined via `exp` -/</span>
+<span id="L53" class="line"><a href="#L53">53</a> @[pp_nodot]</span>
+<span id="L54" class="line"><a href="#L54">54</a> def cosh (z : ℂ) : ℂ :=</span>
+<span id="L55" class="line"><a href="#L55">55</a>   (exp z + exp (-z)) / 2</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> /-- The complex hyperbolic tangent function, defined as `sinh z / cosh z` -/</span>
+<span id="L58" class="line"><a href="#L58">58</a> @[pp_nodot]</span>
+<span id="L59" class="line"><a href="#L59">59</a> def tanh (z : ℂ) : ℂ :=</span>
+<span id="L60" class="line"><a href="#L60">60</a>   sinh z / cosh z</span>
+<span id="L61" class="line"><a href="#L61">61</a> </span>
+<span id="L62" class="line"><a href="#L62">62</a> end</span>
+<span id="L63" class="line"><a href="#L63">63</a> </span>
+<span id="L64" class="line"><a href="#L64">64</a> end Complex</span>
+<span id="L65" class="line"><a href="#L65">65</a> </span>
+<span id="L66" class="line"><a href="#L66">66</a> namespace Real</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> open Complex</span>
+<span id="L69" class="line"><a href="#L69">69</a> </span>
+<span id="L70" class="line"><a href="#L70">70</a> noncomputable section</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> /-- The real sine function, defined as the real part of the complex sine -/</span>
+<span id="L73" class="line"><a href="#L73">73</a> @[pp_nodot]</span>
+<span id="L74" class="line"><a href="#L74">74</a> nonrec def sin (x : ℝ) : ℝ :=</span>
+<span id="L75" class="line"><a href="#L75">75</a>   (sin x).re</span>
+<span id="L76" class="line"><a href="#L76">76</a> </span>
+<span id="L77" class="line"><a href="#L77">77</a> /-- The real cosine function, defined as the real part of the complex cosine -/</span>
+<span id="L78" class="line"><a href="#L78">78</a> @[pp_nodot]</span>
+<span id="L79" class="line"><a href="#L79">79</a> nonrec def cos (x : ℝ) : ℝ :=</span>
+<span id="L80" class="line"><a href="#L80">80</a>   (cos x).re</span>
+<span id="L81" class="line"><a href="#L81">81</a> </span>
+<span id="L82" class="line"><a href="#L82">82</a> /-- The real tangent function, defined as the real part of the complex tangent -/</span>
+<span id="L83" class="line"><a href="#L83">83</a> @[pp_nodot]</span>
+<span id="L84" class="line"><a href="#L84">84</a> nonrec def tan (x : ℝ) : ℝ :=</span>
+<span id="L85" class="line"><a href="#L85">85</a>   (tan x).re</span>
+<span id="L86" class="line"><a href="#L86">86</a> </span>
+<span id="L87" class="line"><a href="#L87">87</a> /-- The real cotangent function, defined as the real part of the complex cotangent -/</span>
+<span id="L88" class="line"><a href="#L88">88</a> nonrec def cot (x : ℝ) : ℝ :=</span>
+<span id="L89" class="line"><a href="#L89">89</a>   (cot x).re</span>
+<span id="L90" class="line"><a href="#L90">90</a> </span>
+<span id="L91" class="line"><a href="#L91">91</a> /-- The real hyperbolic sine function, defined as the real part of the complex hyperbolic sine -/</span>
+<span id="L92" class="line"><a href="#L92">92</a> @[pp_nodot]</span>
+<span id="L93" class="line"><a href="#L93">93</a> nonrec def sinh (x : ℝ) : ℝ :=</span>
+<span id="L94" class="line"><a href="#L94">94</a>   (sinh x).re</span>
+<span id="L95" class="line"><a href="#L95">95</a> </span>
+<span id="L96" class="line"><a href="#L96">96</a> /-- The real hyperbolic cosine function, defined as the real part of the complex hyperbolic cosine</span>
+<span id="L97" class="line"><a href="#L97">97</a> -/</span>
+<span id="L98" class="line"><a href="#L98">98</a> @[pp_nodot]</span>
+<span id="L99" class="line"><a href="#L99">99</a> nonrec def cosh (x : ℝ) : ℝ :=</span>
+<span id="L100" class="line"><a href="#L100">100</a>   (cosh x).re</span>
+<span id="L101" class="line"><a href="#L101">101</a> </span>
+<span id="L102" class="line"><a href="#L102">102</a> /-- The real hyperbolic tangent function, defined as the real part of</span>
+<span id="L103" class="line"><a href="#L103">103</a> the complex hyperbolic tangent -/</span>
+<span id="L104" class="line"><a href="#L104">104</a> @[pp_nodot]</span>
+<span id="L105" class="line"><a href="#L105">105</a> nonrec def tanh (x : ℝ) : ℝ :=</span>
+<span id="L106" class="line"><a href="#L106">106</a>   (tanh x).re</span>
+<span id="L107" class="line"><a href="#L107">107</a> </span>
+<span id="L108" class="line"><a href="#L108">108</a> end</span>
+<span id="L109" class="line"><a href="#L109">109</a> </span>
+<span id="L110" class="line"><a href="#L110">110</a> end Real</span>
+<span id="L111" class="line"><a href="#L111">111</a> </span>
+<span id="L112" class="line"><a href="#L112">112</a> namespace Complex</span>
+<span id="L113" class="line"><a href="#L113">113</a> </span>
+<span id="L114" class="line"><a href="#L114">114</a> variable (x y : ℂ)</span>
+<span id="L115" class="line"><a href="#L115">115</a> </span>
+<span id="L116" class="line"><a href="#L116">116</a> theorem two_sinh : 2 * sinh x = exp x - exp (-x) :=</span>
+<span id="L117" class="line"><a href="#L117">117</a>   mul_div_cancel₀ _ two_ne_zero</span>
+<span id="L118" class="line"><a href="#L118">118</a> </span>
+<span id="L119" class="line"><a href="#L119">119</a> theorem two_cosh : 2 * cosh x = exp x + exp (-x) :=</span>
+<span id="L120" class="line"><a href="#L120">120</a>   mul_div_cancel₀ _ two_ne_zero</span>
+<span id="L121" class="line"><a href="#L121">121</a> </span>
+<span id="L122" class="line"><a href="#L122">122</a> @[simp]</span>
+<span id="L123" class="line"><a href="#L123">123</a> theorem sinh_zero : sinh 0 = 0 := by simp [sinh]</span>
+<span id="L124" class="line"><a href="#L124">124</a> </span>
+<span id="L125" class="line"><a href="#L125">125</a> @[simp]</span>
+<span id="L126" class="line"><a href="#L126">126</a> theorem sinh_neg : sinh (-x) = -sinh x := by simp [sinh, exp_neg, (neg_div _ _).symm]</span>
+<span id="L127" class="line"><a href="#L127">127</a> </span>
+<span id="L128" class="line"><a href="#L128">128</a> private theorem sinh_add_aux {a b c d : ℂ} :</span>
+<span id="L129" class="line"><a href="#L129">129</a>     (a - b) * (c + d) + (a + b) * (c - d) = 2 * (a * c - b * d) := by ring</span>
+<span id="L130" class="line"><a href="#L130">130</a> </span>
+<span id="L131" class="line"><a href="#L131">131</a> theorem sinh_add : sinh (x + y) = sinh x * cosh y + cosh x * sinh y := by</span>
+<span id="L132" class="line"><a href="#L132">132</a>   rw [← mul_right_inj&#x27; (two_ne_zero&#x27; ℂ), two_sinh, exp_add, neg_add, exp_add, eq_comm, mul_add, ←</span>
+<span id="L133" class="line"><a href="#L133">133</a>     mul_assoc, two_sinh, mul_left_comm, two_sinh, ← mul_right_inj&#x27; (two_ne_zero&#x27; ℂ), mul_add,</span>
+<span id="L134" class="line"><a href="#L134">134</a>     mul_left_comm, two_cosh, ← mul_assoc, two_cosh]</span>
+<span id="L135" class="line"><a href="#L135">135</a>   exact sinh_add_aux</span>
+<span id="L136" class="line"><a href="#L136">136</a> </span>
+<span id="L137" class="line"><a href="#L137">137</a> @[simp]</span>
+<span id="L138" class="line"><a href="#L138">138</a> theorem cosh_zero : cosh 0 = 1 := by simp [cosh]</span>
+<span id="L139" class="line"><a href="#L139">139</a> </span>
+<span id="L140" class="line"><a href="#L140">140</a> @[simp]</span>
+<span id="L141" class="line"><a href="#L141">141</a> theorem cosh_neg : cosh (-x) = cosh x := by simp [add_comm, cosh, exp_neg]</span>
+<span id="L142" class="line"><a href="#L142">142</a> </span>
+<span id="L143" class="line"><a href="#L143">143</a> private theorem cosh_add_aux {a b c d : ℂ} :</span>
+<span id="L144" class="line"><a href="#L144">144</a>     (a + b) * (c + d) + (a - b) * (c - d) = 2 * (a * c + b * d) := by ring</span>
+<span id="L145" class="line"><a href="#L145">145</a> </span>
+<span id="L146" class="line"><a href="#L146">146</a> theorem cosh_add : cosh (x + y) = cosh x * cosh y + sinh x * sinh y := by</span>
+<span id="L147" class="line"><a href="#L147">147</a>   rw [← mul_right_inj&#x27; (two_ne_zero&#x27; ℂ), two_cosh, exp_add, neg_add, exp_add, eq_comm, mul_add, ←</span>
+<span id="L148" class="line"><a href="#L148">148</a>     mul_assoc, two_cosh, ← mul_assoc, two_sinh, ← mul_right_inj&#x27; (two_ne_zero&#x27; ℂ), mul_add,</span>
+<span id="L149" class="line"><a href="#L149">149</a>     mul_left_comm, two_cosh, mul_left_comm, two_sinh]</span>
+<span id="L150" class="line"><a href="#L150">150</a>   exact cosh_add_aux</span>
+<span id="L151" class="line"><a href="#L151">151</a> </span>
+<span id="L152" class="line"><a href="#L152">152</a> theorem sinh_sub : sinh (x - y) = sinh x * cosh y - cosh x * sinh y := by</span>
+<span id="L153" class="line"><a href="#L153">153</a>   simp [sub_eq_add_neg, sinh_add, sinh_neg, cosh_neg]</span>
+<span id="L154" class="line"><a href="#L154">154</a> </span>
+<span id="L155" class="line"><a href="#L155">155</a> theorem cosh_sub : cosh (x - y) = cosh x * cosh y - sinh x * sinh y := by</span>
+<span id="L156" class="line"><a href="#L156">156</a>   simp [sub_eq_add_neg, cosh_add, sinh_neg, cosh_neg]</span>
+<span id="L157" class="line"><a href="#L157">157</a> </span>
+<span id="L158" class="line"><a href="#L158">158</a> theorem sinh_conj : sinh (conj x) = conj (sinh x) := by</span>
+<span id="L159" class="line"><a href="#L159">159</a>   rw [sinh, ← map_neg, exp_conj, exp_conj, ← map_sub, sinh, map_div₀, map_ofNat]</span>
+<span id="L160" class="line"><a href="#L160">160</a> </span>
+<span id="L161" class="line"><a href="#L161">161</a> @[simp]</span>
+<span id="L162" class="line"><a href="#L162">162</a> theorem ofReal_sinh_ofReal_re (x : ℝ) : ((sinh x).re : ℂ) = sinh x :=</span>
+<span id="L163" class="line"><a href="#L163">163</a>   conj_eq_iff_re.1 &lt;| by rw [← sinh_conj, conj_ofReal]</span>
+<span id="L164" class="line"><a href="#L164">164</a> </span>
+<span id="L165" class="line"><a href="#L165">165</a> @[simp, norm_cast]</span>
+<span id="L166" class="line"><a href="#L166">166</a> theorem ofReal_sinh (x : ℝ) : (Real.sinh x : ℂ) = sinh x :=</span>
+<span id="L167" class="line"><a href="#L167">167</a>   ofReal_sinh_ofReal_re _</span>
+<span id="L168" class="line"><a href="#L168">168</a> </span>
+<span id="L169" class="line"><a href="#L169">169</a> @[simp]</span>
+<span id="L170" class="line"><a href="#L170">170</a> theorem sinh_ofReal_im (x : ℝ) : (sinh x).im = 0 := by rw [← ofReal_sinh_ofReal_re, ofReal_im]</span>
+<span id="L171" class="line"><a href="#L171">171</a> </span>
+<span id="L172" class="line"><a href="#L172">172</a> theorem sinh_ofReal_re (x : ℝ) : (sinh x).re = Real.sinh x :=</span>
+<span id="L173" class="line"><a href="#L173">173</a>   rfl</span>
+<span id="L174" class="line"><a href="#L174">174</a> </span>
+<span id="L175" class="line"><a href="#L175">175</a> theorem cosh_conj : cosh (conj x) = conj (cosh x) := by</span>
+<span id="L176" class="line"><a href="#L176">176</a>   rw [cosh, ← map_neg, exp_conj, exp_conj, ← map_add, cosh, map_div₀, map_ofNat]</span>
+<span id="L177" class="line"><a href="#L177">177</a> </span>
+<span id="L178" class="line"><a href="#L178">178</a> theorem ofReal_cosh_ofReal_re (x : ℝ) : ((cosh x).re : ℂ) = cosh x :=</span>
+<span id="L179" class="line"><a href="#L179">179</a>   conj_eq_iff_re.1 &lt;| by rw [← cosh_conj, conj_ofReal]</span>
+<span id="L180" class="line"><a href="#L180">180</a> </span>
+<span id="L181" class="line"><a href="#L181">181</a> @[simp, norm_cast]</span>
+<span id="L182" class="line"><a href="#L182">182</a> theorem ofReal_cosh (x : ℝ) : (Real.cosh x : ℂ) = cosh x :=</span>
+<span id="L183" class="line"><a href="#L183">183</a>   ofReal_cosh_ofReal_re _</span>
+<span id="L184" class="line"><a href="#L184">184</a> </span>
+<span id="L185" class="line"><a href="#L185">185</a> @[simp]</span>
+<span id="L186" class="line"><a href="#L186">186</a> theorem cosh_ofReal_im (x : ℝ) : (cosh x).im = 0 := by rw [← ofReal_cosh_ofReal_re, ofReal_im]</span>
+<span id="L187" class="line"><a href="#L187">187</a> </span>
+<span id="L188" class="line"><a href="#L188">188</a> @[simp]</span>
+<span id="L189" class="line"><a href="#L189">189</a> theorem cosh_ofReal_re (x : ℝ) : (cosh x).re = Real.cosh x :=</span>
+<span id="L190" class="line"><a href="#L190">190</a>   rfl</span>
+<span id="L191" class="line"><a href="#L191">191</a> </span>
+<span id="L192" class="line"><a href="#L192">192</a> theorem tanh_eq_sinh_div_cosh : tanh x = sinh x / cosh x :=</span>
+<span id="L193" class="line"><a href="#L193">193</a>   rfl</span>
+<span id="L194" class="line"><a href="#L194">194</a> </span>
+<span id="L195" class="line"><a href="#L195">195</a> @[simp]</span>
+<span id="L196" class="line"><a href="#L196">196</a> theorem tanh_zero : tanh 0 = 0 := by simp [tanh]</span>
+<span id="L197" class="line"><a href="#L197">197</a> </span>
+<span id="L198" class="line"><a href="#L198">198</a> @[simp]</span>
+<span id="L199" class="line"><a href="#L199">199</a> theorem tanh_neg : tanh (-x) = -tanh x := by simp [tanh, neg_div]</span>
+<span id="L200" class="line"><a href="#L200">200</a> </span>
+<span id="L201" class="line"><a href="#L201">201</a> theorem tanh_conj : tanh (conj x) = conj (tanh x) := by</span>
+<span id="L202" class="line"><a href="#L202">202</a>   rw [tanh, sinh_conj, cosh_conj, ← map_div₀, tanh]</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> @[simp]</span>
+<span id="L205" class="line"><a href="#L205">205</a> theorem ofReal_tanh_ofReal_re (x : ℝ) : ((tanh x).re : ℂ) = tanh x :=</span>
+<span id="L206" class="line"><a href="#L206">206</a>   conj_eq_iff_re.1 &lt;| by rw [← tanh_conj, conj_ofReal]</span>
+<span id="L207" class="line"><a href="#L207">207</a> </span>
+<span id="L208" class="line"><a href="#L208">208</a> @[simp, norm_cast]</span>
+<span id="L209" class="line"><a href="#L209">209</a> theorem ofReal_tanh (x : ℝ) : (Real.tanh x : ℂ) = tanh x :=</span>
+<span id="L210" class="line"><a href="#L210">210</a>   ofReal_tanh_ofReal_re _</span>
+<span id="L211" class="line"><a href="#L211">211</a> </span>
+<span id="L212" class="line"><a href="#L212">212</a> @[simp]</span>
+<span id="L213" class="line"><a href="#L213">213</a> theorem tanh_ofReal_im (x : ℝ) : (tanh x).im = 0 := by rw [← ofReal_tanh_ofReal_re, ofReal_im]</span>
+<span id="L214" class="line"><a href="#L214">214</a> </span>
+<span id="L215" class="line"><a href="#L215">215</a> theorem tanh_ofReal_re (x : ℝ) : (tanh x).re = Real.tanh x :=</span>
+<span id="L216" class="line"><a href="#L216">216</a>   rfl</span>
+<span id="L217" class="line"><a href="#L217">217</a> </span>
+<span id="L218" class="line"><a href="#L218">218</a> @[simp]</span>
+<span id="L219" class="line"><a href="#L219">219</a> theorem cosh_add_sinh : cosh x + sinh x = exp x := by</span>
+<span id="L220" class="line"><a href="#L220">220</a>   rw [← mul_right_inj&#x27; (two_ne_zero&#x27; ℂ), mul_add, two_cosh, two_sinh, add_add_sub_cancel, two_mul]</span>
+<span id="L221" class="line"><a href="#L221">221</a> </span>
+<span id="L222" class="line"><a href="#L222">222</a> @[simp]</span>
+<span id="L223" class="line"><a href="#L223">223</a> theorem sinh_add_cosh : sinh x + cosh x = exp x := by rw [add_comm, cosh_add_sinh]</span>
+<span id="L224" class="line"><a href="#L224">224</a> </span>
+<span id="L225" class="line"><a href="#L225">225</a> @[simp]</span>
+<span id="L226" class="line"><a href="#L226">226</a> theorem exp_sub_cosh : exp x - cosh x = sinh x :=</span>
+<span id="L227" class="line"><a href="#L227">227</a>   sub_eq_iff_eq_add.2 (sinh_add_cosh x).symm</span>
+<span id="L228" class="line"><a href="#L228">228</a> </span>
+<span id="L229" class="line"><a href="#L229">229</a> @[simp]</span>
+<span id="L230" class="line"><a href="#L230">230</a> theorem exp_sub_sinh : exp x - sinh x = cosh x :=</span>
+<span id="L231" class="line"><a href="#L231">231</a>   sub_eq_iff_eq_add.2 (cosh_add_sinh x).symm</span>
+<span id="L232" class="line"><a href="#L232">232</a> </span>
+<span id="L233" class="line"><a href="#L233">233</a> @[simp]</span>
+<span id="L234" class="line"><a href="#L234">234</a> theorem cosh_sub_sinh : cosh x - sinh x = exp (-x) := by</span>
+<span id="L235" class="line"><a href="#L235">235</a>   rw [← mul_right_inj&#x27; (two_ne_zero&#x27; ℂ), mul_sub, two_cosh, two_sinh, add_sub_sub_cancel, two_mul]</span>
+<span id="L236" class="line"><a href="#L236">236</a> </span>
+<span id="L237" class="line"><a href="#L237">237</a> @[simp]</span>
+<span id="L238" class="line"><a href="#L238">238</a> theorem sinh_sub_cosh : sinh x - cosh x = -exp (-x) := by rw [← neg_sub, cosh_sub_sinh]</span>
+<span id="L239" class="line"><a href="#L239">239</a> </span>
+<span id="L240" class="line"><a href="#L240">240</a> @[simp]</span>
+<span id="L241" class="line"><a href="#L241">241</a> theorem cosh_sq_sub_sinh_sq : cosh x ^ 2 - sinh x ^ 2 = 1 := by</span>
+<span id="L242" class="line"><a href="#L242">242</a>   rw [sq_sub_sq, cosh_add_sinh, cosh_sub_sinh, ← exp_add, add_neg_cancel, exp_zero]</span>
+<span id="L243" class="line"><a href="#L243">243</a> </span>
+<span id="L244" class="line"><a href="#L244">244</a> theorem cosh_sq : cosh x ^ 2 = sinh x ^ 2 + 1 := by</span>
+<span id="L245" class="line"><a href="#L245">245</a>   rw [← cosh_sq_sub_sinh_sq x]</span>
+<span id="L246" class="line"><a href="#L246">246</a>   ring</span>
+<span id="L247" class="line"><a href="#L247">247</a> </span>
+<span id="L248" class="line"><a href="#L248">248</a> theorem sinh_sq : sinh x ^ 2 = cosh x ^ 2 - 1 := by</span>
+<span id="L249" class="line"><a href="#L249">249</a>   rw [← cosh_sq_sub_sinh_sq x]</span>
+<span id="L250" class="line"><a href="#L250">250</a>   ring</span>
+<span id="L251" class="line"><a href="#L251">251</a> </span>
+<span id="L252" class="line"><a href="#L252">252</a> theorem cosh_two_mul : cosh (2 * x) = cosh x ^ 2 + sinh x ^ 2 := by rw [two_mul, cosh_add, sq, sq]</span>
+<span id="L253" class="line"><a href="#L253">253</a> </span>
+<span id="L254" class="line"><a href="#L254">254</a> theorem sinh_two_mul : sinh (2 * x) = 2 * sinh x * cosh x := by</span>
+<span id="L255" class="line"><a href="#L255">255</a>   rw [two_mul, sinh_add]</span>
+<span id="L256" class="line"><a href="#L256">256</a>   ring</span>
+<span id="L257" class="line"><a href="#L257">257</a> </span>
+<span id="L258" class="line"><a href="#L258">258</a> theorem cosh_three_mul : cosh (3 * x) = 4 * cosh x ^ 3 - 3 * cosh x := by</span>
+<span id="L259" class="line"><a href="#L259">259</a>   have h1 : x + 2 * x = 3 * x := by ring</span>
+<span id="L260" class="line"><a href="#L260">260</a>   rw [← h1, cosh_add x (2 * x)]</span>
+<span id="L261" class="line"><a href="#L261">261</a>   simp only [cosh_two_mul, sinh_two_mul]</span>
+<span id="L262" class="line"><a href="#L262">262</a>   have h2 : sinh x * (2 * sinh x * cosh x) = 2 * cosh x * sinh x ^ 2 := by ring</span>
+<span id="L263" class="line"><a href="#L263">263</a>   rw [h2, sinh_sq]</span>
+<span id="L264" class="line"><a href="#L264">264</a>   ring</span>
+<span id="L265" class="line"><a href="#L265">265</a> </span>
+<span id="L266" class="line"><a href="#L266">266</a> theorem sinh_three_mul : sinh (3 * x) = 4 * sinh x ^ 3 + 3 * sinh x := by</span>
+<span id="L267" class="line"><a href="#L267">267</a>   have h1 : x + 2 * x = 3 * x := by ring</span>
+<span id="L268" class="line"><a href="#L268">268</a>   rw [← h1, sinh_add x (2 * x)]</span>
+<span id="L269" class="line"><a href="#L269">269</a>   simp only [cosh_two_mul, sinh_two_mul]</span>
+<span id="L270" class="line"><a href="#L270">270</a>   have h2 : cosh x * (2 * sinh x * cosh x) = 2 * sinh x * cosh x ^ 2 := by ring</span>
+<span id="L271" class="line"><a href="#L271">271</a>   rw [h2, cosh_sq]</span>
+<span id="L272" class="line"><a href="#L272">272</a>   ring</span>
+<span id="L273" class="line"><a href="#L273">273</a> </span>
+<span id="L274" class="line"><a href="#L274">274</a> @[simp]</span>
+<span id="L275" class="line"><a href="#L275">275</a> theorem sin_zero : sin 0 = 0 := by simp [sin]</span>
+<span id="L276" class="line"><a href="#L276">276</a> </span>
+<span id="L277" class="line"><a href="#L277">277</a> @[simp]</span>
+<span id="L278" class="line"><a href="#L278">278</a> theorem sin_neg : sin (-x) = -sin x := by</span>
+<span id="L279" class="line"><a href="#L279">279</a>   simp [sin, sub_eq_add_neg, exp_neg, (neg_div _ _).symm, add_mul]</span>
+<span id="L280" class="line"><a href="#L280">280</a> </span>
+<span id="L281" class="line"><a href="#L281">281</a> theorem two_sin : 2 * sin x = (exp (-x * I) - exp (x * I)) * I :=</span>
+<span id="L282" class="line"><a href="#L282">282</a>   mul_div_cancel₀ _ two_ne_zero</span>
+<span id="L283" class="line"><a href="#L283">283</a> </span>
+<span id="L284" class="line"><a href="#L284">284</a> theorem two_cos : 2 * cos x = exp (x * I) + exp (-x * I) :=</span>
+<span id="L285" class="line"><a href="#L285">285</a>   mul_div_cancel₀ _ two_ne_zero</span>
+<span id="L286" class="line"><a href="#L286">286</a> </span>
+<span id="L287" class="line"><a href="#L287">287</a> theorem sinh_mul_I : sinh (x * I) = sin x * I := by</span>
+<span id="L288" class="line"><a href="#L288">288</a>   rw [← mul_right_inj&#x27; (two_ne_zero&#x27; ℂ), two_sinh, ← mul_assoc, two_sin, mul_assoc, I_mul_I,</span>
+<span id="L289" class="line"><a href="#L289">289</a>     mul_neg_one, neg_sub, neg_mul_eq_neg_mul]</span>
+<span id="L290" class="line"><a href="#L290">290</a> </span>
+<span id="L291" class="line"><a href="#L291">291</a> theorem cosh_mul_I : cosh (x * I) = cos x := by</span>
+<span id="L292" class="line"><a href="#L292">292</a>   rw [← mul_right_inj&#x27; (two_ne_zero&#x27; ℂ), two_cosh, two_cos, neg_mul_eq_neg_mul]</span>
+<span id="L293" class="line"><a href="#L293">293</a> </span>
+<span id="L294" class="line"><a href="#L294">294</a> theorem tanh_mul_I : tanh (x * I) = tan x * I := by</span>
+<span id="L295" class="line"><a href="#L295">295</a>   rw [tanh_eq_sinh_div_cosh, cosh_mul_I, sinh_mul_I, mul_div_right_comm, tan]</span>
+<span id="L296" class="line"><a href="#L296">296</a> </span>
+<span id="L297" class="line"><a href="#L297">297</a> theorem cos_mul_I : cos (x * I) = cosh x := by rw [← cosh_mul_I]; ring_nf; simp</span>
+<span id="L298" class="line"><a href="#L298">298</a> </span>
+<span id="L299" class="line"><a href="#L299">299</a> theorem sin_mul_I : sin (x * I) = sinh x * I := by</span>
+<span id="L300" class="line"><a href="#L300">300</a>   have h : I * sin (x * I) = -sinh x := by</span>
+<span id="L301" class="line"><a href="#L301">301</a>     rw [mul_comm, ← sinh_mul_I]</span>
+<span id="L302" class="line"><a href="#L302">302</a>     ring_nf</span>
+<span id="L303" class="line"><a href="#L303">303</a>     simp</span>
+<span id="L304" class="line"><a href="#L304">304</a>   rw [← neg_neg (sinh x), ← h]</span>
+<span id="L305" class="line"><a href="#L305">305</a>   apply Complex.ext &lt;;&gt; simp</span>
+<span id="L306" class="line"><a href="#L306">306</a> </span>
+<span id="L307" class="line"><a href="#L307">307</a> theorem tan_mul_I : tan (x * I) = tanh x * I := by</span>
+<span id="L308" class="line"><a href="#L308">308</a>   rw [tan, sin_mul_I, cos_mul_I, mul_div_right_comm, tanh_eq_sinh_div_cosh]</span>
+<span id="L309" class="line"><a href="#L309">309</a> </span>
+<span id="L310" class="line"><a href="#L310">310</a> theorem sin_add : sin (x + y) = sin x * cos y + cos x * sin y := by</span>
+<span id="L311" class="line"><a href="#L311">311</a>   rw [← mul_left_inj&#x27; I_ne_zero, ← sinh_mul_I, add_mul, add_mul, mul_right_comm, ← sinh_mul_I,</span>
+<span id="L312" class="line"><a href="#L312">312</a>     mul_assoc, ← sinh_mul_I, ← cosh_mul_I, ← cosh_mul_I, sinh_add]</span>
+<span id="L313" class="line"><a href="#L313">313</a> </span>
+<span id="L314" class="line"><a href="#L314">314</a> @[simp]</span>
+<span id="L315" class="line"><a href="#L315">315</a> theorem cos_zero : cos 0 = 1 := by simp [cos]</span>
+<span id="L316" class="line"><a href="#L316">316</a> </span>
+<span id="L317" class="line"><a href="#L317">317</a> @[simp]</span>
+<span id="L318" class="line"><a href="#L318">318</a> theorem cos_neg : cos (-x) = cos x := by simp [cos, exp_neg, add_comm]</span>
+<span id="L319" class="line"><a href="#L319">319</a> </span>
+<span id="L320" class="line"><a href="#L320">320</a> theorem cos_add : cos (x + y) = cos x * cos y - sin x * sin y := by</span>
+<span id="L321" class="line"><a href="#L321">321</a>   rw [← cosh_mul_I, add_mul, cosh_add, cosh_mul_I, cosh_mul_I, sinh_mul_I, sinh_mul_I,</span>
+<span id="L322" class="line"><a href="#L322">322</a>     mul_mul_mul_comm, I_mul_I, mul_neg_one, sub_eq_add_neg]</span>
+<span id="L323" class="line"><a href="#L323">323</a> </span>
+<span id="L324" class="line"><a href="#L324">324</a> theorem sin_sub : sin (x - y) = sin x * cos y - cos x * sin y := by</span>
+<span id="L325" class="line"><a href="#L325">325</a>   simp [sub_eq_add_neg, sin_add, sin_neg, cos_neg]</span>
+<span id="L326" class="line"><a href="#L326">326</a> </span>
+<span id="L327" class="line"><a href="#L327">327</a> theorem cos_sub : cos (x - y) = cos x * cos y + sin x * sin y := by</span>
+<span id="L328" class="line"><a href="#L328">328</a>   simp [sub_eq_add_neg, cos_add, sin_neg, cos_neg]</span>
+<span id="L329" class="line"><a href="#L329">329</a> </span>
+<span id="L330" class="line"><a href="#L330">330</a> theorem sin_add_mul_I (x y : ℂ) : sin (x + y * I) = sin x * cosh y + cos x * sinh y * I := by</span>
+<span id="L331" class="line"><a href="#L331">331</a>   rw [sin_add, cos_mul_I, sin_mul_I, mul_assoc]</span>
+<span id="L332" class="line"><a href="#L332">332</a> </span>
+<span id="L333" class="line"><a href="#L333">333</a> theorem sin_eq (z : ℂ) : sin z = sin z.re * cosh z.im + cos z.re * sinh z.im * I := by</span>
+<span id="L334" class="line"><a href="#L334">334</a>   convert sin_add_mul_I z.re z.im; exact (re_add_im z).symm</span>
+<span id="L335" class="line"><a href="#L335">335</a> </span>
+<span id="L336" class="line"><a href="#L336">336</a> theorem cos_add_mul_I (x y : ℂ) : cos (x + y * I) = cos x * cosh y - sin x * sinh y * I := by</span>
+<span id="L337" class="line"><a href="#L337">337</a>   rw [cos_add, cos_mul_I, sin_mul_I, mul_assoc]</span>
+<span id="L338" class="line"><a href="#L338">338</a> </span>
+<span id="L339" class="line"><a href="#L339">339</a> theorem cos_eq (z : ℂ) : cos z = cos z.re * cosh z.im - sin z.re * sinh z.im * I := by</span>
+<span id="L340" class="line"><a href="#L340">340</a>   convert cos_add_mul_I z.re z.im; exact (re_add_im z).symm</span>
+<span id="L341" class="line"><a href="#L341">341</a> </span>
+<span id="L342" class="line"><a href="#L342">342</a> theorem sin_sub_sin : sin x - sin y = 2 * sin ((x - y) / 2) * cos ((x + y) / 2) := by</span>
+<span id="L343" class="line"><a href="#L343">343</a>   have s1 := sin_add ((x + y) / 2) ((x - y) / 2)</span>
+<span id="L344" class="line"><a href="#L344">344</a>   have s2 := sin_sub ((x + y) / 2) ((x - y) / 2)</span>
+<span id="L345" class="line"><a href="#L345">345</a>   rw [← add_div, add_sub, add_right_comm, add_sub_cancel_right, add_self_div_two] at s1</span>
+<span id="L346" class="line"><a href="#L346">346</a>   rw [div_sub_div_same, ← sub_add, add_sub_cancel_left, add_self_div_two] at s2</span>
+<span id="L347" class="line"><a href="#L347">347</a>   rw [s1, s2]</span>
+<span id="L348" class="line"><a href="#L348">348</a>   ring</span>
+<span id="L349" class="line"><a href="#L349">349</a> </span>
+<span id="L350" class="line"><a href="#L350">350</a> theorem cos_sub_cos : cos x - cos y = -2 * sin ((x + y) / 2) * sin ((x - y) / 2) := by</span>
+<span id="L351" class="line"><a href="#L351">351</a>   have s1 := cos_add ((x + y) / 2) ((x - y) / 2)</span>
+<span id="L352" class="line"><a href="#L352">352</a>   have s2 := cos_sub ((x + y) / 2) ((x - y) / 2)</span>
+<span id="L353" class="line"><a href="#L353">353</a>   rw [← add_div, add_sub, add_right_comm, add_sub_cancel_right, add_self_div_two] at s1</span>
+<span id="L354" class="line"><a href="#L354">354</a>   rw [div_sub_div_same, ← sub_add, add_sub_cancel_left, add_self_div_two] at s2</span>
+<span id="L355" class="line"><a href="#L355">355</a>   rw [s1, s2]</span>
+<span id="L356" class="line"><a href="#L356">356</a>   ring</span>
+<span id="L357" class="line"><a href="#L357">357</a> </span>
+<span id="L358" class="line"><a href="#L358">358</a> theorem sin_add_sin : sin x + sin y = 2 * sin ((x + y) / 2) * cos ((x - y) / 2) := by</span>
+<span id="L359" class="line"><a href="#L359">359</a>   simpa using sin_sub_sin x (-y)</span>
+<span id="L360" class="line"><a href="#L360">360</a> </span>
+<span id="L361" class="line"><a href="#L361">361</a> theorem cos_add_cos : cos x + cos y = 2 * cos ((x + y) / 2) * cos ((x - y) / 2) := by</span>
+<span id="L362" class="line"><a href="#L362">362</a>   calc</span>
+<span id="L363" class="line"><a href="#L363">363</a>     cos x + cos y = cos ((x + y) / 2 + (x - y) / 2) + cos ((x + y) / 2 - (x - y) / 2) := ?_</span>
+<span id="L364" class="line"><a href="#L364">364</a>     _ =</span>
+<span id="L365" class="line"><a href="#L365">365</a>         cos ((x + y) / 2) * cos ((x - y) / 2) - sin ((x + y) / 2) * sin ((x - y) / 2) +</span>
+<span id="L366" class="line"><a href="#L366">366</a>           (cos ((x + y) / 2) * cos ((x - y) / 2) + sin ((x + y) / 2) * sin ((x - y) / 2)) :=</span>
+<span id="L367" class="line"><a href="#L367">367</a>       ?_</span>
+<span id="L368" class="line"><a href="#L368">368</a>     _ = 2 * cos ((x + y) / 2) * cos ((x - y) / 2) := ?_</span>
+<span id="L369" class="line"><a href="#L369">369</a>   · congr &lt;;&gt; field</span>
+<span id="L370" class="line"><a href="#L370">370</a>   · rw [cos_add, cos_sub]</span>
+<span id="L371" class="line"><a href="#L371">371</a>   ring</span>
+<span id="L372" class="line"><a href="#L372">372</a> </span>
+<span id="L373" class="line"><a href="#L373">373</a> theorem sin_conj : sin (conj x) = conj (sin x) := by</span>
+<span id="L374" class="line"><a href="#L374">374</a>   rw [← mul_left_inj&#x27; I_ne_zero, ← sinh_mul_I, ← conj_neg_I, ← map_mul, ← map_mul,</span>
+<span id="L375" class="line"><a href="#L375">375</a>     sinh_conj, mul_neg, sinh_neg, sinh_mul_I, mul_neg]</span>
+<span id="L376" class="line"><a href="#L376">376</a> </span>
+<span id="L377" class="line"><a href="#L377">377</a> @[simp]</span>
+<span id="L378" class="line"><a href="#L378">378</a> theorem ofReal_sin_ofReal_re (x : ℝ) : ((sin x).re : ℂ) = sin x :=</span>
+<span id="L379" class="line"><a href="#L379">379</a>   conj_eq_iff_re.1 &lt;| by rw [← sin_conj, conj_ofReal]</span>
+<span id="L380" class="line"><a href="#L380">380</a> </span>
+<span id="L381" class="line"><a href="#L381">381</a> @[simp, norm_cast]</span>
+<span id="L382" class="line"><a href="#L382">382</a> theorem ofReal_sin (x : ℝ) : (Real.sin x : ℂ) = sin x :=</span>
+<span id="L383" class="line"><a href="#L383">383</a>   ofReal_sin_ofReal_re _</span>
+<span id="L384" class="line"><a href="#L384">384</a> </span>
+<span id="L385" class="line"><a href="#L385">385</a> @[simp]</span>
+<span id="L386" class="line"><a href="#L386">386</a> theorem sin_ofReal_im (x : ℝ) : (sin x).im = 0 := by rw [← ofReal_sin_ofReal_re, ofReal_im]</span>
+<span id="L387" class="line"><a href="#L387">387</a> </span>
+<span id="L388" class="line"><a href="#L388">388</a> theorem sin_ofReal_re (x : ℝ) : (sin x).re = Real.sin x :=</span>
+<span id="L389" class="line"><a href="#L389">389</a>   rfl</span>
+<span id="L390" class="line"><a href="#L390">390</a> </span>
+<span id="L391" class="line"><a href="#L391">391</a> theorem cos_conj : cos (conj x) = conj (cos x) := by</span>
+<span id="L392" class="line"><a href="#L392">392</a>   rw [← cosh_mul_I, ← conj_neg_I, ← map_mul, ← cosh_mul_I, cosh_conj, mul_neg, cosh_neg]</span>
+<span id="L393" class="line"><a href="#L393">393</a> </span>
+<span id="L394" class="line"><a href="#L394">394</a> @[simp]</span>
+<span id="L395" class="line"><a href="#L395">395</a> theorem ofReal_cos_ofReal_re (x : ℝ) : ((cos x).re : ℂ) = cos x :=</span>
+<span id="L396" class="line"><a href="#L396">396</a>   conj_eq_iff_re.1 &lt;| by rw [← cos_conj, conj_ofReal]</span>
+<span id="L397" class="line"><a href="#L397">397</a> </span>
+<span id="L398" class="line"><a href="#L398">398</a> @[simp, norm_cast]</span>
+<span id="L399" class="line"><a href="#L399">399</a> theorem ofReal_cos (x : ℝ) : (Real.cos x : ℂ) = cos x :=</span>
+<span id="L400" class="line"><a href="#L400">400</a>   ofReal_cos_ofReal_re _</span>
+<span id="L401" class="line"><a href="#L401">401</a> </span>
+<span id="L402" class="line"><a href="#L402">402</a> @[simp]</span>
+<span id="L403" class="line"><a href="#L403">403</a> theorem cos_ofReal_im (x : ℝ) : (cos x).im = 0 := by rw [← ofReal_cos_ofReal_re, ofReal_im]</span>
+<span id="L404" class="line"><a href="#L404">404</a> </span>
+<span id="L405" class="line"><a href="#L405">405</a> theorem cos_ofReal_re (x : ℝ) : (cos x).re = Real.cos x :=</span>
+<span id="L406" class="line"><a href="#L406">406</a>   rfl</span>
+<span id="L407" class="line"><a href="#L407">407</a> </span>
+<span id="L408" class="line"><a href="#L408">408</a> @[simp]</span>
+<span id="L409" class="line"><a href="#L409">409</a> theorem tan_zero : tan 0 = 0 := by simp [tan]</span>
+<span id="L410" class="line"><a href="#L410">410</a> </span>
+<span id="L411" class="line"><a href="#L411">411</a> theorem tan_eq_sin_div_cos : tan x = sin x / cos x :=</span>
+<span id="L412" class="line"><a href="#L412">412</a>   rfl</span>
+<span id="L413" class="line"><a href="#L413">413</a> </span>
+<span id="L414" class="line"><a href="#L414">414</a> theorem cot_eq_cos_div_sin : cot x = cos x / sin x :=</span>
+<span id="L415" class="line"><a href="#L415">415</a>   rfl</span>
+<span id="L416" class="line"><a href="#L416">416</a> </span>
+<span id="L417" class="line"><a href="#L417">417</a> theorem tan_mul_cos {x : ℂ} (hx : cos x ≠ 0) : tan x * cos x = sin x := by</span>
+<span id="L418" class="line"><a href="#L418">418</a>   rw [tan_eq_sin_div_cos, div_mul_cancel₀ _ hx]</span>
+<span id="L419" class="line"><a href="#L419">419</a> </span>
+<span id="L420" class="line"><a href="#L420">420</a> @[simp]</span>
+<span id="L421" class="line"><a href="#L421">421</a> theorem tan_inv_eq_cot : (tan x)⁻¹ = cot x :=</span>
+<span id="L422" class="line"><a href="#L422">422</a>   inv_div ..</span>
+<span id="L423" class="line"><a href="#L423">423</a> </span>
+<span id="L424" class="line"><a href="#L424">424</a> @[simp]</span>
+<span id="L425" class="line"><a href="#L425">425</a> theorem cot_inv_eq_tan : (cot x)⁻¹ = tan x :=</span>
+<span id="L426" class="line"><a href="#L426">426</a>   inv_div ..</span>
+<span id="L427" class="line"><a href="#L427">427</a> </span>
+<span id="L428" class="line"><a href="#L428">428</a> @[simp]</span>
+<span id="L429" class="line"><a href="#L429">429</a> theorem tan_neg : tan (-x) = -tan x := by simp [tan, neg_div]</span>
+<span id="L430" class="line"><a href="#L430">430</a> </span>
+<span id="L431" class="line"><a href="#L431">431</a> theorem tan_conj : tan (conj x) = conj (tan x) := by rw [tan, sin_conj, cos_conj, ← map_div₀, tan]</span>
+<span id="L432" class="line"><a href="#L432">432</a> </span>
+<span id="L433" class="line"><a href="#L433">433</a> theorem cot_conj : cot (conj x) = conj (cot x) := by rw [cot, sin_conj, cos_conj, ← map_div₀, cot]</span>
+<span id="L434" class="line"><a href="#L434">434</a> </span>
+<span id="L435" class="line"><a href="#L435">435</a> @[simp]</span>
+<span id="L436" class="line"><a href="#L436">436</a> theorem ofReal_tan_ofReal_re (x : ℝ) : ((tan x).re : ℂ) = tan x :=</span>
+<span id="L437" class="line"><a href="#L437">437</a>   conj_eq_iff_re.1 &lt;| by rw [← tan_conj, conj_ofReal]</span>
+<span id="L438" class="line"><a href="#L438">438</a> </span>
+<span id="L439" class="line"><a href="#L439">439</a> @[simp]</span>
+<span id="L440" class="line"><a href="#L440">440</a> theorem ofReal_cot_ofReal_re (x : ℝ) : ((cot x).re : ℂ) = cot x :=</span>
+<span id="L441" class="line"><a href="#L441">441</a>   conj_eq_iff_re.1 &lt;| by rw [← cot_conj, conj_ofReal]</span>
+<span id="L442" class="line"><a href="#L442">442</a> </span>
+<span id="L443" class="line"><a href="#L443">443</a> @[simp, norm_cast]</span>
+<span id="L444" class="line"><a href="#L444">444</a> theorem ofReal_tan (x : ℝ) : (Real.tan x : ℂ) = tan x :=</span>
+<span id="L445" class="line"><a href="#L445">445</a>   ofReal_tan_ofReal_re _</span>
+<span id="L446" class="line"><a href="#L446">446</a> </span>
+<span id="L447" class="line"><a href="#L447">447</a> @[simp, norm_cast]</span>
+<span id="L448" class="line"><a href="#L448">448</a> theorem ofReal_cot (x : ℝ) : (Real.cot x : ℂ) = cot x :=</span>
+<span id="L449" class="line"><a href="#L449">449</a>   ofReal_cot_ofReal_re _</span>
+<span id="L450" class="line"><a href="#L450">450</a> </span>
+<span id="L451" class="line"><a href="#L451">451</a> @[simp]</span>
+<span id="L452" class="line"><a href="#L452">452</a> theorem tan_ofReal_im (x : ℝ) : (tan x).im = 0 := by rw [← ofReal_tan_ofReal_re, ofReal_im]</span>
+<span id="L453" class="line"><a href="#L453">453</a> </span>
+<span id="L454" class="line"><a href="#L454">454</a> theorem tan_ofReal_re (x : ℝ) : (tan x).re = Real.tan x :=</span>
+<span id="L455" class="line"><a href="#L455">455</a>   rfl</span>
+<span id="L456" class="line"><a href="#L456">456</a> </span>
+<span id="L457" class="line"><a href="#L457">457</a> theorem cos_add_sin_I : cos x + sin x * I = exp (x * I) := by</span>
+<span id="L458" class="line"><a href="#L458">458</a>   rw [← cosh_add_sinh, sinh_mul_I, cosh_mul_I]</span>
+<span id="L459" class="line"><a href="#L459">459</a> </span>
+<span id="L460" class="line"><a href="#L460">460</a> theorem cos_sub_sin_I : cos x - sin x * I = exp (-x * I) := by</span>
+<span id="L461" class="line"><a href="#L461">461</a>   rw [neg_mul, ← cosh_sub_sinh, sinh_mul_I, cosh_mul_I]</span>
+<span id="L462" class="line"><a href="#L462">462</a> </span>
+<span id="L463" class="line"><a href="#L463">463</a> @[simp]</span>
+<span id="L464" class="line"><a href="#L464">464</a> theorem sin_sq_add_cos_sq : sin x ^ 2 + cos x ^ 2 = 1 :=</span>
+<span id="L465" class="line"><a href="#L465">465</a>   Eq.trans (by rw [cosh_mul_I, sinh_mul_I, mul_pow, I_sq, mul_neg_one, sub_neg_eq_add, add_comm])</span>
+<span id="L466" class="line"><a href="#L466">466</a>     (cosh_sq_sub_sinh_sq (x * I))</span>
+<span id="L467" class="line"><a href="#L467">467</a> </span>
+<span id="L468" class="line"><a href="#L468">468</a> @[simp]</span>
+<span id="L469" class="line"><a href="#L469">469</a> theorem cos_sq_add_sin_sq : cos x ^ 2 + sin x ^ 2 = 1 := by rw [add_comm, sin_sq_add_cos_sq]</span>
+<span id="L470" class="line"><a href="#L470">470</a> </span>
+<span id="L471" class="line"><a href="#L471">471</a> theorem cos_two_mul&#x27; : cos (2 * x) = cos x ^ 2 - sin x ^ 2 := by rw [two_mul, cos_add, ← sq, ← sq]</span>
+<span id="L472" class="line"><a href="#L472">472</a> </span>
+<span id="L473" class="line"><a href="#L473">473</a> theorem cos_two_mul : cos (2 * x) = 2 * cos x ^ 2 - 1 := by</span>
+<span id="L474" class="line"><a href="#L474">474</a>   rw [cos_two_mul&#x27;, eq_sub_iff_add_eq.2 (sin_sq_add_cos_sq x), ← sub_add, sub_add_eq_add_sub,</span>
+<span id="L475" class="line"><a href="#L475">475</a>     two_mul]</span>
+<span id="L476" class="line"><a href="#L476">476</a> </span>
+<span id="L477" class="line"><a href="#L477">477</a> theorem cos_two_mul_eq_one_sub : cos (2 * x) = 1 - 2 * sin x ^ 2 := by</span>
+<span id="L478" class="line"><a href="#L478">478</a>   grind [cos_two_mul, sin_sq_add_cos_sq]</span>
+<span id="L479" class="line"><a href="#L479">479</a> </span>
+<span id="L480" class="line"><a href="#L480">480</a> theorem sin_two_mul : sin (2 * x) = 2 * sin x * cos x := by</span>
+<span id="L481" class="line"><a href="#L481">481</a>   rw [two_mul, sin_add, two_mul, add_mul, mul_comm]</span>
+<span id="L482" class="line"><a href="#L482">482</a> </span>
+<span id="L483" class="line"><a href="#L483">483</a> theorem cos_sq : cos x ^ 2 = 1 / 2 + cos (2 * x) / 2 := by</span>
+<span id="L484" class="line"><a href="#L484">484</a>   simp [cos_two_mul, ← add_div, mul_div_cancel_left₀, -one_div]</span>
+<span id="L485" class="line"><a href="#L485">485</a> </span>
+<span id="L486" class="line"><a href="#L486">486</a> theorem cos_sq&#x27; : cos x ^ 2 = 1 - sin x ^ 2 := by rw [← sin_sq_add_cos_sq x, add_sub_cancel_left]</span>
+<span id="L487" class="line"><a href="#L487">487</a> </span>
+<span id="L488" class="line"><a href="#L488">488</a> theorem sin_sq : sin x ^ 2 = 1 - cos x ^ 2 := by rw [← sin_sq_add_cos_sq x, add_sub_cancel_right]</span>
+<span id="L489" class="line"><a href="#L489">489</a> </span>
+<span id="L490" class="line"><a href="#L490">490</a> theorem one_add_tan_sq_mul_cos_sq_eq_one {x : ℂ} (h : cos x ≠ 0) :</span>
+<span id="L491" class="line"><a href="#L491">491</a>     (1 + tan x ^ 2) * cos x ^ 2 = 1 := by</span>
+<span id="L492" class="line"><a href="#L492">492</a>   conv_rhs =&gt; rw [← sin_sq_add_cos_sq x, ← tan_mul_cos h]</span>
+<span id="L493" class="line"><a href="#L493">493</a>   ring</span>
+<span id="L494" class="line"><a href="#L494">494</a> </span>
+<span id="L495" class="line"><a href="#L495">495</a> theorem inv_one_add_tan_sq {x : ℂ} (hx : cos x ≠ 0) : (1 + tan x ^ 2)⁻¹ = cos x ^ 2 := by</span>
+<span id="L496" class="line"><a href="#L496">496</a>   rw [tan_eq_sin_div_cos, div_pow]</span>
+<span id="L497" class="line"><a href="#L497">497</a>   simp [field]</span>
+<span id="L498" class="line"><a href="#L498">498</a> </span>
+<span id="L499" class="line"><a href="#L499">499</a> theorem tan_sq_div_one_add_tan_sq {x : ℂ} (hx : cos x ≠ 0) :</span>
+<span id="L500" class="line"><a href="#L500">500</a>     tan x ^ 2 / (1 + tan x ^ 2) = sin x ^ 2 := by</span>
+<span id="L501" class="line"><a href="#L501">501</a>   simp only [← tan_mul_cos hx, mul_pow, ← inv_one_add_tan_sq hx, div_eq_mul_inv]</span>
+<span id="L502" class="line"><a href="#L502">502</a> </span>
+<span id="L503" class="line"><a href="#L503">503</a> theorem cos_three_mul : cos (3 * x) = 4 * cos x ^ 3 - 3 * cos x := by</span>
+<span id="L504" class="line"><a href="#L504">504</a>   have h1 : x + 2 * x = 3 * x := by ring</span>
+<span id="L505" class="line"><a href="#L505">505</a>   rw [← h1, cos_add x (2 * x)]</span>
+<span id="L506" class="line"><a href="#L506">506</a>   simp only [cos_two_mul, sin_two_mul, mul_sub, mul_one, sq]</span>
+<span id="L507" class="line"><a href="#L507">507</a>   have h2 : 4 * cos x ^ 3 = 2 * cos x * cos x * cos x + 2 * cos x * cos x ^ 2 := by ring</span>
+<span id="L508" class="line"><a href="#L508">508</a>   rw [h2, cos_sq&#x27;]</span>
+<span id="L509" class="line"><a href="#L509">509</a>   ring</span>
+<span id="L510" class="line"><a href="#L510">510</a> </span>
+<span id="L511" class="line"><a href="#L511">511</a> theorem sin_three_mul : sin (3 * x) = 3 * sin x - 4 * sin x ^ 3 := by</span>
+<span id="L512" class="line"><a href="#L512">512</a>   have h1 : x + 2 * x = 3 * x := by ring</span>
+<span id="L513" class="line"><a href="#L513">513</a>   rw [← h1, sin_add x (2 * x)]</span>
+<span id="L514" class="line"><a href="#L514">514</a>   simp only [cos_two_mul, sin_two_mul, cos_sq&#x27;]</span>
+<span id="L515" class="line"><a href="#L515">515</a>   have h2 : cos x * (2 * sin x * cos x) = 2 * sin x * cos x ^ 2 := by ring</span>
+<span id="L516" class="line"><a href="#L516">516</a>   rw [h2, cos_sq&#x27;]</span>
+<span id="L517" class="line"><a href="#L517">517</a>   ring</span>
+<span id="L518" class="line"><a href="#L518">518</a> </span>
+<span id="L519" class="line"><a href="#L519">519</a> theorem exp_mul_I : exp (x * I) = cos x + sin x * I :=</span>
+<span id="L520" class="line"><a href="#L520">520</a>   (cos_add_sin_I _).symm</span>
+<span id="L521" class="line"><a href="#L521">521</a> </span>
+<span id="L522" class="line"><a href="#L522">522</a> theorem exp_add_mul_I : exp (x + y * I) = exp x * (cos y + sin y * I) := by rw [exp_add, exp_mul_I]</span>
+<span id="L523" class="line"><a href="#L523">523</a> </span>
+<span id="L524" class="line"><a href="#L524">524</a> theorem exp_eq_exp_re_mul_sin_add_cos : exp x = exp x.re * (cos x.im + sin x.im * I) := by</span>
+<span id="L525" class="line"><a href="#L525">525</a>   rw [← exp_add_mul_I, re_add_im]</span>
+<span id="L526" class="line"><a href="#L526">526</a> </span>
+<span id="L527" class="line"><a href="#L527">527</a> theorem exp_re : (exp x).re = Real.exp x.re * Real.cos x.im := by</span>
+<span id="L528" class="line"><a href="#L528">528</a>   rw [exp_eq_exp_re_mul_sin_add_cos]</span>
+<span id="L529" class="line"><a href="#L529">529</a>   simp [exp_ofReal_re, cos_ofReal_re]</span>
+<span id="L530" class="line"><a href="#L530">530</a> </span>
+<span id="L531" class="line"><a href="#L531">531</a> theorem exp_im : (exp x).im = Real.exp x.re * Real.sin x.im := by</span>
+<span id="L532" class="line"><a href="#L532">532</a>   rw [exp_eq_exp_re_mul_sin_add_cos]</span>
+<span id="L533" class="line"><a href="#L533">533</a>   simp [exp_ofReal_re, sin_ofReal_re]</span>
+<span id="L534" class="line"><a href="#L534">534</a> </span>
+<span id="L535" class="line"><a href="#L535">535</a> @[simp]</span>
+<span id="L536" class="line"><a href="#L536">536</a> theorem exp_ofReal_mul_I_re (x : ℝ) : (exp (x * I)).re = Real.cos x := by</span>
+<span id="L537" class="line"><a href="#L537">537</a>   simp [exp_mul_I, cos_ofReal_re]</span>
+<span id="L538" class="line"><a href="#L538">538</a> </span>
+<span id="L539" class="line"><a href="#L539">539</a> @[simp]</span>
+<span id="L540" class="line"><a href="#L540">540</a> theorem exp_ofReal_mul_I_im (x : ℝ) : (exp (x * I)).im = Real.sin x := by</span>
+<span id="L541" class="line"><a href="#L541">541</a>   simp [exp_mul_I, sin_ofReal_re]</span>
+<span id="L542" class="line"><a href="#L542">542</a> </span>
+<span id="L543" class="line"><a href="#L543">543</a> theorem exp_ofReal_mul_I (x : ℝ) : exp (x * I) = Real.cos x + (Real.sin x) * I := by</span>
+<span id="L544" class="line"><a href="#L544">544</a>   simp [exp_mul_I]</span>
+<span id="L545" class="line"><a href="#L545">545</a> </span>
+<span id="L546" class="line"><a href="#L546">546</a> /-- **De Moivre&#x27;s formula** -/</span>
+<span id="L547" class="line"><a href="#L547">547</a> theorem cos_add_sin_mul_I_pow (n : ℕ) (z : ℂ) :</span>
+<span id="L548" class="line"><a href="#L548">548</a>     (cos z + sin z * I) ^ n = cos (↑n * z) + sin (↑n * z) * I := by</span>
+<span id="L549" class="line"><a href="#L549">549</a>   rw [← exp_mul_I, ← exp_mul_I, ← exp_nat_mul, mul_assoc]</span>
+<span id="L550" class="line"><a href="#L550">550</a> </span>
+<span id="L551" class="line"><a href="#L551">551</a> open Finset</span>
+<span id="L552" class="line"><a href="#L552">552</a> </span>
+<span id="L553" class="line"><a href="#L553">553</a> theorem cos_bound {x : ℂ} (hx : ‖x‖ ≤ 1) : ‖cos x - (1 - x ^ 2 / 2)‖ ≤ ‖x‖ ^ 4 * (5 / 96) :=</span>
+<span id="L554" class="line"><a href="#L554">554</a>   calc</span>
+<span id="L555" class="line"><a href="#L555">555</a>     ‖cos x - (1 - x ^ 2 / 2)‖ =</span>
+<span id="L556" class="line"><a href="#L556">556</a>         ‖(exp (-x * I) - ∑ m ∈ range 4, (-x * I) ^ m / m.factorial) / 2 +</span>
+<span id="L557" class="line"><a href="#L557">557</a>          (exp (x * I) - ∑ m ∈ range 4, (x * I) ^ m / m.factorial) / 2‖ := by</span>
+<span id="L558" class="line"><a href="#L558">558</a>       simp [cos, field, Finset.sum_range_succ, Nat.factorial]</span>
+<span id="L559" class="line"><a href="#L559">559</a>       grind [I_sq, two_ne_zero]</span>
+<span id="L560" class="line"><a href="#L560">560</a>     _ ≤ ‖exp (-x * I) - ∑ m ∈ range 4, (-x * I) ^ m / m.factorial‖ / 2 +</span>
+<span id="L561" class="line"><a href="#L561">561</a>         ‖exp (x * I) - ∑ m ∈ range 4, (x * I) ^ m / m.factorial‖ / 2 := by</span>
+<span id="L562" class="line"><a href="#L562">562</a>       grw [norm_add_le]</span>
+<span id="L563" class="line"><a href="#L563">563</a>       simp</span>
+<span id="L564" class="line"><a href="#L564">564</a>     _ ≤ ‖-x * I‖ ^ 4 * (Nat.succ 4 * (Nat.factorial 4 * (4 : ℕ) : ℝ)⁻¹) / 2 +</span>
+<span id="L565" class="line"><a href="#L565">565</a>         ‖x * I‖ ^ 4 * (Nat.succ 4 * (Nat.factorial 4 * (4 : ℕ) : ℝ)⁻¹) / 2 := by</span>
+<span id="L566" class="line"><a href="#L566">566</a>       grw [exp_bound (by simpa) (by simp), exp_bound (by simpa) (by simp)]</span>
+<span id="L567" class="line"><a href="#L567">567</a>     _ ≤ ‖x‖ ^ 4 * (5 / 96) := by norm_num</span>
+<span id="L568" class="line"><a href="#L568">568</a> </span>
+<span id="L569" class="line"><a href="#L569">569</a> theorem sin_bound {x : ℂ} (hx : ‖x‖ ≤ 1) : ‖sin x - (x - x ^ 3 / 6)‖ ≤ ‖x‖ ^ 4 * (5 / 96) :=</span>
+<span id="L570" class="line"><a href="#L570">570</a>   calc</span>
+<span id="L571" class="line"><a href="#L571">571</a>     ‖sin x - (x - x ^ 3 / 6)‖ =</span>
+<span id="L572" class="line"><a href="#L572">572</a>         ‖(exp (-x * I) - ∑ m ∈ range 4, (-x * I) ^ m / m.factorial) * I / 2 -</span>
+<span id="L573" class="line"><a href="#L573">573</a>          (exp (x * I) - ∑ m ∈ range 4, (x * I) ^ m / m.factorial) * I / 2‖ := by</span>
+<span id="L574" class="line"><a href="#L574">574</a>       simp [sin, field, Finset.sum_range_succ, Nat.factorial]</span>
+<span id="L575" class="line"><a href="#L575">575</a>       grind [I_sq, two_ne_zero]</span>
+<span id="L576" class="line"><a href="#L576">576</a>     _ ≤ ‖exp (-x * I) - ∑ m ∈ range 4, (-x * I) ^ m / m.factorial‖ / 2 +</span>
+<span id="L577" class="line"><a href="#L577">577</a>         ‖exp (x * I) - ∑ m ∈ range 4, (x * I) ^ m / m.factorial‖ / 2 := by</span>
+<span id="L578" class="line"><a href="#L578">578</a>       grw [norm_sub_le]</span>
+<span id="L579" class="line"><a href="#L579">579</a>       simp</span>
+<span id="L580" class="line"><a href="#L580">580</a>     _ ≤ ‖-x * I‖ ^ 4 * (Nat.succ 4 * (Nat.factorial 4 * (4 : ℕ) : ℝ)⁻¹) / 2 +</span>
+<span id="L581" class="line"><a href="#L581">581</a>         ‖x * I‖ ^ 4 * (Nat.succ 4 * (Nat.factorial 4 * (4 : ℕ) : ℝ)⁻¹) / 2 := by</span>
+<span id="L582" class="line"><a href="#L582">582</a>       grw [exp_bound (by simpa) (by simp), exp_bound (by simpa) (by simp)]</span>
+<span id="L583" class="line"><a href="#L583">583</a>     _ ≤ ‖x‖ ^ 4 * (5 / 96) := by norm_num</span>
+<span id="L584" class="line"><a href="#L584">584</a> </span>
+<span id="L585" class="line"><a href="#L585">585</a> end Complex</span>
+<span id="L586" class="line"><a href="#L586">586</a> </span>
+<span id="L587" class="line"><a href="#L587">587</a> namespace Real</span>
+<span id="L588" class="line"><a href="#L588">588</a> </span>
+<span id="L589" class="line"><a href="#L589">589</a> open Complex</span>
+<span id="L590" class="line"><a href="#L590">590</a> </span>
+<span id="L591" class="line"><a href="#L591">591</a> variable (x y : ℝ)</span>
+<span id="L592" class="line"><a href="#L592">592</a> </span>
+<span id="L593" class="line"><a href="#L593">593</a> @[simp]</span>
+<span id="L594" class="line"><a href="#L594">594</a> theorem sin_zero : sin 0 = 0 := by simp [sin]</span>
+<span id="L595" class="line"><a href="#L595">595</a> </span>
+<span id="L596" class="line"><a href="#L596">596</a> @[simp]</span>
+<span id="L597" class="line"><a href="#L597">597</a> theorem sin_neg : sin (-x) = -sin x := by simp [sin]</span>
+<span id="L598" class="line"><a href="#L598">598</a> </span>
+<span id="L599" class="line"><a href="#L599">599</a> nonrec theorem sin_add : sin (x + y) = sin x * cos y + cos x * sin y :=</span>
+<span id="L600" class="line"><a href="#L600">600</a>   ofReal_injective &lt;| by simp [sin_add]</span>
+<span id="L601" class="line"><a href="#L601">601</a> </span>
+<span id="L602" class="line"><a href="#L602">602</a> @[simp]</span>
+<span id="L603" class="line"><a href="#L603">603</a> theorem cos_zero : cos 0 = 1 := by simp [cos]</span>
+<span id="L604" class="line"><a href="#L604">604</a> </span>
+<span id="L605" class="line"><a href="#L605">605</a> @[simp]</span>
+<span id="L606" class="line"><a href="#L606">606</a> theorem cos_neg : cos (-x) = cos x := by simp [cos]</span>
+<span id="L607" class="line"><a href="#L607">607</a> </span>
+<span id="L608" class="line"><a href="#L608">608</a> @[simp]</span>
+<span id="L609" class="line"><a href="#L609">609</a> theorem cos_abs : cos |x| = cos x := by</span>
+<span id="L610" class="line"><a href="#L610">610</a>   cases le_total x 0 &lt;;&gt; simp only [*, abs_of_nonneg, abs_of_nonpos, cos_neg]</span>
+<span id="L611" class="line"><a href="#L611">611</a> </span>
+<span id="L612" class="line"><a href="#L612">612</a> nonrec theorem cos_add : cos (x + y) = cos x * cos y - sin x * sin y :=</span>
+<span id="L613" class="line"><a href="#L613">613</a>   ofReal_injective &lt;| by simp [cos_add]</span>
+<span id="L614" class="line"><a href="#L614">614</a> </span>
+<span id="L615" class="line"><a href="#L615">615</a> theorem sin_sub : sin (x - y) = sin x * cos y - cos x * sin y := by</span>
+<span id="L616" class="line"><a href="#L616">616</a>   simp [sub_eq_add_neg, sin_add, sin_neg, cos_neg]</span>
+<span id="L617" class="line"><a href="#L617">617</a> </span>
+<span id="L618" class="line"><a href="#L618">618</a> theorem cos_sub : cos (x - y) = cos x * cos y + sin x * sin y := by</span>
+<span id="L619" class="line"><a href="#L619">619</a>   simp [sub_eq_add_neg, cos_add, sin_neg, cos_neg]</span>
+<span id="L620" class="line"><a href="#L620">620</a> </span>
+<span id="L621" class="line"><a href="#L621">621</a> nonrec theorem sin_add_sin : sin x + sin y = 2 * sin ((x + y) / 2) * cos ((x - y) / 2) :=</span>
+<span id="L622" class="line"><a href="#L622">622</a>   ofReal_injective &lt;| by simp [sin_add_sin]</span>
+<span id="L623" class="line"><a href="#L623">623</a> </span>
+<span id="L624" class="line"><a href="#L624">624</a> nonrec theorem sin_sub_sin : sin x - sin y = 2 * sin ((x - y) / 2) * cos ((x + y) / 2) :=</span>
+<span id="L625" class="line"><a href="#L625">625</a>   ofReal_injective &lt;| by simp [sin_sub_sin]</span>
+<span id="L626" class="line"><a href="#L626">626</a> </span>
+<span id="L627" class="line"><a href="#L627">627</a> nonrec theorem cos_add_cos : cos x + cos y = 2 * cos ((x + y) / 2) * cos ((x - y) / 2) :=</span>
+<span id="L628" class="line"><a href="#L628">628</a>   ofReal_injective &lt;| by simp [cos_add_cos]</span>
+<span id="L629" class="line"><a href="#L629">629</a> </span>
+<span id="L630" class="line"><a href="#L630">630</a> nonrec theorem cos_sub_cos : cos x - cos y = -2 * sin ((x + y) / 2) * sin ((x - y) / 2) :=</span>
+<span id="L631" class="line"><a href="#L631">631</a>   ofReal_injective &lt;| by simp [cos_sub_cos]</span>
+<span id="L632" class="line"><a href="#L632">632</a> </span>
+<span id="L633" class="line"><a href="#L633">633</a> theorem two_mul_sin_mul_sin (x y : ℝ) : 2 * sin x * sin y = cos (x - y) - cos (x + y) := by</span>
+<span id="L634" class="line"><a href="#L634">634</a>   simp [cos_add, cos_sub]</span>
+<span id="L635" class="line"><a href="#L635">635</a>   ring</span>
+<span id="L636" class="line"><a href="#L636">636</a> </span>
+<span id="L637" class="line"><a href="#L637">637</a> theorem two_mul_cos_mul_cos (x y : ℝ) : 2 * cos x * cos y = cos (x - y) + cos (x + y) := by</span>
+<span id="L638" class="line"><a href="#L638">638</a>   simp [cos_add, cos_sub]</span>
+<span id="L639" class="line"><a href="#L639">639</a>   ring</span>
+<span id="L640" class="line"><a href="#L640">640</a> </span>
+<span id="L641" class="line"><a href="#L641">641</a> theorem two_mul_sin_mul_cos (x y : ℝ) : 2 * sin x * cos y = sin (x - y) + sin (x + y) := by</span>
+<span id="L642" class="line"><a href="#L642">642</a>   simp [sin_add, sin_sub]</span>
+<span id="L643" class="line"><a href="#L643">643</a>   ring</span>
+<span id="L644" class="line"><a href="#L644">644</a> </span>
+<span id="L645" class="line"><a href="#L645">645</a> nonrec theorem tan_eq_sin_div_cos : tan x = sin x / cos x :=</span>
+<span id="L646" class="line"><a href="#L646">646</a>   ofReal_injective &lt;| by simp only [ofReal_tan, tan_eq_sin_div_cos, ofReal_div, ofReal_sin,</span>
+<span id="L647" class="line"><a href="#L647">647</a>     ofReal_cos]</span>
+<span id="L648" class="line"><a href="#L648">648</a> </span>
+<span id="L649" class="line"><a href="#L649">649</a> nonrec theorem cot_eq_cos_div_sin : cot x = cos x / sin x :=</span>
+<span id="L650" class="line"><a href="#L650">650</a>   ofReal_injective &lt;| by simp [cot_eq_cos_div_sin]</span>
+<span id="L651" class="line"><a href="#L651">651</a> </span>
+<span id="L652" class="line"><a href="#L652">652</a> theorem tan_mul_cos {x : ℝ} (hx : cos x ≠ 0) : tan x * cos x = sin x := by</span>
+<span id="L653" class="line"><a href="#L653">653</a>   rw [tan_eq_sin_div_cos, div_mul_cancel₀ _ hx]</span>
+<span id="L654" class="line"><a href="#L654">654</a> </span>
+<span id="L655" class="line"><a href="#L655">655</a> @[simp]</span>
+<span id="L656" class="line"><a href="#L656">656</a> theorem tan_inv_eq_cot : (tan x)⁻¹ = cot x :=</span>
+<span id="L657" class="line"><a href="#L657">657</a>   ofReal_injective &lt;| by simp</span>
+<span id="L658" class="line"><a href="#L658">658</a> </span>
+<span id="L659" class="line"><a href="#L659">659</a> @[simp]</span>
+<span id="L660" class="line"><a href="#L660">660</a> theorem cot_inv_eq_tan : (cot x)⁻¹ = tan x :=</span>
+<span id="L661" class="line"><a href="#L661">661</a>   ofReal_injective &lt;| by simp</span>
+<span id="L662" class="line"><a href="#L662">662</a> </span>
+<span id="L663" class="line"><a href="#L663">663</a> @[simp]</span>
+<span id="L664" class="line"><a href="#L664">664</a> theorem tan_zero : tan 0 = 0 := by simp [tan]</span>
+<span id="L665" class="line"><a href="#L665">665</a> </span>
+<span id="L666" class="line"><a href="#L666">666</a> @[simp]</span>
+<span id="L667" class="line"><a href="#L667">667</a> theorem tan_neg : tan (-x) = -tan x := by simp [tan]</span>
+<span id="L668" class="line"><a href="#L668">668</a> </span>
+<span id="L669" class="line"><a href="#L669">669</a> @[simp]</span>
+<span id="L670" class="line"><a href="#L670">670</a> nonrec theorem sin_sq_add_cos_sq : sin x ^ 2 + cos x ^ 2 = 1 :=</span>
+<span id="L671" class="line"><a href="#L671">671</a>   ofReal_injective (by simp [sin_sq_add_cos_sq])</span>
+<span id="L672" class="line"><a href="#L672">672</a> </span>
+<span id="L673" class="line"><a href="#L673">673</a> @[simp]</span>
+<span id="L674" class="line"><a href="#L674">674</a> theorem cos_sq_add_sin_sq : cos x ^ 2 + sin x ^ 2 = 1 := by rw [add_comm, sin_sq_add_cos_sq]</span>
+<span id="L675" class="line"><a href="#L675">675</a> </span>
+<span id="L676" class="line"><a href="#L676">676</a> theorem sin_sq_le_one : sin x ^ 2 ≤ 1 := by</span>
+<span id="L677" class="line"><a href="#L677">677</a>   rw [← sin_sq_add_cos_sq x]; exact le_add_of_nonneg_right (sq_nonneg _)</span>
+<span id="L678" class="line"><a href="#L678">678</a> </span>
+<span id="L679" class="line"><a href="#L679">679</a> theorem cos_sq_le_one : cos x ^ 2 ≤ 1 := by</span>
+<span id="L680" class="line"><a href="#L680">680</a>   rw [← sin_sq_add_cos_sq x]; exact le_add_of_nonneg_left (sq_nonneg _)</span>
+<span id="L681" class="line"><a href="#L681">681</a> </span>
+<span id="L682" class="line"><a href="#L682">682</a> theorem abs_sin_le_one : |sin x| ≤ 1 :=</span>
+<span id="L683" class="line"><a href="#L683">683</a>   abs_le_one_iff_mul_self_le_one.2 &lt;| by simp only [← sq, sin_sq_le_one]</span>
+<span id="L684" class="line"><a href="#L684">684</a> </span>
+<span id="L685" class="line"><a href="#L685">685</a> theorem abs_cos_le_one : |cos x| ≤ 1 :=</span>
+<span id="L686" class="line"><a href="#L686">686</a>   abs_le_one_iff_mul_self_le_one.2 &lt;| by simp only [← sq, cos_sq_le_one]</span>
+<span id="L687" class="line"><a href="#L687">687</a> </span>
+<span id="L688" class="line"><a href="#L688">688</a> theorem sin_le_one : sin x ≤ 1 :=</span>
+<span id="L689" class="line"><a href="#L689">689</a>   (abs_le.1 (abs_sin_le_one _)).2</span>
+<span id="L690" class="line"><a href="#L690">690</a> </span>
+<span id="L691" class="line"><a href="#L691">691</a> theorem cos_le_one : cos x ≤ 1 :=</span>
+<span id="L692" class="line"><a href="#L692">692</a>   (abs_le.1 (abs_cos_le_one _)).2</span>
+<span id="L693" class="line"><a href="#L693">693</a> </span>
+<span id="L694" class="line"><a href="#L694">694</a> theorem neg_one_le_sin : -1 ≤ sin x :=</span>
+<span id="L695" class="line"><a href="#L695">695</a>   (abs_le.1 (abs_sin_le_one _)).1</span>
+<span id="L696" class="line"><a href="#L696">696</a> </span>
+<span id="L697" class="line"><a href="#L697">697</a> theorem neg_one_le_cos : -1 ≤ cos x :=</span>
+<span id="L698" class="line"><a href="#L698">698</a>   (abs_le.1 (abs_cos_le_one _)).1</span>
+<span id="L699" class="line"><a href="#L699">699</a> </span>
+<span id="L700" class="line"><a href="#L700">700</a> nonrec theorem cos_two_mul : cos (2 * x) = 2 * cos x ^ 2 - 1 :=</span>
+<span id="L701" class="line"><a href="#L701">701</a>   ofReal_injective &lt;| by simp [cos_two_mul]</span>
+<span id="L702" class="line"><a href="#L702">702</a> </span>
+<span id="L703" class="line"><a href="#L703">703</a> nonrec theorem cos_two_mul&#x27; : cos (2 * x) = cos x ^ 2 - sin x ^ 2 :=</span>
+<span id="L704" class="line"><a href="#L704">704</a>   ofReal_injective &lt;| by simp [cos_two_mul&#x27;]</span>
+<span id="L705" class="line"><a href="#L705">705</a> </span>
+<span id="L706" class="line"><a href="#L706">706</a> nonrec theorem cos_two_mul_eq_one_sub : cos (2 * x) = 1 - 2 * sin x ^ 2 :=</span>
+<span id="L707" class="line"><a href="#L707">707</a>   ofReal_injective &lt;| by simp [cos_two_mul_eq_one_sub]</span>
+<span id="L708" class="line"><a href="#L708">708</a> </span>
+<span id="L709" class="line"><a href="#L709">709</a> nonrec theorem sin_two_mul : sin (2 * x) = 2 * sin x * cos x :=</span>
+<span id="L710" class="line"><a href="#L710">710</a>   ofReal_injective &lt;| by simp [sin_two_mul]</span>
+<span id="L711" class="line"><a href="#L711">711</a> </span>
+<span id="L712" class="line"><a href="#L712">712</a> nonrec theorem cos_sq : cos x ^ 2 = 1 / 2 + cos (2 * x) / 2 :=</span>
+<span id="L713" class="line"><a href="#L713">713</a>   ofReal_injective &lt;| by simp [cos_sq]</span>
+<span id="L714" class="line"><a href="#L714">714</a> </span>
+<span id="L715" class="line"><a href="#L715">715</a> theorem cos_sq&#x27; : cos x ^ 2 = 1 - sin x ^ 2 := by rw [← sin_sq_add_cos_sq x, add_sub_cancel_left]</span>
+<span id="L716" class="line"><a href="#L716">716</a> </span>
+<span id="L717" class="line"><a href="#L717">717</a> theorem sin_sq : sin x ^ 2 = 1 - cos x ^ 2 :=</span>
+<span id="L718" class="line"><a href="#L718">718</a>   eq_sub_iff_add_eq.2 &lt;| sin_sq_add_cos_sq _</span>
+<span id="L719" class="line"><a href="#L719">719</a> </span>
+<span id="L720" class="line"><a href="#L720">720</a> lemma sin_sq_eq_half_sub : sin x ^ 2 = 1 / 2 - cos (2 * x) / 2 := by</span>
+<span id="L721" class="line"><a href="#L721">721</a>   rw [sin_sq, cos_sq, ← sub_sub, sub_half]</span>
+<span id="L722" class="line"><a href="#L722">722</a> </span>
+<span id="L723" class="line"><a href="#L723">723</a> theorem abs_sin_eq_sqrt_one_sub_cos_sq (x : ℝ) : |sin x| = √(1 - cos x ^ 2) := by</span>
+<span id="L724" class="line"><a href="#L724">724</a>   rw [← sin_sq, sqrt_sq_eq_abs]</span>
+<span id="L725" class="line"><a href="#L725">725</a> </span>
+<span id="L726" class="line"><a href="#L726">726</a> theorem abs_cos_eq_sqrt_one_sub_sin_sq (x : ℝ) : |cos x| = √(1 - sin x ^ 2) := by</span>
+<span id="L727" class="line"><a href="#L727">727</a>   rw [← cos_sq&#x27;, sqrt_sq_eq_abs]</span>
+<span id="L728" class="line"><a href="#L728">728</a> </span>
+<span id="L729" class="line"><a href="#L729">729</a> theorem one_add_tan_sq_mul_cos_sq_eq_one {x : ℝ} (h : cos x ≠ 0) :</span>
+<span id="L730" class="line"><a href="#L730">730</a>     (1 + tan x ^ 2) * cos x ^ 2 = 1 :=</span>
+<span id="L731" class="line"><a href="#L731">731</a>   mod_cast @Complex.one_add_tan_sq_mul_cos_sq_eq_one x (mod_cast h)</span>
+<span id="L732" class="line"><a href="#L732">732</a> </span>
+<span id="L733" class="line"><a href="#L733">733</a> theorem inv_one_add_tan_sq {x : ℝ} (hx : cos x ≠ 0) : (1 + tan x ^ 2)⁻¹ = cos x ^ 2 :=</span>
+<span id="L734" class="line"><a href="#L734">734</a>   have : Complex.cos x ≠ 0 := mt (congr_arg re) hx</span>
+<span id="L735" class="line"><a href="#L735">735</a>   ofReal_inj.1 &lt;| by simpa using Complex.inv_one_add_tan_sq this</span>
+<span id="L736" class="line"><a href="#L736">736</a> </span>
+<span id="L737" class="line"><a href="#L737">737</a> theorem tan_sq_div_one_add_tan_sq {x : ℝ} (hx : cos x ≠ 0) :</span>
+<span id="L738" class="line"><a href="#L738">738</a>     tan x ^ 2 / (1 + tan x ^ 2) = sin x ^ 2 := by</span>
+<span id="L739" class="line"><a href="#L739">739</a>   simp only [← tan_mul_cos hx, mul_pow, ← inv_one_add_tan_sq hx, div_eq_mul_inv]</span>
+<span id="L740" class="line"><a href="#L740">740</a> </span>
+<span id="L741" class="line"><a href="#L741">741</a> theorem inv_sqrt_one_add_tan_sq {x : ℝ} (hx : 0 &lt; cos x) : (√(1 + tan x ^ 2))⁻¹ = cos x := by</span>
+<span id="L742" class="line"><a href="#L742">742</a>   rw [← sqrt_sq hx.le, ← sqrt_inv, inv_one_add_tan_sq hx.ne&#x27;]</span>
+<span id="L743" class="line"><a href="#L743">743</a> </span>
+<span id="L744" class="line"><a href="#L744">744</a> theorem tan_div_sqrt_one_add_tan_sq {x : ℝ} (hx : 0 &lt; cos x) :</span>
+<span id="L745" class="line"><a href="#L745">745</a>     tan x / √(1 + tan x ^ 2) = sin x := by</span>
+<span id="L746" class="line"><a href="#L746">746</a>   rw [← tan_mul_cos hx.ne&#x27;, ← inv_sqrt_one_add_tan_sq hx, div_eq_mul_inv]</span>
+<span id="L747" class="line"><a href="#L747">747</a> </span>
+<span id="L748" class="line"><a href="#L748">748</a> nonrec theorem cos_three_mul : cos (3 * x) = 4 * cos x ^ 3 - 3 * cos x := by</span>
+<span id="L749" class="line"><a href="#L749">749</a>   rw [← ofReal_inj]; simp [cos_three_mul]</span>
+<span id="L750" class="line"><a href="#L750">750</a> </span>
+<span id="L751" class="line"><a href="#L751">751</a> nonrec theorem sin_three_mul : sin (3 * x) = 3 * sin x - 4 * sin x ^ 3 := by</span>
+<span id="L752" class="line"><a href="#L752">752</a>   rw [← ofReal_inj]; simp [sin_three_mul]</span>
+<span id="L753" class="line"><a href="#L753">753</a> </span>
+<span id="L754" class="line"><a href="#L754">754</a> /-- The definition of `sinh` in terms of `exp`. -/</span>
+<span id="L755" class="line"><a href="#L755">755</a> nonrec theorem sinh_eq (x : ℝ) : sinh x = (exp x - exp (-x)) / 2 :=</span>
+<span id="L756" class="line"><a href="#L756">756</a>   ofReal_injective &lt;| by simp [Complex.sinh]</span>
+<span id="L757" class="line"><a href="#L757">757</a> </span>
+<span id="L758" class="line"><a href="#L758">758</a> @[simp]</span>
+<span id="L759" class="line"><a href="#L759">759</a> theorem sinh_zero : sinh 0 = 0 := by simp [sinh]</span>
+<span id="L760" class="line"><a href="#L760">760</a> </span>
+<span id="L761" class="line"><a href="#L761">761</a> @[simp]</span>
+<span id="L762" class="line"><a href="#L762">762</a> theorem sinh_neg : sinh (-x) = -sinh x := by simp [sinh]</span>
+<span id="L763" class="line"><a href="#L763">763</a> </span>
+<span id="L764" class="line"><a href="#L764">764</a> nonrec theorem sinh_add : sinh (x + y) = sinh x * cosh y + cosh x * sinh y := by</span>
+<span id="L765" class="line"><a href="#L765">765</a>   rw [← ofReal_inj]; simp [sinh_add]</span>
+<span id="L766" class="line"><a href="#L766">766</a> </span>
+<span id="L767" class="line"><a href="#L767">767</a> /-- The definition of `cosh` in terms of `exp`. -/</span>
+<span id="L768" class="line"><a href="#L768">768</a> theorem cosh_eq (x : ℝ) : cosh x = (exp x + exp (-x)) / 2 :=</span>
+<span id="L769" class="line"><a href="#L769">769</a>   eq_div_of_mul_eq two_ne_zero &lt;| by</span>
+<span id="L770" class="line"><a href="#L770">770</a>     rw [cosh, exp, exp, Complex.ofReal_neg, Complex.cosh, mul_two, ← Complex.add_re, ← mul_two,</span>
+<span id="L771" class="line"><a href="#L771">771</a>       div_mul_cancel₀ _ (two_ne_zero&#x27; ℂ), Complex.add_re]</span>
+<span id="L772" class="line"><a href="#L772">772</a> </span>
+<span id="L773" class="line"><a href="#L773">773</a> @[simp]</span>
+<span id="L774" class="line"><a href="#L774">774</a> theorem cosh_zero : cosh 0 = 1 := by simp [cosh]</span>
+<span id="L775" class="line"><a href="#L775">775</a> </span>
+<span id="L776" class="line"><a href="#L776">776</a> @[simp]</span>
+<span id="L777" class="line"><a href="#L777">777</a> theorem cosh_neg : cosh (-x) = cosh x :=</span>
+<span id="L778" class="line"><a href="#L778">778</a>   ofReal_inj.1 &lt;| by simp</span>
+<span id="L779" class="line"><a href="#L779">779</a> </span>
+<span id="L780" class="line"><a href="#L780">780</a> @[simp]</span>
+<span id="L781" class="line"><a href="#L781">781</a> theorem cosh_abs : cosh |x| = cosh x := by</span>
+<span id="L782" class="line"><a href="#L782">782</a>   cases le_total x 0 &lt;;&gt; simp [*, abs_of_nonneg, abs_of_nonpos]</span>
+<span id="L783" class="line"><a href="#L783">783</a> </span>
+<span id="L784" class="line"><a href="#L784">784</a> nonrec theorem cosh_add : cosh (x + y) = cosh x * cosh y + sinh x * sinh y := by</span>
+<span id="L785" class="line"><a href="#L785">785</a>   rw [← ofReal_inj]; simp [cosh_add]</span>
+<span id="L786" class="line"><a href="#L786">786</a> </span>
+<span id="L787" class="line"><a href="#L787">787</a> theorem sinh_sub : sinh (x - y) = sinh x * cosh y - cosh x * sinh y := by</span>
+<span id="L788" class="line"><a href="#L788">788</a>   simp [sub_eq_add_neg, sinh_add, sinh_neg, cosh_neg]</span>
+<span id="L789" class="line"><a href="#L789">789</a> </span>
+<span id="L790" class="line"><a href="#L790">790</a> theorem cosh_sub : cosh (x - y) = cosh x * cosh y - sinh x * sinh y := by</span>
+<span id="L791" class="line"><a href="#L791">791</a>   simp [sub_eq_add_neg, cosh_add, sinh_neg, cosh_neg]</span>
+<span id="L792" class="line"><a href="#L792">792</a> </span>
+<span id="L793" class="line"><a href="#L793">793</a> nonrec theorem tanh_eq_sinh_div_cosh : tanh x = sinh x / cosh x :=</span>
+<span id="L794" class="line"><a href="#L794">794</a>   ofReal_inj.1 &lt;| by simp [tanh_eq_sinh_div_cosh]</span>
+<span id="L795" class="line"><a href="#L795">795</a> </span>
+<span id="L796" class="line"><a href="#L796">796</a> /-- The definition of `tanh` in terms of `exp`. -/</span>
+<span id="L797" class="line"><a href="#L797">797</a> theorem tanh_eq (x : ℝ) : tanh x = (exp x - exp (-x)) / (exp x + exp (-x)) := by</span>
+<span id="L798" class="line"><a href="#L798">798</a>   rw [tanh_eq_sinh_div_cosh, sinh_eq, cosh_eq, div_div_div_cancel_right₀ two_ne_zero]</span>
+<span id="L799" class="line"><a href="#L799">799</a> </span>
+<span id="L800" class="line"><a href="#L800">800</a> @[simp]</span>
+<span id="L801" class="line"><a href="#L801">801</a> theorem tanh_zero : tanh 0 = 0 := by simp [tanh]</span>
+<span id="L802" class="line"><a href="#L802">802</a> </span>
+<span id="L803" class="line"><a href="#L803">803</a> @[simp]</span>
+<span id="L804" class="line"><a href="#L804">804</a> theorem tanh_neg : tanh (-x) = -tanh x := by simp [tanh]</span>
+<span id="L805" class="line"><a href="#L805">805</a> </span>
+<span id="L806" class="line"><a href="#L806">806</a> @[simp]</span>
+<span id="L807" class="line"><a href="#L807">807</a> theorem cosh_add_sinh : cosh x + sinh x = exp x := by rw [← ofReal_inj]; simp</span>
+<span id="L808" class="line"><a href="#L808">808</a> </span>
+<span id="L809" class="line"><a href="#L809">809</a> @[simp]</span>
+<span id="L810" class="line"><a href="#L810">810</a> theorem sinh_add_cosh : sinh x + cosh x = exp x := by rw [add_comm, cosh_add_sinh]</span>
+<span id="L811" class="line"><a href="#L811">811</a> </span>
+<span id="L812" class="line"><a href="#L812">812</a> @[simp]</span>
+<span id="L813" class="line"><a href="#L813">813</a> theorem exp_sub_cosh : exp x - cosh x = sinh x :=</span>
+<span id="L814" class="line"><a href="#L814">814</a>   sub_eq_iff_eq_add.2 (sinh_add_cosh x).symm</span>
+<span id="L815" class="line"><a href="#L815">815</a> </span>
+<span id="L816" class="line"><a href="#L816">816</a> @[simp]</span>
+<span id="L817" class="line"><a href="#L817">817</a> theorem exp_sub_sinh : exp x - sinh x = cosh x :=</span>
+<span id="L818" class="line"><a href="#L818">818</a>   sub_eq_iff_eq_add.2 (cosh_add_sinh x).symm</span>
+<span id="L819" class="line"><a href="#L819">819</a> </span>
+<span id="L820" class="line"><a href="#L820">820</a> @[simp]</span>
+<span id="L821" class="line"><a href="#L821">821</a> theorem cosh_sub_sinh : cosh x - sinh x = exp (-x) := by</span>
+<span id="L822" class="line"><a href="#L822">822</a>   rw [← ofReal_inj]</span>
+<span id="L823" class="line"><a href="#L823">823</a>   simp</span>
+<span id="L824" class="line"><a href="#L824">824</a> </span>
+<span id="L825" class="line"><a href="#L825">825</a> @[simp]</span>
+<span id="L826" class="line"><a href="#L826">826</a> theorem sinh_sub_cosh : sinh x - cosh x = -exp (-x) := by rw [← neg_sub, cosh_sub_sinh]</span>
+<span id="L827" class="line"><a href="#L827">827</a> </span>
+<span id="L828" class="line"><a href="#L828">828</a> @[simp]</span>
+<span id="L829" class="line"><a href="#L829">829</a> theorem cosh_sq_sub_sinh_sq (x : ℝ) : cosh x ^ 2 - sinh x ^ 2 = 1 := by rw [← ofReal_inj]; simp</span>
+<span id="L830" class="line"><a href="#L830">830</a> </span>
+<span id="L831" class="line"><a href="#L831">831</a> nonrec theorem cosh_sq : cosh x ^ 2 = sinh x ^ 2 + 1 := by rw [← ofReal_inj]; simp [cosh_sq]</span>
+<span id="L832" class="line"><a href="#L832">832</a> </span>
+<span id="L833" class="line"><a href="#L833">833</a> theorem cosh_sq&#x27; : cosh x ^ 2 = 1 + sinh x ^ 2 :=</span>
+<span id="L834" class="line"><a href="#L834">834</a>   (cosh_sq x).trans (add_comm _ _)</span>
+<span id="L835" class="line"><a href="#L835">835</a> </span>
+<span id="L836" class="line"><a href="#L836">836</a> nonrec theorem sinh_sq : sinh x ^ 2 = cosh x ^ 2 - 1 := by rw [← ofReal_inj]; simp [sinh_sq]</span>
+<span id="L837" class="line"><a href="#L837">837</a> </span>
+<span id="L838" class="line"><a href="#L838">838</a> nonrec theorem cosh_two_mul : cosh (2 * x) = cosh x ^ 2 + sinh x ^ 2 := by</span>
+<span id="L839" class="line"><a href="#L839">839</a>   rw [← ofReal_inj]; simp [cosh_two_mul]</span>
+<span id="L840" class="line"><a href="#L840">840</a> </span>
+<span id="L841" class="line"><a href="#L841">841</a> nonrec theorem sinh_two_mul : sinh (2 * x) = 2 * sinh x * cosh x := by</span>
+<span id="L842" class="line"><a href="#L842">842</a>   rw [← ofReal_inj]; simp [sinh_two_mul]</span>
+<span id="L843" class="line"><a href="#L843">843</a> </span>
+<span id="L844" class="line"><a href="#L844">844</a> nonrec theorem cosh_three_mul : cosh (3 * x) = 4 * cosh x ^ 3 - 3 * cosh x := by</span>
+<span id="L845" class="line"><a href="#L845">845</a>   rw [← ofReal_inj]; simp [cosh_three_mul]</span>
+<span id="L846" class="line"><a href="#L846">846</a> </span>
+<span id="L847" class="line"><a href="#L847">847</a> nonrec theorem sinh_three_mul : sinh (3 * x) = 4 * sinh x ^ 3 + 3 * sinh x := by</span>
+<span id="L848" class="line"><a href="#L848">848</a>   rw [← ofReal_inj]; simp [sinh_three_mul]</span>
+<span id="L849" class="line"><a href="#L849">849</a> </span>
+<span id="L850" class="line"><a href="#L850">850</a> open IsAbsoluteValue Nat</span>
+<span id="L851" class="line"><a href="#L851">851</a> </span>
+<span id="L852" class="line"><a href="#L852">852</a> /-- `Real.cosh` is always positive -/</span>
+<span id="L853" class="line"><a href="#L853">853</a> theorem cosh_pos (x : ℝ) : 0 &lt; Real.cosh x :=</span>
+<span id="L854" class="line"><a href="#L854">854</a>   (cosh_eq x).symm ▸ half_pos (add_pos (exp_pos x) (exp_pos (-x)))</span>
+<span id="L855" class="line"><a href="#L855">855</a> </span>
+<span id="L856" class="line"><a href="#L856">856</a> theorem sinh_lt_cosh : sinh x &lt; cosh x :=</span>
+<span id="L857" class="line"><a href="#L857">857</a>   lt_of_pow_lt_pow_left₀ 2 (cosh_pos _).le &lt;| (cosh_sq x).symm ▸ lt_add_one _</span>
+<span id="L858" class="line"><a href="#L858">858</a> </span>
+<span id="L859" class="line"><a href="#L859">859</a> theorem tanh_lt_one (x : ℝ) : tanh x &lt; 1 := by</span>
+<span id="L860" class="line"><a href="#L860">860</a>   rw [tanh_eq]</span>
+<span id="L861" class="line"><a href="#L861">861</a>   field_simp</span>
+<span id="L862" class="line"><a href="#L862">862</a>   grind [exp_pos]</span>
+<span id="L863" class="line"><a href="#L863">863</a> </span>
+<span id="L864" class="line"><a href="#L864">864</a> theorem neg_one_lt_tanh (x : ℝ) : -1 &lt; tanh x := by</span>
+<span id="L865" class="line"><a href="#L865">865</a>   rw [tanh_eq]</span>
+<span id="L866" class="line"><a href="#L866">866</a>   field_simp</span>
+<span id="L867" class="line"><a href="#L867">867</a>   grind [exp_pos]</span>
+<span id="L868" class="line"><a href="#L868">868</a> </span>
+<span id="L869" class="line"><a href="#L869">869</a> theorem abs_tanh_lt_one (x : ℝ) : |tanh x| &lt; 1 :=</span>
+<span id="L870" class="line"><a href="#L870">870</a>   abs_lt.mpr ⟨neg_one_lt_tanh x, tanh_lt_one x⟩</span>
+<span id="L871" class="line"><a href="#L871">871</a> </span>
+<span id="L872" class="line"><a href="#L872">872</a> theorem tanh_sq_lt_one (x : ℝ) : (tanh x) ^ 2 &lt; 1 :=</span>
+<span id="L873" class="line"><a href="#L873">873</a>   (sq_lt_one_iff_abs_lt_one (tanh x)).mpr (abs_tanh_lt_one x)</span>
+<span id="L874" class="line"><a href="#L874">874</a> </span>
+<span id="L875" class="line"><a href="#L875">875</a> end Real</span>
+<span id="L876" class="line"><a href="#L876">876</a> </span>
+<span id="L877" class="line"><a href="#L877">877</a> namespace Real</span>
+<span id="L878" class="line"><a href="#L878">878</a> </span>
+<span id="L879" class="line"><a href="#L879">879</a> open Complex</span>
+<span id="L880" class="line"><a href="#L880">880</a> </span>
+<span id="L881" class="line"><a href="#L881">881</a> theorem cos_bound {x : ℝ} (hx : |x| ≤ 1) : |cos x - (1 - x ^ 2 / 2)| ≤ |x| ^ 4 * (5 / 96) := by</span>
+<span id="L882" class="line"><a href="#L882">882</a>   simpa [← ofReal_cos, ← norm_eq_abs, ← norm_real] using Complex.cos_bound (x := x) (by simpa)</span>
+<span id="L883" class="line"><a href="#L883">883</a> </span>
+<span id="L884" class="line"><a href="#L884">884</a> theorem sin_bound {x : ℝ} (hx : |x| ≤ 1) : |sin x - (x - x ^ 3 / 6)| ≤ |x| ^ 4 * (5 / 96) := by</span>
+<span id="L885" class="line"><a href="#L885">885</a>   simpa [← ofReal_sin, ← norm_eq_abs, ← norm_real] using Complex.sin_bound (x := x) (by simpa)</span>
+<span id="L886" class="line"><a href="#L886">886</a> </span>
+<span id="L887" class="line"><a href="#L887">887</a> theorem cos_pos_of_le_one {x : ℝ} (hx : |x| ≤ 1) : 0 &lt; cos x :=</span>
+<span id="L888" class="line"><a href="#L888">888</a>   calc 0 &lt; 1 - x ^ 2 / 2 - |x| ^ 4 * (5 / 96) :=</span>
+<span id="L889" class="line"><a href="#L889">889</a>       sub_pos.2 &lt;|</span>
+<span id="L890" class="line"><a href="#L890">890</a>         lt_sub_iff_add_lt.2</span>
+<span id="L891" class="line"><a href="#L891">891</a>           (calc</span>
+<span id="L892" class="line"><a href="#L892">892</a>             |x| ^ 4 * (5 / 96) + x ^ 2 / 2 ≤ 1 * (5 / 96) + 1 / 2 := by</span>
+<span id="L893" class="line"><a href="#L893">893</a>                   gcongr</span>
+<span id="L894" class="line"><a href="#L894">894</a>                   · exact pow_le_one₀ (abs_nonneg _) hx</span>
+<span id="L895" class="line"><a href="#L895">895</a>                   · rw [sq, ← abs_mul_self, abs_mul]</span>
+<span id="L896" class="line"><a href="#L896">896</a>                     exact mul_le_one₀ hx (abs_nonneg _) hx</span>
+<span id="L897" class="line"><a href="#L897">897</a>             _ &lt; 1 := by norm_num)</span>
+<span id="L898" class="line"><a href="#L898">898</a>     _ ≤ cos x := sub_le_comm.1 (abs_sub_le_iff.1 (cos_bound hx)).2</span>
+<span id="L899" class="line"><a href="#L899">899</a> </span>
+<span id="L900" class="line"><a href="#L900">900</a> theorem sin_pos_of_pos_of_le_one {x : ℝ} (hx0 : 0 &lt; x) (hx : x ≤ 1) : 0 &lt; sin x :=</span>
+<span id="L901" class="line"><a href="#L901">901</a>   calc 0 &lt; x - x ^ 3 / 6 - |x| ^ 4 * (5 / 96) :=</span>
+<span id="L902" class="line"><a href="#L902">902</a>       sub_pos.2 &lt;| lt_sub_iff_add_lt.2</span>
+<span id="L903" class="line"><a href="#L903">903</a>           (calc</span>
+<span id="L904" class="line"><a href="#L904">904</a>             |x| ^ 4 * (5 / 96) + x ^ 3 / 6 ≤ x * (5 / 96) + x / 6 := by</span>
+<span id="L905" class="line"><a href="#L905">905</a>                 gcongr</span>
+<span id="L906" class="line"><a href="#L906">906</a>                 · calc</span>
+<span id="L907" class="line"><a href="#L907">907</a>                     |x| ^ 4 ≤ |x| ^ 1 :=</span>
+<span id="L908" class="line"><a href="#L908">908</a>                       pow_le_pow_of_le_one (abs_nonneg _)</span>
+<span id="L909" class="line"><a href="#L909">909</a>                         (by rwa [abs_of_nonneg (le_of_lt hx0)]) (by decide)</span>
+<span id="L910" class="line"><a href="#L910">910</a>                     _ = x := by simp [abs_of_nonneg (le_of_lt hx0)]</span>
+<span id="L911" class="line"><a href="#L911">911</a>                 · calc</span>
+<span id="L912" class="line"><a href="#L912">912</a>                     x ^ 3 ≤ x ^ 1 := pow_le_pow_of_le_one (le_of_lt hx0) hx (by decide)</span>
+<span id="L913" class="line"><a href="#L913">913</a>                     _ = x := pow_one _</span>
+<span id="L914" class="line"><a href="#L914">914</a>             _ &lt; x := by linarith)</span>
+<span id="L915" class="line"><a href="#L915">915</a>     _ ≤ sin x :=</span>
+<span id="L916" class="line"><a href="#L916">916</a>       sub_le_comm.1 (abs_sub_le_iff.1 (sin_bound (by rwa [abs_of_nonneg (le_of_lt hx0)]))).2</span>
+<span id="L917" class="line"><a href="#L917">917</a> </span>
+<span id="L918" class="line"><a href="#L918">918</a> theorem sin_pos_of_pos_of_le_two {x : ℝ} (hx0 : 0 &lt; x) (hx : x ≤ 2) : 0 &lt; sin x :=</span>
+<span id="L919" class="line"><a href="#L919">919</a>   have : x / 2 ≤ 1 := (div_le_iff₀ (by simp)).mpr (by simpa)</span>
+<span id="L920" class="line"><a href="#L920">920</a>   calc</span>
+<span id="L921" class="line"><a href="#L921">921</a>     0 &lt; 2 * sin (x / 2) * cos (x / 2) :=</span>
+<span id="L922" class="line"><a href="#L922">922</a>       mul_pos (mul_pos (by simp) (sin_pos_of_pos_of_le_one (half_pos hx0) this))</span>
+<span id="L923" class="line"><a href="#L923">923</a>         (cos_pos_of_le_one (by rwa [abs_of_nonneg (le_of_lt (half_pos hx0))]))</span>
+<span id="L924" class="line"><a href="#L924">924</a>     _ = sin x := by rw [← sin_two_mul, two_mul, add_halves]</span>
+<span id="L925" class="line"><a href="#L925">925</a> </span>
+<span id="L926" class="line"><a href="#L926">926</a> theorem cos_one_le : cos 1 ≤ 5 / 9 :=</span>
+<span id="L927" class="line"><a href="#L927">927</a>   calc</span>
+<span id="L928" class="line"><a href="#L928">928</a>     cos 1 ≤ |(1 : ℝ)| ^ 4 * (5 / 96) + (1 - 1 ^ 2 / 2) :=</span>
+<span id="L929" class="line"><a href="#L929">929</a>       sub_le_iff_le_add.1 (abs_sub_le_iff.1 (cos_bound (by simp))).1</span>
+<span id="L930" class="line"><a href="#L930">930</a>     _ ≤ 5 / 9 := by norm_num</span>
+<span id="L931" class="line"><a href="#L931">931</a> </span>
+<span id="L932" class="line"><a href="#L932">932</a> theorem cos_one_pos : 0 &lt; cos 1 :=</span>
+<span id="L933" class="line"><a href="#L933">933</a>   cos_pos_of_le_one (le_of_eq abs_one)</span>
+<span id="L934" class="line"><a href="#L934">934</a> </span>
+<span id="L935" class="line"><a href="#L935">935</a> theorem cos_two_neg : cos 2 &lt; 0 :=</span>
+<span id="L936" class="line"><a href="#L936">936</a>   calc cos 2 = cos (2 * 1) := congr_arg cos (mul_one _).symm</span>
+<span id="L937" class="line"><a href="#L937">937</a>     _ = _ := Real.cos_two_mul 1</span>
+<span id="L938" class="line"><a href="#L938">938</a>     _ ≤ 2 * (5 / 9) ^ 2 - 1 := by</span>
+<span id="L939" class="line"><a href="#L939">939</a>       gcongr</span>
+<span id="L940" class="line"><a href="#L940">940</a>       · exact cos_one_pos.le</span>
+<span id="L941" class="line"><a href="#L941">941</a>       · apply cos_one_le</span>
+<span id="L942" class="line"><a href="#L942">942</a>     _ &lt; 0 := by norm_num</span>
+<span id="L943" class="line"><a href="#L943">943</a> </span>
+<span id="L944" class="line"><a href="#L944">944</a> end Real</span>
+<span id="L945" class="line"><a href="#L945">945</a> </span>
+<span id="L946" class="line"><a href="#L946">946</a> namespace Mathlib.Meta.Positivity</span>
+<span id="L947" class="line"><a href="#L947">947</a> open Lean.Meta Qq</span>
+<span id="L948" class="line"><a href="#L948">948</a> </span>
+<span id="L949" class="line"><a href="#L949">949</a> /-- Extension for the `positivity` tactic: `Real.cosh` is always positive. -/</span>
+<span id="L950" class="line"><a href="#L950">950</a> @[positivity Real.cosh _]</span>
+<span id="L951" class="line"><a href="#L951">951</a> meta def evalCosh : PositivityExt where eval {u α} _ _ e := do</span>
+<span id="L952" class="line"><a href="#L952">952</a>   match u, α, e with</span>
+<span id="L953" class="line"><a href="#L953">953</a>   | 0, ~q(ℝ), ~q(Real.cosh $a) =&gt;</span>
+<span id="L954" class="line"><a href="#L954">954</a>     assertInstancesCommute</span>
+<span id="L955" class="line"><a href="#L955">955</a>     return .positive q(Real.cosh_pos $a)</span>
+<span id="L956" class="line"><a href="#L956">956</a>   | _, _, _ =&gt; throwError &quot;not Real.cosh&quot;</span>
+<span id="L957" class="line"><a href="#L957">957</a> </span>
+<span id="L958" class="line"><a href="#L958">958</a> example (x : ℝ) : 0 &lt; x.cosh := by positivity</span>
+<span id="L959" class="line"><a href="#L959">959</a> </span>
+<span id="L960" class="line"><a href="#L960">960</a> end Mathlib.Meta.Positivity</span>
+<span id="L961" class="line"><a href="#L961">961</a> </span>
+<span id="L962" class="line"><a href="#L962">962</a> namespace Complex</span>
+<span id="L963" class="line"><a href="#L963">963</a> </span>
+<span id="L964" class="line"><a href="#L964">964</a> @[simp]</span>
+<span id="L965" class="line"><a href="#L965">965</a> theorem norm_cos_add_sin_mul_I (x : ℝ) : ‖cos x + sin x * I‖ = 1 := by</span>
+<span id="L966" class="line"><a href="#L966">966</a>   have := Real.sin_sq_add_cos_sq x</span>
+<span id="L967" class="line"><a href="#L967">967</a>   simp_all [add_comm, norm_def, normSq, sq, sin_ofReal_re, cos_ofReal_re, mul_re]</span>
+<span id="L968" class="line"><a href="#L968">968</a> </span>
+<span id="L969" class="line"><a href="#L969">969</a> @[simp]</span>
+<span id="L970" class="line"><a href="#L970">970</a> theorem norm_exp_ofReal_mul_I (x : ℝ) : ‖exp (x * I)‖ = 1 := by</span>
+<span id="L971" class="line"><a href="#L971">971</a>   rw [exp_mul_I, norm_cos_add_sin_mul_I]</span>
+<span id="L972" class="line"><a href="#L972">972</a> </span>
+<span id="L973" class="line"><a href="#L973">973</a> @[simp]</span>
+<span id="L974" class="line"><a href="#L974">974</a> theorem norm_exp_I_mul_ofReal (x : ℝ) : ‖exp (I * x)‖ = 1 := by</span>
+<span id="L975" class="line"><a href="#L975">975</a>   rw [mul_comm, norm_exp_ofReal_mul_I]</span>
+<span id="L976" class="line"><a href="#L976">976</a> </span>
+<span id="L977" class="line"><a href="#L977">977</a> @[simp]</span>
+<span id="L978" class="line"><a href="#L978">978</a> theorem nnnorm_exp_ofReal_mul_I (x : ℝ) : ‖exp (x * I)‖₊ = 1 := by</span>
+<span id="L979" class="line"><a href="#L979">979</a>   rw [← nnnorm_norm, norm_exp_ofReal_mul_I, ← NNReal.coe_eq_one]; simp</span>
+<span id="L980" class="line"><a href="#L980">980</a> </span>
+<span id="L981" class="line"><a href="#L981">981</a> @[simp]</span>
+<span id="L982" class="line"><a href="#L982">982</a> theorem nnnorm_exp_I_mul_ofReal (x : ℝ) : ‖exp (I * x)‖₊ = 1 := by</span>
+<span id="L983" class="line"><a href="#L983">983</a>   rw [← nnnorm_norm, norm_exp_I_mul_ofReal, ← NNReal.coe_eq_one]; simp</span>
+<span id="L984" class="line"><a href="#L984">984</a> </span>
+<span id="L985" class="line"><a href="#L985">985</a> @[simp]</span>
+<span id="L986" class="line"><a href="#L986">986</a> theorem enorm_exp_ofReal_mul_I (x : ℝ) : ‖exp (x * I)‖ₑ = 1 := by</span>
+<span id="L987" class="line"><a href="#L987">987</a>   simp [← ENNReal.toReal_eq_one_iff]</span>
+<span id="L988" class="line"><a href="#L988">988</a> </span>
+<span id="L989" class="line"><a href="#L989">989</a> @[simp]</span>
+<span id="L990" class="line"><a href="#L990">990</a> theorem enorm_exp_I_mul_ofReal (x : ℝ) : ‖exp (I * x)‖ₑ = 1 := by</span>
+<span id="L991" class="line"><a href="#L991">991</a>   simp [← ENNReal.toReal_eq_one_iff]</span>
+<span id="L992" class="line"><a href="#L992">992</a> </span>
+<span id="L993" class="line"><a href="#L993">993</a> theorem norm_exp_I_mul_ofReal_sub_one (x : ℝ) : ‖exp (I * x) - 1‖ = ‖2 * Real.sin (x / 2)‖ := by</span>
+<span id="L994" class="line"><a href="#L994">994</a>   rw [show ‖2 * Real.sin (x / 2)‖ = ‖2 * sin (x / 2)‖ by norm_cast, two_sin]</span>
+<span id="L995" class="line"><a href="#L995">995</a>   nth_rw 2 [← one_mul (_ - _), ← exp_zero]</span>
+<span id="L996" class="line"><a href="#L996">996</a>   rw [← neg_add_cancel (x / 2 * I), exp_add, mul_assoc _ _ (_ - _), mul_sub, ← exp_add, ← exp_add,</span>
+<span id="L997" class="line"><a href="#L997">997</a>     ← add_mul, ← add_mul]; norm_cast</span>
+<span id="L998" class="line"><a href="#L998">998</a>   rw [add_neg_cancel, ofReal_zero, zero_mul, exp_zero, add_halves, ← neg_mul, Complex.norm_mul,</span>
+<span id="L999" class="line"><a href="#L999">999</a>     norm_I, mul_one, Complex.norm_mul,</span>
+<span id="L1000" class="line"><a href="#L1000">1000</a>     show -(ofReal (x / 2)) = ofReal (-x / 2) by norm_cast; exact neg_div&#x27; 2 x,</span>
+<span id="L1001" class="line"><a href="#L1001">1001</a>     norm_exp_ofReal_mul_I, one_mul, ← norm_neg, neg_sub, mul_comm]</span>
+<span id="L1002" class="line"><a href="#L1002">1002</a> </span>
+<span id="L1003" class="line"><a href="#L1003">1003</a> theorem norm_exp (z : ℂ) : ‖exp z‖ = Real.exp z.re := by</span>
+<span id="L1004" class="line"><a href="#L1004">1004</a>   rw [exp_eq_exp_re_mul_sin_add_cos, Complex.norm_mul, norm_exp_ofReal, norm_cos_add_sin_mul_I,</span>
+<span id="L1005" class="line"><a href="#L1005">1005</a>     mul_one]</span>
+<span id="L1006" class="line"><a href="#L1006">1006</a> </span>
+<span id="L1007" class="line"><a href="#L1007">1007</a> theorem norm_exp_eq_iff_re_eq {x y : ℂ} : ‖exp x‖ = ‖exp y‖ ↔ x.re = y.re := by</span>
+<span id="L1008" class="line"><a href="#L1008">1008</a>   rw [norm_exp, norm_exp, Real.exp_eq_exp]</span>
+<span id="L1009" class="line"><a href="#L1009">1009</a> </span>
+<span id="L1010" class="line"><a href="#L1010">1010</a> end Complex</span></pre></html>

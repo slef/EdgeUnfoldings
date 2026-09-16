@@ -1,0 +1,280 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Data/Set/Defs.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Data/Set/Defs.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2016 Microsoft Corporation. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Leonardo de Moura</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Init</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Batteries.Util.ExtendedBinder</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> import Mathlib.Tactic.ToDual</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> /-!</span>
+<span id="L14" class="line"><a href="#L14">14</a> # Sets</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> This file sets up the theory of sets whose elements have a given type.</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> ## Main definitions</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> Given a type `X` and a predicate `p : X → Prop`:</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> * `Set X` : the type of sets whose elements have type `X`</span>
+<span id="L23" class="line"><a href="#L23">23</a> * `{a : X | p a} : Set X` : the set of all elements of `X` satisfying `p`</span>
+<span id="L24" class="line"><a href="#L24">24</a> * `{a | p a} : Set X` : a more concise notation for `{a : X | p a}`</span>
+<span id="L25" class="line"><a href="#L25">25</a> * `{f x y | (x : X) (y : Y)} : Set Z` : a more concise notation for `{z : Z | ∃ x y, f x y = z}`</span>
+<span id="L26" class="line"><a href="#L26">26</a> * `{a ∈ S | p a} : Set X` : given `S : Set X`, the subset of `S` consisting of</span>
+<span id="L27" class="line"><a href="#L27">27</a>   its elements satisfying `p`.</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> ## Implementation issues</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> As in Lean 3, `Set X := X → Prop`</span>
+<span id="L32" class="line"><a href="#L32">32</a> This file is a port of the core Lean 3 file `lib/lean/library/init/data/set.lean`.</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> -/</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> @[expose] public section</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> open Lean Elab Term Meta Batteries.ExtendedBinder</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> universe u</span>
+<span id="L41" class="line"><a href="#L41">41</a> variable {α : Type u}</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> /-- A set is a collection of elements of some type `α`.</span>
+<span id="L44" class="line"><a href="#L44">44</a> </span>
+<span id="L45" class="line"><a href="#L45">45</a> Although `Set` is defined as `α → Prop`, this is an implementation detail which should not be</span>
+<span id="L46" class="line"><a href="#L46">46</a> relied on. Instead, `setOf` and membership of a set (`∈`) should be used to convert between sets</span>
+<span id="L47" class="line"><a href="#L47">47</a> and predicates.</span>
+<span id="L48" class="line"><a href="#L48">48</a> -/</span>
+<span id="L49" class="line"><a href="#L49">49</a> def Set (α : Type u) := α → Prop</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> /-</span>
+<span id="L52" class="line"><a href="#L52">52</a> We don&#x27;t translate the order on sets (i.e. turning `s ⊆ t` into `t ⊆ s`).</span>
+<span id="L53" class="line"><a href="#L53">53</a> This is because for example the following theorems should be dual</span>
+<span id="L54" class="line"><a href="#L54">54</a> ```</span>
+<span id="L55" class="line"><a href="#L55">55</a> theorem sSup_le_sSup {s t : Set α} (h : s ⊆ t) : sSup s ≤ sSup t</span>
+<span id="L56" class="line"><a href="#L56">56</a> theorem sInf_le_sInf {s t : Set α} (h : s ⊆ t) : sInf t ≤ sInf s</span>
+<span id="L57" class="line"><a href="#L57">57</a> ```</span>
+<span id="L58" class="line"><a href="#L58">58</a> Additionally, dualizing the order on sets would mean that a set is dual to its complement.</span>
+<span id="L59" class="line"><a href="#L59">59</a> But we would like to dualize set intervals such that e.g. `Ico a b` is dual to `Ioc b a`.</span>
+<span id="L60" class="line"><a href="#L60">60</a> -/</span>
+<span id="L61" class="line"><a href="#L61">61</a> attribute [to_dual_dont_translate] Set</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> /-- Turn a predicate `p : α → Prop` into a set, also written as `{x | p x}` -/</span>
+<span id="L64" class="line"><a href="#L64">64</a> def setOf {α : Type u} (p : α → Prop) : Set α :=</span>
+<span id="L65" class="line"><a href="#L65">65</a>   p</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> namespace Set</span>
+<span id="L68" class="line"><a href="#L68">68</a> </span>
+<span id="L69" class="line"><a href="#L69">69</a> /-- Membership in a set -/</span>
+<span id="L70" class="line"><a href="#L70">70</a> protected def Mem (s : Set α) (a : α) : Prop :=</span>
+<span id="L71" class="line"><a href="#L71">71</a>   s a</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> instance : Membership α (Set α) :=</span>
+<span id="L74" class="line"><a href="#L74">74</a>   ⟨Set.Mem⟩</span>
+<span id="L75" class="line"><a href="#L75">75</a> </span>
+<span id="L76" class="line"><a href="#L76">76</a> @[ext, grind ext]</span>
+<span id="L77" class="line"><a href="#L77">77</a> theorem ext {a b : Set α} (h : ∀ (x : α), x ∈ a ↔ x ∈ b) : a = b :=</span>
+<span id="L78" class="line"><a href="#L78">78</a>   funext (fun x ↦ propext (h x))</span>
+<span id="L79" class="line"><a href="#L79">79</a> </span>
+<span id="L80" class="line"><a href="#L80">80</a> /-- The subset relation on sets. `s ⊆ t` means that all elements of `s` are elements of `t`.</span>
+<span id="L81" class="line"><a href="#L81">81</a> </span>
+<span id="L82" class="line"><a href="#L82">82</a> Note that you should **not** use this definition directly, but instead write `s ⊆ t`. -/</span>
+<span id="L83" class="line"><a href="#L83">83</a> protected def Subset (s₁ s₂ : Set α) :=</span>
+<span id="L84" class="line"><a href="#L84">84</a>   ∀ ⦃a⦄, a ∈ s₁ → a ∈ s₂</span>
+<span id="L85" class="line"><a href="#L85">85</a> </span>
+<span id="L86" class="line"><a href="#L86">86</a> /-- We introduce `≤` before `⊆` to help the unifier when applying lattice theorems</span>
+<span id="L87" class="line"><a href="#L87">87</a> to subset hypotheses. -/</span>
+<span id="L88" class="line"><a href="#L88">88</a> instance : LE (Set α) :=</span>
+<span id="L89" class="line"><a href="#L89">89</a>   ⟨Set.Subset⟩</span>
+<span id="L90" class="line"><a href="#L90">90</a> </span>
+<span id="L91" class="line"><a href="#L91">91</a> instance : HasSubset (Set α) :=</span>
+<span id="L92" class="line"><a href="#L92">92</a>   ⟨(· ≤ ·)⟩</span>
+<span id="L93" class="line"><a href="#L93">93</a> </span>
+<span id="L94" class="line"><a href="#L94">94</a> instance : EmptyCollection (Set α) :=</span>
+<span id="L95" class="line"><a href="#L95">95</a>   ⟨fun _ ↦ False⟩</span>
+<span id="L96" class="line"><a href="#L96">96</a> </span>
+<span id="L97" class="line"><a href="#L97">97</a> end Set</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> namespace Mathlib.Meta</span>
+<span id="L100" class="line"><a href="#L100">100</a> </span>
+<span id="L101" class="line"><a href="#L101">101</a> /-- Set builder syntax. This can be elaborated to either a `Set` or a `Finset` depending on context.</span>
+<span id="L102" class="line"><a href="#L102">102</a> </span>
+<span id="L103" class="line"><a href="#L103">103</a> The elaborators for this syntax are located in:</span>
+<span id="L104" class="line"><a href="#L104">104</a> * `Data.Set.Defs` for the `Set` builder notation elaborator for syntax of the form `{x | p x}`,</span>
+<span id="L105" class="line"><a href="#L105">105</a>   `{x : α | p x}`, `{binder x | p x}`.</span>
+<span id="L106" class="line"><a href="#L106">106</a> * `Data.Finset.Basic` for the `Finset` builder notation elaborator for syntax of the form</span>
+<span id="L107" class="line"><a href="#L107">107</a>   `{x ∈ s | p x}`.</span>
+<span id="L108" class="line"><a href="#L108">108</a> * `Data.Fintype.Basic` for the `Finset` builder notation elaborator for syntax of the form</span>
+<span id="L109" class="line"><a href="#L109">109</a>   `{x | p x}`, `{x : α | p x}`, `{x ∉ s | p x}`, `{x ≠ a | p x}`.</span>
+<span id="L110" class="line"><a href="#L110">110</a> * `Order.LocallyFinite.Basic` for the `Finset` builder notation elaborator for syntax of the form</span>
+<span id="L111" class="line"><a href="#L111">111</a>   `{x ≤ a | p x}`, `{x ≥ a | p x}`, `{x &lt; a | p x}`, `{x &gt; a | p x}`.</span>
+<span id="L112" class="line"><a href="#L112">112</a> -/</span>
+<span id="L113" class="line"><a href="#L113">113</a> syntax (name := setBuilder) &quot;{&quot; extBinder &quot; | &quot; term &quot;}&quot; : term</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> /-- Elaborate set builder notation for `Set`.</span>
+<span id="L116" class="line"><a href="#L116">116</a> </span>
+<span id="L117" class="line"><a href="#L117">117</a> * `{x | p x}` is elaborated as `Set.setOf fun x ↦ p x`</span>
+<span id="L118" class="line"><a href="#L118">118</a> * `{x : α | p x}` is elaborated as `Set.setOf fun x : α ↦ p x`</span>
+<span id="L119" class="line"><a href="#L119">119</a> * `{binder x | p x}`, where `x` is bound by the `binder` binder, is elaborated as</span>
+<span id="L120" class="line"><a href="#L120">120</a>   `{x | binder x ∧ p x}`. The typical example is `{x ∈ s | p x}`, which is elaborated as</span>
+<span id="L121" class="line"><a href="#L121">121</a>   `{x | x ∈ s ∧ p x}`. The possible binders are</span>
+<span id="L122" class="line"><a href="#L122">122</a>   * `· ∈ s`, `· ∉ s`</span>
+<span id="L123" class="line"><a href="#L123">123</a>   * `· ⊆ s`, `· ⊂ s`, `· ⊇ s`, `· ⊃ s`</span>
+<span id="L124" class="line"><a href="#L124">124</a>   * `· ≤ a`, `· ≥ a`, `· &lt; a`, `· &gt; a`, `· ≠ a`</span>
+<span id="L125" class="line"><a href="#L125">125</a> </span>
+<span id="L126" class="line"><a href="#L126">126</a>   More binders can be declared using the `binder_predicate` command, see `Init.BinderPredicates` for</span>
+<span id="L127" class="line"><a href="#L127">127</a>   more info.</span>
+<span id="L128" class="line"><a href="#L128">128</a> </span>
+<span id="L129" class="line"><a href="#L129">129</a> See also</span>
+<span id="L130" class="line"><a href="#L130">130</a> * `Data.Finset.Basic` for the `Finset` builder notation elaborator partly overriding this one for</span>
+<span id="L131" class="line"><a href="#L131">131</a>   syntax of the form `{x ∈ s | p x}`.</span>
+<span id="L132" class="line"><a href="#L132">132</a> * `Data.Fintype.Basic` for the `Finset` builder notation elaborator partly overriding this one for</span>
+<span id="L133" class="line"><a href="#L133">133</a>   syntax of the form `{x | p x}`, `{x : α | p x}`, `{x ∉ s | p x}`, `{x ≠ a | p x}`.</span>
+<span id="L134" class="line"><a href="#L134">134</a> * `Order.LocallyFinite.Basic` for the `Finset` builder notation elaborator partly overriding this</span>
+<span id="L135" class="line"><a href="#L135">135</a>   one for syntax of the form `{x ≤ a | p x}`, `{x ≥ a | p x}`, `{x &lt; a | p x}`, `{x &gt; a | p x}`.</span>
+<span id="L136" class="line"><a href="#L136">136</a> -/</span>
+<span id="L137" class="line"><a href="#L137">137</a> @[term_elab setBuilder]</span>
+<span id="L138" class="line"><a href="#L138">138</a> meta def elabSetBuilder : TermElab</span>
+<span id="L139" class="line"><a href="#L139">139</a>   | `({ $x:ident | $p }), expectedType? =&gt; do</span>
+<span id="L140" class="line"><a href="#L140">140</a>     elabTerm (← `(setOf fun $x:ident ↦ $p)) expectedType?</span>
+<span id="L141" class="line"><a href="#L141">141</a>   | `({ $x:ident : $t | $p }), expectedType? =&gt; do</span>
+<span id="L142" class="line"><a href="#L142">142</a>     elabTerm (← `(setOf fun $x:ident : $t ↦ $p)) expectedType?</span>
+<span id="L143" class="line"><a href="#L143">143</a>   | `({ $x:ident $b:binderPred | $p }), expectedType? =&gt; do</span>
+<span id="L144" class="line"><a href="#L144">144</a>     elabTerm (← `(setOf fun $x:ident ↦ satisfies_binder_pred% $x $b ∧ $p)) expectedType?</span>
+<span id="L145" class="line"><a href="#L145">145</a>   | _, _ =&gt; throwUnsupportedSyntax</span>
+<span id="L146" class="line"><a href="#L146">146</a> </span>
+<span id="L147" class="line"><a href="#L147">147</a> /-- Unexpander for set builder notation. -/</span>
+<span id="L148" class="line"><a href="#L148">148</a> @[app_unexpander setOf]</span>
+<span id="L149" class="line"><a href="#L149">149</a> meta def setOf.unexpander : Lean.PrettyPrinter.Unexpander</span>
+<span id="L150" class="line"><a href="#L150">150</a>   | `($_ fun $x:ident ↦ $p) =&gt; `({ $x:ident | $p })</span>
+<span id="L151" class="line"><a href="#L151">151</a>   | `($_ fun ($x:ident : $ty:term) ↦ $p) =&gt; `({ $x:ident : $ty:term | $p })</span>
+<span id="L152" class="line"><a href="#L152">152</a>   | _ =&gt; throw ()</span>
+<span id="L153" class="line"><a href="#L153">153</a> </span>
+<span id="L154" class="line"><a href="#L154">154</a> open Batteries.ExtendedBinder in</span>
+<span id="L155" class="line"><a href="#L155">155</a> /--</span>
+<span id="L156" class="line"><a href="#L156">156</a> `{ f x y | (x : X) (y : Y) }` is notation for the set of elements `f x y` constructed from the</span>
+<span id="L157" class="line"><a href="#L157">157</a> binders `x` and `y`, equivalent to `{z : Z | ∃ x y, f x y = z}`.</span>
+<span id="L158" class="line"><a href="#L158">158</a> </span>
+<span id="L159" class="line"><a href="#L159">159</a> If `f x y` is a single identifier, it must be parenthesized to avoid ambiguity with `{x | p x}`;</span>
+<span id="L160" class="line"><a href="#L160">160</a> for instance, `{(x) | (x : Nat) (y : Nat) (_hxy : x = y^2)}`.</span>
+<span id="L161" class="line"><a href="#L161">161</a> -/</span>
+<span id="L162" class="line"><a href="#L162">162</a> macro (priority := low) &quot;{&quot; t:term &quot; | &quot; bs:extBinders &quot;}&quot; : term =&gt;</span>
+<span id="L163" class="line"><a href="#L163">163</a>   `({x | ∃ᵉ $bs:extBinders, $t = x})</span>
+<span id="L164" class="line"><a href="#L164">164</a> </span>
+<span id="L165" class="line"><a href="#L165">165</a> /--</span>
+<span id="L166" class="line"><a href="#L166">166</a> * `{ pat : X | p }` is notation for pattern matching in set-builder notation,</span>
+<span id="L167" class="line"><a href="#L167">167</a>   where `pat` is a pattern that is matched by all objects of type `X`</span>
+<span id="L168" class="line"><a href="#L168">168</a>   and `p` is a proposition that can refer to variables in the pattern.</span>
+<span id="L169" class="line"><a href="#L169">169</a>   It is the set of all objects of type `X` which, when matched with the pattern `pat`,</span>
+<span id="L170" class="line"><a href="#L170">170</a>   make `p` come out true.</span>
+<span id="L171" class="line"><a href="#L171">171</a> * `{ pat | p }` is the same, but in the case when the type `X` can be inferred.</span>
+<span id="L172" class="line"><a href="#L172">172</a> </span>
+<span id="L173" class="line"><a href="#L173">173</a> For example, `{ (m, n) : ℕ × ℕ | m * n = 12 }` denotes the set of all ordered pairs of</span>
+<span id="L174" class="line"><a href="#L174">174</a> natural numbers whose product is 12.</span>
+<span id="L175" class="line"><a href="#L175">175</a> </span>
+<span id="L176" class="line"><a href="#L176">176</a> Note that if the type ascription is left out and `p` can be interpreted as an extended binder,</span>
+<span id="L177" class="line"><a href="#L177">177</a> then the extended binder interpretation will be used.  For example, `{ n + 1 | n &lt; 3 }` will</span>
+<span id="L178" class="line"><a href="#L178">178</a> be interpreted as `{ x : Nat | ∃ n &lt; 3, n + 1 = x }` rather than using pattern matching.</span>
+<span id="L179" class="line"><a href="#L179">179</a> -/</span>
+<span id="L180" class="line"><a href="#L180">180</a> macro (name := macroPattSetBuilder) (priority := low - 1)</span>
+<span id="L181" class="line"><a href="#L181">181</a>   &quot;{&quot; pat:term &quot; : &quot; t:term &quot; | &quot; p:term &quot;}&quot; : term =&gt;</span>
+<span id="L182" class="line"><a href="#L182">182</a>   `({ x : $t | match x with | $pat =&gt; $p })</span>
+<span id="L183" class="line"><a href="#L183">183</a> </span>
+<span id="L184" class="line"><a href="#L184">184</a> @[inherit_doc macroPattSetBuilder]</span>
+<span id="L185" class="line"><a href="#L185">185</a> macro (priority := low - 1) &quot;{&quot; pat:term &quot; | &quot; p:term &quot;}&quot; : term =&gt;</span>
+<span id="L186" class="line"><a href="#L186">186</a>   `({ x | match x with | $pat =&gt; $p })</span>
+<span id="L187" class="line"><a href="#L187">187</a> </span>
+<span id="L188" class="line"><a href="#L188">188</a> /-- Pretty printing for set-builder notation with pattern matching. -/</span>
+<span id="L189" class="line"><a href="#L189">189</a> @[app_unexpander setOf]</span>
+<span id="L190" class="line"><a href="#L190">190</a> meta def setOfPatternMatchUnexpander : Lean.PrettyPrinter.Unexpander</span>
+<span id="L191" class="line"><a href="#L191">191</a>   | `($_ fun $x:ident ↦ match $y:ident with | $pat =&gt; $p) =&gt;</span>
+<span id="L192" class="line"><a href="#L192">192</a>       if x == y then</span>
+<span id="L193" class="line"><a href="#L193">193</a>         `({ $pat:term | $p:term })</span>
+<span id="L194" class="line"><a href="#L194">194</a>       else</span>
+<span id="L195" class="line"><a href="#L195">195</a>         throw ()</span>
+<span id="L196" class="line"><a href="#L196">196</a>   | `($_ fun ($x:ident : $ty:term) ↦ match $y:ident with | $pat =&gt; $p) =&gt;</span>
+<span id="L197" class="line"><a href="#L197">197</a>       if x == y then</span>
+<span id="L198" class="line"><a href="#L198">198</a>         `({ $pat:term : $ty:term | $p:term })</span>
+<span id="L199" class="line"><a href="#L199">199</a>       else</span>
+<span id="L200" class="line"><a href="#L200">200</a>         throw ()</span>
+<span id="L201" class="line"><a href="#L201">201</a>   | _ =&gt; throw ()</span>
+<span id="L202" class="line"><a href="#L202">202</a> </span>
+<span id="L203" class="line"><a href="#L203">203</a> end Mathlib.Meta</span>
+<span id="L204" class="line"><a href="#L204">204</a> </span>
+<span id="L205" class="line"><a href="#L205">205</a> namespace Set</span>
+<span id="L206" class="line"><a href="#L206">206</a> </span>
+<span id="L207" class="line"><a href="#L207">207</a> /-- The universal set on a type `α` is the set containing all elements of `α`.</span>
+<span id="L208" class="line"><a href="#L208">208</a> </span>
+<span id="L209" class="line"><a href="#L209">209</a> This is conceptually the &quot;same as&quot; `α` (in set theory, it is actually the same), but type theory</span>
+<span id="L210" class="line"><a href="#L210">210</a> makes the distinction that `α` is a type while `Set.univ` is a term of type `Set α`. `Set.univ` can</span>
+<span id="L211" class="line"><a href="#L211">211</a> itself be coerced to a type `↥Set.univ` which is in bijection with (but distinct from) `α`. -/</span>
+<span id="L212" class="line"><a href="#L212">212</a> def univ : Set α := {_a | True}</span>
+<span id="L213" class="line"><a href="#L213">213</a> </span>
+<span id="L214" class="line"><a href="#L214">214</a> /-- `Set.insert a s` is the set `{a} ∪ s`.</span>
+<span id="L215" class="line"><a href="#L215">215</a> </span>
+<span id="L216" class="line"><a href="#L216">216</a> Note that you should **not** use this definition directly, but instead write `insert a s` (which is</span>
+<span id="L217" class="line"><a href="#L217">217</a> mediated by the `Insert` typeclass). -/</span>
+<span id="L218" class="line"><a href="#L218">218</a> protected def insert (a : α) (s : Set α) : Set α := {b | b = a ∨ b ∈ s}</span>
+<span id="L219" class="line"><a href="#L219">219</a> </span>
+<span id="L220" class="line"><a href="#L220">220</a> instance : Insert α (Set α) := ⟨Set.insert⟩</span>
+<span id="L221" class="line"><a href="#L221">221</a> </span>
+<span id="L222" class="line"><a href="#L222">222</a> /-- The singleton of an element `a` is the set with `a` as a single element.</span>
+<span id="L223" class="line"><a href="#L223">223</a> </span>
+<span id="L224" class="line"><a href="#L224">224</a> Note that you should **not** use this definition directly, but instead write `{a}`. -/</span>
+<span id="L225" class="line"><a href="#L225">225</a> protected def singleton (a : α) : Set α := {b | b = a}</span>
+<span id="L226" class="line"><a href="#L226">226</a> </span>
+<span id="L227" class="line"><a href="#L227">227</a> instance instSingletonSet : Singleton α (Set α) := ⟨Set.singleton⟩</span>
+<span id="L228" class="line"><a href="#L228">228</a> </span>
+<span id="L229" class="line"><a href="#L229">229</a> /-- The union of two sets `s` and `t` is the set of elements contained in either `s` or `t`.</span>
+<span id="L230" class="line"><a href="#L230">230</a> </span>
+<span id="L231" class="line"><a href="#L231">231</a> Note that you should **not** use this definition directly, but instead write `s ∪ t`. -/</span>
+<span id="L232" class="line"><a href="#L232">232</a> protected def union (s₁ s₂ : Set α) : Set α := {a | a ∈ s₁ ∨ a ∈ s₂}</span>
+<span id="L233" class="line"><a href="#L233">233</a> </span>
+<span id="L234" class="line"><a href="#L234">234</a> instance : Union (Set α) := ⟨Set.union⟩</span>
+<span id="L235" class="line"><a href="#L235">235</a> </span>
+<span id="L236" class="line"><a href="#L236">236</a> /-- The intersection of two sets `s` and `t` is the set of elements contained in both `s` and `t`.</span>
+<span id="L237" class="line"><a href="#L237">237</a> </span>
+<span id="L238" class="line"><a href="#L238">238</a> Note that you should **not** use this definition directly, but instead write `s ∩ t`. -/</span>
+<span id="L239" class="line"><a href="#L239">239</a> protected def inter (s₁ s₂ : Set α) : Set α := {a | a ∈ s₁ ∧ a ∈ s₂}</span>
+<span id="L240" class="line"><a href="#L240">240</a> </span>
+<span id="L241" class="line"><a href="#L241">241</a> instance : Inter (Set α) := ⟨Set.inter⟩</span>
+<span id="L242" class="line"><a href="#L242">242</a> </span>
+<span id="L243" class="line"><a href="#L243">243</a> /-- The complement of a set `s` is the set of elements not contained in `s`.</span>
+<span id="L244" class="line"><a href="#L244">244</a> </span>
+<span id="L245" class="line"><a href="#L245">245</a> Note that you should **not** use this definition directly, but instead write `sᶜ`. -/</span>
+<span id="L246" class="line"><a href="#L246">246</a> protected def compl (s : Set α) : Set α := {a | a ∉ s}</span>
+<span id="L247" class="line"><a href="#L247">247</a> </span>
+<span id="L248" class="line"><a href="#L248">248</a> /-- The difference of two sets `s` and `t` is the set of elements contained in `s` but not in `t`.</span>
+<span id="L249" class="line"><a href="#L249">249</a> </span>
+<span id="L250" class="line"><a href="#L250">250</a> Note that you should **not** use this definition directly, but instead write `s \ t`. -/</span>
+<span id="L251" class="line"><a href="#L251">251</a> protected def diff (s t : Set α) : Set α := {a ∈ s | a ∉ t}</span>
+<span id="L252" class="line"><a href="#L252">252</a> </span>
+<span id="L253" class="line"><a href="#L253">253</a> instance : SDiff (Set α) := ⟨Set.diff⟩</span>
+<span id="L254" class="line"><a href="#L254">254</a> </span>
+<span id="L255" class="line"><a href="#L255">255</a> /-- `𝒫 s` is the set of all subsets of `s`. -/</span>
+<span id="L256" class="line"><a href="#L256">256</a> def powerset (s : Set α) : Set (Set α) := {t | t ⊆ s}</span>
+<span id="L257" class="line"><a href="#L257">257</a> </span>
+<span id="L258" class="line"><a href="#L258">258</a> @[inherit_doc] prefix:100 &quot;𝒫 &quot; =&gt; powerset</span>
+<span id="L259" class="line"><a href="#L259">259</a> </span>
+<span id="L260" class="line"><a href="#L260">260</a> universe v in</span>
+<span id="L261" class="line"><a href="#L261">261</a> /-- The image of `s : Set α` by `f : α → β`, written `f &#x27;&#x27; s`, is the set of `b : β` such that</span>
+<span id="L262" class="line"><a href="#L262">262</a> `f a = b` for some `a ∈ s`. -/</span>
+<span id="L263" class="line"><a href="#L263">263</a> def image {β : Type v} (f : α → β) (s : Set α) : Set β := {f a | a ∈ s}</span>
+<span id="L264" class="line"><a href="#L264">264</a> </span>
+<span id="L265" class="line"><a href="#L265">265</a> instance : Functor Set where map := @Set.image</span>
+<span id="L266" class="line"><a href="#L266">266</a> </span>
+<span id="L267" class="line"><a href="#L267">267</a> instance : LawfulFunctor Set where</span>
+<span id="L268" class="line"><a href="#L268">268</a>   id_map _ := funext fun _ ↦ propext ⟨fun ⟨_, sb, rfl⟩ ↦ sb, fun sb ↦ ⟨_, sb, rfl⟩⟩</span>
+<span id="L269" class="line"><a href="#L269">269</a>   comp_map g h _ := funext &lt;| fun c ↦ propext</span>
+<span id="L270" class="line"><a href="#L270">270</a>     ⟨fun ⟨a, ⟨h₁, h₂⟩⟩ ↦ ⟨g a, ⟨⟨a, ⟨h₁, rfl⟩⟩, h₂⟩⟩,</span>
+<span id="L271" class="line"><a href="#L271">271</a>      fun ⟨_, ⟨⟨a, ⟨h₁, h₂⟩⟩, h₃⟩⟩ ↦ ⟨a, ⟨h₁, show h (g a) = c from h₂ ▸ h₃⟩⟩⟩</span>
+<span id="L272" class="line"><a href="#L272">272</a>   map_const := rfl</span>
+<span id="L273" class="line"><a href="#L273">273</a> </span>
+<span id="L274" class="line"><a href="#L274">274</a> /-- The property `s.Nonempty` expresses the fact that the set `s` is not empty. It should be used</span>
+<span id="L275" class="line"><a href="#L275">275</a> in theorem assumptions instead of `∃ x, x ∈ s` or `s ≠ ∅` as it gives access to a nice API thanks</span>
+<span id="L276" class="line"><a href="#L276">276</a> to the dot notation. -/</span>
+<span id="L277" class="line"><a href="#L277">277</a> protected def Nonempty (s : Set α) : Prop :=</span>
+<span id="L278" class="line"><a href="#L278">278</a>   ∃ x, x ∈ s</span>
+<span id="L279" class="line"><a href="#L279">279</a> </span>
+<span id="L280" class="line"><a href="#L280">280</a> end Set</span></pre></html>

@@ -1,0 +1,206 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Topology/Defs/Basic.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Topology/Defs/Basic.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2017 Johannes Hölzl. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Johannes Hölzl, Mario Carneiro, Jeremy Avigad</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Order.SetNotation</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Tactic.Continuity</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Tactic.FunProp</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Mathlib.Tactic.MkIffOfInductiveProp</span>
+<span id="L12" class="line"><a href="#L12">12</a> public import Mathlib.Data.Nat.Notation</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> /-!</span>
+<span id="L15" class="line"><a href="#L15">15</a> # Basic definitions about topological spaces</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> This file contains definitions about topology that do not require imports</span>
+<span id="L18" class="line"><a href="#L18">18</a> other than `Mathlib/Data/Set/Lattice.lean`.</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> ## Main definitions</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> * `TopologicalSpace X`: a typeclass endowing `X` with a topology.</span>
+<span id="L23" class="line"><a href="#L23">23</a>   By definition, a topology is a collection of sets called *open sets* such that</span>
+<span id="L24" class="line"><a href="#L24">24</a> </span>
+<span id="L25" class="line"><a href="#L25">25</a>   - `isOpen_univ`: the whole space is open;</span>
+<span id="L26" class="line"><a href="#L26">26</a>   - `IsOpen.inter`: the intersection of two open sets is an open set;</span>
+<span id="L27" class="line"><a href="#L27">27</a>   - `isOpen_sUnion`: the union of a family of open sets is an open set.</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> * `IsOpen s`: predicate saying that `s` is an open set, same as `TopologicalSpace.IsOpen`.</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> * `IsClosed s`: a set is called *closed*, if its complement is an open set.</span>
+<span id="L32" class="line"><a href="#L32">32</a>   For technical reasons, this is a typeclass.</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> * `IsClopen s`: a set is *clopen* if it is both closed and open.</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> * `interior s`: the *interior* of a set `s` is the maximal open set that is included in `s`.</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> * `closure s`: the *closure* of a set `s` is the minimal closed set that includes `s`.</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> * `frontier s`: the *frontier* of a set is the set difference `closure s \ interior s`.</span>
+<span id="L41" class="line"><a href="#L41">41</a>   A point `x` belongs to `frontier s`, if any neighborhood of `x`</span>
+<span id="L42" class="line"><a href="#L42">42</a>   contains points both from `s` and `sᶜ`.</span>
+<span id="L43" class="line"><a href="#L43">43</a> </span>
+<span id="L44" class="line"><a href="#L44">44</a> * `Dense s`: a set is *dense* if its closure is the whole space.</span>
+<span id="L45" class="line"><a href="#L45">45</a>   We define it as `∀ x, x ∈ closure s` so that one can write `(h : Dense s) x`.</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> * `DenseRange f`: a function has *dense range*, if `Set.range f` is a dense set.</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> * `Continuous f`: a map is *continuous*, if the preimage of any open set is an open set.</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> * `IsOpenMap f`: a map is an *open map*, if the image of any open set is an open set.</span>
+<span id="L52" class="line"><a href="#L52">52</a> </span>
+<span id="L53" class="line"><a href="#L53">53</a> * `IsClosedMap f`: a map is a *closed map*, if the image of any closed set is a closed set.</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> ** Notation</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> We introduce notation `IsOpen[t]`, `IsClosed[t]`, `closure[t]`, `Continuous[t₁, t₂]`</span>
+<span id="L58" class="line"><a href="#L58">58</a> that allow passing custom topologies to these predicates and functions without using `@`.</span>
+<span id="L59" class="line"><a href="#L59">59</a> -/</span>
+<span id="L60" class="line"><a href="#L60">60</a> </span>
+<span id="L61" class="line"><a href="#L61">61</a> @[expose] public section</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> assert_not_exists Monoid</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> universe u v</span>
+<span id="L66" class="line"><a href="#L66">66</a> open Set</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> /-- A topology on `X`. -/</span>
+<span id="L69" class="line"><a href="#L69">69</a> class TopologicalSpace (X : Type u) where</span>
+<span id="L70" class="line"><a href="#L70">70</a>   /-- A predicate saying that a set is an open set. Use `IsOpen` in the root namespace instead. -/</span>
+<span id="L71" class="line"><a href="#L71">71</a>   protected IsOpen : Set X → Prop</span>
+<span id="L72" class="line"><a href="#L72">72</a>   /-- The set representing the whole space is an open set.</span>
+<span id="L73" class="line"><a href="#L73">73</a>   Use `isOpen_univ` in the root namespace instead. -/</span>
+<span id="L74" class="line"><a href="#L74">74</a>   protected isOpen_univ : IsOpen univ</span>
+<span id="L75" class="line"><a href="#L75">75</a>   /-- The intersection of two open sets is an open set. Use `IsOpen.inter` instead. -/</span>
+<span id="L76" class="line"><a href="#L76">76</a>   protected isOpen_inter : ∀ s t, IsOpen s → IsOpen t → IsOpen (s ∩ t)</span>
+<span id="L77" class="line"><a href="#L77">77</a>   /-- The union of a family of open sets is an open set.</span>
+<span id="L78" class="line"><a href="#L78">78</a>   Use `isOpen_sUnion` in the root namespace instead. -/</span>
+<span id="L79" class="line"><a href="#L79">79</a>   protected isOpen_sUnion : ∀ s, (∀ t ∈ s, IsOpen t) → IsOpen (⋃₀ s)</span>
+<span id="L80" class="line"><a href="#L80">80</a> </span>
+<span id="L81" class="line"><a href="#L81">81</a> variable {X : Type u} {Y : Type v}</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> /-! ### Predicates on sets -/</span>
+<span id="L84" class="line"><a href="#L84">84</a> </span>
+<span id="L85" class="line"><a href="#L85">85</a> section Defs</span>
+<span id="L86" class="line"><a href="#L86">86</a> </span>
+<span id="L87" class="line"><a href="#L87">87</a> variable [TopologicalSpace X] [TopologicalSpace Y] {s t : Set X}</span>
+<span id="L88" class="line"><a href="#L88">88</a> </span>
+<span id="L89" class="line"><a href="#L89">89</a> /-- `IsOpen s` means that `s` is open in the ambient topological space on `X` -/</span>
+<span id="L90" class="line"><a href="#L90">90</a> def IsOpen : Set X → Prop := TopologicalSpace.IsOpen</span>
+<span id="L91" class="line"><a href="#L91">91</a> </span>
+<span id="L92" class="line"><a href="#L92">92</a> @[simp] theorem isOpen_univ : IsOpen (univ : Set X) := TopologicalSpace.isOpen_univ</span>
+<span id="L93" class="line"><a href="#L93">93</a> </span>
+<span id="L94" class="line"><a href="#L94">94</a> theorem IsOpen.inter (hs : IsOpen s) (ht : IsOpen t) : IsOpen (s ∩ t) :=</span>
+<span id="L95" class="line"><a href="#L95">95</a>   TopologicalSpace.isOpen_inter s t hs ht</span>
+<span id="L96" class="line"><a href="#L96">96</a> </span>
+<span id="L97" class="line"><a href="#L97">97</a> theorem isOpen_sUnion {s : Set (Set X)} (h : ∀ t ∈ s, IsOpen t) : IsOpen (⋃₀ s) :=</span>
+<span id="L98" class="line"><a href="#L98">98</a>   TopologicalSpace.isOpen_sUnion s h</span>
+<span id="L99" class="line"><a href="#L99">99</a> </span>
+<span id="L100" class="line"><a href="#L100">100</a> /-- A set is closed if its complement is open -/</span>
+<span id="L101" class="line"><a href="#L101">101</a> class IsClosed (s : Set X) : Prop where</span>
+<span id="L102" class="line"><a href="#L102">102</a>   /-- The complement of a closed set is an open set. -/</span>
+<span id="L103" class="line"><a href="#L103">103</a>   isOpen_compl : IsOpen sᶜ</span>
+<span id="L104" class="line"><a href="#L104">104</a> </span>
+<span id="L105" class="line"><a href="#L105">105</a> /-- A set is clopen if it is both closed and open. -/</span>
+<span id="L106" class="line"><a href="#L106">106</a> def IsClopen (s : Set X) : Prop :=</span>
+<span id="L107" class="line"><a href="#L107">107</a>   IsClosed s ∧ IsOpen s</span>
+<span id="L108" class="line"><a href="#L108">108</a> </span>
+<span id="L109" class="line"><a href="#L109">109</a> /--</span>
+<span id="L110" class="line"><a href="#L110">110</a> A set is locally closed if it is the intersection of some open set and some closed set.</span>
+<span id="L111" class="line"><a href="#L111">111</a> Also see `isLocallyClosed_tfae` and other lemmas in `Mathlib/Topology/LocallyClosed.lean`.</span>
+<span id="L112" class="line"><a href="#L112">112</a> -/</span>
+<span id="L113" class="line"><a href="#L113">113</a> def IsLocallyClosed (s : Set X) : Prop := ∃ (U Z : Set X), IsOpen U ∧ IsClosed Z ∧ s = U ∩ Z</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> /-- The interior of a set `s` is the largest open subset of `s`. -/</span>
+<span id="L116" class="line"><a href="#L116">116</a> def interior (s : Set X) : Set X :=</span>
+<span id="L117" class="line"><a href="#L117">117</a>   ⋃₀ { t | IsOpen t ∧ t ⊆ s }</span>
+<span id="L118" class="line"><a href="#L118">118</a> </span>
+<span id="L119" class="line"><a href="#L119">119</a> /-- The closure of `s` is the smallest closed set containing `s`. -/</span>
+<span id="L120" class="line"><a href="#L120">120</a> def closure (s : Set X) : Set X :=</span>
+<span id="L121" class="line"><a href="#L121">121</a>   ⋂₀ { t | IsClosed t ∧ s ⊆ t }</span>
+<span id="L122" class="line"><a href="#L122">122</a> </span>
+<span id="L123" class="line"><a href="#L123">123</a> /-- The frontier of a set is the set of points between the closure and interior. -/</span>
+<span id="L124" class="line"><a href="#L124">124</a> def frontier (s : Set X) : Set X :=</span>
+<span id="L125" class="line"><a href="#L125">125</a>   closure s \ interior s</span>
+<span id="L126" class="line"><a href="#L126">126</a> </span>
+<span id="L127" class="line"><a href="#L127">127</a> /--</span>
+<span id="L128" class="line"><a href="#L128">128</a> The coborder is defined as the complement of `closure s \ s`,</span>
+<span id="L129" class="line"><a href="#L129">129</a> or the union of `s` and the complement of `∂(s)`.</span>
+<span id="L130" class="line"><a href="#L130">130</a> This is the largest set in which `s` is closed, and `s` is locally closed if and only if</span>
+<span id="L131" class="line"><a href="#L131">131</a> `coborder s` is open.</span>
+<span id="L132" class="line"><a href="#L132">132</a> </span>
+<span id="L133" class="line"><a href="#L133">133</a> This is unnamed in the literature, and this name is due to the fact that `coborder s = (border sᶜ)ᶜ`</span>
+<span id="L134" class="line"><a href="#L134">134</a> where `border s = s \ interior s` is the border in the sense of Hausdorff.</span>
+<span id="L135" class="line"><a href="#L135">135</a> -/</span>
+<span id="L136" class="line"><a href="#L136">136</a> def coborder (s : Set X) : Set X :=</span>
+<span id="L137" class="line"><a href="#L137">137</a>   (closure s \ s)ᶜ</span>
+<span id="L138" class="line"><a href="#L138">138</a> </span>
+<span id="L139" class="line"><a href="#L139">139</a> /-- A set is dense in a topological space if every point belongs to its closure. -/</span>
+<span id="L140" class="line"><a href="#L140">140</a> def Dense (s : Set X) : Prop :=</span>
+<span id="L141" class="line"><a href="#L141">141</a>   ∀ x, x ∈ closure s</span>
+<span id="L142" class="line"><a href="#L142">142</a> </span>
+<span id="L143" class="line"><a href="#L143">143</a> /-- `f : α → X` has dense range if its range (image) is a dense subset of `X`. -/</span>
+<span id="L144" class="line"><a href="#L144">144</a> def DenseRange {α : Type*} (f : α → X) := Dense (range f)</span>
+<span id="L145" class="line"><a href="#L145">145</a> </span>
+<span id="L146" class="line"><a href="#L146">146</a> /-- A function between topological spaces is continuous if the preimage</span>
+<span id="L147" class="line"><a href="#L147">147</a>   of every open set is open. Registered as a structure to make sure it is not unfolded by Lean. -/</span>
+<span id="L148" class="line"><a href="#L148">148</a> @[fun_prop]</span>
+<span id="L149" class="line"><a href="#L149">149</a> structure Continuous (f : X → Y) : Prop where</span>
+<span id="L150" class="line"><a href="#L150">150</a>   /-- The preimage of an open set under a continuous function is an open set. Use `IsOpen.preimage`</span>
+<span id="L151" class="line"><a href="#L151">151</a>   instead. -/</span>
+<span id="L152" class="line"><a href="#L152">152</a>   isOpen_preimage : ∀ s, IsOpen s → IsOpen (f ⁻¹&#x27; s)</span>
+<span id="L153" class="line"><a href="#L153">153</a> </span>
+<span id="L154" class="line"><a href="#L154">154</a> /-- A map `f : X → Y` is said to be an *open map*,</span>
+<span id="L155" class="line"><a href="#L155">155</a> if the image of any open `U : Set X` is open in `Y`. -/</span>
+<span id="L156" class="line"><a href="#L156">156</a> def IsOpenMap (f : X → Y) : Prop := ∀ U : Set X, IsOpen U → IsOpen (f &#x27;&#x27; U)</span>
+<span id="L157" class="line"><a href="#L157">157</a> </span>
+<span id="L158" class="line"><a href="#L158">158</a> /-- A map `f : X → Y` is said to be a *closed map*,</span>
+<span id="L159" class="line"><a href="#L159">159</a> if the image of any closed `U : Set X` is closed in `Y`. -/</span>
+<span id="L160" class="line"><a href="#L160">160</a> def IsClosedMap (f : X → Y) : Prop := ∀ U : Set X, IsClosed U → IsClosed (f &#x27;&#x27; U)</span>
+<span id="L161" class="line"><a href="#L161">161</a> </span>
+<span id="L162" class="line"><a href="#L162">162</a> /-- An open quotient map is an open map `f : X → Y` which is both an open map and a quotient map.</span>
+<span id="L163" class="line"><a href="#L163">163</a> Equivalently, it is a surjective continuous open map.</span>
+<span id="L164" class="line"><a href="#L164">164</a> We use the latter characterization as a definition.</span>
+<span id="L165" class="line"><a href="#L165">165</a> </span>
+<span id="L166" class="line"><a href="#L166">166</a> Many important quotient maps are open quotient maps, including</span>
+<span id="L167" class="line"><a href="#L167">167</a> </span>
+<span id="L168" class="line"><a href="#L168">168</a> - the quotient map from a topological space to its quotient by the action of a group;</span>
+<span id="L169" class="line"><a href="#L169">169</a> - the quotient map from a topological group to its quotient by a normal subgroup;</span>
+<span id="L170" class="line"><a href="#L170">170</a> - the quotient map from a topological space to its separation quotient.</span>
+<span id="L171" class="line"><a href="#L171">171</a> </span>
+<span id="L172" class="line"><a href="#L172">172</a> Contrary to general quotient maps,</span>
+<span id="L173" class="line"><a href="#L173">173</a> the category of open quotient maps is closed under `Prod.map`.</span>
+<span id="L174" class="line"><a href="#L174">174</a> -/</span>
+<span id="L175" class="line"><a href="#L175">175</a> @[mk_iff]</span>
+<span id="L176" class="line"><a href="#L176">176</a> structure IsOpenQuotientMap (f : X → Y) : Prop where</span>
+<span id="L177" class="line"><a href="#L177">177</a>   /-- An open quotient map is surjective. -/</span>
+<span id="L178" class="line"><a href="#L178">178</a>   surjective : Function.Surjective f</span>
+<span id="L179" class="line"><a href="#L179">179</a>   /-- An open quotient map is continuous. -/</span>
+<span id="L180" class="line"><a href="#L180">180</a>   continuous : Continuous f</span>
+<span id="L181" class="line"><a href="#L181">181</a>   /-- An open quotient map is an open map. -/</span>
+<span id="L182" class="line"><a href="#L182">182</a>   isOpenMap : IsOpenMap f</span>
+<span id="L183" class="line"><a href="#L183">183</a> </span>
+<span id="L184" class="line"><a href="#L184">184</a> end Defs</span>
+<span id="L185" class="line"><a href="#L185">185</a> </span>
+<span id="L186" class="line"><a href="#L186">186</a> /-! ### Notation for non-standard topologies -/</span>
+<span id="L187" class="line"><a href="#L187">187</a> </span>
+<span id="L188" class="line"><a href="#L188">188</a> /-- Notation for `IsOpen` with respect to a non-standard topology. -/</span>
+<span id="L189" class="line"><a href="#L189">189</a> scoped[Topology] notation (name := IsOpen_of) &quot;IsOpen[&quot; t &quot;]&quot; =&gt; @IsOpen _ t</span>
+<span id="L190" class="line"><a href="#L190">190</a> </span>
+<span id="L191" class="line"><a href="#L191">191</a> /-- Notation for `IsClosed` with respect to a non-standard topology. -/</span>
+<span id="L192" class="line"><a href="#L192">192</a> scoped[Topology] notation (name := IsClosed_of) &quot;IsClosed[&quot; t &quot;]&quot; =&gt; @IsClosed _ t</span>
+<span id="L193" class="line"><a href="#L193">193</a> </span>
+<span id="L194" class="line"><a href="#L194">194</a> /-- Notation for `closure` with respect to a non-standard topology. -/</span>
+<span id="L195" class="line"><a href="#L195">195</a> scoped[Topology] notation (name := closure_of) &quot;closure[&quot; t &quot;]&quot; =&gt; @closure _ t</span>
+<span id="L196" class="line"><a href="#L196">196</a> </span>
+<span id="L197" class="line"><a href="#L197">197</a> /-- Notation for `Continuous` with respect to a non-standard topologies. -/</span>
+<span id="L198" class="line"><a href="#L198">198</a> scoped[Topology] notation (name := Continuous_of) &quot;Continuous[&quot; t₁ &quot;, &quot; t₂ &quot;]&quot; =&gt;</span>
+<span id="L199" class="line"><a href="#L199">199</a>   @Continuous _ _ t₁ t₂</span>
+<span id="L200" class="line"><a href="#L200">200</a> </span>
+<span id="L201" class="line"><a href="#L201">201</a> /-- The property `BaireSpace α` means that the topological space `α` has the Baire property:</span>
+<span id="L202" class="line"><a href="#L202">202</a> any countable intersection of open dense subsets is dense.</span>
+<span id="L203" class="line"><a href="#L203">203</a> Formulated here when the source space is ℕ.</span>
+<span id="L204" class="line"><a href="#L204">204</a> Use `dense_iInter_of_isOpen` which works for any countable index type instead. -/</span>
+<span id="L205" class="line"><a href="#L205">205</a> class BaireSpace (X : Type*) [TopologicalSpace X] : Prop where</span>
+<span id="L206" class="line"><a href="#L206">206</a>   baire_property : ∀ f : ℕ → Set X, (∀ n, IsOpen (f n)) → (∀ n, Dense (f n)) → Dense (⋂ n, f n)</span></pre></html>

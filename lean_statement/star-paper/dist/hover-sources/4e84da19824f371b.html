@@ -1,0 +1,708 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lean/Elab/BuiltinCommand.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Lean/Elab/BuiltinCommand.lean</h1><p>Lean core · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2021 Microsoft Corporation. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Leonardo de Moura</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> prelude</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Lean.Meta.Reduce</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Lean.Elab.Eval</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Lean.Elab.Command</span>
+<span id="L12" class="line"><a href="#L12">12</a> public import Lean.Elab.Open</span>
+<span id="L13" class="line"><a href="#L13">13</a> import Init.Data.Nat.Order</span>
+<span id="L14" class="line"><a href="#L14">14</a> import Init.Data.Order.Lemmas</span>
+<span id="L15" class="line"><a href="#L15">15</a> import Init.System.Platform</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> public section</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> namespace Lean.Elab.Command</span>
+<span id="L20" class="line"><a href="#L20">20</a> </span>
+<span id="L21" class="line"><a href="#L21">21</a> @[builtin_command_elab moduleDoc] def elabModuleDoc : CommandElab := fun stx =&gt; do</span>
+<span id="L22" class="line"><a href="#L22">22</a>   let some range ← Elab.getDeclarationRange? stx</span>
+<span id="L23" class="line"><a href="#L23">23</a>     | return  -- must be from partial syntax, ignore</span>
+<span id="L24" class="line"><a href="#L24">24</a> </span>
+<span id="L25" class="line"><a href="#L25">25</a>   match stx[1] with</span>
+<span id="L26" class="line"><a href="#L26">26</a>   | Syntax.atom _ val =&gt;</span>
+<span id="L27" class="line"><a href="#L27">27</a>     if getMainVersoModuleDocs (← getEnv) |&gt;.isEmpty then</span>
+<span id="L28" class="line"><a href="#L28">28</a>       let doc := String.Pos.Raw.extract val 0 (val.rawEndPos.unoffsetBy ⟨2⟩)</span>
+<span id="L29" class="line"><a href="#L29">29</a>       modifyEnv fun env =&gt; addMainModuleDoc env ⟨doc, range⟩</span>
+<span id="L30" class="line"><a href="#L30">30</a>     else</span>
+<span id="L31" class="line"><a href="#L31">31</a>       throwError m!&quot;Can&#x27;t add Markdown-format module docs because there is already Verso-format content present.&quot;</span>
+<span id="L32" class="line"><a href="#L32">32</a>   | Syntax.node _ ``Lean.Parser.Command.versoCommentBody args =&gt;</span>
+<span id="L33" class="line"><a href="#L33">33</a>     let docSyntax := args.getD 0 .missing</span>
+<span id="L34" class="line"><a href="#L34">34</a>     if docSyntax.getKind == `Lean.Doc.Syntax.parseFailure then</span>
+<span id="L35" class="line"><a href="#L35">35</a>       -- Report parser errors without attempting elaboration</span>
+<span id="L36" class="line"><a href="#L36">36</a>       runTermElabM fun _ =&gt; reportVersoParseFailure docSyntax</span>
+<span id="L37" class="line"><a href="#L37">37</a>     else</span>
+<span id="L38" class="line"><a href="#L38">38</a>       runTermElabM fun _ =&gt; do</span>
+<span id="L39" class="line"><a href="#L39">39</a>         addVersoModDocString range ⟨docSyntax⟩</span>
+<span id="L40" class="line"><a href="#L40">40</a>   | _ =&gt; throwErrorAt stx &quot;unexpected module doc string{indentD &lt;| stx}&quot;</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> private def addScope (isNewNamespace : Bool) (header : String) (newNamespace : Name)</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (isNoncomputable isPublic isMeta : Bool := false) (attrs : List (TSyntax ``Parser.Term.attrInstance) := []) :</span>
+<span id="L44" class="line"><a href="#L44">44</a>     CommandElabM Unit := do</span>
+<span id="L45" class="line"><a href="#L45">45</a>   modify fun s =&gt; { s with</span>
+<span id="L46" class="line"><a href="#L46">46</a>     env    := s.env.registerNamespace newNamespace,</span>
+<span id="L47" class="line"><a href="#L47">47</a>     scopes := { s.scopes.head! with</span>
+<span id="L48" class="line"><a href="#L48">48</a>       header := header, currNamespace := newNamespace</span>
+<span id="L49" class="line"><a href="#L49">49</a>       isNoncomputable := s.scopes.head!.isNoncomputable || isNoncomputable</span>
+<span id="L50" class="line"><a href="#L50">50</a>       isPublic := s.scopes.head!.isPublic || isPublic</span>
+<span id="L51" class="line"><a href="#L51">51</a>       isMeta := s.scopes.head!.isMeta || isMeta</span>
+<span id="L52" class="line"><a href="#L52">52</a>       attrs := s.scopes.head!.attrs ++ attrs</span>
+<span id="L53" class="line"><a href="#L53">53</a>     } :: s.scopes</span>
+<span id="L54" class="line"><a href="#L54">54</a>   }</span>
+<span id="L55" class="line"><a href="#L55">55</a>   pushScope</span>
+<span id="L56" class="line"><a href="#L56">56</a>   if isNewNamespace then</span>
+<span id="L57" class="line"><a href="#L57">57</a>     activateScoped newNamespace</span>
+<span id="L58" class="line"><a href="#L58">58</a> </span>
+<span id="L59" class="line"><a href="#L59">59</a> private def addScopes (header : Name) (isNewNamespace : Bool) (isNoncomputable isPublic isMeta : Bool := false)</span>
+<span id="L60" class="line"><a href="#L60">60</a>     (attrs : List (TSyntax ``Parser.Term.attrInstance) := []) : CommandElabM Unit :=</span>
+<span id="L61" class="line"><a href="#L61">61</a>   go header</span>
+<span id="L62" class="line"><a href="#L62">62</a> where go</span>
+<span id="L63" class="line"><a href="#L63">63</a>   | .anonymous =&gt; pure ()</span>
+<span id="L64" class="line"><a href="#L64">64</a>   | .str p header =&gt; do</span>
+<span id="L65" class="line"><a href="#L65">65</a>     go p</span>
+<span id="L66" class="line"><a href="#L66">66</a>     let currNamespace ← getCurrNamespace</span>
+<span id="L67" class="line"><a href="#L67">67</a>     addScope isNewNamespace header (if isNewNamespace then Name.mkStr currNamespace header else currNamespace) isNoncomputable isPublic isMeta attrs</span>
+<span id="L68" class="line"><a href="#L68">68</a>   | _ =&gt; throwError &quot;invalid scope&quot;</span>
+<span id="L69" class="line"><a href="#L69">69</a> </span>
+<span id="L70" class="line"><a href="#L70">70</a> private def addNamespace (header : Name) : CommandElabM Unit :=</span>
+<span id="L71" class="line"><a href="#L71">71</a>   addScopes (isNewNamespace := true) (isNoncomputable := false) (attrs := []) header</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> def withNamespace {α} (ns : Name) (elabFn : CommandElabM α) : CommandElabM α := do</span>
+<span id="L74" class="line"><a href="#L74">74</a>   addNamespace ns</span>
+<span id="L75" class="line"><a href="#L75">75</a>   let a ← elabFn</span>
+<span id="L76" class="line"><a href="#L76">76</a>   modify fun s =&gt; { s with scopes := s.scopes.drop ns.getNumParts }</span>
+<span id="L77" class="line"><a href="#L77">77</a>   pure a</span>
+<span id="L78" class="line"><a href="#L78">78</a> </span>
+<span id="L79" class="line"><a href="#L79">79</a> private def popScopes (numScopes : Nat) : CommandElabM Unit :=</span>
+<span id="L80" class="line"><a href="#L80">80</a>   for _ in *...numScopes do</span>
+<span id="L81" class="line"><a href="#L81">81</a>     popScope</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> private def innermostScopeName? : List Scope → Option Name</span>
+<span id="L84" class="line"><a href="#L84">84</a>   | { header := &quot;&quot;, .. } :: _ =&gt; none</span>
+<span id="L85" class="line"><a href="#L85">85</a>   | { header := h, .. }  :: _ =&gt; some &lt;| .mkSimple h</span>
+<span id="L86" class="line"><a href="#L86">86</a>   | _                         =&gt; some .anonymous -- should not happen</span>
+<span id="L87" class="line"><a href="#L87">87</a> </span>
+<span id="L88" class="line"><a href="#L88">88</a> private def checkEndHeader : Name → List Scope → Option Name</span>
+<span id="L89" class="line"><a href="#L89">89</a>   | .anonymous, _ =&gt; none</span>
+<span id="L90" class="line"><a href="#L90">90</a>   | .str p s, { header := h, .. } :: scopes =&gt;</span>
+<span id="L91" class="line"><a href="#L91">91</a>     if h == s then</span>
+<span id="L92" class="line"><a href="#L92">92</a>       (.str · s) &lt;$&gt; checkEndHeader p scopes</span>
+<span id="L93" class="line"><a href="#L93">93</a>     else</span>
+<span id="L94" class="line"><a href="#L94">94</a>       some &lt;| .mkSimple h</span>
+<span id="L95" class="line"><a href="#L95">95</a>   | _, _ =&gt; some .anonymous -- should not happen</span>
+<span id="L96" class="line"><a href="#L96">96</a> </span>
+<span id="L97" class="line"><a href="#L97">97</a> @[builtin_command_elab «namespace»] def elabNamespace : CommandElab := fun stx =&gt;</span>
+<span id="L98" class="line"><a href="#L98">98</a>   match stx with</span>
+<span id="L99" class="line"><a href="#L99">99</a>   | `(namespace $n) =&gt; addNamespace n.getId</span>
+<span id="L100" class="line"><a href="#L100">100</a>   | _               =&gt; throwUnsupportedSyntax</span>
+<span id="L101" class="line"><a href="#L101">101</a> </span>
+<span id="L102" class="line"><a href="#L102">102</a> @[builtin_command_elab «section»] def elabSection : CommandElab := fun stx =&gt; do</span>
+<span id="L103" class="line"><a href="#L103">103</a>   match stx with</span>
+<span id="L104" class="line"><a href="#L104">104</a>   | `(Parser.Command.section| $[@[expose%$expTk]]? $[public%$publicTk]? $[noncomputable%$ncTk]? $[meta%$metaTk]? section $(header?)?) =&gt;</span>
+<span id="L105" class="line"><a href="#L105">105</a>     -- TODO: allow more attributes?</span>
+<span id="L106" class="line"><a href="#L106">106</a>     let attrs ← if expTk.isSome then</span>
+<span id="L107" class="line"><a href="#L107">107</a>       pure [← `(Parser.Term.attrInstance| expose)]</span>
+<span id="L108" class="line"><a href="#L108">108</a>     else</span>
+<span id="L109" class="line"><a href="#L109">109</a>       pure []</span>
+<span id="L110" class="line"><a href="#L110">110</a>     if let some header := header? then</span>
+<span id="L111" class="line"><a href="#L111">111</a>       addScopes (isNewNamespace := false) (isNoncomputable := ncTk.isSome) (isPublic := publicTk.isSome) (isMeta := metaTk.isSome) (attrs := attrs) header.getId</span>
+<span id="L112" class="line"><a href="#L112">112</a>     else</span>
+<span id="L113" class="line"><a href="#L113">113</a>       addScope (isNewNamespace := false) (isNoncomputable := ncTk.isSome) (isPublic := publicTk.isSome) (isMeta := metaTk.isSome) (attrs := attrs) &quot;&quot; (← getCurrNamespace)</span>
+<span id="L114" class="line"><a href="#L114">114</a>   | _                        =&gt; throwUnsupportedSyntax</span>
+<span id="L115" class="line"><a href="#L115">115</a> </span>
+<span id="L116" class="line"><a href="#L116">116</a> @[builtin_command_elab InternalSyntax.end_local_scope] def elabEndLocalScope : CommandElab := fun _ =&gt; do</span>
+<span id="L117" class="line"><a href="#L117">117</a>   setDelimitsLocal</span>
+<span id="L118" class="line"><a href="#L118">118</a> </span>
+<span id="L119" class="line"><a href="#L119">119</a> /--</span>
+<span id="L120" class="line"><a href="#L120">120</a> Produces a `Name` composed of the names of at most the innermost `n` scopes in `ss`, truncating if an</span>
+<span id="L121" class="line"><a href="#L121">121</a> empty scope is reached (so that we do not suggest names like `Foo.«».Bar`).</span>
+<span id="L122" class="line"><a href="#L122">122</a> </span>
+<span id="L123" class="line"><a href="#L123">123</a> If `n` is not specified, will use all scopes in `ss`.</span>
+<span id="L124" class="line"><a href="#L124">124</a> -/</span>
+<span id="L125" class="line"><a href="#L125">125</a> private def nameOfScopes : (ss : List Scope) → (n : Nat := ss.length) → Name</span>
+<span id="L126" class="line"><a href="#L126">126</a>   | _, 0 =&gt; .anonymous</span>
+<span id="L127" class="line"><a href="#L127">127</a>   | [], _ =&gt; .anonymous</span>
+<span id="L128" class="line"><a href="#L128">128</a>   | s :: ss, n + 1 =&gt;</span>
+<span id="L129" class="line"><a href="#L129">129</a>     if s.header == &quot;&quot; then</span>
+<span id="L130" class="line"><a href="#L130">130</a>       .anonymous</span>
+<span id="L131" class="line"><a href="#L131">131</a>     else</span>
+<span id="L132" class="line"><a href="#L132">132</a>     .str (nameOfScopes ss n) s.header</span>
+<span id="L133" class="line"><a href="#L133">133</a> </span>
+<span id="L134" class="line"><a href="#L134">134</a> /--</span>
+<span id="L135" class="line"><a href="#L135">135</a> Returns the first suffix of `base` that begins with `seg`, if one exists.</span>
+<span id="L136" class="line"><a href="#L136">136</a> </span>
+<span id="L137" class="line"><a href="#L137">137</a> Note: this uses a naive, O(m*n) implementation for simplicity; we assume repeated partial overlap of</span>
+<span id="L138" class="line"><a href="#L138">138</a> name components to be relatively uncommon, so that practical performance is closer to linear.</span>
+<span id="L139" class="line"><a href="#L139">139</a> -/</span>
+<span id="L140" class="line"><a href="#L140">140</a> private def findSuffixWithPrefix (base : Name) (seg : Name) : Option Name :=</span>
+<span id="L141" class="line"><a href="#L141">141</a>   findSuffixMatch base seg true</span>
+<span id="L142" class="line"><a href="#L142">142</a> where</span>
+<span id="L143" class="line"><a href="#L143">143</a>   /--</span>
+<span id="L144" class="line"><a href="#L144">144</a>   Helper for `findSuffixWithPrefix`. If `allowOffset` is `false`, then `seg` must be a suffix of</span>
+<span id="L145" class="line"><a href="#L145">145</a>   `base`, not just a prefix of a suffix.</span>
+<span id="L146" class="line"><a href="#L146">146</a>   -/</span>
+<span id="L147" class="line"><a href="#L147">147</a>   findSuffixMatch : (base : Name) → (seg : Name) → (allowOffset : Bool) → Option Name</span>
+<span id="L148" class="line"><a href="#L148">148</a>   | _, .anonymous, _ =&gt; some .anonymous</span>
+<span id="L149" class="line"><a href="#L149">149</a>   | .anonymous, _, _ =&gt; none</span>
+<span id="L150" class="line"><a href="#L150">150</a>   | .num p n, seg@(.num p&#x27; n&#x27;), allowOffset =&gt; do</span>
+<span id="L151" class="line"><a href="#L151">151</a>     if n == n&#x27; then</span>
+<span id="L152" class="line"><a href="#L152">152</a>       if let some nm := findSuffixMatch p p&#x27; (allowOffset := false) then</span>
+<span id="L153" class="line"><a href="#L153">153</a>         return .num nm n</span>
+<span id="L154" class="line"><a href="#L154">154</a>     if allowOffset then</span>
+<span id="L155" class="line"><a href="#L155">155</a>       return .num (← findSuffixMatch p seg allowOffset) n</span>
+<span id="L156" class="line"><a href="#L156">156</a>     else</span>
+<span id="L157" class="line"><a href="#L157">157</a>       none</span>
+<span id="L158" class="line"><a href="#L158">158</a>   | .str p s, seg@(.str p&#x27; s&#x27;), allowOffset =&gt; do</span>
+<span id="L159" class="line"><a href="#L159">159</a>     if s == s&#x27; then</span>
+<span id="L160" class="line"><a href="#L160">160</a>       if let some nm := findSuffixMatch p p&#x27; (allowOffset := false) then</span>
+<span id="L161" class="line"><a href="#L161">161</a>         return .str nm s</span>
+<span id="L162" class="line"><a href="#L162">162</a>     if allowOffset then</span>
+<span id="L163" class="line"><a href="#L163">163</a>       return .str (← findSuffixMatch p seg allowOffset) s</span>
+<span id="L164" class="line"><a href="#L164">164</a>     else</span>
+<span id="L165" class="line"><a href="#L165">165</a>       none</span>
+<span id="L166" class="line"><a href="#L166">166</a>   | .str p s, seg, allowOffset =&gt;</span>
+<span id="L167" class="line"><a href="#L167">167</a>     if allowOffset then</span>
+<span id="L168" class="line"><a href="#L168">168</a>       return .str (← findSuffixMatch p seg allowOffset) s</span>
+<span id="L169" class="line"><a href="#L169">169</a>     else</span>
+<span id="L170" class="line"><a href="#L170">170</a>       none</span>
+<span id="L171" class="line"><a href="#L171">171</a>   | .num p n, seg, allowOffset =&gt;</span>
+<span id="L172" class="line"><a href="#L172">172</a>     if allowOffset then</span>
+<span id="L173" class="line"><a href="#L173">173</a>       return .num (← findSuffixMatch p seg allowOffset) n</span>
+<span id="L174" class="line"><a href="#L174">174</a>     else</span>
+<span id="L175" class="line"><a href="#L175">175</a>       none</span>
+<span id="L176" class="line"><a href="#L176">176</a> </span>
+<span id="L177" class="line"><a href="#L177">177</a> private def throwNoScope : CommandElabM Unit :=</span>
+<span id="L178" class="line"><a href="#L178">178</a>   throwError m!&quot;Invalid `end`: There is no current scope to end&quot;</span>
+<span id="L179" class="line"><a href="#L179">179</a>     ++ .note m!&quot;Scopes are introduced using `namespace` and `section`&quot;</span>
+<span id="L180" class="line"><a href="#L180">180</a> </span>
+<span id="L181" class="line"><a href="#L181">181</a> private def throwMissingName (name : Name) : CommandElabM Unit := do</span>
+<span id="L182" class="line"><a href="#L182">182</a>   let hint ← liftCoreM &lt;| MessageData.hint m!&quot;To end the current scope `{name}`, specify its name:&quot;</span>
+<span id="L183" class="line"><a href="#L183">183</a>     #[← `(end $(mkIdent name))] (codeActionPrefix? := &quot;Add scope name: &quot;)</span>
+<span id="L184" class="line"><a href="#L184">184</a>   throwError &quot;Missing name after `end`: Expected the current scope name `{name}`{hint}&quot;</span>
+<span id="L185" class="line"><a href="#L185">185</a> </span>
+<span id="L186" class="line"><a href="#L186">186</a> /--</span>
+<span id="L187" class="line"><a href="#L187">187</a> Produces a hint message with a suggestion to replace the name following `end` at the current ref</span>
+<span id="L188" class="line"><a href="#L188">188</a> with the name given by `scopes` if there is only one active scope; otherwise, returns `none`.</span>
+<span id="L189" class="line"><a href="#L189">189</a> </span>
+<span id="L190" class="line"><a href="#L190">190</a> Rationale: When there is only one active scope, only one valid `end` command is possible, so we</span>
+<span id="L191" class="line"><a href="#L191">191</a> suggest it; if there are multiple, then it is harder to determine with confidence which the user</span>
+<span id="L192" class="line"><a href="#L192">192</a> intended to end.</span>
+<span id="L193" class="line"><a href="#L193">193</a> -/</span>
+<span id="L194" class="line"><a href="#L194">194</a> private def mkSingleScopeReplacementHint? (scopes : List Scope) := do</span>
+<span id="L195" class="line"><a href="#L195">195</a>   -- Recall that there is always an anonymous topmost scope, so `scopes.length = 2` when there is</span>
+<span id="L196" class="line"><a href="#L196">196</a>   -- only one active scope:</span>
+<span id="L197" class="line"><a href="#L197">197</a>   if scopes.length == 2 then</span>
+<span id="L198" class="line"><a href="#L198">198</a>     let name := nameOfScopes scopes</span>
+<span id="L199" class="line"><a href="#L199">199</a>     some &lt;$&gt; MessageData.hint m!&quot;Use current scope name `{name}`:&quot; #[(← `(end $(mkIdent name)))]</span>
+<span id="L200" class="line"><a href="#L200">200</a>       (codeActionPrefix? := &quot;Replace scope name: &quot;)</span>
+<span id="L201" class="line"><a href="#L201">201</a>   else</span>
+<span id="L202" class="line"><a href="#L202">202</a>     return none</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> private def throwTooManyScopeComponents (header : Name) (scopes : List Scope) : CommandElabM Unit := do</span>
+<span id="L205" class="line"><a href="#L205">205</a>   let hint ← liftCoreM do</span>
+<span id="L206" class="line"><a href="#L206">206</a>     if let some hint ← mkSingleScopeReplacementHint? scopes then</span>
+<span id="L207" class="line"><a href="#L207">207</a>       pure hint</span>
+<span id="L208" class="line"><a href="#L208">208</a>     else</span>
+<span id="L209" class="line"><a href="#L209">209</a>       let scopesName := nameOfScopes scopes</span>
+<span id="L210" class="line"><a href="#L210">210</a>       pure &lt;| MessageData.hint&#x27; m!&quot;The name after `end` must be `{scopesName}` or some suffix thereof&quot;</span>
+<span id="L211" class="line"><a href="#L211">211</a>   throwError m!&quot;Invalid name after `end`: `{header}` contains too many components&quot; ++ hint</span>
+<span id="L212" class="line"><a href="#L212">212</a> </span>
+<span id="L213" class="line"><a href="#L213">213</a> private def throwScopeNameMismatch (header : Name) (scopes : List Scope) (endSize : Nat)</span>
+<span id="L214" class="line"><a href="#L214">214</a>     : CommandElabM Unit := do</span>
+<span id="L215" class="line"><a href="#L215">215</a>   let correspondingScopes := nameOfScopes scopes endSize</span>
+<span id="L216" class="line"><a href="#L216">216</a>   let allScopes := nameOfScopes scopes</span>
+<span id="L217" class="line"><a href="#L217">217</a>   let help ← liftCoreM do</span>
+<span id="L218" class="line"><a href="#L218">218</a>     if let some hint ← mkSingleScopeReplacementHint? scopes then</span>
+<span id="L219" class="line"><a href="#L219">219</a>       pure hint</span>
+<span id="L220" class="line"><a href="#L220">220</a>     else if let some suffix := findSuffixWithPrefix allScopes header then</span>
+<span id="L221" class="line"><a href="#L221">221</a>       let hintMsg := m!&quot;If you meant to end the outer scope(s) `{header}`, you must end all the \</span>
+<span id="L222" class="line"><a href="#L222">222</a>         intervening scopes `{suffix}`:&quot;</span>
+<span id="L223" class="line"><a href="#L223">223</a>       MessageData.hint hintMsg #[← `(end $(mkIdent suffix))]</span>
+<span id="L224" class="line"><a href="#L224">224</a>         (codeActionPrefix? := &quot;Add intervening scopes: &quot;)</span>
+<span id="L225" class="line"><a href="#L225">225</a>     else if correspondingScopes != allScopes then</span>
+<span id="L226" class="line"><a href="#L226">226</a>       pure &lt;| .note m!&quot;The current scopes are `{allScopes}`&quot;</span>
+<span id="L227" class="line"><a href="#L227">227</a>     else pure .nil</span>
+<span id="L228" class="line"><a href="#L228">228</a>   throwError m!&quot;Invalid name after `end`: Expected `{correspondingScopes}`, but found `{header}`&quot; ++ help</span>
+<span id="L229" class="line"><a href="#L229">229</a> </span>
+<span id="L230" class="line"><a href="#L230">230</a> private def throwUnnecessaryScopeName (header : Name) : CommandElabM Unit := do</span>
+<span id="L231" class="line"><a href="#L231">231</a>   let hintMsg := m!&quot;Delete the name `{header}` to end the current unnamed scope; outer named scopes \</span>
+<span id="L232" class="line"><a href="#L232">232</a>     can then be closed using additional `end` command(s):&quot;</span>
+<span id="L233" class="line"><a href="#L233">233</a>   let hint ← liftCoreM &lt;| MessageData.hint hintMsg #[← `(end)] (codeActionPrefix? := &quot;Delete name: &quot;)</span>
+<span id="L234" class="line"><a href="#L234">234</a>   throwError m!&quot;Unexpected name `{header}` after `end`: The current section is unnamed&quot; ++ hint</span>
+<span id="L235" class="line"><a href="#L235">235</a> </span>
+<span id="L236" class="line"><a href="#L236">236</a> @[builtin_command_elab «end»] def elabEnd : CommandElab := fun stx =&gt; do</span>
+<span id="L237" class="line"><a href="#L237">237</a>   let `(end $[$header? $[.%$trailingDotTk?$_]?]?) := stx</span>
+<span id="L238" class="line"><a href="#L238">238</a>     | throwUnsupportedSyntax</span>
+<span id="L239" class="line"><a href="#L239">239</a>   let header? := header?.map (·.getId)</span>
+<span id="L240" class="line"><a href="#L240">240</a>   let danglingDot := trailingDotTk?.join.isSome</span>
+<span id="L241" class="line"><a href="#L241">241</a>   let endSize : Nat := match header? with</span>
+<span id="L242" class="line"><a href="#L242">242</a>     | none   =&gt; 1</span>
+<span id="L243" class="line"><a href="#L243">243</a>     | some n =&gt; n.getNumParts</span>
+<span id="L244" class="line"><a href="#L244">244</a>   let scopes ← getScopes</span>
+<span id="L245" class="line"><a href="#L245">245</a>   let numScopes := scopes.length</span>
+<span id="L246" class="line"><a href="#L246">246</a>   if numScopes == 1 then</span>
+<span id="L247" class="line"><a href="#L247">247</a>     throwNoScope</span>
+<span id="L248" class="line"><a href="#L248">248</a>   match header? with</span>
+<span id="L249" class="line"><a href="#L249">249</a>   | none        =&gt;</span>
+<span id="L250" class="line"><a href="#L250">250</a>     addCompletionInfo &lt;| .endSection stx none false &lt;| scopes.map (·.header)</span>
+<span id="L251" class="line"><a href="#L251">251</a>     if let some name := innermostScopeName? scopes then</span>
+<span id="L252" class="line"><a href="#L252">252</a>       throwMissingName name</span>
+<span id="L253" class="line"><a href="#L253">253</a>   | some header =&gt;</span>
+<span id="L254" class="line"><a href="#L254">254</a>     if endSize &gt;= numScopes then</span>
+<span id="L255" class="line"><a href="#L255">255</a>       throwTooManyScopeComponents header scopes</span>
+<span id="L256" class="line"><a href="#L256">256</a>     else</span>
+<span id="L257" class="line"><a href="#L257">257</a>       addCompletionInfo &lt;| .endSection stx header danglingDot &lt;| scopes.map (·.header)</span>
+<span id="L258" class="line"><a href="#L258">258</a>       let scopesName := nameOfScopes scopes endSize</span>
+<span id="L259" class="line"><a href="#L259">259</a>       if scopesName != header then</span>
+<span id="L260" class="line"><a href="#L260">260</a>         if scopesName == .anonymous then</span>
+<span id="L261" class="line"><a href="#L261">261</a>           throwUnnecessaryScopeName header</span>
+<span id="L262" class="line"><a href="#L262">262</a>         else</span>
+<span id="L263" class="line"><a href="#L263">263</a>           throwScopeNameMismatch header scopes endSize</span>
+<span id="L264" class="line"><a href="#L264">264</a>   modify fun s =&gt; {s with scopes := s.scopes.drop endSize }</span>
+<span id="L265" class="line"><a href="#L265">265</a>   popScopes endSize</span>
+<span id="L266" class="line"><a href="#L266">266</a> </span>
+<span id="L267" class="line"><a href="#L267">267</a> private partial def elabChoiceAux (cmds : Array Syntax) (i : Nat) : CommandElabM Unit :=</span>
+<span id="L268" class="line"><a href="#L268">268</a>   if h : i &lt; cmds.size then</span>
+<span id="L269" class="line"><a href="#L269">269</a>     catchInternalId unsupportedSyntaxExceptionId</span>
+<span id="L270" class="line"><a href="#L270">270</a>       (elabCommand cmds[i])</span>
+<span id="L271" class="line"><a href="#L271">271</a>       (fun _ =&gt; elabChoiceAux cmds (i+1))</span>
+<span id="L272" class="line"><a href="#L272">272</a>   else</span>
+<span id="L273" class="line"><a href="#L273">273</a>     throwUnsupportedSyntax</span>
+<span id="L274" class="line"><a href="#L274">274</a> </span>
+<span id="L275" class="line"><a href="#L275">275</a> @[builtin_command_elab choice] def elabChoice : CommandElab := fun stx =&gt;</span>
+<span id="L276" class="line"><a href="#L276">276</a>   elabChoiceAux stx.getArgs 0</span>
+<span id="L277" class="line"><a href="#L277">277</a> </span>
+<span id="L278" class="line"><a href="#L278">278</a> @[builtin_command_elab «universe»] def elabUniverse : CommandElab := fun n =&gt; do</span>
+<span id="L279" class="line"><a href="#L279">279</a>   n[1].forArgsM addUnivLevel</span>
+<span id="L280" class="line"><a href="#L280">280</a> </span>
+<span id="L281" class="line"><a href="#L281">281</a> @[builtin_command_elab «init_quot»] def elabInitQuot : CommandElab := fun _ =&gt; do</span>
+<span id="L282" class="line"><a href="#L282">282</a>   liftCoreM &lt;| addDecl Declaration.quotDecl</span>
+<span id="L283" class="line"><a href="#L283">283</a> </span>
+<span id="L284" class="line"><a href="#L284">284</a> @[builtin_command_elab «docs_to_verso»] def elabDocsToVerso : CommandElab := fun stx =&gt; do</span>
+<span id="L285" class="line"><a href="#L285">285</a>   let xs := stx[1].getArgs</span>
+<span id="L286" class="line"><a href="#L286">286</a>   for x in xs do</span>
+<span id="L287" class="line"><a href="#L287">287</a>     if x.getKind == identKind then -- skip commas</span>
+<span id="L288" class="line"><a href="#L288">288</a>       let declName ← liftCoreM &lt;| realizeGlobalConstNoOverload x</span>
+<span id="L289" class="line"><a href="#L289">289</a>       runTermElabM &lt;| fun _ =&gt; withRef x &lt;| makeDocStringVerso declName</span>
+<span id="L290" class="line"><a href="#L290">290</a>       -- Add the info afterwards so the hover shows the updated docstring</span>
+<span id="L291" class="line"><a href="#L291">291</a>       addConstInfo x declName</span>
+<span id="L292" class="line"><a href="#L292">292</a> </span>
+<span id="L293" class="line"><a href="#L293">293</a> @[builtin_command_elab «export»] def elabExport : CommandElab := fun stx =&gt; do</span>
+<span id="L294" class="line"><a href="#L294">294</a>   let `(export $ns ($ids*)) := stx | throwUnsupportedSyntax</span>
+<span id="L295" class="line"><a href="#L295">295</a>   let nss ← resolveNamespace ns</span>
+<span id="L296" class="line"><a href="#L296">296</a>   let currNamespace ← getCurrNamespace</span>
+<span id="L297" class="line"><a href="#L297">297</a>   if nss == [currNamespace] then throwError &quot;invalid &#x27;export&#x27;, self export&quot;</span>
+<span id="L298" class="line"><a href="#L298">298</a>   let mut aliases := #[]</span>
+<span id="L299" class="line"><a href="#L299">299</a>   for idStx in ids do</span>
+<span id="L300" class="line"><a href="#L300">300</a>     let id := idStx.getId</span>
+<span id="L301" class="line"><a href="#L301">301</a>     let declName ← resolveNameUsingNamespaces nss idStx</span>
+<span id="L302" class="line"><a href="#L302">302</a>     if (← getInfoState).enabled then</span>
+<span id="L303" class="line"><a href="#L303">303</a>       addConstInfo idStx declName</span>
+<span id="L304" class="line"><a href="#L304">304</a>     aliases := aliases.push (currNamespace ++ id, declName)</span>
+<span id="L305" class="line"><a href="#L305">305</a>   modify fun s =&gt; { s with env := aliases.foldl (init := s.env) fun env p =&gt; addAlias env p.1 p.2 }</span>
+<span id="L306" class="line"><a href="#L306">306</a> </span>
+<span id="L307" class="line"><a href="#L307">307</a> @[builtin_command_elab «open»] def elabOpen : CommandElab</span>
+<span id="L308" class="line"><a href="#L308">308</a>   | `(open $decl:openDecl) =&gt; do</span>
+<span id="L309" class="line"><a href="#L309">309</a>     let openDecls ← elabOpenDecl decl</span>
+<span id="L310" class="line"><a href="#L310">310</a>     modifyScope fun scope =&gt; { scope with openDecls := openDecls }</span>
+<span id="L311" class="line"><a href="#L311">311</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L312" class="line"><a href="#L312">312</a> </span>
+<span id="L313" class="line"><a href="#L313">313</a> open Lean.Parser.Term</span>
+<span id="L314" class="line"><a href="#L314">314</a> </span>
+<span id="L315" class="line"><a href="#L315">315</a> private def typelessBinder? : Syntax → Option (Array (TSyntax [`ident, `Lean.Parser.Term.hole]) × BinderInfo)</span>
+<span id="L316" class="line"><a href="#L316">316</a>   | `(bracketedBinderF|($ids*))     =&gt; some (ids, .default)</span>
+<span id="L317" class="line"><a href="#L317">317</a>   | `(bracketedBinderF|{$ids*})     =&gt; some (ids, .implicit)</span>
+<span id="L318" class="line"><a href="#L318">318</a>   | `(bracketedBinderF|⦃$ids*⦄)     =&gt; some (ids, .strictImplicit)</span>
+<span id="L319" class="line"><a href="#L319">319</a>   | `(bracketedBinderF|[$id:ident]) =&gt; some (#[id], .instImplicit)</span>
+<span id="L320" class="line"><a href="#L320">320</a>   | _                               =&gt; none</span>
+<span id="L321" class="line"><a href="#L321">321</a> </span>
+<span id="L322" class="line"><a href="#L322">322</a> /--  If `id` is an identifier, return true if `ids` contains `id`. -/</span>
+<span id="L323" class="line"><a href="#L323">323</a> private def containsId (ids : Array (TSyntax [`ident, ``Parser.Term.hole])) (id : TSyntax [`ident, ``Parser.Term.hole]) : Bool :=</span>
+<span id="L324" class="line"><a href="#L324">324</a>   id.raw.isIdent &amp;&amp; ids.any fun id&#x27; =&gt; id&#x27;.raw.getId == id.raw.getId</span>
+<span id="L325" class="line"><a href="#L325">325</a> </span>
+<span id="L326" class="line"><a href="#L326">326</a> /--</span>
+<span id="L327" class="line"><a href="#L327">327</a>   Auxiliary method for processing binder annotation update commands:</span>
+<span id="L328" class="line"><a href="#L328">328</a>   `variable (α)`, `variable {α}`, `variable ⦃α⦄`, and `variable [α]`.</span>
+<span id="L329" class="line"><a href="#L329">329</a>   The argument `binder` is the binder of the `variable` command.</span>
+<span id="L330" class="line"><a href="#L330">330</a>   The method returns an array containing the &quot;residue&quot;, that is, variables that do not correspond to updates.</span>
+<span id="L331" class="line"><a href="#L331">331</a>   Recall that a `bracketedBinder` can be of the form `(x y)`.</span>
+<span id="L332" class="line"><a href="#L332">332</a>   ```</span>
+<span id="L333" class="line"><a href="#L333">333</a>   variable {α β : Type}</span>
+<span id="L334" class="line"><a href="#L334">334</a>   variable (α γ)</span>
+<span id="L335" class="line"><a href="#L335">335</a>   ```</span>
+<span id="L336" class="line"><a href="#L336">336</a>   The second `variable` command updates the binder annotation for `α`, and returns &quot;residue&quot; `γ`.</span>
+<span id="L337" class="line"><a href="#L337">337</a> -/</span>
+<span id="L338" class="line"><a href="#L338">338</a> private def replaceBinderAnnotation (binder : TSyntax ``Parser.Term.bracketedBinder) : CommandElabM (Array (TSyntax ``Parser.Term.bracketedBinder)) := do</span>
+<span id="L339" class="line"><a href="#L339">339</a>   let some (binderIds, binderInfo) := typelessBinder? binder | return #[binder]</span>
+<span id="L340" class="line"><a href="#L340">340</a>   let varDecls := (← getScope).varDecls</span>
+<span id="L341" class="line"><a href="#L341">341</a>   let mut varDeclsNew := #[]</span>
+<span id="L342" class="line"><a href="#L342">342</a>   let mut binderIds := binderIds</span>
+<span id="L343" class="line"><a href="#L343">343</a>   let mut binderIdsIniSize := binderIds.size</span>
+<span id="L344" class="line"><a href="#L344">344</a>   let mut modifiedVarDecls := false</span>
+<span id="L345" class="line"><a href="#L345">345</a>   -- Go through declarations in reverse to respect shadowing</span>
+<span id="L346" class="line"><a href="#L346">346</a>   for varDecl in varDecls.reverse do</span>
+<span id="L347" class="line"><a href="#L347">347</a>     let (ids, ty?, binderInfo&#x27;) ← match varDecl with</span>
+<span id="L348" class="line"><a href="#L348">348</a>       | `(bracketedBinderF|($ids* $[: $ty?]? $(annot?)?)) =&gt;</span>
+<span id="L349" class="line"><a href="#L349">349</a>         if annot?.isSome then</span>
+<span id="L350" class="line"><a href="#L350">350</a>           for binderId in binderIds do</span>
+<span id="L351" class="line"><a href="#L351">351</a>             if containsId ids binderId then</span>
+<span id="L352" class="line"><a href="#L352">352</a>               throwErrorAt binderId &quot;cannot update binder annotation of variables with default values/tactics&quot;</span>
+<span id="L353" class="line"><a href="#L353">353</a>         pure (ids, ty?, .default)</span>
+<span id="L354" class="line"><a href="#L354">354</a>       | `(bracketedBinderF|{$ids* $[: $ty?]?}) =&gt;</span>
+<span id="L355" class="line"><a href="#L355">355</a>         pure (ids, ty?, .implicit)</span>
+<span id="L356" class="line"><a href="#L356">356</a>       | `(bracketedBinderF|⦃$ids* $[: $ty?]?⦄) =&gt;</span>
+<span id="L357" class="line"><a href="#L357">357</a>         pure (ids, ty?, .strictImplicit)</span>
+<span id="L358" class="line"><a href="#L358">358</a>       | `(bracketedBinderF|[$id : $ty]) =&gt;</span>
+<span id="L359" class="line"><a href="#L359">359</a>         pure (#[⟨id⟩], some ty, .instImplicit)</span>
+<span id="L360" class="line"><a href="#L360">360</a>       | _ =&gt;</span>
+<span id="L361" class="line"><a href="#L361">361</a>         varDeclsNew := varDeclsNew.push varDecl; continue</span>
+<span id="L362" class="line"><a href="#L362">362</a>     if binderInfo == binderInfo&#x27; then</span>
+<span id="L363" class="line"><a href="#L363">363</a>       -- no update, ensure we don&#x27;t have redundant annotations.</span>
+<span id="L364" class="line"><a href="#L364">364</a>       for binderId in binderIds do</span>
+<span id="L365" class="line"><a href="#L365">365</a>         if containsId ids binderId then</span>
+<span id="L366" class="line"><a href="#L366">366</a>           throwErrorAt binderId &quot;redundant binder annotation update&quot;</span>
+<span id="L367" class="line"><a href="#L367">367</a>       varDeclsNew := varDeclsNew.push varDecl</span>
+<span id="L368" class="line"><a href="#L368">368</a>     else if binderIds.all fun binderId =&gt; !containsId ids binderId then</span>
+<span id="L369" class="line"><a href="#L369">369</a>       -- `binderIds` and `ids` are disjoint</span>
+<span id="L370" class="line"><a href="#L370">370</a>       varDeclsNew := varDeclsNew.push varDecl</span>
+<span id="L371" class="line"><a href="#L371">371</a>     else</span>
+<span id="L372" class="line"><a href="#L372">372</a>       let mkBinder (id : TSyntax [`ident, ``Parser.Term.hole]) (binderInfo : BinderInfo) : CommandElabM (TSyntax ``Parser.Term.bracketedBinder) :=</span>
+<span id="L373" class="line"><a href="#L373">373</a>         match binderInfo with</span>
+<span id="L374" class="line"><a href="#L374">374</a>         | .default =&gt; `(bracketedBinderF| ($id $[: $ty?]?))</span>
+<span id="L375" class="line"><a href="#L375">375</a>         | .implicit =&gt; `(bracketedBinderF| {$id $[: $ty?]?})</span>
+<span id="L376" class="line"><a href="#L376">376</a>         | .strictImplicit =&gt; `(bracketedBinderF| {{$id $[: $ty?]?}})</span>
+<span id="L377" class="line"><a href="#L377">377</a>         | .instImplicit =&gt; do</span>
+<span id="L378" class="line"><a href="#L378">378</a>           let some ty := ty?</span>
+<span id="L379" class="line"><a href="#L379">379</a>             | throwErrorAt binder &quot;cannot update binder annotation of variable `{id}` to instance implicit:\n\</span>
+<span id="L380" class="line"><a href="#L380">380</a>                 variable was originally declared without an explicit type&quot;</span>
+<span id="L381" class="line"><a href="#L381">381</a>           `(bracketedBinderF| [$(⟨id⟩) : $ty])</span>
+<span id="L382" class="line"><a href="#L382">382</a>       for id in ids.reverse do</span>
+<span id="L383" class="line"><a href="#L383">383</a>         if let some idx := binderIds.findFinIdx? fun binderId =&gt; binderId.raw.isIdent &amp;&amp; binderId.raw.getId == id.raw.getId then</span>
+<span id="L384" class="line"><a href="#L384">384</a>           binderIds := binderIds.eraseIdx idx</span>
+<span id="L385" class="line"><a href="#L385">385</a>           modifiedVarDecls := true</span>
+<span id="L386" class="line"><a href="#L386">386</a>           let newBinder ← mkBinder id binderInfo</span>
+<span id="L387" class="line"><a href="#L387">387</a>           if binderInfo.isInstImplicit then</span>
+<span id="L388" class="line"><a href="#L388">388</a>             -- We elaborate the new binder to make sure it&#x27;s valid as instance implicit</span>
+<span id="L389" class="line"><a href="#L389">389</a>             try</span>
+<span id="L390" class="line"><a href="#L390">390</a>               runTermElabM fun _ =&gt; Term.withSynthesize &lt;| Term.withAutoBoundImplicit &lt;|</span>
+<span id="L391" class="line"><a href="#L391">391</a>                 Term.elabBinder newBinder fun _ =&gt; pure ()</span>
+<span id="L392" class="line"><a href="#L392">392</a>             catch e =&gt;</span>
+<span id="L393" class="line"><a href="#L393">393</a>               throwErrorAt binder m!&quot;cannot update binder annotation of variable `{id}` to instance implicit:\n\</span>
+<span id="L394" class="line"><a href="#L394">394</a>                 {e.toMessageData}&quot;</span>
+<span id="L395" class="line"><a href="#L395">395</a>           varDeclsNew := varDeclsNew.push (← mkBinder id binderInfo)</span>
+<span id="L396" class="line"><a href="#L396">396</a>         else</span>
+<span id="L397" class="line"><a href="#L397">397</a>           varDeclsNew := varDeclsNew.push (← mkBinder id binderInfo&#x27;)</span>
+<span id="L398" class="line"><a href="#L398">398</a>   if modifiedVarDecls then</span>
+<span id="L399" class="line"><a href="#L399">399</a>     modifyScope fun scope =&gt; { scope with varDecls := varDeclsNew.reverse }</span>
+<span id="L400" class="line"><a href="#L400">400</a>   if binderIds.size != binderIdsIniSize then</span>
+<span id="L401" class="line"><a href="#L401">401</a>     binderIds.mapM fun binderId =&gt;</span>
+<span id="L402" class="line"><a href="#L402">402</a>       match binderInfo with</span>
+<span id="L403" class="line"><a href="#L403">403</a>         | .default =&gt; `(bracketedBinderF| ($binderId))</span>
+<span id="L404" class="line"><a href="#L404">404</a>         | .implicit =&gt; `(bracketedBinderF| {$binderId})</span>
+<span id="L405" class="line"><a href="#L405">405</a>         | .strictImplicit =&gt; `(bracketedBinderF| {{$binderId}})</span>
+<span id="L406" class="line"><a href="#L406">406</a>         | .instImplicit =&gt; throwUnsupportedSyntax</span>
+<span id="L407" class="line"><a href="#L407">407</a>   else</span>
+<span id="L408" class="line"><a href="#L408">408</a>     return #[binder]</span>
+<span id="L409" class="line"><a href="#L409">409</a> </span>
+<span id="L410" class="line"><a href="#L410">410</a> @[builtin_command_elab «variable»] def elabVariable : CommandElab</span>
+<span id="L411" class="line"><a href="#L411">411</a>   | `(variable%$tk $binders*) =&gt; do</span>
+<span id="L412" class="line"><a href="#L412">412</a>     let binders ← binders.flatMapM replaceBinderAnnotation</span>
+<span id="L413" class="line"><a href="#L413">413</a>     -- Try to elaborate `binders` for sanity checking</span>
+<span id="L414" class="line"><a href="#L414">414</a>     runTermElabM fun _ =&gt; Term.withSynthesize &lt;| Term.withAutoBoundImplicit &lt;|</span>
+<span id="L415" class="line"><a href="#L415">415</a>       Term.elabBinders binders fun xs =&gt; do</span>
+<span id="L416" class="line"><a href="#L416">416</a>         -- Determine the set of auto-implicits for this variable command and add an inlay hint</span>
+<span id="L417" class="line"><a href="#L417">417</a>         -- for them. We will only actually add the auto-implicits to a type when the variables</span>
+<span id="L418" class="line"><a href="#L418">418</a>         -- declared here are used in some other declaration, but this is nonetheless the right</span>
+<span id="L419" class="line"><a href="#L419">419</a>         -- place to display the inlay hint.</span>
+<span id="L420" class="line"><a href="#L420">420</a>         let _ ← Term.addAutoBoundImplicits xs (tk.getTailPos? (canonicalOnly := true))</span>
+<span id="L421" class="line"><a href="#L421">421</a>     -- Remark: if we want to produce error messages when variables shadow existing ones, here is the place to do it.</span>
+<span id="L422" class="line"><a href="#L422">422</a>     for binder in binders do</span>
+<span id="L423" class="line"><a href="#L423">423</a>       let varUIds ← (← getBracketedBinderIds binder) |&gt;.mapM (withFreshMacroScope ∘ MonadQuotation.addMacroScope)</span>
+<span id="L424" class="line"><a href="#L424">424</a>       modifyScope fun scope =&gt; { scope with varDecls := scope.varDecls.push binder, varUIds := scope.varUIds ++ varUIds }</span>
+<span id="L425" class="line"><a href="#L425">425</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L426" class="line"><a href="#L426">426</a> </span>
+<span id="L427" class="line"><a href="#L427">427</a> open Meta</span>
+<span id="L428" class="line"><a href="#L428">428</a> </span>
+<span id="L429" class="line"><a href="#L429">429</a> def elabCheckCore (ignoreStuckTC : Bool) : CommandElab</span>
+<span id="L430" class="line"><a href="#L430">430</a>   | `(#check%$tk $term) =&gt; withoutModifyingEnv &lt;| runTermElabM fun _ =&gt; Term.withDeclName `_check do</span>
+<span id="L431" class="line"><a href="#L431">431</a>     -- show signature for `#check id`/`#check @id`</span>
+<span id="L432" class="line"><a href="#L432">432</a>     if let `($id:ident) := term then</span>
+<span id="L433" class="line"><a href="#L433">433</a>       try</span>
+<span id="L434" class="line"><a href="#L434">434</a>         for c in (← realizeGlobalConstWithInfos term) do</span>
+<span id="L435" class="line"><a href="#L435">435</a>           addCompletionInfo &lt;| .id term id.getId (danglingDot := false) {} none</span>
+<span id="L436" class="line"><a href="#L436">436</a>           logInfoAt tk &lt;| .signature c</span>
+<span id="L437" class="line"><a href="#L437">437</a>           return</span>
+<span id="L438" class="line"><a href="#L438">438</a>       catch _ =&gt; pure ()  -- identifier might not be a constant but constant + projection</span>
+<span id="L439" class="line"><a href="#L439">439</a>     let e ← Term.elabTerm term none</span>
+<span id="L440" class="line"><a href="#L440">440</a>     Term.synthesizeSyntheticMVarsNoPostponing (ignoreStuckTC := ignoreStuckTC)</span>
+<span id="L441" class="line"><a href="#L441">441</a>     -- Users might be testing out buggy elaborators. Let&#x27;s typecheck before proceeding:</span>
+<span id="L442" class="line"><a href="#L442">442</a>     withRef tk &lt;| Meta.check e</span>
+<span id="L443" class="line"><a href="#L443">443</a>     let e ← Term.levelMVarToParam (← instantiateMVars e)</span>
+<span id="L444" class="line"><a href="#L444">444</a>     if e.isSyntheticSorry then</span>
+<span id="L445" class="line"><a href="#L445">445</a>       return</span>
+<span id="L446" class="line"><a href="#L446">446</a>     let type ← inferType e</span>
+<span id="L447" class="line"><a href="#L447">447</a>     logInfoAt tk m!&quot;{e} : {type}&quot;</span>
+<span id="L448" class="line"><a href="#L448">448</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L449" class="line"><a href="#L449">449</a> </span>
+<span id="L450" class="line"><a href="#L450">450</a> @[builtin_command_elab Lean.Parser.Command.check] def elabCheck : CommandElab := elabCheckCore (ignoreStuckTC := true)</span>
+<span id="L451" class="line"><a href="#L451">451</a> </span>
+<span id="L452" class="line"><a href="#L452">452</a> @[builtin_command_elab Lean.reduceCmd] def elabReduce : CommandElab</span>
+<span id="L453" class="line"><a href="#L453">453</a>   | `(#reduce%$tk $term) =&gt; go tk term</span>
+<span id="L454" class="line"><a href="#L454">454</a>   | `(#reduce%$tk (proofs := true) $term) =&gt; go tk term (skipProofs := false)</span>
+<span id="L455" class="line"><a href="#L455">455</a>   | `(#reduce%$tk (types := true) $term) =&gt; go tk term (skipTypes := false)</span>
+<span id="L456" class="line"><a href="#L456">456</a>   | `(#reduce%$tk (proofs := true) (types := true) $term) =&gt; go tk term (skipProofs := false) (skipTypes := false)</span>
+<span id="L457" class="line"><a href="#L457">457</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L458" class="line"><a href="#L458">458</a> where</span>
+<span id="L459" class="line"><a href="#L459">459</a>   go (tk : Syntax) (term : Syntax) (skipProofs := true) (skipTypes := true) : CommandElabM Unit :=</span>
+<span id="L460" class="line"><a href="#L460">460</a>     withoutModifyingEnv &lt;| runTermElabM fun _ =&gt; Term.withDeclName `_reduce do</span>
+<span id="L461" class="line"><a href="#L461">461</a>       let e ← Term.elabTerm term none</span>
+<span id="L462" class="line"><a href="#L462">462</a>       Term.synthesizeSyntheticMVarsNoPostponing</span>
+<span id="L463" class="line"><a href="#L463">463</a>       -- Users might be testing out buggy elaborators. Let&#x27;s typecheck before proceeding:</span>
+<span id="L464" class="line"><a href="#L464">464</a>       withRef tk &lt;| Meta.check e</span>
+<span id="L465" class="line"><a href="#L465">465</a>       let e ← Term.levelMVarToParam (← instantiateMVars e)</span>
+<span id="L466" class="line"><a href="#L466">466</a>       -- TODO: add options or notation for setting the following parameters</span>
+<span id="L467" class="line"><a href="#L467">467</a>       withTheReader Core.Context (fun ctx =&gt; { ctx with options := ctx.options.set `smartUnfolding false }) do</span>
+<span id="L468" class="line"><a href="#L468">468</a>         let e ← withTransparency (mode := TransparencyMode.all) &lt;| reduce e (skipProofs := skipProofs) (skipTypes := skipTypes)</span>
+<span id="L469" class="line"><a href="#L469">469</a>         logInfoAt tk e</span>
+<span id="L470" class="line"><a href="#L470">470</a> </span>
+<span id="L471" class="line"><a href="#L471">471</a> def hasNoErrorMessages : CommandElabM Bool := do</span>
+<span id="L472" class="line"><a href="#L472">472</a>   return !(← get).messages.hasErrors</span>
+<span id="L473" class="line"><a href="#L473">473</a> </span>
+<span id="L474" class="line"><a href="#L474">474</a> def failIfSucceeds (x : CommandElabM Unit) : CommandElabM Unit := do</span>
+<span id="L475" class="line"><a href="#L475">475</a>   let resetMessages : CommandElabM MessageLog := do</span>
+<span id="L476" class="line"><a href="#L476">476</a>     let s ← get</span>
+<span id="L477" class="line"><a href="#L477">477</a>     let messages := s.messages;</span>
+<span id="L478" class="line"><a href="#L478">478</a>     modify fun s =&gt; { s with messages := {} };</span>
+<span id="L479" class="line"><a href="#L479">479</a>     pure messages</span>
+<span id="L480" class="line"><a href="#L480">480</a>   let restoreMessages (prevMessages : MessageLog) : CommandElabM Unit := do</span>
+<span id="L481" class="line"><a href="#L481">481</a>     modify fun s =&gt; { s with messages := prevMessages ++ s.messages.errorsToInfos }</span>
+<span id="L482" class="line"><a href="#L482">482</a>   let prevMessages ← resetMessages</span>
+<span id="L483" class="line"><a href="#L483">483</a>   let succeeded ← try</span>
+<span id="L484" class="line"><a href="#L484">484</a>     x</span>
+<span id="L485" class="line"><a href="#L485">485</a>     hasNoErrorMessages</span>
+<span id="L486" class="line"><a href="#L486">486</a>   catch</span>
+<span id="L487" class="line"><a href="#L487">487</a>     | ex@(Exception.error _ _) =&gt; do logException ex; pure false</span>
+<span id="L488" class="line"><a href="#L488">488</a>     | Exception.internal id _  =&gt; do logError (← id.getName); pure false</span>
+<span id="L489" class="line"><a href="#L489">489</a>   finally</span>
+<span id="L490" class="line"><a href="#L490">490</a>     restoreMessages prevMessages</span>
+<span id="L491" class="line"><a href="#L491">491</a>   if succeeded then</span>
+<span id="L492" class="line"><a href="#L492">492</a>     throwError &quot;unexpected success&quot;</span>
+<span id="L493" class="line"><a href="#L493">493</a> </span>
+<span id="L494" class="line"><a href="#L494">494</a> @[builtin_command_elab «check_failure»] def elabCheckFailure : CommandElab</span>
+<span id="L495" class="line"><a href="#L495">495</a>   | `(#check_failure $term) =&gt; do</span>
+<span id="L496" class="line"><a href="#L496">496</a>     failIfSucceeds &lt;| elabCheckCore (ignoreStuckTC := false) (← `(#check $term))</span>
+<span id="L497" class="line"><a href="#L497">497</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L498" class="line"><a href="#L498">498</a> </span>
+<span id="L499" class="line"><a href="#L499">499</a> @[builtin_command_elab «synth»] def elabSynth : CommandElab := fun stx =&gt; do</span>
+<span id="L500" class="line"><a href="#L500">500</a>   let term := stx[1]</span>
+<span id="L501" class="line"><a href="#L501">501</a>   withoutModifyingEnv &lt;| runTermElabM fun _ =&gt; Term.withDeclName `_synth_cmd do</span>
+<span id="L502" class="line"><a href="#L502">502</a>     let inst ← Term.elabTerm term none</span>
+<span id="L503" class="line"><a href="#L503">503</a>     Term.synthesizeSyntheticMVarsNoPostponing</span>
+<span id="L504" class="line"><a href="#L504">504</a>     let inst ← instantiateMVars inst</span>
+<span id="L505" class="line"><a href="#L505">505</a>     let val  ← synthInstance inst</span>
+<span id="L506" class="line"><a href="#L506">506</a>     logInfo val</span>
+<span id="L507" class="line"><a href="#L507">507</a>     pure ()</span>
+<span id="L508" class="line"><a href="#L508">508</a> </span>
+<span id="L509" class="line"><a href="#L509">509</a> @[builtin_command_elab «set_option»] def elabSetOption : CommandElab := fun stx =&gt; do</span>
+<span id="L510" class="line"><a href="#L510">510</a>   let options ← Elab.elabSetOption stx[1] stx[3]</span>
+<span id="L511" class="line"><a href="#L511">511</a>   modify fun s =&gt; { s with maxRecDepth := maxRecDepth.get options }</span>
+<span id="L512" class="line"><a href="#L512">512</a>   modifyScope fun scope =&gt; { scope with opts := options }</span>
+<span id="L513" class="line"><a href="#L513">513</a> </span>
+<span id="L514" class="line"><a href="#L514">514</a> open Lean.Parser.Command.InternalSyntax in</span>
+<span id="L515" class="line"><a href="#L515">515</a> @[builtin_macro Lean.Parser.Command.«in»] def expandInCmd : Macro</span>
+<span id="L516" class="line"><a href="#L516">516</a>   | `($cmd₁ in%$tk $cmd₂) =&gt;</span>
+<span id="L517" class="line"><a href="#L517">517</a>     -- Limit ref variability for incrementality; see Note [Incremental Macros]</span>
+<span id="L518" class="line"><a href="#L518">518</a>     withRef tk `(section $cmd₁:command $endLocalScopeSyntax:command $cmd₂ end)</span>
+<span id="L519" class="line"><a href="#L519">519</a>   | _                 =&gt; Macro.throwUnsupported</span>
+<span id="L520" class="line"><a href="#L520">520</a> </span>
+<span id="L521" class="line"><a href="#L521">521</a> @[builtin_command_elab Parser.Command.addDocString] def elabAddDeclDoc : CommandElab := fun stx =&gt; do</span>
+<span id="L522" class="line"><a href="#L522">522</a>   match stx with</span>
+<span id="L523" class="line"><a href="#L523">523</a>   | `($doc:docComment add_decl_doc $id) =&gt;</span>
+<span id="L524" class="line"><a href="#L524">524</a>     let declName ← liftCoreM &lt;| realizeGlobalConstNoOverloadWithInfo id</span>
+<span id="L525" class="line"><a href="#L525">525</a>     unless ((← getEnv).getModuleIdxFor? declName).isNone do</span>
+<span id="L526" class="line"><a href="#L526">526</a>       throwError &quot;invalid &#x27;add_decl_doc&#x27;, declaration is in an imported module&quot;</span>
+<span id="L527" class="line"><a href="#L527">527</a>     if let .none ← findDeclarationRangesCore? declName then</span>
+<span id="L528" class="line"><a href="#L528">528</a>       -- this is only relevant for declarations added without a declaration range</span>
+<span id="L529" class="line"><a href="#L529">529</a>       -- in particular `Quot.mk` et al which are added by `init_quot`</span>
+<span id="L530" class="line"><a href="#L530">530</a>       addDeclarationRangesFromSyntax declName stx id</span>
+<span id="L531" class="line"><a href="#L531">531</a>     runTermElabM fun _ =&gt; addDocString declName (mkNullNode #[]) doc</span>
+<span id="L532" class="line"><a href="#L532">532</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L533" class="line"><a href="#L533">533</a> </span>
+<span id="L534" class="line"><a href="#L534">534</a> @[builtin_command_elab Lean.Parser.Command.include] def elabInclude : CommandElab</span>
+<span id="L535" class="line"><a href="#L535">535</a>   | `(Lean.Parser.Command.include| include $ids*) =&gt; do</span>
+<span id="L536" class="line"><a href="#L536">536</a>     let sc ← getScope</span>
+<span id="L537" class="line"><a href="#L537">537</a>     let vars ← sc.varDecls.flatMapM getBracketedBinderIds</span>
+<span id="L538" class="line"><a href="#L538">538</a>     let mut uids := #[]</span>
+<span id="L539" class="line"><a href="#L539">539</a>     for id in ids do</span>
+<span id="L540" class="line"><a href="#L540">540</a>       if let some idx := vars.findIdx? (· == id.getId) then</span>
+<span id="L541" class="line"><a href="#L541">541</a>         uids := uids.push sc.varUIds[idx]!</span>
+<span id="L542" class="line"><a href="#L542">542</a>       else</span>
+<span id="L543" class="line"><a href="#L543">543</a>         throwError &quot;invalid &#x27;include&#x27;, variable `{id}` has not been declared in the current scope&quot;</span>
+<span id="L544" class="line"><a href="#L544">544</a>     modifyScope fun sc =&gt; { sc with</span>
+<span id="L545" class="line"><a href="#L545">545</a>       includedVars := sc.includedVars ++ uids.toList</span>
+<span id="L546" class="line"><a href="#L546">546</a>       omittedVars := sc.omittedVars.filter (!uids.contains ·) }</span>
+<span id="L547" class="line"><a href="#L547">547</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L548" class="line"><a href="#L548">548</a> </span>
+<span id="L549" class="line"><a href="#L549">549</a> @[builtin_command_elab Lean.Parser.Command.omit] def elabOmit : CommandElab</span>
+<span id="L550" class="line"><a href="#L550">550</a>   | `(Lean.Parser.Command.omit| omit $omits*) =&gt; do</span>
+<span id="L551" class="line"><a href="#L551">551</a>     -- TODO: this really shouldn&#x27;t have to re-elaborate section vars... they should come</span>
+<span id="L552" class="line"><a href="#L552">552</a>     -- pre-elaborated</span>
+<span id="L553" class="line"><a href="#L553">553</a>     let omittedVars ← runTermElabM fun vars =&gt; do</span>
+<span id="L554" class="line"><a href="#L554">554</a>       Term.synthesizeSyntheticMVarsNoPostponing</span>
+<span id="L555" class="line"><a href="#L555">555</a>       -- We don&#x27;t want to store messages produced when elaborating `(getVarDecls s)` because they have already been saved when we elaborated the `variable`(s) command.</span>
+<span id="L556" class="line"><a href="#L556">556</a>       -- So, we use `Core.resetMessageLog`.</span>
+<span id="L557" class="line"><a href="#L557">557</a>       Core.resetMessageLog</span>
+<span id="L558" class="line"><a href="#L558">558</a>       -- resolve each omit to variable user name or type pattern</span>
+<span id="L559" class="line"><a href="#L559">559</a>       let elaboratedOmits : Array (Sum Name Expr) ← omits.mapM fun</span>
+<span id="L560" class="line"><a href="#L560">560</a>         | `(ident| $id:ident) =&gt; pure &lt;| Sum.inl id.getId</span>
+<span id="L561" class="line"><a href="#L561">561</a>         | `(Lean.Parser.Term.instBinder| [$id : $_]) =&gt; pure &lt;| Sum.inl id.getId</span>
+<span id="L562" class="line"><a href="#L562">562</a>         | `(Lean.Parser.Term.instBinder| [$ty]) =&gt;</span>
+<span id="L563" class="line"><a href="#L563">563</a>           Sum.inr &lt;$&gt; Term.withoutErrToSorry (Term.elabTermAndSynthesize ty none)</span>
+<span id="L564" class="line"><a href="#L564">564</a>         | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L565" class="line"><a href="#L565">565</a>       -- check that each omit is actually used in the end</span>
+<span id="L566" class="line"><a href="#L566">566</a>       let mut omitsUsed := omits.map fun _ =&gt; false</span>
+<span id="L567" class="line"><a href="#L567">567</a>       let mut omittedVars := #[]</span>
+<span id="L568" class="line"><a href="#L568">568</a>       let mut revSectionFVars : Std.HashMap FVarId Name := {}</span>
+<span id="L569" class="line"><a href="#L569">569</a>       for (uid, var) in (← read).sectionFVars do</span>
+<span id="L570" class="line"><a href="#L570">570</a>         revSectionFVars := revSectionFVars.insert var.fvarId! uid</span>
+<span id="L571" class="line"><a href="#L571">571</a>       for var in vars do</span>
+<span id="L572" class="line"><a href="#L572">572</a>         let ldecl ← var.fvarId!.getDecl</span>
+<span id="L573" class="line"><a href="#L573">573</a>         if let some idx := (← elaboratedOmits.findIdxM? fun</span>
+<span id="L574" class="line"><a href="#L574">574</a>             | .inl id =&gt; return ldecl.userName == id</span>
+<span id="L575" class="line"><a href="#L575">575</a>             | .inr ty =&gt; do</span>
+<span id="L576" class="line"><a href="#L576">576</a>               let mctx ← getMCtx</span>
+<span id="L577" class="line"><a href="#L577">577</a>               isDefEq ty ldecl.type &lt;* setMCtx mctx) then</span>
+<span id="L578" class="line"><a href="#L578">578</a>           if let some uid := revSectionFVars[var.fvarId!]? then</span>
+<span id="L579" class="line"><a href="#L579">579</a>             omittedVars := omittedVars.push uid</span>
+<span id="L580" class="line"><a href="#L580">580</a>             omitsUsed := omitsUsed.set! idx true</span>
+<span id="L581" class="line"><a href="#L581">581</a>           else</span>
+<span id="L582" class="line"><a href="#L582">582</a>             throwError &quot;invalid &#x27;omit&#x27;, `{ldecl.userName}` has not been declared in the current scope&quot;</span>
+<span id="L583" class="line"><a href="#L583">583</a>       for o in omits, used in omitsUsed do</span>
+<span id="L584" class="line"><a href="#L584">584</a>         unless used do</span>
+<span id="L585" class="line"><a href="#L585">585</a>           throwError &quot;`{o}` did not match any variables in the current scope&quot;</span>
+<span id="L586" class="line"><a href="#L586">586</a>       return omittedVars</span>
+<span id="L587" class="line"><a href="#L587">587</a>     modifyScope fun sc =&gt; { sc with</span>
+<span id="L588" class="line"><a href="#L588">588</a>       omittedVars := sc.omittedVars ++ omittedVars.toList</span>
+<span id="L589" class="line"><a href="#L589">589</a>       includedVars := sc.includedVars.filter (!omittedVars.contains ·) }</span>
+<span id="L590" class="line"><a href="#L590">590</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L591" class="line"><a href="#L591">591</a> </span>
+<span id="L592" class="line"><a href="#L592">592</a> @[builtin_command_elab version] def elabVersion : CommandElab := fun _ =&gt; do</span>
+<span id="L593" class="line"><a href="#L593">593</a>   let mut target := System.Platform.target</span>
+<span id="L594" class="line"><a href="#L594">594</a>   if target.isEmpty then target := &quot;unknown&quot;</span>
+<span id="L595" class="line"><a href="#L595">595</a>   -- Only one should be set, but good to know if multiple are set in error.</span>
+<span id="L596" class="line"><a href="#L596">596</a>   let platforms :=</span>
+<span id="L597" class="line"><a href="#L597">597</a>     (if System.Platform.isWindows then [&quot; Windows&quot;] else [])</span>
+<span id="L598" class="line"><a href="#L598">598</a>     ++ (if System.Platform.isOSX then [&quot; macOS&quot;] else [])</span>
+<span id="L599" class="line"><a href="#L599">599</a>     ++ (if System.Platform.isEmscripten then [&quot; Emscripten&quot;] else [])</span>
+<span id="L600" class="line"><a href="#L600">600</a>   logInfo m!&quot;Lean {Lean.versionString}\nTarget: {target}{String.join platforms}&quot;</span>
+<span id="L601" class="line"><a href="#L601">601</a> </span>
+<span id="L602" class="line"><a href="#L602">602</a> @[builtin_command_elab Parser.Command.exit] def elabExit : CommandElab := fun _ =&gt;</span>
+<span id="L603" class="line"><a href="#L603">603</a>   logWarning &quot;using &#x27;exit&#x27; to interrupt Lean&quot;</span>
+<span id="L604" class="line"><a href="#L604">604</a> </span>
+<span id="L605" class="line"><a href="#L605">605</a> @[builtin_command_elab Parser.Command.import] def elabImport : CommandElab := fun _ =&gt;</span>
+<span id="L606" class="line"><a href="#L606">606</a>   throwError &quot;invalid &#x27;import&#x27; command, it must be used in the beginning of the file&quot;</span>
+<span id="L607" class="line"><a href="#L607">607</a> </span>
+<span id="L608" class="line"><a href="#L608">608</a> @[builtin_command_elab Parser.Command.eoi] def elabEoi : CommandElab := fun _ =&gt;</span>
+<span id="L609" class="line"><a href="#L609">609</a>   return</span>
+<span id="L610" class="line"><a href="#L610">610</a> </span>
+<span id="L611" class="line"><a href="#L611">611</a> @[builtin_command_elab Parser.Command.where] def elabWhere : CommandElab := fun _ =&gt; do</span>
+<span id="L612" class="line"><a href="#L612">612</a>   let scope ← getScope</span>
+<span id="L613" class="line"><a href="#L613">613</a>   let mut msg : Array MessageData := #[]</span>
+<span id="L614" class="line"><a href="#L614">614</a>   -- Noncomputable</span>
+<span id="L615" class="line"><a href="#L615">615</a>   if scope.isNoncomputable then</span>
+<span id="L616" class="line"><a href="#L616">616</a>     msg := msg.push &lt;| ← `(Parser.Command.section| noncomputable section)</span>
+<span id="L617" class="line"><a href="#L617">617</a>   -- Namespace</span>
+<span id="L618" class="line"><a href="#L618">618</a>   if !scope.currNamespace.isAnonymous then</span>
+<span id="L619" class="line"><a href="#L619">619</a>     msg := msg.push &lt;| ← `(command| namespace $(mkIdent scope.currNamespace))</span>
+<span id="L620" class="line"><a href="#L620">620</a>   -- Open namespaces</span>
+<span id="L621" class="line"><a href="#L621">621</a>   if let some openMsg ← describeOpenDecls scope.openDecls.reverse then</span>
+<span id="L622" class="line"><a href="#L622">622</a>     msg := msg.push openMsg</span>
+<span id="L623" class="line"><a href="#L623">623</a>   -- Universe levels</span>
+<span id="L624" class="line"><a href="#L624">624</a>   if !scope.levelNames.isEmpty then</span>
+<span id="L625" class="line"><a href="#L625">625</a>     let levels := scope.levelNames.reverse.map mkIdent</span>
+<span id="L626" class="line"><a href="#L626">626</a>     msg := msg.push &lt;| ← `(command| universe $levels.toArray*)</span>
+<span id="L627" class="line"><a href="#L627">627</a>   -- Variables</span>
+<span id="L628" class="line"><a href="#L628">628</a>   if !scope.varDecls.isEmpty then</span>
+<span id="L629" class="line"><a href="#L629">629</a>     let varDecls : Array (TSyntax `Lean.Parser.Term.bracketedBinder) := scope.varDecls.map (⟨·.raw.unsetTrailing⟩)</span>
+<span id="L630" class="line"><a href="#L630">630</a>     msg := msg.push &lt;| ← `(command| variable $varDecls*)</span>
+<span id="L631" class="line"><a href="#L631">631</a>   -- Included variables</span>
+<span id="L632" class="line"><a href="#L632">632</a>   if !scope.includedVars.isEmpty then</span>
+<span id="L633" class="line"><a href="#L633">633</a>     msg := msg.push &lt;| ← `(command| include $(scope.includedVars.toArray.map (mkIdent ·.eraseMacroScopes))*)</span>
+<span id="L634" class="line"><a href="#L634">634</a>   -- Options</span>
+<span id="L635" class="line"><a href="#L635">635</a>   if let some optionsMsg ← describeOptions scope.opts then</span>
+<span id="L636" class="line"><a href="#L636">636</a>     msg := msg.push optionsMsg</span>
+<span id="L637" class="line"><a href="#L637">637</a>   if msg.isEmpty then</span>
+<span id="L638" class="line"><a href="#L638">638</a>     logInfo m!&quot;-- In root namespace with initial scope&quot;</span>
+<span id="L639" class="line"><a href="#L639">639</a>   else</span>
+<span id="L640" class="line"><a href="#L640">640</a>     logInfo &lt;| MessageData.joinSep msg.toList &quot;\n\n&quot;</span>
+<span id="L641" class="line"><a href="#L641">641</a> where</span>
+<span id="L642" class="line"><a href="#L642">642</a>   /--</span>
+<span id="L643" class="line"><a href="#L643">643</a>   &#x27;Delaborate&#x27; open declarations.</span>
+<span id="L644" class="line"><a href="#L644">644</a>   Current limitations:</span>
+<span id="L645" class="line"><a href="#L645">645</a>   - does not check whether or not successive namespaces need `_root_`</span>
+<span id="L646" class="line"><a href="#L646">646</a>   - does not combine commands with `renaming` clauses into a single command</span>
+<span id="L647" class="line"><a href="#L647">647</a>   -/</span>
+<span id="L648" class="line"><a href="#L648">648</a>   describeOpenDecls (ds : List OpenDecl) : CommandElabM (Option MessageData) := do</span>
+<span id="L649" class="line"><a href="#L649">649</a>     let mut lines : Array MessageData := #[]</span>
+<span id="L650" class="line"><a href="#L650">650</a>     let mut simple : Array Name := #[]</span>
+<span id="L651" class="line"><a href="#L651">651</a>     let flush (lines : Array MessageData) (simple : Array Name) : CommandElabM (Array MessageData × Array Name) := do</span>
+<span id="L652" class="line"><a href="#L652">652</a>       if simple.isEmpty then</span>
+<span id="L653" class="line"><a href="#L653">653</a>         return (lines, simple)</span>
+<span id="L654" class="line"><a href="#L654">654</a>       else</span>
+<span id="L655" class="line"><a href="#L655">655</a>         return (lines.push &lt;| ← `(command| open $(simple.map mkIdent)*), #[])</span>
+<span id="L656" class="line"><a href="#L656">656</a>     for d in ds do</span>
+<span id="L657" class="line"><a href="#L657">657</a>       match d with</span>
+<span id="L658" class="line"><a href="#L658">658</a>       | .explicit id decl =&gt;</span>
+<span id="L659" class="line"><a href="#L659">659</a>         (lines, simple) ← flush lines simple</span>
+<span id="L660" class="line"><a href="#L660">660</a>         let ns := decl.getPrefix</span>
+<span id="L661" class="line"><a href="#L661">661</a>         let «from» := Name.mkSimple decl.getString!</span>
+<span id="L662" class="line"><a href="#L662">662</a>         lines := lines.push &lt;| ← `(command| open $(mkIdent ns) renaming $(mkIdent «from») → $(mkIdent id))</span>
+<span id="L663" class="line"><a href="#L663">663</a>       | .simple ns ex =&gt;</span>
+<span id="L664" class="line"><a href="#L664">664</a>         if ex == [] then</span>
+<span id="L665" class="line"><a href="#L665">665</a>           simple := simple.push ns</span>
+<span id="L666" class="line"><a href="#L666">666</a>         else</span>
+<span id="L667" class="line"><a href="#L667">667</a>           (lines, simple) ← flush lines simple</span>
+<span id="L668" class="line"><a href="#L668">668</a>           lines := lines.push &lt;| ← `(command| open $(mkIdent ns) hiding $[$(ex.toArray.map mkIdent)]*)</span>
+<span id="L669" class="line"><a href="#L669">669</a>     (lines, _) ← flush lines simple</span>
+<span id="L670" class="line"><a href="#L670">670</a>     return if lines.isEmpty then none else MessageData.joinSep lines.toList &quot;\n&quot;</span>
+<span id="L671" class="line"><a href="#L671">671</a> </span>
+<span id="L672" class="line"><a href="#L672">672</a>   describeOptions (opts : Options) : CommandElabM (Option MessageData) := do</span>
+<span id="L673" class="line"><a href="#L673">673</a>     let mut lines : Array MessageData := #[]</span>
+<span id="L674" class="line"><a href="#L674">674</a>     let decls ← getOptionDecls</span>
+<span id="L675" class="line"><a href="#L675">675</a>     for (name, val) in opts do</span>
+<span id="L676" class="line"><a href="#L676">676</a>       -- `#guard_msgs` sets this option internally, we don&#x27;t want it to end up in its output</span>
+<span id="L677" class="line"><a href="#L677">677</a>       if name == `Elab.async then</span>
+<span id="L678" class="line"><a href="#L678">678</a>         continue</span>
+<span id="L679" class="line"><a href="#L679">679</a>       let (isSet, isUnknown) :=</span>
+<span id="L680" class="line"><a href="#L680">680</a>         match decls.find? name with</span>
+<span id="L681" class="line"><a href="#L681">681</a>         | some decl =&gt; (decl.defValue != val, false)</span>
+<span id="L682" class="line"><a href="#L682">682</a>         | none      =&gt; (true, true)</span>
+<span id="L683" class="line"><a href="#L683">683</a>       if isSet then</span>
+<span id="L684" class="line"><a href="#L684">684</a>         let cmd : TSyntax `command ←</span>
+<span id="L685" class="line"><a href="#L685">685</a>           match val with</span>
+<span id="L686" class="line"><a href="#L686">686</a>           | .ofBool true  =&gt; `(set_option $(mkIdent name) true)</span>
+<span id="L687" class="line"><a href="#L687">687</a>           | .ofBool false =&gt; `(set_option $(mkIdent name) false)</span>
+<span id="L688" class="line"><a href="#L688">688</a>           | .ofString str =&gt; `(set_option $(mkIdent name) $(Syntax.mkStrLit str))</span>
+<span id="L689" class="line"><a href="#L689">689</a>           | .ofNat n      =&gt; `(set_option $(mkIdent name) $(Syntax.mkNatLit n))</span>
+<span id="L690" class="line"><a href="#L690">690</a>           | _             =&gt; `(set_option $(mkIdent name) 0 /- unrepresentable value -/)</span>
+<span id="L691" class="line"><a href="#L691">691</a>         if isUnknown then</span>
+<span id="L692" class="line"><a href="#L692">692</a>           lines := lines.push m!&quot;-- {cmd} -- unknown option&quot;</span>
+<span id="L693" class="line"><a href="#L693">693</a>         else</span>
+<span id="L694" class="line"><a href="#L694">694</a>           lines := lines.push cmd</span>
+<span id="L695" class="line"><a href="#L695">695</a>     return if lines.isEmpty then none else MessageData.joinSep lines.toList &quot;\n&quot;</span>
+<span id="L696" class="line"><a href="#L696">696</a> </span>
+<span id="L697" class="line"><a href="#L697">697</a> @[builtin_command_elab Parser.Command.withExporting] def elabWithExporting : CommandElab</span>
+<span id="L698" class="line"><a href="#L698">698</a>   | `(Parser.Command.withExporting| #with_exporting $cmd) =&gt;</span>
+<span id="L699" class="line"><a href="#L699">699</a>     withExporting do</span>
+<span id="L700" class="line"><a href="#L700">700</a>       elabCommand cmd</span>
+<span id="L701" class="line"><a href="#L701">701</a>   | _ =&gt; throwUnsupportedSyntax</span>
+<span id="L702" class="line"><a href="#L702">702</a> </span>
+<span id="L703" class="line"><a href="#L703">703</a> @[builtin_command_elab Parser.Command.dumpAsyncEnvState] def elabDumpAsyncEnvState : CommandElab :=</span>
+<span id="L704" class="line"><a href="#L704">704</a>   fun _ =&gt; do</span>
+<span id="L705" class="line"><a href="#L705">705</a>     let env ← getEnv</span>
+<span id="L706" class="line"><a href="#L706">706</a>     IO.eprintln (← env.dbgFormatAsyncState)</span>
+<span id="L707" class="line"><a href="#L707">707</a> </span>
+<span id="L708" class="line"><a href="#L708">708</a> end Lean.Elab.Command</span></pre></html>

@@ -1,0 +1,140 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Topology/Defs/Induced.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Topology/Defs/Induced.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2017 Johannes Hölzl. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Johannes Hölzl, Mario Carneiro, Jeremy Avigad</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Data.Set.Lattice.Image</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Topology.Basic</span>
+<span id="L10" class="line"><a href="#L10">10</a> /-!</span>
+<span id="L11" class="line"><a href="#L11">11</a> # Induced and coinduced topologies</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> In this file we define the induced and coinduced topologies,</span>
+<span id="L14" class="line"><a href="#L14">14</a> as well as topology inducing maps, topological embeddings, and quotient maps.</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> ## Main definitions</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> * `TopologicalSpace.induced`: given `f : X → Y` and a topology on `Y`,</span>
+<span id="L19" class="line"><a href="#L19">19</a>   the induced topology on `X` is the collection of sets</span>
+<span id="L20" class="line"><a href="#L20">20</a>   that are preimages of some open set in `Y`.</span>
+<span id="L21" class="line"><a href="#L21">21</a>   This is the coarsest topology that makes `f` continuous.</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> * `TopologicalSpace.coinduced`: given `f : X → Y` and a topology on `X`,</span>
+<span id="L24" class="line"><a href="#L24">24</a>   the coinduced topology on `Y` is defined such that</span>
+<span id="L25" class="line"><a href="#L25">25</a>   `s : Set Y` is open if the preimage of `s` is open.</span>
+<span id="L26" class="line"><a href="#L26">26</a>   This is the finest topology that makes `f` continuous.</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> * `IsInducing`: a map `f : X → Y` is called *inducing*,</span>
+<span id="L29" class="line"><a href="#L29">29</a>   if the topology on the domain is equal to the induced topology.</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> * `IsEmbedding`: a map `f : X → Y` is an *embedding*,</span>
+<span id="L32" class="line"><a href="#L32">32</a>   if it is a topology inducing map and it is injective.</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> * `IsOpenEmbedding`: a map `f : X → Y` is an *open embedding*,</span>
+<span id="L35" class="line"><a href="#L35">35</a>   if it is an embedding and its range is open.</span>
+<span id="L36" class="line"><a href="#L36">36</a>   An open embedding is an open map.</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> * `IsClosedEmbedding`: a map `f : X → Y` is an *open embedding*,</span>
+<span id="L39" class="line"><a href="#L39">39</a>   if it is an embedding and its range is open.</span>
+<span id="L40" class="line"><a href="#L40">40</a>   An open embedding is an open map.</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> * `IsQuotientMap`: a map `f : X → Y` is a *quotient map*,</span>
+<span id="L43" class="line"><a href="#L43">43</a>   if it is surjective</span>
+<span id="L44" class="line"><a href="#L44">44</a>   and the topology on the codomain is equal to the coinduced topology.</span>
+<span id="L45" class="line"><a href="#L45">45</a> -/</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> @[expose] public section</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> open Set</span>
+<span id="L50" class="line"><a href="#L50">50</a> open scoped Topology</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> namespace TopologicalSpace</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> variable {X Y : Type*}</span>
+<span id="L55" class="line"><a href="#L55">55</a> </span>
+<span id="L56" class="line"><a href="#L56">56</a> /-- Given `f : X → Y` and a topology on `Y`,</span>
+<span id="L57" class="line"><a href="#L57">57</a>   the induced topology on `X` is the collection of sets</span>
+<span id="L58" class="line"><a href="#L58">58</a>   that are preimages of some open set in `Y`.</span>
+<span id="L59" class="line"><a href="#L59">59</a>   This is the coarsest topology that makes `f` continuous. -/</span>
+<span id="L60" class="line"><a href="#L60">60</a> @[implicit_reducible]</span>
+<span id="L61" class="line"><a href="#L61">61</a> def induced (f : X → Y) (t : TopologicalSpace Y) : TopologicalSpace X where</span>
+<span id="L62" class="line"><a href="#L62">62</a>   IsOpen s := ∃ t, IsOpen t ∧ f ⁻¹&#x27; t = s</span>
+<span id="L63" class="line"><a href="#L63">63</a>   isOpen_univ := ⟨univ, isOpen_univ, preimage_univ⟩</span>
+<span id="L64" class="line"><a href="#L64">64</a>   isOpen_inter := by</span>
+<span id="L65" class="line"><a href="#L65">65</a>     rintro s₁ s₂ ⟨s&#x27;₁, hs₁, rfl⟩ ⟨s&#x27;₂, hs₂, rfl⟩</span>
+<span id="L66" class="line"><a href="#L66">66</a>     exact ⟨s&#x27;₁ ∩ s&#x27;₂, hs₁.inter hs₂, preimage_inter⟩</span>
+<span id="L67" class="line"><a href="#L67">67</a>   isOpen_sUnion S h := by</span>
+<span id="L68" class="line"><a href="#L68">68</a>     choose! g hgo hfg using h</span>
+<span id="L69" class="line"><a href="#L69">69</a>     refine ⟨⋃₀ (g &#x27;&#x27; S), isOpen_sUnion &lt;| forall_mem_image.2 hgo, ?_⟩</span>
+<span id="L70" class="line"><a href="#L70">70</a>     rw [preimage_sUnion, biUnion_image, sUnion_eq_biUnion]</span>
+<span id="L71" class="line"><a href="#L71">71</a>     exact iUnion₂_congr hfg</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> instance _root_.instTopologicalSpaceSubtype {p : X → Prop} [t : TopologicalSpace X] :</span>
+<span id="L74" class="line"><a href="#L74">74</a>     TopologicalSpace (Subtype p) :=</span>
+<span id="L75" class="line"><a href="#L75">75</a>   induced (↑) t</span>
+<span id="L76" class="line"><a href="#L76">76</a> </span>
+<span id="L77" class="line"><a href="#L77">77</a> /-- Given `f : X → Y` and a topology on `X`,</span>
+<span id="L78" class="line"><a href="#L78">78</a>   the coinduced topology on `Y` is defined such that</span>
+<span id="L79" class="line"><a href="#L79">79</a>   `s : Set Y` is open if the preimage of `s` is open.</span>
+<span id="L80" class="line"><a href="#L80">80</a>   This is the finest topology that makes `f` continuous. -/</span>
+<span id="L81" class="line"><a href="#L81">81</a> @[implicit_reducible]</span>
+<span id="L82" class="line"><a href="#L82">82</a> def coinduced (f : X → Y) (t : TopologicalSpace X) : TopologicalSpace Y where</span>
+<span id="L83" class="line"><a href="#L83">83</a>   IsOpen s := IsOpen (f ⁻¹&#x27; s)</span>
+<span id="L84" class="line"><a href="#L84">84</a>   isOpen_univ := t.isOpen_univ</span>
+<span id="L85" class="line"><a href="#L85">85</a>   isOpen_inter _ _ h₁ h₂ := h₁.inter h₂</span>
+<span id="L86" class="line"><a href="#L86">86</a>   isOpen_sUnion s h := by simpa only [preimage_sUnion] using isOpen_biUnion h</span>
+<span id="L87" class="line"><a href="#L87">87</a> </span>
+<span id="L88" class="line"><a href="#L88">88</a> end TopologicalSpace</span>
+<span id="L89" class="line"><a href="#L89">89</a> </span>
+<span id="L90" class="line"><a href="#L90">90</a> namespace Topology</span>
+<span id="L91" class="line"><a href="#L91">91</a> variable {X Y : Type*} [tX : TopologicalSpace X] [tY : TopologicalSpace Y]</span>
+<span id="L92" class="line"><a href="#L92">92</a> </span>
+<span id="L93" class="line"><a href="#L93">93</a> /-- We say that restrictions of the topology on `X` to sets from a family `S`</span>
+<span id="L94" class="line"><a href="#L94">94</a> generates the original topology,</span>
+<span id="L95" class="line"><a href="#L95">95</a> if either of the following equivalent conditions hold:</span>
+<span id="L96" class="line"><a href="#L96">96</a> </span>
+<span id="L97" class="line"><a href="#L97">97</a> - a set which is relatively open in each `s ∈ S` is open;</span>
+<span id="L98" class="line"><a href="#L98">98</a> - a set which is relatively closed in each `s ∈ S` is closed;</span>
+<span id="L99" class="line"><a href="#L99">99</a> - for any topological space `Y`, a function `f : X → Y` is continuous</span>
+<span id="L100" class="line"><a href="#L100">100</a>   provided that it is continuous on each `s ∈ S`.</span>
+<span id="L101" class="line"><a href="#L101">101</a> -/</span>
+<span id="L102" class="line"><a href="#L102">102</a> structure IsCoherentWith (S : Set (Set X)) : Prop where</span>
+<span id="L103" class="line"><a href="#L103">103</a>   isOpen_of_forall_induced (u : Set X) : (∀ s ∈ S, IsOpen ((↑) ⁻¹&#x27; u : Set s)) → IsOpen u</span>
+<span id="L104" class="line"><a href="#L104">104</a> </span>
+<span id="L105" class="line"><a href="#L105">105</a> /-- A function `f : X → Y` between topological spaces is inducing if the topology on `X` is induced</span>
+<span id="L106" class="line"><a href="#L106">106</a> by the topology on `Y` through `f`, meaning that a set `s : Set X` is open iff it is the preimage</span>
+<span id="L107" class="line"><a href="#L107">107</a> under `f` of some open set `t : Set Y`. -/</span>
+<span id="L108" class="line"><a href="#L108">108</a> @[fun_prop, mk_iff]</span>
+<span id="L109" class="line"><a href="#L109">109</a> structure IsInducing (f : X → Y) : Prop where</span>
+<span id="L110" class="line"><a href="#L110">110</a>   /-- The topology on the domain is equal to the induced topology. -/</span>
+<span id="L111" class="line"><a href="#L111">111</a>   eq_induced : tX = tY.induced f</span>
+<span id="L112" class="line"><a href="#L112">112</a> </span>
+<span id="L113" class="line"><a href="#L113">113</a> /-- A function between topological spaces is an embedding if it is injective,</span>
+<span id="L114" class="line"><a href="#L114">114</a>   and for all `s : Set X`, `s` is open iff it is the preimage of an open set. -/</span>
+<span id="L115" class="line"><a href="#L115">115</a> @[fun_prop, mk_iff]</span>
+<span id="L116" class="line"><a href="#L116">116</a> structure IsEmbedding (f : X → Y) : Prop extends IsInducing f where</span>
+<span id="L117" class="line"><a href="#L117">117</a>   /-- A topological embedding is injective. -/</span>
+<span id="L118" class="line"><a href="#L118">118</a>   injective : Function.Injective f</span>
+<span id="L119" class="line"><a href="#L119">119</a> </span>
+<span id="L120" class="line"><a href="#L120">120</a> /-- An open embedding is an embedding with open range. -/</span>
+<span id="L121" class="line"><a href="#L121">121</a> @[fun_prop, mk_iff]</span>
+<span id="L122" class="line"><a href="#L122">122</a> structure IsOpenEmbedding (f : X → Y) : Prop extends IsEmbedding f where</span>
+<span id="L123" class="line"><a href="#L123">123</a>   /-- The range of an open embedding is an open set. -/</span>
+<span id="L124" class="line"><a href="#L124">124</a>   isOpen_range : IsOpen &lt;| range f</span>
+<span id="L125" class="line"><a href="#L125">125</a> </span>
+<span id="L126" class="line"><a href="#L126">126</a> /-- A closed embedding is an embedding with closed image. -/</span>
+<span id="L127" class="line"><a href="#L127">127</a> @[fun_prop, mk_iff]</span>
+<span id="L128" class="line"><a href="#L128">128</a> structure IsClosedEmbedding (f : X → Y) : Prop extends IsEmbedding f where</span>
+<span id="L129" class="line"><a href="#L129">129</a>   /-- The range of a closed embedding is a closed set. -/</span>
+<span id="L130" class="line"><a href="#L130">130</a>   isClosed_range : IsClosed &lt;| range f</span>
+<span id="L131" class="line"><a href="#L131">131</a> </span>
+<span id="L132" class="line"><a href="#L132">132</a> /-- A function between topological spaces is a quotient map if it is surjective,</span>
+<span id="L133" class="line"><a href="#L133">133</a>   and for all `s : Set Y`, `s` is open iff its preimage is an open set. -/</span>
+<span id="L134" class="line"><a href="#L134">134</a> @[fun_prop, mk_iff isQuotientMap_iff&#x27;]</span>
+<span id="L135" class="line"><a href="#L135">135</a> structure IsQuotientMap {X : Type*} {Y : Type*} [tX : TopologicalSpace X] [tY : TopologicalSpace Y]</span>
+<span id="L136" class="line"><a href="#L136">136</a>     (f : X → Y) : Prop where</span>
+<span id="L137" class="line"><a href="#L137">137</a>   surjective : Function.Surjective f</span>
+<span id="L138" class="line"><a href="#L138">138</a>   eq_coinduced : tY = tX.coinduced f</span>
+<span id="L139" class="line"><a href="#L139">139</a> </span>
+<span id="L140" class="line"><a href="#L140">140</a> end Topology</span></pre></html>

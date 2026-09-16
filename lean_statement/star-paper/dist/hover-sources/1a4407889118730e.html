@@ -1,0 +1,84 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/GeodesicCurveCompactness.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/GeodesicCurveCompactness.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.IntrinsicSurfaceMetric</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.SurfacePathCompactness</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! Normalized intrinsic geodesics form a compact family, even while both</span>
+<span id="L5" class="line"><a href="#L5">5</a> endpoints vary. The topology is uniform convergence of actual surface curves. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set Filter BoundedContinuousFunction</span>
+<span id="L10" class="line"><a href="#L10">10</a> open scoped Topology NNReal</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-- Curves with values on the actual boundary, with the uniform metric. -/</span>
+<span id="L13" class="line"><a href="#L13">13</a> abbrev BoundaryCurve (P : ConvexPolyhedron) := unitInterval →ᵇ (frontier P.body)</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-- Intrinsic distances on the compact boundary have one finite common bound. -/</span>
+<span id="L16" class="line"><a href="#L16">16</a> theorem surfaceDist_uniform_bound (P : ConvexPolyhedron) :</span>
+<span id="L17" class="line"><a href="#L17">17</a>     ∃ C : ℝ≥0, ∀ x y : frontier P.body, P.surfaceDist x y ≤ C := by</span>
+<span id="L18" class="line"><a href="#L18">18</a>   letI : CompactSpace (frontier P.body) := isCompact_iff_compactSpace.mp</span>
+<span id="L19" class="line"><a href="#L19">19</a>     (P.body_compact.of_isClosed_subset isClosed_frontier P.body_closed.frontier_subset)</span>
+<span id="L20" class="line"><a href="#L20">20</a>   have bounded : BddAbove (range (fun pair : (frontier P.body) × (frontier P.body) =&gt; P.surfaceDist pair.1 pair.2)) :=</span>
+<span id="L21" class="line"><a href="#L21">21</a>     (isCompact_range P.surfaceDist_continuous).bddAbove</span>
+<span id="L22" class="line"><a href="#L22">22</a>   obtain ⟨C, bound⟩ := bounded</span>
+<span id="L23" class="line"><a href="#L23">23</a>   refine ⟨⟨max C 0, le_max_right _ _⟩, ?_⟩</span>
+<span id="L24" class="line"><a href="#L24">24</a>   intro x y</span>
+<span id="L25" class="line"><a href="#L25">25</a>   exact (bound ⟨(x, y), rfl⟩).trans (le_max_left _ _)</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> /-- The intrinsic constant-speed geodesic equation, with no prescribed endpoints. -/</span>
+<span id="L28" class="line"><a href="#L28">28</a> def geodesicCurves (P : ConvexPolyhedron) : Set P.BoundaryCurve :=</span>
+<span id="L29" class="line"><a href="#L29">29</a>   {f | ∀ s t, P.surfaceDist (f s) (f t) = P.surfaceDist (f 0) (f 1) * dist s t}</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> /-- The geodesic equation survives uniform limits, since intrinsic distance is continuous. -/</span>
+<span id="L32" class="line"><a href="#L32">32</a> theorem geodesicCurves_closed (P : ConvexPolyhedron) : IsClosed P.geodesicCurves := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>   have evaluation (t : unitInterval) : Continuous (fun f : P.BoundaryCurve =&gt; f t) := continuous_eval_const t</span>
+<span id="L34" class="line"><a href="#L34">34</a>   have distance (s t : unitInterval) : Continuous (fun f : P.BoundaryCurve =&gt; P.surfaceDist (f s) (f t)) :=</span>
+<span id="L35" class="line"><a href="#L35">35</a>     P.surfaceDist_continuous.comp ((evaluation s).prodMk (evaluation t))</span>
+<span id="L36" class="line"><a href="#L36">36</a>   unfold geodesicCurves</span>
+<span id="L37" class="line"><a href="#L37">37</a>   simp only [setOf_forall]</span>
+<span id="L38" class="line"><a href="#L38">38</a>   exact isClosed_iInter (fun s =&gt; isClosed_iInter (fun t =&gt;</span>
+<span id="L39" class="line"><a href="#L39">39</a>     isClosed_eq (distance s t) ((distance 0 1).mul continuous_const)))</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> /-- Surface curves sharing an ambient speed bound form a compact family. -/</span>
+<span id="L42" class="line"><a href="#L42">42</a> theorem boundary_curves_with_speed_compact (P : ConvexPolyhedron) (C : ℝ≥0) :</span>
+<span id="L43" class="line"><a href="#L43">43</a>     IsCompact {f : P.BoundaryCurve | LipschitzWith C f} := by</span>
+<span id="L44" class="line"><a href="#L44">44</a>   letI : CompactSpace (frontier P.body) := isCompact_iff_compactSpace.mp</span>
+<span id="L45" class="line"><a href="#L45">45</a>     (P.body_compact.of_isClosed_subset isClosed_frontier P.body_closed.frontier_subset)</span>
+<span id="L46" class="line"><a href="#L46">46</a>   have closed : IsClosed {f : P.BoundaryCurve | LipschitzWith C f} :=</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (isClosed_setOf_lipschitzWith C).preimage continuous_coeFun</span>
+<span id="L48" class="line"><a href="#L48">48</a>   apply BoundedContinuousFunction.arzela_ascoli₂ univ isCompact_univ _ closed (fun _ _ _ =&gt; mem_univ _)</span>
+<span id="L49" class="line"><a href="#L49">49</a>   apply Metric.equicontinuous_of_continuity_modulus (fun r : ℝ =&gt; C * r)</span>
+<span id="L50" class="line"><a href="#L50">50</a>     (by simpa using (tendsto_const_nhds.mul (tendsto_id : Tendsto (id : ℝ → ℝ) (𝓝 0) (𝓝 0))))</span>
+<span id="L51" class="line"><a href="#L51">51</a>   intro x y f</span>
+<span id="L52" class="line"><a href="#L52">52</a>   exact f.property.dist_le_mul x y</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> /-- All normalized geodesics form a compact family, uniformly over all endpoint pairs. -/</span>
+<span id="L55" class="line"><a href="#L55">55</a> theorem geodesicCurves_compact (P : ConvexPolyhedron) : IsCompact P.geodesicCurves := by</span>
+<span id="L56" class="line"><a href="#L56">56</a>   obtain ⟨C, bound⟩ := P.surfaceDist_uniform_bound</span>
+<span id="L57" class="line"><a href="#L57">57</a>   apply (P.boundary_curves_with_speed_compact C).of_isClosed_subset P.geodesicCurves_closed</span>
+<span id="L58" class="line"><a href="#L58">58</a>   intro f geodesic</span>
+<span id="L59" class="line"><a href="#L59">59</a>   apply LipschitzWith.of_dist_le_mul</span>
+<span id="L60" class="line"><a href="#L60">60</a>   intro s t</span>
+<span id="L61" class="line"><a href="#L61">61</a>   have lower := P.dist_le_surfaceDist (f s).property (f t).property</span>
+<span id="L62" class="line"><a href="#L62">62</a>   rw [geodesic s t] at lower</span>
+<span id="L63" class="line"><a href="#L63">63</a>   exact lower.trans (mul_le_mul_of_nonneg_right (bound (f 0) (f 1)) dist_nonneg)</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> namespace SurfacePath</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> variable {P : ConvexPolyhedron} {a b : Space}</span>
+<span id="L68" class="line"><a href="#L68">68</a> </span>
+<span id="L69" class="line"><a href="#L69">69</a> /-- Regard a surface path as a curve in the boundary&#x27;s ordinary subspace topology. -/</span>
+<span id="L70" class="line"><a href="#L70">70</a> noncomputable def boundaryCurve (path : P.SurfacePath a b) : P.BoundaryCurve :=</span>
+<span id="L71" class="line"><a href="#L71">71</a>   mkOfCompact ⟨fun t =&gt; ⟨path.curve t, path.on_surface t⟩, path.curve.continuous.subtype_mk _⟩</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> /-- Every normalized shortest surface route satisfies the compact family&#x27;s geodesic equation. -/</span>
+<span id="L74" class="line"><a href="#L74">74</a> theorem boundaryCurve_geodesic (path : P.SurfacePath a b) (shortest : path.IsShortest)</span>
+<span id="L75" class="line"><a href="#L75">75</a>     (finite : path.length ≠ ⊤) (speed : LipschitzWith path.length.toNNReal path.curve) :</span>
+<span id="L76" class="line"><a href="#L76">76</a>     path.boundaryCurve ∈ P.geodesicCurves := by</span>
+<span id="L77" class="line"><a href="#L77">77</a>   intro s t</span>
+<span id="L78" class="line"><a href="#L78">78</a>   change P.surfaceDist (path.curve s) (path.curve t) =</span>
+<span id="L79" class="line"><a href="#L79">79</a>     P.surfaceDist (path.curve 0) (path.curve 1) * dist s t</span>
+<span id="L80" class="line"><a href="#L80">80</a>   rw [path.surfaceDist_along shortest finite speed, path.curve.source, path.curve.target,</span>
+<span id="L81" class="line"><a href="#L81">81</a>     surfaceDist, ← path.length_eq_surfaceEDist shortest]</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> end SurfacePath</span>
+<span id="L84" class="line"><a href="#L84">84</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

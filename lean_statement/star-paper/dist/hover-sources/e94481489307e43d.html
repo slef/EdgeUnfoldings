@@ -1,0 +1,96 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/JunctionDevelopedKites.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/JunctionDevelopedKites.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.JunctionFan</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.GapKiteStep</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! The kite used by the planar inequalities is exactly the union of</span>
+<span id="L5" class="line"><a href="#L5">5</a> the two actual triangle developments in their common junction chart. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Real Set Wedge</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> namespace IncidentTriangles</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L14" class="line"><a href="#L14">14</a>     {u v : T.vertices} {edge : T.graph.Adj u v}</span>
+<span id="L15" class="line"><a href="#L15">15</a>     {chart : P.CutVoronoiChart a (T.vertexTarget u)} {θ : ℝ}</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> /-- The two triangle images keep their distinct planar source copies. -/</span>
+<span id="L18" class="line"><a href="#L18">18</a> def developedKite (D : IncidentTriangles T edge chart θ) : Set Plane :=</span>
+<span id="L19" class="line"><a href="#L19">19</a>   convexHull ℝ ({D.motion D.model.first, D.motion D.model.left, D.motion D.model.right} : Set Plane) ∪</span>
+<span id="L20" class="line"><a href="#L20">20</a>     convexHull ℝ ({D.motion D.model.second, D.motion D.model.left, D.motion D.model.right} : Set Plane)</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> end IncidentTriangles</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> namespace JunctionFan</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L27" class="line"><a href="#L27">27</a>     {u : T.vertices} (fan : JunctionFan T u)</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> /-- The actual two source labels are exactly the endpoints of the assigned gap. -/</span>
+<span id="L30" class="line"><a href="#L30">30</a> theorem gap_source_pair</span>
+<span id="L31" class="line"><a href="#L31">31</a>     (m : circularGapMidpoints fan.order.angles fan.order.first fan.order.last)</span>
+<span id="L32" class="line"><a href="#L32">32</a>     {α β : ℝ} (gap : IsCircularGap fan.order.angles fan.order.first fan.order.last α β)</span>
+<span id="L33" class="line"><a href="#L33">33</a>     (midpoint : (m : ℝ) = (α + β) / 2) :</span>
+<span id="L34" class="line"><a href="#L34">34</a>     let D := fan.triangles m</span>
+<span id="L35" class="line"><a href="#L35">35</a>     ({D.motion D.model.first, D.motion D.model.second} : Set Plane) =</span>
+<span id="L36" class="line"><a href="#L36">36</a>       {fan.order.chart.origin + P.surfaceDist a (T.vertexTarget u) • direction α,</span>
+<span id="L37" class="line"><a href="#L37">37</a>         fan.order.chart.origin + P.surfaceDist a (T.vertexTarget u) • direction β} := by</span>
+<span id="L38" class="line"><a href="#L38">38</a>   dsimp only</span>
+<span id="L39" class="line"><a href="#L39">39</a>   let D := fan.triangles m</span>
+<span id="L40" class="line"><a href="#L40">40</a>   obtain ⟨ordered, width, _, _, first, second, empty_gap⟩ := circular_gap_spec</span>
+<span id="L41" class="line"><a href="#L41">41</a>     fan.order.sites fan.order.angles fan.order.increasing fan.order.bounds fan.order.chart.origin</span>
+<span id="L42" class="line"><a href="#L42">42</a>     (P.surfaceDist a (T.vertexTarget u)) fan.order.position fan.order.first fan.order.last</span>
+<span id="L43" class="line"><a href="#L43">43</a>     fan.order.at_first fan.order.at_last fan.order.two gap</span>
+<span id="L44" class="line"><a href="#L44">44</a>   have on_ray (ρ : ℝ) (hr : ρ ∈ Ioo (0 : ℝ) fan.order.radius) :</span>
+<span id="L45" class="line"><a href="#L45">45</a>       fan.order.chart.map (fan.order.chart.origin + ρ • direction ((α + β) / 2)) ∈</span>
+<span id="L46" class="line"><a href="#L46">46</a>         openSegment ℝ (T.vertexTarget u : Space) ((fan.order.neighbors m).val : Space) := by</span>
+<span id="L47" class="line"><a href="#L47">47</a>     rw [← midpoint]</span>
+<span id="L48" class="line"><a href="#L48">48</a>     exact fan.order.rays m ρ hr</span>
+<span id="L49" class="line"><a href="#L49">49</a>   have left := fan.order.chart.incident_branch_source T (fan.order.neighbors m).property rfl</span>
+<span id="L50" class="line"><a href="#L50">50</a>     D.first (fun t =&gt; (D.member t).1) D.first_label ordered width first second empty_gap</span>
+<span id="L51" class="line"><a href="#L51">51</a>     fan.order.radius_positive on_ray</span>
+<span id="L52" class="line"><a href="#L52">52</a>   have right := fan.order.chart.incident_branch_source T (fan.order.neighbors m).property rfl</span>
+<span id="L53" class="line"><a href="#L53">53</a>     D.second (fun t =&gt; (D.member t).2) D.second_label ordered width first second empty_gap</span>
+<span id="L54" class="line"><a href="#L54">54</a>     fan.order.radius_positive on_ray</span>
+<span id="L55" class="line"><a href="#L55">55</a>   have different : D.motion D.model.first ≠ D.motion D.model.second :=</span>
+<span id="L56" class="line"><a href="#L56">56</a>     D.motion.injective.ne D.model.distinct_sources</span>
+<span id="L57" class="line"><a href="#L57">57</a>   rcases left with l | l &lt;;&gt; rcases right with r | r</span>
+<span id="L58" class="line"><a href="#L58">58</a>   · exact (different (l.trans r.symm)).elim</span>
+<span id="L59" class="line"><a href="#L59">59</a>   · rw [l, r]</span>
+<span id="L60" class="line"><a href="#L60">60</a>   · rw [l, r, pair_comm]</span>
+<span id="L61" class="line"><a href="#L61">61</a>   · exact (different (l.trans r.symm)).elim</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> /-- No surrogate kite is used: both full developed triangles form exactly this gap kite. -/</span>
+<span id="L64" class="line"><a href="#L64">64</a> theorem developed_kite_eq</span>
+<span id="L65" class="line"><a href="#L65">65</a>     (m : circularGapMidpoints fan.order.angles fan.order.first fan.order.last)</span>
+<span id="L66" class="line"><a href="#L66">66</a>     {α β : ℝ} (gap : IsCircularGap fan.order.angles fan.order.first fan.order.last α β)</span>
+<span id="L67" class="line"><a href="#L67">67</a>     (midpoint : (m : ℝ) = (α + β) / 2) :</span>
+<span id="L68" class="line"><a href="#L68">68</a>     (fan.triangles m).developedKite = gapKite fan.order.chart.origin</span>
+<span id="L69" class="line"><a href="#L69">69</a>       (P.surfaceDist a (T.vertexTarget u))</span>
+<span id="L70" class="line"><a href="#L70">70</a>       (dist (u : Space) ((fan.order.neighbors m).val : Space)) α β := by</span>
+<span id="L71" class="line"><a href="#L71">71</a>   have pair := fan.gap_source_pair m gap midpoint</span>
+<span id="L72" class="line"><a href="#L72">72</a>   let z := fan.order.chart.origin</span>
+<span id="L73" class="line"><a href="#L73">73</a>   let y := z + dist (u : Space) ((fan.order.neighbors m).val : Space) • direction m</span>
+<span id="L74" class="line"><a href="#L74">74</a>   have union_pairs (p q : Plane) :</span>
+<span id="L75" class="line"><a href="#L75">75</a>       convexHull ℝ ({p, z, y} : Set Plane) ∪ convexHull ℝ ({q, z, y} : Set Plane) =</span>
+<span id="L76" class="line"><a href="#L76">76</a>         ⋃ s ∈ ({p, q} : Set Plane), convexHull ℝ ({s, z, y} : Set Plane) := by simp</span>
+<span id="L77" class="line"><a href="#L77">77</a>   unfold IncidentTriangles.developedKite</span>
+<span id="L78" class="line"><a href="#L78">78</a>   rw [(fan.triangles m).at_junction, (fan.triangles m).at_neighbor]</span>
+<span id="L79" class="line"><a href="#L79">79</a>   change convexHull ℝ ({_, z, y} : Set Plane) ∪ convexHull ℝ ({_, z, y} : Set Plane) = _</span>
+<span id="L80" class="line"><a href="#L80">80</a>   rw [union_pairs, pair, ← union_pairs]</span>
+<span id="L81" class="line"><a href="#L81">81</a>   dsimp [z, y]</span>
+<span id="L82" class="line"><a href="#L82">82</a>   rw [midpoint]</span>
+<span id="L83" class="line"><a href="#L83">83</a>   unfold gapKite</span>
+<span id="L84" class="line"><a href="#L84">84</a>   rw [union_comm]</span>
+<span id="L85" class="line"><a href="#L85">85</a>   apply congrArg₂ (fun A B : Set Plane =&gt; A ∪ B)</span>
+<span id="L86" class="line"><a href="#L86">86</a>   · apply congrArg (convexHull ℝ)</span>
+<span id="L87" class="line"><a href="#L87">87</a>     ext x</span>
+<span id="L88" class="line"><a href="#L88">88</a>     simp only [mem_insert_iff, mem_singleton_iff]</span>
+<span id="L89" class="line"><a href="#L89">89</a>     tauto</span>
+<span id="L90" class="line"><a href="#L90">90</a>   · apply congrArg (convexHull ℝ)</span>
+<span id="L91" class="line"><a href="#L91">91</a>     ext x</span>
+<span id="L92" class="line"><a href="#L92">92</a>     simp only [mem_insert_iff, mem_singleton_iff]</span>
+<span id="L93" class="line"><a href="#L93">93</a>     tauto</span>
+<span id="L94" class="line"><a href="#L94">94</a> </span>
+<span id="L95" class="line"><a href="#L95">95</a> end JunctionFan</span>
+<span id="L96" class="line"><a href="#L96">96</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

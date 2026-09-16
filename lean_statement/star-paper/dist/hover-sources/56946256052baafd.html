@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/SurfacePaths.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/SurfacePaths.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.EdgeGraph</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Actual continuous paths on the polyhedral boundary, measured by Mathlib&#x27;s total variation.</span>
+<span id="L4" class="line"><a href="#L4">4</a> This supplies the shortest-path premise for straight original edges and face diagonals.</span>
+<span id="L5" class="line"><a href="#L5">5</a> It makes no claim yet about nonoverlap of a star unfolding. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open scoped ENNReal NNReal</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- A continuous path whose entire image lies on the boundary of the solid. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> structure SurfacePath (P : ConvexPolyhedron) (a b : Space) where</span>
+<span id="L13" class="line"><a href="#L13">13</a>   curve : Path a b</span>
+<span id="L14" class="line"><a href="#L14">14</a>   on_surface : ∀ t, curve t ∈ frontier P.body</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> namespace SurfacePath</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> variable {P : ConvexPolyhedron} {a b : Space}</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> /-- Arc length, including infinite length, is the supremum of lengths of inscribed polygonal chains. -/</span>
+<span id="L21" class="line"><a href="#L21">21</a> noncomputable def length (path : P.SurfacePath a b) : ℝ≥0∞ :=</span>
+<span id="L22" class="line"><a href="#L22">22</a>   eVariationOn path.curve.extend (Set.Icc 0 1)</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> /-- Every continuous surface path is at least as long as the Euclidean chord joining its endpoints. -/</span>
+<span id="L25" class="line"><a href="#L25">25</a> theorem chord_le_length (path : P.SurfacePath a b) : edist a b ≤ path.length := by</span>
+<span id="L26" class="line"><a href="#L26">26</a>   have bound := eVariationOn.edist_le path.curve.extend</span>
+<span id="L27" class="line"><a href="#L27">27</a>     (by norm_num : (0 : ℝ) ∈ Set.Icc 0 1) (by norm_num : (1 : ℝ) ∈ Set.Icc 0 1)</span>
+<span id="L28" class="line"><a href="#L28">28</a>   simpa only [Path.extend_zero, Path.extend_one] using bound</span>
+<span id="L29" class="line"><a href="#L29">29</a> </span>
+<span id="L30" class="line"><a href="#L30">30</a> /-- Shortest means no other continuous path on the surface has smaller arc length. -/</span>
+<span id="L31" class="line"><a href="#L31">31</a> def IsShortest (path : P.SurfacePath a b) : Prop :=</span>
+<span id="L32" class="line"><a href="#L32">32</a>   ∀ other : P.SurfacePath a b, path.length ≤ other.length</span>
+<span id="L33" class="line"><a href="#L33">33</a> </span>
+<span id="L34" class="line"><a href="#L34">34</a> /-- A whole face contains the straight path between any two of its points. -/</span>
+<span id="L35" class="line"><a href="#L35">35</a> noncomputable def inFace (F : P.Face) (ha : a ∈ F.val) (hb : b ∈ F.val) : P.SurfacePath a b where</span>
+<span id="L36" class="line"><a href="#L36">36</a>   curve := Path.segment a b</span>
+<span id="L37" class="line"><a href="#L37">37</a>   on_surface t := F.subset_frontier (F.convex.segment_subset ha hb (by</span>
+<span id="L38" class="line"><a href="#L38">38</a>     rw [← Path.range_segment]</span>
+<span id="L39" class="line"><a href="#L39">39</a>     exact ⟨t, rfl⟩))</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> /-- The straight face path has exactly the length of its Euclidean chord. -/</span>
+<span id="L42" class="line"><a href="#L42">42</a> theorem inFace_length (F : P.Face) (ha : a ∈ F.val) (hb : b ∈ F.val) :</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (inFace F ha hb).length = edist a b := by</span>
+<span id="L44" class="line"><a href="#L44">44</a>   apply le_antisymm ?_ (inFace F ha hb).chord_le_length</span>
+<span id="L45" class="line"><a href="#L45">45</a>   change eVariationOn (Path.segment a b).extend (Set.Icc 0 1) ≤ edist a b</span>
+<span id="L46" class="line"><a href="#L46">46</a>   rw [eVariationOn.congr (Path.eqOn_extend_segment a b)]</span>
+<span id="L47" class="line"><a href="#L47">47</a>   have unit : eVariationOn (id : ℝ → ℝ) (Set.Icc 0 1) ≤ 1 := by</span>
+<span id="L48" class="line"><a href="#L48">48</a>     simpa using (monotone_id.monotoneOn (s := Set.univ)).eVariationOn_le</span>
+<span id="L49" class="line"><a href="#L49">49</a>       (Set.mem_univ (0 : ℝ)) (Set.mem_univ (1 : ℝ))</span>
+<span id="L50" class="line"><a href="#L50">50</a>   have bound := (lipschitzWith_lineMap a b (𝕜 := ℝ)).lipschitzOnWith.comp_eVariationOn_le</span>
+<span id="L51" class="line"><a href="#L51">51</a>     (show Set.MapsTo (id : ℝ → ℝ) (Set.Icc 0 1) Set.univ from fun _ _ =&gt; Set.mem_univ _)</span>
+<span id="L52" class="line"><a href="#L52">52</a>   exact bound.trans (by simpa using mul_le_mul_right unit (nndist a b : ℝ≥0∞))</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> /-- Straight paths within a face minimize length among all continuous surface paths. -/</span>
+<span id="L55" class="line"><a href="#L55">55</a> theorem inFace_shortest (F : P.Face) (ha : a ∈ F.val) (hb : b ∈ F.val) :</span>
+<span id="L56" class="line"><a href="#L56">56</a>     (inFace F ha hb).IsShortest := by</span>
+<span id="L57" class="line"><a href="#L57">57</a>   intro other</span>
+<span id="L58" class="line"><a href="#L58">58</a>   rw [inFace_length]</span>
+<span id="L59" class="line"><a href="#L59">59</a>   exact other.chord_le_length</span>
+<span id="L60" class="line"><a href="#L60">60</a> </span>
+<span id="L61" class="line"><a href="#L61">61</a> end SurfacePath</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> /-- Every original edge is realized by a shortest surface path with exactly that edge as its image. -/</span>
+<span id="L64" class="line"><a href="#L64">64</a> theorem edge_has_shortest_surface_path (P : ConvexPolyhedron) (a b : P.Vertex)</span>
+<span id="L65" class="line"><a href="#L65">65</a>     (edge : P.edgeGraph.Adj a b) :</span>
+<span id="L66" class="line"><a href="#L66">66</a>     ∃ path : P.SurfacePath a b, path.IsShortest ∧</span>
+<span id="L67" class="line"><a href="#L67">67</a>       Set.range path.curve = segment ℝ (a : Space) (b : Space) := by</span>
+<span id="L68" class="line"><a href="#L68">68</a>   obtain ⟨_, F, G, _, common⟩ := edge</span>
+<span id="L69" class="line"><a href="#L69">69</a>   have aF : (a : Space) ∈ F.val :=</span>
+<span id="L70" class="line"><a href="#L70">70</a>     (common ▸ (left_mem_segment ℝ (a : Space) (b : Space))).1</span>
+<span id="L71" class="line"><a href="#L71">71</a>   have bF : (b : Space) ∈ F.val :=</span>
+<span id="L72" class="line"><a href="#L72">72</a>     (common ▸ (right_mem_segment ℝ (a : Space) (b : Space))).1</span>
+<span id="L73" class="line"><a href="#L73">73</a>   exact ⟨SurfacePath.inFace F aF bF, SurfacePath.inFace_shortest F aF bF, Path.range_segment _ _⟩</span>
+<span id="L74" class="line"><a href="#L74">74</a> </span>
+<span id="L75" class="line"><a href="#L75">75</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

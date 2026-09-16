@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Init/Data/NeZero.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Init/Data/NeZero.lean</h1><p>Lean core · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2021 Eric Rodriguez. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Eric Rodriguez</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> prelude</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Init.Data.Zero</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Init.Core</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> public section</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-!</span>
+<span id="L16" class="line"><a href="#L16">16</a> # `NeZero` typeclass</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> We create a typeclass `NeZero n` which carries around the fact that `(n : R) ≠ 0`.</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> ## Main declarations</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> * `NeZero`: `n ≠ 0` as a typeclass.</span>
+<span id="L23" class="line"><a href="#L23">23</a> -/</span>
+<span id="L24" class="line"><a href="#L24">24</a> </span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> variable {R : Type _} [Zero R]</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> /-- A type-class version of `n ≠ 0`.  -/</span>
+<span id="L29" class="line"><a href="#L29">29</a> class NeZero (n : R) : Prop where</span>
+<span id="L30" class="line"><a href="#L30">30</a>   /-- The proposition that `n` is not zero. -/</span>
+<span id="L31" class="line"><a href="#L31">31</a>   out : n ≠ 0</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> theorem NeZero.ne (n : R) [h : NeZero n] : n ≠ 0 :=</span>
+<span id="L34" class="line"><a href="#L34">34</a>   h.out</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> theorem NeZero.ne&#x27; (n : R) [h : NeZero n] : 0 ≠ n :=</span>
+<span id="L37" class="line"><a href="#L37">37</a>   h.out.symm</span>
+<span id="L38" class="line"><a href="#L38">38</a> </span>
+<span id="L39" class="line"><a href="#L39">39</a> theorem neZero_iff {n : R} : NeZero n ↔ n ≠ 0 :=</span>
+<span id="L40" class="line"><a href="#L40">40</a>   ⟨fun h ↦ h.out, NeZero.mk⟩</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> @[simp] theorem neZero_zero_iff_false {α : Type _} [Zero α] : NeZero (0 : α) ↔ False :=</span>
+<span id="L43" class="line"><a href="#L43">43</a>   ⟨fun _ ↦ NeZero.ne (0 : α) rfl, fun h ↦ h.elim⟩</span>
+<span id="L44" class="line"><a href="#L44">44</a> </span>
+<span id="L45" class="line"><a href="#L45">45</a> instance {p : Prop} [Decidable p] {n m : Nat} [NeZero n] [NeZero m] :</span>
+<span id="L46" class="line"><a href="#L46">46</a>     NeZero (if p then n else m) := by</span>
+<span id="L47" class="line"><a href="#L47">47</a>   split &lt;;&gt; infer_instance</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> instance {n m : Nat} [h : NeZero n] : NeZero (n + m) where</span>
+<span id="L50" class="line"><a href="#L50">50</a>   out :=</span>
+<span id="L51" class="line"><a href="#L51">51</a>     match n, h, m with</span>
+<span id="L52" class="line"><a href="#L52">52</a>     | _ + 1, _, 0</span>
+<span id="L53" class="line"><a href="#L53">53</a>     | _ + 1, _, _ + 1 =&gt; fun h =&gt; nomatch h</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> instance {n m : Nat} [h : NeZero m] : NeZero (n + m) where</span>
+<span id="L56" class="line"><a href="#L56">56</a>   out :=</span>
+<span id="L57" class="line"><a href="#L57">57</a>     match m, h, n with</span>
+<span id="L58" class="line"><a href="#L58">58</a>     | _ + 1, _, 0 =&gt; fun h =&gt; nomatch h</span>
+<span id="L59" class="line"><a href="#L59">59</a>     | _ + 1, _, _ + 1 =&gt; fun h =&gt; nomatch h</span>
+<span id="L60" class="line"><a href="#L60">60</a> </span>
+<span id="L61" class="line"><a href="#L61">61</a> instance {n m : Nat} [hn : NeZero n] [hm : NeZero m] : NeZero (n * m) where</span>
+<span id="L62" class="line"><a href="#L62">62</a>   out :=</span>
+<span id="L63" class="line"><a href="#L63">63</a>     match n, hn, m, hm with</span>
+<span id="L64" class="line"><a href="#L64">64</a>     | _ + 1, _, _ + 1, _ =&gt; fun h =&gt; nomatch h</span></pre></html>

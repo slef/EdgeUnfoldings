@@ -1,0 +1,126 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/WedgeStep.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/WedgeStep.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.WedgeCoordinates</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! One complete planar wedge step: rotate the arms, add the next kite,</span>
+<span id="L4" class="line"><a href="#L4">4</a> and express the result as a wedge about the new root. The hypotheses state</span>
+<span id="L5" class="line"><a href="#L5">5</a> the angular order and the angle budget; the cut-surface construction must</span>
+<span id="L6" class="line"><a href="#L6">6</a> still supply those facts at actual tree junctions.</span>
+<span id="L7" class="line"><a href="#L7">7</a> -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> namespace SixVertexUnfolding.Wedge</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> open Real Set</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> /-- Scaling a ray&#x27;s direction by a positive number does not change the region. -/</span>
+<span id="L14" class="line"><a href="#L14">14</a> theorem region_rescale (h r a b : ℝ) {c : ℝ} (positive : 0 &lt; c) :</span>
+<span id="L15" class="line"><a href="#L15">15</a>     region h r (c * a) (c * b) = region h r a b := by</span>
+<span id="L16" class="line"><a href="#L16">16</a>   have negative : c * a &lt; 0 ↔ a &lt; 0 := by</span>
+<span id="L17" class="line"><a href="#L17">17</a>     simpa using (mul_lt_mul_iff_right₀ positive : c * a &lt; c * 0 ↔ a &lt; 0)</span>
+<span id="L18" class="line"><a href="#L18">18</a>   ext z</span>
+<span id="L19" class="line"><a href="#L19">19</a>   simp only [region, mem_setOf_eq, mul_assoc, mul_pos_iff_of_pos_left positive,</span>
+<span id="L20" class="line"><a href="#L20">20</a>     mul_nonneg_iff_of_pos_left positive, negative,</span>
+<span id="L21" class="line"><a href="#L21">21</a>     mul_le_mul_iff_right₀ positive]</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> namespace ArmCoordinates</span>
+<span id="L24" class="line"><a href="#L24">24</a> </span>
+<span id="L25" class="line"><a href="#L25">25</a> variable {h r a b d θ γ : ℝ} (C : ArmCoordinates h r a b d θ γ)</span>
+<span id="L26" class="line"><a href="#L26">26</a> include C</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> /-- The source direction increases when the root moves to the right. -/</span>
+<span id="L29" class="line"><a href="#L29">29</a> theorem source_direction_mono {q D Θ : ℝ} (order : r ≤ q) (radius : 0 &lt; D)</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (angle_pos : 0 &lt; Θ)</span>
+<span id="L31" class="line"><a href="#L31">31</a>     (source_x : -q = D * cos Θ) (source_y : h = D * sin Θ) : θ ≤ Θ := by</span>
+<span id="L32" class="line"><a href="#L32">32</a>   have product : d * D * sin (Θ - θ) = h * (q - r) := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>     rw [sin_sub]</span>
+<span id="L34" class="line"><a href="#L34">34</a>     rw [C.source_y, show r = -(d * cos θ) by linarith [C.source_x],</span>
+<span id="L35" class="line"><a href="#L35">35</a>       show q = -(D * cos Θ) by linarith [source_x]]</span>
+<span id="L36" class="line"><a href="#L36">36</a>     have heights : d * sin θ = D * sin Θ := C.source_y.symm.trans source_y</span>
+<span id="L37" class="line"><a href="#L37">37</a>     nlinarith [congrArg (fun x : ℝ =&gt; d * cos θ * x) heights]</span>
+<span id="L38" class="line"><a href="#L38">38</a>   have sine : 0 ≤ sin (Θ - θ) := by</span>
+<span id="L39" class="line"><a href="#L39">39</a>     have nonnegative := mul_nonneg C.height_pos.le (sub_nonneg.mpr order)</span>
+<span id="L40" class="line"><a href="#L40">40</a>     rw [← product] at nonnegative</span>
+<span id="L41" class="line"><a href="#L41">41</a>     exact (mul_nonneg_iff_of_pos_left (mul_pos C.radius_pos radius)).mp nonnegative</span>
+<span id="L42" class="line"><a href="#L42">42</a>   by_contra backwards</span>
+<span id="L43" class="line"><a href="#L43">43</a>   have negative := sin_neg_of_neg_of_neg_pi_lt (by linarith : Θ - θ &lt; 0)</span>
+<span id="L44" class="line"><a href="#L44">44</a>     (by linarith [C.angle_lt_pi] : -π &lt; Θ - θ)</span>
+<span id="L45" class="line"><a href="#L45">45</a>   linarith</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> /-- The same outer rays, seen from the new root, have angle `γ + (Θ - θ)`.</span>
+<span id="L48" class="line"><a href="#L48">48</a> Their directions are rescaled only to match the new inner-leg length. -/</span>
+<span id="L49" class="line"><a href="#L49">49</a> theorem moved_coordinates {q D Θ : ℝ} (radius : 0 &lt; D)</span>
+<span id="L50" class="line"><a href="#L50">50</a>     (angle_pos : 0 &lt; Θ) (angle_lt_pi : Θ &lt; π)</span>
+<span id="L51" class="line"><a href="#L51">51</a>     (source_x : -q = D * cos Θ) (source_y : h = D * sin Θ)</span>
+<span id="L52" class="line"><a href="#L52">52</a>     (lower : π / 2 ≤ γ + (Θ - θ)) (upper : γ + (Θ - θ) ≤ 3 * π / 2) :</span>
+<span id="L53" class="line"><a href="#L53">53</a>     ArmCoordinates h q (D / d * a) (D / d * b) D Θ (γ + (Θ - θ)) := by</span>
+<span id="L54" class="line"><a href="#L54">54</a>   refine ⟨radius, angle_pos, angle_lt_pi, lower, upper, source_x, source_y, ?_, ?_⟩</span>
+<span id="L55" class="line"><a href="#L55">55</a>   · rw [show Θ + (π - (γ + (Θ - θ))) = θ + (π - γ) by ring, C.ray_x]</span>
+<span id="L56" class="line"><a href="#L56">56</a>     field_simp [ne_of_gt C.radius_pos]</span>
+<span id="L57" class="line"><a href="#L57">57</a>   · rw [show Θ + (π - (γ + (Θ - θ))) = θ + (π - γ) by ring, C.ray_y]</span>
+<span id="L58" class="line"><a href="#L58">58</a>     field_simp [ne_of_gt C.radius_pos]</span>
+<span id="L59" class="line"><a href="#L59">59</a> </span>
+<span id="L60" class="line"><a href="#L60">60</a> /-- The new angle bound supplies the second outward condition in `root_step`. -/</span>
+<span id="L61" class="line"><a href="#L61">61</a> theorem next_outward {q D Θ : ℝ} (radius : 0 &lt; D)</span>
+<span id="L62" class="line"><a href="#L62">62</a>     (angle_pos : 0 &lt; Θ) (angle_lt_pi : Θ &lt; π)</span>
+<span id="L63" class="line"><a href="#L63">63</a>     (source_x : -q = D * cos Θ) (source_y : h = D * sin Θ)</span>
+<span id="L64" class="line"><a href="#L64">64</a>     (lower : π / 2 ≤ γ + (Θ - θ)) (upper : γ + (Θ - θ) ≤ 3 * π / 2) :</span>
+<span id="L65" class="line"><a href="#L65">65</a>     0 ≤ h * b - q * a := by</span>
+<span id="L66" class="line"><a href="#L66">66</a>   have next := (C.moved_coordinates radius angle_pos angle_lt_pi source_x source_y lower upper).outward</span>
+<span id="L67" class="line"><a href="#L67">67</a>   have positive := div_pos radius C.radius_pos</span>
+<span id="L68" class="line"><a href="#L68">68</a>   have factored : 0 ≤ D / d * (h * b - q * a) := by nlinarith [next]</span>
+<span id="L69" class="line"><a href="#L69">69</a>   exact (mul_nonneg_iff_of_pos_left positive).mp factored</span>
+<span id="L70" class="line"><a href="#L70">70</a> </span>
+<span id="L71" class="line"><a href="#L71">71</a> /-- The angle increase is the ordinary angle at the upper apex of the kite. -/</span>
+<span id="L72" class="line"><a href="#L72">72</a> theorem kite_apex_angle {q D Θ : ℝ} (order : r ≤ q) (radius : 0 &lt; D)</span>
+<span id="L73" class="line"><a href="#L73">73</a>     (angle_pos : 0 &lt; Θ) (angle_lt_pi : Θ &lt; π)</span>
+<span id="L74" class="line"><a href="#L74">74</a>     (source_x : -q = D * cos Θ) (source_y : h = D * sin Θ) :</span>
+<span id="L75" class="line"><a href="#L75">75</a>     EuclideanGeometry.angle (point r 0) (point 0 h) (point q 0) = Θ - θ := by</span>
+<span id="L76" class="line"><a href="#L76">76</a>   have old : point r 0 - point 0 h = -(d • direction θ) := by</span>
+<span id="L77" class="line"><a href="#L77">77</a>     ext i</span>
+<span id="L78" class="line"><a href="#L78">78</a>     fin_cases i &lt;;&gt; simp [point, direction, PiLp.sub_apply, C.source_y,</span>
+<span id="L79" class="line"><a href="#L79">79</a>       show r = -(d * cos θ) by linarith [C.source_x]]</span>
+<span id="L80" class="line"><a href="#L80">80</a>   have next : point q 0 - point 0 h = -(D • direction Θ) := by</span>
+<span id="L81" class="line"><a href="#L81">81</a>     ext i</span>
+<span id="L82" class="line"><a href="#L82">82</a>     fin_cases i &lt;;&gt; simp [point, direction, PiLp.sub_apply, source_y,</span>
+<span id="L83" class="line"><a href="#L83">83</a>       show q = -(D * cos Θ) by linarith [source_x]]</span>
+<span id="L84" class="line"><a href="#L84">84</a>   change InnerProductGeometry.angle (point r 0 - point 0 h) (point q 0 - point 0 h) = _</span>
+<span id="L85" class="line"><a href="#L85">85</a>   rw [old, next, InnerProductGeometry.angle_neg_neg,</span>
+<span id="L86" class="line"><a href="#L86">86</a>     InnerProductGeometry.angle_smul_left_of_pos _ _ C.radius_pos,</span>
+<span id="L87" class="line"><a href="#L87">87</a>     InnerProductGeometry.angle_smul_right_of_pos _ _ radius]</span>
+<span id="L88" class="line"><a href="#L88">88</a>   exact direction_angle θ Θ</span>
+<span id="L89" class="line"><a href="#L89">89</a>     (sub_nonneg.mpr (C.source_direction_mono order radius angle_pos source_x source_y))</span>
+<span id="L90" class="line"><a href="#L90">90</a>     (by linarith [C.angle_pos])</span>
+<span id="L91" class="line"><a href="#L91">91</a> </span>
+<span id="L92" class="line"><a href="#L92">92</a> /-- Rotation, exact addition of the next kite, and separation before addition.</span>
+<span id="L93" class="line"><a href="#L93">93</a> All three regions are explicit sets of points in the same Euclidean plane. -/</span>
+<span id="L94" class="line"><a href="#L94">94</a> theorem rotate_and_move {q D Θ lower upper : ℝ}</span>
+<span id="L95" class="line"><a href="#L95">95</a>     (order : r ≤ q) (radius : 0 &lt; D) (angle_pos : 0 &lt; Θ) (angle_lt_pi : Θ &lt; π)</span>
+<span id="L96" class="line"><a href="#L96">96</a>     (source_x : -q = D * cos Θ) (source_y : h = D * sin Θ)</span>
+<span id="L97" class="line"><a href="#L97">97</a>     (lower_moves : θ ≤ lower) (upper_moves : upper ≤ 2 * π - θ)</span>
+<span id="L98" class="line"><a href="#L98">98</a>     (budget : γ + EuclideanGeometry.angle (point r 0) (point 0 h) (point q 0) ≤ 3 * π / 2) :</span>
+<span id="L99" class="line"><a href="#L99">99</a>     let α := EuclideanGeometry.angle (point r 0) (point 0 h) (point q 0)</span>
+<span id="L100" class="line"><a href="#L100">100</a>     let W : Set Plane := {z | z - point r 0 ∈ polarRegion d γ lower upper}</span>
+<span id="L101" class="line"><a href="#L101">101</a>     let V : Set Plane := {z | z - point r 0 ∈ polarRegion d γ θ (2 * π - θ)}</span>
+<span id="L102" class="line"><a href="#L102">102</a>     let W&#x27; : Set Plane := {z | z - point q 0 ∈</span>
+<span id="L103" class="line"><a href="#L103">103</a>       polarRegion D (γ + α) Θ (2 * π - Θ)}</span>
+<span id="L104" class="line"><a href="#L104">104</a>     W ⊆ V ∧ Disjoint V (interior (kite h r q)) ∧ W&#x27; = V ∪ kite h r q := by</span>
+<span id="L105" class="line"><a href="#L105">105</a>   rw [C.kite_apex_angle order radius angle_pos angle_lt_pi source_x source_y] at budget ⊢</span>
+<span id="L106" class="line"><a href="#L106">106</a>   have increasing := C.source_direction_mono order radius angle_pos source_x source_y</span>
+<span id="L107" class="line"><a href="#L107">107</a>   have lower_bound : π / 2 ≤ γ + (Θ - θ) := by linarith [C.lower]</span>
+<span id="L108" class="line"><a href="#L108">108</a>   have next := C.moved_coordinates radius angle_pos angle_lt_pi source_x source_y lower_bound budget</span>
+<span id="L109" class="line"><a href="#L109">109</a>   have old_identity : {z | z - point r 0 ∈ polarRegion d γ θ (2 * π - θ)} =</span>
+<span id="L110" class="line"><a href="#L110">110</a>       region h r a b := by</span>
+<span id="L111" class="line"><a href="#L111">111</a>     ext z</span>
+<span id="L112" class="line"><a href="#L112">112</a>     exact (C.mem_region_iff_polar z).symm</span>
+<span id="L113" class="line"><a href="#L113">113</a>   have new_identity : {z | z - point q 0 ∈</span>
+<span id="L114" class="line"><a href="#L114">114</a>       polarRegion D (γ + (Θ - θ)) Θ (2 * π - Θ)} = region h q a b := by</span>
+<span id="L115" class="line"><a href="#L115">115</a>     rw [← region_rescale h q a b (div_pos radius C.radius_pos)]</span>
+<span id="L116" class="line"><a href="#L116">116</a>     ext z</span>
+<span id="L117" class="line"><a href="#L117">117</a>     exact (next.mem_region_iff_polar z).symm</span>
+<span id="L118" class="line"><a href="#L118">118</a>   refine ⟨fun z member =&gt; rotate_arms lower_moves upper_moves member, ?_⟩</span>
+<span id="L119" class="line"><a href="#L119">119</a>   change Disjoint _ _ ∧ _ = _</span>
+<span id="L120" class="line"><a href="#L120">120</a>   rw [old_identity, new_identity]</span>
+<span id="L121" class="line"><a href="#L121">121</a>   have step := root_step C.height_pos order C.outward</span>
+<span id="L122" class="line"><a href="#L122">122</a>     (C.next_outward radius angle_pos angle_lt_pi source_x source_y lower_bound budget)</span>
+<span id="L123" class="line"><a href="#L123">123</a>   exact ⟨step.2, step.1⟩</span>
+<span id="L124" class="line"><a href="#L124">124</a> </span>
+<span id="L125" class="line"><a href="#L125">125</a> end ArmCoordinates</span>
+<span id="L126" class="line"><a href="#L126">126</a> end SixVertexUnfolding.Wedge</span></pre></html>

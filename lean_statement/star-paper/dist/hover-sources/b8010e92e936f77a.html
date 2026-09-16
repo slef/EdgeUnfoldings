@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/CofacialStarCuts.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/CofacialStarCuts.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.GlobalTriangleMaps</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.SourceNeighborhood</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! For a source sharing a face with every original vertex, the star</span>
+<span id="L5" class="line"><a href="#L5">5</a> cuts are simply the straight segments from the source to those vertices. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- The straight source-to-vertex cuts, viewed on the actual boundary. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> def starCuts (P : ConvexPolyhedron) (a : frontier P.body) : Set (frontier P.body) :=</span>
+<span id="L13" class="line"><a href="#L13">13</a>   {b | ∃ v : P.Vertex, (b : Space) ∈ segment ℝ (a : Space) (v : Space)}</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-- The actual boundary after removing those cut rays. -/</span>
+<span id="L16" class="line"><a href="#L16">16</a> abbrev UncutSurface (P : ConvexPolyhedron) (a : frontier P.body) :=</span>
+<span id="L17" class="line"><a href="#L17">17</a>   {b : frontier P.body // b ∉ P.starCuts a}</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> theorem source_mem_starCuts (P : ConvexPolyhedron) (a : frontier P.body) : a ∈ P.starCuts a := by</span>
+<span id="L20" class="line"><a href="#L20">20</a>   obtain ⟨v, member⟩ := P.vertices_nonempty</span>
+<span id="L21" class="line"><a href="#L21">21</a>   exact ⟨⟨v, member⟩, left_mem_segment ℝ _ _⟩</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> theorem starCuts_closed (P : ConvexPolyhedron) (a : frontier P.body) : IsClosed (P.starCuts a) := by</span>
+<span id="L24" class="line"><a href="#L24">24</a>   have description : P.starCuts a = ⋃ v : P.Vertex,</span>
+<span id="L25" class="line"><a href="#L25">25</a>       (fun b : frontier P.body =&gt; (b : Space)) ⁻¹&#x27; segment ℝ (a : Space) (v : Space) := by</span>
+<span id="L26" class="line"><a href="#L26">26</a>     ext b</span>
+<span id="L27" class="line"><a href="#L27">27</a>     simp only [starCuts, mem_setOf_eq, mem_iUnion, mem_preimage]</span>
+<span id="L28" class="line"><a href="#L28">28</a>   rw [description]</span>
+<span id="L29" class="line"><a href="#L29">29</a>   apply isClosed_iUnion_of_finite</span>
+<span id="L30" class="line"><a href="#L30">30</a>   intro v</span>
+<span id="L31" class="line"><a href="#L31">31</a>   have compact : IsCompact (segment ℝ (a : Space) (v : Space)) := by</span>
+<span id="L32" class="line"><a href="#L32">32</a>     rw [segment_eq_image_lineMap]</span>
+<span id="L33" class="line"><a href="#L33">33</a>     apply isCompact_Icc.image</span>
+<span id="L34" class="line"><a href="#L34">34</a>     fun_prop</span>
+<span id="L35" class="line"><a href="#L35">35</a>   exact compact.isClosed.preimage continuous_subtype_val</span>
+<span id="L36" class="line"><a href="#L36">36</a> </span>
+<span id="L37" class="line"><a href="#L37">37</a> /-- Every shortest ray to an original cofacial vertex lies in the stated straight cut. -/</span>
+<span id="L38" class="line"><a href="#L38">38</a> theorem original_route_subset_starCuts (P : ConvexPolyhedron) (a b : frontier P.body)</span>
+<span id="L39" class="line"><a href="#L39">39</a>     (original : (b : Space) ∈ P.vertices) (F : P.Face) (source : (a : Space) ∈ F.val)</span>
+<span id="L40" class="line"><a href="#L40">40</a>     (target : (b : Space) ∈ F.val) (route : P.BoundaryCurve) (member : route ∈ P.geodesicFiber a b) :</span>
+<span id="L41" class="line"><a href="#L41">41</a>     range route ⊆ P.starCuts a := by</span>
+<span id="L42" class="line"><a href="#L42">42</a>   obtain ⟨path, shortest, _, _, same⟩ := P.geodesicFiber_path a b route member</span>
+<span id="L43" class="line"><a href="#L43">43</a>   rintro x ⟨t, rfl⟩</span>
+<span id="L44" class="line"><a href="#L44">44</a>   refine ⟨⟨b, original⟩, ?_⟩</span>
+<span id="L45" class="line"><a href="#L45">45</a>   have inside := path.shortest_cofacial_range_subset shortest F source target ⟨t, rfl⟩</span>
+<span id="L46" class="line"><a href="#L46">46</a>   rw [← same]</span>
+<span id="L47" class="line"><a href="#L47">47</a>   exact inside</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> namespace PlacedCutEdgeTriangles</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L52" class="line"><a href="#L52">52</a>     {u v : T.vertices} {edge : T.graph.Adj u v} (D : PlacedCutEdgeTriangles T edge)</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> /-- A represented endpoint ray outside the star cuts cannot end at an original vertex. -/</span>
+<span id="L55" class="line"><a href="#L55">55</a> theorem endpoint_nonvertex_of_outside_cuts</span>
+<span id="L56" class="line"><a href="#L56">56</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)</span>
+<span id="L57" class="line"><a href="#L57">57</a>     {b : frontier P.body} {x : Plane} (outside : b ∉ P.starCuts a)</span>
+<span id="L58" class="line"><a href="#L58">58</a>     (placed : D.PlacesOnRay 0 b x) : (u : Space) ∉ P.vertices := by</span>
+<span id="L59" class="line"><a href="#L59">59</a>   intro original</span>
+<span id="L60" class="line"><a href="#L60">60</a>   obtain ⟨F, source, target⟩ := cofacial ⟨u, original⟩</span>
+<span id="L61" class="line"><a href="#L61">61</a>   obtain ⟨side, t, at_point, _⟩ := placed</span>
+<span id="L62" class="line"><a href="#L62">62</a>   apply outside</span>
+<span id="L63" class="line"><a href="#L63">63</a>   apply P.original_route_subset_starCuts a (T.vertexTarget u) original F source target (D.routes side 0)</span>
+<span id="L64" class="line"><a href="#L64">64</a>   · simpa only [T.closedEdgeTarget_zero] using D.routes_member side 0</span>
+<span id="L65" class="line"><a href="#L65">65</a>   · exact ⟨t, at_point⟩</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> end PlacedCutEdgeTriangles</span>
+<span id="L68" class="line"><a href="#L68">68</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

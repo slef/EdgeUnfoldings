@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/SurfaceDistance.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/SurfaceDistance.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.SurfacePathReversal</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Intrinsic distance on the actual boundary, defined from the existing</span>
+<span id="L4" class="line"><a href="#L4">4</a> continuous surface paths. The distance is finite and attained. -/</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> open Set</span>
+<span id="L9" class="line"><a href="#L9">9</a> open scoped ENNReal NNReal</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- The infimum of lengths of continuous routes on the boundary. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> noncomputable def surfaceEDist (P : ConvexPolyhedron) (a b : Space) : ℝ≥0∞ :=</span>
+<span id="L13" class="line"><a href="#L13">13</a>   ⨅ path : P.SurfacePath a b, path.length</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-- Real-valued intrinsic distance; its metric properties are asserted on boundary points. -/</span>
+<span id="L16" class="line"><a href="#L16">16</a> noncomputable def surfaceDist (P : ConvexPolyhedron) (a b : Space) : ℝ :=</span>
+<span id="L17" class="line"><a href="#L17">17</a>   (P.surfaceEDist a b).toReal</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> /-- Every route bounds the intrinsic distance above. -/</span>
+<span id="L20" class="line"><a href="#L20">20</a> theorem SurfacePath.surfaceEDist_le_length {P : ConvexPolyhedron} {a b : Space} (path : P.SurfacePath a b) :</span>
+<span id="L21" class="line"><a href="#L21">21</a>     P.surfaceEDist a b ≤ path.length := iInf_le _ path</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> /-- Intrinsic distance is never smaller than the Euclidean chord. -/</span>
+<span id="L24" class="line"><a href="#L24">24</a> theorem edist_le_surfaceEDist (P : ConvexPolyhedron) (a b : Space) :</span>
+<span id="L25" class="line"><a href="#L25">25</a>     edist a b ≤ P.surfaceEDist a b := le_iInf fun path =&gt; path.chord_le_length</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> /-- Reversing routes makes intrinsic distance symmetric. -/</span>
+<span id="L28" class="line"><a href="#L28">28</a> theorem surfaceEDist_comm (P : ConvexPolyhedron) (a b : Space) :</span>
+<span id="L29" class="line"><a href="#L29">29</a>     P.surfaceEDist a b = P.surfaceEDist b a := by</span>
+<span id="L30" class="line"><a href="#L30">30</a>   have bound (x y : Space) : P.surfaceEDist x y ≤ P.surfaceEDist y x := by</span>
+<span id="L31" class="line"><a href="#L31">31</a>     apply le_iInf</span>
+<span id="L32" class="line"><a href="#L32">32</a>     intro path</span>
+<span id="L33" class="line"><a href="#L33">33</a>     exact path.reverse.surfaceEDist_le_length.trans_eq path.reverse_length</span>
+<span id="L34" class="line"><a href="#L34">34</a>   exact le_antisymm (bound a b) (bound b a)</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> /-- A shortest route realizes the intrinsic distance. -/</span>
+<span id="L37" class="line"><a href="#L37">37</a> theorem SurfacePath.length_eq_surfaceEDist {P : ConvexPolyhedron} {a b : Space}</span>
+<span id="L38" class="line"><a href="#L38">38</a>     (path : P.SurfacePath a b) (shortest : path.IsShortest) : path.length = P.surfaceEDist a b :=</span>
+<span id="L39" class="line"><a href="#L39">39</a>   le_antisymm (le_iInf shortest) path.surfaceEDist_le_length</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> /-- The shortest-path existence theorem shows that the infimum is attained and finite. -/</span>
+<span id="L42" class="line"><a href="#L42">42</a> theorem exists_surface_distance_path (P : ConvexPolyhedron) {a b : Space}</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (ha : a ∈ frontier P.body) (hb : b ∈ frontier P.body) :</span>
+<span id="L44" class="line"><a href="#L44">44</a>     ∃ path : P.SurfacePath a b, path.IsShortest ∧ path.length ≠ ⊤ ∧</span>
+<span id="L45" class="line"><a href="#L45">45</a>       path.length = P.surfaceEDist a b := by</span>
+<span id="L46" class="line"><a href="#L46">46</a>   obtain ⟨path, shortest, finite⟩ := P.exists_shortest_surface_path ha hb</span>
+<span id="L47" class="line"><a href="#L47">47</a>   exact ⟨path, shortest, finite, le_antisymm (le_iInf shortest) path.surfaceEDist_le_length⟩</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> /-- Intrinsic distances between boundary points are finite. -/</span>
+<span id="L50" class="line"><a href="#L50">50</a> theorem surfaceEDist_ne_top (P : ConvexPolyhedron) {a b : Space}</span>
+<span id="L51" class="line"><a href="#L51">51</a>     (ha : a ∈ frontier P.body) (hb : b ∈ frontier P.body) : P.surfaceEDist a b ≠ ⊤ := by</span>
+<span id="L52" class="line"><a href="#L52">52</a>   obtain ⟨path, _, finite, equal⟩ := P.exists_surface_distance_path ha hb</span>
+<span id="L53" class="line"><a href="#L53">53</a>   exact equal ▸ finite</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> /-- Within any whole face the intrinsic distance is exactly the Euclidean distance. -/</span>
+<span id="L56" class="line"><a href="#L56">56</a> theorem surfaceEDist_eq_edist_in_face (P : ConvexPolyhedron) (F : P.Face) {a b : Space}</span>
+<span id="L57" class="line"><a href="#L57">57</a>     (ha : a ∈ F.val) (hb : b ∈ F.val) : P.surfaceEDist a b = edist a b := by</span>
+<span id="L58" class="line"><a href="#L58">58</a>   exact le_antisymm</span>
+<span id="L59" class="line"><a href="#L59">59</a>     ((SurfacePath.inFace F ha hb).surfaceEDist_le_length.trans_eq (SurfacePath.inFace_length F ha hb))</span>
+<span id="L60" class="line"><a href="#L60">60</a>     (P.edist_le_surfaceEDist a b)</span>
+<span id="L61" class="line"><a href="#L61">61</a> </span>
+<span id="L62" class="line"><a href="#L62">62</a> /-- A boundary point has zero intrinsic distance from itself. -/</span>
+<span id="L63" class="line"><a href="#L63">63</a> theorem surfaceEDist_self (P : ConvexPolyhedron) {a : Space} (ha : a ∈ frontier P.body) :</span>
+<span id="L64" class="line"><a href="#L64">64</a>     P.surfaceEDist a a = 0 := by</span>
+<span id="L65" class="line"><a href="#L65">65</a>   obtain ⟨F, aF⟩ := P.boundary_point_in_face ha</span>
+<span id="L66" class="line"><a href="#L66">66</a>   rw [P.surfaceEDist_eq_edist_in_face F aF aF, edist_self]</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> /-- Concatenating minimizing routes proves the intrinsic triangle inequality. -/</span>
+<span id="L69" class="line"><a href="#L69">69</a> theorem surfaceEDist_triangle (P : ConvexPolyhedron) {a b c : Space}</span>
+<span id="L70" class="line"><a href="#L70">70</a>     (ha : a ∈ frontier P.body) (hb : b ∈ frontier P.body) (hc : c ∈ frontier P.body) :</span>
+<span id="L71" class="line"><a href="#L71">71</a>     P.surfaceEDist a c ≤ P.surfaceEDist a b + P.surfaceEDist b c := by</span>
+<span id="L72" class="line"><a href="#L72">72</a>   obtain ⟨first, _, _, first_length⟩ := P.exists_surface_distance_path ha hb</span>
+<span id="L73" class="line"><a href="#L73">73</a>   obtain ⟨second, _, _, second_length⟩ := P.exists_surface_distance_path hb hc</span>
+<span id="L74" class="line"><a href="#L74">74</a>   have bound := (first.join second).surfaceEDist_le_length</span>
+<span id="L75" class="line"><a href="#L75">75</a>   rwa [SurfacePath.join_length, first_length, second_length] at bound</span>
+<span id="L76" class="line"><a href="#L76">76</a> </span>
+<span id="L77" class="line"><a href="#L77">77</a> /-- Real intrinsic distance is nonnegative. -/</span>
+<span id="L78" class="line"><a href="#L78">78</a> theorem surfaceDist_nonneg (P : ConvexPolyhedron) (a b : Space) : 0 ≤ P.surfaceDist a b :=</span>
+<span id="L79" class="line"><a href="#L79">79</a>   ENNReal.toReal_nonneg</span>
+<span id="L80" class="line"><a href="#L80">80</a> </span>
+<span id="L81" class="line"><a href="#L81">81</a> theorem surfaceDist_comm (P : ConvexPolyhedron) (a b : Space) :</span>
+<span id="L82" class="line"><a href="#L82">82</a>     P.surfaceDist a b = P.surfaceDist b a := by rw [surfaceDist, surfaceDist, P.surfaceEDist_comm]</span>
+<span id="L83" class="line"><a href="#L83">83</a> </span>
+<span id="L84" class="line"><a href="#L84">84</a> theorem dist_le_surfaceDist (P : ConvexPolyhedron) {a b : Space}</span>
+<span id="L85" class="line"><a href="#L85">85</a>     (ha : a ∈ frontier P.body) (hb : b ∈ frontier P.body) : dist a b ≤ P.surfaceDist a b := by</span>
+<span id="L86" class="line"><a href="#L86">86</a>   simpa only [surfaceDist, edist_dist, ENNReal.toReal_ofReal dist_nonneg] using</span>
+<span id="L87" class="line"><a href="#L87">87</a>     ENNReal.toReal_mono (P.surfaceEDist_ne_top ha hb) (P.edist_le_surfaceEDist a b)</span>
+<span id="L88" class="line"><a href="#L88">88</a> </span>
+<span id="L89" class="line"><a href="#L89">89</a> theorem surfaceDist_eq_dist_in_face (P : ConvexPolyhedron) (F : P.Face) {a b : Space}</span>
+<span id="L90" class="line"><a href="#L90">90</a>     (ha : a ∈ F.val) (hb : b ∈ F.val) : P.surfaceDist a b = dist a b := by</span>
+<span id="L91" class="line"><a href="#L91">91</a>   rw [surfaceDist, P.surfaceEDist_eq_edist_in_face F ha hb, edist_dist, ENNReal.toReal_ofReal dist_nonneg]</span>
+<span id="L92" class="line"><a href="#L92">92</a> </span>
+<span id="L93" class="line"><a href="#L93">93</a> theorem surfaceDist_self (P : ConvexPolyhedron) {a : Space} (ha : a ∈ frontier P.body) :</span>
+<span id="L94" class="line"><a href="#L94">94</a>     P.surfaceDist a a = 0 := by rw [surfaceDist, P.surfaceEDist_self ha, ENNReal.toReal_zero]</span>
+<span id="L95" class="line"><a href="#L95">95</a> </span>
+<span id="L96" class="line"><a href="#L96">96</a> theorem surfaceDist_triangle (P : ConvexPolyhedron) {a b c : Space}</span>
+<span id="L97" class="line"><a href="#L97">97</a>     (ha : a ∈ frontier P.body) (hb : b ∈ frontier P.body) (hc : c ∈ frontier P.body) :</span>
+<span id="L98" class="line"><a href="#L98">98</a>     P.surfaceDist a c ≤ P.surfaceDist a b + P.surfaceDist b c := by</span>
+<span id="L99" class="line"><a href="#L99">99</a>   have bound := ENNReal.toReal_mono (ENNReal.add_ne_top.mpr</span>
+<span id="L100" class="line"><a href="#L100">100</a>     ⟨P.surfaceEDist_ne_top ha hb, P.surfaceEDist_ne_top hb hc⟩) (P.surfaceEDist_triangle ha hb hc)</span>
+<span id="L101" class="line"><a href="#L101">101</a>   simpa only [surfaceDist, ENNReal.toReal_add (P.surfaceEDist_ne_top ha hb)</span>
+<span id="L102" class="line"><a href="#L102">102</a>     (P.surfaceEDist_ne_top hb hc)] using bound</span>
+<span id="L103" class="line"><a href="#L103">103</a> </span>
+<span id="L104" class="line"><a href="#L104">104</a> /-- Zero intrinsic distance identifies boundary points. -/</span>
+<span id="L105" class="line"><a href="#L105">105</a> theorem surfaceDist_eq_zero_iff (P : ConvexPolyhedron) {a b : Space}</span>
+<span id="L106" class="line"><a href="#L106">106</a>     (ha : a ∈ frontier P.body) (hb : b ∈ frontier P.body) : P.surfaceDist a b = 0 ↔ a = b := by</span>
+<span id="L107" class="line"><a href="#L107">107</a>   constructor</span>
+<span id="L108" class="line"><a href="#L108">108</a>   · intro zero</span>
+<span id="L109" class="line"><a href="#L109">109</a>     exact dist_eq_zero.mp (le_antisymm ((P.dist_le_surfaceDist ha hb).trans_eq zero) dist_nonneg)</span>
+<span id="L110" class="line"><a href="#L110">110</a>   · rintro rfl</span>
+<span id="L111" class="line"><a href="#L111">111</a>     exact P.surfaceDist_self ha</span>
+<span id="L112" class="line"><a href="#L112">112</a> </span>
+<span id="L113" class="line"><a href="#L113">113</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

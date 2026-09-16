@@ -1,0 +1,109 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/SurfaceFlatCharts.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/SurfaceFlatCharts.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.EdgeLocalMetric</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Away from the original vertices, the actual polyhedral boundary admits</span>
+<span id="L4" class="line"><a href="#L4">4</a> planar neighborhoods preserving its shortest-path metric. -/</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> open Set</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> /-- An internal flat neighborhood with its actual surface map and metric meaning. -/</span>
+<span id="L11" class="line"><a href="#L11">11</a> structure FlatChart (P : ConvexPolyhedron) (z : Space) where</span>
+<span id="L12" class="line"><a href="#L12">12</a>   domain : Set Plane</span>
+<span id="L13" class="line"><a href="#L13">13</a>   open_domain : IsOpen domain</span>
+<span id="L14" class="line"><a href="#L14">14</a>   origin : Plane</span>
+<span id="L15" class="line"><a href="#L15">15</a>   origin_mem : origin ∈ domain</span>
+<span id="L16" class="line"><a href="#L16">16</a>   map : Plane → Space</span>
+<span id="L17" class="line"><a href="#L17">17</a>   continuous : Continuous map</span>
+<span id="L18" class="line"><a href="#L18">18</a>   at_origin : map origin = z</span>
+<span id="L19" class="line"><a href="#L19">19</a>   on_surface : MapsTo map domain (frontier P.body)</span>
+<span id="L20" class="line"><a href="#L20">20</a>   distance : ∀ x ∈ domain, ∀ y ∈ domain, P.surfaceDist (map x) (map y) = dist x y</span>
+<span id="L21" class="line"><a href="#L21">21</a>   covers : ∃ U : Set Space, IsOpen U ∧ z ∈ U ∧ U ∩ frontier P.body ⊆ map &#x27;&#x27; domain</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> namespace EdgeFolding</span>
+<span id="L24" class="line"><a href="#L24">24</a> </span>
+<span id="L25" class="line"><a href="#L25">25</a> variable {P : ConvexPolyhedron} {center : Space} {facets : P.NormalizedFacets center}</span>
+<span id="L26" class="line"><a href="#L26">26</a>   {F G : P.Face} (chart : EdgeFolding facets F G)</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> /-- Any positive planar disk covers some neighborhood of its central edge point. -/</span>
+<span id="L29" class="line"><a href="#L29">29</a> theorem disk_covers_neighborhood (shared : P.ShareEdge F G) {z : Space}</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (hz : z ∈ F.val ∩ G.val) (not_vertex : z ∉ P.vertices) {ε : ℝ} (positive : 0 &lt; ε) :</span>
+<span id="L31" class="line"><a href="#L31">31</a>     ∃ U : Set Space, IsOpen U ∧ z ∈ U ∧</span>
+<span id="L32" class="line"><a href="#L32">32</a>       U ∩ frontier P.body ⊆ chart.fold.map &#x27;&#x27; Metric.ball (chart.left z) ε := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>   obtain ⟨U₀, open₀, z₀, only_two⟩ := P.edge_neighborhood_two_facets F G shared hz not_vertex</span>
+<span id="L34" class="line"><a href="#L34">34</a>   let V := Metric.ball (chart.left z) ε</span>
+<span id="L35" class="line"><a href="#L35">35</a>   let U : Set Space := U₀ ∩ (chart.left ⁻¹&#x27; V ∩ chart.right ⁻¹&#x27; V)</span>
+<span id="L36" class="line"><a href="#L36">36</a>   have openU : IsOpen U := open₀.inter</span>
+<span id="L37" class="line"><a href="#L37">37</a>     ((Metric.isOpen_ball.preimage chart.left.continuous_of_finiteDimensional).inter</span>
+<span id="L38" class="line"><a href="#L38">38</a>       (Metric.isOpen_ball.preimage chart.right.continuous_of_finiteDimensional))</span>
+<span id="L39" class="line"><a href="#L39">39</a>   have origin : chart.left z ∈ V := Metric.mem_ball_self positive</span>
+<span id="L40" class="line"><a href="#L40">40</a>   have zU : z ∈ U := ⟨z₀, origin, by change chart.right z ∈ V; rwa [← chart.joined hz]⟩</span>
+<span id="L41" class="line"><a href="#L41">41</a>   refine ⟨U, openU, zU, ?_⟩</span>
+<span id="L42" class="line"><a href="#L42">42</a>   intro x hx</span>
+<span id="L43" class="line"><a href="#L43">43</a>   rcases only_two ⟨hx.1.1, hx.2⟩ with first | second</span>
+<span id="L44" class="line"><a href="#L44">44</a>   · exact ⟨chart.left x, hx.1.2.1, chart.fold_left first⟩</span>
+<span id="L45" class="line"><a href="#L45">45</a>   · exact ⟨chart.right x, hx.1.2.2, chart.fold_right second⟩</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> include chart in</span>
+<span id="L48" class="line"><a href="#L48">48</a> /-- The constructed edge neighborhood supplies a flat chart in the intrinsic metric. -/</span>
+<span id="L49" class="line"><a href="#L49">49</a> theorem flat_chart (shared : P.ShareEdge F G) {z : Space}</span>
+<span id="L50" class="line"><a href="#L50">50</a>     (hz : z ∈ F.val ∩ G.val) (not_vertex : z ∉ P.vertices) : Nonempty (P.FlatChart z) := by</span>
+<span id="L51" class="line"><a href="#L51">51</a>   obtain ⟨near⟩ := chart.exists_neighborhood shared hz not_vertex</span>
+<span id="L52" class="line"><a href="#L52">52</a>   obtain ⟨ε, positive, disk_in, isometric⟩ := near.exists_isometric_disk shared hz not_vertex</span>
+<span id="L53" class="line"><a href="#L53">53</a>   exact ⟨{</span>
+<span id="L54" class="line"><a href="#L54">54</a>     domain := Metric.ball (chart.left z) ε</span>
+<span id="L55" class="line"><a href="#L55">55</a>     open_domain := Metric.isOpen_ball</span>
+<span id="L56" class="line"><a href="#L56">56</a>     origin := chart.left z</span>
+<span id="L57" class="line"><a href="#L57">57</a>     origin_mem := Metric.mem_ball_self positive</span>
+<span id="L58" class="line"><a href="#L58">58</a>     map := chart.fold.map</span>
+<span id="L59" class="line"><a href="#L59">59</a>     continuous := chart.fold.continuous</span>
+<span id="L60" class="line"><a href="#L60">60</a>     at_origin := chart.fold_left hz.1</span>
+<span id="L61" class="line"><a href="#L61">61</a>     on_surface := fun x hx =&gt; near.on_surface ⟨x, disk_in hx, rfl⟩</span>
+<span id="L62" class="line"><a href="#L62">62</a>     distance := isometric</span>
+<span id="L63" class="line"><a href="#L63">63</a>     covers := chart.disk_covers_neighborhood shared hz not_vertex positive }⟩</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> end EdgeFolding</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> /-- A point belonging to only one original face has a rigid planar chart. -/</span>
+<span id="L68" class="line"><a href="#L68">68</a> theorem flat_chart_in_single_face {P : ConvexPolyhedron} (F : P.Face) {z : Space}</span>
+<span id="L69" class="line"><a href="#L69">69</a>     (hz : z ∈ F.val) (unique : ∀ G : P.Face, z ∈ G.val → G = F) : Nonempty (P.FlatChart z) := by</span>
+<span id="L70" class="line"><a href="#L70">70</a>   obtain ⟨center, inside⟩ := P.solid</span>
+<span id="L71" class="line"><a href="#L71">71</a>   obtain ⟨facets⟩ := P.exists_normalized_facets inside</span>
+<span id="L72" class="line"><a href="#L72">72</a>   obtain ⟨U₁, open₁, z₁, plane⟩ := facets.single_face_local_plane F hz unique</span>
+<span id="L73" class="line"><a href="#L73">73</a>   obtain ⟨place, rigid⟩ := F.exists_rigid_placement</span>
+<span id="L74" class="line"><a href="#L74">74</a>   obtain ⟨lift, in_plane, left_inverse, right_inverse, lift_rigid⟩ := F.exists_rigid_plane_inverse place rigid</span>
+<span id="L75" class="line"><a href="#L75">75</a>   let V : Set Plane := lift ⁻¹&#x27; U₁</span>
+<span id="L76" class="line"><a href="#L76">76</a>   have openV : IsOpen V := open₁.preimage lift.continuous_of_finiteDimensional</span>
+<span id="L77" class="line"><a href="#L77">77</a>   have origin : place z ∈ V := by change lift (place z) ∈ U₁; rwa [right_inverse z (subset_affineSpan ℝ _ hz)]</span>
+<span id="L78" class="line"><a href="#L78">78</a>   have in_face (x : Plane) (hx : x ∈ V) : lift x ∈ F.val := by</span>
+<span id="L79" class="line"><a href="#L79">79</a>     have member : lift x ∈ U₁ ∩ (affineSpan ℝ F.val : Set Space) := ⟨hx, in_plane x⟩</span>
+<span id="L80" class="line"><a href="#L80">80</a>     rw [← plane] at member</span>
+<span id="L81" class="line"><a href="#L81">81</a>     exact member.2</span>
+<span id="L82" class="line"><a href="#L82">82</a>   obtain ⟨U₀, open₀, z₀, incident⟩ := P.incident_facets_neighborhood z</span>
+<span id="L83" class="line"><a href="#L83">83</a>   let U : Set Space := U₀ ∩ place ⁻¹&#x27; V</span>
+<span id="L84" class="line"><a href="#L84">84</a>   have openU : IsOpen U := open₀.inter (openV.preimage place.continuous_of_finiteDimensional)</span>
+<span id="L85" class="line"><a href="#L85">85</a>   have covered : U ∩ frontier P.body ⊆ lift &#x27;&#x27; V := by</span>
+<span id="L86" class="line"><a href="#L86">86</a>     intro x hx</span>
+<span id="L87" class="line"><a href="#L87">87</a>     obtain ⟨G, xG⟩ := P.boundary_point_in_face hx.2</span>
+<span id="L88" class="line"><a href="#L88">88</a>     have same := unique G (incident x hx.1.1 G xG)</span>
+<span id="L89" class="line"><a href="#L89">89</a>     subst G</span>
+<span id="L90" class="line"><a href="#L90">90</a>     exact ⟨place x, hx.1.2, right_inverse x (subset_affineSpan ℝ _ xG)⟩</span>
+<span id="L91" class="line"><a href="#L91">91</a>   exact ⟨{</span>
+<span id="L92" class="line"><a href="#L92">92</a>     domain := V, open_domain := openV, origin := place z, origin_mem := origin</span>
+<span id="L93" class="line"><a href="#L93">93</a>     map := lift, continuous := lift.continuous_of_finiteDimensional</span>
+<span id="L94" class="line"><a href="#L94">94</a>     at_origin := right_inverse z (subset_affineSpan ℝ _ hz)</span>
+<span id="L95" class="line"><a href="#L95">95</a>     on_surface := fun x hx =&gt; F.subset_frontier (in_face x hx)</span>
+<span id="L96" class="line"><a href="#L96">96</a>     distance := fun x hx y hy =&gt; (P.surfaceDist_eq_dist_in_face F (in_face x hx) (in_face y hy)).trans (lift_rigid x y)</span>
+<span id="L97" class="line"><a href="#L97">97</a>     covers := ⟨U, openU, ⟨z₀, origin⟩, covered⟩ }⟩</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> /-- Every boundary point except an original vertex has an actual flat metric chart. -/</span>
+<span id="L100" class="line"><a href="#L100">100</a> theorem exists_flat_chart (P : ConvexPolyhedron) {z : Space}</span>
+<span id="L101" class="line"><a href="#L101">101</a>     (surface : z ∈ frontier P.body) (not_vertex : z ∉ P.vertices) : Nonempty (P.FlatChart z) := by</span>
+<span id="L102" class="line"><a href="#L102">102</a>   rcases P.nonvertex_incident_facets surface not_vertex with ⟨F, hz, unique⟩ | ⟨F, G, shared, hz, _⟩</span>
+<span id="L103" class="line"><a href="#L103">103</a>   · exact flat_chart_in_single_face F hz unique</span>
+<span id="L104" class="line"><a href="#L104">104</a>   · obtain ⟨center, inside⟩ := P.solid</span>
+<span id="L105" class="line"><a href="#L105">105</a>     obtain ⟨facets⟩ := P.exists_normalized_facets inside</span>
+<span id="L106" class="line"><a href="#L106">106</a>     obtain ⟨chart⟩ := exists_edge_folding facets F G shared</span>
+<span id="L107" class="line"><a href="#L107">107</a>     exact chart.flat_chart shared hz not_vertex</span>
+<span id="L108" class="line"><a href="#L108">108</a> </span>
+<span id="L109" class="line"><a href="#L109">109</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

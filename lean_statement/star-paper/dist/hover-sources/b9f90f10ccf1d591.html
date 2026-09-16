@@ -1,0 +1,76 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/ClosedRouteStrips.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/ClosedRouteStrips.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.RouteStrips</span>
+<span id="L2" class="line"><a href="#L2">2</a> import Mathlib.Topology.Constructions</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! Closing a continuous route family closes its swept strip exactly.</span>
+<span id="L5" class="line"><a href="#L5">5</a> The only added parameters are the two endpoint routes, the target edge,</span>
+<span id="L6" class="line"><a href="#L6">6</a> and the common source. -/</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> open Set BoundedContinuousFunction</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-- Evaluate a route family including both edge endpoints and both route endpoints. -/</span>
+<span id="L13" class="line"><a href="#L13">13</a> noncomputable def closedRouteStripMap {P : ConvexPolyhedron}</span>
+<span id="L14" class="line"><a href="#L14">14</a>     (routes : C(unitInterval, P.BoundaryCurve)) : C(unitInterval × unitInterval, frontier P.body) :=</span>
+<span id="L15" class="line"><a href="#L15">15</a>   ⟨fun p =&gt; routes p.1 p.2,</span>
+<span id="L16" class="line"><a href="#L16">16</a>     continuous_eval.comp ((routes.continuous.comp continuous_fst).prodMk continuous_snd)⟩</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> /-- Interior times are dense in the closed unit interval. -/</span>
+<span id="L19" class="line"><a href="#L19">19</a> theorem interiorTime_dense : DenseRange interiorTime := by</span>
+<span id="L20" class="line"><a href="#L20">20</a>   change DenseRange (inclusion (Ioo_subset_Icc_self : Ioo (0 : ℝ) 1 ⊆ Icc 0 1))</span>
+<span id="L21" class="line"><a href="#L21">21</a>   rw [denseRange_inclusion_iff, closure_Ioo (by norm_num : (0 : ℝ) ≠ 1)]</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> /-- The closed swept region is precisely the closure of its open strip. -/</span>
+<span id="L24" class="line"><a href="#L24">24</a> theorem closure_routeStrip_eq {P : ConvexPolyhedron}</span>
+<span id="L25" class="line"><a href="#L25">25</a>     (open_routes : C(Ioo (0 : ℝ) 1, P.BoundaryCurve))</span>
+<span id="L26" class="line"><a href="#L26">26</a>     (closed_routes : C(unitInterval, P.BoundaryCurve))</span>
+<span id="L27" class="line"><a href="#L27">27</a>     (agrees : ∀ t, closed_routes (interiorTime t) = open_routes t) :</span>
+<span id="L28" class="line"><a href="#L28">28</a>     closure (routeStrip open_routes) = range (closedRouteStripMap closed_routes) := by</span>
+<span id="L29" class="line"><a href="#L29">29</a>   let inclusion : Ioo (0 : ℝ) 1 × Ioo (0 : ℝ) 1 → unitInterval × unitInterval :=</span>
+<span id="L30" class="line"><a href="#L30">30</a>     Prod.map interiorTime interiorTime</span>
+<span id="L31" class="line"><a href="#L31">31</a>   have dense : DenseRange inclusion := interiorTime_dense.prodMap interiorTime_dense</span>
+<span id="L32" class="line"><a href="#L32">32</a>   have same : closedRouteStripMap closed_routes ∘ inclusion = routeStripMap open_routes := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>     funext p</span>
+<span id="L34" class="line"><a href="#L34">34</a>     exact congrFun (congrArg DFunLike.coe (agrees p.1)) (interiorTime p.2)</span>
+<span id="L35" class="line"><a href="#L35">35</a>   have included : routeStrip open_routes ⊆ range (closedRouteStripMap closed_routes) := by</span>
+<span id="L36" class="line"><a href="#L36">36</a>     rw [routeStrip, ← same]</span>
+<span id="L37" class="line"><a href="#L37">37</a>     exact range_comp_subset_range _ _</span>
+<span id="L38" class="line"><a href="#L38">38</a>   apply Subset.antisymm (closure_minimal included (isCompact_range (closedRouteStripMap closed_routes).continuous).isClosed)</span>
+<span id="L39" class="line"><a href="#L39">39</a>   have contains := (closedRouteStripMap closed_routes).continuous.range_subset_closure_image_dense dense</span>
+<span id="L40" class="line"><a href="#L40">40</a>   rwa [← range_comp, same] at contains</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> /-- Any point added by closure lies on an endpoint route, the target edge, or the source. -/</span>
+<span id="L43" class="line"><a href="#L43">43</a> theorem closed_route_strip_added_points {P : ConvexPolyhedron} (a : frontier P.body)</span>
+<span id="L44" class="line"><a href="#L44">44</a>     (target : unitInterval → frontier P.body)</span>
+<span id="L45" class="line"><a href="#L45">45</a>     (open_routes : C(Ioo (0 : ℝ) 1, P.BoundaryCurve))</span>
+<span id="L46" class="line"><a href="#L46">46</a>     (closed_routes : C(unitInterval, P.BoundaryCurve))</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (agrees : ∀ t, closed_routes (interiorTime t) = open_routes t)</span>
+<span id="L48" class="line"><a href="#L48">48</a>     (member : ∀ t, closed_routes t ∈ P.geodesicFiber a (target t))</span>
+<span id="L49" class="line"><a href="#L49">49</a>     (b : frontier P.body) (added : b ∈ closure (routeStrip open_routes) \ routeStrip open_routes) :</span>
+<span id="L50" class="line"><a href="#L50">50</a>     b = a ∨ b ∈ range target ∨ b ∈ range (closed_routes 0) ∨ b ∈ range (closed_routes 1) := by</span>
+<span id="L51" class="line"><a href="#L51">51</a>   rw [closure_routeStrip_eq open_routes closed_routes agrees] at added</span>
+<span id="L52" class="line"><a href="#L52">52</a>   obtain ⟨⟨x, t⟩, at_point⟩ := added.1</span>
+<span id="L53" class="line"><a href="#L53">53</a>   have at_point&#x27; : closed_routes x t = b := at_point</span>
+<span id="L54" class="line"><a href="#L54">54</a>   by_cases time_zero : t = 0</span>
+<span id="L55" class="line"><a href="#L55">55</a>   · exact Or.inl (at_point&#x27;.symm.trans (time_zero ▸ congrArg Prod.fst (member x).2))</span>
+<span id="L56" class="line"><a href="#L56">56</a>   by_cases time_one : t = 1</span>
+<span id="L57" class="line"><a href="#L57">57</a>   · right; left</span>
+<span id="L58" class="line"><a href="#L58">58</a>     exact ⟨x, (congrArg Prod.snd (member x).2).symm.trans (by simpa only [time_one] using at_point&#x27;)⟩</span>
+<span id="L59" class="line"><a href="#L59">59</a>   by_cases edge_zero : x = 0</span>
+<span id="L60" class="line"><a href="#L60">60</a>   · right; right; left</span>
+<span id="L61" class="line"><a href="#L61">61</a>     exact ⟨t, edge_zero ▸ at_point&#x27;⟩</span>
+<span id="L62" class="line"><a href="#L62">62</a>   by_cases edge_one : x = 1</span>
+<span id="L63" class="line"><a href="#L63">63</a>   · right; right; right</span>
+<span id="L64" class="line"><a href="#L64">64</a>     exact ⟨t, edge_one ▸ at_point&#x27;⟩</span>
+<span id="L65" class="line"><a href="#L65">65</a>   have x_inside : 0 &lt; x ∧ x &lt; 1 := ⟨lt_of_le_of_ne x.property.1 (Ne.symm edge_zero),</span>
+<span id="L66" class="line"><a href="#L66">66</a>     lt_of_le_of_ne x.property.2 edge_one⟩</span>
+<span id="L67" class="line"><a href="#L67">67</a>   have t_inside : 0 &lt; t ∧ t &lt; 1 := ⟨lt_of_le_of_ne t.property.1 (Ne.symm time_zero),</span>
+<span id="L68" class="line"><a href="#L68">68</a>     lt_of_le_of_ne t.property.2 time_one⟩</span>
+<span id="L69" class="line"><a href="#L69">69</a>   exfalso</span>
+<span id="L70" class="line"><a href="#L70">70</a>   apply added.2</span>
+<span id="L71" class="line"><a href="#L71">71</a>   refine ⟨(⟨x, x_inside⟩, ⟨t, t_inside⟩), ?_⟩</span>
+<span id="L72" class="line"><a href="#L72">72</a>   change open_routes ⟨x, x_inside⟩ t = b</span>
+<span id="L73" class="line"><a href="#L73">73</a>   rw [← agrees]</span>
+<span id="L74" class="line"><a href="#L74">74</a>   exact at_point&#x27;</span>
+<span id="L75" class="line"><a href="#L75">75</a> </span>
+<span id="L76" class="line"><a href="#L76">76</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

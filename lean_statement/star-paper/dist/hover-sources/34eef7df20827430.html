@@ -1,0 +1,849 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Analysis/Normed/Affine/Isometry.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Analysis/Normed/Affine/Isometry.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2021 Heather Macbeth. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Heather Macbeth</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Algebra.CharP.Invertible</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Analysis.Normed.Group.AddTorsor</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Analysis.Normed.Module.Basic</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Mathlib.Analysis.Normed.Operator.LinearIsometry</span>
+<span id="L12" class="line"><a href="#L12">12</a> public import Mathlib.LinearAlgebra.AffineSpace.Restrict</span>
+<span id="L13" class="line"><a href="#L13">13</a> public import Mathlib.Topology.Algebra.AffineSubspace</span>
+<span id="L14" class="line"><a href="#L14">14</a> public import Mathlib.Topology.Algebra.ContinuousAffineEquiv</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> /-!</span>
+<span id="L17" class="line"><a href="#L17">17</a> # Affine isometries</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> In this file we define `AffineIsometry 𝕜 P P₂` to be an affine isometric embedding of normed</span>
+<span id="L20" class="line"><a href="#L20">20</a> add-torsors `P` into `P₂` over normed `𝕜`-spaces and `AffineIsometryEquiv` to be an affine</span>
+<span id="L21" class="line"><a href="#L21">21</a> isometric equivalence between `P` and `P₂`.</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> We also prove basic lemmas and provide convenience constructors.  The choice of these lemmas and</span>
+<span id="L24" class="line"><a href="#L24">24</a> constructors is closely modelled on those for the `LinearIsometry` and `AffineMap` theories.</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> Since many elementary properties don&#x27;t require `‖x‖ = 0 → x = 0` we initially set up the theory for</span>
+<span id="L27" class="line"><a href="#L27">27</a> `SeminormedAddCommGroup` and specialize to `NormedAddCommGroup` only when needed.</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> ## Notation</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> We introduce the notation `P →ᵃⁱ[𝕜] P₂` for `AffineIsometry 𝕜 P P₂`, and `P ≃ᵃⁱ[𝕜] P₂` for</span>
+<span id="L32" class="line"><a href="#L32">32</a> `AffineIsometryEquiv 𝕜 P P₂`.  In contrast with the notation `→ₗᵢ` for linear isometries, `≃ᵢ`</span>
+<span id="L33" class="line"><a href="#L33">33</a> for isometric equivalences, etc., the &quot;i&quot; here is a superscript.  This is for aesthetic reasons to</span>
+<span id="L34" class="line"><a href="#L34">34</a> match the superscript &quot;a&quot; (note that in mathlib `→ᵃ` is an affine map, since `→ₐ` has been taken by</span>
+<span id="L35" class="line"><a href="#L35">35</a> algebra-homomorphisms.)</span>
+<span id="L36" class="line"><a href="#L36">36</a> </span>
+<span id="L37" class="line"><a href="#L37">37</a> -/</span>
+<span id="L38" class="line"><a href="#L38">38</a> </span>
+<span id="L39" class="line"><a href="#L39">39</a> @[expose] public section</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> open Function Set Metric</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> variable (𝕜 : Type*) {V V₁ V₁&#x27; V₂ V₃ V₄ : Type*} {P₁ P₁&#x27; : Type*} (P P₂ : Type*) {P₃ P₄ : Type*}</span>
+<span id="L44" class="line"><a href="#L44">44</a>   [NormedField 𝕜]</span>
+<span id="L45" class="line"><a href="#L45">45</a>   [SeminormedAddCommGroup V] [NormedSpace 𝕜 V] [PseudoMetricSpace P] [NormedAddTorsor V P]</span>
+<span id="L46" class="line"><a href="#L46">46</a>   [SeminormedAddCommGroup V₁] [NormedSpace 𝕜 V₁] [PseudoMetricSpace P₁] [NormedAddTorsor V₁ P₁]</span>
+<span id="L47" class="line"><a href="#L47">47</a>   [SeminormedAddCommGroup V₁&#x27;] [NormedSpace 𝕜 V₁&#x27;] [MetricSpace P₁&#x27;] [NormedAddTorsor V₁&#x27; P₁&#x27;]</span>
+<span id="L48" class="line"><a href="#L48">48</a>   [SeminormedAddCommGroup V₂] [NormedSpace 𝕜 V₂] [PseudoMetricSpace P₂] [NormedAddTorsor V₂ P₂]</span>
+<span id="L49" class="line"><a href="#L49">49</a>   [SeminormedAddCommGroup V₃] [NormedSpace 𝕜 V₃] [PseudoMetricSpace P₃] [NormedAddTorsor V₃ P₃]</span>
+<span id="L50" class="line"><a href="#L50">50</a>   [SeminormedAddCommGroup V₄] [NormedSpace 𝕜 V₄] [PseudoMetricSpace P₄] [NormedAddTorsor V₄ P₄]</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> /-- A `𝕜`-affine isometric embedding of one normed add-torsor over a normed `𝕜`-space into</span>
+<span id="L53" class="line"><a href="#L53">53</a> another, denoted as `f : P →ᵃⁱ[𝕜] P₂`. -/</span>
+<span id="L54" class="line"><a href="#L54">54</a> structure AffineIsometry extends P →ᵃ[𝕜] P₂ where</span>
+<span id="L55" class="line"><a href="#L55">55</a>   norm_map : ∀ x : V, ‖linear x‖ = ‖x‖</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> variable {𝕜 P P₂}</span>
+<span id="L58" class="line"><a href="#L58">58</a> </span>
+<span id="L59" class="line"><a href="#L59">59</a> @[inherit_doc]</span>
+<span id="L60" class="line"><a href="#L60">60</a> notation:25 -- `→ᵃᵢ` would be more consistent with the linear isometry notation, but it is uglier</span>
+<span id="L61" class="line"><a href="#L61">61</a> P &quot; →ᵃⁱ[&quot; 𝕜:25 &quot;] &quot; P₂:0 =&gt; AffineIsometry 𝕜 P P₂</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> namespace AffineIsometry</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> variable (f : P →ᵃⁱ[𝕜] P₂)</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> /-- The underlying linear map of an affine isometry is in fact a linear isometry. -/</span>
+<span id="L68" class="line"><a href="#L68">68</a> protected def linearIsometry : V →ₗᵢ[𝕜] V₂ :=</span>
+<span id="L69" class="line"><a href="#L69">69</a>   { f.linear with norm_map&#x27; := f.norm_map }</span>
+<span id="L70" class="line"><a href="#L70">70</a> </span>
+<span id="L71" class="line"><a href="#L71">71</a> @[simp]</span>
+<span id="L72" class="line"><a href="#L72">72</a> theorem linear_eq_linearIsometry : f.linear = f.linearIsometry.toLinearMap := by</span>
+<span id="L73" class="line"><a href="#L73">73</a>   ext</span>
+<span id="L74" class="line"><a href="#L74">74</a>   rfl</span>
+<span id="L75" class="line"><a href="#L75">75</a> </span>
+<span id="L76" class="line"><a href="#L76">76</a> instance : FunLike (P →ᵃⁱ[𝕜] P₂) P P₂ where</span>
+<span id="L77" class="line"><a href="#L77">77</a>   coe f := f.toFun</span>
+<span id="L78" class="line"><a href="#L78">78</a>   coe_injective&#x27; f g := by cases f; cases g; simp</span>
+<span id="L79" class="line"><a href="#L79">79</a> </span>
+<span id="L80" class="line"><a href="#L80">80</a> @[simp]</span>
+<span id="L81" class="line"><a href="#L81">81</a> theorem coe_toAffineMap : ⇑f.toAffineMap = f := by</span>
+<span id="L82" class="line"><a href="#L82">82</a>   rfl</span>
+<span id="L83" class="line"><a href="#L83">83</a> </span>
+<span id="L84" class="line"><a href="#L84">84</a> theorem toAffineMap_injective : Injective (toAffineMap : (P →ᵃⁱ[𝕜] P₂) → P →ᵃ[𝕜] P₂) := by</span>
+<span id="L85" class="line"><a href="#L85">85</a>   rintro ⟨f, _⟩ ⟨g, _⟩ rfl</span>
+<span id="L86" class="line"><a href="#L86">86</a>   rfl</span>
+<span id="L87" class="line"><a href="#L87">87</a> </span>
+<span id="L88" class="line"><a href="#L88">88</a> theorem coeFn_injective : @Injective (P →ᵃⁱ[𝕜] P₂) (P → P₂) (↑) :=</span>
+<span id="L89" class="line"><a href="#L89">89</a>   AffineMap.coeFn_injective.comp toAffineMap_injective</span>
+<span id="L90" class="line"><a href="#L90">90</a> </span>
+<span id="L91" class="line"><a href="#L91">91</a> @[ext]</span>
+<span id="L92" class="line"><a href="#L92">92</a> theorem ext {f g : P →ᵃⁱ[𝕜] P₂} (h : ∀ x, f x = g x) : f = g :=</span>
+<span id="L93" class="line"><a href="#L93">93</a>   coeFn_injective &lt;| funext h</span>
+<span id="L94" class="line"><a href="#L94">94</a> </span>
+<span id="L95" class="line"><a href="#L95">95</a> end AffineIsometry</span>
+<span id="L96" class="line"><a href="#L96">96</a> </span>
+<span id="L97" class="line"><a href="#L97">97</a> namespace LinearIsometry</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> variable (f : V →ₗᵢ[𝕜] V₂)</span>
+<span id="L100" class="line"><a href="#L100">100</a> </span>
+<span id="L101" class="line"><a href="#L101">101</a> /-- Reinterpret a linear isometry as an affine isometry. -/</span>
+<span id="L102" class="line"><a href="#L102">102</a> def toAffineIsometry : V →ᵃⁱ[𝕜] V₂ :=</span>
+<span id="L103" class="line"><a href="#L103">103</a>   { f.toLinearMap.toAffineMap with norm_map := f.norm_map }</span>
+<span id="L104" class="line"><a href="#L104">104</a> </span>
+<span id="L105" class="line"><a href="#L105">105</a> @[simp]</span>
+<span id="L106" class="line"><a href="#L106">106</a> theorem coe_toAffineIsometry : ⇑(f.toAffineIsometry : V →ᵃⁱ[𝕜] V₂) = f :=</span>
+<span id="L107" class="line"><a href="#L107">107</a>   rfl</span>
+<span id="L108" class="line"><a href="#L108">108</a> </span>
+<span id="L109" class="line"><a href="#L109">109</a> @[simp]</span>
+<span id="L110" class="line"><a href="#L110">110</a> theorem toAffineIsometry_linearIsometry : f.toAffineIsometry.linearIsometry = f := by</span>
+<span id="L111" class="line"><a href="#L111">111</a>   ext</span>
+<span id="L112" class="line"><a href="#L112">112</a>   rfl</span>
+<span id="L113" class="line"><a href="#L113">113</a> </span>
+<span id="L114" class="line"><a href="#L114">114</a> -- somewhat arbitrary choice of simp direction</span>
+<span id="L115" class="line"><a href="#L115">115</a> @[simp]</span>
+<span id="L116" class="line"><a href="#L116">116</a> theorem toAffineIsometry_toAffineMap : f.toAffineIsometry.toAffineMap = f.toLinearMap.toAffineMap :=</span>
+<span id="L117" class="line"><a href="#L117">117</a>   rfl</span>
+<span id="L118" class="line"><a href="#L118">118</a> </span>
+<span id="L119" class="line"><a href="#L119">119</a> end LinearIsometry</span>
+<span id="L120" class="line"><a href="#L120">120</a> </span>
+<span id="L121" class="line"><a href="#L121">121</a> namespace AffineIsometry</span>
+<span id="L122" class="line"><a href="#L122">122</a> </span>
+<span id="L123" class="line"><a href="#L123">123</a> variable (f : P →ᵃⁱ[𝕜] P₂) (f₁ : P₁&#x27; →ᵃⁱ[𝕜] P₂)</span>
+<span id="L124" class="line"><a href="#L124">124</a> </span>
+<span id="L125" class="line"><a href="#L125">125</a> @[simp]</span>
+<span id="L126" class="line"><a href="#L126">126</a> theorem map_vadd (p : P) (v : V) : f (v +ᵥ p) = f.linearIsometry v +ᵥ f p :=</span>
+<span id="L127" class="line"><a href="#L127">127</a>   f.toAffineMap.map_vadd p v</span>
+<span id="L128" class="line"><a href="#L128">128</a> </span>
+<span id="L129" class="line"><a href="#L129">129</a> @[simp]</span>
+<span id="L130" class="line"><a href="#L130">130</a> theorem map_vsub (p1 p2 : P) : f.linearIsometry (p1 -ᵥ p2) = f p1 -ᵥ f p2 :=</span>
+<span id="L131" class="line"><a href="#L131">131</a>   f.toAffineMap.linearMap_vsub p1 p2</span>
+<span id="L132" class="line"><a href="#L132">132</a> </span>
+<span id="L133" class="line"><a href="#L133">133</a> @[simp]</span>
+<span id="L134" class="line"><a href="#L134">134</a> theorem dist_map (x y : P) : dist (f x) (f y) = dist x y := by</span>
+<span id="L135" class="line"><a href="#L135">135</a>   rw [dist_eq_norm_vsub V₂, dist_eq_norm_vsub V, ← map_vsub, f.linearIsometry.norm_map]</span>
+<span id="L136" class="line"><a href="#L136">136</a> </span>
+<span id="L137" class="line"><a href="#L137">137</a> @[simp]</span>
+<span id="L138" class="line"><a href="#L138">138</a> theorem nndist_map (x y : P) : nndist (f x) (f y) = nndist x y := by simp [nndist_dist]</span>
+<span id="L139" class="line"><a href="#L139">139</a> </span>
+<span id="L140" class="line"><a href="#L140">140</a> @[simp]</span>
+<span id="L141" class="line"><a href="#L141">141</a> theorem edist_map (x y : P) : edist (f x) (f y) = edist x y := by simp [edist_dist]</span>
+<span id="L142" class="line"><a href="#L142">142</a> </span>
+<span id="L143" class="line"><a href="#L143">143</a> protected theorem isometry : Isometry f :=</span>
+<span id="L144" class="line"><a href="#L144">144</a>   f.edist_map</span>
+<span id="L145" class="line"><a href="#L145">145</a> </span>
+<span id="L146" class="line"><a href="#L146">146</a> protected theorem injective : Injective f₁ :=</span>
+<span id="L147" class="line"><a href="#L147">147</a>   f₁.isometry.injective</span>
+<span id="L148" class="line"><a href="#L148">148</a> </span>
+<span id="L149" class="line"><a href="#L149">149</a> @[simp]</span>
+<span id="L150" class="line"><a href="#L150">150</a> theorem map_eq_iff {x y : P₁&#x27;} : f₁ x = f₁ y ↔ x = y :=</span>
+<span id="L151" class="line"><a href="#L151">151</a>   f₁.injective.eq_iff</span>
+<span id="L152" class="line"><a href="#L152">152</a> </span>
+<span id="L153" class="line"><a href="#L153">153</a> theorem map_ne {x y : P₁&#x27;} (h : x ≠ y) : f₁ x ≠ f₁ y :=</span>
+<span id="L154" class="line"><a href="#L154">154</a>   f₁.injective.ne h</span>
+<span id="L155" class="line"><a href="#L155">155</a> </span>
+<span id="L156" class="line"><a href="#L156">156</a> protected theorem lipschitz : LipschitzWith 1 f :=</span>
+<span id="L157" class="line"><a href="#L157">157</a>   f.isometry.lipschitz</span>
+<span id="L158" class="line"><a href="#L158">158</a> </span>
+<span id="L159" class="line"><a href="#L159">159</a> protected theorem antilipschitz : AntilipschitzWith 1 f :=</span>
+<span id="L160" class="line"><a href="#L160">160</a>   f.isometry.antilipschitz</span>
+<span id="L161" class="line"><a href="#L161">161</a> </span>
+<span id="L162" class="line"><a href="#L162">162</a> @[continuity]</span>
+<span id="L163" class="line"><a href="#L163">163</a> protected theorem continuous : Continuous f :=</span>
+<span id="L164" class="line"><a href="#L164">164</a>   f.isometry.continuous</span>
+<span id="L165" class="line"><a href="#L165">165</a> </span>
+<span id="L166" class="line"><a href="#L166">166</a> theorem ediam_image (s : Set P) : ediam (f &#x27;&#x27; s) = ediam s :=</span>
+<span id="L167" class="line"><a href="#L167">167</a>   f.isometry.ediam_image s</span>
+<span id="L168" class="line"><a href="#L168">168</a> </span>
+<span id="L169" class="line"><a href="#L169">169</a> theorem ediam_range : ediam (range f) = ediam (univ : Set P) :=</span>
+<span id="L170" class="line"><a href="#L170">170</a>   f.isometry.ediam_range</span>
+<span id="L171" class="line"><a href="#L171">171</a> </span>
+<span id="L172" class="line"><a href="#L172">172</a> theorem diam_image (s : Set P) : Metric.diam (f &#x27;&#x27; s) = Metric.diam s :=</span>
+<span id="L173" class="line"><a href="#L173">173</a>   f.isometry.diam_image s</span>
+<span id="L174" class="line"><a href="#L174">174</a> </span>
+<span id="L175" class="line"><a href="#L175">175</a> theorem diam_range : Metric.diam (range f) = Metric.diam (univ : Set P) :=</span>
+<span id="L176" class="line"><a href="#L176">176</a>   f.isometry.diam_range</span>
+<span id="L177" class="line"><a href="#L177">177</a> </span>
+<span id="L178" class="line"><a href="#L178">178</a> /-- Interpret an affine isometry as a continuous affine map. -/</span>
+<span id="L179" class="line"><a href="#L179">179</a> def toContinuousAffineMap : P →ᴬ[𝕜] P₂ := { f with cont := f.continuous }</span>
+<span id="L180" class="line"><a href="#L180">180</a> </span>
+<span id="L181" class="line"><a href="#L181">181</a> theorem toContinuousAffineMap_injective :</span>
+<span id="L182" class="line"><a href="#L182">182</a>     Function.Injective (toContinuousAffineMap : _ → P →ᴬ[𝕜] P₂) := fun x _ h =&gt;</span>
+<span id="L183" class="line"><a href="#L183">183</a>   coeFn_injective (congr_arg _ h : ⇑x.toContinuousAffineMap = _)</span>
+<span id="L184" class="line"><a href="#L184">184</a> </span>
+<span id="L185" class="line"><a href="#L185">185</a> @[simp]</span>
+<span id="L186" class="line"><a href="#L186">186</a> theorem toContinuousAffineMap_inj {f g : P →ᵃⁱ[𝕜] P₂} :</span>
+<span id="L187" class="line"><a href="#L187">187</a>     f.toContinuousAffineMap = g.toContinuousAffineMap ↔ f = g :=</span>
+<span id="L188" class="line"><a href="#L188">188</a>   toContinuousAffineMap_injective.eq_iff</span>
+<span id="L189" class="line"><a href="#L189">189</a> </span>
+<span id="L190" class="line"><a href="#L190">190</a> @[simp]</span>
+<span id="L191" class="line"><a href="#L191">191</a> theorem coe_toContinuousAffineMap : ⇑f.toContinuousAffineMap = f := rfl</span>
+<span id="L192" class="line"><a href="#L192">192</a> </span>
+<span id="L193" class="line"><a href="#L193">193</a> @[simp]</span>
+<span id="L194" class="line"><a href="#L194">194</a> theorem comp_continuous_iff {α : Type*} [TopologicalSpace α] {g : α → P} :</span>
+<span id="L195" class="line"><a href="#L195">195</a>     Continuous (f ∘ g) ↔ Continuous g :=</span>
+<span id="L196" class="line"><a href="#L196">196</a>   f.isometry.comp_continuous_iff</span>
+<span id="L197" class="line"><a href="#L197">197</a> </span>
+<span id="L198" class="line"><a href="#L198">198</a> /-- The identity affine isometry. -/</span>
+<span id="L199" class="line"><a href="#L199">199</a> def id : P →ᵃⁱ[𝕜] P :=</span>
+<span id="L200" class="line"><a href="#L200">200</a>   ⟨AffineMap.id 𝕜 P, fun _ =&gt; rfl⟩</span>
+<span id="L201" class="line"><a href="#L201">201</a> </span>
+<span id="L202" class="line"><a href="#L202">202</a> @[simp, norm_cast]</span>
+<span id="L203" class="line"><a href="#L203">203</a> theorem coe_id : ⇑(id : P →ᵃⁱ[𝕜] P) = _root_.id :=</span>
+<span id="L204" class="line"><a href="#L204">204</a>   rfl</span>
+<span id="L205" class="line"><a href="#L205">205</a> </span>
+<span id="L206" class="line"><a href="#L206">206</a> @[simp]</span>
+<span id="L207" class="line"><a href="#L207">207</a> theorem id_apply (x : P) : (AffineIsometry.id : P →ᵃⁱ[𝕜] P) x = x :=</span>
+<span id="L208" class="line"><a href="#L208">208</a>   rfl</span>
+<span id="L209" class="line"><a href="#L209">209</a> </span>
+<span id="L210" class="line"><a href="#L210">210</a> @[simp]</span>
+<span id="L211" class="line"><a href="#L211">211</a> theorem id_toAffineMap : (id.toAffineMap : P →ᵃ[𝕜] P) = AffineMap.id 𝕜 P :=</span>
+<span id="L212" class="line"><a href="#L212">212</a>   rfl</span>
+<span id="L213" class="line"><a href="#L213">213</a> </span>
+<span id="L214" class="line"><a href="#L214">214</a> @[simp]</span>
+<span id="L215" class="line"><a href="#L215">215</a> theorem toContinuousAffineMap_id : id.toContinuousAffineMap = ContinuousAffineMap.id 𝕜 P :=</span>
+<span id="L216" class="line"><a href="#L216">216</a>   rfl</span>
+<span id="L217" class="line"><a href="#L217">217</a> </span>
+<span id="L218" class="line"><a href="#L218">218</a> instance : Inhabited (P →ᵃⁱ[𝕜] P) :=</span>
+<span id="L219" class="line"><a href="#L219">219</a>   ⟨id⟩</span>
+<span id="L220" class="line"><a href="#L220">220</a> </span>
+<span id="L221" class="line"><a href="#L221">221</a> /-- Composition of affine isometries. -/</span>
+<span id="L222" class="line"><a href="#L222">222</a> def comp (g : P₂ →ᵃⁱ[𝕜] P₃) (f : P →ᵃⁱ[𝕜] P₂) : P →ᵃⁱ[𝕜] P₃ :=</span>
+<span id="L223" class="line"><a href="#L223">223</a>   ⟨g.toAffineMap.comp f.toAffineMap, fun _ =&gt; (g.norm_map _).trans (f.norm_map _)⟩</span>
+<span id="L224" class="line"><a href="#L224">224</a> </span>
+<span id="L225" class="line"><a href="#L225">225</a> @[simp]</span>
+<span id="L226" class="line"><a href="#L226">226</a> theorem coe_comp (g : P₂ →ᵃⁱ[𝕜] P₃) (f : P →ᵃⁱ[𝕜] P₂) : ⇑(g.comp f) = g ∘ f :=</span>
+<span id="L227" class="line"><a href="#L227">227</a>   rfl</span>
+<span id="L228" class="line"><a href="#L228">228</a> </span>
+<span id="L229" class="line"><a href="#L229">229</a> @[simp]</span>
+<span id="L230" class="line"><a href="#L230">230</a> theorem id_comp : (id : P₂ →ᵃⁱ[𝕜] P₂).comp f = f :=</span>
+<span id="L231" class="line"><a href="#L231">231</a>   ext fun _ =&gt; rfl</span>
+<span id="L232" class="line"><a href="#L232">232</a> </span>
+<span id="L233" class="line"><a href="#L233">233</a> @[simp]</span>
+<span id="L234" class="line"><a href="#L234">234</a> theorem comp_id : f.comp id = f :=</span>
+<span id="L235" class="line"><a href="#L235">235</a>   ext fun _ =&gt; rfl</span>
+<span id="L236" class="line"><a href="#L236">236</a> </span>
+<span id="L237" class="line"><a href="#L237">237</a> theorem comp_assoc (f : P₃ →ᵃⁱ[𝕜] P₄) (g : P₂ →ᵃⁱ[𝕜] P₃) (h : P →ᵃⁱ[𝕜] P₂) :</span>
+<span id="L238" class="line"><a href="#L238">238</a>     (f.comp g).comp h = f.comp (g.comp h) :=</span>
+<span id="L239" class="line"><a href="#L239">239</a>   rfl</span>
+<span id="L240" class="line"><a href="#L240">240</a> </span>
+<span id="L241" class="line"><a href="#L241">241</a> instance : Monoid (P →ᵃⁱ[𝕜] P) where</span>
+<span id="L242" class="line"><a href="#L242">242</a>   one := id</span>
+<span id="L243" class="line"><a href="#L243">243</a>   mul := comp</span>
+<span id="L244" class="line"><a href="#L244">244</a>   mul_assoc := comp_assoc</span>
+<span id="L245" class="line"><a href="#L245">245</a>   one_mul := id_comp</span>
+<span id="L246" class="line"><a href="#L246">246</a>   mul_one := comp_id</span>
+<span id="L247" class="line"><a href="#L247">247</a> </span>
+<span id="L248" class="line"><a href="#L248">248</a> @[simp]</span>
+<span id="L249" class="line"><a href="#L249">249</a> theorem coe_one : ⇑(1 : P →ᵃⁱ[𝕜] P) = _root_.id :=</span>
+<span id="L250" class="line"><a href="#L250">250</a>   rfl</span>
+<span id="L251" class="line"><a href="#L251">251</a> </span>
+<span id="L252" class="line"><a href="#L252">252</a> @[simp]</span>
+<span id="L253" class="line"><a href="#L253">253</a> theorem coe_mul (f g : P →ᵃⁱ[𝕜] P) : ⇑(f * g) = f ∘ g :=</span>
+<span id="L254" class="line"><a href="#L254">254</a>   rfl</span>
+<span id="L255" class="line"><a href="#L255">255</a> </span>
+<span id="L256" class="line"><a href="#L256">256</a> end AffineIsometry</span>
+<span id="L257" class="line"><a href="#L257">257</a> </span>
+<span id="L258" class="line"><a href="#L258">258</a> namespace AffineSubspace</span>
+<span id="L259" class="line"><a href="#L259">259</a> </span>
+<span id="L260" class="line"><a href="#L260">260</a> /-- `AffineSubspace.subtype` as an `AffineIsometry`. -/</span>
+<span id="L261" class="line"><a href="#L261">261</a> def subtypeₐᵢ (s : AffineSubspace 𝕜 P) [Nonempty s] : s →ᵃⁱ[𝕜] P :=</span>
+<span id="L262" class="line"><a href="#L262">262</a>   { s.subtype with norm_map := s.direction.subtypeₗᵢ.norm_map }</span>
+<span id="L263" class="line"><a href="#L263">263</a> </span>
+<span id="L264" class="line"><a href="#L264">264</a> theorem subtypeₐᵢ_linear (s : AffineSubspace 𝕜 P) [Nonempty s] :</span>
+<span id="L265" class="line"><a href="#L265">265</a>     s.subtypeₐᵢ.linear = s.direction.subtype :=</span>
+<span id="L266" class="line"><a href="#L266">266</a>   rfl</span>
+<span id="L267" class="line"><a href="#L267">267</a> </span>
+<span id="L268" class="line"><a href="#L268">268</a> @[simp]</span>
+<span id="L269" class="line"><a href="#L269">269</a> theorem subtypeₐᵢ_linearIsometry (s : AffineSubspace 𝕜 P) [Nonempty s] :</span>
+<span id="L270" class="line"><a href="#L270">270</a>     s.subtypeₐᵢ.linearIsometry = s.direction.subtypeₗᵢ :=</span>
+<span id="L271" class="line"><a href="#L271">271</a>   rfl</span>
+<span id="L272" class="line"><a href="#L272">272</a> </span>
+<span id="L273" class="line"><a href="#L273">273</a> @[simp]</span>
+<span id="L274" class="line"><a href="#L274">274</a> theorem coe_subtypeₐᵢ (s : AffineSubspace 𝕜 P) [Nonempty s] : ⇑s.subtypeₐᵢ = s.subtype :=</span>
+<span id="L275" class="line"><a href="#L275">275</a>   rfl</span>
+<span id="L276" class="line"><a href="#L276">276</a> </span>
+<span id="L277" class="line"><a href="#L277">277</a> @[simp]</span>
+<span id="L278" class="line"><a href="#L278">278</a> theorem subtypeₐᵢ_toAffineMap (s : AffineSubspace 𝕜 P) [Nonempty s] :</span>
+<span id="L279" class="line"><a href="#L279">279</a>     s.subtypeₐᵢ.toAffineMap = s.subtype :=</span>
+<span id="L280" class="line"><a href="#L280">280</a>   rfl</span>
+<span id="L281" class="line"><a href="#L281">281</a> </span>
+<span id="L282" class="line"><a href="#L282">282</a> @[simp]</span>
+<span id="L283" class="line"><a href="#L283">283</a> theorem toContinuousAffineMap_subtypeₐᵢ (s : AffineSubspace 𝕜 P) [Nonempty s] :</span>
+<span id="L284" class="line"><a href="#L284">284</a>     s.subtypeₐᵢ.toContinuousAffineMap = s.subtypeA :=</span>
+<span id="L285" class="line"><a href="#L285">285</a>   rfl</span>
+<span id="L286" class="line"><a href="#L286">286</a> </span>
+<span id="L287" class="line"><a href="#L287">287</a> end AffineSubspace</span>
+<span id="L288" class="line"><a href="#L288">288</a> </span>
+<span id="L289" class="line"><a href="#L289">289</a> variable (𝕜 P P₂)</span>
+<span id="L290" class="line"><a href="#L290">290</a> </span>
+<span id="L291" class="line"><a href="#L291">291</a> /-- An affine isometric equivalence between two normed vector spaces,</span>
+<span id="L292" class="line"><a href="#L292">292</a> denoted `f : P ≃ᵃⁱ[𝕜] P₂`. -/</span>
+<span id="L293" class="line"><a href="#L293">293</a> structure AffineIsometryEquiv extends P ≃ᵃ[𝕜] P₂ where</span>
+<span id="L294" class="line"><a href="#L294">294</a>   norm_map : ∀ x, ‖linear x‖ = ‖x‖</span>
+<span id="L295" class="line"><a href="#L295">295</a> </span>
+<span id="L296" class="line"><a href="#L296">296</a> variable {𝕜 P P₂}</span>
+<span id="L297" class="line"><a href="#L297">297</a> </span>
+<span id="L298" class="line"><a href="#L298">298</a> -- `≃ᵃᵢ` would be more consistent with the linear isometry equiv notation, but it is uglier</span>
+<span id="L299" class="line"><a href="#L299">299</a> @[inherit_doc] notation:25 P &quot; ≃ᵃⁱ[&quot; 𝕜:25 &quot;] &quot; P₂:0 =&gt; AffineIsometryEquiv 𝕜 P P₂</span>
+<span id="L300" class="line"><a href="#L300">300</a> </span>
+<span id="L301" class="line"><a href="#L301">301</a> namespace AffineIsometryEquiv</span>
+<span id="L302" class="line"><a href="#L302">302</a> </span>
+<span id="L303" class="line"><a href="#L303">303</a> variable (e : P ≃ᵃⁱ[𝕜] P₂)</span>
+<span id="L304" class="line"><a href="#L304">304</a> </span>
+<span id="L305" class="line"><a href="#L305">305</a> /-- The underlying linear equiv of an affine isometry equiv is in fact a linear isometry equiv. -/</span>
+<span id="L306" class="line"><a href="#L306">306</a> protected def linearIsometryEquiv : V ≃ₗᵢ[𝕜] V₂ :=</span>
+<span id="L307" class="line"><a href="#L307">307</a>   { e.linear with norm_map&#x27; := e.norm_map }</span>
+<span id="L308" class="line"><a href="#L308">308</a> </span>
+<span id="L309" class="line"><a href="#L309">309</a> @[simp]</span>
+<span id="L310" class="line"><a href="#L310">310</a> theorem linear_eq_linear_isometry : e.linear = e.linearIsometryEquiv.toLinearEquiv := by</span>
+<span id="L311" class="line"><a href="#L311">311</a>   ext</span>
+<span id="L312" class="line"><a href="#L312">312</a>   rfl</span>
+<span id="L313" class="line"><a href="#L313">313</a> </span>
+<span id="L314" class="line"><a href="#L314">314</a> instance : EquivLike (P ≃ᵃⁱ[𝕜] P₂) P P₂ where</span>
+<span id="L315" class="line"><a href="#L315">315</a>   coe f := f.toFun</span>
+<span id="L316" class="line"><a href="#L316">316</a>   inv f := f.invFun</span>
+<span id="L317" class="line"><a href="#L317">317</a>   left_inv f := f.left_inv</span>
+<span id="L318" class="line"><a href="#L318">318</a>   right_inv f := f.right_inv</span>
+<span id="L319" class="line"><a href="#L319">319</a>   coe_injective&#x27; f g h _ := by</span>
+<span id="L320" class="line"><a href="#L320">320</a>     cases f</span>
+<span id="L321" class="line"><a href="#L321">321</a>     cases g</span>
+<span id="L322" class="line"><a href="#L322">322</a>     congr</span>
+<span id="L323" class="line"><a href="#L323">323</a>     simpa [DFunLike.coe_injective.eq_iff] using h</span>
+<span id="L324" class="line"><a href="#L324">324</a> </span>
+<span id="L325" class="line"><a href="#L325">325</a> @[simp]</span>
+<span id="L326" class="line"><a href="#L326">326</a> theorem coe_mk (e : P ≃ᵃ[𝕜] P₂) (he : ∀ x, ‖e.linear x‖ = ‖x‖) : ⇑(mk e he) = e :=</span>
+<span id="L327" class="line"><a href="#L327">327</a>   rfl</span>
+<span id="L328" class="line"><a href="#L328">328</a> </span>
+<span id="L329" class="line"><a href="#L329">329</a> @[simp]</span>
+<span id="L330" class="line"><a href="#L330">330</a> theorem coe_toAffineEquiv (e : P ≃ᵃⁱ[𝕜] P₂) : ⇑e.toAffineEquiv = e :=</span>
+<span id="L331" class="line"><a href="#L331">331</a>   rfl</span>
+<span id="L332" class="line"><a href="#L332">332</a> </span>
+<span id="L333" class="line"><a href="#L333">333</a> theorem toAffineEquiv_injective : Injective (toAffineEquiv : (P ≃ᵃⁱ[𝕜] P₂) → P ≃ᵃ[𝕜] P₂)</span>
+<span id="L334" class="line"><a href="#L334">334</a>   | ⟨_, _⟩, ⟨_, _⟩, rfl =&gt; rfl</span>
+<span id="L335" class="line"><a href="#L335">335</a> </span>
+<span id="L336" class="line"><a href="#L336">336</a> @[ext]</span>
+<span id="L337" class="line"><a href="#L337">337</a> theorem ext {e e&#x27; : P ≃ᵃⁱ[𝕜] P₂} (h : ∀ x, e x = e&#x27; x) : e = e&#x27; :=</span>
+<span id="L338" class="line"><a href="#L338">338</a>   toAffineEquiv_injective &lt;| AffineEquiv.ext h</span>
+<span id="L339" class="line"><a href="#L339">339</a> </span>
+<span id="L340" class="line"><a href="#L340">340</a> theorem coeFn_injective : @Injective (P ≃ᵃⁱ[𝕜] P₂) (P → P₂) (fun f =&gt; f) :=</span>
+<span id="L341" class="line"><a href="#L341">341</a>   DFunLike.coe_injective</span>
+<span id="L342" class="line"><a href="#L342">342</a> </span>
+<span id="L343" class="line"><a href="#L343">343</a> /-- Reinterpret an `AffineIsometryEquiv` as an `AffineIsometry`. -/</span>
+<span id="L344" class="line"><a href="#L344">344</a> def toAffineIsometry : P →ᵃⁱ[𝕜] P₂ :=</span>
+<span id="L345" class="line"><a href="#L345">345</a>   ⟨e.1.toAffineMap, e.2⟩</span>
+<span id="L346" class="line"><a href="#L346">346</a> </span>
+<span id="L347" class="line"><a href="#L347">347</a> @[simp]</span>
+<span id="L348" class="line"><a href="#L348">348</a> theorem coe_toAffineIsometry : ⇑e.toAffineIsometry = e :=</span>
+<span id="L349" class="line"><a href="#L349">349</a>   rfl</span>
+<span id="L350" class="line"><a href="#L350">350</a> </span>
+<span id="L351" class="line"><a href="#L351">351</a> /-- Construct an affine isometry equivalence by verifying the relation between the map and its</span>
+<span id="L352" class="line"><a href="#L352">352</a> linear part at one base point. Namely, this function takes a map `e : P₁ → P₂`, a linear isometry</span>
+<span id="L353" class="line"><a href="#L353">353</a> equivalence `e&#x27; : V₁ ≃ᵢₗ[k] V₂`, and a point `p` such that for any other point `p&#x27;` we have</span>
+<span id="L354" class="line"><a href="#L354">354</a> `e p&#x27; = e&#x27; (p&#x27; -ᵥ p) +ᵥ e p`. -/</span>
+<span id="L355" class="line"><a href="#L355">355</a> def mk&#x27; (e : P₁ → P₂) (e&#x27; : V₁ ≃ₗᵢ[𝕜] V₂) (p : P₁) (h : ∀ p&#x27; : P₁, e p&#x27; = e&#x27; (p&#x27; -ᵥ p) +ᵥ e p) :</span>
+<span id="L356" class="line"><a href="#L356">356</a>     P₁ ≃ᵃⁱ[𝕜] P₂ :=</span>
+<span id="L357" class="line"><a href="#L357">357</a>   { AffineEquiv.mk&#x27; e e&#x27;.toLinearEquiv p h with norm_map := e&#x27;.norm_map }</span>
+<span id="L358" class="line"><a href="#L358">358</a> </span>
+<span id="L359" class="line"><a href="#L359">359</a> @[simp]</span>
+<span id="L360" class="line"><a href="#L360">360</a> theorem coe_mk&#x27; (e : P₁ → P₂) (e&#x27; : V₁ ≃ₗᵢ[𝕜] V₂) (p h) : ⇑(mk&#x27; e e&#x27; p h) = e :=</span>
+<span id="L361" class="line"><a href="#L361">361</a>   rfl</span>
+<span id="L362" class="line"><a href="#L362">362</a> </span>
+<span id="L363" class="line"><a href="#L363">363</a> @[simp]</span>
+<span id="L364" class="line"><a href="#L364">364</a> theorem linearIsometryEquiv_mk&#x27; (e : P₁ → P₂) (e&#x27; : V₁ ≃ₗᵢ[𝕜] V₂) (p h) :</span>
+<span id="L365" class="line"><a href="#L365">365</a>     (mk&#x27; e e&#x27; p h).linearIsometryEquiv = e&#x27; := by</span>
+<span id="L366" class="line"><a href="#L366">366</a>   ext</span>
+<span id="L367" class="line"><a href="#L367">367</a>   rfl</span>
+<span id="L368" class="line"><a href="#L368">368</a> </span>
+<span id="L369" class="line"><a href="#L369">369</a> end AffineIsometryEquiv</span>
+<span id="L370" class="line"><a href="#L370">370</a> </span>
+<span id="L371" class="line"><a href="#L371">371</a> namespace LinearIsometryEquiv</span>
+<span id="L372" class="line"><a href="#L372">372</a> </span>
+<span id="L373" class="line"><a href="#L373">373</a> variable (e : V ≃ₗᵢ[𝕜] V₂)</span>
+<span id="L374" class="line"><a href="#L374">374</a> </span>
+<span id="L375" class="line"><a href="#L375">375</a> /-- Reinterpret a linear isometry equiv as an affine isometry equiv. -/</span>
+<span id="L376" class="line"><a href="#L376">376</a> def toAffineIsometryEquiv : V ≃ᵃⁱ[𝕜] V₂ :=</span>
+<span id="L377" class="line"><a href="#L377">377</a>   { e.toLinearEquiv.toAffineEquiv with norm_map := e.norm_map }</span>
+<span id="L378" class="line"><a href="#L378">378</a> </span>
+<span id="L379" class="line"><a href="#L379">379</a> @[simp]</span>
+<span id="L380" class="line"><a href="#L380">380</a> theorem coe_toAffineIsometryEquiv : ⇑(e.toAffineIsometryEquiv : V ≃ᵃⁱ[𝕜] V₂) = e := by</span>
+<span id="L381" class="line"><a href="#L381">381</a>   rfl</span>
+<span id="L382" class="line"><a href="#L382">382</a> </span>
+<span id="L383" class="line"><a href="#L383">383</a> @[simp]</span>
+<span id="L384" class="line"><a href="#L384">384</a> theorem toAffineIsometryEquiv_linearIsometryEquiv :</span>
+<span id="L385" class="line"><a href="#L385">385</a>     e.toAffineIsometryEquiv.linearIsometryEquiv = e := by</span>
+<span id="L386" class="line"><a href="#L386">386</a>   ext</span>
+<span id="L387" class="line"><a href="#L387">387</a>   rfl</span>
+<span id="L388" class="line"><a href="#L388">388</a> </span>
+<span id="L389" class="line"><a href="#L389">389</a> -- somewhat arbitrary choice of simp direction</span>
+<span id="L390" class="line"><a href="#L390">390</a> @[simp]</span>
+<span id="L391" class="line"><a href="#L391">391</a> theorem toAffineIsometryEquiv_toAffineEquiv :</span>
+<span id="L392" class="line"><a href="#L392">392</a>     e.toAffineIsometryEquiv.toAffineEquiv = e.toLinearEquiv.toAffineEquiv :=</span>
+<span id="L393" class="line"><a href="#L393">393</a>   rfl</span>
+<span id="L394" class="line"><a href="#L394">394</a> </span>
+<span id="L395" class="line"><a href="#L395">395</a> -- somewhat arbitrary choice of simp direction</span>
+<span id="L396" class="line"><a href="#L396">396</a> @[simp]</span>
+<span id="L397" class="line"><a href="#L397">397</a> theorem toAffineIsometryEquiv_toAffineIsometry :</span>
+<span id="L398" class="line"><a href="#L398">398</a>     e.toAffineIsometryEquiv.toAffineIsometry = e.toLinearIsometry.toAffineIsometry :=</span>
+<span id="L399" class="line"><a href="#L399">399</a>   rfl</span>
+<span id="L400" class="line"><a href="#L400">400</a> </span>
+<span id="L401" class="line"><a href="#L401">401</a> end LinearIsometryEquiv</span>
+<span id="L402" class="line"><a href="#L402">402</a> </span>
+<span id="L403" class="line"><a href="#L403">403</a> namespace AffineIsometryEquiv</span>
+<span id="L404" class="line"><a href="#L404">404</a> </span>
+<span id="L405" class="line"><a href="#L405">405</a> variable (e : P ≃ᵃⁱ[𝕜] P₂)</span>
+<span id="L406" class="line"><a href="#L406">406</a> </span>
+<span id="L407" class="line"><a href="#L407">407</a> protected theorem isometry : Isometry e :=</span>
+<span id="L408" class="line"><a href="#L408">408</a>   e.toAffineIsometry.isometry</span>
+<span id="L409" class="line"><a href="#L409">409</a> </span>
+<span id="L410" class="line"><a href="#L410">410</a> /-- Reinterpret an `AffineIsometryEquiv` as an `IsometryEquiv`. -/</span>
+<span id="L411" class="line"><a href="#L411">411</a> def toIsometryEquiv : P ≃ᵢ P₂ :=</span>
+<span id="L412" class="line"><a href="#L412">412</a>   ⟨e.toAffineEquiv.toEquiv, e.isometry⟩</span>
+<span id="L413" class="line"><a href="#L413">413</a> </span>
+<span id="L414" class="line"><a href="#L414">414</a> @[simp]</span>
+<span id="L415" class="line"><a href="#L415">415</a> theorem coe_toIsometryEquiv : ⇑e.toIsometryEquiv = e :=</span>
+<span id="L416" class="line"><a href="#L416">416</a>   rfl</span>
+<span id="L417" class="line"><a href="#L417">417</a> </span>
+<span id="L418" class="line"><a href="#L418">418</a> theorem range_eq_univ (e : P ≃ᵃⁱ[𝕜] P₂) : Set.range e = Set.univ := by</span>
+<span id="L419" class="line"><a href="#L419">419</a>   rw [← coe_toIsometryEquiv]</span>
+<span id="L420" class="line"><a href="#L420">420</a>   exact IsometryEquiv.range_eq_univ _</span>
+<span id="L421" class="line"><a href="#L421">421</a> </span>
+<span id="L422" class="line"><a href="#L422">422</a> /-- Reinterpret an `AffineIsometryEquiv` as a `Homeomorph`. -/</span>
+<span id="L423" class="line"><a href="#L423">423</a> def toHomeomorph : P ≃ₜ P₂ :=</span>
+<span id="L424" class="line"><a href="#L424">424</a>   e.toIsometryEquiv.toHomeomorph</span>
+<span id="L425" class="line"><a href="#L425">425</a> </span>
+<span id="L426" class="line"><a href="#L426">426</a> @[simp]</span>
+<span id="L427" class="line"><a href="#L427">427</a> theorem coe_toHomeomorph : ⇑e.toHomeomorph = e :=</span>
+<span id="L428" class="line"><a href="#L428">428</a>   rfl</span>
+<span id="L429" class="line"><a href="#L429">429</a> </span>
+<span id="L430" class="line"><a href="#L430">430</a> protected theorem continuous : Continuous e :=</span>
+<span id="L431" class="line"><a href="#L431">431</a>   e.isometry.continuous</span>
+<span id="L432" class="line"><a href="#L432">432</a> </span>
+<span id="L433" class="line"><a href="#L433">433</a> protected theorem continuousAt {x} : ContinuousAt e x :=</span>
+<span id="L434" class="line"><a href="#L434">434</a>   e.continuous.continuousAt</span>
+<span id="L435" class="line"><a href="#L435">435</a> </span>
+<span id="L436" class="line"><a href="#L436">436</a> protected theorem continuousOn {s} : ContinuousOn e s :=</span>
+<span id="L437" class="line"><a href="#L437">437</a>   e.continuous.continuousOn</span>
+<span id="L438" class="line"><a href="#L438">438</a> </span>
+<span id="L439" class="line"><a href="#L439">439</a> protected theorem continuousWithinAt {s x} : ContinuousWithinAt e s x :=</span>
+<span id="L440" class="line"><a href="#L440">440</a>   e.continuous.continuousWithinAt</span>
+<span id="L441" class="line"><a href="#L441">441</a> </span>
+<span id="L442" class="line"><a href="#L442">442</a> /-- Interpret a `AffineIsometryEquiv` as a `ContinuousAffineEquiv`. -/</span>
+<span id="L443" class="line"><a href="#L443">443</a> def toContinuousAffineEquiv : P ≃ᴬ[𝕜] P₂ :=</span>
+<span id="L444" class="line"><a href="#L444">444</a>   { e.toAffineEquiv, e.toHomeomorph with }</span>
+<span id="L445" class="line"><a href="#L445">445</a> </span>
+<span id="L446" class="line"><a href="#L446">446</a> theorem toContinuousAffineEquiv_injective :</span>
+<span id="L447" class="line"><a href="#L447">447</a>     Function.Injective (toContinuousAffineEquiv : _ → P ≃ᴬ[𝕜] P₂) := fun x _ h =&gt;</span>
+<span id="L448" class="line"><a href="#L448">448</a>   coeFn_injective (congr_arg _ h : ⇑x.toContinuousAffineEquiv = _)</span>
+<span id="L449" class="line"><a href="#L449">449</a> </span>
+<span id="L450" class="line"><a href="#L450">450</a> @[simp]</span>
+<span id="L451" class="line"><a href="#L451">451</a> theorem toContinuousAffineEquiv_inj {f g : P ≃ᵃⁱ[𝕜] P₂} :</span>
+<span id="L452" class="line"><a href="#L452">452</a>     f.toContinuousAffineEquiv = g.toContinuousAffineEquiv ↔ f = g :=</span>
+<span id="L453" class="line"><a href="#L453">453</a>   toContinuousAffineEquiv_injective.eq_iff</span>
+<span id="L454" class="line"><a href="#L454">454</a> </span>
+<span id="L455" class="line"><a href="#L455">455</a> @[simp]</span>
+<span id="L456" class="line"><a href="#L456">456</a> theorem coe_toContinuousAffineEquiv : ⇑e.toContinuousAffineEquiv = e :=</span>
+<span id="L457" class="line"><a href="#L457">457</a>   rfl</span>
+<span id="L458" class="line"><a href="#L458">458</a> </span>
+<span id="L459" class="line"><a href="#L459">459</a> /-- Reinterpret a `AffineIsometryEquiv` as a `ContinuousAffineEquiv`. -/</span>
+<span id="L460" class="line"><a href="#L460">460</a> instance : Coe (P ≃ᵃⁱ[𝕜] P₂) (P ≃ᴬ[𝕜] P₂) :=</span>
+<span id="L461" class="line"><a href="#L461">461</a>   ⟨fun e =&gt; e.toContinuousAffineEquiv⟩</span>
+<span id="L462" class="line"><a href="#L462">462</a> </span>
+<span id="L463" class="line"><a href="#L463">463</a> variable (𝕜 P)</span>
+<span id="L464" class="line"><a href="#L464">464</a> </span>
+<span id="L465" class="line"><a href="#L465">465</a> /-- Identity map as an `AffineIsometryEquiv`. -/</span>
+<span id="L466" class="line"><a href="#L466">466</a> def refl : P ≃ᵃⁱ[𝕜] P :=</span>
+<span id="L467" class="line"><a href="#L467">467</a>   ⟨AffineEquiv.refl 𝕜 P, fun _ =&gt; rfl⟩</span>
+<span id="L468" class="line"><a href="#L468">468</a> </span>
+<span id="L469" class="line"><a href="#L469">469</a> variable {𝕜 P}</span>
+<span id="L470" class="line"><a href="#L470">470</a> </span>
+<span id="L471" class="line"><a href="#L471">471</a> instance : Inhabited (P ≃ᵃⁱ[𝕜] P) :=</span>
+<span id="L472" class="line"><a href="#L472">472</a>   ⟨refl 𝕜 P⟩</span>
+<span id="L473" class="line"><a href="#L473">473</a> </span>
+<span id="L474" class="line"><a href="#L474">474</a> @[simp]</span>
+<span id="L475" class="line"><a href="#L475">475</a> theorem coe_refl : ⇑(refl 𝕜 P) = id :=</span>
+<span id="L476" class="line"><a href="#L476">476</a>   rfl</span>
+<span id="L477" class="line"><a href="#L477">477</a> </span>
+<span id="L478" class="line"><a href="#L478">478</a> @[simp]</span>
+<span id="L479" class="line"><a href="#L479">479</a> theorem toAffineEquiv_refl : (refl 𝕜 P).toAffineEquiv = AffineEquiv.refl 𝕜 P :=</span>
+<span id="L480" class="line"><a href="#L480">480</a>   rfl</span>
+<span id="L481" class="line"><a href="#L481">481</a> </span>
+<span id="L482" class="line"><a href="#L482">482</a> @[simp]</span>
+<span id="L483" class="line"><a href="#L483">483</a> theorem toContinuousAffineEquiv_refl : (refl 𝕜 P).toContinuousAffineEquiv = .refl 𝕜 P := rfl</span>
+<span id="L484" class="line"><a href="#L484">484</a> </span>
+<span id="L485" class="line"><a href="#L485">485</a> @[simp]</span>
+<span id="L486" class="line"><a href="#L486">486</a> theorem toIsometryEquiv_refl : (refl 𝕜 P).toIsometryEquiv = IsometryEquiv.refl P :=</span>
+<span id="L487" class="line"><a href="#L487">487</a>   rfl</span>
+<span id="L488" class="line"><a href="#L488">488</a> </span>
+<span id="L489" class="line"><a href="#L489">489</a> @[simp]</span>
+<span id="L490" class="line"><a href="#L490">490</a> theorem toHomeomorph_refl : (refl 𝕜 P).toHomeomorph = Homeomorph.refl P :=</span>
+<span id="L491" class="line"><a href="#L491">491</a>   rfl</span>
+<span id="L492" class="line"><a href="#L492">492</a> </span>
+<span id="L493" class="line"><a href="#L493">493</a> /-- The inverse `AffineIsometryEquiv`. -/</span>
+<span id="L494" class="line"><a href="#L494">494</a> def symm : P₂ ≃ᵃⁱ[𝕜] P :=</span>
+<span id="L495" class="line"><a href="#L495">495</a>   { e.toAffineEquiv.symm with norm_map := e.linearIsometryEquiv.symm.norm_map }</span>
+<span id="L496" class="line"><a href="#L496">496</a> </span>
+<span id="L497" class="line"><a href="#L497">497</a> @[simp]</span>
+<span id="L498" class="line"><a href="#L498">498</a> theorem apply_symm_apply (x : P₂) : e (e.symm x) = x :=</span>
+<span id="L499" class="line"><a href="#L499">499</a>   e.toAffineEquiv.apply_symm_apply x</span>
+<span id="L500" class="line"><a href="#L500">500</a> </span>
+<span id="L501" class="line"><a href="#L501">501</a> @[simp]</span>
+<span id="L502" class="line"><a href="#L502">502</a> theorem symm_apply_apply (x : P) : e.symm (e x) = x :=</span>
+<span id="L503" class="line"><a href="#L503">503</a>   e.toAffineEquiv.symm_apply_apply x</span>
+<span id="L504" class="line"><a href="#L504">504</a> </span>
+<span id="L505" class="line"><a href="#L505">505</a> @[simp]</span>
+<span id="L506" class="line"><a href="#L506">506</a> theorem symm_symm : e.symm.symm = e := rfl</span>
+<span id="L507" class="line"><a href="#L507">507</a> </span>
+<span id="L508" class="line"><a href="#L508">508</a> theorem symm_bijective : Bijective (AffineIsometryEquiv.symm : (P₂ ≃ᵃⁱ[𝕜] P) → _) :=</span>
+<span id="L509" class="line"><a href="#L509">509</a>   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩</span>
+<span id="L510" class="line"><a href="#L510">510</a> </span>
+<span id="L511" class="line"><a href="#L511">511</a> @[simp]</span>
+<span id="L512" class="line"><a href="#L512">512</a> theorem toAffineEquiv_symm : e.symm.toAffineEquiv = e.toAffineEquiv.symm :=</span>
+<span id="L513" class="line"><a href="#L513">513</a>   rfl</span>
+<span id="L514" class="line"><a href="#L514">514</a> </span>
+<span id="L515" class="line"><a href="#L515">515</a> @[simp]</span>
+<span id="L516" class="line"><a href="#L516">516</a> theorem coe_symm_toAffineEquiv : ⇑e.toAffineEquiv.symm = e.symm :=</span>
+<span id="L517" class="line"><a href="#L517">517</a>   rfl</span>
+<span id="L518" class="line"><a href="#L518">518</a> </span>
+<span id="L519" class="line"><a href="#L519">519</a> @[simp]</span>
+<span id="L520" class="line"><a href="#L520">520</a> theorem toContinuousAffineEquiv_symm :</span>
+<span id="L521" class="line"><a href="#L521">521</a>     e.symm.toContinuousAffineEquiv = e.toContinuousAffineEquiv.symm := rfl</span>
+<span id="L522" class="line"><a href="#L522">522</a> </span>
+<span id="L523" class="line"><a href="#L523">523</a> @[simp]</span>
+<span id="L524" class="line"><a href="#L524">524</a> theorem coe_symm_toContinuousAffineEquiv : ⇑e.toContinuousAffineEquiv.symm = e.symm :=</span>
+<span id="L525" class="line"><a href="#L525">525</a>   rfl</span>
+<span id="L526" class="line"><a href="#L526">526</a> </span>
+<span id="L527" class="line"><a href="#L527">527</a> @[simp]</span>
+<span id="L528" class="line"><a href="#L528">528</a> theorem toIsometryEquiv_symm : e.symm.toIsometryEquiv = e.toIsometryEquiv.symm :=</span>
+<span id="L529" class="line"><a href="#L529">529</a>   rfl</span>
+<span id="L530" class="line"><a href="#L530">530</a> </span>
+<span id="L531" class="line"><a href="#L531">531</a> @[simp]</span>
+<span id="L532" class="line"><a href="#L532">532</a> theorem coe_symm_toIsometryEquiv : ⇑e.toIsometryEquiv.symm = e.symm :=</span>
+<span id="L533" class="line"><a href="#L533">533</a>   rfl</span>
+<span id="L534" class="line"><a href="#L534">534</a> </span>
+<span id="L535" class="line"><a href="#L535">535</a> @[simp]</span>
+<span id="L536" class="line"><a href="#L536">536</a> theorem toHomeomorph_symm : e.symm.toHomeomorph = e.toHomeomorph.symm :=</span>
+<span id="L537" class="line"><a href="#L537">537</a>   rfl</span>
+<span id="L538" class="line"><a href="#L538">538</a> </span>
+<span id="L539" class="line"><a href="#L539">539</a> @[simp]</span>
+<span id="L540" class="line"><a href="#L540">540</a> theorem coe_symm_toHomeomorph : ⇑e.toHomeomorph.symm = e.symm :=</span>
+<span id="L541" class="line"><a href="#L541">541</a>   rfl</span>
+<span id="L542" class="line"><a href="#L542">542</a> </span>
+<span id="L543" class="line"><a href="#L543">543</a> /-- Composition of `AffineIsometryEquiv`s as an `AffineIsometryEquiv`. -/</span>
+<span id="L544" class="line"><a href="#L544">544</a> def trans (e&#x27; : P₂ ≃ᵃⁱ[𝕜] P₃) : P ≃ᵃⁱ[𝕜] P₃ :=</span>
+<span id="L545" class="line"><a href="#L545">545</a>   ⟨e.toAffineEquiv.trans e&#x27;.toAffineEquiv, fun _ =&gt; (e&#x27;.norm_map _).trans (e.norm_map _)⟩</span>
+<span id="L546" class="line"><a href="#L546">546</a> </span>
+<span id="L547" class="line"><a href="#L547">547</a> @[simp]</span>
+<span id="L548" class="line"><a href="#L548">548</a> theorem coe_trans (e₁ : P ≃ᵃⁱ[𝕜] P₂) (e₂ : P₂ ≃ᵃⁱ[𝕜] P₃) : ⇑(e₁.trans e₂) = e₂ ∘ e₁ :=</span>
+<span id="L549" class="line"><a href="#L549">549</a>   rfl</span>
+<span id="L550" class="line"><a href="#L550">550</a> </span>
+<span id="L551" class="line"><a href="#L551">551</a> @[simp]</span>
+<span id="L552" class="line"><a href="#L552">552</a> theorem trans_refl : e.trans (refl 𝕜 P₂) = e :=</span>
+<span id="L553" class="line"><a href="#L553">553</a>   ext fun _ =&gt; rfl</span>
+<span id="L554" class="line"><a href="#L554">554</a> </span>
+<span id="L555" class="line"><a href="#L555">555</a> @[simp]</span>
+<span id="L556" class="line"><a href="#L556">556</a> theorem refl_trans : (refl 𝕜 P).trans e = e :=</span>
+<span id="L557" class="line"><a href="#L557">557</a>   ext fun _ =&gt; rfl</span>
+<span id="L558" class="line"><a href="#L558">558</a> </span>
+<span id="L559" class="line"><a href="#L559">559</a> @[simp]</span>
+<span id="L560" class="line"><a href="#L560">560</a> theorem self_trans_symm : e.trans e.symm = refl 𝕜 P :=</span>
+<span id="L561" class="line"><a href="#L561">561</a>   ext e.symm_apply_apply</span>
+<span id="L562" class="line"><a href="#L562">562</a> </span>
+<span id="L563" class="line"><a href="#L563">563</a> @[simp]</span>
+<span id="L564" class="line"><a href="#L564">564</a> theorem symm_trans_self : e.symm.trans e = refl 𝕜 P₂ :=</span>
+<span id="L565" class="line"><a href="#L565">565</a>   ext e.apply_symm_apply</span>
+<span id="L566" class="line"><a href="#L566">566</a> </span>
+<span id="L567" class="line"><a href="#L567">567</a> @[simp]</span>
+<span id="L568" class="line"><a href="#L568">568</a> theorem coe_symm_trans (e₁ : P ≃ᵃⁱ[𝕜] P₂) (e₂ : P₂ ≃ᵃⁱ[𝕜] P₃) :</span>
+<span id="L569" class="line"><a href="#L569">569</a>     ⇑(e₁.trans e₂).symm = e₁.symm ∘ e₂.symm :=</span>
+<span id="L570" class="line"><a href="#L570">570</a>   rfl</span>
+<span id="L571" class="line"><a href="#L571">571</a> </span>
+<span id="L572" class="line"><a href="#L572">572</a> theorem trans_assoc (ePP₂ : P ≃ᵃⁱ[𝕜] P₂) (eP₂G : P₂ ≃ᵃⁱ[𝕜] P₃) (eGG&#x27; : P₃ ≃ᵃⁱ[𝕜] P₄) :</span>
+<span id="L573" class="line"><a href="#L573">573</a>     ePP₂.trans (eP₂G.trans eGG&#x27;) = (ePP₂.trans eP₂G).trans eGG&#x27; :=</span>
+<span id="L574" class="line"><a href="#L574">574</a>   rfl</span>
+<span id="L575" class="line"><a href="#L575">575</a> </span>
+<span id="L576" class="line"><a href="#L576">576</a> /-- The group of affine isometries of a `NormedAddTorsor`, `P`. -/</span>
+<span id="L577" class="line"><a href="#L577">577</a> instance instGroup : Group (P ≃ᵃⁱ[𝕜] P) where</span>
+<span id="L578" class="line"><a href="#L578">578</a>   mul e₁ e₂ := e₂.trans e₁</span>
+<span id="L579" class="line"><a href="#L579">579</a>   one := refl _ _</span>
+<span id="L580" class="line"><a href="#L580">580</a>   inv := symm</span>
+<span id="L581" class="line"><a href="#L581">581</a>   one_mul := trans_refl</span>
+<span id="L582" class="line"><a href="#L582">582</a>   mul_one := refl_trans</span>
+<span id="L583" class="line"><a href="#L583">583</a>   mul_assoc _ _ _ := trans_assoc _ _ _</span>
+<span id="L584" class="line"><a href="#L584">584</a>   inv_mul_cancel := self_trans_symm</span>
+<span id="L585" class="line"><a href="#L585">585</a> </span>
+<span id="L586" class="line"><a href="#L586">586</a> @[simp]</span>
+<span id="L587" class="line"><a href="#L587">587</a> theorem coe_one : ⇑(1 : P ≃ᵃⁱ[𝕜] P) = id :=</span>
+<span id="L588" class="line"><a href="#L588">588</a>   rfl</span>
+<span id="L589" class="line"><a href="#L589">589</a> </span>
+<span id="L590" class="line"><a href="#L590">590</a> @[simp]</span>
+<span id="L591" class="line"><a href="#L591">591</a> theorem coe_mul (e e&#x27; : P ≃ᵃⁱ[𝕜] P) : ⇑(e * e&#x27;) = e ∘ e&#x27; :=</span>
+<span id="L592" class="line"><a href="#L592">592</a>   rfl</span>
+<span id="L593" class="line"><a href="#L593">593</a> </span>
+<span id="L594" class="line"><a href="#L594">594</a> @[simp]</span>
+<span id="L595" class="line"><a href="#L595">595</a> theorem coe_inv (e : P ≃ᵃⁱ[𝕜] P) : ⇑e⁻¹ = e.symm :=</span>
+<span id="L596" class="line"><a href="#L596">596</a>   rfl</span>
+<span id="L597" class="line"><a href="#L597">597</a> </span>
+<span id="L598" class="line"><a href="#L598">598</a> @[simp]</span>
+<span id="L599" class="line"><a href="#L599">599</a> theorem map_vadd (p : P) (v : V) : e (v +ᵥ p) = e.linearIsometryEquiv v +ᵥ e p :=</span>
+<span id="L600" class="line"><a href="#L600">600</a>   e.toAffineIsometry.map_vadd p v</span>
+<span id="L601" class="line"><a href="#L601">601</a> </span>
+<span id="L602" class="line"><a href="#L602">602</a> @[simp]</span>
+<span id="L603" class="line"><a href="#L603">603</a> theorem map_vsub (p1 p2 : P) : e.linearIsometryEquiv (p1 -ᵥ p2) = e p1 -ᵥ e p2 :=</span>
+<span id="L604" class="line"><a href="#L604">604</a>   e.toAffineIsometry.map_vsub p1 p2</span>
+<span id="L605" class="line"><a href="#L605">605</a> </span>
+<span id="L606" class="line"><a href="#L606">606</a> @[simp]</span>
+<span id="L607" class="line"><a href="#L607">607</a> theorem dist_map (x y : P) : dist (e x) (e y) = dist x y :=</span>
+<span id="L608" class="line"><a href="#L608">608</a>   e.toAffineIsometry.dist_map x y</span>
+<span id="L609" class="line"><a href="#L609">609</a> </span>
+<span id="L610" class="line"><a href="#L610">610</a> @[simp]</span>
+<span id="L611" class="line"><a href="#L611">611</a> theorem edist_map (x y : P) : edist (e x) (e y) = edist x y :=</span>
+<span id="L612" class="line"><a href="#L612">612</a>   e.toAffineIsometry.edist_map x y</span>
+<span id="L613" class="line"><a href="#L613">613</a> </span>
+<span id="L614" class="line"><a href="#L614">614</a> protected theorem bijective : Bijective e :=</span>
+<span id="L615" class="line"><a href="#L615">615</a>   e.1.bijective</span>
+<span id="L616" class="line"><a href="#L616">616</a> </span>
+<span id="L617" class="line"><a href="#L617">617</a> protected theorem injective : Injective e :=</span>
+<span id="L618" class="line"><a href="#L618">618</a>   e.1.injective</span>
+<span id="L619" class="line"><a href="#L619">619</a> </span>
+<span id="L620" class="line"><a href="#L620">620</a> protected theorem surjective : Surjective e :=</span>
+<span id="L621" class="line"><a href="#L621">621</a>   e.1.surjective</span>
+<span id="L622" class="line"><a href="#L622">622</a> </span>
+<span id="L623" class="line"><a href="#L623">623</a> theorem map_eq_iff {x y : P} : e x = e y ↔ x = y :=</span>
+<span id="L624" class="line"><a href="#L624">624</a>   e.injective.eq_iff</span>
+<span id="L625" class="line"><a href="#L625">625</a> </span>
+<span id="L626" class="line"><a href="#L626">626</a> theorem map_ne {x y : P} (h : x ≠ y) : e x ≠ e y :=</span>
+<span id="L627" class="line"><a href="#L627">627</a>   e.injective.ne h</span>
+<span id="L628" class="line"><a href="#L628">628</a> </span>
+<span id="L629" class="line"><a href="#L629">629</a> protected theorem lipschitz : LipschitzWith 1 e :=</span>
+<span id="L630" class="line"><a href="#L630">630</a>   e.isometry.lipschitz</span>
+<span id="L631" class="line"><a href="#L631">631</a> </span>
+<span id="L632" class="line"><a href="#L632">632</a> protected theorem antilipschitz : AntilipschitzWith 1 e :=</span>
+<span id="L633" class="line"><a href="#L633">633</a>   e.isometry.antilipschitz</span>
+<span id="L634" class="line"><a href="#L634">634</a> </span>
+<span id="L635" class="line"><a href="#L635">635</a> @[simp]</span>
+<span id="L636" class="line"><a href="#L636">636</a> theorem ediam_image (s : Set P) : ediam (e &#x27;&#x27; s) = ediam s :=</span>
+<span id="L637" class="line"><a href="#L637">637</a>   e.isometry.ediam_image s</span>
+<span id="L638" class="line"><a href="#L638">638</a> </span>
+<span id="L639" class="line"><a href="#L639">639</a> @[simp]</span>
+<span id="L640" class="line"><a href="#L640">640</a> theorem diam_image (s : Set P) : Metric.diam (e &#x27;&#x27; s) = Metric.diam s :=</span>
+<span id="L641" class="line"><a href="#L641">641</a>   e.isometry.diam_image s</span>
+<span id="L642" class="line"><a href="#L642">642</a> </span>
+<span id="L643" class="line"><a href="#L643">643</a> variable {α : Type*} [TopologicalSpace α]</span>
+<span id="L644" class="line"><a href="#L644">644</a> </span>
+<span id="L645" class="line"><a href="#L645">645</a> @[simp]</span>
+<span id="L646" class="line"><a href="#L646">646</a> theorem comp_continuousOn_iff {f : α → P} {s : Set α} : ContinuousOn (e ∘ f) s ↔ ContinuousOn f s :=</span>
+<span id="L647" class="line"><a href="#L647">647</a>   e.isometry.comp_continuousOn_iff</span>
+<span id="L648" class="line"><a href="#L648">648</a> </span>
+<span id="L649" class="line"><a href="#L649">649</a> @[simp]</span>
+<span id="L650" class="line"><a href="#L650">650</a> theorem comp_continuous_iff {f : α → P} : Continuous (e ∘ f) ↔ Continuous f :=</span>
+<span id="L651" class="line"><a href="#L651">651</a>   e.isometry.comp_continuous_iff</span>
+<span id="L652" class="line"><a href="#L652">652</a> </span>
+<span id="L653" class="line"><a href="#L653">653</a> section Constructions</span>
+<span id="L654" class="line"><a href="#L654">654</a> </span>
+<span id="L655" class="line"><a href="#L655">655</a> variable (s₁ s₂ : AffineSubspace 𝕜 P) [Nonempty s₁] [Nonempty s₂]</span>
+<span id="L656" class="line"><a href="#L656">656</a> </span>
+<span id="L657" class="line"><a href="#L657">657</a> /-- The identity equivalence of an affine subspace equal to `⊤` to the whole space. -/</span>
+<span id="L658" class="line"><a href="#L658">658</a> def ofTop (h : s₁ = ⊤) : s₁ ≃ᵃⁱ[𝕜] P :=</span>
+<span id="L659" class="line"><a href="#L659">659</a>   { (AffineEquiv.ofEq s₁ ⊤ h).trans (AffineSubspace.topEquiv 𝕜 V P) with norm_map := fun _ ↦ rfl }</span>
+<span id="L660" class="line"><a href="#L660">660</a> </span>
+<span id="L661" class="line"><a href="#L661">661</a> variable {s₁}</span>
+<span id="L662" class="line"><a href="#L662">662</a> </span>
+<span id="L663" class="line"><a href="#L663">663</a> @[simp]</span>
+<span id="L664" class="line"><a href="#L664">664</a> lemma ofTop_apply (h : s₁ = ⊤) (x : s₁) : (ofTop s₁ h x : P) = x :=</span>
+<span id="L665" class="line"><a href="#L665">665</a>   rfl</span>
+<span id="L666" class="line"><a href="#L666">666</a> </span>
+<span id="L667" class="line"><a href="#L667">667</a> @[simp]</span>
+<span id="L668" class="line"><a href="#L668">668</a> lemma ofTop_symm_apply_coe (h : s₁ = ⊤) (x : P) : (ofTop s₁ h).symm x = x :=</span>
+<span id="L669" class="line"><a href="#L669">669</a>   rfl</span>
+<span id="L670" class="line"><a href="#L670">670</a> </span>
+<span id="L671" class="line"><a href="#L671">671</a> variable (s₁)</span>
+<span id="L672" class="line"><a href="#L672">672</a> </span>
+<span id="L673" class="line"><a href="#L673">673</a> /-- `AffineEquiv.ofEq` as an `AffineIsometryEquiv`. -/</span>
+<span id="L674" class="line"><a href="#L674">674</a> def ofEq (h : s₁ = s₂) : s₁ ≃ᵃⁱ[𝕜] s₂ :=</span>
+<span id="L675" class="line"><a href="#L675">675</a>   { AffineEquiv.ofEq s₁ s₂ h with norm_map := fun _ ↦ rfl }</span>
+<span id="L676" class="line"><a href="#L676">676</a> </span>
+<span id="L677" class="line"><a href="#L677">677</a> variable {s₁ s₂}</span>
+<span id="L678" class="line"><a href="#L678">678</a> </span>
+<span id="L679" class="line"><a href="#L679">679</a> @[simp]</span>
+<span id="L680" class="line"><a href="#L680">680</a> lemma coe_ofEq_apply (h : s₁ = s₂) (x : s₁) : (ofEq s₁ s₂ h x : P) = x :=</span>
+<span id="L681" class="line"><a href="#L681">681</a>   rfl</span>
+<span id="L682" class="line"><a href="#L682">682</a> </span>
+<span id="L683" class="line"><a href="#L683">683</a> @[simp]</span>
+<span id="L684" class="line"><a href="#L684">684</a> lemma ofEq_symm (h : s₁ = s₂) : (ofEq s₁ s₂ h).symm = ofEq s₂ s₁ h.symm :=</span>
+<span id="L685" class="line"><a href="#L685">685</a>   rfl</span>
+<span id="L686" class="line"><a href="#L686">686</a> </span>
+<span id="L687" class="line"><a href="#L687">687</a> @[simp]</span>
+<span id="L688" class="line"><a href="#L688">688</a> lemma ofEq_rfl : ofEq s₁ s₁ rfl = refl 𝕜 s₁ :=</span>
+<span id="L689" class="line"><a href="#L689">689</a>   rfl</span>
+<span id="L690" class="line"><a href="#L690">690</a> </span>
+<span id="L691" class="line"><a href="#L691">691</a> variable (𝕜) in</span>
+<span id="L692" class="line"><a href="#L692">692</a> /-- The map `v ↦ v +ᵥ p` as an affine isometric equivalence between `V` and `P`. -/</span>
+<span id="L693" class="line"><a href="#L693">693</a> def vaddConst (p : P) : V ≃ᵃⁱ[𝕜] P :=</span>
+<span id="L694" class="line"><a href="#L694">694</a>   { AffineEquiv.vaddConst 𝕜 p with norm_map := fun _ =&gt; rfl }</span>
+<span id="L695" class="line"><a href="#L695">695</a> </span>
+<span id="L696" class="line"><a href="#L696">696</a> @[simp]</span>
+<span id="L697" class="line"><a href="#L697">697</a> theorem coe_vaddConst (p : P) : ⇑(vaddConst 𝕜 p) = fun v =&gt; v +ᵥ p :=</span>
+<span id="L698" class="line"><a href="#L698">698</a>   rfl</span>
+<span id="L699" class="line"><a href="#L699">699</a> </span>
+<span id="L700" class="line"><a href="#L700">700</a> @[simp]</span>
+<span id="L701" class="line"><a href="#L701">701</a> theorem coe_vaddConst&#x27; (p : P) : ↑(AffineEquiv.vaddConst 𝕜 p) = fun v =&gt; v +ᵥ p :=</span>
+<span id="L702" class="line"><a href="#L702">702</a>   rfl</span>
+<span id="L703" class="line"><a href="#L703">703</a> </span>
+<span id="L704" class="line"><a href="#L704">704</a> @[simp]</span>
+<span id="L705" class="line"><a href="#L705">705</a> theorem coe_vaddConst_symm (p : P) : ⇑(vaddConst 𝕜 p).symm = fun p&#x27; =&gt; p&#x27; -ᵥ p :=</span>
+<span id="L706" class="line"><a href="#L706">706</a>   rfl</span>
+<span id="L707" class="line"><a href="#L707">707</a> </span>
+<span id="L708" class="line"><a href="#L708">708</a> @[simp]</span>
+<span id="L709" class="line"><a href="#L709">709</a> theorem vaddConst_toAffineEquiv (p : P) :</span>
+<span id="L710" class="line"><a href="#L710">710</a>     (vaddConst 𝕜 p).toAffineEquiv = AffineEquiv.vaddConst 𝕜 p :=</span>
+<span id="L711" class="line"><a href="#L711">711</a>   rfl</span>
+<span id="L712" class="line"><a href="#L712">712</a> </span>
+<span id="L713" class="line"><a href="#L713">713</a> variable (𝕜) in</span>
+<span id="L714" class="line"><a href="#L714">714</a> /-- `p&#x27; ↦ p -ᵥ p&#x27;` as an affine isometric equivalence. -/</span>
+<span id="L715" class="line"><a href="#L715">715</a> def constVSub (p : P) : P ≃ᵃⁱ[𝕜] V :=</span>
+<span id="L716" class="line"><a href="#L716">716</a>   { AffineEquiv.constVSub 𝕜 p with norm_map := norm_neg }</span>
+<span id="L717" class="line"><a href="#L717">717</a> </span>
+<span id="L718" class="line"><a href="#L718">718</a> @[simp]</span>
+<span id="L719" class="line"><a href="#L719">719</a> theorem coe_constVSub (p : P) : ⇑(constVSub 𝕜 p) = (p -ᵥ ·) :=</span>
+<span id="L720" class="line"><a href="#L720">720</a>   rfl</span>
+<span id="L721" class="line"><a href="#L721">721</a> </span>
+<span id="L722" class="line"><a href="#L722">722</a> @[simp]</span>
+<span id="L723" class="line"><a href="#L723">723</a> theorem symm_constVSub (p : P) :</span>
+<span id="L724" class="line"><a href="#L724">724</a>     (constVSub 𝕜 p).symm =</span>
+<span id="L725" class="line"><a href="#L725">725</a>       (LinearIsometryEquiv.neg 𝕜).toAffineIsometryEquiv.trans (vaddConst 𝕜 p) := by</span>
+<span id="L726" class="line"><a href="#L726">726</a>   ext</span>
+<span id="L727" class="line"><a href="#L727">727</a>   rfl</span>
+<span id="L728" class="line"><a href="#L728">728</a> </span>
+<span id="L729" class="line"><a href="#L729">729</a> variable (𝕜 P) in</span>
+<span id="L730" class="line"><a href="#L730">730</a> /-- Translation by `v` (that is, the map `p ↦ v +ᵥ p`) as an affine isometric automorphism of `P`.</span>
+<span id="L731" class="line"><a href="#L731">731</a> -/</span>
+<span id="L732" class="line"><a href="#L732">732</a> def constVAdd (v : V) : P ≃ᵃⁱ[𝕜] P :=</span>
+<span id="L733" class="line"><a href="#L733">733</a>   { AffineEquiv.constVAdd 𝕜 P v with norm_map := fun _ =&gt; rfl }</span>
+<span id="L734" class="line"><a href="#L734">734</a> </span>
+<span id="L735" class="line"><a href="#L735">735</a> @[simp]</span>
+<span id="L736" class="line"><a href="#L736">736</a> theorem coe_constVAdd (v : V) : ⇑(constVAdd 𝕜 P v : P ≃ᵃⁱ[𝕜] P) = (v +ᵥ ·) :=</span>
+<span id="L737" class="line"><a href="#L737">737</a>   rfl</span>
+<span id="L738" class="line"><a href="#L738">738</a> </span>
+<span id="L739" class="line"><a href="#L739">739</a> @[simp]</span>
+<span id="L740" class="line"><a href="#L740">740</a> theorem constVAdd_zero : constVAdd 𝕜 P (0 : V) = refl 𝕜 P :=</span>
+<span id="L741" class="line"><a href="#L741">741</a>   ext &lt;| zero_vadd V</span>
+<span id="L742" class="line"><a href="#L742">742</a> </span>
+<span id="L743" class="line"><a href="#L743">743</a> include 𝕜 in</span>
+<span id="L744" class="line"><a href="#L744">744</a> /-- The map `g` from `V` to `V₂` corresponding to a map `f` from `P` to `P₂`, at a base point `p`,</span>
+<span id="L745" class="line"><a href="#L745">745</a> is an isometry if `f` is one. -/</span>
+<span id="L746" class="line"><a href="#L746">746</a> theorem vadd_vsub {f : P → P₂} (hf : Isometry f) {p : P} {g : V → V₂}</span>
+<span id="L747" class="line"><a href="#L747">747</a>     (hg : ∀ v, g v = f (v +ᵥ p) -ᵥ f p) : Isometry g := by</span>
+<span id="L748" class="line"><a href="#L748">748</a>   convert (vaddConst 𝕜 (f p)).symm.isometry.comp (hf.comp (vaddConst 𝕜 p).isometry)</span>
+<span id="L749" class="line"><a href="#L749">749</a>   exact funext hg</span>
+<span id="L750" class="line"><a href="#L750">750</a> </span>
+<span id="L751" class="line"><a href="#L751">751</a> variable (𝕜) in</span>
+<span id="L752" class="line"><a href="#L752">752</a> /-- Point reflection in `x` as an affine isometric automorphism. -/</span>
+<span id="L753" class="line"><a href="#L753">753</a> def pointReflection (x : P) : P ≃ᵃⁱ[𝕜] P :=</span>
+<span id="L754" class="line"><a href="#L754">754</a>   (constVSub 𝕜 x).trans (vaddConst 𝕜 x)</span>
+<span id="L755" class="line"><a href="#L755">755</a> </span>
+<span id="L756" class="line"><a href="#L756">756</a> theorem pointReflection_apply (x y : P) : (pointReflection 𝕜 x) y = (x -ᵥ y) +ᵥ x :=</span>
+<span id="L757" class="line"><a href="#L757">757</a>   rfl</span>
+<span id="L758" class="line"><a href="#L758">758</a> </span>
+<span id="L759" class="line"><a href="#L759">759</a> @[simp]</span>
+<span id="L760" class="line"><a href="#L760">760</a> theorem pointReflection_toAffineEquiv (x : P) :</span>
+<span id="L761" class="line"><a href="#L761">761</a>     (pointReflection 𝕜 x).toAffineEquiv = AffineEquiv.pointReflection 𝕜 x :=</span>
+<span id="L762" class="line"><a href="#L762">762</a>   rfl</span>
+<span id="L763" class="line"><a href="#L763">763</a> </span>
+<span id="L764" class="line"><a href="#L764">764</a> @[simp]</span>
+<span id="L765" class="line"><a href="#L765">765</a> theorem pointReflection_self (x : P) : pointReflection 𝕜 x x = x :=</span>
+<span id="L766" class="line"><a href="#L766">766</a>   AffineEquiv.pointReflection_self 𝕜 x</span>
+<span id="L767" class="line"><a href="#L767">767</a> </span>
+<span id="L768" class="line"><a href="#L768">768</a> theorem pointReflection_involutive (x : P) : Function.Involutive (pointReflection 𝕜 x) :=</span>
+<span id="L769" class="line"><a href="#L769">769</a>   Equiv.pointReflection_involutive x</span>
+<span id="L770" class="line"><a href="#L770">770</a> </span>
+<span id="L771" class="line"><a href="#L771">771</a> @[simp]</span>
+<span id="L772" class="line"><a href="#L772">772</a> theorem pointReflection_symm (x : P) : (pointReflection 𝕜 x).symm = pointReflection 𝕜 x :=</span>
+<span id="L773" class="line"><a href="#L773">773</a>   toAffineEquiv_injective &lt;| AffineEquiv.pointReflection_symm 𝕜 x</span>
+<span id="L774" class="line"><a href="#L774">774</a> </span>
+<span id="L775" class="line"><a href="#L775">775</a> @[simp]</span>
+<span id="L776" class="line"><a href="#L776">776</a> theorem dist_pointReflection_fixed (x y : P) : dist (pointReflection 𝕜 x y) x = dist y x := by</span>
+<span id="L777" class="line"><a href="#L777">777</a>   rw [← (pointReflection 𝕜 x).dist_map y x, pointReflection_self]</span>
+<span id="L778" class="line"><a href="#L778">778</a> </span>
+<span id="L779" class="line"><a href="#L779">779</a> theorem dist_pointReflection_self&#x27; (x y : P) :</span>
+<span id="L780" class="line"><a href="#L780">780</a>     dist (pointReflection 𝕜 x y) y = ‖2 • (x -ᵥ y)‖ := by</span>
+<span id="L781" class="line"><a href="#L781">781</a>   rw [pointReflection_apply, dist_eq_norm_vsub V, vadd_vsub_assoc, two_nsmul]</span>
+<span id="L782" class="line"><a href="#L782">782</a> </span>
+<span id="L783" class="line"><a href="#L783">783</a> theorem dist_pointReflection_self (x y : P) :</span>
+<span id="L784" class="line"><a href="#L784">784</a>     dist (pointReflection 𝕜 x y) y = ‖(2 : 𝕜)‖ * dist x y := by</span>
+<span id="L785" class="line"><a href="#L785">785</a>   rw [dist_pointReflection_self&#x27;, two_nsmul, ← two_smul 𝕜, norm_smul, ← dist_eq_norm_vsub V]</span>
+<span id="L786" class="line"><a href="#L786">786</a> </span>
+<span id="L787" class="line"><a href="#L787">787</a> theorem pointReflection_fixed_iff [Invertible (2 : 𝕜)] {x y : P} :</span>
+<span id="L788" class="line"><a href="#L788">788</a>     pointReflection 𝕜 x y = y ↔ y = x :=</span>
+<span id="L789" class="line"><a href="#L789">789</a>   AffineEquiv.pointReflection_fixed_iff_of_module 𝕜</span>
+<span id="L790" class="line"><a href="#L790">790</a> </span>
+<span id="L791" class="line"><a href="#L791">791</a> variable [NormedSpace ℝ V]</span>
+<span id="L792" class="line"><a href="#L792">792</a> </span>
+<span id="L793" class="line"><a href="#L793">793</a> theorem dist_pointReflection_self_real (x y : P) :</span>
+<span id="L794" class="line"><a href="#L794">794</a>     dist (pointReflection ℝ x y) y = 2 * dist x y := by</span>
+<span id="L795" class="line"><a href="#L795">795</a>   rw [dist_pointReflection_self, Real.norm_two]</span>
+<span id="L796" class="line"><a href="#L796">796</a> </span>
+<span id="L797" class="line"><a href="#L797">797</a> @[simp]</span>
+<span id="L798" class="line"><a href="#L798">798</a> theorem pointReflection_midpoint_left (x y : P) : pointReflection ℝ (midpoint ℝ x y) x = y :=</span>
+<span id="L799" class="line"><a href="#L799">799</a>   AffineEquiv.pointReflection_midpoint_left x y</span>
+<span id="L800" class="line"><a href="#L800">800</a> </span>
+<span id="L801" class="line"><a href="#L801">801</a> @[simp]</span>
+<span id="L802" class="line"><a href="#L802">802</a> theorem pointReflection_midpoint_right (x y : P) : pointReflection ℝ (midpoint ℝ x y) y = x :=</span>
+<span id="L803" class="line"><a href="#L803">803</a>   AffineEquiv.pointReflection_midpoint_right x y</span>
+<span id="L804" class="line"><a href="#L804">804</a> </span>
+<span id="L805" class="line"><a href="#L805">805</a> end Constructions</span>
+<span id="L806" class="line"><a href="#L806">806</a> </span>
+<span id="L807" class="line"><a href="#L807">807</a> end AffineIsometryEquiv</span>
+<span id="L808" class="line"><a href="#L808">808</a> </span>
+<span id="L809" class="line"><a href="#L809">809</a> namespace AffineSubspace</span>
+<span id="L810" class="line"><a href="#L810">810</a> </span>
+<span id="L811" class="line"><a href="#L811">811</a> /-- An affine subspace is isomorphic to its image under an injective affine map.</span>
+<span id="L812" class="line"><a href="#L812">812</a> This is the affine version of `Submodule.equivMapOfInjective`.</span>
+<span id="L813" class="line"><a href="#L813">813</a> -/</span>
+<span id="L814" class="line"><a href="#L814">814</a> @[simps linear, simps! toFun]</span>
+<span id="L815" class="line"><a href="#L815">815</a> noncomputable def equivMapOfInjective (E : AffineSubspace 𝕜 P₁) [Nonempty E] (φ : P₁ →ᵃ[𝕜] P₂)</span>
+<span id="L816" class="line"><a href="#L816">816</a>     (hφ : Function.Injective φ) : E ≃ᵃ[𝕜] E.map φ :=</span>
+<span id="L817" class="line"><a href="#L817">817</a>   { Equiv.Set.image _ (E : Set P₁) hφ with</span>
+<span id="L818" class="line"><a href="#L818">818</a>     linear :=</span>
+<span id="L819" class="line"><a href="#L819">819</a>       (E.direction.equivMapOfInjective φ.linear (φ.linear_injective_iff.mpr hφ)).trans</span>
+<span id="L820" class="line"><a href="#L820">820</a>         (LinearEquiv.ofEq _ _ (AffineSubspace.map_direction _ _).symm)</span>
+<span id="L821" class="line"><a href="#L821">821</a>     map_vadd&#x27; := fun p v =&gt; Subtype.ext &lt;| φ.map_vadd p v }</span>
+<span id="L822" class="line"><a href="#L822">822</a> </span>
+<span id="L823" class="line"><a href="#L823">823</a> /-- Restricts an affine isometry to an affine isometry equivalence between a nonempty affine</span>
+<span id="L824" class="line"><a href="#L824">824</a> subspace `E` and its image.</span>
+<span id="L825" class="line"><a href="#L825">825</a> </span>
+<span id="L826" class="line"><a href="#L826">826</a> This is an isometry version of `AffineSubspace.equivMap`, having a stronger premise and a stronger</span>
+<span id="L827" class="line"><a href="#L827">827</a> conclusion.</span>
+<span id="L828" class="line"><a href="#L828">828</a> -/</span>
+<span id="L829" class="line"><a href="#L829">829</a> noncomputable def isometryEquivMap (φ : P₁&#x27; →ᵃⁱ[𝕜] P₂) (E : AffineSubspace 𝕜 P₁&#x27;) [Nonempty E] :</span>
+<span id="L830" class="line"><a href="#L830">830</a>     E ≃ᵃⁱ[𝕜] E.map φ.toAffineMap :=</span>
+<span id="L831" class="line"><a href="#L831">831</a>   ⟨E.equivMapOfInjective φ.toAffineMap φ.injective, fun _ =&gt; φ.norm_map _⟩</span>
+<span id="L832" class="line"><a href="#L832">832</a> </span>
+<span id="L833" class="line"><a href="#L833">833</a> @[simp]</span>
+<span id="L834" class="line"><a href="#L834">834</a> theorem isometryEquivMap.apply_symm_apply {E : AffineSubspace 𝕜 P₁&#x27;} [Nonempty E]</span>
+<span id="L835" class="line"><a href="#L835">835</a>     {φ : P₁&#x27; →ᵃⁱ[𝕜] P₂} (x : E.map φ.toAffineMap) : φ ((E.isometryEquivMap φ).symm x) = x :=</span>
+<span id="L836" class="line"><a href="#L836">836</a>   congr_arg Subtype.val &lt;| (E.isometryEquivMap φ).apply_symm_apply _</span>
+<span id="L837" class="line"><a href="#L837">837</a> </span>
+<span id="L838" class="line"><a href="#L838">838</a> @[simp]</span>
+<span id="L839" class="line"><a href="#L839">839</a> theorem isometryEquivMap.coe_apply (φ : P₁&#x27; →ᵃⁱ[𝕜] P₂) (E : AffineSubspace 𝕜 P₁&#x27;) [Nonempty E]</span>
+<span id="L840" class="line"><a href="#L840">840</a>     (g : E) : ↑(E.isometryEquivMap φ g) = φ g :=</span>
+<span id="L841" class="line"><a href="#L841">841</a>   rfl</span>
+<span id="L842" class="line"><a href="#L842">842</a> </span>
+<span id="L843" class="line"><a href="#L843">843</a> @[simp]</span>
+<span id="L844" class="line"><a href="#L844">844</a> theorem isometryEquivMap.toAffineMap_eq (φ : P₁&#x27; →ᵃⁱ[𝕜] P₂) (E : AffineSubspace 𝕜 P₁&#x27;)</span>
+<span id="L845" class="line"><a href="#L845">845</a>     [Nonempty E] :</span>
+<span id="L846" class="line"><a href="#L846">846</a>     (E.isometryEquivMap φ).toAffineMap = E.equivMapOfInjective φ.toAffineMap φ.injective :=</span>
+<span id="L847" class="line"><a href="#L847">847</a>   rfl</span>
+<span id="L848" class="line"><a href="#L848">848</a> </span>
+<span id="L849" class="line"><a href="#L849">849</a> end AffineSubspace</span></pre></html>

@@ -1,0 +1,341 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Data/Set/Operations.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Data/Set/Operations.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2016 Jeremy Avigad. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Jeremy Avigad, Johannes Hölzl, Reid Barton, Kim Morrison, Patrick Massot, Kyle Miller,</span>
+<span id="L5" class="line"><a href="#L5">5</a> Minchao Wu, Yury Kudryashov, Floris van Doorn</span>
+<span id="L6" class="line"><a href="#L6">6</a> -/</span>
+<span id="L7" class="line"><a href="#L7">7</a> module</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Data.Set.CoeSort</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Data.SProd</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Mathlib.Data.Subtype</span>
+<span id="L12" class="line"><a href="#L12">12</a> public import Mathlib.Order.Notation</span>
+<span id="L13" class="line"><a href="#L13">13</a> public import Mathlib.Tactic.Push.Attr</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> import Mathlib.Tactic.Attr.Register</span>
+<span id="L16" class="line"><a href="#L16">16</a> import Aesop.BuiltinRules</span>
+<span id="L17" class="line"><a href="#L17">17</a> import Aesop.Frontend.Tactic</span>
+<span id="L18" class="line"><a href="#L18">18</a> import Aesop.Main</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> /-!</span>
+<span id="L21" class="line"><a href="#L21">21</a> # Basic definitions about sets</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> In this file we define various operations on sets.</span>
+<span id="L24" class="line"><a href="#L24">24</a> We also provide basic lemmas needed to unfold the definitions.</span>
+<span id="L25" class="line"><a href="#L25">25</a> More advanced theorems about these definitions are located in other files in `Mathlib/Data/Set`.</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> ## Main definitions</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> - complement of a set and set difference;</span>
+<span id="L30" class="line"><a href="#L30">30</a> - `Set.preimage f s`, a.k.a. `f ⁻¹&#x27; s`: preimage of a set;</span>
+<span id="L31" class="line"><a href="#L31">31</a> - `Set.range f`: the range of a function;</span>
+<span id="L32" class="line"><a href="#L32">32</a>   it is more general than `f &#x27;&#x27; univ` because it allows functions from `Sort*`;</span>
+<span id="L33" class="line"><a href="#L33">33</a> - `s ×ˢ t`: product of `s : Set α` and `t : Set β` as a set in `α × β`;</span>
+<span id="L34" class="line"><a href="#L34">34</a> - `Set.diagonal`: the diagonal in `α × α`;</span>
+<span id="L35" class="line"><a href="#L35">35</a> - `Set.offDiag s`: the part of `s ×ˢ s` that is off the diagonal;</span>
+<span id="L36" class="line"><a href="#L36">36</a> - `Set.pi`: indexed product of a family of sets `∀ i, Set (α i)`,</span>
+<span id="L37" class="line"><a href="#L37">37</a>   as a set in `∀ i, α i`;</span>
+<span id="L38" class="line"><a href="#L38">38</a> - `Set.EqOn f g s`: the predicate saying that two functions are equal on a set;</span>
+<span id="L39" class="line"><a href="#L39">39</a> - `Set.MapsTo f s t`: the predicate saying that `f` sends all points of `s` to `t`;</span>
+<span id="L40" class="line"><a href="#L40">40</a> - `Set.MapsTo.restrict`: restrict `f : α → β` to `f&#x27; : s → t` provided that `Set.MapsTo f s t`;</span>
+<span id="L41" class="line"><a href="#L41">41</a> - `Set.restrictPreimage`: restrict `f : α → β` to `f&#x27; : (f ⁻¹&#x27; t) → t`;</span>
+<span id="L42" class="line"><a href="#L42">42</a> - `Set.InjOn`: the predicate saying that `f` is injective on a set;</span>
+<span id="L43" class="line"><a href="#L43">43</a> - `Set.SurjOn f s t`: the predicate saying that `t ⊆ f &#x27;&#x27; s`;</span>
+<span id="L44" class="line"><a href="#L44">44</a> - `Set.BijOn f s t`: the predicate saying that `f` is injective on `s` and `f &#x27;&#x27; s = t`;</span>
+<span id="L45" class="line"><a href="#L45">45</a> - `Set.graphOn`: the graph of a function on a set;</span>
+<span id="L46" class="line"><a href="#L46">46</a> - `Set.LeftInvOn`, `Set.RightInvOn`, `Set.InvOn`:</span>
+<span id="L47" class="line"><a href="#L47">47</a>   the predicates saying that `f&#x27;` is a left, right or two-sided inverse of `f` on `s`, `t`, or both;</span>
+<span id="L48" class="line"><a href="#L48">48</a> - `Set.image2`: the image of a pair of sets under a binary operation,</span>
+<span id="L49" class="line"><a href="#L49">49</a>   mostly useful to define pointwise algebraic operations on sets;</span>
+<span id="L50" class="line"><a href="#L50">50</a> - `Set.seq`: monadic `seq` operation on sets;</span>
+<span id="L51" class="line"><a href="#L51">51</a>   we don&#x27;t use monadic notation to ensure support for maps between different universes.</span>
+<span id="L52" class="line"><a href="#L52">52</a> </span>
+<span id="L53" class="line"><a href="#L53">53</a> ## Notation</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> - `f &#x27;&#x27; s`: image of a set;</span>
+<span id="L56" class="line"><a href="#L56">56</a> - `f ⁻¹&#x27; s`: preimage of a set;</span>
+<span id="L57" class="line"><a href="#L57">57</a> - `s ×ˢ t`: the product of sets;</span>
+<span id="L58" class="line"><a href="#L58">58</a> - `s ∪ t`: the union of two sets;</span>
+<span id="L59" class="line"><a href="#L59">59</a> - `s ∩ t`: the intersection of two sets;</span>
+<span id="L60" class="line"><a href="#L60">60</a> - `sᶜ`: the complement of a set;</span>
+<span id="L61" class="line"><a href="#L61">61</a> - `s \ t`: the difference of two sets.</span>
+<span id="L62" class="line"><a href="#L62">62</a> </span>
+<span id="L63" class="line"><a href="#L63">63</a> ## Keywords</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> set, image, preimage</span>
+<span id="L66" class="line"><a href="#L66">66</a> -/</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> @[expose] public section</span>
+<span id="L69" class="line"><a href="#L69">69</a> </span>
+<span id="L70" class="line"><a href="#L70">70</a> universe u v w</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> namespace Set</span>
+<span id="L73" class="line"><a href="#L73">73</a> </span>
+<span id="L74" class="line"><a href="#L74">74</a> variable {α : Type u} {β : Type v} {γ : Type w}</span>
+<span id="L75" class="line"><a href="#L75">75</a> </span>
+<span id="L76" class="line"><a href="#L76">76</a> /-! ### Lemmas about `mem` and `setOf` -/</span>
+<span id="L77" class="line"><a href="#L77">77</a> </span>
+<span id="L78" class="line"><a href="#L78">78</a> @[simp, mfld_simps, push]</span>
+<span id="L79" class="line"><a href="#L79">79</a> theorem mem_setOf_eq {x : α} {p : α → Prop} : (x ∈ {y | p y}) = p x := rfl</span>
+<span id="L80" class="line"><a href="#L80">80</a> </span>
+<span id="L81" class="line"><a href="#L81">81</a> grind_pattern mem_setOf_eq =&gt; x ∈ setOf p</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> /-- This lemma is intended for use with `rw` where a membership predicate is needed,</span>
+<span id="L84" class="line"><a href="#L84">84</a> hence the explicit argument and the equality in the reverse direction from normal.</span>
+<span id="L85" class="line"><a href="#L85">85</a> See also `Set.mem_setOf_eq` for the reverse direction applied to an argument. -/</span>
+<span id="L86" class="line"><a href="#L86">86</a> theorem eq_mem_setOf (p : α → Prop) : p = (· ∈ {a | p a}) := rfl</span>
+<span id="L87" class="line"><a href="#L87">87</a> </span>
+<span id="L88" class="line"><a href="#L88">88</a> theorem mem_setOf {a : α} {p : α → Prop} : a ∈ { x | p x } ↔ p a := Iff.rfl</span>
+<span id="L89" class="line"><a href="#L89">89</a> </span>
+<span id="L90" class="line"><a href="#L90">90</a> /-- If `h : a ∈ {x | p x}` then `h.out : p x`. These are definitionally equal, but this can</span>
+<span id="L91" class="line"><a href="#L91">91</a> nevertheless be useful for various reasons, e.g. to apply further projection notation or in an</span>
+<span id="L92" class="line"><a href="#L92">92</a> argument to `simp`. -/</span>
+<span id="L93" class="line"><a href="#L93">93</a> alias ⟨_root_.Membership.mem.out, _⟩ := mem_setOf</span>
+<span id="L94" class="line"><a href="#L94">94</a> </span>
+<span id="L95" class="line"><a href="#L95">95</a> theorem notMem_setOf_iff {a : α} {p : α → Prop} : a ∉ { x | p x } ↔ ¬p a := Iff.rfl</span>
+<span id="L96" class="line"><a href="#L96">96</a> </span>
+<span id="L97" class="line"><a href="#L97">97</a> @[simp] theorem setOf_mem_eq {s : Set α} : { x | x ∈ s } = s := rfl</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> @[simp, mfld_simps, grind ←, push]</span>
+<span id="L100" class="line"><a href="#L100">100</a> theorem mem_univ (x : α) : x ∈ @univ α := trivial</span>
+<span id="L101" class="line"><a href="#L101">101</a> </span>
+<span id="L102" class="line"><a href="#L102">102</a> /-! ### Operations -/</span>
+<span id="L103" class="line"><a href="#L103">103</a> </span>
+<span id="L104" class="line"><a href="#L104">104</a> instance : Compl (Set α) := ⟨fun s ↦ {x | x ∉ s}⟩</span>
+<span id="L105" class="line"><a href="#L105">105</a> </span>
+<span id="L106" class="line"><a href="#L106">106</a> @[simp, grind =, push]</span>
+<span id="L107" class="line"><a href="#L107">107</a> theorem mem_compl_iff (s : Set α) (x : α) : x ∈ sᶜ ↔ x ∉ s := Iff.rfl</span>
+<span id="L108" class="line"><a href="#L108">108</a> </span>
+<span id="L109" class="line"><a href="#L109">109</a> theorem diff_eq (s t : Set α) : s \ t = s ∩ tᶜ := rfl</span>
+<span id="L110" class="line"><a href="#L110">110</a> </span>
+<span id="L111" class="line"><a href="#L111">111</a> @[simp, grind =, push]</span>
+<span id="L112" class="line"><a href="#L112">112</a> theorem mem_diff {s t : Set α} (x : α) : x ∈ s \ t ↔ x ∈ s ∧ x ∉ t := Iff.rfl</span>
+<span id="L113" class="line"><a href="#L113">113</a> </span>
+<span id="L114" class="line"><a href="#L114">114</a> theorem mem_diff_of_mem {s t : Set α} {x : α} (h1 : x ∈ s) (h2 : x ∉ t) : x ∈ s \ t := ⟨h1, h2⟩</span>
+<span id="L115" class="line"><a href="#L115">115</a> </span>
+<span id="L116" class="line"><a href="#L116">116</a> /-- The preimage of `s : Set β` by `f : α → β`, written `f ⁻¹&#x27; s`,</span>
+<span id="L117" class="line"><a href="#L117">117</a>   is the set of `x : α` such that `f x ∈ s`. -/</span>
+<span id="L118" class="line"><a href="#L118">118</a> def preimage (f : α → β) (s : Set β) : Set α := {x | f x ∈ s}</span>
+<span id="L119" class="line"><a href="#L119">119</a> </span>
+<span id="L120" class="line"><a href="#L120">120</a> /-- `f ⁻¹&#x27; t` denotes the preimage of `t : Set β` under the function `f : α → β`. -/</span>
+<span id="L121" class="line"><a href="#L121">121</a> infixl:80 &quot; ⁻¹&#x27; &quot; =&gt; preimage</span>
+<span id="L122" class="line"><a href="#L122">122</a> </span>
+<span id="L123" class="line"><a href="#L123">123</a> @[simp, mfld_simps, grind =, push]</span>
+<span id="L124" class="line"><a href="#L124">124</a> theorem mem_preimage {f : α → β} {s : Set β} {a : α} : a ∈ f ⁻¹&#x27; s ↔ f a ∈ s := Iff.rfl</span>
+<span id="L125" class="line"><a href="#L125">125</a> </span>
+<span id="L126" class="line"><a href="#L126">126</a> /-- `f &#x27;&#x27; s` denotes the image of `s : Set α` under the function `f : α → β`. -/</span>
+<span id="L127" class="line"><a href="#L127">127</a> infixl:80 &quot; &#x27;&#x27; &quot; =&gt; image</span>
+<span id="L128" class="line"><a href="#L128">128</a> </span>
+<span id="L129" class="line"><a href="#L129">129</a> @[simp, grind =, push]</span>
+<span id="L130" class="line"><a href="#L130">130</a> theorem mem_image (f : α → β) (s : Set α) (y : β) : y ∈ f &#x27;&#x27; s ↔ ∃ x ∈ s, f x = y :=</span>
+<span id="L131" class="line"><a href="#L131">131</a>   Iff.rfl</span>
+<span id="L132" class="line"><a href="#L132">132</a> </span>
+<span id="L133" class="line"><a href="#L133">133</a> @[mfld_simps]</span>
+<span id="L134" class="line"><a href="#L134">134</a> theorem mem_image_of_mem (f : α → β) {x : α} {a : Set α} (h : x ∈ a) : f x ∈ f &#x27;&#x27; a :=</span>
+<span id="L135" class="line"><a href="#L135">135</a>   ⟨_, h, rfl⟩</span>
+<span id="L136" class="line"><a href="#L136">136</a> </span>
+<span id="L137" class="line"><a href="#L137">137</a> /-- Restriction of `f` to `s` factors through `s.imageFactorization f : s → f &#x27;&#x27; s`. -/</span>
+<span id="L138" class="line"><a href="#L138">138</a> def imageFactorization (f : α → β) (s : Set α) : s → f &#x27;&#x27; s := fun p =&gt;</span>
+<span id="L139" class="line"><a href="#L139">139</a>   ⟨f p.1, mem_image_of_mem f p.2⟩</span>
+<span id="L140" class="line"><a href="#L140">140</a> </span>
+<span id="L141" class="line"><a href="#L141">141</a> /-- `kernImage f s` is the set of `y` such that `f ⁻¹ y ⊆ s`. -/</span>
+<span id="L142" class="line"><a href="#L142">142</a> def kernImage (f : α → β) (s : Set α) : Set β := {y | ∀ ⦃x⦄, f x = y → x ∈ s}</span>
+<span id="L143" class="line"><a href="#L143">143</a> </span>
+<span id="L144" class="line"><a href="#L144">144</a> lemma subset_kernImage_iff {s : Set β} {t : Set α} {f : α → β} : s ⊆ kernImage f t ↔ f ⁻¹&#x27; s ⊆ t :=</span>
+<span id="L145" class="line"><a href="#L145">145</a>   ⟨fun h _ hx ↦ h hx rfl,</span>
+<span id="L146" class="line"><a href="#L146">146</a>     fun h _ hx y hy ↦ h (show f y ∈ s from hy.symm ▸ hx)⟩</span>
+<span id="L147" class="line"><a href="#L147">147</a> </span>
+<span id="L148" class="line"><a href="#L148">148</a> section Range</span>
+<span id="L149" class="line"><a href="#L149">149</a> </span>
+<span id="L150" class="line"><a href="#L150">150</a> variable {ι : Sort*} {f : ι → α}</span>
+<span id="L151" class="line"><a href="#L151">151</a> </span>
+<span id="L152" class="line"><a href="#L152">152</a> /-- Range of a function.</span>
+<span id="L153" class="line"><a href="#L153">153</a> </span>
+<span id="L154" class="line"><a href="#L154">154</a> This function is more flexible than `f &#x27;&#x27; univ`, as the image requires that the domain is in Type</span>
+<span id="L155" class="line"><a href="#L155">155</a> and not an arbitrary Sort. -/</span>
+<span id="L156" class="line"><a href="#L156">156</a> def range (f : ι → α) : Set α := {x | ∃ y, f y = x}</span>
+<span id="L157" class="line"><a href="#L157">157</a> </span>
+<span id="L158" class="line"><a href="#L158">158</a> @[simp, grind =, push] theorem mem_range {x : α} : x ∈ range f ↔ ∃ y, f y = x := Iff.rfl</span>
+<span id="L159" class="line"><a href="#L159">159</a> </span>
+<span id="L160" class="line"><a href="#L160">160</a> @[mfld_simps] theorem mem_range_self (i : ι) : f i ∈ range f := ⟨i, rfl⟩</span>
+<span id="L161" class="line"><a href="#L161">161</a> </span>
+<span id="L162" class="line"><a href="#L162">162</a> /-- Any map `f : ι → α` factors through a map `rangeFactorization f : ι → range f`. -/</span>
+<span id="L163" class="line"><a href="#L163">163</a> def rangeFactorization (f : ι → α) : ι → range f := fun i =&gt; ⟨f i, mem_range_self i⟩</span>
+<span id="L164" class="line"><a href="#L164">164</a> </span>
+<span id="L165" class="line"><a href="#L165">165</a> @[simp] lemma rangeFactorization_injective :</span>
+<span id="L166" class="line"><a href="#L166">166</a>     (Set.rangeFactorization f).Injective ↔ f.Injective := by</span>
+<span id="L167" class="line"><a href="#L167">167</a>   simp [Function.Injective, rangeFactorization]</span>
+<span id="L168" class="line"><a href="#L168">168</a> </span>
+<span id="L169" class="line"><a href="#L169">169</a> @[simp] lemma rangeFactorization_surjective : (rangeFactorization f).Surjective :=</span>
+<span id="L170" class="line"><a href="#L170">170</a>   fun ⟨_, i, rfl⟩ ↦ ⟨i, rfl⟩</span>
+<span id="L171" class="line"><a href="#L171">171</a> </span>
+<span id="L172" class="line"><a href="#L172">172</a> @[simp] lemma rangeFactorization_bijective :</span>
+<span id="L173" class="line"><a href="#L173">173</a>     (Set.rangeFactorization f).Bijective ↔ f.Injective := by simp [Function.Bijective]</span>
+<span id="L174" class="line"><a href="#L174">174</a> </span>
+<span id="L175" class="line"><a href="#L175">175</a> @[simp] lemma rangeFactorization_eq_rangeFactorization_iff {ι : Sort*} {α : Type*} {f : ι → α}</span>
+<span id="L176" class="line"><a href="#L176">176</a>     (a b : ι) : Set.rangeFactorization f a = Set.rangeFactorization f b ↔ f a = f b := by</span>
+<span id="L177" class="line"><a href="#L177">177</a>   simp [Set.rangeFactorization]</span>
+<span id="L178" class="line"><a href="#L178">178</a> </span>
+<span id="L179" class="line"><a href="#L179">179</a> lemma rangeFactorization_eq_iff {ι : Sort*} {α : Type*} {f : ι → α} (a : ι) (b : Set.range f) :</span>
+<span id="L180" class="line"><a href="#L180">180</a>     Set.rangeFactorization f a = b ↔ f a = b := by</span>
+<span id="L181" class="line"><a href="#L181">181</a>   rw [Set.rangeFactorization, ← b.coe_eta b.2, Subtype.ext_iff]</span>
+<span id="L182" class="line"><a href="#L182">182</a> </span>
+<span id="L183" class="line"><a href="#L183">183</a> end Range</span>
+<span id="L184" class="line"><a href="#L184">184</a> </span>
+<span id="L185" class="line"><a href="#L185">185</a> /-- We can use the axiom of choice to pick a preimage for every element of `range f`. -/</span>
+<span id="L186" class="line"><a href="#L186">186</a> noncomputable def rangeSplitting (f : α → β) : range f → α := fun x =&gt; x.2.choose</span>
+<span id="L187" class="line"><a href="#L187">187</a> </span>
+<span id="L188" class="line"><a href="#L188">188</a> -- This cannot be a `@[simp]` lemma because the head of the left-hand side is a variable.</span>
+<span id="L189" class="line"><a href="#L189">189</a> theorem apply_rangeSplitting (f : α → β) (x : range f) : f (rangeSplitting f x) = x :=</span>
+<span id="L190" class="line"><a href="#L190">190</a>   x.2.choose_spec</span>
+<span id="L191" class="line"><a href="#L191">191</a> </span>
+<span id="L192" class="line"><a href="#L192">192</a> @[simp]</span>
+<span id="L193" class="line"><a href="#L193">193</a> theorem comp_rangeSplitting (f : α → β) : f ∘ rangeSplitting f = Subtype.val := by</span>
+<span id="L194" class="line"><a href="#L194">194</a>   ext</span>
+<span id="L195" class="line"><a href="#L195">195</a>   simp only [Function.comp_apply]</span>
+<span id="L196" class="line"><a href="#L196">196</a>   apply apply_rangeSplitting</span>
+<span id="L197" class="line"><a href="#L197">197</a> </span>
+<span id="L198" class="line"><a href="#L198">198</a> lemma Subtype.range_coind (f : α → β) {p : β → Prop} (h : ∀ (a : α), p (f a)) :</span>
+<span id="L199" class="line"><a href="#L199">199</a>     range (Subtype.coind f h) = Subtype.val ⁻¹&#x27; range f := by</span>
+<span id="L200" class="line"><a href="#L200">200</a>   simp [Set.ext_iff, Subtype.ext_iff]</span>
+<span id="L201" class="line"><a href="#L201">201</a> </span>
+<span id="L202" class="line"><a href="#L202">202</a> section Prod</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> /-- The Cartesian product `Set.prod s t` is the set of `(a, b)` such that `a ∈ s` and `b ∈ t`. -/</span>
+<span id="L205" class="line"><a href="#L205">205</a> def prod (s : Set α) (t : Set β) : Set (α × β) := {p | p.1 ∈ s ∧ p.2 ∈ t}</span>
+<span id="L206" class="line"><a href="#L206">206</a> </span>
+<span id="L207" class="line"><a href="#L207">207</a> @[default_instance]</span>
+<span id="L208" class="line"><a href="#L208">208</a> instance instSProd : SProd (Set α) (Set β) (Set (α × β)) where</span>
+<span id="L209" class="line"><a href="#L209">209</a>   sprod := Set.prod</span>
+<span id="L210" class="line"><a href="#L210">210</a> </span>
+<span id="L211" class="line"><a href="#L211">211</a> theorem prod_eq (s : Set α) (t : Set β) : s ×ˢ t = Prod.fst ⁻¹&#x27; s ∩ Prod.snd ⁻¹&#x27; t := rfl</span>
+<span id="L212" class="line"><a href="#L212">212</a> </span>
+<span id="L213" class="line"><a href="#L213">213</a> variable {a : α} {b : β} {s : Set α} {t : Set β} {p : α × β}</span>
+<span id="L214" class="line"><a href="#L214">214</a> </span>
+<span id="L215" class="line"><a href="#L215">215</a> theorem mem_prod_eq : (p ∈ s ×ˢ t) = (p.1 ∈ s ∧ p.2 ∈ t) := rfl</span>
+<span id="L216" class="line"><a href="#L216">216</a> </span>
+<span id="L217" class="line"><a href="#L217">217</a> @[simp, mfld_simps, grind =, push]</span>
+<span id="L218" class="line"><a href="#L218">218</a> theorem mem_prod : p ∈ s ×ˢ t ↔ p.1 ∈ s ∧ p.2 ∈ t := .rfl</span>
+<span id="L219" class="line"><a href="#L219">219</a> </span>
+<span id="L220" class="line"><a href="#L220">220</a> @[mfld_simps, push only high] /- This `push` lemma is so that `(a, b) ∈ s ×ˢ t` gets turned</span>
+<span id="L221" class="line"><a href="#L221">221</a> into `a ∈ s ∧ b ∈ t`, instead of getting `(a, b).1` and `(a, b).2`. -/</span>
+<span id="L222" class="line"><a href="#L222">222</a> theorem prodMk_mem_set_prod_eq : ((a, b) ∈ s ×ˢ t) = (a ∈ s ∧ b ∈ t) :=</span>
+<span id="L223" class="line"><a href="#L223">223</a>   rfl</span>
+<span id="L224" class="line"><a href="#L224">224</a> </span>
+<span id="L225" class="line"><a href="#L225">225</a> theorem mk_mem_prod (ha : a ∈ s) (hb : b ∈ t) : (a, b) ∈ s ×ˢ t := ⟨ha, hb⟩</span>
+<span id="L226" class="line"><a href="#L226">226</a> </span>
+<span id="L227" class="line"><a href="#L227">227</a> theorem prod_image_left (f : α → γ) (s : Set α) (t : Set β) :</span>
+<span id="L228" class="line"><a href="#L228">228</a>     (f &#x27;&#x27; s) ×ˢ t = (fun x ↦ (f x.1, x.2)) &#x27;&#x27; s ×ˢ t := by</span>
+<span id="L229" class="line"><a href="#L229">229</a>   aesop</span>
+<span id="L230" class="line"><a href="#L230">230</a> </span>
+<span id="L231" class="line"><a href="#L231">231</a> theorem prod_image_right (f : α → γ) (s : Set α) (t : Set β) :</span>
+<span id="L232" class="line"><a href="#L232">232</a>     t ×ˢ (f &#x27;&#x27; s) = (fun x ↦ (x.1, f x.2)) &#x27;&#x27; t ×ˢ s := by</span>
+<span id="L233" class="line"><a href="#L233">233</a>   aesop</span>
+<span id="L234" class="line"><a href="#L234">234</a> </span>
+<span id="L235" class="line"><a href="#L235">235</a> end Prod</span>
+<span id="L236" class="line"><a href="#L236">236</a> </span>
+<span id="L237" class="line"><a href="#L237">237</a> section Diagonal</span>
+<span id="L238" class="line"><a href="#L238">238</a> </span>
+<span id="L239" class="line"><a href="#L239">239</a> /-- `diagonal α` is the set of `α × α` consisting of all pairs of the form `(a, a)`. -/</span>
+<span id="L240" class="line"><a href="#L240">240</a> def diagonal (α : Type*) : Set (α × α) := {p | p.1 = p.2}</span>
+<span id="L241" class="line"><a href="#L241">241</a> </span>
+<span id="L242" class="line"><a href="#L242">242</a> theorem mem_diagonal (x : α) : (x, x) ∈ diagonal α := rfl</span>
+<span id="L243" class="line"><a href="#L243">243</a> </span>
+<span id="L244" class="line"><a href="#L244">244</a> @[simp, grind =, push] theorem mem_diagonal_iff {x : α × α} : x ∈ diagonal α ↔ x.1 = x.2 := .rfl</span>
+<span id="L245" class="line"><a href="#L245">245</a> </span>
+<span id="L246" class="line"><a href="#L246">246</a> /-- The off-diagonal of a set `s` is the set of pairs `(a, b)` with `a, b ∈ s` and `a ≠ b`. -/</span>
+<span id="L247" class="line"><a href="#L247">247</a> def offDiag (s : Set α) : Set (α × α) := {x | x.1 ∈ s ∧ x.2 ∈ s ∧ x.1 ≠ x.2}</span>
+<span id="L248" class="line"><a href="#L248">248</a> </span>
+<span id="L249" class="line"><a href="#L249">249</a> @[simp, grind =, push]</span>
+<span id="L250" class="line"><a href="#L250">250</a> theorem mem_offDiag {x : α × α} {s : Set α} : x ∈ s.offDiag ↔ x.1 ∈ s ∧ x.2 ∈ s ∧ x.1 ≠ x.2 :=</span>
+<span id="L251" class="line"><a href="#L251">251</a>   Iff.rfl</span>
+<span id="L252" class="line"><a href="#L252">252</a> </span>
+<span id="L253" class="line"><a href="#L253">253</a> end Diagonal</span>
+<span id="L254" class="line"><a href="#L254">254</a> </span>
+<span id="L255" class="line"><a href="#L255">255</a> section Pi</span>
+<span id="L256" class="line"><a href="#L256">256</a> </span>
+<span id="L257" class="line"><a href="#L257">257</a> variable {ι : Type*} {α : ι → Type*}</span>
+<span id="L258" class="line"><a href="#L258">258</a> </span>
+<span id="L259" class="line"><a href="#L259">259</a> /-- Given an index set `ι` and a family of sets `t : Π i, Set (α i)`, `pi s t`</span>
+<span id="L260" class="line"><a href="#L260">260</a> is the set of dependent functions `f : Πa, π a` such that `f i` belongs to `t i`</span>
+<span id="L261" class="line"><a href="#L261">261</a> whenever `i ∈ s`. -/</span>
+<span id="L262" class="line"><a href="#L262">262</a> def pi (s : Set ι) (t : ∀ i, Set (α i)) : Set (∀ i, α i) := {f | ∀ i ∈ s, f i ∈ t i}</span>
+<span id="L263" class="line"><a href="#L263">263</a> </span>
+<span id="L264" class="line"><a href="#L264">264</a> variable {s : Set ι} {t : ∀ i, Set (α i)} {f : ∀ i, α i}</span>
+<span id="L265" class="line"><a href="#L265">265</a> </span>
+<span id="L266" class="line"><a href="#L266">266</a> @[simp, grind =, push] theorem mem_pi : f ∈ s.pi t ↔ ∀ i ∈ s, f i ∈ t i := .rfl</span>
+<span id="L267" class="line"><a href="#L267">267</a> </span>
+<span id="L268" class="line"><a href="#L268">268</a> theorem mem_univ_pi : f ∈ pi univ t ↔ ∀ i, f i ∈ t i := by simp</span>
+<span id="L269" class="line"><a href="#L269">269</a> </span>
+<span id="L270" class="line"><a href="#L270">270</a> end Pi</span>
+<span id="L271" class="line"><a href="#L271">271</a> </span>
+<span id="L272" class="line"><a href="#L272">272</a> /-- Two functions `f₁ f₂ : α → β` are equal on `s` if `f₁ x = f₂ x` for all `x ∈ s`. -/</span>
+<span id="L273" class="line"><a href="#L273">273</a> def EqOn (f₁ f₂ : α → β) (s : Set α) : Prop := ∀ ⦃x⦄, x ∈ s → f₁ x = f₂ x</span>
+<span id="L274" class="line"><a href="#L274">274</a> </span>
+<span id="L275" class="line"><a href="#L275">275</a> /-- `MapsTo f s t` means that the image of `s` is contained in `t`. -/</span>
+<span id="L276" class="line"><a href="#L276">276</a> def MapsTo (f : α → β) (s : Set α) (t : Set β) : Prop := ∀ ⦃x⦄, x ∈ s → f x ∈ t</span>
+<span id="L277" class="line"><a href="#L277">277</a> </span>
+<span id="L278" class="line"><a href="#L278">278</a> theorem mapsTo_image (f : α → β) (s : Set α) : MapsTo f s (f &#x27;&#x27; s) := fun _ ↦ mem_image_of_mem f</span>
+<span id="L279" class="line"><a href="#L279">279</a> </span>
+<span id="L280" class="line"><a href="#L280">280</a> theorem mapsTo_preimage (f : α → β) (t : Set β) : MapsTo f (f ⁻¹&#x27; t) t := fun _ ↦ id</span>
+<span id="L281" class="line"><a href="#L281">281</a> </span>
+<span id="L282" class="line"><a href="#L282">282</a> /-- Given a map `f` sending `s : Set α` into `t : Set β`, restrict domain of `f` to `s`</span>
+<span id="L283" class="line"><a href="#L283">283</a> and the codomain to `t`. Same as `Subtype.map`. -/</span>
+<span id="L284" class="line"><a href="#L284">284</a> def MapsTo.restrict (f : α → β) (s : Set α) (t : Set β) (h : MapsTo f s t) : s → t :=</span>
+<span id="L285" class="line"><a href="#L285">285</a>   Subtype.map f h</span>
+<span id="L286" class="line"><a href="#L286">286</a> </span>
+<span id="L287" class="line"><a href="#L287">287</a> /-- The restriction of a function onto the preimage of a set. -/</span>
+<span id="L288" class="line"><a href="#L288">288</a> @[simps!]</span>
+<span id="L289" class="line"><a href="#L289">289</a> def restrictPreimage (t : Set β) (f : α → β) : f ⁻¹&#x27; t → t :=</span>
+<span id="L290" class="line"><a href="#L290">290</a>   (Set.mapsTo_preimage f t).restrict _ _ _</span>
+<span id="L291" class="line"><a href="#L291">291</a> </span>
+<span id="L292" class="line"><a href="#L292">292</a> /-- `f` is injective on `s` if the restriction of `f` to `s` is injective. -/</span>
+<span id="L293" class="line"><a href="#L293">293</a> def InjOn (f : α → β) (s : Set α) : Prop :=</span>
+<span id="L294" class="line"><a href="#L294">294</a>   ∀ ⦃x₁ : α⦄, x₁ ∈ s → ∀ ⦃x₂ : α⦄, x₂ ∈ s → f x₁ = f x₂ → x₁ = x₂</span>
+<span id="L295" class="line"><a href="#L295">295</a> </span>
+<span id="L296" class="line"><a href="#L296">296</a> /-- The graph of a function `f : α → β` on a set `s`. -/</span>
+<span id="L297" class="line"><a href="#L297">297</a> def graphOn (f : α → β) (s : Set α) : Set (α × β) := (fun x ↦ (x, f x)) &#x27;&#x27; s</span>
+<span id="L298" class="line"><a href="#L298">298</a> </span>
+<span id="L299" class="line"><a href="#L299">299</a> /-- `f` is surjective from `s` to `t` if `t` is contained in the image of `s`. -/</span>
+<span id="L300" class="line"><a href="#L300">300</a> def SurjOn (f : α → β) (s : Set α) (t : Set β) : Prop := t ⊆ f &#x27;&#x27; s</span>
+<span id="L301" class="line"><a href="#L301">301</a> </span>
+<span id="L302" class="line"><a href="#L302">302</a> /-- `f` is bijective from `s` to `t` if `f` is injective on `s` and `f &#x27;&#x27; s = t`. -/</span>
+<span id="L303" class="line"><a href="#L303">303</a> def BijOn (f : α → β) (s : Set α) (t : Set β) : Prop := MapsTo f s t ∧ InjOn f s ∧ SurjOn f s t</span>
+<span id="L304" class="line"><a href="#L304">304</a> </span>
+<span id="L305" class="line"><a href="#L305">305</a> /-- `g` is a left inverse to `f` on `s` means that `g (f x) = x` for all `x ∈ s`. -/</span>
+<span id="L306" class="line"><a href="#L306">306</a> def LeftInvOn (g : β → α) (f : α → β) (s : Set α) : Prop := ∀ ⦃x⦄, x ∈ s → g (f x) = x</span>
+<span id="L307" class="line"><a href="#L307">307</a> </span>
+<span id="L308" class="line"><a href="#L308">308</a> /-- `g` is a right inverse to `f` on `t` if `f (g x) = x` for all `x ∈ t`. -/</span>
+<span id="L309" class="line"><a href="#L309">309</a> abbrev RightInvOn (g : β → α) (f : α → β) (t : Set β) : Prop := LeftInvOn f g t</span>
+<span id="L310" class="line"><a href="#L310">310</a> </span>
+<span id="L311" class="line"><a href="#L311">311</a> /-- `g` is an inverse to `f` viewed as a map from `s` to `t` -/</span>
+<span id="L312" class="line"><a href="#L312">312</a> def InvOn (g : β → α) (f : α → β) (s : Set α) (t : Set β) : Prop :=</span>
+<span id="L313" class="line"><a href="#L313">313</a>   LeftInvOn g f s ∧ RightInvOn g f t</span>
+<span id="L314" class="line"><a href="#L314">314</a> </span>
+<span id="L315" class="line"><a href="#L315">315</a> section image2</span>
+<span id="L316" class="line"><a href="#L316">316</a> </span>
+<span id="L317" class="line"><a href="#L317">317</a> /-- The image of a binary function `f : α → β → γ` as a function `Set α → Set β → Set γ`.</span>
+<span id="L318" class="line"><a href="#L318">318</a> Mathematically this should be thought of as the image of the corresponding function `α × β → γ`. -/</span>
+<span id="L319" class="line"><a href="#L319">319</a> def image2 (f : α → β → γ) (s : Set α) (t : Set β) : Set γ := {c | ∃ a ∈ s, ∃ b ∈ t, f a b = c}</span>
+<span id="L320" class="line"><a href="#L320">320</a> </span>
+<span id="L321" class="line"><a href="#L321">321</a> variable {f : α → β → γ} {s : Set α} {t : Set β} {a : α} {b : β} {c : γ}</span>
+<span id="L322" class="line"><a href="#L322">322</a> </span>
+<span id="L323" class="line"><a href="#L323">323</a> @[simp, grind =] theorem mem_image2 : c ∈ image2 f s t ↔ ∃ a ∈ s, ∃ b ∈ t, f a b = c := .rfl</span>
+<span id="L324" class="line"><a href="#L324">324</a> </span>
+<span id="L325" class="line"><a href="#L325">325</a> theorem mem_image2_of_mem (ha : a ∈ s) (hb : b ∈ t) : f a b ∈ image2 f s t :=</span>
+<span id="L326" class="line"><a href="#L326">326</a>   ⟨a, ha, b, hb, rfl⟩</span>
+<span id="L327" class="line"><a href="#L327">327</a> </span>
+<span id="L328" class="line"><a href="#L328">328</a> end image2</span>
+<span id="L329" class="line"><a href="#L329">329</a> </span>
+<span id="L330" class="line"><a href="#L330">330</a> /-- Given a set `s` of functions `α → β` and `t : Set α`, `seq s t` is the union of `f &#x27;&#x27; t` over</span>
+<span id="L331" class="line"><a href="#L331">331</a> all `f ∈ s`. -/</span>
+<span id="L332" class="line"><a href="#L332">332</a> def seq (s : Set (α → β)) (t : Set α) : Set β := image2 (fun f ↦ f) s t</span>
+<span id="L333" class="line"><a href="#L333">333</a> </span>
+<span id="L334" class="line"><a href="#L334">334</a> @[simp, grind =]</span>
+<span id="L335" class="line"><a href="#L335">335</a> theorem mem_seq_iff {s : Set (α → β)} {t : Set α} {b : β} :</span>
+<span id="L336" class="line"><a href="#L336">336</a>     b ∈ seq s t ↔ ∃ f ∈ s, ∃ a ∈ t, (f : α → β) a = b :=</span>
+<span id="L337" class="line"><a href="#L337">337</a>   Iff.rfl</span>
+<span id="L338" class="line"><a href="#L338">338</a> </span>
+<span id="L339" class="line"><a href="#L339">339</a> lemma seq_eq_image2 (s : Set (α → β)) (t : Set α) : seq s t = image2 (fun f a ↦ f a) s t := rfl</span>
+<span id="L340" class="line"><a href="#L340">340</a> </span>
+<span id="L341" class="line"><a href="#L341">341</a> end Set</span></pre></html>

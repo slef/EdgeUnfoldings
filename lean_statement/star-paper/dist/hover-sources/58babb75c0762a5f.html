@@ -1,0 +1,137 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/ExpandingRegionChains.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/ExpandingRegionChains.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.CutTreeWedgeMoves</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Finite iteration of the proved expanding-region operation. Coordinates</span>
+<span id="L4" class="line"><a href="#L4">4</a> may change at every step; the conclusion compares all kites in one plane.</span>
+<span id="L5" class="line"><a href="#L5">5</a> This does not construct the cut-surface quotient or its junction data. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.Wedge</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- The three geometric facts needed for one step, with its coordinate change. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> structure RegionStep (before after kite : Set Plane) where</span>
+<span id="L13" class="line"><a href="#L13">13</a>   enlarged : Set Plane</span>
+<span id="L14" class="line"><a href="#L14">14</a>   motion : Plane ≃ᵃⁱ[ℝ] Plane</span>
+<span id="L15" class="line"><a href="#L15">15</a>   contains : before ⊆ enlarged</span>
+<span id="L16" class="line"><a href="#L16">16</a>   avoids : Disjoint enlarged (interior kite)</span>
+<span id="L17" class="line"><a href="#L17">17</a>   updated : motion &#x27;&#x27; (enlarged ∪ kite) = after</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> namespace RegionStep</span>
+<span id="L20" class="line"><a href="#L20">20</a> </span>
+<span id="L21" class="line"><a href="#L21">21</a> variable {before after kite : Set Plane} (step : RegionStep before after kite)</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> theorem carries_before : step.motion &#x27;&#x27; before ⊆ after := by</span>
+<span id="L24" class="line"><a href="#L24">24</a>   exact (image_mono (step.contains.trans subset_union_left)).trans step.updated.subset</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> theorem carries_kite : step.motion &#x27;&#x27; kite ⊆ after := by</span>
+<span id="L27" class="line"><a href="#L27">27</a>   exact (image_mono subset_union_right).trans step.updated.subset</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> include step in</span>
+<span id="L30" class="line"><a href="#L30">30</a> theorem before_avoids : Disjoint before (interior kite) :=</span>
+<span id="L31" class="line"><a href="#L31">31</a>   step.avoids.mono step.contains Subset.rfl</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> end RegionStep</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> /-- Map each successive local coordinate plane back to the first one. -/</span>
+<span id="L36" class="line"><a href="#L36">36</a> noncomputable def chainFrame (moves : ℕ → Plane ≃ᵃⁱ[ℝ] Plane) : ℕ → Plane ≃ᵃⁱ[ℝ] Plane</span>
+<span id="L37" class="line"><a href="#L37">37</a>   | 0 =&gt; AffineIsometryEquiv.refl ℝ Plane</span>
+<span id="L38" class="line"><a href="#L38">38</a>   | n + 1 =&gt; (moves n).symm.trans (chainFrame moves n)</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> theorem chainFrame_step (moves : ℕ → Plane ≃ᵃⁱ[ℝ] Plane) (n : ℕ) (x : Plane) :</span>
+<span id="L41" class="line"><a href="#L41">41</a>     chainFrame moves (n + 1) (moves n x) = chainFrame moves n x := by</span>
+<span id="L42" class="line"><a href="#L42">42</a>   change chainFrame moves n ((moves n).symm (moves n x)) = chainFrame moves n x</span>
+<span id="L43" class="line"><a href="#L43">43</a>   rw [(moves n).symm_apply_apply]</span>
+<span id="L44" class="line"><a href="#L44">44</a> </span>
+<span id="L45" class="line"><a href="#L45">45</a> /-- A finite chain of actual steps separates every earlier closed kite</span>
+<span id="L46" class="line"><a href="#L46">46</a> from the ordinary interior of every later kite in one common plane. -/</span>
+<span id="L47" class="line"><a href="#L47">47</a> theorem finite_chain_separation (n : ℕ) (regions kites : ℕ → Set Plane)</span>
+<span id="L48" class="line"><a href="#L48">48</a>     (steps : ∀ i : Fin n, RegionStep (regions i) (regions (i + 1)) (kites i)) :</span>
+<span id="L49" class="line"><a href="#L49">49</a>     ∃ frames : ℕ → Plane ≃ᵃⁱ[ℝ] Plane,</span>
+<span id="L50" class="line"><a href="#L50">50</a>       frames 0 = AffineIsometryEquiv.refl ℝ Plane ∧</span>
+<span id="L51" class="line"><a href="#L51">51</a>       (∀ i : Fin n, ∀ x, frames (i + 1) ((steps i).motion x) = frames i x) ∧</span>
+<span id="L52" class="line"><a href="#L52">52</a>       (∀ i j : ℕ, i &lt; j → j &lt; n →</span>
+<span id="L53" class="line"><a href="#L53">53</a>         Disjoint (frames i &#x27;&#x27; kites i) (interior (frames j &#x27;&#x27; kites j))) ∧</span>
+<span id="L54" class="line"><a href="#L54">54</a>       (∀ j : ℕ, j &lt; n → Disjoint (regions 0) (interior (frames j &#x27;&#x27; kites j))) ∧</span>
+<span id="L55" class="line"><a href="#L55">55</a>       (∀ i j : ℕ, i ≤ j → j ≤ n → frames i &#x27;&#x27; regions i ⊆ frames j &#x27;&#x27; regions j) := by</span>
+<span id="L56" class="line"><a href="#L56">56</a>   classical</span>
+<span id="L57" class="line"><a href="#L57">57</a>   let moves (i : ℕ) : Plane ≃ᵃⁱ[ℝ] Plane :=</span>
+<span id="L58" class="line"><a href="#L58">58</a>     if small : i &lt; n then (steps ⟨i, small⟩).motion else AffineIsometryEquiv.refl ℝ Plane</span>
+<span id="L59" class="line"><a href="#L59">59</a>   let frames := chainFrame moves</span>
+<span id="L60" class="line"><a href="#L60">60</a>   have changes (i : Fin n) (x : Plane) :</span>
+<span id="L61" class="line"><a href="#L61">61</a>       frames (i + 1) ((steps i).motion x) = frames i x := by</span>
+<span id="L62" class="line"><a href="#L62">62</a>     have move_eq : moves i = (steps i).motion := dif_pos i.isLt</span>
+<span id="L63" class="line"><a href="#L63">63</a>     rw [← move_eq]</span>
+<span id="L64" class="line"><a href="#L64">64</a>     exact chainFrame_step moves i x</span>
+<span id="L65" class="line"><a href="#L65">65</a>   let R (i : ℕ) := frames i &#x27;&#x27; regions i</span>
+<span id="L66" class="line"><a href="#L66">66</a>   let K (i : ℕ) := frames i &#x27;&#x27; kites i</span>
+<span id="L67" class="line"><a href="#L67">67</a>   have grows (i : ℕ) (small : i &lt; n) : R i ⊆ R (i + 1) := by</span>
+<span id="L68" class="line"><a href="#L68">68</a>     rintro _ ⟨x, member, rfl⟩</span>
+<span id="L69" class="line"><a href="#L69">69</a>     let s := steps ⟨i, small⟩</span>
+<span id="L70" class="line"><a href="#L70">70</a>     exact ⟨s.motion x, s.carries_before ⟨x, member, rfl⟩, changes ⟨i, small⟩ x⟩</span>
+<span id="L71" class="line"><a href="#L71">71</a>   have added (i : ℕ) (small : i &lt; n) : K i ⊆ R (i + 1) := by</span>
+<span id="L72" class="line"><a href="#L72">72</a>     rintro _ ⟨x, member, rfl⟩</span>
+<span id="L73" class="line"><a href="#L73">73</a>     let s := steps ⟨i, small⟩</span>
+<span id="L74" class="line"><a href="#L74">74</a>     exact ⟨s.motion x, s.carries_kite ⟨x, member, rfl⟩, changes ⟨i, small⟩ x⟩</span>
+<span id="L75" class="line"><a href="#L75">75</a>   have avoids (i : ℕ) (small : i &lt; n) : Disjoint (R i) (interior (K i)) := by</span>
+<span id="L76" class="line"><a href="#L76">76</a>     have disjoint := disjoint_image_of_injective (frames i).injective (steps ⟨i, small⟩).before_avoids</span>
+<span id="L77" class="line"><a href="#L77">77</a>     have image_interior : frames i &#x27;&#x27; interior (kites i) = interior (frames i &#x27;&#x27; kites i) :=</span>
+<span id="L78" class="line"><a href="#L78">78</a>       (frames i).toHomeomorph.image_interior _</span>
+<span id="L79" class="line"><a href="#L79">79</a>     rw [image_interior] at disjoint</span>
+<span id="L80" class="line"><a href="#L80">80</a>     exact disjoint</span>
+<span id="L81" class="line"><a href="#L81">81</a>   have monotone (i j : ℕ) (order : i ≤ j) (bound : j ≤ n) : R i ⊆ R j := by</span>
+<span id="L82" class="line"><a href="#L82">82</a>     induction j, order using Nat.le_induction with</span>
+<span id="L83" class="line"><a href="#L83">83</a>     | base =&gt; exact Subset.rfl</span>
+<span id="L84" class="line"><a href="#L84">84</a>     | succ j order previous =&gt;</span>
+<span id="L85" class="line"><a href="#L85">85</a>       exact (previous (by omega)).trans (grows j (by omega))</span>
+<span id="L86" class="line"><a href="#L86">86</a>   refine ⟨frames, rfl, changes, ?_, ?_, monotone⟩</span>
+<span id="L87" class="line"><a href="#L87">87</a>   · intro i j before small</span>
+<span id="L88" class="line"><a href="#L88">88</a>     exact (avoids j small).mono ((added i (by omega)).trans</span>
+<span id="L89" class="line"><a href="#L89">89</a>       (monotone (i + 1) j before (by omega))) Subset.rfl</span>
+<span id="L90" class="line"><a href="#L90">90</a>   · intro j small</span>
+<span id="L91" class="line"><a href="#L91">91</a>     have start : R 0 = regions 0 := by simp only [R, frames, chainFrame, AffineIsometryEquiv.coe_refl, image_id]</span>
+<span id="L92" class="line"><a href="#L92">92</a>     rw [← start]</span>
+<span id="L93" class="line"><a href="#L93">93</a>     exact (avoids j small).mono (monotone 0 j (by omega) (by omega)) Subset.rfl</span>
+<span id="L94" class="line"><a href="#L94">94</a> </span>
+<span id="L95" class="line"><a href="#L95">95</a> /-- Enclose the first kite, carry it through finitely many moves, and</span>
+<span id="L96" class="line"><a href="#L96">96</a> exclude a final kite without requiring a chart beyond that last edge. -/</span>
+<span id="L97" class="line"><a href="#L97">97</a> theorem finite_chain_endpoint_separation (n : ℕ) (regions kites : ℕ → Set Plane)</span>
+<span id="L98" class="line"><a href="#L98">98</a>     (steps : ∀ i : Fin n, RegionStep (regions i) (regions (i + 1)) (kites i))</span>
+<span id="L99" class="line"><a href="#L99">99</a>     (first last : Set Plane) (initial : first ⊆ regions 0)</span>
+<span id="L100" class="line"><a href="#L100">100</a>     (terminal : Disjoint (regions n) (interior last)) :</span>
+<span id="L101" class="line"><a href="#L101">101</a>     ∃ frames : ℕ → Plane ≃ᵃⁱ[ℝ] Plane,</span>
+<span id="L102" class="line"><a href="#L102">102</a>       frames 0 = AffineIsometryEquiv.refl ℝ Plane ∧</span>
+<span id="L103" class="line"><a href="#L103">103</a>       (∀ i : Fin n, ∀ x, frames (i + 1) ((steps i).motion x) = frames i x) ∧</span>
+<span id="L104" class="line"><a href="#L104">104</a>       Disjoint first (interior (frames n &#x27;&#x27; last)) := by</span>
+<span id="L105" class="line"><a href="#L105">105</a>   obtain ⟨frames, start, compatible, _, _, grows⟩ := finite_chain_separation n regions kites steps</span>
+<span id="L106" class="line"><a href="#L106">106</a>   have first_inside : first ⊆ frames n &#x27;&#x27; regions n := by</span>
+<span id="L107" class="line"><a href="#L107">107</a>     intro x member</span>
+<span id="L108" class="line"><a href="#L108">108</a>     apply grows 0 n (by omega) le_rfl</span>
+<span id="L109" class="line"><a href="#L109">109</a>     refine ⟨x, initial member, ?_⟩</span>
+<span id="L110" class="line"><a href="#L110">110</a>     rw [start]</span>
+<span id="L111" class="line"><a href="#L111">111</a>     rfl</span>
+<span id="L112" class="line"><a href="#L112">112</a>   have final_avoids := disjoint_image_of_injective (frames n).injective terminal</span>
+<span id="L113" class="line"><a href="#L113">113</a>   have final_interior : frames n &#x27;&#x27; interior last = interior (frames n &#x27;&#x27; last) :=</span>
+<span id="L114" class="line"><a href="#L114">114</a>     (frames n).toHomeomorph.image_interior _</span>
+<span id="L115" class="line"><a href="#L115">115</a>   rw [final_interior] at final_avoids</span>
+<span id="L116" class="line"><a href="#L116">116</a>   exact ⟨frames, start, compatible, final_avoids.mono first_inside Subset.rfl⟩</span>
+<span id="L117" class="line"><a href="#L117">117</a> </span>
+<span id="L118" class="line"><a href="#L118">118</a> end SixVertexUnfolding.Wedge</span>
+<span id="L119" class="line"><a href="#L119">119</a> </span>
+<span id="L120" class="line"><a href="#L120">120</a> namespace SixVertexUnfolding.ConvexPolyhedron.JunctionFan.WedgeMove</span>
+<span id="L121" class="line"><a href="#L121">121</a> </span>
+<span id="L122" class="line"><a href="#L122">122</a> open Wedge</span>
+<span id="L123" class="line"><a href="#L123">123</a> </span>
+<span id="L124" class="line"><a href="#L124">124</a> variable {P : ConvexPolyhedron} {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L125" class="line"><a href="#L125">125</a>     {u : T.vertices} {fan : JunctionFan T u}</span>
+<span id="L126" class="line"><a href="#L126">126</a>     {incoming outgoing : circularGapMidpoints fan.order.angles fan.order.first fan.order.last}</span>
+<span id="L127" class="line"><a href="#L127">127</a>     {next_chart : P.CutVoronoiChart a (T.vertexTarget (fan.order.neighbors outgoing).val)} {φ : ℝ}</span>
+<span id="L128" class="line"><a href="#L128">128</a>     {next : IncidentTriangles T (fan.order.neighbors outgoing).property.symm next_chart φ} {ω : ℝ}</span>
+<span id="L129" class="line"><a href="#L129">129</a> </span>
+<span id="L130" class="line"><a href="#L130">130</a> /-- The constructed geometric move supplies every hypothesis of finite region iteration. -/</span>
+<span id="L131" class="line"><a href="#L131">131</a> def toRegionStep (move : fan.WedgeMove incoming outgoing next ω) :</span>
+<span id="L132" class="line"><a href="#L132">132</a>     RegionStep ((fan.triangles incoming).incomingWedge ω)</span>
+<span id="L133" class="line"><a href="#L133">133</a>       (next.incomingWedge (ω + (fan.triangles outgoing).model.sourceAngle))</span>
+<span id="L134" class="line"><a href="#L134">134</a>       (fan.triangles outgoing).developedKite :=</span>
+<span id="L135" class="line"><a href="#L135">135</a>   ⟨move.enlarged, move.motion, move.contains, move.avoids, move.updated⟩</span>
+<span id="L136" class="line"><a href="#L136">136</a> </span>
+<span id="L137" class="line"><a href="#L137">137</a> end SixVertexUnfolding.ConvexPolyhedron.JunctionFan.WedgeMove</span></pre></html>

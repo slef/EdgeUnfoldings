@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/OctahedralAngles.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/OctahedralAngles.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.OctahedralSubdivision</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Actual spatial triangle angles and their six-vertex total curvature identity. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> open OctahedralTriangles EuclideanGeometry</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- The ordinary spatial angle at a named corner of a subdivision triangle. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> noncomputable def cornerAngle (t : Fin 8) (i : Fin 3) : ℝ :=</span>
+<span id="L13" class="line"><a href="#L13">13</a>   angle (graph.trianglePoint t (i + 1)) (graph.trianglePoint t i) (graph.trianglePoint t (i + 2))</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-- The sum of the incident subdivision angles at one original vertex. -/</span>
+<span id="L16" class="line"><a href="#L16">16</a> noncomputable def totalAngleAt (v : Fin 6) : ℝ :=</span>
+<span id="L17" class="line"><a href="#L17">17</a>   ∑ t : Fin 8, ∑ i : Fin 3, if corner t i = v then graph.cornerAngle t i else 0</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> /-- Curvature is the angular deficit at this genuine original vertex. -/</span>
+<span id="L20" class="line"><a href="#L20">20</a> noncomputable def curvature (v : Fin 6) : ℝ := 2 * Real.pi - graph.totalAngleAt v</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> /-- The three cyclically ordered corners remain noncollinear. -/</span>
+<span id="L23" class="line"><a href="#L23">23</a> theorem corner_triangle_not_collinear (t : Fin 8) (i : Fin 3) :</span>
+<span id="L24" class="line"><a href="#L24">24</a>     ¬ Collinear ℝ ({graph.trianglePoint t (i + 1), graph.trianglePoint t i,</span>
+<span id="L25" class="line"><a href="#L25">25</a>       graph.trianglePoint t (i + 2)} : Set Space) := by</span>
+<span id="L26" class="line"><a href="#L26">26</a>   apply P.no_three_collinear_vertices</span>
+<span id="L27" class="line"><a href="#L27">27</a>     (graph.vertex (corner t (i + 1))).property (graph.vertex (corner t i)).property</span>
+<span id="L28" class="line"><a href="#L28">28</a>     (graph.vertex (corner t (i + 2))).property</span>
+<span id="L29" class="line"><a href="#L29">29</a>   · exact (graph.trianglePoint_injective t).ne ((by decide : ∀ i : Fin 3, i + 1 ≠ i) i)</span>
+<span id="L30" class="line"><a href="#L30">30</a>   · exact (graph.trianglePoint_injective t).ne ((by decide : ∀ i : Fin 3, i + 1 ≠ i + 2) i)</span>
+<span id="L31" class="line"><a href="#L31">31</a>   · exact (graph.trianglePoint_injective t).ne ((by decide : ∀ i : Fin 3, i ≠ i + 2) i)</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> theorem cornerAngle_pos (t : Fin 8) (i : Fin 3) : 0 &lt; graph.cornerAngle t i :=</span>
+<span id="L34" class="line"><a href="#L34">34</a>   angle_pos_of_not_collinear (graph.corner_triangle_not_collinear t i)</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> theorem cornerAngle_lt_pi (t : Fin 8) (i : Fin 3) : graph.cornerAngle t i &lt; Real.pi :=</span>
+<span id="L37" class="line"><a href="#L37">37</a>   angle_lt_pi_of_not_collinear (graph.corner_triangle_not_collinear t i)</span>
+<span id="L38" class="line"><a href="#L38">38</a> </span>
+<span id="L39" class="line"><a href="#L39">39</a> /-- Each actual subdivision triangle contributes exactly pi in angle sum. -/</span>
+<span id="L40" class="line"><a href="#L40">40</a> theorem sum_cornerAngle (t : Fin 8) : ∑ i : Fin 3, graph.cornerAngle t i = Real.pi := by</span>
+<span id="L41" class="line"><a href="#L41">41</a>   have total := angle_add_angle_add_angle_eq_pi (graph.trianglePoint t 2)</span>
+<span id="L42" class="line"><a href="#L42">42</a>     ((graph.trianglePoint_injective t).ne (by decide : (1 : Fin 3) ≠ 0))</span>
+<span id="L43" class="line"><a href="#L43">43</a>   simp only [Fin.sum_univ_three, cornerAngle]</span>
+<span id="L44" class="line"><a href="#L44">44</a>   change angle (graph.trianglePoint t 1) (graph.trianglePoint t 0) (graph.trianglePoint t 2) +</span>
+<span id="L45" class="line"><a href="#L45">45</a>     angle (graph.trianglePoint t 2) (graph.trianglePoint t 1) (graph.trianglePoint t 0) +</span>
+<span id="L46" class="line"><a href="#L46">46</a>     angle (graph.trianglePoint t 0) (graph.trianglePoint t 2) (graph.trianglePoint t 1) = Real.pi</span>
+<span id="L47" class="line"><a href="#L47">47</a>   rw [angle_comm (graph.trianglePoint t 1) (graph.trianglePoint t 0),</span>
+<span id="L48" class="line"><a href="#L48">48</a>     angle_comm (graph.trianglePoint t 2) (graph.trianglePoint t 1),</span>
+<span id="L49" class="line"><a href="#L49">49</a>     angle_comm (graph.trianglePoint t 0) (graph.trianglePoint t 2)]</span>
+<span id="L50" class="line"><a href="#L50">50</a>   linarith</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> /-- The 24 corner angles are counted exactly once across the six original vertices. -/</span>
+<span id="L53" class="line"><a href="#L53">53</a> theorem sum_totalAngleAt : ∑ v : Fin 6, graph.totalAngleAt v = 8 * Real.pi := by</span>
+<span id="L54" class="line"><a href="#L54">54</a>   unfold totalAngleAt</span>
+<span id="L55" class="line"><a href="#L55">55</a>   calc</span>
+<span id="L56" class="line"><a href="#L56">56</a>     (∑ v : Fin 6, ∑ t : Fin 8, ∑ i : Fin 3, if corner t i = v then graph.cornerAngle t i else 0) =</span>
+<span id="L57" class="line"><a href="#L57">57</a>         ∑ t : Fin 8, ∑ i : Fin 3, ∑ v : Fin 6, if corner t i = v then graph.cornerAngle t i else 0 := by</span>
+<span id="L58" class="line"><a href="#L58">58</a>       rw [Finset.sum_comm]</span>
+<span id="L59" class="line"><a href="#L59">59</a>       apply Finset.sum_congr rfl</span>
+<span id="L60" class="line"><a href="#L60">60</a>       intro t member</span>
+<span id="L61" class="line"><a href="#L61">61</a>       rw [Finset.sum_comm]</span>
+<span id="L62" class="line"><a href="#L62">62</a>     _ = ∑ t : Fin 8, ∑ i : Fin 3, graph.cornerAngle t i := by simp</span>
+<span id="L63" class="line"><a href="#L63">63</a>     _ = 8 * Real.pi := by simp [graph.sum_cornerAngle]</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> /-- Gauss--Bonnet for this explicit six-vertex subdivision, derived from its actual spatial angles. -/</span>
+<span id="L66" class="line"><a href="#L66">66</a> theorem sum_curvature : ∑ v : Fin 6, graph.curvature v = 4 * Real.pi := by</span>
+<span id="L67" class="line"><a href="#L67">67</a>   simp only [curvature, Finset.sum_sub_distrib, graph.sum_totalAngleAt]</span>
+<span id="L68" class="line"><a href="#L68">68</a>   norm_num</span>
+<span id="L69" class="line"><a href="#L69">69</a>   ring</span>
+<span id="L70" class="line"><a href="#L70">70</a> </span>
+<span id="L71" class="line"><a href="#L71">71</a> /-- Every vertex has a positive incident angle sum. -/</span>
+<span id="L72" class="line"><a href="#L72">72</a> theorem totalAngleAt_pos (v : Fin 6) : 0 &lt; graph.totalAngleAt v := by</span>
+<span id="L73" class="line"><a href="#L73">73</a>   obtain ⟨t, i, at_vertex⟩ := (by decide : ∀ v : Fin 6, ∃ t : Fin 8, ∃ i : Fin 3, corner t i = v) v</span>
+<span id="L74" class="line"><a href="#L74">74</a>   have nonnegative (t : Fin 8) (i : Fin 3) : 0 ≤ if corner t i = v then graph.cornerAngle t i else 0 := by</span>
+<span id="L75" class="line"><a href="#L75">75</a>     split_ifs</span>
+<span id="L76" class="line"><a href="#L76">76</a>     · exact (graph.cornerAngle_pos t i).le</span>
+<span id="L77" class="line"><a href="#L77">77</a>     · exact le_rfl</span>
+<span id="L78" class="line"><a href="#L78">78</a>   apply Finset.sum_pos&#x27; (fun t _ =&gt; Finset.sum_nonneg (fun i _ =&gt; nonnegative t i))</span>
+<span id="L79" class="line"><a href="#L79">79</a>   refine ⟨t, Finset.mem_univ _, ?_⟩</span>
+<span id="L80" class="line"><a href="#L80">80</a>   apply Finset.sum_pos&#x27; (fun i _ =&gt; nonnegative t i)</span>
+<span id="L81" class="line"><a href="#L81">81</a>   exact ⟨i, Finset.mem_univ _, by rw [if_pos at_vertex]; exact graph.cornerAngle_pos t i⟩</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> /-- The upper curvature bound follows from nondegenerate actual face angles. -/</span>
+<span id="L84" class="line"><a href="#L84">84</a> theorem curvature_lt_two_pi (v : Fin 6) : graph.curvature v &lt; 2 * Real.pi := by</span>
+<span id="L85" class="line"><a href="#L85">85</a>   have positive := graph.totalAngleAt_pos v</span>
+<span id="L86" class="line"><a href="#L86">86</a>   unfold curvature</span>
+<span id="L87" class="line"><a href="#L87">87</a>   linarith</span>
+<span id="L88" class="line"><a href="#L88">88</a> </span>
+<span id="L89" class="line"><a href="#L89">89</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span></pre></html>

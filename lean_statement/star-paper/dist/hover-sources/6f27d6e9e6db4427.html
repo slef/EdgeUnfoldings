@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/CutTreeCharts.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/CutTreeCharts.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.CutTreeFrames</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.UniqueRouteLeaves</span>
+<span id="L3" class="line"><a href="#L3">3</a> import SixVertexUnfolding.Geometry.JunctionEdgeIndices</span>
+<span id="L4" class="line"><a href="#L4">4</a> import SixVertexUnfolding.Geometry.CutTreeTriangleCoverage</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> /-! Choose all actual radial triangle charts simultaneously. Internal</span>
+<span id="L7" class="line"><a href="#L7">7</a> vertices use their proved flat fans, original vertices are leaves, and</span>
+<span id="L8" class="line"><a href="#L8">8</a> one set of frames aligns every reverse-edge pair throughout the tree.</span>
+<span id="L9" class="line"><a href="#L9">9</a> This still precedes the proof of global nonoverlap and the cut-surface gluing. -/</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> open Set</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-- Actual local charts with coherent global frames and full surface coverage. -/</span>
+<span id="L16" class="line"><a href="#L16">16</a> structure CutTreeCharts {P : ConvexPolyhedron} {a : frontier P.body} (T : P.CutLocusTree a) where</span>
+<span id="L17" class="line"><a href="#L17">17</a>   fan : ∀ u : T.vertices, (u : Space) ∉ P.vertices → JunctionFan T u</span>
+<span id="L18" class="line"><a href="#L18">18</a>   triangles : ∀ {u v : T.vertices} (edge : T.graph.Adj u v), PlacedCutEdgeTriangles T edge</span>
+<span id="L19" class="line"><a href="#L19">19</a>   at_fan : ∀ {u v : T.vertices} (edge : T.graph.Adj u v) (nonvertex : (u : Space) ∉ P.vertices),</span>
+<span id="L20" class="line"><a href="#L20">20</a>     triangles edge = ((fan u nonvertex).edgeTriangles edge).placed</span>
+<span id="L21" class="line"><a href="#L21">21</a>   original_leaves : ∀ u : T.vertices, (u : Space) ∈ P.vertices → ∃! v, T.graph.Adj u v</span>
+<span id="L22" class="line"><a href="#L22">22</a>   frames : CutTreeFrames T triangles</span>
+<span id="L23" class="line"><a href="#L23">23</a>   covers : ∀ b : frontier P.body, ∃ u v : T.vertices, ∃ edge : T.graph.Adj u v,</span>
+<span id="L24" class="line"><a href="#L24">24</a>     b ∈ (triangles edge).region</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> namespace SixVertexGraph</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L29" class="line"><a href="#L29">29</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L31" class="line"><a href="#L31">31</a> </span>
+<span id="L32" class="line"><a href="#L32">32</a> include graph small_faces in</span>
+<span id="L33" class="line"><a href="#L33">33</a> /-- For a cofacial source, construct the entire chart collection and its common frames. -/</span>
+<span id="L34" class="line"><a href="#L34">34</a> theorem exists_cut_tree_charts (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L35" class="line"><a href="#L35">35</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :</span>
+<span id="L36" class="line"><a href="#L36">36</a>     Nonempty (CutTreeCharts T) := by</span>
+<span id="L37" class="line"><a href="#L37">37</a>   classical</span>
+<span id="L38" class="line"><a href="#L38">38</a>   let fan (u : T.vertices) (nonvertex : (u : Space) ∉ P.vertices) :=</span>
+<span id="L39" class="line"><a href="#L39">39</a>     Classical.choice (graph.exists_junction_fan small_faces a T u nonvertex)</span>
+<span id="L40" class="line"><a href="#L40">40</a>   let triangles {u v : T.vertices} (edge : T.graph.Adj u v) : PlacedCutEdgeTriangles T edge :=</span>
+<span id="L41" class="line"><a href="#L41">41</a>     if original : (u : Space) ∈ P.vertices then</span>
+<span id="L42" class="line"><a href="#L42">42</a>       ⟨Classical.choice (graph.exists_cut_edge_triangles small_faces a T edge), AffineIsometryEquiv.refl ℝ Plane⟩</span>
+<span id="L43" class="line"><a href="#L43">43</a>     else ((fan u original).edgeTriangles edge).placed</span>
+<span id="L44" class="line"><a href="#L44">44</a>   obtain ⟨frames⟩ := exists_cut_tree_frames T @triangles</span>
+<span id="L45" class="line"><a href="#L45">45</a>   refine ⟨{</span>
+<span id="L46" class="line"><a href="#L46">46</a>     fan := fan</span>
+<span id="L47" class="line"><a href="#L47">47</a>     triangles := @triangles</span>
+<span id="L48" class="line"><a href="#L48">48</a>     at_fan := ?_</span>
+<span id="L49" class="line"><a href="#L49">49</a>     original_leaves := fun u original =&gt;</span>
+<span id="L50" class="line"><a href="#L50">50</a>       (graph.cofacial_source_leaf_iff_original small_faces a T cofacial u).mpr original</span>
+<span id="L51" class="line"><a href="#L51">51</a>     frames := frames</span>
+<span id="L52" class="line"><a href="#L52">52</a>     covers := ?_ }⟩</span>
+<span id="L53" class="line"><a href="#L53">53</a>   · intro u v edge nonvertex</span>
+<span id="L54" class="line"><a href="#L54">54</a>     simp only [triangles, dif_neg nonvertex]</span>
+<span id="L55" class="line"><a href="#L55">55</a>   · intro b</span>
+<span id="L56" class="line"><a href="#L56">56</a>     obtain ⟨d, member⟩ := graph.cut_tree_triangles_cover small_faces a T</span>
+<span id="L57" class="line"><a href="#L57">57</a>       (fun d =&gt; (triangles d.adj).toCutEdgeTriangles) b</span>
+<span id="L58" class="line"><a href="#L58">58</a>     exact ⟨d.fst, d.snd, d.adj, member⟩</span>
+<span id="L59" class="line"><a href="#L59">59</a> </span>
+<span id="L60" class="line"><a href="#L60">60</a> end SixVertexGraph</span>
+<span id="L61" class="line"><a href="#L61">61</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

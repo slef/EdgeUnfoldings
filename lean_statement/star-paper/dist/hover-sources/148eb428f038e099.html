@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/RouteStrips.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/RouteStrips.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.CutRayCoordinates</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! The interiors swept out by continuously varying shortest routes.</span>
+<span id="L4" class="line"><a href="#L4">4</a> These are actual surface regions, parametrized by a target and a time</span>
+<span id="L5" class="line"><a href="#L5">5</a> strictly between the source and the cut endpoint. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set BoundedContinuousFunction</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- Regard a time strictly between zero and one as a closed-unit-interval time. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> def interiorTime (t : Ioo (0 : ℝ) 1) : unitInterval := ⟨t.val, t.property.1.le, t.property.2.le⟩</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> theorem interiorTime_continuous : Continuous interiorTime := continuous_subtype_val.subtype_mk _</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> /-- Evaluate a continuous route family at an interior time. -/</span>
+<span id="L17" class="line"><a href="#L17">17</a> noncomputable def routeStripMap {P : ConvexPolyhedron} {X : Type*} [TopologicalSpace X]</span>
+<span id="L18" class="line"><a href="#L18">18</a>     (routes : C(X, P.BoundaryCurve)) : C(X × Ioo (0 : ℝ) 1, frontier P.body) :=</span>
+<span id="L19" class="line"><a href="#L19">19</a>   ⟨fun p =&gt; routes p.1 (interiorTime p.2), continuous_eval.comp</span>
+<span id="L20" class="line"><a href="#L20">20</a>     ((routes.continuous.comp continuous_fst).prodMk (interiorTime_continuous.comp continuous_snd))⟩</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> /-- The actual points swept out before reaching the terminal cut targets. -/</span>
+<span id="L23" class="line"><a href="#L23">23</a> def routeStrip {P : ConvexPolyhedron} {X : Type*} [TopologicalSpace X]</span>
+<span id="L24" class="line"><a href="#L24">24</a>     (routes : C(X, P.BoundaryCurve)) : Set (frontier P.body) := range (routeStripMap routes)</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> namespace SixVertexGraph</span>
+<span id="L27" class="line"><a href="#L27">27</a> </span>
+<span id="L28" class="line"><a href="#L28">28</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L29" class="line"><a href="#L29">29</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L31" class="line"><a href="#L31">31</a> </span>
+<span id="L32" class="line"><a href="#L32">32</a> include graph small_faces in</span>
+<span id="L33" class="line"><a href="#L33">33</a> /-- A strip parametrized by distinct cut endpoints has no self-identifications. -/</span>
+<span id="L34" class="line"><a href="#L34">34</a> theorem routeStripMap_injective (a : frontier P.body) {X : Type*} [TopologicalSpace X]</span>
+<span id="L35" class="line"><a href="#L35">35</a>     (target : X → frontier P.body) (injective_target : Function.Injective target)</span>
+<span id="L36" class="line"><a href="#L36">36</a>     (cut : ∀ x, target x ∈ P.cutSet a) (routes : C(X, P.BoundaryCurve))</span>
+<span id="L37" class="line"><a href="#L37">37</a>     (member : ∀ x, routes x ∈ P.geodesicFiber a (target x)) :</span>
+<span id="L38" class="line"><a href="#L38">38</a>     Function.Injective (routeStripMap routes) := by</span>
+<span id="L39" class="line"><a href="#L39">39</a>   rintro ⟨x, s⟩ ⟨y, t⟩ meet</span>
+<span id="L40" class="line"><a href="#L40">40</a>   have same := graph.cut_rays_meeting small_faces a (target x) (target y) (cut x) (cut y)</span>
+<span id="L41" class="line"><a href="#L41">41</a>     (routes x) (routes y) (member x) (member y) (interiorTime s) (interiorTime t)</span>
+<span id="L42" class="line"><a href="#L42">42</a>     s.property.1 s.property.2 meet</span>
+<span id="L43" class="line"><a href="#L43">43</a>   have times : s.val = t.val := congrArg (fun r : unitInterval =&gt; (r : ℝ)) same.2.1</span>
+<span id="L44" class="line"><a href="#L44">44</a>   exact Prod.ext (injective_target same.1) (Subtype.ext times)</span>
+<span id="L45" class="line"><a href="#L45">45</a> </span>
+<span id="L46" class="line"><a href="#L46">46</a> include graph small_faces in</span>
+<span id="L47" class="line"><a href="#L47">47</a> /-- Two distinct route branches over the same cut-edge targets sweep disjoint interiors. -/</span>
+<span id="L48" class="line"><a href="#L48">48</a> theorem routeStrips_disjoint (a : frontier P.body) {X : Type*} [TopologicalSpace X]</span>
+<span id="L49" class="line"><a href="#L49">49</a>     (target : X → frontier P.body) (injective_target : Function.Injective target)</span>
+<span id="L50" class="line"><a href="#L50">50</a>     (cut : ∀ x, target x ∈ P.cutSet a) (first second : C(X, P.BoundaryCurve))</span>
+<span id="L51" class="line"><a href="#L51">51</a>     (first_member : ∀ x, first x ∈ P.geodesicFiber a (target x))</span>
+<span id="L52" class="line"><a href="#L52">52</a>     (second_member : ∀ x, second x ∈ P.geodesicFiber a (target x))</span>
+<span id="L53" class="line"><a href="#L53">53</a>     (distinct : ∀ x, first x ≠ second x) : Disjoint (routeStrip first) (routeStrip second) := by</span>
+<span id="L54" class="line"><a href="#L54">54</a>   apply disjoint_left.mpr</span>
+<span id="L55" class="line"><a href="#L55">55</a>   rintro b ⟨⟨x, s⟩, hx⟩ ⟨⟨y, t⟩, hy⟩</span>
+<span id="L56" class="line"><a href="#L56">56</a>   have same := graph.cut_rays_meeting small_faces a (target x) (target y) (cut x) (cut y)</span>
+<span id="L57" class="line"><a href="#L57">57</a>     (first x) (second y) (first_member x) (second_member y) (interiorTime s) (interiorTime t)</span>
+<span id="L58" class="line"><a href="#L58">58</a>     s.property.1 s.property.2 (hx.trans hy.symm)</span>
+<span id="L59" class="line"><a href="#L59">59</a>   have parameters := injective_target same.1</span>
+<span id="L60" class="line"><a href="#L60">60</a>   exact distinct x (same.2.2.trans (congrArg second parameters.symm))</span>
+<span id="L61" class="line"><a href="#L61">61</a> </span>
+<span id="L62" class="line"><a href="#L62">62</a> include graph small_faces in</span>
+<span id="L63" class="line"><a href="#L63">63</a> /-- Every point in a route strip avoids both the source and the cut set. -/</span>
+<span id="L64" class="line"><a href="#L64">64</a> theorem routeStrip_outside_cutSet (a : frontier P.body) {X : Type*} [TopologicalSpace X]</span>
+<span id="L65" class="line"><a href="#L65">65</a>     (target : X → frontier P.body) (cut : ∀ x, target x ∈ P.cutSet a)</span>
+<span id="L66" class="line"><a href="#L66">66</a>     (routes : C(X, P.BoundaryCurve)) (member : ∀ x, routes x ∈ P.geodesicFiber a (target x))</span>
+<span id="L67" class="line"><a href="#L67">67</a>     (b : frontier P.body) (inside : b ∈ routeStrip routes) : b ≠ a ∧ b ∉ P.cutSet a := by</span>
+<span id="L68" class="line"><a href="#L68">68</a>   obtain ⟨⟨x, t⟩, rfl⟩ := inside</span>
+<span id="L69" class="line"><a href="#L69">69</a>   have h := member x</span>
+<span id="L70" class="line"><a href="#L70">70</a>   have first : routes x 0 = a := congrArg Prod.fst h.2</span>
+<span id="L71" class="line"><a href="#L71">71</a>   have last : routes x 1 = target x := congrArg Prod.snd h.2</span>
+<span id="L72" class="line"><a href="#L72">72</a>   have different : a ≠ target x := fun same =&gt; P.source_not_cutSet a (same.symm ▸ cut x)</span>
+<span id="L73" class="line"><a href="#L73">73</a>   constructor</span>
+<span id="L74" class="line"><a href="#L74">74</a>   · intro same</span>
+<span id="L75" class="line"><a href="#L75">75</a>     have equal := P.geodesicFiber_injective a (target x) different (routes x) h (same.trans first.symm)</span>
+<span id="L76" class="line"><a href="#L76">76</a>     have real_equal := congrArg Subtype.val equal</span>
+<span id="L77" class="line"><a href="#L77">77</a>     exact t.property.1.ne&#x27; real_equal</span>
+<span id="L78" class="line"><a href="#L78">78</a>   · have outside := graph.geodesic_proper_prefix_outside_cutSet small_faces (routes x) h.1</span>
+<span id="L79" class="line"><a href="#L79">79</a>       (by simpa only [first, last] using different) (interiorTime t) t.property.2</span>
+<span id="L80" class="line"><a href="#L80">80</a>     simpa only [first] using outside</span>
+<span id="L81" class="line"><a href="#L81">81</a> </span>
+<span id="L82" class="line"><a href="#L82">82</a> end SixVertexGraph</span>
+<span id="L83" class="line"><a href="#L83">83</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

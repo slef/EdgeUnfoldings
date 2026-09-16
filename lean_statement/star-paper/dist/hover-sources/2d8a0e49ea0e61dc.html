@@ -1,0 +1,1259 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2018 Chris Hughes. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Chris Hughes, Abhimanyu Pallavi Sudhir, Jean Lo, Calle Sönne, Benjamin Davidson</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Algebra.Field.NegOnePow</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Algebra.Field.Periodic</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Algebra.QuadraticDiscriminant</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Mathlib.Analysis.SpecialFunctions.Exp</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> /-!</span>
+<span id="L14" class="line"><a href="#L14">14</a> # Trigonometric functions</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> ## Main definitions</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> This file contains the definition of `π`.</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> See also `Analysis.SpecialFunctions.Trigonometric.Inverse` and</span>
+<span id="L21" class="line"><a href="#L21">21</a> `Analysis.SpecialFunctions.Trigonometric.Arctan` for the inverse trigonometric functions.</span>
+<span id="L22" class="line"><a href="#L22">22</a> </span>
+<span id="L23" class="line"><a href="#L23">23</a> See also `Analysis.SpecialFunctions.Complex.Arg` and</span>
+<span id="L24" class="line"><a href="#L24">24</a> `Analysis.SpecialFunctions.Complex.Log` for the complex argument function</span>
+<span id="L25" class="line"><a href="#L25">25</a> and the complex logarithm.</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> ## Main statements</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> Many basic inequalities on the real trigonometric functions are established.</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> The continuity of the usual trigonometric functions is proved.</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> Several facts about the real trigonometric functions have the proofs deferred to</span>
+<span id="L34" class="line"><a href="#L34">34</a> `Analysis.SpecialFunctions.Trigonometric.Complex`,</span>
+<span id="L35" class="line"><a href="#L35">35</a> as they are most easily proved by appealing to the corresponding fact for</span>
+<span id="L36" class="line"><a href="#L36">36</a> complex trigonometric functions.</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> See also `Analysis.SpecialFunctions.Trigonometric.Chebyshev` for the multiple angle formulas</span>
+<span id="L39" class="line"><a href="#L39">39</a> in terms of Chebyshev polynomials.</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> ## Tags</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> sin, cos, tan, angle</span>
+<span id="L44" class="line"><a href="#L44">44</a> -/</span>
+<span id="L45" class="line"><a href="#L45">45</a> </span>
+<span id="L46" class="line"><a href="#L46">46</a> @[expose] public section</span>
+<span id="L47" class="line"><a href="#L47">47</a> </span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> noncomputable section</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> open Topology Filter Set</span>
+<span id="L52" class="line"><a href="#L52">52</a> </span>
+<span id="L53" class="line"><a href="#L53">53</a> namespace Complex</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> @[continuity, fun_prop]</span>
+<span id="L56" class="line"><a href="#L56">56</a> theorem continuous_sin : Continuous sin := by</span>
+<span id="L57" class="line"><a href="#L57">57</a>   change Continuous fun z =&gt; (exp (-z * I) - exp (z * I)) * I / 2</span>
+<span id="L58" class="line"><a href="#L58">58</a>   fun_prop</span>
+<span id="L59" class="line"><a href="#L59">59</a> </span>
+<span id="L60" class="line"><a href="#L60">60</a> @[fun_prop]</span>
+<span id="L61" class="line"><a href="#L61">61</a> theorem continuousOn_sin {s : Set ℂ} : ContinuousOn sin s :=</span>
+<span id="L62" class="line"><a href="#L62">62</a>   continuous_sin.continuousOn</span>
+<span id="L63" class="line"><a href="#L63">63</a> </span>
+<span id="L64" class="line"><a href="#L64">64</a> @[continuity, fun_prop]</span>
+<span id="L65" class="line"><a href="#L65">65</a> theorem continuous_cos : Continuous cos := by</span>
+<span id="L66" class="line"><a href="#L66">66</a>   change Continuous fun z =&gt; (exp (z * I) + exp (-z * I)) / 2</span>
+<span id="L67" class="line"><a href="#L67">67</a>   fun_prop</span>
+<span id="L68" class="line"><a href="#L68">68</a> </span>
+<span id="L69" class="line"><a href="#L69">69</a> @[fun_prop]</span>
+<span id="L70" class="line"><a href="#L70">70</a> theorem continuousOn_cos {s : Set ℂ} : ContinuousOn cos s :=</span>
+<span id="L71" class="line"><a href="#L71">71</a>   continuous_cos.continuousOn</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> @[continuity, fun_prop]</span>
+<span id="L74" class="line"><a href="#L74">74</a> theorem continuous_sinh : Continuous sinh := by</span>
+<span id="L75" class="line"><a href="#L75">75</a>   change Continuous fun z =&gt; (exp z - exp (-z)) / 2</span>
+<span id="L76" class="line"><a href="#L76">76</a>   fun_prop</span>
+<span id="L77" class="line"><a href="#L77">77</a> </span>
+<span id="L78" class="line"><a href="#L78">78</a> @[continuity, fun_prop]</span>
+<span id="L79" class="line"><a href="#L79">79</a> theorem continuous_cosh : Continuous cosh := by</span>
+<span id="L80" class="line"><a href="#L80">80</a>   change Continuous fun z =&gt; (exp z + exp (-z)) / 2</span>
+<span id="L81" class="line"><a href="#L81">81</a>   fun_prop</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> end Complex</span>
+<span id="L84" class="line"><a href="#L84">84</a> </span>
+<span id="L85" class="line"><a href="#L85">85</a> namespace Real</span>
+<span id="L86" class="line"><a href="#L86">86</a> </span>
+<span id="L87" class="line"><a href="#L87">87</a> variable {x y z : ℝ}</span>
+<span id="L88" class="line"><a href="#L88">88</a> </span>
+<span id="L89" class="line"><a href="#L89">89</a> @[continuity, fun_prop]</span>
+<span id="L90" class="line"><a href="#L90">90</a> theorem continuous_sin : Continuous sin :=</span>
+<span id="L91" class="line"><a href="#L91">91</a>   Complex.continuous_re.comp (Complex.continuous_sin.comp Complex.continuous_ofReal)</span>
+<span id="L92" class="line"><a href="#L92">92</a> </span>
+<span id="L93" class="line"><a href="#L93">93</a> @[fun_prop]</span>
+<span id="L94" class="line"><a href="#L94">94</a> theorem continuousOn_sin {s} : ContinuousOn sin s :=</span>
+<span id="L95" class="line"><a href="#L95">95</a>   continuous_sin.continuousOn</span>
+<span id="L96" class="line"><a href="#L96">96</a> </span>
+<span id="L97" class="line"><a href="#L97">97</a> @[continuity, fun_prop]</span>
+<span id="L98" class="line"><a href="#L98">98</a> theorem continuous_cos : Continuous cos :=</span>
+<span id="L99" class="line"><a href="#L99">99</a>   Complex.continuous_re.comp (Complex.continuous_cos.comp Complex.continuous_ofReal)</span>
+<span id="L100" class="line"><a href="#L100">100</a> </span>
+<span id="L101" class="line"><a href="#L101">101</a> @[fun_prop]</span>
+<span id="L102" class="line"><a href="#L102">102</a> theorem continuousOn_cos {s} : ContinuousOn cos s :=</span>
+<span id="L103" class="line"><a href="#L103">103</a>   continuous_cos.continuousOn</span>
+<span id="L104" class="line"><a href="#L104">104</a> </span>
+<span id="L105" class="line"><a href="#L105">105</a> @[continuity, fun_prop]</span>
+<span id="L106" class="line"><a href="#L106">106</a> theorem continuous_sinh : Continuous sinh :=</span>
+<span id="L107" class="line"><a href="#L107">107</a>   Complex.continuous_re.comp (Complex.continuous_sinh.comp Complex.continuous_ofReal)</span>
+<span id="L108" class="line"><a href="#L108">108</a> </span>
+<span id="L109" class="line"><a href="#L109">109</a> @[continuity, fun_prop]</span>
+<span id="L110" class="line"><a href="#L110">110</a> theorem continuous_cosh : Continuous cosh :=</span>
+<span id="L111" class="line"><a href="#L111">111</a>   Complex.continuous_re.comp (Complex.continuous_cosh.comp Complex.continuous_ofReal)</span>
+<span id="L112" class="line"><a href="#L112">112</a> </span>
+<span id="L113" class="line"><a href="#L113">113</a> end Real</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> namespace Real</span>
+<span id="L116" class="line"><a href="#L116">116</a> </span>
+<span id="L117" class="line"><a href="#L117">117</a> theorem exists_cos_eq_zero : 0 ∈ cos &#x27;&#x27; Icc (1 : ℝ) 2 :=</span>
+<span id="L118" class="line"><a href="#L118">118</a>   intermediate_value_Icc&#x27; (by simp) continuousOn_cos</span>
+<span id="L119" class="line"><a href="#L119">119</a>     ⟨le_of_lt cos_two_neg, le_of_lt cos_one_pos⟩</span>
+<span id="L120" class="line"><a href="#L120">120</a> </span>
+<span id="L121" class="line"><a href="#L121">121</a> /-- The number π = 3.14159265... Defined here using choice as twice a zero of cos in [1,2],</span>
+<span id="L122" class="line"><a href="#L122">122</a> from which one can derive all its properties. For explicit bounds on π,</span>
+<span id="L123" class="line"><a href="#L123">123</a> see `Mathlib/Analysis/Real/Pi/Bounds.lean`.</span>
+<span id="L124" class="line"><a href="#L124">124</a> </span>
+<span id="L125" class="line"><a href="#L125">125</a> Denoted `π`, once the `Real` namespace is opened. -/</span>
+<span id="L126" class="line"><a href="#L126">126</a> protected noncomputable def pi : ℝ :=</span>
+<span id="L127" class="line"><a href="#L127">127</a>   2 * Classical.choose exists_cos_eq_zero</span>
+<span id="L128" class="line"><a href="#L128">128</a> </span>
+<span id="L129" class="line"><a href="#L129">129</a> @[inherit_doc]</span>
+<span id="L130" class="line"><a href="#L130">130</a> scoped notation &quot;π&quot; =&gt; Real.pi</span>
+<span id="L131" class="line"><a href="#L131">131</a> </span>
+<span id="L132" class="line"><a href="#L132">132</a> @[simp]</span>
+<span id="L133" class="line"><a href="#L133">133</a> theorem cos_pi_div_two : cos (π / 2) = 0 := by</span>
+<span id="L134" class="line"><a href="#L134">134</a>   rw [Real.pi, mul_div_cancel_left₀ _ two_ne_zero]</span>
+<span id="L135" class="line"><a href="#L135">135</a>   exact (Classical.choose_spec exists_cos_eq_zero).2</span>
+<span id="L136" class="line"><a href="#L136">136</a> </span>
+<span id="L137" class="line"><a href="#L137">137</a> theorem one_le_pi_div_two : (1 : ℝ) ≤ π / 2 := by</span>
+<span id="L138" class="line"><a href="#L138">138</a>   rw [Real.pi, mul_div_cancel_left₀ _ two_ne_zero]</span>
+<span id="L139" class="line"><a href="#L139">139</a>   exact (Classical.choose_spec exists_cos_eq_zero).1.1</span>
+<span id="L140" class="line"><a href="#L140">140</a> </span>
+<span id="L141" class="line"><a href="#L141">141</a> theorem pi_div_two_le_two : π / 2 ≤ 2 := by</span>
+<span id="L142" class="line"><a href="#L142">142</a>   rw [Real.pi, mul_div_cancel_left₀ _ two_ne_zero]</span>
+<span id="L143" class="line"><a href="#L143">143</a>   exact (Classical.choose_spec exists_cos_eq_zero).1.2</span>
+<span id="L144" class="line"><a href="#L144">144</a> </span>
+<span id="L145" class="line"><a href="#L145">145</a> theorem two_le_pi : (2 : ℝ) ≤ π :=</span>
+<span id="L146" class="line"><a href="#L146">146</a>   (div_le_div_iff_of_pos_right zero_lt_two).1</span>
+<span id="L147" class="line"><a href="#L147">147</a>     (by rw [div_self two_ne_zero]; exact one_le_pi_div_two)</span>
+<span id="L148" class="line"><a href="#L148">148</a> </span>
+<span id="L149" class="line"><a href="#L149">149</a> theorem pi_le_four : π ≤ 4 :=</span>
+<span id="L150" class="line"><a href="#L150">150</a>   (div_le_div_iff_of_pos_right zero_lt_two).1</span>
+<span id="L151" class="line"><a href="#L151">151</a>     (calc</span>
+<span id="L152" class="line"><a href="#L152">152</a>       π / 2 ≤ 2 := pi_div_two_le_two</span>
+<span id="L153" class="line"><a href="#L153">153</a>       _ = 4 / 2 := by norm_num)</span>
+<span id="L154" class="line"><a href="#L154">154</a> </span>
+<span id="L155" class="line"><a href="#L155">155</a> @[bound]</span>
+<span id="L156" class="line"><a href="#L156">156</a> theorem pi_pos : 0 &lt; π :=</span>
+<span id="L157" class="line"><a href="#L157">157</a>   lt_of_lt_of_le (by simp) two_le_pi</span>
+<span id="L158" class="line"><a href="#L158">158</a> </span>
+<span id="L159" class="line"><a href="#L159">159</a> @[bound]</span>
+<span id="L160" class="line"><a href="#L160">160</a> theorem pi_nonneg : 0 ≤ π :=</span>
+<span id="L161" class="line"><a href="#L161">161</a>   pi_pos.le</span>
+<span id="L162" class="line"><a href="#L162">162</a> </span>
+<span id="L163" class="line"><a href="#L163">163</a> @[simp]</span>
+<span id="L164" class="line"><a href="#L164">164</a> theorem pi_ne_zero : π ≠ 0 :=</span>
+<span id="L165" class="line"><a href="#L165">165</a>   pi_pos.ne&#x27;</span>
+<span id="L166" class="line"><a href="#L166">166</a> </span>
+<span id="L167" class="line"><a href="#L167">167</a> theorem pi_div_two_pos : 0 &lt; π / 2 :=</span>
+<span id="L168" class="line"><a href="#L168">168</a>   half_pos pi_pos</span>
+<span id="L169" class="line"><a href="#L169">169</a> </span>
+<span id="L170" class="line"><a href="#L170">170</a> theorem two_pi_pos : 0 &lt; 2 * π := by linarith [pi_pos]</span>
+<span id="L171" class="line"><a href="#L171">171</a> </span>
+<span id="L172" class="line"><a href="#L172">172</a> end Real</span>
+<span id="L173" class="line"><a href="#L173">173</a> </span>
+<span id="L174" class="line"><a href="#L174">174</a> namespace Mathlib.Meta.Positivity</span>
+<span id="L175" class="line"><a href="#L175">175</a> open Lean.Meta Qq</span>
+<span id="L176" class="line"><a href="#L176">176</a> </span>
+<span id="L177" class="line"><a href="#L177">177</a> /-- Extension for the `positivity` tactic: `π` is always positive. -/</span>
+<span id="L178" class="line"><a href="#L178">178</a> @[positivity Real.pi]</span>
+<span id="L179" class="line"><a href="#L179">179</a> meta def evalRealPi : PositivityExt where eval {u α} _zα _pα e := do</span>
+<span id="L180" class="line"><a href="#L180">180</a>   match u, α, e with</span>
+<span id="L181" class="line"><a href="#L181">181</a>   | 0, ~q(ℝ), ~q(Real.pi) =&gt;</span>
+<span id="L182" class="line"><a href="#L182">182</a>     assertInstancesCommute</span>
+<span id="L183" class="line"><a href="#L183">183</a>     pure (.positive q(Real.pi_pos))</span>
+<span id="L184" class="line"><a href="#L184">184</a>   | _, _, _ =&gt; throwError &quot;not Real.pi&quot;</span>
+<span id="L185" class="line"><a href="#L185">185</a> </span>
+<span id="L186" class="line"><a href="#L186">186</a> end Mathlib.Meta.Positivity</span>
+<span id="L187" class="line"><a href="#L187">187</a> </span>
+<span id="L188" class="line"><a href="#L188">188</a> namespace NNReal</span>
+<span id="L189" class="line"><a href="#L189">189</a> </span>
+<span id="L190" class="line"><a href="#L190">190</a> open Real</span>
+<span id="L191" class="line"><a href="#L191">191</a> </span>
+<span id="L192" class="line"><a href="#L192">192</a> open Real NNReal</span>
+<span id="L193" class="line"><a href="#L193">193</a> </span>
+<span id="L194" class="line"><a href="#L194">194</a> /-- `π` considered as a nonnegative real. -/</span>
+<span id="L195" class="line"><a href="#L195">195</a> noncomputable def pi : ℝ≥0 :=</span>
+<span id="L196" class="line"><a href="#L196">196</a>   ⟨π, Real.pi_pos.le⟩</span>
+<span id="L197" class="line"><a href="#L197">197</a> </span>
+<span id="L198" class="line"><a href="#L198">198</a> @[simp]</span>
+<span id="L199" class="line"><a href="#L199">199</a> theorem coe_real_pi : (pi : ℝ) = π :=</span>
+<span id="L200" class="line"><a href="#L200">200</a>   rfl</span>
+<span id="L201" class="line"><a href="#L201">201</a> </span>
+<span id="L202" class="line"><a href="#L202">202</a> theorem pi_pos : 0 &lt; pi := mod_cast Real.pi_pos</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> theorem pi_ne_zero : pi ≠ 0 :=</span>
+<span id="L205" class="line"><a href="#L205">205</a>   pi_pos.ne&#x27;</span>
+<span id="L206" class="line"><a href="#L206">206</a> </span>
+<span id="L207" class="line"><a href="#L207">207</a> end NNReal</span>
+<span id="L208" class="line"><a href="#L208">208</a> </span>
+<span id="L209" class="line"><a href="#L209">209</a> namespace Real</span>
+<span id="L210" class="line"><a href="#L210">210</a> </span>
+<span id="L211" class="line"><a href="#L211">211</a> @[simp]</span>
+<span id="L212" class="line"><a href="#L212">212</a> theorem sin_pi : sin π = 0 := by</span>
+<span id="L213" class="line"><a href="#L213">213</a>   rw [← mul_div_cancel_left₀ π two_ne_zero, two_mul, add_div, sin_add, cos_pi_div_two]; simp</span>
+<span id="L214" class="line"><a href="#L214">214</a> </span>
+<span id="L215" class="line"><a href="#L215">215</a> @[simp]</span>
+<span id="L216" class="line"><a href="#L216">216</a> theorem cos_pi : cos π = -1 := by</span>
+<span id="L217" class="line"><a href="#L217">217</a>   rw [← mul_div_cancel_left₀ π two_ne_zero, mul_div_assoc, cos_two_mul, cos_pi_div_two]</span>
+<span id="L218" class="line"><a href="#L218">218</a>   norm_num</span>
+<span id="L219" class="line"><a href="#L219">219</a> </span>
+<span id="L220" class="line"><a href="#L220">220</a> @[simp]</span>
+<span id="L221" class="line"><a href="#L221">221</a> theorem sin_two_pi : sin (2 * π) = 0 := by simp [two_mul, sin_add]</span>
+<span id="L222" class="line"><a href="#L222">222</a> </span>
+<span id="L223" class="line"><a href="#L223">223</a> @[simp]</span>
+<span id="L224" class="line"><a href="#L224">224</a> theorem cos_two_pi : cos (2 * π) = 1 := by simp [two_mul, cos_add]</span>
+<span id="L225" class="line"><a href="#L225">225</a> </span>
+<span id="L226" class="line"><a href="#L226">226</a> theorem sin_antiperiodic : Function.Antiperiodic sin π := by simp [sin_add]</span>
+<span id="L227" class="line"><a href="#L227">227</a> </span>
+<span id="L228" class="line"><a href="#L228">228</a> theorem sin_periodic : Function.Periodic sin (2 * π) :=</span>
+<span id="L229" class="line"><a href="#L229">229</a>   sin_antiperiodic.periodic_two_mul</span>
+<span id="L230" class="line"><a href="#L230">230</a> </span>
+<span id="L231" class="line"><a href="#L231">231</a> @[simp]</span>
+<span id="L232" class="line"><a href="#L232">232</a> theorem sin_add_pi (x : ℝ) : sin (x + π) = -sin x :=</span>
+<span id="L233" class="line"><a href="#L233">233</a>   sin_antiperiodic x</span>
+<span id="L234" class="line"><a href="#L234">234</a> </span>
+<span id="L235" class="line"><a href="#L235">235</a> @[simp]</span>
+<span id="L236" class="line"><a href="#L236">236</a> theorem sin_add_two_pi (x : ℝ) : sin (x + 2 * π) = sin x :=</span>
+<span id="L237" class="line"><a href="#L237">237</a>   sin_periodic x</span>
+<span id="L238" class="line"><a href="#L238">238</a> </span>
+<span id="L239" class="line"><a href="#L239">239</a> @[simp]</span>
+<span id="L240" class="line"><a href="#L240">240</a> theorem sin_sub_pi (x : ℝ) : sin (x - π) = -sin x :=</span>
+<span id="L241" class="line"><a href="#L241">241</a>   sin_antiperiodic.sub_eq x</span>
+<span id="L242" class="line"><a href="#L242">242</a> </span>
+<span id="L243" class="line"><a href="#L243">243</a> @[simp]</span>
+<span id="L244" class="line"><a href="#L244">244</a> theorem sin_sub_two_pi (x : ℝ) : sin (x - 2 * π) = sin x :=</span>
+<span id="L245" class="line"><a href="#L245">245</a>   sin_periodic.sub_eq x</span>
+<span id="L246" class="line"><a href="#L246">246</a> </span>
+<span id="L247" class="line"><a href="#L247">247</a> @[simp]</span>
+<span id="L248" class="line"><a href="#L248">248</a> theorem sin_pi_sub (x : ℝ) : sin (π - x) = sin x :=</span>
+<span id="L249" class="line"><a href="#L249">249</a>   neg_neg (sin x) ▸ sin_neg x ▸ sin_antiperiodic.sub_eq&#x27;</span>
+<span id="L250" class="line"><a href="#L250">250</a> </span>
+<span id="L251" class="line"><a href="#L251">251</a> @[simp]</span>
+<span id="L252" class="line"><a href="#L252">252</a> theorem sin_two_pi_sub (x : ℝ) : sin (2 * π - x) = -sin x :=</span>
+<span id="L253" class="line"><a href="#L253">253</a>   sin_neg x ▸ sin_periodic.sub_eq&#x27;</span>
+<span id="L254" class="line"><a href="#L254">254</a> </span>
+<span id="L255" class="line"><a href="#L255">255</a> @[simp]</span>
+<span id="L256" class="line"><a href="#L256">256</a> theorem sin_nat_mul_pi (n : ℕ) : sin (n * π) = 0 :=</span>
+<span id="L257" class="line"><a href="#L257">257</a>   sin_antiperiodic.nat_mul_eq_of_eq_zero sin_zero n</span>
+<span id="L258" class="line"><a href="#L258">258</a> </span>
+<span id="L259" class="line"><a href="#L259">259</a> @[simp]</span>
+<span id="L260" class="line"><a href="#L260">260</a> theorem sin_int_mul_pi (n : ℤ) : sin (n * π) = 0 :=</span>
+<span id="L261" class="line"><a href="#L261">261</a>   sin_antiperiodic.int_mul_eq_of_eq_zero sin_zero n</span>
+<span id="L262" class="line"><a href="#L262">262</a> </span>
+<span id="L263" class="line"><a href="#L263">263</a> @[simp]</span>
+<span id="L264" class="line"><a href="#L264">264</a> theorem sin_add_nat_mul_two_pi (x : ℝ) (n : ℕ) : sin (x + n * (2 * π)) = sin x :=</span>
+<span id="L265" class="line"><a href="#L265">265</a>   sin_periodic.nat_mul n x</span>
+<span id="L266" class="line"><a href="#L266">266</a> </span>
+<span id="L267" class="line"><a href="#L267">267</a> @[simp]</span>
+<span id="L268" class="line"><a href="#L268">268</a> theorem sin_add_int_mul_two_pi (x : ℝ) (n : ℤ) : sin (x + n * (2 * π)) = sin x :=</span>
+<span id="L269" class="line"><a href="#L269">269</a>   sin_periodic.int_mul n x</span>
+<span id="L270" class="line"><a href="#L270">270</a> </span>
+<span id="L271" class="line"><a href="#L271">271</a> @[simp]</span>
+<span id="L272" class="line"><a href="#L272">272</a> theorem sin_sub_nat_mul_two_pi (x : ℝ) (n : ℕ) : sin (x - n * (2 * π)) = sin x :=</span>
+<span id="L273" class="line"><a href="#L273">273</a>   sin_periodic.sub_nat_mul_eq n</span>
+<span id="L274" class="line"><a href="#L274">274</a> </span>
+<span id="L275" class="line"><a href="#L275">275</a> @[simp]</span>
+<span id="L276" class="line"><a href="#L276">276</a> theorem sin_sub_int_mul_two_pi (x : ℝ) (n : ℤ) : sin (x - n * (2 * π)) = sin x :=</span>
+<span id="L277" class="line"><a href="#L277">277</a>   sin_periodic.sub_int_mul_eq n</span>
+<span id="L278" class="line"><a href="#L278">278</a> </span>
+<span id="L279" class="line"><a href="#L279">279</a> @[simp]</span>
+<span id="L280" class="line"><a href="#L280">280</a> theorem sin_nat_mul_two_pi_sub (x : ℝ) (n : ℕ) : sin (n * (2 * π) - x) = -sin x :=</span>
+<span id="L281" class="line"><a href="#L281">281</a>   sin_neg x ▸ sin_periodic.nat_mul_sub_eq n</span>
+<span id="L282" class="line"><a href="#L282">282</a> </span>
+<span id="L283" class="line"><a href="#L283">283</a> @[simp]</span>
+<span id="L284" class="line"><a href="#L284">284</a> theorem sin_int_mul_two_pi_sub (x : ℝ) (n : ℤ) : sin (n * (2 * π) - x) = -sin x :=</span>
+<span id="L285" class="line"><a href="#L285">285</a>   sin_neg x ▸ sin_periodic.int_mul_sub_eq n</span>
+<span id="L286" class="line"><a href="#L286">286</a> </span>
+<span id="L287" class="line"><a href="#L287">287</a> theorem sin_add_int_mul_pi (x : ℝ) (n : ℤ) : sin (x + n * π) = (-1) ^ n * sin x :=</span>
+<span id="L288" class="line"><a href="#L288">288</a>   n.cast_negOnePow ℝ ▸ sin_antiperiodic.add_int_mul_eq n</span>
+<span id="L289" class="line"><a href="#L289">289</a> </span>
+<span id="L290" class="line"><a href="#L290">290</a> theorem sin_add_nat_mul_pi (x : ℝ) (n : ℕ) : sin (x + n * π) = (-1) ^ n * sin x :=</span>
+<span id="L291" class="line"><a href="#L291">291</a>   sin_antiperiodic.add_nat_mul_eq n</span>
+<span id="L292" class="line"><a href="#L292">292</a> </span>
+<span id="L293" class="line"><a href="#L293">293</a> theorem sin_sub_int_mul_pi (x : ℝ) (n : ℤ) : sin (x - n * π) = (-1) ^ n * sin x :=</span>
+<span id="L294" class="line"><a href="#L294">294</a>   n.cast_negOnePow ℝ ▸ sin_antiperiodic.sub_int_mul_eq n</span>
+<span id="L295" class="line"><a href="#L295">295</a> </span>
+<span id="L296" class="line"><a href="#L296">296</a> theorem sin_sub_nat_mul_pi (x : ℝ) (n : ℕ) : sin (x - n * π) = (-1) ^ n * sin x :=</span>
+<span id="L297" class="line"><a href="#L297">297</a>   sin_antiperiodic.sub_nat_mul_eq n</span>
+<span id="L298" class="line"><a href="#L298">298</a> </span>
+<span id="L299" class="line"><a href="#L299">299</a> theorem sin_int_mul_pi_sub (x : ℝ) (n : ℤ) : sin (n * π - x) = -((-1) ^ n * sin x) := by</span>
+<span id="L300" class="line"><a href="#L300">300</a>   simpa only [sin_neg, mul_neg, Int.cast_negOnePow] using sin_antiperiodic.int_mul_sub_eq n</span>
+<span id="L301" class="line"><a href="#L301">301</a> </span>
+<span id="L302" class="line"><a href="#L302">302</a> theorem sin_nat_mul_pi_sub (x : ℝ) (n : ℕ) : sin (n * π - x) = -((-1) ^ n * sin x) := by</span>
+<span id="L303" class="line"><a href="#L303">303</a>   simpa only [sin_neg, mul_neg] using sin_antiperiodic.nat_mul_sub_eq n</span>
+<span id="L304" class="line"><a href="#L304">304</a> </span>
+<span id="L305" class="line"><a href="#L305">305</a> theorem cos_antiperiodic : Function.Antiperiodic cos π := by simp [cos_add]</span>
+<span id="L306" class="line"><a href="#L306">306</a> </span>
+<span id="L307" class="line"><a href="#L307">307</a> theorem cos_periodic : Function.Periodic cos (2 * π) :=</span>
+<span id="L308" class="line"><a href="#L308">308</a>   cos_antiperiodic.periodic_two_mul</span>
+<span id="L309" class="line"><a href="#L309">309</a> </span>
+<span id="L310" class="line"><a href="#L310">310</a> @[simp]</span>
+<span id="L311" class="line"><a href="#L311">311</a> theorem abs_cos_int_mul_pi (k : ℤ) : |cos (k * π)| = 1 := by</span>
+<span id="L312" class="line"><a href="#L312">312</a>   simp [abs_cos_eq_sqrt_one_sub_sin_sq]</span>
+<span id="L313" class="line"><a href="#L313">313</a> </span>
+<span id="L314" class="line"><a href="#L314">314</a> @[simp]</span>
+<span id="L315" class="line"><a href="#L315">315</a> theorem cos_add_pi (x : ℝ) : cos (x + π) = -cos x :=</span>
+<span id="L316" class="line"><a href="#L316">316</a>   cos_antiperiodic x</span>
+<span id="L317" class="line"><a href="#L317">317</a> </span>
+<span id="L318" class="line"><a href="#L318">318</a> @[simp]</span>
+<span id="L319" class="line"><a href="#L319">319</a> theorem cos_add_two_pi (x : ℝ) : cos (x + 2 * π) = cos x :=</span>
+<span id="L320" class="line"><a href="#L320">320</a>   cos_periodic x</span>
+<span id="L321" class="line"><a href="#L321">321</a> </span>
+<span id="L322" class="line"><a href="#L322">322</a> @[simp]</span>
+<span id="L323" class="line"><a href="#L323">323</a> theorem cos_sub_pi (x : ℝ) : cos (x - π) = -cos x :=</span>
+<span id="L324" class="line"><a href="#L324">324</a>   cos_antiperiodic.sub_eq x</span>
+<span id="L325" class="line"><a href="#L325">325</a> </span>
+<span id="L326" class="line"><a href="#L326">326</a> @[simp]</span>
+<span id="L327" class="line"><a href="#L327">327</a> theorem cos_sub_two_pi (x : ℝ) : cos (x - 2 * π) = cos x :=</span>
+<span id="L328" class="line"><a href="#L328">328</a>   cos_periodic.sub_eq x</span>
+<span id="L329" class="line"><a href="#L329">329</a> </span>
+<span id="L330" class="line"><a href="#L330">330</a> @[simp]</span>
+<span id="L331" class="line"><a href="#L331">331</a> theorem cos_pi_sub (x : ℝ) : cos (π - x) = -cos x :=</span>
+<span id="L332" class="line"><a href="#L332">332</a>   cos_neg x ▸ cos_antiperiodic.sub_eq&#x27;</span>
+<span id="L333" class="line"><a href="#L333">333</a> </span>
+<span id="L334" class="line"><a href="#L334">334</a> @[simp]</span>
+<span id="L335" class="line"><a href="#L335">335</a> theorem cos_two_pi_sub (x : ℝ) : cos (2 * π - x) = cos x :=</span>
+<span id="L336" class="line"><a href="#L336">336</a>   cos_neg x ▸ cos_periodic.sub_eq&#x27;</span>
+<span id="L337" class="line"><a href="#L337">337</a> </span>
+<span id="L338" class="line"><a href="#L338">338</a> @[simp]</span>
+<span id="L339" class="line"><a href="#L339">339</a> theorem cos_nat_mul_two_pi (n : ℕ) : cos (n * (2 * π)) = 1 :=</span>
+<span id="L340" class="line"><a href="#L340">340</a>   (cos_periodic.nat_mul_eq n).trans cos_zero</span>
+<span id="L341" class="line"><a href="#L341">341</a> </span>
+<span id="L342" class="line"><a href="#L342">342</a> @[simp]</span>
+<span id="L343" class="line"><a href="#L343">343</a> theorem cos_int_mul_two_pi (n : ℤ) : cos (n * (2 * π)) = 1 :=</span>
+<span id="L344" class="line"><a href="#L344">344</a>   (cos_periodic.int_mul_eq n).trans cos_zero</span>
+<span id="L345" class="line"><a href="#L345">345</a> </span>
+<span id="L346" class="line"><a href="#L346">346</a> @[simp]</span>
+<span id="L347" class="line"><a href="#L347">347</a> theorem cos_add_nat_mul_two_pi (x : ℝ) (n : ℕ) : cos (x + n * (2 * π)) = cos x :=</span>
+<span id="L348" class="line"><a href="#L348">348</a>   cos_periodic.nat_mul n x</span>
+<span id="L349" class="line"><a href="#L349">349</a> </span>
+<span id="L350" class="line"><a href="#L350">350</a> @[simp]</span>
+<span id="L351" class="line"><a href="#L351">351</a> theorem cos_add_int_mul_two_pi (x : ℝ) (n : ℤ) : cos (x + n * (2 * π)) = cos x :=</span>
+<span id="L352" class="line"><a href="#L352">352</a>   cos_periodic.int_mul n x</span>
+<span id="L353" class="line"><a href="#L353">353</a> </span>
+<span id="L354" class="line"><a href="#L354">354</a> @[simp]</span>
+<span id="L355" class="line"><a href="#L355">355</a> theorem cos_sub_nat_mul_two_pi (x : ℝ) (n : ℕ) : cos (x - n * (2 * π)) = cos x :=</span>
+<span id="L356" class="line"><a href="#L356">356</a>   cos_periodic.sub_nat_mul_eq n</span>
+<span id="L357" class="line"><a href="#L357">357</a> </span>
+<span id="L358" class="line"><a href="#L358">358</a> @[simp]</span>
+<span id="L359" class="line"><a href="#L359">359</a> theorem cos_sub_int_mul_two_pi (x : ℝ) (n : ℤ) : cos (x - n * (2 * π)) = cos x :=</span>
+<span id="L360" class="line"><a href="#L360">360</a>   cos_periodic.sub_int_mul_eq n</span>
+<span id="L361" class="line"><a href="#L361">361</a> </span>
+<span id="L362" class="line"><a href="#L362">362</a> @[simp]</span>
+<span id="L363" class="line"><a href="#L363">363</a> theorem cos_nat_mul_two_pi_sub (x : ℝ) (n : ℕ) : cos (n * (2 * π) - x) = cos x :=</span>
+<span id="L364" class="line"><a href="#L364">364</a>   cos_neg x ▸ cos_periodic.nat_mul_sub_eq n</span>
+<span id="L365" class="line"><a href="#L365">365</a> </span>
+<span id="L366" class="line"><a href="#L366">366</a> @[simp]</span>
+<span id="L367" class="line"><a href="#L367">367</a> theorem cos_int_mul_two_pi_sub (x : ℝ) (n : ℤ) : cos (n * (2 * π) - x) = cos x :=</span>
+<span id="L368" class="line"><a href="#L368">368</a>   cos_neg x ▸ cos_periodic.int_mul_sub_eq n</span>
+<span id="L369" class="line"><a href="#L369">369</a> </span>
+<span id="L370" class="line"><a href="#L370">370</a> theorem cos_add_int_mul_pi (x : ℝ) (n : ℤ) : cos (x + n * π) = (-1) ^ n * cos x :=</span>
+<span id="L371" class="line"><a href="#L371">371</a>   n.cast_negOnePow ℝ ▸ cos_antiperiodic.add_int_mul_eq n</span>
+<span id="L372" class="line"><a href="#L372">372</a> </span>
+<span id="L373" class="line"><a href="#L373">373</a> theorem cos_int_mul_pi (n : ℤ) : cos (n * π) = (-1) ^ n := by</span>
+<span id="L374" class="line"><a href="#L374">374</a>   simpa using cos_add_int_mul_pi 0 n</span>
+<span id="L375" class="line"><a href="#L375">375</a> </span>
+<span id="L376" class="line"><a href="#L376">376</a> theorem cos_add_nat_mul_pi (x : ℝ) (n : ℕ) : cos (x + n * π) = (-1) ^ n * cos x :=</span>
+<span id="L377" class="line"><a href="#L377">377</a>   cos_antiperiodic.add_nat_mul_eq n</span>
+<span id="L378" class="line"><a href="#L378">378</a> </span>
+<span id="L379" class="line"><a href="#L379">379</a> theorem cos_nat_mul_pi (n : ℕ) : cos (n * π) = (-1) ^ n := by</span>
+<span id="L380" class="line"><a href="#L380">380</a>   simpa using cos_add_nat_mul_pi 0 n</span>
+<span id="L381" class="line"><a href="#L381">381</a> </span>
+<span id="L382" class="line"><a href="#L382">382</a> theorem cos_sub_int_mul_pi (x : ℝ) (n : ℤ) : cos (x - n * π) = (-1) ^ n * cos x :=</span>
+<span id="L383" class="line"><a href="#L383">383</a>   n.cast_negOnePow ℝ ▸ cos_antiperiodic.sub_int_mul_eq n</span>
+<span id="L384" class="line"><a href="#L384">384</a> </span>
+<span id="L385" class="line"><a href="#L385">385</a> theorem cos_sub_nat_mul_pi (x : ℝ) (n : ℕ) : cos (x - n * π) = (-1) ^ n * cos x :=</span>
+<span id="L386" class="line"><a href="#L386">386</a>   cos_antiperiodic.sub_nat_mul_eq n</span>
+<span id="L387" class="line"><a href="#L387">387</a> </span>
+<span id="L388" class="line"><a href="#L388">388</a> theorem cos_int_mul_pi_sub (x : ℝ) (n : ℤ) : cos (n * π - x) = (-1) ^ n * cos x :=</span>
+<span id="L389" class="line"><a href="#L389">389</a>   n.cast_negOnePow ℝ ▸ cos_neg x ▸ cos_antiperiodic.int_mul_sub_eq n</span>
+<span id="L390" class="line"><a href="#L390">390</a> </span>
+<span id="L391" class="line"><a href="#L391">391</a> theorem cos_nat_mul_pi_sub (x : ℝ) (n : ℕ) : cos (n * π - x) = (-1) ^ n * cos x :=</span>
+<span id="L392" class="line"><a href="#L392">392</a>   cos_neg x ▸ cos_antiperiodic.nat_mul_sub_eq n</span>
+<span id="L393" class="line"><a href="#L393">393</a> </span>
+<span id="L394" class="line"><a href="#L394">394</a> theorem cos_nat_mul_two_pi_add_pi (n : ℕ) : cos (n * (2 * π) + π) = -1 := by</span>
+<span id="L395" class="line"><a href="#L395">395</a>   simpa only [cos_zero] using (cos_periodic.nat_mul n).add_antiperiod_eq cos_antiperiodic</span>
+<span id="L396" class="line"><a href="#L396">396</a> </span>
+<span id="L397" class="line"><a href="#L397">397</a> theorem cos_int_mul_two_pi_add_pi (n : ℤ) : cos (n * (2 * π) + π) = -1 := by</span>
+<span id="L398" class="line"><a href="#L398">398</a>   simpa only [cos_zero] using (cos_periodic.int_mul n).add_antiperiod_eq cos_antiperiodic</span>
+<span id="L399" class="line"><a href="#L399">399</a> </span>
+<span id="L400" class="line"><a href="#L400">400</a> theorem cos_nat_mul_two_pi_sub_pi (n : ℕ) : cos (n * (2 * π) - π) = -1 := by</span>
+<span id="L401" class="line"><a href="#L401">401</a>   simpa only [cos_zero] using (cos_periodic.nat_mul n).sub_antiperiod_eq cos_antiperiodic</span>
+<span id="L402" class="line"><a href="#L402">402</a> </span>
+<span id="L403" class="line"><a href="#L403">403</a> theorem cos_int_mul_two_pi_sub_pi (n : ℤ) : cos (n * (2 * π) - π) = -1 := by</span>
+<span id="L404" class="line"><a href="#L404">404</a>   simpa only [cos_zero] using (cos_periodic.int_mul n).sub_antiperiod_eq cos_antiperiodic</span>
+<span id="L405" class="line"><a href="#L405">405</a> </span>
+<span id="L406" class="line"><a href="#L406">406</a> theorem sin_pos_of_pos_of_lt_pi {x : ℝ} (h0x : 0 &lt; x) (hxp : x &lt; π) : 0 &lt; sin x :=</span>
+<span id="L407" class="line"><a href="#L407">407</a>   if hx2 : x ≤ 2 then sin_pos_of_pos_of_le_two h0x hx2</span>
+<span id="L408" class="line"><a href="#L408">408</a>   else sin_pi_sub x ▸ sin_pos_of_pos_of_le_two (sub_pos.2 hxp) (by linarith [pi_le_four])</span>
+<span id="L409" class="line"><a href="#L409">409</a> </span>
+<span id="L410" class="line"><a href="#L410">410</a> theorem sin_pos_of_mem_Ioo {x : ℝ} (hx : x ∈ Ioo 0 π) : 0 &lt; sin x :=</span>
+<span id="L411" class="line"><a href="#L411">411</a>   sin_pos_of_pos_of_lt_pi hx.1 hx.2</span>
+<span id="L412" class="line"><a href="#L412">412</a> </span>
+<span id="L413" class="line"><a href="#L413">413</a> theorem sin_nonneg_of_mem_Icc {x : ℝ} (hx : x ∈ Icc 0 π) : 0 ≤ sin x := by</span>
+<span id="L414" class="line"><a href="#L414">414</a>   rw [← closure_Ioo pi_ne_zero.symm] at hx</span>
+<span id="L415" class="line"><a href="#L415">415</a>   exact</span>
+<span id="L416" class="line"><a href="#L416">416</a>     closure_lt_subset_le continuous_const continuous_sin</span>
+<span id="L417" class="line"><a href="#L417">417</a>       (closure_mono (fun y =&gt; sin_pos_of_mem_Ioo) hx)</span>
+<span id="L418" class="line"><a href="#L418">418</a> </span>
+<span id="L419" class="line"><a href="#L419">419</a> theorem sin_nonneg_of_nonneg_of_le_pi {x : ℝ} (h0x : 0 ≤ x) (hxp : x ≤ π) : 0 ≤ sin x :=</span>
+<span id="L420" class="line"><a href="#L420">420</a>   sin_nonneg_of_mem_Icc ⟨h0x, hxp⟩</span>
+<span id="L421" class="line"><a href="#L421">421</a> </span>
+<span id="L422" class="line"><a href="#L422">422</a> theorem sin_neg_of_neg_of_neg_pi_lt {x : ℝ} (hx0 : x &lt; 0) (hpx : -π &lt; x) : sin x &lt; 0 :=</span>
+<span id="L423" class="line"><a href="#L423">423</a>   neg_pos.1 &lt;| sin_neg x ▸ sin_pos_of_pos_of_lt_pi (neg_pos.2 hx0) (neg_lt.1 hpx)</span>
+<span id="L424" class="line"><a href="#L424">424</a> </span>
+<span id="L425" class="line"><a href="#L425">425</a> theorem sin_nonpos_of_nonpos_of_neg_pi_le {x : ℝ} (hx0 : x ≤ 0) (hpx : -π ≤ x) : sin x ≤ 0 :=</span>
+<span id="L426" class="line"><a href="#L426">426</a>   neg_nonneg.1 &lt;| sin_neg x ▸ sin_nonneg_of_nonneg_of_le_pi (neg_nonneg.2 hx0) (neg_le.1 hpx)</span>
+<span id="L427" class="line"><a href="#L427">427</a> </span>
+<span id="L428" class="line"><a href="#L428">428</a> lemma abs_sin_eq_sin_abs_of_abs_le_pi {x : ℝ} (hx : |x| ≤ π) : |sin x| = sin |x| := by</span>
+<span id="L429" class="line"><a href="#L429">429</a>   rcases lt_or_ge x 0 with h | h</span>
+<span id="L430" class="line"><a href="#L430">430</a>   · rw [abs_of_neg h, sin_neg,</span>
+<span id="L431" class="line"><a href="#L431">431</a>       abs_of_nonpos (sin_nonpos_of_nonpos_of_neg_pi_le h.le (abs_le.1 hx).1)]</span>
+<span id="L432" class="line"><a href="#L432">432</a>   · rw [abs_of_nonneg h, abs_of_nonneg (sin_nonneg_of_nonneg_of_le_pi h (abs_le.1 hx).2)]</span>
+<span id="L433" class="line"><a href="#L433">433</a> </span>
+<span id="L434" class="line"><a href="#L434">434</a> @[simp]</span>
+<span id="L435" class="line"><a href="#L435">435</a> theorem sin_pi_div_two : sin (π / 2) = 1 :=</span>
+<span id="L436" class="line"><a href="#L436">436</a>   have : sin (π / 2) = 1 ∨ sin (π / 2) = -1 := by</span>
+<span id="L437" class="line"><a href="#L437">437</a>     simpa [sq, mul_self_eq_one_iff] using sin_sq_add_cos_sq (π / 2)</span>
+<span id="L438" class="line"><a href="#L438">438</a>   this.resolve_right fun h =&gt;</span>
+<span id="L439" class="line"><a href="#L439">439</a>     show ¬(0 : ℝ) &lt; -1 by simp &lt;|</span>
+<span id="L440" class="line"><a href="#L440">440</a>       h ▸ sin_pos_of_pos_of_lt_pi pi_div_two_pos (half_lt_self pi_pos)</span>
+<span id="L441" class="line"><a href="#L441">441</a> </span>
+<span id="L442" class="line"><a href="#L442">442</a> theorem sin_add_pi_div_two (x : ℝ) : sin (x + π / 2) = cos x := by simp [sin_add]</span>
+<span id="L443" class="line"><a href="#L443">443</a> </span>
+<span id="L444" class="line"><a href="#L444">444</a> theorem sin_sub_pi_div_two (x : ℝ) : sin (x - π / 2) = -cos x := by simp [sub_eq_add_neg, sin_add]</span>
+<span id="L445" class="line"><a href="#L445">445</a> </span>
+<span id="L446" class="line"><a href="#L446">446</a> theorem sin_pi_div_two_sub (x : ℝ) : sin (π / 2 - x) = cos x := by simp [sub_eq_add_neg, sin_add]</span>
+<span id="L447" class="line"><a href="#L447">447</a> </span>
+<span id="L448" class="line"><a href="#L448">448</a> theorem cos_add_pi_div_two (x : ℝ) : cos (x + π / 2) = -sin x := by simp [cos_add]</span>
+<span id="L449" class="line"><a href="#L449">449</a> </span>
+<span id="L450" class="line"><a href="#L450">450</a> theorem cos_sub_pi_div_two (x : ℝ) : cos (x - π / 2) = sin x := by simp [sub_eq_add_neg, cos_add]</span>
+<span id="L451" class="line"><a href="#L451">451</a> </span>
+<span id="L452" class="line"><a href="#L452">452</a> theorem cos_pi_div_two_sub (x : ℝ) : cos (π / 2 - x) = sin x := by</span>
+<span id="L453" class="line"><a href="#L453">453</a>   rw [← cos_neg, neg_sub, cos_sub_pi_div_two]</span>
+<span id="L454" class="line"><a href="#L454">454</a> </span>
+<span id="L455" class="line"><a href="#L455">455</a> theorem cos_pos_of_mem_Ioo {x : ℝ} (hx : x ∈ Ioo (-(π / 2)) (π / 2)) : 0 &lt; cos x :=</span>
+<span id="L456" class="line"><a href="#L456">456</a>   sin_add_pi_div_two x ▸ sin_pos_of_mem_Ioo ⟨by linarith [hx.1], by linarith [hx.2]⟩</span>
+<span id="L457" class="line"><a href="#L457">457</a> </span>
+<span id="L458" class="line"><a href="#L458">458</a> theorem cos_nonneg_of_mem_Icc {x : ℝ} (hx : x ∈ Icc (-(π / 2)) (π / 2)) : 0 ≤ cos x :=</span>
+<span id="L459" class="line"><a href="#L459">459</a>   sin_add_pi_div_two x ▸ sin_nonneg_of_mem_Icc ⟨by linarith [hx.1], by linarith [hx.2]⟩</span>
+<span id="L460" class="line"><a href="#L460">460</a> </span>
+<span id="L461" class="line"><a href="#L461">461</a> theorem cos_nonneg_of_neg_pi_div_two_le_of_le {x : ℝ} (hl : -(π / 2) ≤ x) (hu : x ≤ π / 2) :</span>
+<span id="L462" class="line"><a href="#L462">462</a>     0 ≤ cos x :=</span>
+<span id="L463" class="line"><a href="#L463">463</a>   cos_nonneg_of_mem_Icc ⟨hl, hu⟩</span>
+<span id="L464" class="line"><a href="#L464">464</a> </span>
+<span id="L465" class="line"><a href="#L465">465</a> theorem cos_neg_of_pi_div_two_lt_of_lt {x : ℝ} (hx₁ : π / 2 &lt; x) (hx₂ : x &lt; π + π / 2) :</span>
+<span id="L466" class="line"><a href="#L466">466</a>     cos x &lt; 0 :=</span>
+<span id="L467" class="line"><a href="#L467">467</a>   neg_pos.1 &lt;| cos_pi_sub x ▸ cos_pos_of_mem_Ioo ⟨by linarith, by linarith⟩</span>
+<span id="L468" class="line"><a href="#L468">468</a> </span>
+<span id="L469" class="line"><a href="#L469">469</a> theorem cos_nonpos_of_pi_div_two_le_of_le {x : ℝ} (hx₁ : π / 2 ≤ x) (hx₂ : x ≤ π + π / 2) :</span>
+<span id="L470" class="line"><a href="#L470">470</a>     cos x ≤ 0 :=</span>
+<span id="L471" class="line"><a href="#L471">471</a>   neg_nonneg.1 &lt;| cos_pi_sub x ▸ cos_nonneg_of_mem_Icc ⟨by linarith, by linarith⟩</span>
+<span id="L472" class="line"><a href="#L472">472</a> </span>
+<span id="L473" class="line"><a href="#L473">473</a> theorem sin_eq_sqrt_one_sub_cos_sq {x : ℝ} (hl : 0 ≤ x) (hu : x ≤ π) :</span>
+<span id="L474" class="line"><a href="#L474">474</a>     sin x = √(1 - cos x ^ 2) := by</span>
+<span id="L475" class="line"><a href="#L475">475</a>   rw [← abs_sin_eq_sqrt_one_sub_cos_sq, abs_of_nonneg (sin_nonneg_of_nonneg_of_le_pi hl hu)]</span>
+<span id="L476" class="line"><a href="#L476">476</a> </span>
+<span id="L477" class="line"><a href="#L477">477</a> theorem cos_eq_sqrt_one_sub_sin_sq {x : ℝ} (hl : -(π / 2) ≤ x) (hu : x ≤ π / 2) :</span>
+<span id="L478" class="line"><a href="#L478">478</a>     cos x = √(1 - sin x ^ 2) := by</span>
+<span id="L479" class="line"><a href="#L479">479</a>   rw [← abs_cos_eq_sqrt_one_sub_sin_sq, abs_of_nonneg (cos_nonneg_of_mem_Icc ⟨hl, hu⟩)]</span>
+<span id="L480" class="line"><a href="#L480">480</a> </span>
+<span id="L481" class="line"><a href="#L481">481</a> lemma cos_half {x : ℝ} (hl : -π ≤ x) (hr : x ≤ π) : cos (x / 2) = √((1 + cos x) / 2) := by</span>
+<span id="L482" class="line"><a href="#L482">482</a>   have : 0 ≤ cos (x / 2) := cos_nonneg_of_mem_Icc &lt;| by constructor &lt;;&gt; linarith</span>
+<span id="L483" class="line"><a href="#L483">483</a>   rw [← sqrt_sq this, cos_sq, add_div, two_mul, add_halves]</span>
+<span id="L484" class="line"><a href="#L484">484</a> </span>
+<span id="L485" class="line"><a href="#L485">485</a> lemma abs_sin_half (x : ℝ) : |sin (x / 2)| = √((1 - cos x) / 2) := by</span>
+<span id="L486" class="line"><a href="#L486">486</a>   rw [← sqrt_sq_eq_abs, sin_sq_eq_half_sub, two_mul, add_halves, sub_div]</span>
+<span id="L487" class="line"><a href="#L487">487</a> </span>
+<span id="L488" class="line"><a href="#L488">488</a> lemma sin_half_eq_sqrt {x : ℝ} (hl : 0 ≤ x) (hr : x ≤ 2 * π) :</span>
+<span id="L489" class="line"><a href="#L489">489</a>     sin (x / 2) = √((1 - cos x) / 2) := by</span>
+<span id="L490" class="line"><a href="#L490">490</a>   rw [← abs_sin_half, abs_of_nonneg]</span>
+<span id="L491" class="line"><a href="#L491">491</a>   apply sin_nonneg_of_nonneg_of_le_pi &lt;;&gt; linarith</span>
+<span id="L492" class="line"><a href="#L492">492</a> </span>
+<span id="L493" class="line"><a href="#L493">493</a> lemma sin_half_eq_neg_sqrt {x : ℝ} (hl : -(2 * π) ≤ x) (hr : x ≤ 0) :</span>
+<span id="L494" class="line"><a href="#L494">494</a>     sin (x / 2) = -√((1 - cos x) / 2) := by</span>
+<span id="L495" class="line"><a href="#L495">495</a>   rw [← abs_sin_half, abs_of_nonpos, neg_neg]</span>
+<span id="L496" class="line"><a href="#L496">496</a>   apply sin_nonpos_of_nonpos_of_neg_pi_le &lt;;&gt; linarith</span>
+<span id="L497" class="line"><a href="#L497">497</a> </span>
+<span id="L498" class="line"><a href="#L498">498</a> theorem sin_eq_zero_iff_of_lt_of_lt {x : ℝ} (hx₁ : -π &lt; x) (hx₂ : x &lt; π) : sin x = 0 ↔ x = 0 :=</span>
+<span id="L499" class="line"><a href="#L499">499</a>   ⟨fun h =&gt; by</span>
+<span id="L500" class="line"><a href="#L500">500</a>     contrapose! h</span>
+<span id="L501" class="line"><a href="#L501">501</a>     cases h.lt_or_gt with</span>
+<span id="L502" class="line"><a href="#L502">502</a>     | inl h0 =&gt; exact (sin_neg_of_neg_of_neg_pi_lt h0 hx₁).ne</span>
+<span id="L503" class="line"><a href="#L503">503</a>     | inr h0 =&gt; exact (sin_pos_of_pos_of_lt_pi h0 hx₂).ne&#x27;,</span>
+<span id="L504" class="line"><a href="#L504">504</a>   fun h =&gt; by simp [h]⟩</span>
+<span id="L505" class="line"><a href="#L505">505</a> </span>
+<span id="L506" class="line"><a href="#L506">506</a> theorem sin_eq_zero_iff {x : ℝ} : sin x = 0 ↔ ∃ n : ℤ, (n : ℝ) * π = x :=</span>
+<span id="L507" class="line"><a href="#L507">507</a>   ⟨fun h =&gt;</span>
+<span id="L508" class="line"><a href="#L508">508</a>     ⟨⌊x / π⌋,</span>
+<span id="L509" class="line"><a href="#L509">509</a>       le_antisymm (sub_nonneg.1 (Int.sub_floor_div_mul_nonneg _ pi_pos))</span>
+<span id="L510" class="line"><a href="#L510">510</a>         (sub_nonpos.1 &lt;|</span>
+<span id="L511" class="line"><a href="#L511">511</a>           le_of_not_gt fun h₃ =&gt;</span>
+<span id="L512" class="line"><a href="#L512">512</a>             (sin_pos_of_pos_of_lt_pi h₃ (Int.sub_floor_div_mul_lt _ pi_pos)).ne</span>
+<span id="L513" class="line"><a href="#L513">513</a>               (by simp [sub_eq_add_neg, sin_add, h, sin_int_mul_pi]))⟩,</span>
+<span id="L514" class="line"><a href="#L514">514</a>     fun ⟨_, hn⟩ =&gt; hn ▸ sin_int_mul_pi _⟩</span>
+<span id="L515" class="line"><a href="#L515">515</a> </span>
+<span id="L516" class="line"><a href="#L516">516</a> theorem sin_ne_zero_iff {x : ℝ} : sin x ≠ 0 ↔ ∀ n : ℤ, (n : ℝ) * π ≠ x := by</span>
+<span id="L517" class="line"><a href="#L517">517</a>   contrapose!; exact sin_eq_zero_iff</span>
+<span id="L518" class="line"><a href="#L518">518</a> </span>
+<span id="L519" class="line"><a href="#L519">519</a> theorem sin_eq_zero_iff_cos_eq {x : ℝ} : sin x = 0 ↔ cos x = 1 ∨ cos x = -1 := by</span>
+<span id="L520" class="line"><a href="#L520">520</a>   rw [← mul_self_eq_one_iff, ← sin_sq_add_cos_sq, sq, sq, right_eq_add, mul_eq_zero, or_self]</span>
+<span id="L521" class="line"><a href="#L521">521</a> </span>
+<span id="L522" class="line"><a href="#L522">522</a> theorem cos_eq_zero_iff_sin_eq {x : ℝ} : cos x = 0 ↔ sin x = 1 ∨ sin x = -1 := by</span>
+<span id="L523" class="line"><a href="#L523">523</a>   rw [← mul_self_eq_one_iff, ← sin_sq_add_cos_sq, sq, sq, left_eq_add, mul_eq_zero, or_self]</span>
+<span id="L524" class="line"><a href="#L524">524</a> </span>
+<span id="L525" class="line"><a href="#L525">525</a> theorem cos_eq_one_iff (x : ℝ) : cos x = 1 ↔ ∃ n : ℤ, (n : ℝ) * (2 * π) = x :=</span>
+<span id="L526" class="line"><a href="#L526">526</a>   ⟨fun h =&gt;</span>
+<span id="L527" class="line"><a href="#L527">527</a>     let ⟨n, hn⟩ := sin_eq_zero_iff.1 (sin_eq_zero_iff_cos_eq.2 (Or.inl h))</span>
+<span id="L528" class="line"><a href="#L528">528</a>     ⟨n / 2,</span>
+<span id="L529" class="line"><a href="#L529">529</a>       (Int.emod_two_eq_zero_or_one n).elim</span>
+<span id="L530" class="line"><a href="#L530">530</a>         (fun hn0 =&gt; by</span>
+<span id="L531" class="line"><a href="#L531">531</a>           rwa [← mul_assoc, ← @Int.cast_two ℝ, ← Int.cast_mul,</span>
+<span id="L532" class="line"><a href="#L532">532</a>             Int.ediv_mul_cancel (Int.dvd_iff_emod_eq_zero.2 hn0)])</span>
+<span id="L533" class="line"><a href="#L533">533</a>         fun hn1 =&gt; by</span>
+<span id="L534" class="line"><a href="#L534">534</a>         rw [← Int.emod_add_mul_ediv n 2, hn1, Int.cast_add, Int.cast_one, add_mul, one_mul,</span>
+<span id="L535" class="line"><a href="#L535">535</a>           add_comm, mul_comm (2 : ℤ), Int.cast_mul, mul_assoc, Int.cast_two] at hn</span>
+<span id="L536" class="line"><a href="#L536">536</a>         rw [← hn, cos_int_mul_two_pi_add_pi] at h</span>
+<span id="L537" class="line"><a href="#L537">537</a>         exact absurd h (by norm_num)⟩,</span>
+<span id="L538" class="line"><a href="#L538">538</a>     fun ⟨_, hn⟩ =&gt; hn ▸ cos_int_mul_two_pi _⟩</span>
+<span id="L539" class="line"><a href="#L539">539</a> </span>
+<span id="L540" class="line"><a href="#L540">540</a> theorem cos_eq_one_iff_of_lt_of_lt {x : ℝ} (hx₁ : -(2 * π) &lt; x) (hx₂ : x &lt; 2 * π) :</span>
+<span id="L541" class="line"><a href="#L541">541</a>     cos x = 1 ↔ x = 0 :=</span>
+<span id="L542" class="line"><a href="#L542">542</a>   ⟨fun h =&gt; by</span>
+<span id="L543" class="line"><a href="#L543">543</a>     rcases (cos_eq_one_iff _).1 h with ⟨n, rfl⟩</span>
+<span id="L544" class="line"><a href="#L544">544</a>     rw [mul_lt_iff_lt_one_left two_pi_pos] at hx₂</span>
+<span id="L545" class="line"><a href="#L545">545</a>     rw [neg_lt, neg_mul_eq_neg_mul, mul_lt_iff_lt_one_left two_pi_pos] at hx₁</span>
+<span id="L546" class="line"><a href="#L546">546</a>     norm_cast at hx₁ hx₂</span>
+<span id="L547" class="line"><a href="#L547">547</a>     obtain rfl : n = 0 := le_antisymm (by lia) (by lia)</span>
+<span id="L548" class="line"><a href="#L548">548</a>     simp, fun h =&gt; by simp [h]⟩</span>
+<span id="L549" class="line"><a href="#L549">549</a> </span>
+<span id="L550" class="line"><a href="#L550">550</a> theorem sin_lt_sin_of_lt_of_le_pi_div_two {x y : ℝ} (hx₁ : -(π / 2) ≤ x) (hy₂ : y ≤ π / 2)</span>
+<span id="L551" class="line"><a href="#L551">551</a>     (hxy : x &lt; y) : sin x &lt; sin y := by</span>
+<span id="L552" class="line"><a href="#L552">552</a>   rw [← sub_pos, sin_sub_sin]</span>
+<span id="L553" class="line"><a href="#L553">553</a>   have : 0 &lt; sin ((y - x) / 2) := by apply sin_pos_of_pos_of_lt_pi &lt;;&gt; linarith</span>
+<span id="L554" class="line"><a href="#L554">554</a>   have : 0 &lt; cos ((y + x) / 2) := by refine cos_pos_of_mem_Ioo ⟨?_, ?_⟩ &lt;;&gt; linarith</span>
+<span id="L555" class="line"><a href="#L555">555</a>   positivity</span>
+<span id="L556" class="line"><a href="#L556">556</a> </span>
+<span id="L557" class="line"><a href="#L557">557</a> theorem strictMonoOn_sin : StrictMonoOn sin (Icc (-(π / 2)) (π / 2)) := fun _ hx _ hy hxy =&gt;</span>
+<span id="L558" class="line"><a href="#L558">558</a>   sin_lt_sin_of_lt_of_le_pi_div_two hx.1 hy.2 hxy</span>
+<span id="L559" class="line"><a href="#L559">559</a> </span>
+<span id="L560" class="line"><a href="#L560">560</a> theorem monotoneOn_sin : MonotoneOn sin (Set.Icc (-(π / 2)) (π / 2)) :=</span>
+<span id="L561" class="line"><a href="#L561">561</a>   strictMonoOn_sin.monotoneOn</span>
+<span id="L562" class="line"><a href="#L562">562</a> </span>
+<span id="L563" class="line"><a href="#L563">563</a> theorem cos_lt_cos_of_nonneg_of_le_pi {x y : ℝ} (hx₁ : 0 ≤ x) (hy₂ : y ≤ π) (hxy : x &lt; y) :</span>
+<span id="L564" class="line"><a href="#L564">564</a>     cos y &lt; cos x := by</span>
+<span id="L565" class="line"><a href="#L565">565</a>   rw [← sin_pi_div_two_sub, ← sin_pi_div_two_sub]</span>
+<span id="L566" class="line"><a href="#L566">566</a>   apply sin_lt_sin_of_lt_of_le_pi_div_two &lt;;&gt; linarith</span>
+<span id="L567" class="line"><a href="#L567">567</a> </span>
+<span id="L568" class="line"><a href="#L568">568</a> theorem cos_lt_cos_of_nonneg_of_le_pi_div_two {x y : ℝ} (hx₁ : 0 ≤ x) (hy₂ : y ≤ π / 2)</span>
+<span id="L569" class="line"><a href="#L569">569</a>     (hxy : x &lt; y) : cos y &lt; cos x :=</span>
+<span id="L570" class="line"><a href="#L570">570</a>   cos_lt_cos_of_nonneg_of_le_pi hx₁ (hy₂.trans (by linarith)) hxy</span>
+<span id="L571" class="line"><a href="#L571">571</a> </span>
+<span id="L572" class="line"><a href="#L572">572</a> theorem strictAntiOn_cos : StrictAntiOn cos (Icc 0 π) := fun _ hx _ hy hxy =&gt;</span>
+<span id="L573" class="line"><a href="#L573">573</a>   cos_lt_cos_of_nonneg_of_le_pi hx.1 hy.2 hxy</span>
+<span id="L574" class="line"><a href="#L574">574</a> </span>
+<span id="L575" class="line"><a href="#L575">575</a> theorem antitoneOn_cos : AntitoneOn cos (Set.Icc 0 π) :=</span>
+<span id="L576" class="line"><a href="#L576">576</a>   strictAntiOn_cos.antitoneOn</span>
+<span id="L577" class="line"><a href="#L577">577</a> </span>
+<span id="L578" class="line"><a href="#L578">578</a> theorem cos_le_cos_of_nonneg_of_le_pi {x y : ℝ} (hx₁ : 0 ≤ x) (hy₂ : y ≤ π) (hxy : x ≤ y) :</span>
+<span id="L579" class="line"><a href="#L579">579</a>     cos y ≤ cos x :=</span>
+<span id="L580" class="line"><a href="#L580">580</a>   (strictAntiOn_cos.le_iff_ge ⟨hx₁.trans hxy, hy₂⟩ ⟨hx₁, hxy.trans hy₂⟩).2 hxy</span>
+<span id="L581" class="line"><a href="#L581">581</a> </span>
+<span id="L582" class="line"><a href="#L582">582</a> theorem sin_le_sin_of_le_of_le_pi_div_two {x y : ℝ} (hx₁ : -(π / 2) ≤ x) (hy₂ : y ≤ π / 2)</span>
+<span id="L583" class="line"><a href="#L583">583</a>     (hxy : x ≤ y) : sin x ≤ sin y :=</span>
+<span id="L584" class="line"><a href="#L584">584</a>   (strictMonoOn_sin.le_iff_le ⟨hx₁, hxy.trans hy₂⟩ ⟨hx₁.trans hxy, hy₂⟩).2 hxy</span>
+<span id="L585" class="line"><a href="#L585">585</a> </span>
+<span id="L586" class="line"><a href="#L586">586</a> theorem injOn_sin : InjOn sin (Icc (-(π / 2)) (π / 2)) :=</span>
+<span id="L587" class="line"><a href="#L587">587</a>   strictMonoOn_sin.injOn</span>
+<span id="L588" class="line"><a href="#L588">588</a> </span>
+<span id="L589" class="line"><a href="#L589">589</a> theorem injOn_cos : InjOn cos (Icc 0 π) :=</span>
+<span id="L590" class="line"><a href="#L590">590</a>   strictAntiOn_cos.injOn</span>
+<span id="L591" class="line"><a href="#L591">591</a> </span>
+<span id="L592" class="line"><a href="#L592">592</a> theorem surjOn_sin : SurjOn sin (Icc (-(π / 2)) (π / 2)) (Icc (-1) 1) := by</span>
+<span id="L593" class="line"><a href="#L593">593</a>   simpa only [sin_neg, sin_pi_div_two] using</span>
+<span id="L594" class="line"><a href="#L594">594</a>     intermediate_value_Icc (neg_le_self pi_div_two_pos.le) continuous_sin.continuousOn</span>
+<span id="L595" class="line"><a href="#L595">595</a> </span>
+<span id="L596" class="line"><a href="#L596">596</a> theorem surjOn_cos : SurjOn cos (Icc 0 π) (Icc (-1) 1) := by</span>
+<span id="L597" class="line"><a href="#L597">597</a>   simpa only [cos_zero, cos_pi] using intermediate_value_Icc&#x27; pi_pos.le continuous_cos.continuousOn</span>
+<span id="L598" class="line"><a href="#L598">598</a> </span>
+<span id="L599" class="line"><a href="#L599">599</a> theorem sin_mem_Icc (x : ℝ) : sin x ∈ Icc (-1 : ℝ) 1 :=</span>
+<span id="L600" class="line"><a href="#L600">600</a>   ⟨neg_one_le_sin x, sin_le_one x⟩</span>
+<span id="L601" class="line"><a href="#L601">601</a> </span>
+<span id="L602" class="line"><a href="#L602">602</a> theorem cos_mem_Icc (x : ℝ) : cos x ∈ Icc (-1 : ℝ) 1 :=</span>
+<span id="L603" class="line"><a href="#L603">603</a>   ⟨neg_one_le_cos x, cos_le_one x⟩</span>
+<span id="L604" class="line"><a href="#L604">604</a> </span>
+<span id="L605" class="line"><a href="#L605">605</a> theorem mapsTo_sin (s : Set ℝ) : MapsTo sin s (Icc (-1 : ℝ) 1) := fun x _ =&gt; sin_mem_Icc x</span>
+<span id="L606" class="line"><a href="#L606">606</a> </span>
+<span id="L607" class="line"><a href="#L607">607</a> theorem mapsTo_cos (s : Set ℝ) : MapsTo cos s (Icc (-1 : ℝ) 1) := fun x _ =&gt; cos_mem_Icc x</span>
+<span id="L608" class="line"><a href="#L608">608</a> </span>
+<span id="L609" class="line"><a href="#L609">609</a> theorem bijOn_sin : BijOn sin (Icc (-(π / 2)) (π / 2)) (Icc (-1) 1) :=</span>
+<span id="L610" class="line"><a href="#L610">610</a>   ⟨mapsTo_sin _, injOn_sin, surjOn_sin⟩</span>
+<span id="L611" class="line"><a href="#L611">611</a> </span>
+<span id="L612" class="line"><a href="#L612">612</a> theorem bijOn_cos : BijOn cos (Icc 0 π) (Icc (-1) 1) :=</span>
+<span id="L613" class="line"><a href="#L613">613</a>   ⟨mapsTo_cos _, injOn_cos, surjOn_cos⟩</span>
+<span id="L614" class="line"><a href="#L614">614</a> </span>
+<span id="L615" class="line"><a href="#L615">615</a> @[simp]</span>
+<span id="L616" class="line"><a href="#L616">616</a> theorem range_cos : range cos = (Icc (-1) 1 : Set ℝ) :=</span>
+<span id="L617" class="line"><a href="#L617">617</a>   Subset.antisymm (range_subset_iff.2 cos_mem_Icc) surjOn_cos.subset_range</span>
+<span id="L618" class="line"><a href="#L618">618</a> </span>
+<span id="L619" class="line"><a href="#L619">619</a> @[simp]</span>
+<span id="L620" class="line"><a href="#L620">620</a> theorem range_sin : range sin = (Icc (-1) 1 : Set ℝ) :=</span>
+<span id="L621" class="line"><a href="#L621">621</a>   Subset.antisymm (range_subset_iff.2 sin_mem_Icc) surjOn_sin.subset_range</span>
+<span id="L622" class="line"><a href="#L622">622</a> </span>
+<span id="L623" class="line"><a href="#L623">623</a> theorem range_cos_infinite : (range Real.cos).Infinite := by</span>
+<span id="L624" class="line"><a href="#L624">624</a>   rw [Real.range_cos]</span>
+<span id="L625" class="line"><a href="#L625">625</a>   exact Icc_infinite (by simp)</span>
+<span id="L626" class="line"><a href="#L626">626</a> </span>
+<span id="L627" class="line"><a href="#L627">627</a> theorem range_sin_infinite : (range Real.sin).Infinite := by</span>
+<span id="L628" class="line"><a href="#L628">628</a>   rw [Real.range_sin]</span>
+<span id="L629" class="line"><a href="#L629">629</a>   exact Icc_infinite (by simp)</span>
+<span id="L630" class="line"><a href="#L630">630</a> </span>
+<span id="L631" class="line"><a href="#L631">631</a> section CosDivSq</span>
+<span id="L632" class="line"><a href="#L632">632</a> </span>
+<span id="L633" class="line"><a href="#L633">633</a> variable (x : ℝ)</span>
+<span id="L634" class="line"><a href="#L634">634</a> </span>
+<span id="L635" class="line"><a href="#L635">635</a> /-- the series `sqrtTwoAddSeries x n` is `sqrt(2 + sqrt(2 + ... ))` with `n` square roots,</span>
+<span id="L636" class="line"><a href="#L636">636</a>   starting with `x`. We define it here because `cos (pi / 2 ^ (n+1)) = sqrtTwoAddSeries 0 n / 2`</span>
+<span id="L637" class="line"><a href="#L637">637</a> -/</span>
+<span id="L638" class="line"><a href="#L638">638</a> @[simp]</span>
+<span id="L639" class="line"><a href="#L639">639</a> noncomputable def sqrtTwoAddSeries (x : ℝ) : ℕ → ℝ</span>
+<span id="L640" class="line"><a href="#L640">640</a>   | 0 =&gt; x</span>
+<span id="L641" class="line"><a href="#L641">641</a>   | n + 1 =&gt; √(2 + sqrtTwoAddSeries x n)</span>
+<span id="L642" class="line"><a href="#L642">642</a> </span>
+<span id="L643" class="line"><a href="#L643">643</a> theorem sqrtTwoAddSeries_zero : sqrtTwoAddSeries x 0 = x := by simp</span>
+<span id="L644" class="line"><a href="#L644">644</a> </span>
+<span id="L645" class="line"><a href="#L645">645</a> theorem sqrtTwoAddSeries_one : sqrtTwoAddSeries 0 1 = √2 := by simp</span>
+<span id="L646" class="line"><a href="#L646">646</a> </span>
+<span id="L647" class="line"><a href="#L647">647</a> theorem sqrtTwoAddSeries_two : sqrtTwoAddSeries 0 2 = √(2 + √2) := by simp</span>
+<span id="L648" class="line"><a href="#L648">648</a> </span>
+<span id="L649" class="line"><a href="#L649">649</a> theorem sqrtTwoAddSeries_zero_nonneg : ∀ n : ℕ, 0 ≤ sqrtTwoAddSeries 0 n</span>
+<span id="L650" class="line"><a href="#L650">650</a>   | 0 =&gt; le_refl 0</span>
+<span id="L651" class="line"><a href="#L651">651</a>   | _ + 1 =&gt; sqrt_nonneg _</span>
+<span id="L652" class="line"><a href="#L652">652</a> </span>
+<span id="L653" class="line"><a href="#L653">653</a> theorem sqrtTwoAddSeries_nonneg {x : ℝ} (h : 0 ≤ x) : ∀ n : ℕ, 0 ≤ sqrtTwoAddSeries x n</span>
+<span id="L654" class="line"><a href="#L654">654</a>   | 0 =&gt; h</span>
+<span id="L655" class="line"><a href="#L655">655</a>   | _ + 1 =&gt; sqrt_nonneg _</span>
+<span id="L656" class="line"><a href="#L656">656</a> </span>
+<span id="L657" class="line"><a href="#L657">657</a> theorem sqrtTwoAddSeries_lt_two : ∀ n : ℕ, sqrtTwoAddSeries 0 n &lt; 2</span>
+<span id="L658" class="line"><a href="#L658">658</a>   | 0 =&gt; by simp</span>
+<span id="L659" class="line"><a href="#L659">659</a>   | n + 1 =&gt; by</span>
+<span id="L660" class="line"><a href="#L660">660</a>     refine lt_of_lt_of_le ?_ (sqrt_sq zero_lt_two.le).le</span>
+<span id="L661" class="line"><a href="#L661">661</a>     rw [sqrtTwoAddSeries, sqrt_lt_sqrt_iff, ← lt_sub_iff_add_lt&#x27;]</span>
+<span id="L662" class="line"><a href="#L662">662</a>     · refine (sqrtTwoAddSeries_lt_two n).trans_le ?_</span>
+<span id="L663" class="line"><a href="#L663">663</a>       norm_num</span>
+<span id="L664" class="line"><a href="#L664">664</a>     · exact add_nonneg zero_le_two (sqrtTwoAddSeries_zero_nonneg n)</span>
+<span id="L665" class="line"><a href="#L665">665</a> </span>
+<span id="L666" class="line"><a href="#L666">666</a> theorem sqrtTwoAddSeries_succ (x : ℝ) :</span>
+<span id="L667" class="line"><a href="#L667">667</a>     ∀ n : ℕ, sqrtTwoAddSeries x (n + 1) = sqrtTwoAddSeries (√(2 + x)) n</span>
+<span id="L668" class="line"><a href="#L668">668</a>   | 0 =&gt; rfl</span>
+<span id="L669" class="line"><a href="#L669">669</a>   | n + 1 =&gt; by rw [sqrtTwoAddSeries, sqrtTwoAddSeries_succ _ _, sqrtTwoAddSeries]</span>
+<span id="L670" class="line"><a href="#L670">670</a> </span>
+<span id="L671" class="line"><a href="#L671">671</a> @[gcongr]</span>
+<span id="L672" class="line"><a href="#L672">672</a> theorem sqrtTwoAddSeries_monotone_left {x y : ℝ} (h : x ≤ y) :</span>
+<span id="L673" class="line"><a href="#L673">673</a>     ∀ n : ℕ, sqrtTwoAddSeries x n ≤ sqrtTwoAddSeries y n</span>
+<span id="L674" class="line"><a href="#L674">674</a>   | 0 =&gt; h</span>
+<span id="L675" class="line"><a href="#L675">675</a>   | n + 1 =&gt; by</span>
+<span id="L676" class="line"><a href="#L676">676</a>     rw [sqrtTwoAddSeries, sqrtTwoAddSeries]; gcongr; exact sqrtTwoAddSeries_monotone_left h _</span>
+<span id="L677" class="line"><a href="#L677">677</a> </span>
+<span id="L678" class="line"><a href="#L678">678</a> @[simp]</span>
+<span id="L679" class="line"><a href="#L679">679</a> theorem cos_pi_over_two_pow : ∀ n : ℕ, cos (π / 2 ^ (n + 1)) = sqrtTwoAddSeries 0 n / 2</span>
+<span id="L680" class="line"><a href="#L680">680</a>   | 0 =&gt; by simp</span>
+<span id="L681" class="line"><a href="#L681">681</a>   | n + 1 =&gt; by</span>
+<span id="L682" class="line"><a href="#L682">682</a>     have A : (1 : ℝ) &lt; 2 ^ (n + 1) := one_lt_pow₀ one_lt_two n.succ_ne_zero</span>
+<span id="L683" class="line"><a href="#L683">683</a>     have B : π / 2 ^ (n + 1) &lt; π := div_lt_self pi_pos A</span>
+<span id="L684" class="line"><a href="#L684">684</a>     have C : 0 &lt; π / 2 ^ (n + 1) := by positivity</span>
+<span id="L685" class="line"><a href="#L685">685</a>     rw [pow_succ, div_mul_eq_div_div, cos_half, cos_pi_over_two_pow n, sqrtTwoAddSeries,</span>
+<span id="L686" class="line"><a href="#L686">686</a>       add_div_eq_mul_add_div, one_mul, ← div_mul_eq_div_div, sqrt_div, sqrt_mul_self] &lt;;&gt;</span>
+<span id="L687" class="line"><a href="#L687">687</a>       linarith [sqrtTwoAddSeries_nonneg le_rfl n]</span>
+<span id="L688" class="line"><a href="#L688">688</a> </span>
+<span id="L689" class="line"><a href="#L689">689</a> theorem sin_sq_pi_over_two_pow (n : ℕ) :</span>
+<span id="L690" class="line"><a href="#L690">690</a>     sin (π / 2 ^ (n + 1)) ^ 2 = 1 - (sqrtTwoAddSeries 0 n / 2) ^ 2 := by</span>
+<span id="L691" class="line"><a href="#L691">691</a>   rw [sin_sq, cos_pi_over_two_pow]</span>
+<span id="L692" class="line"><a href="#L692">692</a> </span>
+<span id="L693" class="line"><a href="#L693">693</a> theorem sin_sq_pi_over_two_pow_succ (n : ℕ) :</span>
+<span id="L694" class="line"><a href="#L694">694</a>     sin (π / 2 ^ (n + 2)) ^ 2 = 1 / 2 - sqrtTwoAddSeries 0 n / 4 := by</span>
+<span id="L695" class="line"><a href="#L695">695</a>   rw [sin_sq_pi_over_two_pow, sqrtTwoAddSeries, div_pow, sq_sqrt, add_div, ← sub_sub]</span>
+<span id="L696" class="line"><a href="#L696">696</a>   · congr</span>
+<span id="L697" class="line"><a href="#L697">697</a>     · norm_num</span>
+<span id="L698" class="line"><a href="#L698">698</a>     · norm_num</span>
+<span id="L699" class="line"><a href="#L699">699</a>   · exact add_nonneg two_pos.le (sqrtTwoAddSeries_zero_nonneg _)</span>
+<span id="L700" class="line"><a href="#L700">700</a> </span>
+<span id="L701" class="line"><a href="#L701">701</a> @[simp]</span>
+<span id="L702" class="line"><a href="#L702">702</a> theorem sin_pi_over_two_pow_succ (n : ℕ) :</span>
+<span id="L703" class="line"><a href="#L703">703</a>     sin (π / 2 ^ (n + 2)) = √(2 - sqrtTwoAddSeries 0 n) / 2 := by</span>
+<span id="L704" class="line"><a href="#L704">704</a>   rw [eq_div_iff_mul_eq two_ne_zero, eq_comm, sqrt_eq_iff_eq_sq, mul_pow,</span>
+<span id="L705" class="line"><a href="#L705">705</a>     sin_sq_pi_over_two_pow_succ, sub_mul]</span>
+<span id="L706" class="line"><a href="#L706">706</a>   · congr &lt;;&gt; norm_num</span>
+<span id="L707" class="line"><a href="#L707">707</a>   · rw [sub_nonneg]</span>
+<span id="L708" class="line"><a href="#L708">708</a>     exact (sqrtTwoAddSeries_lt_two _).le</span>
+<span id="L709" class="line"><a href="#L709">709</a>   refine mul_nonneg (sin_nonneg_of_nonneg_of_le_pi ?_ ?_) zero_le_two</span>
+<span id="L710" class="line"><a href="#L710">710</a>   · positivity</span>
+<span id="L711" class="line"><a href="#L711">711</a>   · exact div_le_self pi_pos.le &lt;| one_le_pow₀ one_le_two</span>
+<span id="L712" class="line"><a href="#L712">712</a> </span>
+<span id="L713" class="line"><a href="#L713">713</a> @[simp]</span>
+<span id="L714" class="line"><a href="#L714">714</a> theorem cos_pi_div_four : cos (π / 4) = √2 / 2 := by</span>
+<span id="L715" class="line"><a href="#L715">715</a>   trans cos (π / 2 ^ 2)</span>
+<span id="L716" class="line"><a href="#L716">716</a>   · congr</span>
+<span id="L717" class="line"><a href="#L717">717</a>     norm_num</span>
+<span id="L718" class="line"><a href="#L718">718</a>   · simp</span>
+<span id="L719" class="line"><a href="#L719">719</a> </span>
+<span id="L720" class="line"><a href="#L720">720</a> @[simp]</span>
+<span id="L721" class="line"><a href="#L721">721</a> theorem sin_pi_div_four : sin (π / 4) = √2 / 2 := by</span>
+<span id="L722" class="line"><a href="#L722">722</a>   trans sin (π / 2 ^ 2)</span>
+<span id="L723" class="line"><a href="#L723">723</a>   · congr</span>
+<span id="L724" class="line"><a href="#L724">724</a>     norm_num</span>
+<span id="L725" class="line"><a href="#L725">725</a>   · simp</span>
+<span id="L726" class="line"><a href="#L726">726</a> </span>
+<span id="L727" class="line"><a href="#L727">727</a> @[simp]</span>
+<span id="L728" class="line"><a href="#L728">728</a> theorem cos_pi_div_eight : cos (π / 8) = √(2 + √2) / 2 := by</span>
+<span id="L729" class="line"><a href="#L729">729</a>   trans cos (π / 2 ^ 3)</span>
+<span id="L730" class="line"><a href="#L730">730</a>   · congr</span>
+<span id="L731" class="line"><a href="#L731">731</a>     norm_num</span>
+<span id="L732" class="line"><a href="#L732">732</a>   · simp</span>
+<span id="L733" class="line"><a href="#L733">733</a> </span>
+<span id="L734" class="line"><a href="#L734">734</a> @[simp]</span>
+<span id="L735" class="line"><a href="#L735">735</a> theorem sin_pi_div_eight : sin (π / 8) = √(2 - √2) / 2 := by</span>
+<span id="L736" class="line"><a href="#L736">736</a>   trans sin (π / 2 ^ 3)</span>
+<span id="L737" class="line"><a href="#L737">737</a>   · congr</span>
+<span id="L738" class="line"><a href="#L738">738</a>     norm_num</span>
+<span id="L739" class="line"><a href="#L739">739</a>   · simp</span>
+<span id="L740" class="line"><a href="#L740">740</a> </span>
+<span id="L741" class="line"><a href="#L741">741</a> @[simp]</span>
+<span id="L742" class="line"><a href="#L742">742</a> theorem cos_pi_div_sixteen : cos (π / 16) = √(2 + √(2 + √2)) / 2 := by</span>
+<span id="L743" class="line"><a href="#L743">743</a>   trans cos (π / 2 ^ 4)</span>
+<span id="L744" class="line"><a href="#L744">744</a>   · congr</span>
+<span id="L745" class="line"><a href="#L745">745</a>     norm_num</span>
+<span id="L746" class="line"><a href="#L746">746</a>   · simp</span>
+<span id="L747" class="line"><a href="#L747">747</a> </span>
+<span id="L748" class="line"><a href="#L748">748</a> @[simp]</span>
+<span id="L749" class="line"><a href="#L749">749</a> theorem sin_pi_div_sixteen : sin (π / 16) = √(2 - √(2 + √2)) / 2 := by</span>
+<span id="L750" class="line"><a href="#L750">750</a>   trans sin (π / 2 ^ 4)</span>
+<span id="L751" class="line"><a href="#L751">751</a>   · congr</span>
+<span id="L752" class="line"><a href="#L752">752</a>     norm_num</span>
+<span id="L753" class="line"><a href="#L753">753</a>   · simp</span>
+<span id="L754" class="line"><a href="#L754">754</a> </span>
+<span id="L755" class="line"><a href="#L755">755</a> @[simp]</span>
+<span id="L756" class="line"><a href="#L756">756</a> theorem cos_pi_div_thirty_two : cos (π / 32) = √(2 + √(2 + √(2 + √2))) / 2 := by</span>
+<span id="L757" class="line"><a href="#L757">757</a>   trans cos (π / 2 ^ 5)</span>
+<span id="L758" class="line"><a href="#L758">758</a>   · congr</span>
+<span id="L759" class="line"><a href="#L759">759</a>     norm_num</span>
+<span id="L760" class="line"><a href="#L760">760</a>   · simp</span>
+<span id="L761" class="line"><a href="#L761">761</a> </span>
+<span id="L762" class="line"><a href="#L762">762</a> @[simp]</span>
+<span id="L763" class="line"><a href="#L763">763</a> theorem sin_pi_div_thirty_two : sin (π / 32) = √(2 - √(2 + √(2 + √2))) / 2 := by</span>
+<span id="L764" class="line"><a href="#L764">764</a>   trans sin (π / 2 ^ 5)</span>
+<span id="L765" class="line"><a href="#L765">765</a>   · congr</span>
+<span id="L766" class="line"><a href="#L766">766</a>     norm_num</span>
+<span id="L767" class="line"><a href="#L767">767</a>   · simp</span>
+<span id="L768" class="line"><a href="#L768">768</a> </span>
+<span id="L769" class="line"><a href="#L769">769</a> -- This section is also a convenient location for other explicit values of `sin` and `cos`.</span>
+<span id="L770" class="line"><a href="#L770">770</a> /-- The cosine of `π / 3` is `1 / 2`. -/</span>
+<span id="L771" class="line"><a href="#L771">771</a> @[simp]</span>
+<span id="L772" class="line"><a href="#L772">772</a> theorem cos_pi_div_three : cos (π / 3) = 1 / 2 := by</span>
+<span id="L773" class="line"><a href="#L773">773</a>   have h₁ : (2 * cos (π / 3) - 1) ^ 2 * (2 * cos (π / 3) + 2) = 0 := by</span>
+<span id="L774" class="line"><a href="#L774">774</a>     have : cos (3 * (π / 3)) = cos π := by</span>
+<span id="L775" class="line"><a href="#L775">775</a>       congr 1</span>
+<span id="L776" class="line"><a href="#L776">776</a>       ring</span>
+<span id="L777" class="line"><a href="#L777">777</a>     linarith [cos_pi, cos_three_mul (π / 3)]</span>
+<span id="L778" class="line"><a href="#L778">778</a>   rcases mul_eq_zero.mp h₁ with h | h</span>
+<span id="L779" class="line"><a href="#L779">779</a>   · linarith [eq_zero_of_pow_eq_zero h]</span>
+<span id="L780" class="line"><a href="#L780">780</a>   · have : cos π &lt; cos (π / 3) := by</span>
+<span id="L781" class="line"><a href="#L781">781</a>       refine cos_lt_cos_of_nonneg_of_le_pi ?_ le_rfl ?_ &lt;;&gt; linarith [pi_pos]</span>
+<span id="L782" class="line"><a href="#L782">782</a>     linarith [cos_pi]</span>
+<span id="L783" class="line"><a href="#L783">783</a> </span>
+<span id="L784" class="line"><a href="#L784">784</a> /-- The cosine of `π / 6` is `√3 / 2`. -/</span>
+<span id="L785" class="line"><a href="#L785">785</a> @[simp]</span>
+<span id="L786" class="line"><a href="#L786">786</a> theorem cos_pi_div_six : cos (π / 6) = √3 / 2 := by</span>
+<span id="L787" class="line"><a href="#L787">787</a>   rw [show (6 : ℝ) = 3 * 2 by norm_num, div_mul_eq_div_div, cos_half, cos_pi_div_three, one_add_div,</span>
+<span id="L788" class="line"><a href="#L788">788</a>     ← div_mul_eq_div_div, two_add_one_eq_three, sqrt_div, sqrt_mul_self] &lt;;&gt; linarith [pi_pos]</span>
+<span id="L789" class="line"><a href="#L789">789</a> </span>
+<span id="L790" class="line"><a href="#L790">790</a> /-- The square of the cosine of `π / 6` is `3 / 4` (this is sometimes more convenient than the</span>
+<span id="L791" class="line"><a href="#L791">791</a> result for cosine itself). -/</span>
+<span id="L792" class="line"><a href="#L792">792</a> theorem sq_cos_pi_div_six : cos (π / 6) ^ 2 = 3 / 4 := by</span>
+<span id="L793" class="line"><a href="#L793">793</a>   rw [cos_pi_div_six, div_pow, sq_sqrt] &lt;;&gt; norm_num</span>
+<span id="L794" class="line"><a href="#L794">794</a> </span>
+<span id="L795" class="line"><a href="#L795">795</a> /-- The sine of `π / 6` is `1 / 2`. -/</span>
+<span id="L796" class="line"><a href="#L796">796</a> @[simp]</span>
+<span id="L797" class="line"><a href="#L797">797</a> theorem sin_pi_div_six : sin (π / 6) = 1 / 2 := by</span>
+<span id="L798" class="line"><a href="#L798">798</a>   rw [← cos_pi_div_two_sub, ← cos_pi_div_three]</span>
+<span id="L799" class="line"><a href="#L799">799</a>   congr</span>
+<span id="L800" class="line"><a href="#L800">800</a>   ring</span>
+<span id="L801" class="line"><a href="#L801">801</a> </span>
+<span id="L802" class="line"><a href="#L802">802</a> /-- The square of the sine of `π / 3` is `3 / 4` (this is sometimes more convenient than the</span>
+<span id="L803" class="line"><a href="#L803">803</a> result for cosine itself). -/</span>
+<span id="L804" class="line"><a href="#L804">804</a> theorem sq_sin_pi_div_three : sin (π / 3) ^ 2 = 3 / 4 := by</span>
+<span id="L805" class="line"><a href="#L805">805</a>   rw [← cos_pi_div_two_sub, ← sq_cos_pi_div_six]</span>
+<span id="L806" class="line"><a href="#L806">806</a>   congr</span>
+<span id="L807" class="line"><a href="#L807">807</a>   ring</span>
+<span id="L808" class="line"><a href="#L808">808</a> </span>
+<span id="L809" class="line"><a href="#L809">809</a> /-- The sine of `π / 3` is `√3 / 2`. -/</span>
+<span id="L810" class="line"><a href="#L810">810</a> @[simp]</span>
+<span id="L811" class="line"><a href="#L811">811</a> theorem sin_pi_div_three : sin (π / 3) = √3 / 2 := by</span>
+<span id="L812" class="line"><a href="#L812">812</a>   rw [← cos_pi_div_two_sub, ← cos_pi_div_six]</span>
+<span id="L813" class="line"><a href="#L813">813</a>   congr</span>
+<span id="L814" class="line"><a href="#L814">814</a>   ring</span>
+<span id="L815" class="line"><a href="#L815">815</a> </span>
+<span id="L816" class="line"><a href="#L816">816</a> theorem quadratic_root_cos_pi_div_five :</span>
+<span id="L817" class="line"><a href="#L817">817</a>     letI c := cos (π / 5)</span>
+<span id="L818" class="line"><a href="#L818">818</a>     4 * c ^ 2 - 2 * c - 1 = 0 := by</span>
+<span id="L819" class="line"><a href="#L819">819</a>   set θ := π / 5 with hθ</span>
+<span id="L820" class="line"><a href="#L820">820</a>   set c := cos θ</span>
+<span id="L821" class="line"><a href="#L821">821</a>   set s := sin θ</span>
+<span id="L822" class="line"><a href="#L822">822</a>   suffices 2 * c = 4 * c ^ 2 - 1 by simp [this]</span>
+<span id="L823" class="line"><a href="#L823">823</a>   have hs : s ≠ 0 := by</span>
+<span id="L824" class="line"><a href="#L824">824</a>     rw [ne_eq, sin_eq_zero_iff, hθ]</span>
+<span id="L825" class="line"><a href="#L825">825</a>     push Not</span>
+<span id="L826" class="line"><a href="#L826">826</a>     intro n hn</span>
+<span id="L827" class="line"><a href="#L827">827</a>     replace hn : n * 5 = 1 := by field_simp at hn; norm_cast at hn</span>
+<span id="L828" class="line"><a href="#L828">828</a>     lia</span>
+<span id="L829" class="line"><a href="#L829">829</a>   suffices s * (2 * c) = s * (4 * c ^ 2 - 1) from mul_left_cancel₀ hs this</span>
+<span id="L830" class="line"><a href="#L830">830</a>   calc s * (2 * c) = 2 * s * c := by rw [← mul_assoc, mul_comm 2]</span>
+<span id="L831" class="line"><a href="#L831">831</a>                  _ = sin (2 * θ) := by rw [sin_two_mul]</span>
+<span id="L832" class="line"><a href="#L832">832</a>                  _ = sin (π - 2 * θ) := by rw [sin_pi_sub]</span>
+<span id="L833" class="line"><a href="#L833">833</a>                  _ = sin (2 * θ + θ) := by congr; linarith</span>
+<span id="L834" class="line"><a href="#L834">834</a>                  _ = sin (2 * θ) * c + cos (2 * θ) * s := sin_add (2 * θ) θ</span>
+<span id="L835" class="line"><a href="#L835">835</a>                  _ = 2 * s * c * c + cos (2 * θ) * s := by rw [sin_two_mul]</span>
+<span id="L836" class="line"><a href="#L836">836</a>                  _ = 2 * s * c * c + (2 * c ^ 2 - 1) * s := by rw [cos_two_mul]</span>
+<span id="L837" class="line"><a href="#L837">837</a>                  _ = s * (2 * c * c) + s * (2 * c ^ 2 - 1) := by linarith</span>
+<span id="L838" class="line"><a href="#L838">838</a>                  _ = s * (4 * c ^ 2 - 1) := by linarith</span>
+<span id="L839" class="line"><a href="#L839">839</a> </span>
+<span id="L840" class="line"><a href="#L840">840</a> open Polynomial in</span>
+<span id="L841" class="line"><a href="#L841">841</a> theorem Polynomial.isRoot_cos_pi_div_five :</span>
+<span id="L842" class="line"><a href="#L842">842</a>     (4 • X ^ 2 - 2 • X - C 1 : ℝ[X]).IsRoot (cos (π / 5)) := by</span>
+<span id="L843" class="line"><a href="#L843">843</a>   simpa using quadratic_root_cos_pi_div_five</span>
+<span id="L844" class="line"><a href="#L844">844</a> </span>
+<span id="L845" class="line"><a href="#L845">845</a> /-- The cosine of `π / 5` is `(1 + √5) / 4`. -/</span>
+<span id="L846" class="line"><a href="#L846">846</a> @[simp]</span>
+<span id="L847" class="line"><a href="#L847">847</a> theorem cos_pi_div_five : cos (π / 5) = (1 + √5) / 4 := by</span>
+<span id="L848" class="line"><a href="#L848">848</a>   set c := cos (π / 5)</span>
+<span id="L849" class="line"><a href="#L849">849</a>   have : 4 * (c * c) + (-2) * c + (-1) = 0 := by</span>
+<span id="L850" class="line"><a href="#L850">850</a>     rw [← sq, neg_mul, ← sub_eq_add_neg, ← sub_eq_add_neg]</span>
+<span id="L851" class="line"><a href="#L851">851</a>     exact quadratic_root_cos_pi_div_five</span>
+<span id="L852" class="line"><a href="#L852">852</a>   have hd : discrim 4 (-2) (-1) = (2 * √5) * (2 * √5) := by norm_num [discrim, mul_mul_mul_comm]</span>
+<span id="L853" class="line"><a href="#L853">853</a>   rcases (quadratic_eq_zero_iff (by simp) hd c).mp this with h | h</span>
+<span id="L854" class="line"><a href="#L854">854</a>   · simp [h]; linarith</span>
+<span id="L855" class="line"><a href="#L855">855</a>   · absurd (show 0 ≤ c from cos_nonneg_of_mem_Icc &lt;| by constructor &lt;;&gt; linarith [pi_pos.le])</span>
+<span id="L856" class="line"><a href="#L856">856</a>     rw [not_le, h]</span>
+<span id="L857" class="line"><a href="#L857">857</a>     exact div_neg_of_neg_of_pos (by norm_num [lt_sqrt]) (by positivity)</span>
+<span id="L858" class="line"><a href="#L858">858</a> </span>
+<span id="L859" class="line"><a href="#L859">859</a> end CosDivSq</span>
+<span id="L860" class="line"><a href="#L860">860</a> </span>
+<span id="L861" class="line"><a href="#L861">861</a> /-- `Real.sin` as an `OrderIso` between `[-(π / 2), π / 2]` and `[-1, 1]`. -/</span>
+<span id="L862" class="line"><a href="#L862">862</a> def sinOrderIso : Icc (-(π / 2)) (π / 2) ≃o Icc (-1 : ℝ) 1 :=</span>
+<span id="L863" class="line"><a href="#L863">863</a>   (strictMonoOn_sin.orderIso _ _).trans &lt;| OrderIso.setCongr _ _ bijOn_sin.image_eq</span>
+<span id="L864" class="line"><a href="#L864">864</a> </span>
+<span id="L865" class="line"><a href="#L865">865</a> @[simp]</span>
+<span id="L866" class="line"><a href="#L866">866</a> theorem coe_sinOrderIso_apply (x : Icc (-(π / 2)) (π / 2)) : (sinOrderIso x : ℝ) = sin x :=</span>
+<span id="L867" class="line"><a href="#L867">867</a>   rfl</span>
+<span id="L868" class="line"><a href="#L868">868</a> </span>
+<span id="L869" class="line"><a href="#L869">869</a> theorem sinOrderIso_apply (x : Icc (-(π / 2)) (π / 2)) : sinOrderIso x = ⟨sin x, sin_mem_Icc x⟩ :=</span>
+<span id="L870" class="line"><a href="#L870">870</a>   rfl</span>
+<span id="L871" class="line"><a href="#L871">871</a> </span>
+<span id="L872" class="line"><a href="#L872">872</a> @[simp]</span>
+<span id="L873" class="line"><a href="#L873">873</a> theorem tan_pi_div_four : tan (π / 4) = 1 := by</span>
+<span id="L874" class="line"><a href="#L874">874</a>   rw [tan_eq_sin_div_cos, cos_pi_div_four, sin_pi_div_four]</span>
+<span id="L875" class="line"><a href="#L875">875</a>   have h : √2 / 2 &gt; 0 := by positivity</span>
+<span id="L876" class="line"><a href="#L876">876</a>   exact div_self (ne_of_gt h)</span>
+<span id="L877" class="line"><a href="#L877">877</a> </span>
+<span id="L878" class="line"><a href="#L878">878</a> @[simp]</span>
+<span id="L879" class="line"><a href="#L879">879</a> theorem tan_pi_div_two : tan (π / 2) = 0 := by simp [tan_eq_sin_div_cos]</span>
+<span id="L880" class="line"><a href="#L880">880</a> </span>
+<span id="L881" class="line"><a href="#L881">881</a> @[simp]</span>
+<span id="L882" class="line"><a href="#L882">882</a> theorem tan_pi_div_six : tan (π / 6) = 1 / √3 := by</span>
+<span id="L883" class="line"><a href="#L883">883</a>   rw [tan_eq_sin_div_cos, sin_pi_div_six, cos_pi_div_six]</span>
+<span id="L884" class="line"><a href="#L884">884</a>   ring</span>
+<span id="L885" class="line"><a href="#L885">885</a> </span>
+<span id="L886" class="line"><a href="#L886">886</a> @[simp]</span>
+<span id="L887" class="line"><a href="#L887">887</a> theorem tan_pi_div_three : tan (π / 3) = √3 := by</span>
+<span id="L888" class="line"><a href="#L888">888</a>   rw [tan_eq_sin_div_cos, sin_pi_div_three, cos_pi_div_three]</span>
+<span id="L889" class="line"><a href="#L889">889</a>   ring</span>
+<span id="L890" class="line"><a href="#L890">890</a> </span>
+<span id="L891" class="line"><a href="#L891">891</a> theorem tan_pos_of_pos_of_lt_pi_div_two {x : ℝ} (h0x : 0 &lt; x) (hxp : x &lt; π / 2) : 0 &lt; tan x := by</span>
+<span id="L892" class="line"><a href="#L892">892</a>   rw [tan_eq_sin_div_cos]</span>
+<span id="L893" class="line"><a href="#L893">893</a>   exact div_pos (sin_pos_of_pos_of_lt_pi h0x (by linarith)) (cos_pos_of_mem_Ioo ⟨by linarith, hxp⟩)</span>
+<span id="L894" class="line"><a href="#L894">894</a> </span>
+<span id="L895" class="line"><a href="#L895">895</a> theorem tan_nonneg_of_nonneg_of_le_pi_div_two {x : ℝ} (h0x : 0 ≤ x) (hxp : x ≤ π / 2) : 0 ≤ tan x :=</span>
+<span id="L896" class="line"><a href="#L896">896</a>   match lt_or_eq_of_le h0x, lt_or_eq_of_le hxp with</span>
+<span id="L897" class="line"><a href="#L897">897</a>   | Or.inl hx0, Or.inl hxp =&gt; le_of_lt (tan_pos_of_pos_of_lt_pi_div_two hx0 hxp)</span>
+<span id="L898" class="line"><a href="#L898">898</a>   | Or.inl _, Or.inr hxp =&gt; by simp [hxp, tan_eq_sin_div_cos]</span>
+<span id="L899" class="line"><a href="#L899">899</a>   | Or.inr hx0, _ =&gt; by simp [hx0.symm]</span>
+<span id="L900" class="line"><a href="#L900">900</a> </span>
+<span id="L901" class="line"><a href="#L901">901</a> theorem tan_neg_of_neg_of_pi_div_two_lt {x : ℝ} (hx0 : x &lt; 0) (hpx : -(π / 2) &lt; x) : tan x &lt; 0 :=</span>
+<span id="L902" class="line"><a href="#L902">902</a>   neg_pos.1 (tan_neg x ▸ tan_pos_of_pos_of_lt_pi_div_two (by linarith) (by linarith [pi_pos]))</span>
+<span id="L903" class="line"><a href="#L903">903</a> </span>
+<span id="L904" class="line"><a href="#L904">904</a> theorem tan_nonpos_of_nonpos_of_neg_pi_div_two_le {x : ℝ} (hx0 : x ≤ 0) (hpx : -(π / 2) ≤ x) :</span>
+<span id="L905" class="line"><a href="#L905">905</a>     tan x ≤ 0 :=</span>
+<span id="L906" class="line"><a href="#L906">906</a>   neg_nonneg.1 (tan_neg x ▸ tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith) (by linarith))</span>
+<span id="L907" class="line"><a href="#L907">907</a> </span>
+<span id="L908" class="line"><a href="#L908">908</a> theorem strictMonoOn_tan : StrictMonoOn tan (Ioo (-(π / 2)) (π / 2)) := by</span>
+<span id="L909" class="line"><a href="#L909">909</a>   rintro x hx y hy hlt</span>
+<span id="L910" class="line"><a href="#L910">910</a>   rw [tan_eq_sin_div_cos, tan_eq_sin_div_cos,</span>
+<span id="L911" class="line"><a href="#L911">911</a>     div_lt_div_iff₀ (cos_pos_of_mem_Ioo hx) (cos_pos_of_mem_Ioo hy), mul_comm, ← sub_pos, ← sin_sub]</span>
+<span id="L912" class="line"><a href="#L912">912</a>   exact sin_pos_of_pos_of_lt_pi (sub_pos.2 hlt) &lt;| by linarith [hx.1, hy.2]</span>
+<span id="L913" class="line"><a href="#L913">913</a> </span>
+<span id="L914" class="line"><a href="#L914">914</a> theorem tan_lt_tan_of_lt_of_lt_pi_div_two {x y : ℝ} (hx₁ : -(π / 2) &lt; x) (hy₂ : y &lt; π / 2)</span>
+<span id="L915" class="line"><a href="#L915">915</a>     (hxy : x &lt; y) : tan x &lt; tan y :=</span>
+<span id="L916" class="line"><a href="#L916">916</a>   strictMonoOn_tan ⟨hx₁, hxy.trans hy₂⟩ ⟨hx₁.trans hxy, hy₂⟩ hxy</span>
+<span id="L917" class="line"><a href="#L917">917</a> </span>
+<span id="L918" class="line"><a href="#L918">918</a> theorem tan_lt_tan_of_nonneg_of_lt_pi_div_two {x y : ℝ} (hx₁ : 0 ≤ x) (hy₂ : y &lt; π / 2)</span>
+<span id="L919" class="line"><a href="#L919">919</a>     (hxy : x &lt; y) : tan x &lt; tan y :=</span>
+<span id="L920" class="line"><a href="#L920">920</a>   tan_lt_tan_of_lt_of_lt_pi_div_two (by linarith) hy₂ hxy</span>
+<span id="L921" class="line"><a href="#L921">921</a> </span>
+<span id="L922" class="line"><a href="#L922">922</a> theorem injOn_tan : InjOn tan (Ioo (-(π / 2)) (π / 2)) :=</span>
+<span id="L923" class="line"><a href="#L923">923</a>   strictMonoOn_tan.injOn</span>
+<span id="L924" class="line"><a href="#L924">924</a> </span>
+<span id="L925" class="line"><a href="#L925">925</a> theorem tan_inj_of_lt_of_lt_pi_div_two {x y : ℝ} (hx₁ : -(π / 2) &lt; x) (hx₂ : x &lt; π / 2)</span>
+<span id="L926" class="line"><a href="#L926">926</a>     (hy₁ : -(π / 2) &lt; y) (hy₂ : y &lt; π / 2) (hxy : tan x = tan y) : x = y :=</span>
+<span id="L927" class="line"><a href="#L927">927</a>   injOn_tan ⟨hx₁, hx₂⟩ ⟨hy₁, hy₂⟩ hxy</span>
+<span id="L928" class="line"><a href="#L928">928</a> </span>
+<span id="L929" class="line"><a href="#L929">929</a> theorem tan_periodic : Function.Periodic tan π := by</span>
+<span id="L930" class="line"><a href="#L930">930</a>   simpa only [Function.Periodic, tan_eq_sin_div_cos] using sin_antiperiodic.div cos_antiperiodic</span>
+<span id="L931" class="line"><a href="#L931">931</a> </span>
+<span id="L932" class="line"><a href="#L932">932</a> @[simp]</span>
+<span id="L933" class="line"><a href="#L933">933</a> theorem tan_pi : tan π = 0 := by rw [tan_periodic.eq, tan_zero]</span>
+<span id="L934" class="line"><a href="#L934">934</a> </span>
+<span id="L935" class="line"><a href="#L935">935</a> theorem tan_add_pi (x : ℝ) : tan (x + π) = tan x :=</span>
+<span id="L936" class="line"><a href="#L936">936</a>   tan_periodic x</span>
+<span id="L937" class="line"><a href="#L937">937</a> </span>
+<span id="L938" class="line"><a href="#L938">938</a> theorem tan_sub_pi (x : ℝ) : tan (x - π) = tan x :=</span>
+<span id="L939" class="line"><a href="#L939">939</a>   tan_periodic.sub_eq x</span>
+<span id="L940" class="line"><a href="#L940">940</a> </span>
+<span id="L941" class="line"><a href="#L941">941</a> theorem tan_pi_sub (x : ℝ) : tan (π - x) = -tan x :=</span>
+<span id="L942" class="line"><a href="#L942">942</a>   tan_neg x ▸ tan_periodic.sub_eq&#x27;</span>
+<span id="L943" class="line"><a href="#L943">943</a> </span>
+<span id="L944" class="line"><a href="#L944">944</a> theorem tan_pi_div_two_sub (x : ℝ) : tan (π / 2 - x) = (tan x)⁻¹ := by</span>
+<span id="L945" class="line"><a href="#L945">945</a>   rw [tan_eq_sin_div_cos, tan_eq_sin_div_cos, inv_div, sin_pi_div_two_sub, cos_pi_div_two_sub]</span>
+<span id="L946" class="line"><a href="#L946">946</a> </span>
+<span id="L947" class="line"><a href="#L947">947</a> theorem tan_nat_mul_pi (n : ℕ) : tan (n * π) = 0 :=</span>
+<span id="L948" class="line"><a href="#L948">948</a>   tan_zero ▸ tan_periodic.nat_mul_eq n</span>
+<span id="L949" class="line"><a href="#L949">949</a> </span>
+<span id="L950" class="line"><a href="#L950">950</a> theorem tan_int_mul_pi (n : ℤ) : tan (n * π) = 0 :=</span>
+<span id="L951" class="line"><a href="#L951">951</a>   tan_zero ▸ tan_periodic.int_mul_eq n</span>
+<span id="L952" class="line"><a href="#L952">952</a> </span>
+<span id="L953" class="line"><a href="#L953">953</a> theorem tan_add_nat_mul_pi (x : ℝ) (n : ℕ) : tan (x + n * π) = tan x :=</span>
+<span id="L954" class="line"><a href="#L954">954</a>   tan_periodic.nat_mul n x</span>
+<span id="L955" class="line"><a href="#L955">955</a> </span>
+<span id="L956" class="line"><a href="#L956">956</a> theorem tan_add_int_mul_pi (x : ℝ) (n : ℤ) : tan (x + n * π) = tan x :=</span>
+<span id="L957" class="line"><a href="#L957">957</a>   tan_periodic.int_mul n x</span>
+<span id="L958" class="line"><a href="#L958">958</a> </span>
+<span id="L959" class="line"><a href="#L959">959</a> theorem tan_sub_nat_mul_pi (x : ℝ) (n : ℕ) : tan (x - n * π) = tan x :=</span>
+<span id="L960" class="line"><a href="#L960">960</a>   tan_periodic.sub_nat_mul_eq n</span>
+<span id="L961" class="line"><a href="#L961">961</a> </span>
+<span id="L962" class="line"><a href="#L962">962</a> theorem tan_sub_int_mul_pi (x : ℝ) (n : ℤ) : tan (x - n * π) = tan x :=</span>
+<span id="L963" class="line"><a href="#L963">963</a>   tan_periodic.sub_int_mul_eq n</span>
+<span id="L964" class="line"><a href="#L964">964</a> </span>
+<span id="L965" class="line"><a href="#L965">965</a> theorem tan_nat_mul_pi_sub (x : ℝ) (n : ℕ) : tan (n * π - x) = -tan x :=</span>
+<span id="L966" class="line"><a href="#L966">966</a>   tan_neg x ▸ tan_periodic.nat_mul_sub_eq n</span>
+<span id="L967" class="line"><a href="#L967">967</a> </span>
+<span id="L968" class="line"><a href="#L968">968</a> theorem tan_int_mul_pi_sub (x : ℝ) (n : ℤ) : tan (n * π - x) = -tan x :=</span>
+<span id="L969" class="line"><a href="#L969">969</a>   tan_neg x ▸ tan_periodic.int_mul_sub_eq n</span>
+<span id="L970" class="line"><a href="#L970">970</a> </span>
+<span id="L971" class="line"><a href="#L971">971</a> theorem tendsto_sin_pi_div_two : Tendsto sin (𝓝[&lt;] (π / 2)) (𝓝 1) := by</span>
+<span id="L972" class="line"><a href="#L972">972</a>   convert continuous_sin.continuousWithinAt.tendsto</span>
+<span id="L973" class="line"><a href="#L973">973</a>   simp</span>
+<span id="L974" class="line"><a href="#L974">974</a> </span>
+<span id="L975" class="line"><a href="#L975">975</a> theorem tendsto_cos_pi_div_two : Tendsto cos (𝓝[&lt;] (π / 2)) (𝓝[&gt;] 0) := by</span>
+<span id="L976" class="line"><a href="#L976">976</a>   apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within</span>
+<span id="L977" class="line"><a href="#L977">977</a>   · convert continuous_cos.continuousWithinAt.tendsto</span>
+<span id="L978" class="line"><a href="#L978">978</a>     simp</span>
+<span id="L979" class="line"><a href="#L979">979</a>   · filter_upwards [Ioo_mem_nhdsLT (neg_lt_self pi_div_two_pos)] with x hx</span>
+<span id="L980" class="line"><a href="#L980">980</a>     exact cos_pos_of_mem_Ioo hx</span>
+<span id="L981" class="line"><a href="#L981">981</a> </span>
+<span id="L982" class="line"><a href="#L982">982</a> theorem tendsto_tan_pi_div_two : Tendsto tan (𝓝[&lt;] (π / 2)) atTop := by</span>
+<span id="L983" class="line"><a href="#L983">983</a>   convert tendsto_cos_pi_div_two.inv_tendsto_nhdsGT_zero.atTop_mul_pos zero_lt_one</span>
+<span id="L984" class="line"><a href="#L984">984</a>     tendsto_sin_pi_div_two using 1</span>
+<span id="L985" class="line"><a href="#L985">985</a>   simp only [Pi.inv_apply, ← div_eq_inv_mul, ← tan_eq_sin_div_cos]</span>
+<span id="L986" class="line"><a href="#L986">986</a> </span>
+<span id="L987" class="line"><a href="#L987">987</a> theorem tendsto_sin_neg_pi_div_two : Tendsto sin (𝓝[&gt;] (-(π / 2))) (𝓝 (-1)) := by</span>
+<span id="L988" class="line"><a href="#L988">988</a>   convert continuous_sin.continuousWithinAt.tendsto using 2</span>
+<span id="L989" class="line"><a href="#L989">989</a>   simp</span>
+<span id="L990" class="line"><a href="#L990">990</a> </span>
+<span id="L991" class="line"><a href="#L991">991</a> theorem tendsto_cos_neg_pi_div_two : Tendsto cos (𝓝[&gt;] (-(π / 2))) (𝓝[&gt;] 0) := by</span>
+<span id="L992" class="line"><a href="#L992">992</a>   apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within</span>
+<span id="L993" class="line"><a href="#L993">993</a>   · convert continuous_cos.continuousWithinAt.tendsto</span>
+<span id="L994" class="line"><a href="#L994">994</a>     simp</span>
+<span id="L995" class="line"><a href="#L995">995</a>   · filter_upwards [Ioo_mem_nhdsGT (neg_lt_self pi_div_two_pos)] with x hx</span>
+<span id="L996" class="line"><a href="#L996">996</a>     exact cos_pos_of_mem_Ioo hx</span>
+<span id="L997" class="line"><a href="#L997">997</a> </span>
+<span id="L998" class="line"><a href="#L998">998</a> theorem tendsto_tan_neg_pi_div_two : Tendsto tan (𝓝[&gt;] (-(π / 2))) atBot := by</span>
+<span id="L999" class="line"><a href="#L999">999</a>   convert tendsto_cos_neg_pi_div_two.inv_tendsto_nhdsGT_zero.atTop_mul_neg (by simp)</span>
+<span id="L1000" class="line"><a href="#L1000">1000</a>       tendsto_sin_neg_pi_div_two using 1</span>
+<span id="L1001" class="line"><a href="#L1001">1001</a>   simp only [Pi.inv_apply, ← div_eq_inv_mul, ← tan_eq_sin_div_cos]</span>
+<span id="L1002" class="line"><a href="#L1002">1002</a> </span>
+<span id="L1003" class="line"><a href="#L1003">1003</a> end Real</span>
+<span id="L1004" class="line"><a href="#L1004">1004</a> </span>
+<span id="L1005" class="line"><a href="#L1005">1005</a> namespace Complex</span>
+<span id="L1006" class="line"><a href="#L1006">1006</a> </span>
+<span id="L1007" class="line"><a href="#L1007">1007</a> open Real</span>
+<span id="L1008" class="line"><a href="#L1008">1008</a> </span>
+<span id="L1009" class="line"><a href="#L1009">1009</a> theorem sin_eq_zero_iff_cos_eq {z : ℂ} : sin z = 0 ↔ cos z = 1 ∨ cos z = -1 := by</span>
+<span id="L1010" class="line"><a href="#L1010">1010</a>   rw [← mul_self_eq_one_iff, ← sin_sq_add_cos_sq, sq, sq, right_eq_add, mul_eq_zero, or_self]</span>
+<span id="L1011" class="line"><a href="#L1011">1011</a> </span>
+<span id="L1012" class="line"><a href="#L1012">1012</a> theorem cos_eq_zero_iff_sin_eq {z : ℂ} : cos z = 0 ↔ sin z = 1 ∨ sin z = -1 := by</span>
+<span id="L1013" class="line"><a href="#L1013">1013</a>   rw [← mul_self_eq_one_iff, ← sin_sq_add_cos_sq, sq, sq, left_eq_add, mul_eq_zero, or_self]</span>
+<span id="L1014" class="line"><a href="#L1014">1014</a> </span>
+<span id="L1015" class="line"><a href="#L1015">1015</a> @[simp]</span>
+<span id="L1016" class="line"><a href="#L1016">1016</a> theorem cos_pi_div_two : cos (π / 2) = 0 :=</span>
+<span id="L1017" class="line"><a href="#L1017">1017</a>   calc</span>
+<span id="L1018" class="line"><a href="#L1018">1018</a>     cos (π / 2) = Real.cos (π / 2) := by rw [ofReal_cos]; simp</span>
+<span id="L1019" class="line"><a href="#L1019">1019</a>     _ = 0 := by simp</span>
+<span id="L1020" class="line"><a href="#L1020">1020</a> </span>
+<span id="L1021" class="line"><a href="#L1021">1021</a> @[simp]</span>
+<span id="L1022" class="line"><a href="#L1022">1022</a> theorem sin_pi_div_two : sin (π / 2) = 1 :=</span>
+<span id="L1023" class="line"><a href="#L1023">1023</a>   calc</span>
+<span id="L1024" class="line"><a href="#L1024">1024</a>     sin (π / 2) = Real.sin (π / 2) := by rw [ofReal_sin]; simp</span>
+<span id="L1025" class="line"><a href="#L1025">1025</a>     _ = 1 := by simp</span>
+<span id="L1026" class="line"><a href="#L1026">1026</a> </span>
+<span id="L1027" class="line"><a href="#L1027">1027</a> @[simp]</span>
+<span id="L1028" class="line"><a href="#L1028">1028</a> theorem sin_pi : sin π = 0 := by rw [← ofReal_sin, Real.sin_pi]; simp</span>
+<span id="L1029" class="line"><a href="#L1029">1029</a> </span>
+<span id="L1030" class="line"><a href="#L1030">1030</a> @[simp]</span>
+<span id="L1031" class="line"><a href="#L1031">1031</a> theorem cos_pi : cos π = -1 := by rw [← ofReal_cos, Real.cos_pi]; simp</span>
+<span id="L1032" class="line"><a href="#L1032">1032</a> </span>
+<span id="L1033" class="line"><a href="#L1033">1033</a> @[simp]</span>
+<span id="L1034" class="line"><a href="#L1034">1034</a> theorem sin_two_pi : sin (2 * π) = 0 := by simp [two_mul, sin_add]</span>
+<span id="L1035" class="line"><a href="#L1035">1035</a> </span>
+<span id="L1036" class="line"><a href="#L1036">1036</a> @[simp]</span>
+<span id="L1037" class="line"><a href="#L1037">1037</a> theorem cos_two_pi : cos (2 * π) = 1 := by simp [two_mul, cos_add]</span>
+<span id="L1038" class="line"><a href="#L1038">1038</a> </span>
+<span id="L1039" class="line"><a href="#L1039">1039</a> theorem sin_antiperiodic : Function.Antiperiodic sin π := by simp [sin_add]</span>
+<span id="L1040" class="line"><a href="#L1040">1040</a> </span>
+<span id="L1041" class="line"><a href="#L1041">1041</a> theorem sin_periodic : Function.Periodic sin (2 * π) :=</span>
+<span id="L1042" class="line"><a href="#L1042">1042</a>   sin_antiperiodic.periodic_two_mul</span>
+<span id="L1043" class="line"><a href="#L1043">1043</a> </span>
+<span id="L1044" class="line"><a href="#L1044">1044</a> theorem sin_add_pi (x : ℂ) : sin (x + π) = -sin x :=</span>
+<span id="L1045" class="line"><a href="#L1045">1045</a>   sin_antiperiodic x</span>
+<span id="L1046" class="line"><a href="#L1046">1046</a> </span>
+<span id="L1047" class="line"><a href="#L1047">1047</a> theorem sin_add_two_pi (x : ℂ) : sin (x + 2 * π) = sin x :=</span>
+<span id="L1048" class="line"><a href="#L1048">1048</a>   sin_periodic x</span>
+<span id="L1049" class="line"><a href="#L1049">1049</a> </span>
+<span id="L1050" class="line"><a href="#L1050">1050</a> theorem sin_sub_pi (x : ℂ) : sin (x - π) = -sin x :=</span>
+<span id="L1051" class="line"><a href="#L1051">1051</a>   sin_antiperiodic.sub_eq x</span>
+<span id="L1052" class="line"><a href="#L1052">1052</a> </span>
+<span id="L1053" class="line"><a href="#L1053">1053</a> theorem sin_sub_two_pi (x : ℂ) : sin (x - 2 * π) = sin x :=</span>
+<span id="L1054" class="line"><a href="#L1054">1054</a>   sin_periodic.sub_eq x</span>
+<span id="L1055" class="line"><a href="#L1055">1055</a> </span>
+<span id="L1056" class="line"><a href="#L1056">1056</a> theorem sin_pi_sub (x : ℂ) : sin (π - x) = sin x :=</span>
+<span id="L1057" class="line"><a href="#L1057">1057</a>   neg_neg (sin x) ▸ sin_neg x ▸ sin_antiperiodic.sub_eq&#x27;</span>
+<span id="L1058" class="line"><a href="#L1058">1058</a> </span>
+<span id="L1059" class="line"><a href="#L1059">1059</a> theorem sin_two_pi_sub (x : ℂ) : sin (2 * π - x) = -sin x :=</span>
+<span id="L1060" class="line"><a href="#L1060">1060</a>   sin_neg x ▸ sin_periodic.sub_eq&#x27;</span>
+<span id="L1061" class="line"><a href="#L1061">1061</a> </span>
+<span id="L1062" class="line"><a href="#L1062">1062</a> theorem sin_nat_mul_pi (n : ℕ) : sin (n * π) = 0 :=</span>
+<span id="L1063" class="line"><a href="#L1063">1063</a>   sin_antiperiodic.nat_mul_eq_of_eq_zero sin_zero n</span>
+<span id="L1064" class="line"><a href="#L1064">1064</a> </span>
+<span id="L1065" class="line"><a href="#L1065">1065</a> theorem sin_int_mul_pi (n : ℤ) : sin (n * π) = 0 :=</span>
+<span id="L1066" class="line"><a href="#L1066">1066</a>   sin_antiperiodic.int_mul_eq_of_eq_zero sin_zero n</span>
+<span id="L1067" class="line"><a href="#L1067">1067</a> </span>
+<span id="L1068" class="line"><a href="#L1068">1068</a> theorem sin_add_nat_mul_two_pi (x : ℂ) (n : ℕ) : sin (x + n * (2 * π)) = sin x :=</span>
+<span id="L1069" class="line"><a href="#L1069">1069</a>   sin_periodic.nat_mul n x</span>
+<span id="L1070" class="line"><a href="#L1070">1070</a> </span>
+<span id="L1071" class="line"><a href="#L1071">1071</a> theorem sin_add_int_mul_two_pi (x : ℂ) (n : ℤ) : sin (x + n * (2 * π)) = sin x :=</span>
+<span id="L1072" class="line"><a href="#L1072">1072</a>   sin_periodic.int_mul n x</span>
+<span id="L1073" class="line"><a href="#L1073">1073</a> </span>
+<span id="L1074" class="line"><a href="#L1074">1074</a> theorem sin_sub_nat_mul_two_pi (x : ℂ) (n : ℕ) : sin (x - n * (2 * π)) = sin x :=</span>
+<span id="L1075" class="line"><a href="#L1075">1075</a>   sin_periodic.sub_nat_mul_eq n</span>
+<span id="L1076" class="line"><a href="#L1076">1076</a> </span>
+<span id="L1077" class="line"><a href="#L1077">1077</a> theorem sin_sub_int_mul_two_pi (x : ℂ) (n : ℤ) : sin (x - n * (2 * π)) = sin x :=</span>
+<span id="L1078" class="line"><a href="#L1078">1078</a>   sin_periodic.sub_int_mul_eq n</span>
+<span id="L1079" class="line"><a href="#L1079">1079</a> </span>
+<span id="L1080" class="line"><a href="#L1080">1080</a> theorem sin_nat_mul_two_pi_sub (x : ℂ) (n : ℕ) : sin (n * (2 * π) - x) = -sin x :=</span>
+<span id="L1081" class="line"><a href="#L1081">1081</a>   sin_neg x ▸ sin_periodic.nat_mul_sub_eq n</span>
+<span id="L1082" class="line"><a href="#L1082">1082</a> </span>
+<span id="L1083" class="line"><a href="#L1083">1083</a> theorem sin_int_mul_two_pi_sub (x : ℂ) (n : ℤ) : sin (n * (2 * π) - x) = -sin x :=</span>
+<span id="L1084" class="line"><a href="#L1084">1084</a>   sin_neg x ▸ sin_periodic.int_mul_sub_eq n</span>
+<span id="L1085" class="line"><a href="#L1085">1085</a> </span>
+<span id="L1086" class="line"><a href="#L1086">1086</a> theorem cos_antiperiodic : Function.Antiperiodic cos π := by simp [cos_add]</span>
+<span id="L1087" class="line"><a href="#L1087">1087</a> </span>
+<span id="L1088" class="line"><a href="#L1088">1088</a> theorem cos_periodic : Function.Periodic cos (2 * π) :=</span>
+<span id="L1089" class="line"><a href="#L1089">1089</a>   cos_antiperiodic.periodic_two_mul</span>
+<span id="L1090" class="line"><a href="#L1090">1090</a> </span>
+<span id="L1091" class="line"><a href="#L1091">1091</a> theorem cos_add_pi (x : ℂ) : cos (x + π) = -cos x :=</span>
+<span id="L1092" class="line"><a href="#L1092">1092</a>   cos_antiperiodic x</span>
+<span id="L1093" class="line"><a href="#L1093">1093</a> </span>
+<span id="L1094" class="line"><a href="#L1094">1094</a> theorem cos_add_two_pi (x : ℂ) : cos (x + 2 * π) = cos x :=</span>
+<span id="L1095" class="line"><a href="#L1095">1095</a>   cos_periodic x</span>
+<span id="L1096" class="line"><a href="#L1096">1096</a> </span>
+<span id="L1097" class="line"><a href="#L1097">1097</a> theorem cos_sub_pi (x : ℂ) : cos (x - π) = -cos x :=</span>
+<span id="L1098" class="line"><a href="#L1098">1098</a>   cos_antiperiodic.sub_eq x</span>
+<span id="L1099" class="line"><a href="#L1099">1099</a> </span>
+<span id="L1100" class="line"><a href="#L1100">1100</a> theorem cos_sub_two_pi (x : ℂ) : cos (x - 2 * π) = cos x :=</span>
+<span id="L1101" class="line"><a href="#L1101">1101</a>   cos_periodic.sub_eq x</span>
+<span id="L1102" class="line"><a href="#L1102">1102</a> </span>
+<span id="L1103" class="line"><a href="#L1103">1103</a> theorem cos_pi_sub (x : ℂ) : cos (π - x) = -cos x :=</span>
+<span id="L1104" class="line"><a href="#L1104">1104</a>   cos_neg x ▸ cos_antiperiodic.sub_eq&#x27;</span>
+<span id="L1105" class="line"><a href="#L1105">1105</a> </span>
+<span id="L1106" class="line"><a href="#L1106">1106</a> theorem cos_two_pi_sub (x : ℂ) : cos (2 * π - x) = cos x :=</span>
+<span id="L1107" class="line"><a href="#L1107">1107</a>   cos_neg x ▸ cos_periodic.sub_eq&#x27;</span>
+<span id="L1108" class="line"><a href="#L1108">1108</a> </span>
+<span id="L1109" class="line"><a href="#L1109">1109</a> theorem cos_nat_mul_two_pi (n : ℕ) : cos (n * (2 * π)) = 1 :=</span>
+<span id="L1110" class="line"><a href="#L1110">1110</a>   (cos_periodic.nat_mul_eq n).trans cos_zero</span>
+<span id="L1111" class="line"><a href="#L1111">1111</a> </span>
+<span id="L1112" class="line"><a href="#L1112">1112</a> theorem cos_int_mul_two_pi (n : ℤ) : cos (n * (2 * π)) = 1 :=</span>
+<span id="L1113" class="line"><a href="#L1113">1113</a>   (cos_periodic.int_mul_eq n).trans cos_zero</span>
+<span id="L1114" class="line"><a href="#L1114">1114</a> </span>
+<span id="L1115" class="line"><a href="#L1115">1115</a> theorem cos_add_nat_mul_two_pi (x : ℂ) (n : ℕ) : cos (x + n * (2 * π)) = cos x :=</span>
+<span id="L1116" class="line"><a href="#L1116">1116</a>   cos_periodic.nat_mul n x</span>
+<span id="L1117" class="line"><a href="#L1117">1117</a> </span>
+<span id="L1118" class="line"><a href="#L1118">1118</a> theorem cos_add_int_mul_two_pi (x : ℂ) (n : ℤ) : cos (x + n * (2 * π)) = cos x :=</span>
+<span id="L1119" class="line"><a href="#L1119">1119</a>   cos_periodic.int_mul n x</span>
+<span id="L1120" class="line"><a href="#L1120">1120</a> </span>
+<span id="L1121" class="line"><a href="#L1121">1121</a> theorem cos_sub_nat_mul_two_pi (x : ℂ) (n : ℕ) : cos (x - n * (2 * π)) = cos x :=</span>
+<span id="L1122" class="line"><a href="#L1122">1122</a>   cos_periodic.sub_nat_mul_eq n</span>
+<span id="L1123" class="line"><a href="#L1123">1123</a> </span>
+<span id="L1124" class="line"><a href="#L1124">1124</a> theorem cos_sub_int_mul_two_pi (x : ℂ) (n : ℤ) : cos (x - n * (2 * π)) = cos x :=</span>
+<span id="L1125" class="line"><a href="#L1125">1125</a>   cos_periodic.sub_int_mul_eq n</span>
+<span id="L1126" class="line"><a href="#L1126">1126</a> </span>
+<span id="L1127" class="line"><a href="#L1127">1127</a> theorem cos_nat_mul_two_pi_sub (x : ℂ) (n : ℕ) : cos (n * (2 * π) - x) = cos x :=</span>
+<span id="L1128" class="line"><a href="#L1128">1128</a>   cos_neg x ▸ cos_periodic.nat_mul_sub_eq n</span>
+<span id="L1129" class="line"><a href="#L1129">1129</a> </span>
+<span id="L1130" class="line"><a href="#L1130">1130</a> theorem cos_int_mul_two_pi_sub (x : ℂ) (n : ℤ) : cos (n * (2 * π) - x) = cos x :=</span>
+<span id="L1131" class="line"><a href="#L1131">1131</a>   cos_neg x ▸ cos_periodic.int_mul_sub_eq n</span>
+<span id="L1132" class="line"><a href="#L1132">1132</a> </span>
+<span id="L1133" class="line"><a href="#L1133">1133</a> theorem cos_nat_mul_two_pi_add_pi (n : ℕ) : cos (n * (2 * π) + π) = -1 := by</span>
+<span id="L1134" class="line"><a href="#L1134">1134</a>   simpa only [cos_zero] using (cos_periodic.nat_mul n).add_antiperiod_eq cos_antiperiodic</span>
+<span id="L1135" class="line"><a href="#L1135">1135</a> </span>
+<span id="L1136" class="line"><a href="#L1136">1136</a> theorem cos_int_mul_two_pi_add_pi (n : ℤ) : cos (n * (2 * π) + π) = -1 := by</span>
+<span id="L1137" class="line"><a href="#L1137">1137</a>   simpa only [cos_zero] using (cos_periodic.int_mul n).add_antiperiod_eq cos_antiperiodic</span>
+<span id="L1138" class="line"><a href="#L1138">1138</a> </span>
+<span id="L1139" class="line"><a href="#L1139">1139</a> theorem cos_nat_mul_two_pi_sub_pi (n : ℕ) : cos (n * (2 * π) - π) = -1 := by</span>
+<span id="L1140" class="line"><a href="#L1140">1140</a>   simpa only [cos_zero] using (cos_periodic.nat_mul n).sub_antiperiod_eq cos_antiperiodic</span>
+<span id="L1141" class="line"><a href="#L1141">1141</a> </span>
+<span id="L1142" class="line"><a href="#L1142">1142</a> theorem cos_int_mul_two_pi_sub_pi (n : ℤ) : cos (n * (2 * π) - π) = -1 := by</span>
+<span id="L1143" class="line"><a href="#L1143">1143</a>   simpa only [cos_zero] using (cos_periodic.int_mul n).sub_antiperiod_eq cos_antiperiodic</span>
+<span id="L1144" class="line"><a href="#L1144">1144</a> </span>
+<span id="L1145" class="line"><a href="#L1145">1145</a> theorem sin_add_pi_div_two (x : ℂ) : sin (x + π / 2) = cos x := by simp [sin_add]</span>
+<span id="L1146" class="line"><a href="#L1146">1146</a> </span>
+<span id="L1147" class="line"><a href="#L1147">1147</a> theorem sin_sub_pi_div_two (x : ℂ) : sin (x - π / 2) = -cos x := by simp [sub_eq_add_neg, sin_add]</span>
+<span id="L1148" class="line"><a href="#L1148">1148</a> </span>
+<span id="L1149" class="line"><a href="#L1149">1149</a> theorem sin_pi_div_two_sub (x : ℂ) : sin (π / 2 - x) = cos x := by simp [sub_eq_add_neg, sin_add]</span>
+<span id="L1150" class="line"><a href="#L1150">1150</a> </span>
+<span id="L1151" class="line"><a href="#L1151">1151</a> theorem cos_add_pi_div_two (x : ℂ) : cos (x + π / 2) = -sin x := by simp [cos_add]</span>
+<span id="L1152" class="line"><a href="#L1152">1152</a> </span>
+<span id="L1153" class="line"><a href="#L1153">1153</a> theorem cos_sub_pi_div_two (x : ℂ) : cos (x - π / 2) = sin x := by simp [sub_eq_add_neg, cos_add]</span>
+<span id="L1154" class="line"><a href="#L1154">1154</a> </span>
+<span id="L1155" class="line"><a href="#L1155">1155</a> theorem cos_pi_div_two_sub (x : ℂ) : cos (π / 2 - x) = sin x := by</span>
+<span id="L1156" class="line"><a href="#L1156">1156</a>   rw [← cos_neg, neg_sub, cos_sub_pi_div_two]</span>
+<span id="L1157" class="line"><a href="#L1157">1157</a> </span>
+<span id="L1158" class="line"><a href="#L1158">1158</a> theorem tan_periodic : Function.Periodic tan π := by</span>
+<span id="L1159" class="line"><a href="#L1159">1159</a>   simpa only [tan_eq_sin_div_cos] using sin_antiperiodic.div cos_antiperiodic</span>
+<span id="L1160" class="line"><a href="#L1160">1160</a> </span>
+<span id="L1161" class="line"><a href="#L1161">1161</a> theorem tan_add_pi (x : ℂ) : tan (x + π) = tan x :=</span>
+<span id="L1162" class="line"><a href="#L1162">1162</a>   tan_periodic x</span>
+<span id="L1163" class="line"><a href="#L1163">1163</a> </span>
+<span id="L1164" class="line"><a href="#L1164">1164</a> theorem tan_sub_pi (x : ℂ) : tan (x - π) = tan x :=</span>
+<span id="L1165" class="line"><a href="#L1165">1165</a>   tan_periodic.sub_eq x</span>
+<span id="L1166" class="line"><a href="#L1166">1166</a> </span>
+<span id="L1167" class="line"><a href="#L1167">1167</a> theorem tan_pi_sub (x : ℂ) : tan (π - x) = -tan x :=</span>
+<span id="L1168" class="line"><a href="#L1168">1168</a>   tan_neg x ▸ tan_periodic.sub_eq&#x27;</span>
+<span id="L1169" class="line"><a href="#L1169">1169</a> </span>
+<span id="L1170" class="line"><a href="#L1170">1170</a> theorem tan_pi_div_two_sub (x : ℂ) : tan (π / 2 - x) = (tan x)⁻¹ := by</span>
+<span id="L1171" class="line"><a href="#L1171">1171</a>   rw [tan_eq_sin_div_cos, tan_eq_sin_div_cos, inv_div, sin_pi_div_two_sub, cos_pi_div_two_sub]</span>
+<span id="L1172" class="line"><a href="#L1172">1172</a> </span>
+<span id="L1173" class="line"><a href="#L1173">1173</a> theorem tan_nat_mul_pi (n : ℕ) : tan (n * π) = 0 :=</span>
+<span id="L1174" class="line"><a href="#L1174">1174</a>   tan_zero ▸ tan_periodic.nat_mul_eq n</span>
+<span id="L1175" class="line"><a href="#L1175">1175</a> </span>
+<span id="L1176" class="line"><a href="#L1176">1176</a> theorem tan_int_mul_pi (n : ℤ) : tan (n * π) = 0 :=</span>
+<span id="L1177" class="line"><a href="#L1177">1177</a>   tan_zero ▸ tan_periodic.int_mul_eq n</span>
+<span id="L1178" class="line"><a href="#L1178">1178</a> </span>
+<span id="L1179" class="line"><a href="#L1179">1179</a> theorem tan_add_nat_mul_pi (x : ℂ) (n : ℕ) : tan (x + n * π) = tan x :=</span>
+<span id="L1180" class="line"><a href="#L1180">1180</a>   tan_periodic.nat_mul n x</span>
+<span id="L1181" class="line"><a href="#L1181">1181</a> </span>
+<span id="L1182" class="line"><a href="#L1182">1182</a> theorem tan_add_int_mul_pi (x : ℂ) (n : ℤ) : tan (x + n * π) = tan x :=</span>
+<span id="L1183" class="line"><a href="#L1183">1183</a>   tan_periodic.int_mul n x</span>
+<span id="L1184" class="line"><a href="#L1184">1184</a> </span>
+<span id="L1185" class="line"><a href="#L1185">1185</a> theorem tan_sub_nat_mul_pi (x : ℂ) (n : ℕ) : tan (x - n * π) = tan x :=</span>
+<span id="L1186" class="line"><a href="#L1186">1186</a>   tan_periodic.sub_nat_mul_eq n</span>
+<span id="L1187" class="line"><a href="#L1187">1187</a> </span>
+<span id="L1188" class="line"><a href="#L1188">1188</a> theorem tan_sub_int_mul_pi (x : ℂ) (n : ℤ) : tan (x - n * π) = tan x :=</span>
+<span id="L1189" class="line"><a href="#L1189">1189</a>   tan_periodic.sub_int_mul_eq n</span>
+<span id="L1190" class="line"><a href="#L1190">1190</a> </span>
+<span id="L1191" class="line"><a href="#L1191">1191</a> theorem tan_nat_mul_pi_sub (x : ℂ) (n : ℕ) : tan (n * π - x) = -tan x :=</span>
+<span id="L1192" class="line"><a href="#L1192">1192</a>   tan_neg x ▸ tan_periodic.nat_mul_sub_eq n</span>
+<span id="L1193" class="line"><a href="#L1193">1193</a> </span>
+<span id="L1194" class="line"><a href="#L1194">1194</a> theorem tan_int_mul_pi_sub (x : ℂ) (n : ℤ) : tan (n * π - x) = -tan x :=</span>
+<span id="L1195" class="line"><a href="#L1195">1195</a>   tan_neg x ▸ tan_periodic.int_mul_sub_eq n</span>
+<span id="L1196" class="line"><a href="#L1196">1196</a> </span>
+<span id="L1197" class="line"><a href="#L1197">1197</a> theorem exp_antiperiodic : Function.Antiperiodic exp (π * I) := by simp [exp_add, exp_mul_I]</span>
+<span id="L1198" class="line"><a href="#L1198">1198</a> </span>
+<span id="L1199" class="line"><a href="#L1199">1199</a> theorem exp_periodic : Function.Periodic exp (2 * π * I) :=</span>
+<span id="L1200" class="line"><a href="#L1200">1200</a>   (mul_assoc (2 : ℂ) π I).symm ▸ exp_antiperiodic.periodic_two_mul</span>
+<span id="L1201" class="line"><a href="#L1201">1201</a> </span>
+<span id="L1202" class="line"><a href="#L1202">1202</a> theorem exp_mul_I_antiperiodic : Function.Antiperiodic (fun x =&gt; exp (x * I)) π := by</span>
+<span id="L1203" class="line"><a href="#L1203">1203</a>   simpa only [mul_inv_cancel_right₀ I_ne_zero] using exp_antiperiodic.mul_const I_ne_zero</span>
+<span id="L1204" class="line"><a href="#L1204">1204</a> </span>
+<span id="L1205" class="line"><a href="#L1205">1205</a> theorem exp_mul_I_periodic : Function.Periodic (fun x =&gt; exp (x * I)) (2 * π) :=</span>
+<span id="L1206" class="line"><a href="#L1206">1206</a>   exp_mul_I_antiperiodic.periodic_two_mul</span>
+<span id="L1207" class="line"><a href="#L1207">1207</a> </span>
+<span id="L1208" class="line"><a href="#L1208">1208</a> @[simp]</span>
+<span id="L1209" class="line"><a href="#L1209">1209</a> theorem exp_pi_mul_I : exp (π * I) = -1 :=</span>
+<span id="L1210" class="line"><a href="#L1210">1210</a>   exp_zero ▸ exp_antiperiodic.eq</span>
+<span id="L1211" class="line"><a href="#L1211">1211</a> </span>
+<span id="L1212" class="line"><a href="#L1212">1212</a> @[simp]</span>
+<span id="L1213" class="line"><a href="#L1213">1213</a> theorem exp_two_pi_mul_I : exp (2 * π * I) = 1 :=</span>
+<span id="L1214" class="line"><a href="#L1214">1214</a>   exp_periodic.eq.trans exp_zero</span>
+<span id="L1215" class="line"><a href="#L1215">1215</a> </span>
+<span id="L1216" class="line"><a href="#L1216">1216</a> @[simp]</span>
+<span id="L1217" class="line"><a href="#L1217">1217</a> lemma exp_pi_div_two_mul_I : exp (π / 2 * I) = I := by</span>
+<span id="L1218" class="line"><a href="#L1218">1218</a>   rw [← cos_add_sin_I, cos_pi_div_two, sin_pi_div_two, one_mul, zero_add]</span>
+<span id="L1219" class="line"><a href="#L1219">1219</a> </span>
+<span id="L1220" class="line"><a href="#L1220">1220</a> @[simp]</span>
+<span id="L1221" class="line"><a href="#L1221">1221</a> lemma exp_neg_pi_div_two_mul_I : exp (-π / 2 * I) = -I := by</span>
+<span id="L1222" class="line"><a href="#L1222">1222</a>   rw [← cos_add_sin_I, neg_div, cos_neg, cos_pi_div_two, sin_neg, sin_pi_div_two, zero_add, neg_mul,</span>
+<span id="L1223" class="line"><a href="#L1223">1223</a>     one_mul]</span>
+<span id="L1224" class="line"><a href="#L1224">1224</a> </span>
+<span id="L1225" class="line"><a href="#L1225">1225</a> @[simp]</span>
+<span id="L1226" class="line"><a href="#L1226">1226</a> theorem exp_nat_mul_two_pi_mul_I (n : ℕ) : exp (n * (2 * π * I)) = 1 :=</span>
+<span id="L1227" class="line"><a href="#L1227">1227</a>   (exp_periodic.nat_mul_eq n).trans exp_zero</span>
+<span id="L1228" class="line"><a href="#L1228">1228</a> </span>
+<span id="L1229" class="line"><a href="#L1229">1229</a> @[simp]</span>
+<span id="L1230" class="line"><a href="#L1230">1230</a> theorem exp_int_mul_two_pi_mul_I (n : ℤ) : exp (n * (2 * π * I)) = 1 :=</span>
+<span id="L1231" class="line"><a href="#L1231">1231</a>   (exp_periodic.int_mul_eq n).trans exp_zero</span>
+<span id="L1232" class="line"><a href="#L1232">1232</a> </span>
+<span id="L1233" class="line"><a href="#L1233">1233</a> @[simp]</span>
+<span id="L1234" class="line"><a href="#L1234">1234</a> theorem exp_add_pi_mul_I (z : ℂ) : exp (z + π * I) = -exp z :=</span>
+<span id="L1235" class="line"><a href="#L1235">1235</a>   exp_antiperiodic z</span>
+<span id="L1236" class="line"><a href="#L1236">1236</a> </span>
+<span id="L1237" class="line"><a href="#L1237">1237</a> @[simp]</span>
+<span id="L1238" class="line"><a href="#L1238">1238</a> theorem exp_sub_pi_mul_I (z : ℂ) : exp (z - π * I) = -exp z :=</span>
+<span id="L1239" class="line"><a href="#L1239">1239</a>   exp_antiperiodic.sub_eq z</span>
+<span id="L1240" class="line"><a href="#L1240">1240</a> </span>
+<span id="L1241" class="line"><a href="#L1241">1241</a> /-- A supporting lemma for the **Phragmen-Lindelöf principle** in a horizontal strip. If `z : ℂ`</span>
+<span id="L1242" class="line"><a href="#L1242">1242</a> belongs to a horizontal strip `|Complex.im z| ≤ b`, `b ≤ π / 2`, and `a ≤ 0`, then</span>
+<span id="L1243" class="line"><a href="#L1243">1243</a> $$\left|exp^{a\left(e^{z}+e^{-z}\right)}\right| \le e^{a\cos b \exp^{|re z|}}.$$</span>
+<span id="L1244" class="line"><a href="#L1244">1244</a> -/</span>
+<span id="L1245" class="line"><a href="#L1245">1245</a> theorem norm_exp_mul_exp_add_exp_neg_le_of_abs_im_le {a b : ℝ} (ha : a ≤ 0) {z : ℂ}</span>
+<span id="L1246" class="line"><a href="#L1246">1246</a>     (hz : |z.im| ≤ b) (hb : b ≤ π / 2) :</span>
+<span id="L1247" class="line"><a href="#L1247">1247</a>     ‖exp (a * (exp z + exp (-z)))‖ ≤ Real.exp (a * Real.cos b * Real.exp |z.re|) := by</span>
+<span id="L1248" class="line"><a href="#L1248">1248</a>   simp only [norm_exp, Real.exp_le_exp, re_ofReal_mul, add_re, exp_re, neg_im, Real.cos_neg, ←</span>
+<span id="L1249" class="line"><a href="#L1249">1249</a>     add_mul, mul_assoc, mul_comm (Real.cos b), neg_re, ← Real.cos_abs z.im]</span>
+<span id="L1250" class="line"><a href="#L1250">1250</a>   have : Real.exp |z.re| ≤ Real.exp z.re + Real.exp (-z.re) :=</span>
+<span id="L1251" class="line"><a href="#L1251">1251</a>     apply_abs_le_add_of_nonneg (fun x =&gt; (Real.exp_pos x).le) z.re</span>
+<span id="L1252" class="line"><a href="#L1252">1252</a>   refine mul_le_mul_of_nonpos_left (mul_le_mul this ?_ ?_ ((Real.exp_pos _).le.trans this)) ha</span>
+<span id="L1253" class="line"><a href="#L1253">1253</a>   · exact</span>
+<span id="L1254" class="line"><a href="#L1254">1254</a>       Real.cos_le_cos_of_nonneg_of_le_pi (_root_.abs_nonneg _)</span>
+<span id="L1255" class="line"><a href="#L1255">1255</a>         (hb.trans &lt;| half_le_self &lt;| Real.pi_pos.le) hz</span>
+<span id="L1256" class="line"><a href="#L1256">1256</a>   · refine Real.cos_nonneg_of_mem_Icc ⟨?_, hb⟩</span>
+<span id="L1257" class="line"><a href="#L1257">1257</a>     exact (neg_nonpos.2 &lt;| Real.pi_div_two_pos.le).trans ((_root_.abs_nonneg _).trans hz)</span>
+<span id="L1258" class="line"><a href="#L1258">1258</a> </span>
+<span id="L1259" class="line"><a href="#L1259">1259</a> end Complex</span></pre></html>

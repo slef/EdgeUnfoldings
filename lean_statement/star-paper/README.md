@@ -24,12 +24,17 @@ identity is recorded in `.openai/hosting.json`.
 - `CheckExcerpts.lean`: generated checks and axiom queries for all 50 declarations.
 - `verify_lean.py`: resolve the declarations against the existing compiled
   project and check all 31 theorem axiom reports.
+- `collect_hovers.py`, `build_hovers.py`: capture real language-server hovers and
+  source locations, then bundle portable cards and linked source snapshots.
+- `hover-index.json`: token positions, hover/type/documentation data and source
+  provenance used by the renderer. `dist/hovers.js` contains the browser data.
 - `render.py`: generate the semantic HTML paper.
 - `dist/app.js`, `dist/style.css`: authored interaction and presentation.
 
 After a checked Lean checkpoint, update the correspondence manually, then run
 `python3 export_sources.py`, `python3 verify_lean.py /path/to/dependencies`,
-and `python3 render.py`. Update the displayed snapshot date/revision and
+then `python3 collect_hovers.py /path/to/dependencies`,
+`python3 build_hovers.py /path/to/dependencies`, and `python3 render.py`. Update the displayed snapshot date/revision and
 verification totals when the checked checkpoint changes. The source manifest
 records the revision at export. Re-audit scope labels; they are not inferred
 from a theorem name or from successful compilation. Run `python3 validate.py` for static integrity checks before publication.
@@ -38,14 +43,46 @@ from a theorem name or from successful compilation. Run `python3 validate.py` fo
 
 Lean inserts expand directly below each paper passage using native HTML
 `details`; opening them never scrolls or moves focus to another part of the
-page. The inserts and declaration foldouts work without JavaScript. The only
-script controls the global annotation visibility toggle.
+page. The inserts and declaration foldouts work without JavaScript. JavaScript adds the annotation visibility toggle and contextual definition cards.
+Hover or focus a named identifier in a statement or its surrounding context to
+inspect it. Click to pin the card; Enter also moves keyboard focus into it.
+Escape and the close button dismiss it without moving the paper.
 
-The neutral Lean wordmark means “view the formalization,” not “proved.”
+The official Lean logo (unmodified inline SVG from the navigation at
+<https://lean-lang.org/>, retrieved 16 September 2026) means “view the formalization,” not “proved.”
 Definitions are labelled “Definition · Formalized”; only theorem declarations
 carry “Theorem · Proof checked.” A passage’s scope/coverage is recorded
 separately. The proof map provides ordinary navigation links, not annotation
 buttons that unexpectedly move the reader.
+
+## Hover provenance
+
+The cards contain Lean 4.29.1 language-server hover responses for the actual
+source positions, including instantiated local types and declaration docs.
+They distinguish **This project**, **Mathlib**, and **Lean core**. A linked
+source definition accompanies each named identifier in the displayed
+signatures and contexts. Keywords and punctuation are not identifiers.
+
+For defining occurrences and structure-local binders where Lean returns no
+go-to-definition target, the exporter resolves the exact declaration/binding
+in the source. Inherited `graph` and `vertices` fields are resolved against
+the explicit `EmbeddedCutGraph` parent. Those fallbacks are recorded in the
+index; types and documentation still come from Lean. Source excerpts stop at
+the declaration boundary; theorem proof bodies are omitted from cards but
+remain available in the linked source file.
+
+The capture runs against temporary copies outside a Lake workspace, with
+the already built project and dependency paths supplied to Lean. It does
+not change or rebuild the proof. Captures are cached in `/tmp/star-hover-cache`;
+clear that directory when changing compiled dependencies. The raw capture
+is `/tmp/star-hover-raw.json` by default. The static index is committed, so
+ordinary page rendering requires no running language server.
+
+All linked library source files are bundled with their original headers and
+line numbers. Their hashes, the Lean version and Mathlib revision are in
+`hover-index.json`. Re-capture after changing excerpts or their dependencies.
+The same project source snapshot and scope caveats as the paper annotations
+continue to apply; hovers are inspection aids, not additional proof claims.
 
 ## Status semantics
 

@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/JunctionOrder.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/JunctionOrder.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.JunctionIncidence</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.CircularGapData</span>
+<span id="L3" class="line"><a href="#L3">3</a> import SixVertexUnfolding.Geometry.CutTreeTargets</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> /-! One constructed order for all incident edges at an actual nonvertex</span>
+<span id="L6" class="line"><a href="#L6">6</a> cut-tree vertex. All source labels and ray positions use a common chart.</span>
+<span id="L7" class="line"><a href="#L7">7</a> -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> open Real Set</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> /-- The finite circular order and its geometric correspondence with the tree. -/</span>
+<span id="L14" class="line"><a href="#L14">14</a> structure JunctionOrder {P : ConvexPolyhedron} {a : frontier P.body}</span>
+<span id="L15" class="line"><a href="#L15">15</a>     (T : P.CutLocusTree a) (u : T.vertices) where</span>
+<span id="L16" class="line"><a href="#L16">16</a>   chart : P.CutVoronoiChart a (T.vertexTarget u)</span>
+<span id="L17" class="line"><a href="#L17">17</a>   sites : Fin chart.sources.ncard ≃ chart.sources</span>
+<span id="L18" class="line"><a href="#L18">18</a>   angles : Fin chart.sources.ncard → ℝ</span>
+<span id="L19" class="line"><a href="#L19">19</a>   increasing : StrictMono angles</span>
+<span id="L20" class="line"><a href="#L20">20</a>   bounds : ∀ i, 0 ≤ angles i ∧ angles i &lt; 2 * π</span>
+<span id="L21" class="line"><a href="#L21">21</a>   position : ∀ i, (sites i : Plane) =</span>
+<span id="L22" class="line"><a href="#L22">22</a>     chart.origin + P.surfaceDist a (T.vertexTarget u) • direction (angles i)</span>
+<span id="L23" class="line"><a href="#L23">23</a>   first : Fin chart.sources.ncard</span>
+<span id="L24" class="line"><a href="#L24">24</a>   last : Fin chart.sources.ncard</span>
+<span id="L25" class="line"><a href="#L25">25</a>   at_first : first.val = 0</span>
+<span id="L26" class="line"><a href="#L26">26</a>   at_last : last.val + 1 = chart.sources.ncard</span>
+<span id="L27" class="line"><a href="#L27">27</a>   two : first &lt; last</span>
+<span id="L28" class="line"><a href="#L28">28</a>   neighbors : circularGapMidpoints angles first last ≃ {v : T.vertices // T.graph.Adj u v}</span>
+<span id="L29" class="line"><a href="#L29">29</a>   radius : ℝ</span>
+<span id="L30" class="line"><a href="#L30">30</a>   radius_positive : 0 &lt; radius</span>
+<span id="L31" class="line"><a href="#L31">31</a>   rays : ∀ m, ∀ ρ ∈ Ioo (0 : ℝ) radius,</span>
+<span id="L32" class="line"><a href="#L32">32</a>     chart.map (chart.origin + ρ • direction m) ∈</span>
+<span id="L33" class="line"><a href="#L33">33</a>       openSegment ℝ (u : Space) ((neighbors m).val : Space)</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> namespace SixVertexGraph</span>
+<span id="L36" class="line"><a href="#L36">36</a> </span>
+<span id="L37" class="line"><a href="#L37">37</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L38" class="line"><a href="#L38">38</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L39" class="line"><a href="#L39">39</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L40" class="line"><a href="#L40">40</a> </span>
+<span id="L41" class="line"><a href="#L41">41</a> include graph small_faces in</span>
+<span id="L42" class="line"><a href="#L42">42</a> /-- Every nonvertex tree vertex has one actual circular order of all its</span>
+<span id="L43" class="line"><a href="#L43">43</a> incident edges, together with their complete local ray correspondence. -/</span>
+<span id="L44" class="line"><a href="#L44">44</a> theorem exists_junction_order (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L45" class="line"><a href="#L45">45</a>     (u : T.vertices) (not_vertex : (u : Space) ∉ P.vertices) : Nonempty (JunctionOrder T u) := by</span>
+<span id="L46" class="line"><a href="#L46">46</a>   let b := T.vertexTarget u</span>
+<span id="L47" class="line"><a href="#L47">47</a>   have different : a ≠ b := T.vertexTarget_different u</span>
+<span id="L48" class="line"><a href="#L48">48</a>   obtain ⟨chart⟩ := graph.cut_voronoi_chart small_faces a b different not_vertex</span>
+<span id="L49" class="line"><a href="#L49">49</a>   have multiple : (b : Space) ∈ P.multipleRouteLocus a := by</span>
+<span id="L50" class="line"><a href="#L50">50</a>     rcases T.vertexTarget_cut u with multiple | original</span>
+<span id="L51" class="line"><a href="#L51">51</a>     · exact multiple</span>
+<span id="L52" class="line"><a href="#L52">52</a>     · exact (not_vertex original.1).elim</span>
+<span id="L53" class="line"><a href="#L53">53</a>   have center : chart.origin ∈ voronoiBoundary chart.sources :=</span>
+<span id="L54" class="line"><a href="#L54">54</a>     (chart.cut_diagram chart.origin chart.origin_mem).mp (chart.at_origin.symm ▸ multiple)</span>
+<span id="L55" class="line"><a href="#L55">55</a>   obtain ⟨p, hp, q, hq, distinct, _⟩ := center</span>
+<span id="L56" class="line"><a href="#L56">56</a>   have count : 1 &lt; chart.sources.ncard := (one_lt_ncard chart.finite_sources).mpr</span>
+<span id="L57" class="line"><a href="#L57">57</a>     ⟨p, hp, q, hq, distinct⟩</span>
+<span id="L58" class="line"><a href="#L58">58</a>   have radius_positive : 0 &lt; P.surfaceDist a b := by</span>
+<span id="L59" class="line"><a href="#L59">59</a>     simpa using CutVoronoiChart.tail_radius_pos different (0 : unitInterval)</span>
+<span id="L60" class="line"><a href="#L60">60</a>       (by change (0 : ℝ) &lt; 1; norm_num)</span>
+<span id="L61" class="line"><a href="#L61">61</a>   obtain ⟨sites, θ, increasing, bounds, position⟩ := exists_circular_source_order chart.sources</span>
+<span id="L62" class="line"><a href="#L62">62</a>     chart.finite_sources chart.origin (P.surfaceDist a b) radius_positive chart.source_distance</span>
+<span id="L63" class="line"><a href="#L63">63</a>   let first : Fin chart.sources.ncard := ⟨0, by omega⟩</span>
+<span id="L64" class="line"><a href="#L64">64</a>   let last : Fin chart.sources.ncard := ⟨chart.sources.ncard - 1, by omega⟩</span>
+<span id="L65" class="line"><a href="#L65">65</a>   have at_last : last.val + 1 = chart.sources.ncard := by dsimp [last]; omega</span>
+<span id="L66" class="line"><a href="#L66">66</a>   have two : first &lt; last := by change 0 &lt; chart.sources.ncard - 1; omega</span>
+<span id="L67" class="line"><a href="#L67">67</a>   obtain ⟨ε, positive, neighbors, rays⟩ := chart.gap_rays_equiv_neighbors T.toEmbeddedCutGraph</span>
+<span id="L68" class="line"><a href="#L68">68</a>     u.property different not_vertex sites θ increasing bounds position first last rfl at_last two</span>
+<span id="L69" class="line"><a href="#L69">69</a>   exact ⟨⟨chart, sites, θ, increasing, bounds, position, first, last, rfl, at_last, two,</span>
+<span id="L70" class="line"><a href="#L70">70</a>     neighbors, ε, positive, rays⟩⟩</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> end SixVertexGraph</span>
+<span id="L73" class="line"><a href="#L73">73</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

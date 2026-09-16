@@ -1,0 +1,78 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/PlanarDirections.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/PlanarDirections.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Definitions</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Ordinary Cartesian directions and determinants for the planar separation arguments. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> open Real</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> /-- The unit direction making angle `θ` with the positive horizontal axis. -/</span>
+<span id="L10" class="line"><a href="#L10">10</a> noncomputable def direction (θ : ℝ) : Plane := !₂[cos θ, sin θ]</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-- The signed area of the two planar vectors. -/</span>
+<span id="L13" class="line"><a href="#L13">13</a> def det (x y : Plane) : ℝ := x 0 * y 1 - x 1 * y 0</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> @[simp] theorem direction_x (θ : ℝ) : direction θ 0 = cos θ := rfl</span>
+<span id="L16" class="line"><a href="#L16">16</a> @[simp] theorem direction_y (θ : ℝ) : direction θ 1 = sin θ := rfl</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> theorem direction_norm (θ : ℝ) : ‖direction θ‖ = 1 := by</span>
+<span id="L19" class="line"><a href="#L19">19</a>   have square : ‖direction θ‖ ^ 2 = 1 := by</span>
+<span id="L20" class="line"><a href="#L20">20</a>     rw [EuclideanSpace.real_norm_sq_eq, Fin.sum_univ_two]</span>
+<span id="L21" class="line"><a href="#L21">21</a>     exact cos_sq_add_sin_sq θ</span>
+<span id="L22" class="line"><a href="#L22">22</a>   nlinarith [norm_nonneg (direction θ)]</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> theorem direction_ne_zero (θ : ℝ) : direction θ ≠ 0 := by</span>
+<span id="L25" class="line"><a href="#L25">25</a>   intro zero</span>
+<span id="L26" class="line"><a href="#L26">26</a>   have unit := direction_norm θ</span>
+<span id="L27" class="line"><a href="#L27">27</a>   simp [zero] at unit</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> theorem direction_inner (α β : ℝ) : inner ℝ (direction α) (direction β) = cos (β - α) := by</span>
+<span id="L30" class="line"><a href="#L30">30</a>   simp only [PiLp.inner_apply, Fin.sum_univ_two, direction_x, direction_y, real_inner_eq_re_inner,</span>
+<span id="L31" class="line"><a href="#L31">31</a>     RCLike.inner_apply, RCLike.conj_to_real, RCLike.re_to_real, cos_sub]</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> theorem direction_det (α β : ℝ) : det (direction α) (direction β) = sin (β - α) := by</span>
+<span id="L34" class="line"><a href="#L34">34</a>   simp only [det, direction_x, direction_y, sin_sub]</span>
+<span id="L35" class="line"><a href="#L35">35</a>   ring</span>
+<span id="L36" class="line"><a href="#L36">36</a> </span>
+<span id="L37" class="line"><a href="#L37">37</a> theorem direction_angle (α β : ℝ) (lower : 0 ≤ β - α) (upper : β - α ≤ π) :</span>
+<span id="L38" class="line"><a href="#L38">38</a>     InnerProductGeometry.angle (direction α) (direction β) = β - α := by</span>
+<span id="L39" class="line"><a href="#L39">39</a>   rw [InnerProductGeometry.angle, direction_inner, direction_norm, direction_norm, mul_one, div_one]</span>
+<span id="L40" class="line"><a href="#L40">40</a>   exact arccos_cos lower upper</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> /-- Cartesian polar coordinates realize the cosine law exactly. -/</span>
+<span id="L43" class="line"><a href="#L43">43</a> theorem polar_distance_sq (r s α β : ℝ) :</span>
+<span id="L44" class="line"><a href="#L44">44</a>     dist (r • direction α) (s • direction β) ^ 2 =</span>
+<span id="L45" class="line"><a href="#L45">45</a>       r ^ 2 + s ^ 2 - 2 * r * s * cos (β - α) := by</span>
+<span id="L46" class="line"><a href="#L46">46</a>   rw [dist_eq_norm, norm_sub_sq_real, norm_smul, norm_smul, direction_norm, direction_norm,</span>
+<span id="L47" class="line"><a href="#L47">47</a>     mul_one, mul_one, Real.norm_eq_abs, Real.norm_eq_abs, sq_abs, sq_abs,</span>
+<span id="L48" class="line"><a href="#L48">48</a>     real_inner_smul_left, inner_smul_right, direction_inner]</span>
+<span id="L49" class="line"><a href="#L49">49</a>   ring</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> theorem polar_radius (r θ : ℝ) (nonnegative : 0 ≤ r) : dist 0 (r • direction θ) = r := by</span>
+<span id="L52" class="line"><a href="#L52">52</a>   rw [dist_zero_left, norm_smul, direction_norm, mul_one, Real.norm_eq_abs, abs_of_nonneg nonnegative]</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> theorem det_add_right (x y z : Plane) : det x (y + z) = det x y + det x z := by</span>
+<span id="L55" class="line"><a href="#L55">55</a>   simp [det, PiLp.add_apply]</span>
+<span id="L56" class="line"><a href="#L56">56</a>   ring</span>
+<span id="L57" class="line"><a href="#L57">57</a> </span>
+<span id="L58" class="line"><a href="#L58">58</a> theorem det_sub_right (x y z : Plane) : det x (y - z) = det x y - det x z := by</span>
+<span id="L59" class="line"><a href="#L59">59</a>   simp [det, PiLp.sub_apply]</span>
+<span id="L60" class="line"><a href="#L60">60</a>   ring</span>
+<span id="L61" class="line"><a href="#L61">61</a> </span>
+<span id="L62" class="line"><a href="#L62">62</a> theorem det_smul_right (x y : Plane) (r : ℝ) : det x (r • y) = r * det x y := by</span>
+<span id="L63" class="line"><a href="#L63">63</a>   simp [det, PiLp.smul_apply]</span>
+<span id="L64" class="line"><a href="#L64">64</a>   ring</span>
+<span id="L65" class="line"><a href="#L65">65</a> </span>
+<span id="L66" class="line"><a href="#L66">66</a> /-- Signed area against a fixed direction is a continuous linear height. -/</span>
+<span id="L67" class="line"><a href="#L67">67</a> noncomputable def detHeight (x : Plane) : Plane →L[ℝ] ℝ :=</span>
+<span id="L68" class="line"><a href="#L68">68</a>   x 0 • EuclideanSpace.proj 1 - x 1 • EuclideanSpace.proj 0</span>
+<span id="L69" class="line"><a href="#L69">69</a> </span>
+<span id="L70" class="line"><a href="#L70">70</a> @[simp] theorem detHeight_apply (x y : Plane) : detHeight x y = det x y := rfl</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> theorem direction_height_surjective (θ : ℝ) : Function.Surjective (detHeight (direction θ)) := by</span>
+<span id="L73" class="line"><a href="#L73">73</a>   intro r</span>
+<span id="L74" class="line"><a href="#L74">74</a>   refine ⟨r • direction (θ + π / 2), ?_⟩</span>
+<span id="L75" class="line"><a href="#L75">75</a>   rw [detHeight_apply, det_smul_right, direction_det]</span>
+<span id="L76" class="line"><a href="#L76">76</a>   simp</span>
+<span id="L77" class="line"><a href="#L77">77</a> </span>
+<span id="L78" class="line"><a href="#L78">78</a> end SixVertexUnfolding</span></pre></html>

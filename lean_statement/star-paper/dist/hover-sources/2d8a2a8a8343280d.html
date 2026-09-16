@@ -1,0 +1,516 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Geometry/Euclidean/Angle/Unoriented/Affine.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2020 Joseph Myers. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Joseph Myers, Manuel Candales</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Analysis.Convex.Between</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Analysis.Normed.Group.AddTorsor</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Mathlib.Analysis.Normed.Affine.Isometry</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> /-!</span>
+<span id="L14" class="line"><a href="#L14">14</a> # Angles between points</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> This file defines unoriented angles in Euclidean affine spaces.</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> ## Main definitions</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> * `EuclideanGeometry.angle`, with notation `∠`, is the undirected angle determined by three</span>
+<span id="L21" class="line"><a href="#L21">21</a>   points.</span>
+<span id="L22" class="line"><a href="#L22">22</a> -/</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> @[expose] public section</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> noncomputable section</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> open Real RealInnerProductSpace</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> namespace EuclideanGeometry</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> open InnerProductGeometry</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> variable {V P : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [MetricSpace P]</span>
+<span id="L36" class="line"><a href="#L36">36</a>   [NormedAddTorsor V P] {p p₀ : P}</span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> /-- The undirected angle at `p₂` between the line segments to `p₁` and</span>
+<span id="L39" class="line"><a href="#L39">39</a> `p₃`. If either of those points equals `p₂`, this is π/2. Use</span>
+<span id="L40" class="line"><a href="#L40">40</a> `open scoped EuclideanGeometry` to access the `∠ p₁ p₂ p₃`</span>
+<span id="L41" class="line"><a href="#L41">41</a> notation. -/</span>
+<span id="L42" class="line"><a href="#L42">42</a> nonrec def angle (p₁ p₂ p₃ : P) : ℝ :=</span>
+<span id="L43" class="line"><a href="#L43">43</a>   angle (p₁ -ᵥ p₂ : V) (p₃ -ᵥ p₂)</span>
+<span id="L44" class="line"><a href="#L44">44</a> </span>
+<span id="L45" class="line"><a href="#L45">45</a> @[inherit_doc] scoped notation &quot;∠&quot; =&gt; EuclideanGeometry.angle</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> theorem continuousAt_angle {x : P × P × P} (hx12 : x.1 ≠ x.2.1) (hx32 : x.2.2 ≠ x.2.1) :</span>
+<span id="L48" class="line"><a href="#L48">48</a>     ContinuousAt (fun y : P × P × P =&gt; ∠ y.1 y.2.1 y.2.2) x := by</span>
+<span id="L49" class="line"><a href="#L49">49</a>   let f : P × P × P → V × V := fun y =&gt; (y.1 -ᵥ y.2.1, y.2.2 -ᵥ y.2.1)</span>
+<span id="L50" class="line"><a href="#L50">50</a>   have hf1 : (f x).1 ≠ 0 := by simp [f, hx12]</span>
+<span id="L51" class="line"><a href="#L51">51</a>   have hf2 : (f x).2 ≠ 0 := by simp [f, hx32]</span>
+<span id="L52" class="line"><a href="#L52">52</a>   exact (InnerProductGeometry.continuousAt_angle hf1 hf2).comp (by fun_prop)</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> @[simp]</span>
+<span id="L55" class="line"><a href="#L55">55</a> theorem _root_.AffineIsometry.angle_map {V₂ P₂ : Type*} [NormedAddCommGroup V₂]</span>
+<span id="L56" class="line"><a href="#L56">56</a>     [InnerProductSpace ℝ V₂] [MetricSpace P₂] [NormedAddTorsor V₂ P₂]</span>
+<span id="L57" class="line"><a href="#L57">57</a>     (f : P →ᵃⁱ[ℝ] P₂) (p₁ p₂ p₃ : P) : ∠ (f p₁) (f p₂) (f p₃) = ∠ p₁ p₂ p₃ := by</span>
+<span id="L58" class="line"><a href="#L58">58</a>   simp_rw [angle, ← AffineIsometry.map_vsub, LinearIsometry.angle_map]</span>
+<span id="L59" class="line"><a href="#L59">59</a> </span>
+<span id="L60" class="line"><a href="#L60">60</a> @[simp, norm_cast]</span>
+<span id="L61" class="line"><a href="#L61">61</a> theorem _root_.AffineSubspace.angle_coe {s : AffineSubspace ℝ P} (p₁ p₂ p₃ : s) :</span>
+<span id="L62" class="line"><a href="#L62">62</a>     haveI : Nonempty s := ⟨p₁⟩</span>
+<span id="L63" class="line"><a href="#L63">63</a>     ∠ (p₁ : P) (p₂ : P) (p₃ : P) = ∠ p₁ p₂ p₃ :=</span>
+<span id="L64" class="line"><a href="#L64">64</a>   haveI : Nonempty s := ⟨p₁⟩</span>
+<span id="L65" class="line"><a href="#L65">65</a>   s.subtypeₐᵢ.angle_map p₁ p₂ p₃</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> /-- A homothety with a nonzero scale factor preserves angles. -/</span>
+<span id="L68" class="line"><a href="#L68">68</a> @[simp] lemma angle_homothety (p p₁ p₂ p₃ : P) {r : ℝ} (h : r ≠ 0) :</span>
+<span id="L69" class="line"><a href="#L69">69</a>     ∠ (AffineMap.homothety p r p₁) (AffineMap.homothety p r p₂) (AffineMap.homothety p r p₃) =</span>
+<span id="L70" class="line"><a href="#L70">70</a>       ∠ p₁ p₂ p₃ := by</span>
+<span id="L71" class="line"><a href="#L71">71</a>   simp_rw [angle, ← AffineMap.linearMap_vsub, AffineMap.homothety_linear, LinearMap.smul_apply,</span>
+<span id="L72" class="line"><a href="#L72">72</a>     LinearMap.id_coe, id_eq]</span>
+<span id="L73" class="line"><a href="#L73">73</a>   rcases h.lt_or_gt with hlt | hlt &lt;;&gt; simp [hlt, -neg_vsub_eq_vsub_rev]</span>
+<span id="L74" class="line"><a href="#L74">74</a> </span>
+<span id="L75" class="line"><a href="#L75">75</a> /-- Angles are translation invariant. -/</span>
+<span id="L76" class="line"><a href="#L76">76</a> @[simp]</span>
+<span id="L77" class="line"><a href="#L77">77</a> theorem angle_const_vadd (v : V) (p₁ p₂ p₃ : P) : ∠ (v +ᵥ p₁) (v +ᵥ p₂) (v +ᵥ p₃) = ∠ p₁ p₂ p₃ :=</span>
+<span id="L78" class="line"><a href="#L78">78</a>   (AffineIsometryEquiv.constVAdd ℝ P v).toAffineIsometry.angle_map _ _ _</span>
+<span id="L79" class="line"><a href="#L79">79</a> </span>
+<span id="L80" class="line"><a href="#L80">80</a> /-- Angles are translation invariant. -/</span>
+<span id="L81" class="line"><a href="#L81">81</a> @[simp]</span>
+<span id="L82" class="line"><a href="#L82">82</a> theorem angle_vadd_const (v₁ v₂ v₃ : V) (p : P) : ∠ (v₁ +ᵥ p) (v₂ +ᵥ p) (v₃ +ᵥ p) = ∠ v₁ v₂ v₃ :=</span>
+<span id="L83" class="line"><a href="#L83">83</a>   (AffineIsometryEquiv.vaddConst ℝ p).toAffineIsometry.angle_map _ _ _</span>
+<span id="L84" class="line"><a href="#L84">84</a> </span>
+<span id="L85" class="line"><a href="#L85">85</a> /-- Angles are translation invariant. -/</span>
+<span id="L86" class="line"><a href="#L86">86</a> @[simp]</span>
+<span id="L87" class="line"><a href="#L87">87</a> theorem angle_const_vsub (p p₁ p₂ p₃ : P) : ∠ (p -ᵥ p₁) (p -ᵥ p₂) (p -ᵥ p₃) = ∠ p₁ p₂ p₃ :=</span>
+<span id="L88" class="line"><a href="#L88">88</a>   (AffineIsometryEquiv.constVSub ℝ p).toAffineIsometry.angle_map _ _ _</span>
+<span id="L89" class="line"><a href="#L89">89</a> </span>
+<span id="L90" class="line"><a href="#L90">90</a> /-- Angles are translation invariant. -/</span>
+<span id="L91" class="line"><a href="#L91">91</a> @[simp]</span>
+<span id="L92" class="line"><a href="#L92">92</a> theorem angle_vsub_const (p₁ p₂ p₃ p : P) : ∠ (p₁ -ᵥ p) (p₂ -ᵥ p) (p₃ -ᵥ p) = ∠ p₁ p₂ p₃ :=</span>
+<span id="L93" class="line"><a href="#L93">93</a>   (AffineIsometryEquiv.vaddConst ℝ p).symm.toAffineIsometry.angle_map _ _ _</span>
+<span id="L94" class="line"><a href="#L94">94</a> </span>
+<span id="L95" class="line"><a href="#L95">95</a> /-- Angles in a vector space are translation invariant. -/</span>
+<span id="L96" class="line"><a href="#L96">96</a> @[simp]</span>
+<span id="L97" class="line"><a href="#L97">97</a> theorem angle_add_const (v₁ v₂ v₃ : V) (v : V) : ∠ (v₁ + v) (v₂ + v) (v₃ + v) = ∠ v₁ v₂ v₃ :=</span>
+<span id="L98" class="line"><a href="#L98">98</a>   angle_vadd_const _ _ _ _</span>
+<span id="L99" class="line"><a href="#L99">99</a> </span>
+<span id="L100" class="line"><a href="#L100">100</a> /-- Angles in a vector space are translation invariant. -/</span>
+<span id="L101" class="line"><a href="#L101">101</a> @[simp]</span>
+<span id="L102" class="line"><a href="#L102">102</a> theorem angle_const_add (v : V) (v₁ v₂ v₃ : V) : ∠ (v + v₁) (v + v₂) (v + v₃) = ∠ v₁ v₂ v₃ :=</span>
+<span id="L103" class="line"><a href="#L103">103</a>   angle_const_vadd _ _ _ _</span>
+<span id="L104" class="line"><a href="#L104">104</a> </span>
+<span id="L105" class="line"><a href="#L105">105</a> /-- Angles in a vector space are translation invariant. -/</span>
+<span id="L106" class="line"><a href="#L106">106</a> @[simp]</span>
+<span id="L107" class="line"><a href="#L107">107</a> theorem angle_sub_const (v₁ v₂ v₃ : V) (v : V) : ∠ (v₁ - v) (v₂ - v) (v₃ - v) = ∠ v₁ v₂ v₃ := by</span>
+<span id="L108" class="line"><a href="#L108">108</a>   simpa only [vsub_eq_sub] using angle_vsub_const v₁ v₂ v₃ v</span>
+<span id="L109" class="line"><a href="#L109">109</a> </span>
+<span id="L110" class="line"><a href="#L110">110</a> /-- Angles in a vector space are invariant under inversion. -/</span>
+<span id="L111" class="line"><a href="#L111">111</a> @[simp]</span>
+<span id="L112" class="line"><a href="#L112">112</a> theorem angle_const_sub (v : V) (v₁ v₂ v₃ : V) : ∠ (v - v₁) (v - v₂) (v - v₃) = ∠ v₁ v₂ v₃ := by</span>
+<span id="L113" class="line"><a href="#L113">113</a>   simpa only [vsub_eq_sub] using angle_const_vsub v v₁ v₂ v₃</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> /-- Angles in a vector space are invariant under inversion. -/</span>
+<span id="L116" class="line"><a href="#L116">116</a> @[simp]</span>
+<span id="L117" class="line"><a href="#L117">117</a> theorem angle_neg (v₁ v₂ v₃ : V) : ∠ (-v₁) (-v₂) (-v₃) = ∠ v₁ v₂ v₃ := by</span>
+<span id="L118" class="line"><a href="#L118">118</a>   simpa only [zero_sub] using angle_const_sub 0 v₁ v₂ v₃</span>
+<span id="L119" class="line"><a href="#L119">119</a> </span>
+<span id="L120" class="line"><a href="#L120">120</a> /-- The angle at a point does not depend on the order of the other two</span>
+<span id="L121" class="line"><a href="#L121">121</a> points. -/</span>
+<span id="L122" class="line"><a href="#L122">122</a> nonrec theorem angle_comm (p₁ p₂ p₃ : P) : ∠ p₁ p₂ p₃ = ∠ p₃ p₂ p₁ :=</span>
+<span id="L123" class="line"><a href="#L123">123</a>   angle_comm _ _</span>
+<span id="L124" class="line"><a href="#L124">124</a> </span>
+<span id="L125" class="line"><a href="#L125">125</a> /-- The angle at a point is nonnegative. -/</span>
+<span id="L126" class="line"><a href="#L126">126</a> nonrec theorem angle_nonneg (p₁ p₂ p₃ : P) : 0 ≤ ∠ p₁ p₂ p₃ :=</span>
+<span id="L127" class="line"><a href="#L127">127</a>   angle_nonneg _ _</span>
+<span id="L128" class="line"><a href="#L128">128</a> </span>
+<span id="L129" class="line"><a href="#L129">129</a> /-- The angle at a point is at most π. -/</span>
+<span id="L130" class="line"><a href="#L130">130</a> nonrec theorem angle_le_pi (p₁ p₂ p₃ : P) : ∠ p₁ p₂ p₃ ≤ π :=</span>
+<span id="L131" class="line"><a href="#L131">131</a>   angle_le_pi _ _</span>
+<span id="L132" class="line"><a href="#L132">132</a> </span>
+<span id="L133" class="line"><a href="#L133">133</a> /-- The angle ∠AAB at a point is always `π / 2`. -/</span>
+<span id="L134" class="line"><a href="#L134">134</a> @[simp] lemma angle_self_left (p₀ p : P) : ∠ p₀ p₀ p = π / 2 := by</span>
+<span id="L135" class="line"><a href="#L135">135</a>   unfold angle</span>
+<span id="L136" class="line"><a href="#L136">136</a>   rw [vsub_self]</span>
+<span id="L137" class="line"><a href="#L137">137</a>   exact angle_zero_left _</span>
+<span id="L138" class="line"><a href="#L138">138</a> </span>
+<span id="L139" class="line"><a href="#L139">139</a> /-- The angle ∠ABB at a point is always `π / 2`. -/</span>
+<span id="L140" class="line"><a href="#L140">140</a> @[simp] lemma angle_self_right (p₀ p : P) : ∠ p p₀ p₀ = π / 2 := by rw [angle_comm, angle_self_left]</span>
+<span id="L141" class="line"><a href="#L141">141</a> </span>
+<span id="L142" class="line"><a href="#L142">142</a> /-- The angle ∠ABA at a point is `0`, unless `A = B`. -/</span>
+<span id="L143" class="line"><a href="#L143">143</a> theorem angle_self_of_ne (h : p ≠ p₀) : ∠ p p₀ p = 0 := angle_self &lt;| vsub_ne_zero.2 h</span>
+<span id="L144" class="line"><a href="#L144">144</a> </span>
+<span id="L145" class="line"><a href="#L145">145</a> </span>
+<span id="L146" class="line"><a href="#L146">146</a> /-- If the angle ∠ABC at a point is π, the angle ∠BAC is 0. -/</span>
+<span id="L147" class="line"><a href="#L147">147</a> theorem angle_eq_zero_of_angle_eq_pi_left {p₁ p₂ p₃ : P} (h : ∠ p₁ p₂ p₃ = π) : ∠ p₂ p₁ p₃ = 0 := by</span>
+<span id="L148" class="line"><a href="#L148">148</a>   unfold angle at h</span>
+<span id="L149" class="line"><a href="#L149">149</a>   rw [angle_eq_pi_iff] at h</span>
+<span id="L150" class="line"><a href="#L150">150</a>   rcases h with ⟨hp₁p₂, ⟨r, ⟨hr, hpr⟩⟩⟩</span>
+<span id="L151" class="line"><a href="#L151">151</a>   unfold angle</span>
+<span id="L152" class="line"><a href="#L152">152</a>   rw [angle_eq_zero_iff]</span>
+<span id="L153" class="line"><a href="#L153">153</a>   rw [← neg_vsub_eq_vsub_rev, neg_ne_zero] at hp₁p₂</span>
+<span id="L154" class="line"><a href="#L154">154</a>   use hp₁p₂, -r + 1, add_pos (neg_pos_of_neg hr) zero_lt_one</span>
+<span id="L155" class="line"><a href="#L155">155</a>   rw [add_smul, ← neg_vsub_eq_vsub_rev p₁ p₂, smul_neg]</span>
+<span id="L156" class="line"><a href="#L156">156</a>   simp [← hpr]</span>
+<span id="L157" class="line"><a href="#L157">157</a> </span>
+<span id="L158" class="line"><a href="#L158">158</a> /-- If the angle ∠ABC at a point is π, the angle ∠BCA is 0. -/</span>
+<span id="L159" class="line"><a href="#L159">159</a> theorem angle_eq_zero_of_angle_eq_pi_right {p₁ p₂ p₃ : P} (h : ∠ p₁ p₂ p₃ = π) :</span>
+<span id="L160" class="line"><a href="#L160">160</a>     ∠ p₂ p₃ p₁ = 0 := by</span>
+<span id="L161" class="line"><a href="#L161">161</a>   rw [angle_comm] at h</span>
+<span id="L162" class="line"><a href="#L162">162</a>   exact angle_eq_zero_of_angle_eq_pi_left h</span>
+<span id="L163" class="line"><a href="#L163">163</a> </span>
+<span id="L164" class="line"><a href="#L164">164</a> /-- If ∠BCD = π, then ∠ABC = ∠ABD. -/</span>
+<span id="L165" class="line"><a href="#L165">165</a> theorem angle_eq_angle_of_angle_eq_pi (p₁ : P) {p₂ p₃ p₄ : P} (h : ∠ p₂ p₃ p₄ = π) :</span>
+<span id="L166" class="line"><a href="#L166">166</a>     ∠ p₁ p₂ p₃ = ∠ p₁ p₂ p₄ := by</span>
+<span id="L167" class="line"><a href="#L167">167</a>   unfold angle at *</span>
+<span id="L168" class="line"><a href="#L168">168</a>   rcases angle_eq_pi_iff.1 h with ⟨_, ⟨r, ⟨hr, hpr⟩⟩⟩</span>
+<span id="L169" class="line"><a href="#L169">169</a>   rw [eq_comm]</span>
+<span id="L170" class="line"><a href="#L170">170</a>   convert angle_smul_right_of_pos (p₁ -ᵥ p₂) (p₃ -ᵥ p₂) (add_pos (neg_pos_of_neg hr) zero_lt_one)</span>
+<span id="L171" class="line"><a href="#L171">171</a>   rw [add_smul, ← neg_vsub_eq_vsub_rev p₂ p₃, smul_neg, neg_smul, ← hpr]</span>
+<span id="L172" class="line"><a href="#L172">172</a>   simp</span>
+<span id="L173" class="line"><a href="#L173">173</a> </span>
+<span id="L174" class="line"><a href="#L174">174</a> /-- If ∠BCD = π, then ∠ACB + ∠ACD = π. -/</span>
+<span id="L175" class="line"><a href="#L175">175</a> nonrec theorem angle_add_angle_eq_pi_of_angle_eq_pi (p₁ : P) {p₂ p₃ p₄ : P} (h : ∠ p₂ p₃ p₄ = π) :</span>
+<span id="L176" class="line"><a href="#L176">176</a>     ∠ p₁ p₃ p₂ + ∠ p₁ p₃ p₄ = π := by</span>
+<span id="L177" class="line"><a href="#L177">177</a>   unfold angle at h</span>
+<span id="L178" class="line"><a href="#L178">178</a>   rw [angle_comm p₁ p₃ p₂, angle_comm p₁ p₃ p₄]</span>
+<span id="L179" class="line"><a href="#L179">179</a>   unfold angle</span>
+<span id="L180" class="line"><a href="#L180">180</a>   exact angle_add_angle_eq_pi_of_angle_eq_pi _ h</span>
+<span id="L181" class="line"><a href="#L181">181</a> </span>
+<span id="L182" class="line"><a href="#L182">182</a> /-- **Vertical Angles Theorem**: angles opposite each other, formed by two intersecting straight</span>
+<span id="L183" class="line"><a href="#L183">183</a> lines, are equal. -/</span>
+<span id="L184" class="line"><a href="#L184">184</a> theorem angle_eq_angle_of_angle_eq_pi_of_angle_eq_pi {p₁ p₂ p₃ p₄ p₅ : P} (hapc : ∠ p₁ p₅ p₃ = π)</span>
+<span id="L185" class="line"><a href="#L185">185</a>     (hbpd : ∠ p₂ p₅ p₄ = π) : ∠ p₁ p₅ p₂ = ∠ p₃ p₅ p₄ := by</span>
+<span id="L186" class="line"><a href="#L186">186</a>   linarith [angle_add_angle_eq_pi_of_angle_eq_pi p₁ hbpd, angle_comm p₄ p₅ p₁,</span>
+<span id="L187" class="line"><a href="#L187">187</a>     angle_add_angle_eq_pi_of_angle_eq_pi p₄ hapc, angle_comm p₄ p₅ p₃]</span>
+<span id="L188" class="line"><a href="#L188">188</a> </span>
+<span id="L189" class="line"><a href="#L189">189</a> /-- If ∠ABC = π then dist A B ≠ 0. -/</span>
+<span id="L190" class="line"><a href="#L190">190</a> theorem left_dist_ne_zero_of_angle_eq_pi {p₁ p₂ p₃ : P} (h : ∠ p₁ p₂ p₃ = π) : dist p₁ p₂ ≠ 0 := by</span>
+<span id="L191" class="line"><a href="#L191">191</a>   by_contra heq</span>
+<span id="L192" class="line"><a href="#L192">192</a>   rw [dist_eq_zero] at heq</span>
+<span id="L193" class="line"><a href="#L193">193</a>   rw [heq, angle_self_left] at h</span>
+<span id="L194" class="line"><a href="#L194">194</a>   exact Real.pi_ne_zero (by linarith)</span>
+<span id="L195" class="line"><a href="#L195">195</a> </span>
+<span id="L196" class="line"><a href="#L196">196</a> /-- If ∠ABC = π then dist C B ≠ 0. -/</span>
+<span id="L197" class="line"><a href="#L197">197</a> theorem right_dist_ne_zero_of_angle_eq_pi {p₁ p₂ p₃ : P} (h : ∠ p₁ p₂ p₃ = π) : dist p₃ p₂ ≠ 0 :=</span>
+<span id="L198" class="line"><a href="#L198">198</a>   left_dist_ne_zero_of_angle_eq_pi &lt;| (angle_comm _ _ _).trans h</span>
+<span id="L199" class="line"><a href="#L199">199</a> </span>
+<span id="L200" class="line"><a href="#L200">200</a> /-- If ∠ABC = π, then (dist A C) = (dist A B) + (dist B C). -/</span>
+<span id="L201" class="line"><a href="#L201">201</a> theorem dist_eq_add_dist_of_angle_eq_pi {p₁ p₂ p₃ : P} (h : ∠ p₁ p₂ p₃ = π) :</span>
+<span id="L202" class="line"><a href="#L202">202</a>     dist p₁ p₃ = dist p₁ p₂ + dist p₃ p₂ := by</span>
+<span id="L203" class="line"><a href="#L203">203</a>   rw [dist_eq_norm_vsub V, dist_eq_norm_vsub V, dist_eq_norm_vsub V, ← vsub_sub_vsub_cancel_right]</span>
+<span id="L204" class="line"><a href="#L204">204</a>   exact norm_sub_eq_add_norm_of_angle_eq_pi h</span>
+<span id="L205" class="line"><a href="#L205">205</a> </span>
+<span id="L206" class="line"><a href="#L206">206</a> /-- If A ≠ B and C ≠ B then ∠ABC = π if and only if (dist A C) = (dist A B) + (dist B C). -/</span>
+<span id="L207" class="line"><a href="#L207">207</a> theorem dist_eq_add_dist_iff_angle_eq_pi {p₁ p₂ p₃ : P} (hp₁p₂ : p₁ ≠ p₂) (hp₃p₂ : p₃ ≠ p₂) :</span>
+<span id="L208" class="line"><a href="#L208">208</a>     dist p₁ p₃ = dist p₁ p₂ + dist p₃ p₂ ↔ ∠ p₁ p₂ p₃ = π := by</span>
+<span id="L209" class="line"><a href="#L209">209</a>   rw [dist_eq_norm_vsub V, dist_eq_norm_vsub V, dist_eq_norm_vsub V, ← vsub_sub_vsub_cancel_right]</span>
+<span id="L210" class="line"><a href="#L210">210</a>   exact</span>
+<span id="L211" class="line"><a href="#L211">211</a>     norm_sub_eq_add_norm_iff_angle_eq_pi (fun he =&gt; hp₁p₂ (vsub_eq_zero_iff_eq.1 he)) fun he =&gt;</span>
+<span id="L212" class="line"><a href="#L212">212</a>       hp₃p₂ (vsub_eq_zero_iff_eq.1 he)</span>
+<span id="L213" class="line"><a href="#L213">213</a> </span>
+<span id="L214" class="line"><a href="#L214">214</a> /-- If ∠ABC = 0, then (dist A C) = abs ((dist A B) - (dist B C)). -/</span>
+<span id="L215" class="line"><a href="#L215">215</a> theorem dist_eq_abs_sub_dist_of_angle_eq_zero {p₁ p₂ p₃ : P} (h : ∠ p₁ p₂ p₃ = 0) :</span>
+<span id="L216" class="line"><a href="#L216">216</a>     dist p₁ p₃ = |dist p₁ p₂ - dist p₃ p₂| := by</span>
+<span id="L217" class="line"><a href="#L217">217</a>   rw [dist_eq_norm_vsub V, dist_eq_norm_vsub V, dist_eq_norm_vsub V, ← vsub_sub_vsub_cancel_right]</span>
+<span id="L218" class="line"><a href="#L218">218</a>   exact norm_sub_eq_abs_sub_norm_of_angle_eq_zero h</span>
+<span id="L219" class="line"><a href="#L219">219</a> </span>
+<span id="L220" class="line"><a href="#L220">220</a> /-- If A ≠ B and C ≠ B then ∠ABC = 0 if and only if (dist A C) = abs ((dist A B) - (dist B C)). -/</span>
+<span id="L221" class="line"><a href="#L221">221</a> theorem dist_eq_abs_sub_dist_iff_angle_eq_zero {p₁ p₂ p₃ : P} (hp₁p₂ : p₁ ≠ p₂) (hp₃p₂ : p₃ ≠ p₂) :</span>
+<span id="L222" class="line"><a href="#L222">222</a>     dist p₁ p₃ = |dist p₁ p₂ - dist p₃ p₂| ↔ ∠ p₁ p₂ p₃ = 0 := by</span>
+<span id="L223" class="line"><a href="#L223">223</a>   rw [dist_eq_norm_vsub V, dist_eq_norm_vsub V, dist_eq_norm_vsub V, ← vsub_sub_vsub_cancel_right]</span>
+<span id="L224" class="line"><a href="#L224">224</a>   exact</span>
+<span id="L225" class="line"><a href="#L225">225</a>     norm_sub_eq_abs_sub_norm_iff_angle_eq_zero (fun he =&gt; hp₁p₂ (vsub_eq_zero_iff_eq.1 he))</span>
+<span id="L226" class="line"><a href="#L226">226</a>       fun he =&gt; hp₃p₂ (vsub_eq_zero_iff_eq.1 he)</span>
+<span id="L227" class="line"><a href="#L227">227</a> </span>
+<span id="L228" class="line"><a href="#L228">228</a> /-- If M is the midpoint of the segment AB, then ∠AMB = π. -/</span>
+<span id="L229" class="line"><a href="#L229">229</a> theorem angle_midpoint_eq_pi (p₁ p₂ : P) (hp₁p₂ : p₁ ≠ p₂) : ∠ p₁ (midpoint ℝ p₁ p₂) p₂ = π := by</span>
+<span id="L230" class="line"><a href="#L230">230</a>   simp only [angle, left_vsub_midpoint, invOf_eq_inv, right_vsub_midpoint, inv_pos, zero_lt_two,</span>
+<span id="L231" class="line"><a href="#L231">231</a>     angle_smul_right_of_pos, angle_smul_left_of_pos]</span>
+<span id="L232" class="line"><a href="#L232">232</a>   rw [← neg_vsub_eq_vsub_rev p₁ p₂]</span>
+<span id="L233" class="line"><a href="#L233">233</a>   apply angle_self_neg_of_nonzero</span>
+<span id="L234" class="line"><a href="#L234">234</a>   simpa only [ne_eq, vsub_eq_zero_iff_eq]</span>
+<span id="L235" class="line"><a href="#L235">235</a> </span>
+<span id="L236" class="line"><a href="#L236">236</a> /-- If M is the midpoint of the segment AB and C is the same distance from A as it is from B</span>
+<span id="L237" class="line"><a href="#L237">237</a> then ∠CMA = π / 2. -/</span>
+<span id="L238" class="line"><a href="#L238">238</a> theorem angle_left_midpoint_eq_pi_div_two_of_dist_eq {p₁ p₂ p₃ : P} (h : dist p₃ p₁ = dist p₃ p₂) :</span>
+<span id="L239" class="line"><a href="#L239">239</a>     ∠ p₃ (midpoint ℝ p₁ p₂) p₁ = π / 2 := by</span>
+<span id="L240" class="line"><a href="#L240">240</a>   let m : P := midpoint ℝ p₁ p₂</span>
+<span id="L241" class="line"><a href="#L241">241</a>   have h1 : p₃ -ᵥ p₁ = p₃ -ᵥ m - (p₁ -ᵥ m) := (vsub_sub_vsub_cancel_right p₃ p₁ m).symm</span>
+<span id="L242" class="line"><a href="#L242">242</a>   have h2 : p₃ -ᵥ p₂ = p₃ -ᵥ m + (p₁ -ᵥ m) := by</span>
+<span id="L243" class="line"><a href="#L243">243</a>     rw [left_vsub_midpoint, ← midpoint_vsub_right, vsub_add_vsub_cancel]</span>
+<span id="L244" class="line"><a href="#L244">244</a>   rw [dist_eq_norm_vsub V p₃ p₁, dist_eq_norm_vsub V p₃ p₂, h1, h2] at h</span>
+<span id="L245" class="line"><a href="#L245">245</a>   exact (norm_add_eq_norm_sub_iff_angle_eq_pi_div_two (p₃ -ᵥ m) (p₁ -ᵥ m)).mp h.symm</span>
+<span id="L246" class="line"><a href="#L246">246</a> </span>
+<span id="L247" class="line"><a href="#L247">247</a> /-- If M is the midpoint of the segment AB and C is the same distance from A as it is from B</span>
+<span id="L248" class="line"><a href="#L248">248</a> then ∠CMB = π / 2. -/</span>
+<span id="L249" class="line"><a href="#L249">249</a> theorem angle_right_midpoint_eq_pi_div_two_of_dist_eq {p₁ p₂ p₃ : P} (h : dist p₃ p₁ = dist p₃ p₂) :</span>
+<span id="L250" class="line"><a href="#L250">250</a>     ∠ p₃ (midpoint ℝ p₁ p₂) p₂ = π / 2 := by</span>
+<span id="L251" class="line"><a href="#L251">251</a>   rw [midpoint_comm p₁ p₂, angle_left_midpoint_eq_pi_div_two_of_dist_eq h.symm]</span>
+<span id="L252" class="line"><a href="#L252">252</a> </span>
+<span id="L253" class="line"><a href="#L253">253</a> /-- If the second of three points is strictly between the other two, the angle at that point</span>
+<span id="L254" class="line"><a href="#L254">254</a> is π. -/</span>
+<span id="L255" class="line"><a href="#L255">255</a> theorem _root_.Sbtw.angle₁₂₃_eq_pi {p₁ p₂ p₃ : P} (h : Sbtw ℝ p₁ p₂ p₃) : ∠ p₁ p₂ p₃ = π := by</span>
+<span id="L256" class="line"><a href="#L256">256</a>   rw [angle, angle_eq_pi_iff]</span>
+<span id="L257" class="line"><a href="#L257">257</a>   rcases h with ⟨⟨r, ⟨hr0, hr1⟩, hp₂⟩, hp₂p₁, hp₂p₃⟩</span>
+<span id="L258" class="line"><a href="#L258">258</a>   refine ⟨vsub_ne_zero.2 hp₂p₁.symm, -(1 - r) / r, ?_⟩</span>
+<span id="L259" class="line"><a href="#L259">259</a>   have hr0&#x27; : r ≠ 0 := by</span>
+<span id="L260" class="line"><a href="#L260">260</a>     rintro rfl</span>
+<span id="L261" class="line"><a href="#L261">261</a>     rw [← hp₂] at hp₂p₁</span>
+<span id="L262" class="line"><a href="#L262">262</a>     simp at hp₂p₁</span>
+<span id="L263" class="line"><a href="#L263">263</a>   have hr1&#x27; : r ≠ 1 := by</span>
+<span id="L264" class="line"><a href="#L264">264</a>     rintro rfl</span>
+<span id="L265" class="line"><a href="#L265">265</a>     rw [← hp₂] at hp₂p₃</span>
+<span id="L266" class="line"><a href="#L266">266</a>     simp at hp₂p₃</span>
+<span id="L267" class="line"><a href="#L267">267</a>   replace hr0 := hr0.lt_of_ne hr0&#x27;.symm</span>
+<span id="L268" class="line"><a href="#L268">268</a>   replace hr1 := hr1.lt_of_ne hr1&#x27;</span>
+<span id="L269" class="line"><a href="#L269">269</a>   refine ⟨div_neg_of_neg_of_pos (Left.neg_neg_iff.2 (sub_pos.2 hr1)) hr0, ?_⟩</span>
+<span id="L270" class="line"><a href="#L270">270</a>   rw [← hp₂, AffineMap.lineMap_apply, vsub_vadd_eq_vsub_sub, vsub_vadd_eq_vsub_sub, vsub_self,</span>
+<span id="L271" class="line"><a href="#L271">271</a>     zero_sub, smul_neg, smul_smul, div_mul_cancel₀ _ hr0&#x27;, neg_smul, neg_neg, sub_eq_iff_eq_add, ←</span>
+<span id="L272" class="line"><a href="#L272">272</a>     add_smul, sub_add_cancel, one_smul]</span>
+<span id="L273" class="line"><a href="#L273">273</a> </span>
+<span id="L274" class="line"><a href="#L274">274</a> /-- If the second of three points is strictly between the other two, the angle at that point</span>
+<span id="L275" class="line"><a href="#L275">275</a> (reversed) is π. -/</span>
+<span id="L276" class="line"><a href="#L276">276</a> theorem _root_.Sbtw.angle₃₂₁_eq_pi {p₁ p₂ p₃ : P} (h : Sbtw ℝ p₁ p₂ p₃) : ∠ p₃ p₂ p₁ = π := by</span>
+<span id="L277" class="line"><a href="#L277">277</a>   rw [← h.angle₁₂₃_eq_pi, angle_comm]</span>
+<span id="L278" class="line"><a href="#L278">278</a> </span>
+<span id="L279" class="line"><a href="#L279">279</a> /-- The angle between three points is π if and only if the second point is strictly between the</span>
+<span id="L280" class="line"><a href="#L280">280</a> other two. -/</span>
+<span id="L281" class="line"><a href="#L281">281</a> theorem angle_eq_pi_iff_sbtw {p₁ p₂ p₃ : P} : ∠ p₁ p₂ p₃ = π ↔ Sbtw ℝ p₁ p₂ p₃ := by</span>
+<span id="L282" class="line"><a href="#L282">282</a>   refine ⟨?_, fun h =&gt; h.angle₁₂₃_eq_pi⟩</span>
+<span id="L283" class="line"><a href="#L283">283</a>   rw [angle, angle_eq_pi_iff]</span>
+<span id="L284" class="line"><a href="#L284">284</a>   rintro ⟨hp₁p₂, r, hr, hp₃p₂⟩</span>
+<span id="L285" class="line"><a href="#L285">285</a>   refine ⟨⟨1 / (1 - r), ⟨div_nonneg zero_le_one (sub_nonneg.2 (hr.le.trans zero_le_one)),</span>
+<span id="L286" class="line"><a href="#L286">286</a>     (div_le_one (sub_pos.2 (hr.trans zero_lt_one))).2 ((le_sub_self_iff 1).2 hr.le)⟩, ?_⟩,</span>
+<span id="L287" class="line"><a href="#L287">287</a>     (vsub_ne_zero.1 hp₁p₂).symm, ?_⟩</span>
+<span id="L288" class="line"><a href="#L288">288</a>   · rw [← eq_vadd_iff_vsub_eq] at hp₃p₂</span>
+<span id="L289" class="line"><a href="#L289">289</a>     rw [AffineMap.lineMap_apply, hp₃p₂, vadd_vsub_assoc, ← neg_vsub_eq_vsub_rev p₂ p₁, smul_neg, ←</span>
+<span id="L290" class="line"><a href="#L290">290</a>       neg_smul, smul_add, smul_smul, ← add_smul, eq_comm, eq_vadd_iff_vsub_eq]</span>
+<span id="L291" class="line"><a href="#L291">291</a>     convert (one_smul ℝ (p₂ -ᵥ p₁)).symm</span>
+<span id="L292" class="line"><a href="#L292">292</a>     field [(sub_pos.2 (hr.trans zero_lt_one)).ne.symm]</span>
+<span id="L293" class="line"><a href="#L293">293</a>   · rw [ne_comm, ← @vsub_ne_zero V, hp₃p₂, smul_ne_zero_iff]</span>
+<span id="L294" class="line"><a href="#L294">294</a>     exact ⟨hr.ne, hp₁p₂⟩</span>
+<span id="L295" class="line"><a href="#L295">295</a> </span>
+<span id="L296" class="line"><a href="#L296">296</a> /-- If the second of three points is weakly between the other two, and not equal to the first,</span>
+<span id="L297" class="line"><a href="#L297">297</a> the angle at the first point is zero. -/</span>
+<span id="L298" class="line"><a href="#L298">298</a> theorem _root_.Wbtw.angle₂₁₃_eq_zero_of_ne {p₁ p₂ p₃ : P} (h : Wbtw ℝ p₁ p₂ p₃) (hp₂p₁ : p₂ ≠ p₁) :</span>
+<span id="L299" class="line"><a href="#L299">299</a>     ∠ p₂ p₁ p₃ = 0 := by</span>
+<span id="L300" class="line"><a href="#L300">300</a>   rw [angle, angle_eq_zero_iff]</span>
+<span id="L301" class="line"><a href="#L301">301</a>   rcases h with ⟨r, ⟨hr0, hr1⟩, rfl⟩</span>
+<span id="L302" class="line"><a href="#L302">302</a>   have hr0&#x27; : r ≠ 0 := by</span>
+<span id="L303" class="line"><a href="#L303">303</a>     rintro rfl</span>
+<span id="L304" class="line"><a href="#L304">304</a>     simp at hp₂p₁</span>
+<span id="L305" class="line"><a href="#L305">305</a>   replace hr0 := hr0.lt_of_ne hr0&#x27;.symm</span>
+<span id="L306" class="line"><a href="#L306">306</a>   refine ⟨vsub_ne_zero.2 hp₂p₁, r⁻¹, inv_pos.2 hr0, ?_⟩</span>
+<span id="L307" class="line"><a href="#L307">307</a>   rw [AffineMap.lineMap_apply, vadd_vsub_assoc, vsub_self, add_zero, smul_smul,</span>
+<span id="L308" class="line"><a href="#L308">308</a>     inv_mul_cancel₀ hr0&#x27;, one_smul]</span>
+<span id="L309" class="line"><a href="#L309">309</a> </span>
+<span id="L310" class="line"><a href="#L310">310</a> /-- If the second of three points is strictly between the other two, the angle at the first point</span>
+<span id="L311" class="line"><a href="#L311">311</a> is zero. -/</span>
+<span id="L312" class="line"><a href="#L312">312</a> theorem _root_.Sbtw.angle₂₁₃_eq_zero {p₁ p₂ p₃ : P} (h : Sbtw ℝ p₁ p₂ p₃) : ∠ p₂ p₁ p₃ = 0 :=</span>
+<span id="L313" class="line"><a href="#L313">313</a>   h.wbtw.angle₂₁₃_eq_zero_of_ne h.ne_left</span>
+<span id="L314" class="line"><a href="#L314">314</a> </span>
+<span id="L315" class="line"><a href="#L315">315</a> /-- If the second of three points is weakly between the other two, and not equal to the first,</span>
+<span id="L316" class="line"><a href="#L316">316</a> the angle at the first point (reversed) is zero. -/</span>
+<span id="L317" class="line"><a href="#L317">317</a> theorem _root_.Wbtw.angle₃₁₂_eq_zero_of_ne {p₁ p₂ p₃ : P} (h : Wbtw ℝ p₁ p₂ p₃) (hp₂p₁ : p₂ ≠ p₁) :</span>
+<span id="L318" class="line"><a href="#L318">318</a>     ∠ p₃ p₁ p₂ = 0 := by rw [← h.angle₂₁₃_eq_zero_of_ne hp₂p₁, angle_comm]</span>
+<span id="L319" class="line"><a href="#L319">319</a> </span>
+<span id="L320" class="line"><a href="#L320">320</a> /-- If the second of three points is strictly between the other two, the angle at the first point</span>
+<span id="L321" class="line"><a href="#L321">321</a> (reversed) is zero. -/</span>
+<span id="L322" class="line"><a href="#L322">322</a> theorem _root_.Sbtw.angle₃₁₂_eq_zero {p₁ p₂ p₃ : P} (h : Sbtw ℝ p₁ p₂ p₃) : ∠ p₃ p₁ p₂ = 0 :=</span>
+<span id="L323" class="line"><a href="#L323">323</a>   h.wbtw.angle₃₁₂_eq_zero_of_ne h.ne_left</span>
+<span id="L324" class="line"><a href="#L324">324</a> </span>
+<span id="L325" class="line"><a href="#L325">325</a> /-- If the second of three points is weakly between the other two, and not equal to the third,</span>
+<span id="L326" class="line"><a href="#L326">326</a> the angle at the third point is zero. -/</span>
+<span id="L327" class="line"><a href="#L327">327</a> theorem _root_.Wbtw.angle₂₃₁_eq_zero_of_ne {p₁ p₂ p₃ : P} (h : Wbtw ℝ p₁ p₂ p₃) (hp₂p₃ : p₂ ≠ p₃) :</span>
+<span id="L328" class="line"><a href="#L328">328</a>     ∠ p₂ p₃ p₁ = 0 :=</span>
+<span id="L329" class="line"><a href="#L329">329</a>   h.symm.angle₂₁₃_eq_zero_of_ne hp₂p₃</span>
+<span id="L330" class="line"><a href="#L330">330</a> </span>
+<span id="L331" class="line"><a href="#L331">331</a> /-- If the second of three points is strictly between the other two, the angle at the third point</span>
+<span id="L332" class="line"><a href="#L332">332</a> is zero. -/</span>
+<span id="L333" class="line"><a href="#L333">333</a> theorem _root_.Sbtw.angle₂₃₁_eq_zero {p₁ p₂ p₃ : P} (h : Sbtw ℝ p₁ p₂ p₃) : ∠ p₂ p₃ p₁ = 0 :=</span>
+<span id="L334" class="line"><a href="#L334">334</a>   h.wbtw.angle₂₃₁_eq_zero_of_ne h.ne_right</span>
+<span id="L335" class="line"><a href="#L335">335</a> </span>
+<span id="L336" class="line"><a href="#L336">336</a> /-- If the second of three points is weakly between the other two, and not equal to the third,</span>
+<span id="L337" class="line"><a href="#L337">337</a> the angle at the third point (reversed) is zero. -/</span>
+<span id="L338" class="line"><a href="#L338">338</a> theorem _root_.Wbtw.angle₁₃₂_eq_zero_of_ne {p₁ p₂ p₃ : P} (h : Wbtw ℝ p₁ p₂ p₃) (hp₂p₃ : p₂ ≠ p₃) :</span>
+<span id="L339" class="line"><a href="#L339">339</a>     ∠ p₁ p₃ p₂ = 0 :=</span>
+<span id="L340" class="line"><a href="#L340">340</a>   h.symm.angle₃₁₂_eq_zero_of_ne hp₂p₃</span>
+<span id="L341" class="line"><a href="#L341">341</a> </span>
+<span id="L342" class="line"><a href="#L342">342</a> /-- If the second of three points is strictly between the other two, the angle at the third point</span>
+<span id="L343" class="line"><a href="#L343">343</a> (reversed) is zero. -/</span>
+<span id="L344" class="line"><a href="#L344">344</a> theorem _root_.Sbtw.angle₁₃₂_eq_zero {p₁ p₂ p₃ : P} (h : Sbtw ℝ p₁ p₂ p₃) : ∠ p₁ p₃ p₂ = 0 :=</span>
+<span id="L345" class="line"><a href="#L345">345</a>   h.wbtw.angle₁₃₂_eq_zero_of_ne h.ne_right</span>
+<span id="L346" class="line"><a href="#L346">346</a> </span>
+<span id="L347" class="line"><a href="#L347">347</a> /-- The angle between three points is zero if and only if one of the first and third points is</span>
+<span id="L348" class="line"><a href="#L348">348</a> weakly between the other two, and not equal to the second. -/</span>
+<span id="L349" class="line"><a href="#L349">349</a> theorem angle_eq_zero_iff_ne_and_wbtw {p₁ p₂ p₃ : P} :</span>
+<span id="L350" class="line"><a href="#L350">350</a>     ∠ p₁ p₂ p₃ = 0 ↔ p₁ ≠ p₂ ∧ Wbtw ℝ p₂ p₁ p₃ ∨ p₃ ≠ p₂ ∧ Wbtw ℝ p₂ p₃ p₁ := by</span>
+<span id="L351" class="line"><a href="#L351">351</a>   constructor</span>
+<span id="L352" class="line"><a href="#L352">352</a>   · rw [angle, angle_eq_zero_iff]</span>
+<span id="L353" class="line"><a href="#L353">353</a>     rintro ⟨hp₁p₂, r, hr0, hp₃p₂⟩</span>
+<span id="L354" class="line"><a href="#L354">354</a>     rcases le_or_gt 1 r with (hr1 | hr1)</span>
+<span id="L355" class="line"><a href="#L355">355</a>     · refine Or.inl ⟨vsub_ne_zero.1 hp₁p₂, r⁻¹, ⟨(inv_pos.2 hr0).le, inv_le_one_of_one_le₀ hr1⟩, ?_⟩</span>
+<span id="L356" class="line"><a href="#L356">356</a>       rw [AffineMap.lineMap_apply, hp₃p₂, smul_smul, inv_mul_cancel₀ hr0.ne.symm, one_smul,</span>
+<span id="L357" class="line"><a href="#L357">357</a>         vsub_vadd]</span>
+<span id="L358" class="line"><a href="#L358">358</a>     · refine Or.inr ⟨?_, r, ⟨hr0.le, hr1.le⟩, ?_⟩</span>
+<span id="L359" class="line"><a href="#L359">359</a>       · rw [← @vsub_ne_zero V, hp₃p₂, smul_ne_zero_iff]</span>
+<span id="L360" class="line"><a href="#L360">360</a>         exact ⟨hr0.ne.symm, hp₁p₂⟩</span>
+<span id="L361" class="line"><a href="#L361">361</a>       · rw [AffineMap.lineMap_apply, ← hp₃p₂, vsub_vadd]</span>
+<span id="L362" class="line"><a href="#L362">362</a>   · rintro (⟨hp₁p₂, h⟩ | ⟨hp₃p₂, h⟩)</span>
+<span id="L363" class="line"><a href="#L363">363</a>     · exact h.angle₂₁₃_eq_zero_of_ne hp₁p₂</span>
+<span id="L364" class="line"><a href="#L364">364</a>     · exact h.angle₃₁₂_eq_zero_of_ne hp₃p₂</span>
+<span id="L365" class="line"><a href="#L365">365</a> </span>
+<span id="L366" class="line"><a href="#L366">366</a> /-- The angle between three points is zero if and only if one of the first and third points is</span>
+<span id="L367" class="line"><a href="#L367">367</a> strictly between the other two, or those two points are equal but not equal to the second. -/</span>
+<span id="L368" class="line"><a href="#L368">368</a> theorem angle_eq_zero_iff_eq_and_ne_or_sbtw {p₁ p₂ p₃ : P} :</span>
+<span id="L369" class="line"><a href="#L369">369</a>     ∠ p₁ p₂ p₃ = 0 ↔ p₁ = p₃ ∧ p₁ ≠ p₂ ∨ Sbtw ℝ p₂ p₁ p₃ ∨ Sbtw ℝ p₂ p₃ p₁ := by</span>
+<span id="L370" class="line"><a href="#L370">370</a>   rw [angle_eq_zero_iff_ne_and_wbtw]</span>
+<span id="L371" class="line"><a href="#L371">371</a>   by_cases hp₁p₂ : p₁ = p₂; · simp [hp₁p₂]</span>
+<span id="L372" class="line"><a href="#L372">372</a>   by_cases hp₁p₃ : p₁ = p₃; · simp [hp₁p₃]</span>
+<span id="L373" class="line"><a href="#L373">373</a>   by_cases hp₃p₂ : p₃ = p₂; · simp [hp₃p₂]</span>
+<span id="L374" class="line"><a href="#L374">374</a>   simp [hp₁p₂, hp₁p₃, Ne.symm hp₁p₃, Sbtw, hp₃p₂]</span>
+<span id="L375" class="line"><a href="#L375">375</a> </span>
+<span id="L376" class="line"><a href="#L376">376</a> /-- An Unoriented angle is unchanged by replacing the third point by one strictly further away on</span>
+<span id="L377" class="line"><a href="#L377">377</a> the same ray. -/</span>
+<span id="L378" class="line"><a href="#L378">378</a> theorem _root_.Sbtw.angle_eq_right {p₂ p₃ p : P} (p₁ : P) (h : Sbtw ℝ p₂ p₃ p) :</span>
+<span id="L379" class="line"><a href="#L379">379</a>     ∠ p₁ p₂ p₃ = ∠ p₁ p₂ p :=</span>
+<span id="L380" class="line"><a href="#L380">380</a>   angle_eq_angle_of_angle_eq_pi _ h.angle₁₂₃_eq_pi</span>
+<span id="L381" class="line"><a href="#L381">381</a> </span>
+<span id="L382" class="line"><a href="#L382">382</a> /-- An Unoriented angle is unchanged by replacing the first point by one strictly further away on</span>
+<span id="L383" class="line"><a href="#L383">383</a> the same ray. -/</span>
+<span id="L384" class="line"><a href="#L384">384</a> theorem _root_.Sbtw.angle_eq_left {p₁ p p₂ : P} (p₃ : P) (h : Sbtw ℝ p₂ p₁ p) :</span>
+<span id="L385" class="line"><a href="#L385">385</a>     ∠ p₁ p₂ p₃ = ∠ p p₂ p₃ := by</span>
+<span id="L386" class="line"><a href="#L386">386</a>   simpa only [angle_comm] using h.angle_eq_right p₃</span>
+<span id="L387" class="line"><a href="#L387">387</a> </span>
+<span id="L388" class="line"><a href="#L388">388</a> /-- An Unoriented angle is unchanged by replacing the third point by one weakly further away on the</span>
+<span id="L389" class="line"><a href="#L389">389</a> same ray. -/</span>
+<span id="L390" class="line"><a href="#L390">390</a> theorem _root_.Wbtw.angle_eq_right {p₂ p₃ p : P} (p₁ : P) (h : Wbtw ℝ p₂ p₃ p) (hp₃p₂ : p₃ ≠ p₂) :</span>
+<span id="L391" class="line"><a href="#L391">391</a>     ∠ p₁ p₂ p₃ = ∠ p₁ p₂ p := by</span>
+<span id="L392" class="line"><a href="#L392">392</a>   by_cases hp₃p : p₃ = p; · simp [hp₃p]</span>
+<span id="L393" class="line"><a href="#L393">393</a>   exact Sbtw.angle_eq_right _ ⟨h, hp₃p₂, hp₃p⟩</span>
+<span id="L394" class="line"><a href="#L394">394</a> </span>
+<span id="L395" class="line"><a href="#L395">395</a> /-- An Unoriented angle is unchanged by replacing the first point by one weakly further away on the</span>
+<span id="L396" class="line"><a href="#L396">396</a> same ray. -/</span>
+<span id="L397" class="line"><a href="#L397">397</a> theorem _root_.Wbtw.angle_eq_left {p₁ p p₂ : P} (p₃ : P) (h : Wbtw ℝ p₂ p₁ p) (hp₁p₂ : p₁ ≠ p₂) :</span>
+<span id="L398" class="line"><a href="#L398">398</a>     ∠ p₁ p₂ p₃ = ∠ p p₂ p₃ := by</span>
+<span id="L399" class="line"><a href="#L399">399</a>   simpa only [angle_comm] using h.angle_eq_right p₃ hp₁p₂</span>
+<span id="L400" class="line"><a href="#L400">400</a> </span>
+<span id="L401" class="line"><a href="#L401">401</a> lemma angle_pointReflection_right {p₁ p₂ p₃ : P} :</span>
+<span id="L402" class="line"><a href="#L402">402</a>     ∠ p₁ p₂ (AffineEquiv.pointReflection ℝ p₂ p₃) = π - ∠ p₁ p₂ p₃ := by</span>
+<span id="L403" class="line"><a href="#L403">403</a>   by_cases! h₃₂ : p₃ = p₂</span>
+<span id="L404" class="line"><a href="#L404">404</a>   · simp [h₃₂]</span>
+<span id="L405" class="line"><a href="#L405">405</a>     field</span>
+<span id="L406" class="line"><a href="#L406">406</a>   rw [eq_sub_iff_add_eq]</span>
+<span id="L407" class="line"><a href="#L407">407</a>   apply EuclideanGeometry.angle_add_angle_eq_pi_of_angle_eq_pi</span>
+<span id="L408" class="line"><a href="#L408">408</a>   exact Sbtw.angle₁₂₃_eq_pi &lt;| (sbtw_pointReflection_of_ne ℝ h₃₂.symm).symm</span>
+<span id="L409" class="line"><a href="#L409">409</a> </span>
+<span id="L410" class="line"><a href="#L410">410</a> /-- Three points are collinear if and only if the first or third point equals the second or the</span>
+<span id="L411" class="line"><a href="#L411">411</a> angle between them is 0 or π. -/</span>
+<span id="L412" class="line"><a href="#L412">412</a> theorem collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi {p₁ p₂ p₃ : P} :</span>
+<span id="L413" class="line"><a href="#L413">413</a>     Collinear ℝ ({p₁, p₂, p₃} : Set P) ↔ p₁ = p₂ ∨ p₃ = p₂ ∨ ∠ p₁ p₂ p₃ = 0 ∨ ∠ p₁ p₂ p₃ = π := by</span>
+<span id="L414" class="line"><a href="#L414">414</a>   refine ⟨fun h =&gt; ?_, fun h =&gt; ?_⟩</span>
+<span id="L415" class="line"><a href="#L415">415</a>   · replace h := h.wbtw_or_wbtw_or_wbtw</span>
+<span id="L416" class="line"><a href="#L416">416</a>     by_cases h₁₂ : p₁ = p₂</span>
+<span id="L417" class="line"><a href="#L417">417</a>     · exact Or.inl h₁₂</span>
+<span id="L418" class="line"><a href="#L418">418</a>     by_cases h₃₂ : p₃ = p₂</span>
+<span id="L419" class="line"><a href="#L419">419</a>     · exact Or.inr (Or.inl h₃₂)</span>
+<span id="L420" class="line"><a href="#L420">420</a>     rw [or_iff_right h₁₂, or_iff_right h₃₂]</span>
+<span id="L421" class="line"><a href="#L421">421</a>     rcases h with (h | h | h)</span>
+<span id="L422" class="line"><a href="#L422">422</a>     · exact Or.inr (angle_eq_pi_iff_sbtw.2 ⟨h, Ne.symm h₁₂, Ne.symm h₃₂⟩)</span>
+<span id="L423" class="line"><a href="#L423">423</a>     · exact Or.inl (h.angle₃₁₂_eq_zero_of_ne h₃₂)</span>
+<span id="L424" class="line"><a href="#L424">424</a>     · exact Or.inl (h.angle₂₃₁_eq_zero_of_ne h₁₂)</span>
+<span id="L425" class="line"><a href="#L425">425</a>   · rcases h with (rfl | rfl | h | h)</span>
+<span id="L426" class="line"><a href="#L426">426</a>     · simpa using collinear_pair ℝ p₁ p₃</span>
+<span id="L427" class="line"><a href="#L427">427</a>     · simpa using collinear_pair ℝ p₁ p₃</span>
+<span id="L428" class="line"><a href="#L428">428</a>     · rw [angle_eq_zero_iff_ne_and_wbtw] at h</span>
+<span id="L429" class="line"><a href="#L429">429</a>       rcases h with (⟨-, h⟩ | ⟨-, h⟩)</span>
+<span id="L430" class="line"><a href="#L430">430</a>       · rw [Set.insert_comm]</span>
+<span id="L431" class="line"><a href="#L431">431</a>         exact h.collinear</span>
+<span id="L432" class="line"><a href="#L432">432</a>       · rw [Set.insert_comm, Set.pair_comm]</span>
+<span id="L433" class="line"><a href="#L433">433</a>         exact h.collinear</span>
+<span id="L434" class="line"><a href="#L434">434</a>     · rw [angle_eq_pi_iff_sbtw] at h</span>
+<span id="L435" class="line"><a href="#L435">435</a>       exact h.wbtw.collinear</span>
+<span id="L436" class="line"><a href="#L436">436</a> </span>
+<span id="L437" class="line"><a href="#L437">437</a> /-- If the angle between three points is 0, they are collinear. -/</span>
+<span id="L438" class="line"><a href="#L438">438</a> theorem collinear_of_angle_eq_zero {p₁ p₂ p₃ : P} (h : ∠ p₁ p₂ p₃ = 0) :</span>
+<span id="L439" class="line"><a href="#L439">439</a>     Collinear ℝ ({p₁, p₂, p₃} : Set P) :=</span>
+<span id="L440" class="line"><a href="#L440">440</a>   collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi.2 &lt;| Or.inr &lt;| Or.inr &lt;| Or.inl h</span>
+<span id="L441" class="line"><a href="#L441">441</a> </span>
+<span id="L442" class="line"><a href="#L442">442</a> /-- If the angle between three points is π, they are collinear. -/</span>
+<span id="L443" class="line"><a href="#L443">443</a> theorem collinear_of_angle_eq_pi {p₁ p₂ p₃ : P} (h : ∠ p₁ p₂ p₃ = π) :</span>
+<span id="L444" class="line"><a href="#L444">444</a>     Collinear ℝ ({p₁, p₂, p₃} : Set P) :=</span>
+<span id="L445" class="line"><a href="#L445">445</a>   collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi.2 &lt;| Or.inr &lt;| Or.inr &lt;| Or.inr h</span>
+<span id="L446" class="line"><a href="#L446">446</a> </span>
+<span id="L447" class="line"><a href="#L447">447</a> /-- If three points are not collinear, the angle between them is nonzero. -/</span>
+<span id="L448" class="line"><a href="#L448">448</a> theorem angle_ne_zero_of_not_collinear {p₁ p₂ p₃ : P} (h : ¬Collinear ℝ ({p₁, p₂, p₃} : Set P)) :</span>
+<span id="L449" class="line"><a href="#L449">449</a>     ∠ p₁ p₂ p₃ ≠ 0 :=</span>
+<span id="L450" class="line"><a href="#L450">450</a>   mt collinear_of_angle_eq_zero h</span>
+<span id="L451" class="line"><a href="#L451">451</a> </span>
+<span id="L452" class="line"><a href="#L452">452</a> /-- If three points are not collinear, the angle between them is not π. -/</span>
+<span id="L453" class="line"><a href="#L453">453</a> theorem angle_ne_pi_of_not_collinear {p₁ p₂ p₃ : P} (h : ¬Collinear ℝ ({p₁, p₂, p₃} : Set P)) :</span>
+<span id="L454" class="line"><a href="#L454">454</a>     ∠ p₁ p₂ p₃ ≠ π :=</span>
+<span id="L455" class="line"><a href="#L455">455</a>   mt collinear_of_angle_eq_pi h</span>
+<span id="L456" class="line"><a href="#L456">456</a> </span>
+<span id="L457" class="line"><a href="#L457">457</a> /-- If three points are not collinear, the angle between them is positive. -/</span>
+<span id="L458" class="line"><a href="#L458">458</a> theorem angle_pos_of_not_collinear {p₁ p₂ p₃ : P} (h : ¬Collinear ℝ ({p₁, p₂, p₃} : Set P)) :</span>
+<span id="L459" class="line"><a href="#L459">459</a>     0 &lt; ∠ p₁ p₂ p₃ :=</span>
+<span id="L460" class="line"><a href="#L460">460</a>   (angle_nonneg _ _ _).lt_of_ne (angle_ne_zero_of_not_collinear h).symm</span>
+<span id="L461" class="line"><a href="#L461">461</a> </span>
+<span id="L462" class="line"><a href="#L462">462</a> /-- If three points are not collinear, the angle between them is less than π. -/</span>
+<span id="L463" class="line"><a href="#L463">463</a> theorem angle_lt_pi_of_not_collinear {p₁ p₂ p₃ : P} (h : ¬Collinear ℝ ({p₁, p₂, p₃} : Set P)) :</span>
+<span id="L464" class="line"><a href="#L464">464</a>     ∠ p₁ p₂ p₃ &lt; π :=</span>
+<span id="L465" class="line"><a href="#L465">465</a>   (angle_le_pi _ _ _).lt_of_ne &lt;| angle_ne_pi_of_not_collinear h</span>
+<span id="L466" class="line"><a href="#L466">466</a> </span>
+<span id="L467" class="line"><a href="#L467">467</a> /-- The cosine of the angle between three points is 1 if and only if the angle is 0. -/</span>
+<span id="L468" class="line"><a href="#L468">468</a> nonrec theorem cos_eq_one_iff_angle_eq_zero {p₁ p₂ p₃ : P} :</span>
+<span id="L469" class="line"><a href="#L469">469</a>     Real.cos (∠ p₁ p₂ p₃) = 1 ↔ ∠ p₁ p₂ p₃ = 0 :=</span>
+<span id="L470" class="line"><a href="#L470">470</a>   cos_eq_one_iff_angle_eq_zero</span>
+<span id="L471" class="line"><a href="#L471">471</a> </span>
+<span id="L472" class="line"><a href="#L472">472</a> /-- The cosine of the angle between three points is 0 if and only if the angle is π / 2. -/</span>
+<span id="L473" class="line"><a href="#L473">473</a> nonrec theorem cos_eq_zero_iff_angle_eq_pi_div_two {p₁ p₂ p₃ : P} :</span>
+<span id="L474" class="line"><a href="#L474">474</a>     Real.cos (∠ p₁ p₂ p₃) = 0 ↔ ∠ p₁ p₂ p₃ = π / 2 :=</span>
+<span id="L475" class="line"><a href="#L475">475</a>   cos_eq_zero_iff_angle_eq_pi_div_two</span>
+<span id="L476" class="line"><a href="#L476">476</a> </span>
+<span id="L477" class="line"><a href="#L477">477</a> /-- The cosine of the angle between three points is -1 if and only if the angle is π. -/</span>
+<span id="L478" class="line"><a href="#L478">478</a> nonrec theorem cos_eq_neg_one_iff_angle_eq_pi {p₁ p₂ p₃ : P} :</span>
+<span id="L479" class="line"><a href="#L479">479</a>     Real.cos (∠ p₁ p₂ p₃) = -1 ↔ ∠ p₁ p₂ p₃ = π :=</span>
+<span id="L480" class="line"><a href="#L480">480</a>   cos_eq_neg_one_iff_angle_eq_pi</span>
+<span id="L481" class="line"><a href="#L481">481</a> </span>
+<span id="L482" class="line"><a href="#L482">482</a> /-- The sine of the angle between three points is 0 if and only if the angle is 0 or π. -/</span>
+<span id="L483" class="line"><a href="#L483">483</a> nonrec theorem sin_eq_zero_iff_angle_eq_zero_or_angle_eq_pi {p₁ p₂ p₃ : P} :</span>
+<span id="L484" class="line"><a href="#L484">484</a>     Real.sin (∠ p₁ p₂ p₃) = 0 ↔ ∠ p₁ p₂ p₃ = 0 ∨ ∠ p₁ p₂ p₃ = π :=</span>
+<span id="L485" class="line"><a href="#L485">485</a>   sin_eq_zero_iff_angle_eq_zero_or_angle_eq_pi</span>
+<span id="L486" class="line"><a href="#L486">486</a> </span>
+<span id="L487" class="line"><a href="#L487">487</a> /-- The sine of the angle between three points is 1 if and only if the angle is π / 2. -/</span>
+<span id="L488" class="line"><a href="#L488">488</a> nonrec theorem sin_eq_one_iff_angle_eq_pi_div_two {p₁ p₂ p₃ : P} :</span>
+<span id="L489" class="line"><a href="#L489">489</a>     Real.sin (∠ p₁ p₂ p₃) = 1 ↔ ∠ p₁ p₂ p₃ = π / 2 :=</span>
+<span id="L490" class="line"><a href="#L490">490</a>   sin_eq_one_iff_angle_eq_pi_div_two</span>
+<span id="L491" class="line"><a href="#L491">491</a> </span>
+<span id="L492" class="line"><a href="#L492">492</a> /-- Three points are collinear if and only if the first or third point equals the second or</span>
+<span id="L493" class="line"><a href="#L493">493</a> the sine of the angle between three points is zero. -/</span>
+<span id="L494" class="line"><a href="#L494">494</a> theorem collinear_iff_eq_or_eq_or_sin_eq_zero {p₁ p₂ p₃ : P} :</span>
+<span id="L495" class="line"><a href="#L495">495</a>     Collinear ℝ ({p₁, p₂, p₃} : Set P) ↔ p₁ = p₂ ∨ p₃ = p₂ ∨ Real.sin (∠ p₁ p₂ p₃) = 0 := by</span>
+<span id="L496" class="line"><a href="#L496">496</a>   rw [sin_eq_zero_iff_angle_eq_zero_or_angle_eq_pi,</span>
+<span id="L497" class="line"><a href="#L497">497</a>     collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi]</span>
+<span id="L498" class="line"><a href="#L498">498</a> </span>
+<span id="L499" class="line"><a href="#L499">499</a> /-- If three points are not collinear, the sine of the angle between them is positive. -/</span>
+<span id="L500" class="line"><a href="#L500">500</a> theorem sin_pos_of_not_collinear {p₁ p₂ p₃ : P} (h : ¬Collinear ℝ ({p₁, p₂, p₃} : Set P)) :</span>
+<span id="L501" class="line"><a href="#L501">501</a>     0 &lt; Real.sin (∠ p₁ p₂ p₃) :=</span>
+<span id="L502" class="line"><a href="#L502">502</a>   Real.sin_pos_of_pos_of_lt_pi (angle_pos_of_not_collinear h) (angle_lt_pi_of_not_collinear h)</span>
+<span id="L503" class="line"><a href="#L503">503</a> </span>
+<span id="L504" class="line"><a href="#L504">504</a> /-- If three points are not collinear, the sine of the angle between them is nonzero. -/</span>
+<span id="L505" class="line"><a href="#L505">505</a> theorem sin_ne_zero_of_not_collinear {p₁ p₂ p₃ : P} (h : ¬Collinear ℝ ({p₁, p₂, p₃} : Set P)) :</span>
+<span id="L506" class="line"><a href="#L506">506</a>     Real.sin (∠ p₁ p₂ p₃) ≠ 0 :=</span>
+<span id="L507" class="line"><a href="#L507">507</a>   ne_of_gt (sin_pos_of_not_collinear h)</span>
+<span id="L508" class="line"><a href="#L508">508</a> </span>
+<span id="L509" class="line"><a href="#L509">509</a> /-- If the sine of the angle between three points is 0, they are collinear. -/</span>
+<span id="L510" class="line"><a href="#L510">510</a> theorem collinear_of_sin_eq_zero {p₁ p₂ p₃ : P} (h : Real.sin (∠ p₁ p₂ p₃) = 0) :</span>
+<span id="L511" class="line"><a href="#L511">511</a>     Collinear ℝ ({p₁, p₂, p₃} : Set P) := by</span>
+<span id="L512" class="line"><a href="#L512">512</a>   revert h</span>
+<span id="L513" class="line"><a href="#L513">513</a>   contrapose</span>
+<span id="L514" class="line"><a href="#L514">514</a>   exact sin_ne_zero_of_not_collinear</span>
+<span id="L515" class="line"><a href="#L515">515</a> </span>
+<span id="L516" class="line"><a href="#L516">516</a> end EuclideanGeometry</span></pre></html>
