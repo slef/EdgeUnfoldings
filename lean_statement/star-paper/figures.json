@@ -1,0 +1,6 @@
+{
+  "2": "The star unfolding from a point. a The polyhedron, the source point x, and the shortest paths from vertices to the source point. b The corresponding star unfolding. The cut locus is the internal tree drawn with solid grey edges. The kites are shown with dashed lines. The kite on cut locus edge e is shaded, and its source angle α(e) is indicated. Note that the unfolding shows the inside surface of the polyhedron.",
+  "3": "Illustration for the proof of Lemma 2. Angle θ is in the range [π/2 + α(e), 3π/2] and thus the outer leg of W lies between the tangents (dashed) to the circular arcs aₚ and a_q.",
+  "4": "Kite kᵢ₋₁ (shaded) and the corresponding W-wedge Wᵢ₋₁ (lightly shaded). In the base case, kite k₁ is outside the W-wedge W₀ (very lightly shaded), and W₁ contains k₁ ∪ W₀. To prove by induction that Wᵢ contains all previous kites, we expand Wᵢ₋₁, first rotating the legs about pᵢ₋₁ to the W-wedge W′ᵢ (dashed line), and then moving the center point to pᵢ to obtain Wᵢ. Note that although the figure shows kites kᵢ₋₁ and kᵢ sharing only a vertex, in non-degenerate situations cut locus vertices have degree 3, and two consecutive kites will share an edge as well.",
+  "5": "Old sectors of emptiness (light grey) established by Aronov and O’Rourke and new empty regions (light grey + dark grey) established by Lemma 3."
+}

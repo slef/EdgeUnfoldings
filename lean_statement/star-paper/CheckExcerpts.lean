@@ -1,0 +1,82 @@
+import SixVertexUnfolding
+#check @SixVertexUnfolding.SmallGraphs.SixGraphKind
+#check @SixVertexUnfolding.ConvexPolyhedron.cutSet
+#check @SixVertexUnfolding.ConvexPolyhedron.UncutSurface
+#check @SixVertexUnfolding.ConvexPolyhedron.original_route_subset_starCuts
+#print axioms SixVertexUnfolding.ConvexPolyhedron.original_route_subset_starCuts
+#check @SixVertexUnfolding.ConvexPolyhedron.starCuts
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_star_embedding
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_star_embedding
+#check @SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel
+#check @SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel.sourceAngle
+#check @SixVertexUnfolding.ConvexPolyhedron.CutEdgeTriangles
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.exists_cut_edge_triangles
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.exists_cut_edge_triangles
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cutSet_eq_closure_multiple
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cutSet_eq_closure_multiple
+#check @SixVertexUnfolding.ConvexPolyhedron.CutTreeChain.end_kites_nonoverlap
+#print axioms SixVertexUnfolding.ConvexPolyhedron.CutTreeChain.end_kites_nonoverlap
+#check @SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.incident_model_angles_cover_cone
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.incident_model_angles_cover_cone
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.sum_cutTreeCurvature
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.sum_cutTreeCurvature
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.half_source_angle_sum_lt_pi
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.half_source_angle_sum_lt_pi
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.source_angle_sum_le
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.source_angle_sum_le
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cut_tree_triangles_cover
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cut_tree_triangles_cover
+#check @SixVertexUnfolding.ConvexPolyhedron
+#check @SixVertexUnfolding.ConvexPolyhedron.body
+#check @SixVertexUnfolding.ConvexPolyhedron.EmbeddedCutGraph
+#check @SixVertexUnfolding.Wedge.RegionStep
+#check @SixVertexUnfolding.Wedge.finite_chain_endpoint_separation
+#print axioms SixVertexUnfolding.Wedge.finite_chain_endpoint_separation
+#check @SixVertexUnfolding.Wedge.finite_chain_separation
+#print axioms SixVertexUnfolding.Wedge.finite_chain_separation
+#check @SixVertexUnfolding.Wedge.gapKite
+#check @SixVertexUnfolding.Wedge.gap_rotate_and_move_with_sources
+#print axioms SixVertexUnfolding.Wedge.gap_rotate_and_move_with_sources
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.global_kites_nonoverlap
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.global_kites_nonoverlap
+#check @SixVertexUnfolding.ConvexPolyhedron.IncidentTriangles.initial_kite_in_wedge
+#print axioms SixVertexUnfolding.ConvexPolyhedron.IncidentTriangles.initial_kite_in_wedge
+#check @SixVertexUnfolding.ConvexPolyhedron.JunctionFan.wedge_step_with_parameters
+#print axioms SixVertexUnfolding.ConvexPolyhedron.JunctionFan.wedge_step_with_parameters
+#check @SixVertexUnfolding.ConvexPolyhedron.multipleRouteLocus
+#check @SixVertexUnfolding.ConvexPolyhedron.CutLocusTree
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_uncut_surface_pathConnected
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_uncut_surface_pathConnected
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph
+#check @SixVertexUnfolding.ConvexPolyhedron.small_cut_tree_open_edge_two_routes
+#print axioms SixVertexUnfolding.ConvexPolyhedron.small_cut_tree_open_edge_two_routes
+#check @SixVertexUnfolding.ConvexPolyhedron.small_exists_regular_cut_tree
+#print axioms SixVertexUnfolding.ConvexPolyhedron.small_exists_regular_cut_tree
+#check @SixVertexUnfolding.ConvexPolyhedron.small_shortest_routes_agree_of_meeting
+#print axioms SixVertexUnfolding.ConvexPolyhedron.small_shortest_routes_agree_of_meeting
+#check @SixVertexUnfolding.ConvexPolyhedron.small_geodesic_proper_prefix_outside_cutSet
+#print axioms SixVertexUnfolding.ConvexPolyhedron.small_geodesic_proper_prefix_outside_cutSet
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_locally_isometric
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_locally_isometric
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_isOpenEmbedding
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_isOpenEmbedding
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_frontier_eq_segments
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_frontier_eq_segments
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_source_leaf_iff_original
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_source_leaf_iff_original
+#check @SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan.totalAngle
+#check @SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan.totalAngle_lt_two_pi
+#print axioms SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan.totalAngle_lt_two_pi
+#check @SixVertexUnfolding.Wedge.kite_subset_region
+#print axioms SixVertexUnfolding.Wedge.kite_subset_region
+#check @SixVertexUnfolding.Wedge.move_root
+#print axioms SixVertexUnfolding.Wedge.move_root
+#check @SixVertexUnfolding.Wedge.next_kite_outside
+#print axioms SixVertexUnfolding.Wedge.next_kite_outside
+#check @SixVertexUnfolding.Wedge.region
+#check @SixVertexUnfolding.Wedge.polarRegion
+#check @SixVertexUnfolding.Wedge.rotate_arms
+#print axioms SixVertexUnfolding.Wedge.rotate_arms
+#check @SixVertexUnfolding.Wedge.ArmCoordinates.rotate_and_move
+#print axioms SixVertexUnfolding.Wedge.ArmCoordinates.rotate_and_move

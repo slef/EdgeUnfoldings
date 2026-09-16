@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SmallPolyhedronShortestRoutes.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SmallPolyhedronShortestRoutes.lean</h1><p>SixVertexUnfolding/Geometry/SmallPolyhedronShortestRoutes.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.SmallPolyhedronVertexAvoidance</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> import SixVertexUnfolding.Geometry.FinitelyManyShortestRoutes</span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> import SixVertexUnfolding.Geometry.ShortestFiniteDevelopments</span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> import SixVertexUnfolding.Geometry.ShortestSourceImages</span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> import SixVertexUnfolding.Geometry.GeodesicFibers</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> </span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> /-! Apply all-vertex avoidance to the existing finite-development and</span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> nonbranching arguments. These results now cover the universal-vertex</span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> solids as well as the earlier four canonical graph models. -/</span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> </span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> </span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> open Set</span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a> </span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a> variable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)</span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a>   {a b : Space}</span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a> </span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a> include size small_faces in</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a> /-- Distinct endpoints admit only finitely many normalized shortest routes. -/</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a> theorem small_finite_shortest_routes (different : a ≠ b) :</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a>     {path : P.SurfacePath a b | path.IsShortest ∧ path.length ≠ ⊤ ∧</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a>       LipschitzWith path.length.toNNReal path.curve}.Finite := by</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>   apply (P.finite_vertex_free_shortest_routes a b).subset</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>   intro path hp</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>   exact ⟨hp.1, hp.2.1, hp.2.2,</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a>     small_shortest_lipschitz_avoids_vertices size small_faces path different hp.1 hp.2.1 hp.2.2⟩</span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a> </span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a> include size small_faces in</span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a> /-- Each compact normalized geodesic fiber between distinct endpoints is finite. -/</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a> theorem small_geodesicFiber_finite (a b : frontier P.body) (different : a ≠ b) :</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>     (P.geodesicFiber a b).Finite := by</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a>   have paths := small_finite_shortest_routes size small_faces</span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a>     (fun h : (a : Space) = (b : Space) =&gt; different (Subtype.ext h))</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a>   apply (paths.image SurfacePath.boundaryCurve).subset</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a>   intro f hf</span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a>   obtain ⟨path, shortest, finite, speed, same⟩ := P.geodesicFiber_path a b f hf</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a>   exact ⟨path, ⟨shortest, finite, speed⟩, same⟩</span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a> </span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a> include size small_faces in</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a> /-- Intrinsic distance is one of the finite original-face development formulas. -/</span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a> theorem small_surfaceDist_mem_developed_values</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a>     (ha : a ∈ frontier P.body) (hb : b ∈ frontier P.body) (different : a ≠ b) :</span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a>     P.surfaceDist a b ∈ P.developedDistanceValues a b := by</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a>   obtain ⟨path, shortest, finite, speed, _, avoids⟩ :=</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a>     small_exists_vertex_avoiding_shortest_path size small_faces ha hb different</span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a>   exact path.surfaceDist_mem_developed_values shortest finite speed avoids</span>
+<span id="L49" class="line"><a href="#L49" aria-label="Line 49">49</a> </span>
+<span id="L50" class="line"><a href="#L50" aria-label="Line 50">50</a> include size small_faces in</span>
+<span id="L51" class="line"><a href="#L51" aria-label="Line 51">51</a> /-- At a unique-face target, one of the finite source copies gives the exact distance. -/</span>
+<span id="L52" class="line"><a href="#L52" aria-label="Line 52">52</a> theorem small_exists_source_image</span>
+<span id="L53" class="line"><a href="#L53" aria-label="Line 53">53</a>     (ha : a ∈ frontier P.body) (hb : b ∈ frontier P.body) (different : a ≠ b)</span>
+<span id="L54" class="line"><a href="#L54" aria-label="Line 54">54</a>     (F : P.Face) (unique : ∀ G : P.Face, b ∈ G.val → G = F) :</span>
+<span id="L55" class="line"><a href="#L55" aria-label="Line 55">55</a>     ∃ source ∈ P.sourceImages a F, P.surfaceDist a b = dist source (P.faceCoordinates F b) := by</span>
+<span id="L56" class="line"><a href="#L56" aria-label="Line 56">56</a>   obtain ⟨path, shortest, finite, speed, _, avoids⟩ :=</span>
+<span id="L57" class="line"><a href="#L57" aria-label="Line 57">57</a>     small_exists_vertex_avoiding_shortest_path size small_faces ha hb different</span>
+<span id="L58" class="line"><a href="#L58" aria-label="Line 58">58</a>   exact path.exists_source_image shortest finite speed avoids F unique</span>
+<span id="L59" class="line"><a href="#L59" aria-label="Line 59">59</a> </span>
+<span id="L60" class="line"><a href="#L60" aria-label="Line 60">60</a> include size small_faces in</span>
+<span id="L61" class="line"><a href="#L61" aria-label="Line 61">61</a> /-- Two shortest routes with the same endpoints coincide if they meet internally. -/</span>
+<span id="L62" class="line"><a href="#L62" aria-label="Line 62">62</a> theorem small_shortest_routes_agree_of_meeting</span>
+<span id="L63" class="line"><a href="#L63" aria-label="Line 63">63</a>     (first second : P.SurfacePath a b) (different : a ≠ b)</span>
+<span id="L64" class="line"><a href="#L64" aria-label="Line 64">64</a>     (first_shortest : first.IsShortest) (second_shortest : second.IsShortest)</span>
+<span id="L65" class="line"><a href="#L65" aria-label="Line 65">65</a>     (first_finite : first.length ≠ ⊤) (second_finite : second.length ≠ ⊤)</span>
+<span id="L66" class="line"><a href="#L66" aria-label="Line 66">66</a>     (first_speed : LipschitzWith first.length.toNNReal first.curve)</span>
+<span id="L67" class="line"><a href="#L67" aria-label="Line 67">67</a>     (second_speed : LipschitzWith second.length.toNNReal second.curve)</span>
+<span id="L68" class="line"><a href="#L68" aria-label="Line 68">68</a>     (m : unitInterval) (after_start : 0 &lt; m) (before_end : m &lt; 1)</span>
+<span id="L69" class="line"><a href="#L69" aria-label="Line 69">69</a>     (meet : first.curve m = second.curve m) : ∀ t, first.curve t = second.curve t :=</span>
+<span id="L70" class="line"><a href="#L70" aria-label="Line 70">70</a>   first.agree_of_interior_meeting second first_shortest second_shortest first_finite second_finite</span>
+<span id="L71" class="line"><a href="#L71" aria-label="Line 71">71</a>     first_speed second_speed</span>
+<span id="L72" class="line"><a href="#L72" aria-label="Line 72">72</a>     (small_shortest_lipschitz_avoids_vertices size small_faces first different first_shortest</span>
+<span id="L73" class="line"><a href="#L73" aria-label="Line 73">73</a>       first_finite first_speed) m after_start before_end meet</span>
+<span id="L74" class="line"><a href="#L74" aria-label="Line 74">74</a> </span>
+<span id="L75" class="line"><a href="#L75" aria-label="Line 75">75</a> include size small_faces in</span>
+<span id="L76" class="line"><a href="#L76" aria-label="Line 76">76</a> /-- Distinct shortest routes have disjoint open traces. -/</span>
+<span id="L77" class="line"><a href="#L77" aria-label="Line 77">77</a> theorem small_distinct_shortest_routes_disjoint</span>
+<span id="L78" class="line"><a href="#L78" aria-label="Line 78">78</a>     (first second : P.SurfacePath a b) (different : a ≠ b)</span>
+<span id="L79" class="line"><a href="#L79" aria-label="Line 79">79</a>     (first_shortest : first.IsShortest) (second_shortest : second.IsShortest)</span>
+<span id="L80" class="line"><a href="#L80" aria-label="Line 80">80</a>     (first_finite : first.length ≠ ⊤) (second_finite : second.length ≠ ⊤)</span>
+<span id="L81" class="line"><a href="#L81" aria-label="Line 81">81</a>     (first_speed : LipschitzWith first.length.toNNReal first.curve)</span>
+<span id="L82" class="line"><a href="#L82" aria-label="Line 82">82</a>     (second_speed : LipschitzWith second.length.toNNReal second.curve)</span>
+<span id="L83" class="line"><a href="#L83" aria-label="Line 83">83</a>     (distinct_routes : ¬ ∀ t, first.curve t = second.curve t) :</span>
+<span id="L84" class="line"><a href="#L84" aria-label="Line 84">84</a>     Disjoint (first.curve &#x27;&#x27; Ioo (0 : unitInterval) 1) (second.curve &#x27;&#x27; Ioo (0 : unitInterval) 1) :=</span>
+<span id="L85" class="line"><a href="#L85" aria-label="Line 85">85</a>   first.disjoint_open_traces second different first_shortest second_shortest first_finite second_finite</span>
+<span id="L86" class="line"><a href="#L86" aria-label="Line 86">86</a>     first_speed second_speed</span>
+<span id="L87" class="line"><a href="#L87" aria-label="Line 87">87</a>     (small_shortest_lipschitz_avoids_vertices size small_faces first different first_shortest</span>
+<span id="L88" class="line"><a href="#L88" aria-label="Line 88">88</a>       first_finite first_speed) distinct_routes</span>
+<span id="L89" class="line"><a href="#L89" aria-label="Line 89">89</a> </span>
+<span id="L90" class="line"><a href="#L90" aria-label="Line 90">90</a> end SixVertexUnfolding.ConvexPolyhedron</span>
+</pre></html>

@@ -1,0 +1,144 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WedgeRotation.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>WedgeRotation.lean</h1><p>SixVertexUnfolding/Geometry/WedgeRotation.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.WedgeRootMove</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> </span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> /-! A broken wedge arm meets each circle about its root exactly once.</span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> This gives an explicit polar description of the arm-rotation step.</span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> The outer ray must point away from the root; in Kiazyk&#x27;s notation this</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> is the condition `π/2 ≤ γ ≤ 3π/2`.</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> -/</span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> </span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> namespace SixVertexUnfolding.Wedge</span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> </span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> open Real Set</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> </span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> /-- Distance along an outward unit ray, from an elbow of radius `d`</span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a> to the circle of radius `ρ`. Here `(c,s)` is the ray&#x27;s unit direction</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a> relative to the radial direction of the elbow. -/</span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a> noncomputable def travel (d c s ρ : ℝ) : ℝ :=</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a>   sqrt (ρ ^ 2 - d ^ 2 * s ^ 2) - d * c</span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a> </span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a> /-- The square-root formula gives a nonnegative distance and a point on the circle. -/</span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a> theorem travel_spec {d c s ρ : ℝ} (dp : 0 &lt; d) (outward : 0 ≤ c)</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a>     (unit : c ^ 2 + s ^ 2 = 1) (outside : d ≤ ρ) :</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a>     0 ≤ travel d c s ρ ∧</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a>       (d + travel d c s ρ * c) ^ 2 + (travel d c s ρ * s) ^ 2 = ρ ^ 2 := by</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a>   have dc : 0 ≤ d * c := mul_nonneg dp.le outward</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>   have scaled : d ^ 2 * c ^ 2 + d ^ 2 * s ^ 2 = d ^ 2 := by</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>     nlinarith [congrArg (fun x : ℝ =&gt; d ^ 2 * x) unit]</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>   have radicand : 0 ≤ ρ ^ 2 - d ^ 2 * s ^ 2 := by nlinarith [sq_nonneg (d * c)]</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a>   have root_nonneg := sqrt_nonneg (ρ ^ 2 - d ^ 2 * s ^ 2)</span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a>   have root_square := sq_sqrt radicand</span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a>   have root_bound : d * c ≤ sqrt (ρ ^ 2 - d ^ 2 * s ^ 2) := by nlinarith</span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a>   refine ⟨sub_nonneg.mpr root_bound, ?_⟩</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a>   have scaled&#x27; := congrArg (fun x : ℝ =&gt; (travel d c s ρ) ^ 2 * x) unit</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>   have equation : (travel d c s ρ) ^ 2 + 2 * d * c * travel d c s ρ = ρ ^ 2 - d ^ 2 := by</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a>     unfold travel</span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a>     nlinarith</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a>   nlinarith</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a> </span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a> /-- A point on the right half of a circle has these exact Cartesian polar coordinates. -/</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a> private theorem polar_of_right_circle {ρ x y : ℝ} (rp : 0 &lt; ρ) (xp : 0 ≤ x)</span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a>     (circle : x ^ 2 + y ^ 2 = ρ ^ 2) :</span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a>     ρ * cos (arcsin (y / ρ)) = x ∧ ρ * sin (arcsin (y / ρ)) = y := by</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a>   have low : -1 ≤ y / ρ := (le_div_iff₀ rp).mpr (by nlinarith [sq_nonneg x])</span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a>   have high : y / ρ ≤ 1 := (div_le_iff₀ rp).mpr (by nlinarith [sq_nonneg x])</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a>   have sine : ρ * sin (arcsin (y / ρ)) = y := by</span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a>     rw [sin_arcsin low high]</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a>     field_simp</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a>   refine ⟨?_, sine⟩</span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a>   have cosine := cos_nonneg_of_mem_Icc (arcsin_mem_Icc (y / ρ))</span>
+<span id="L49" class="line"><a href="#L49" aria-label="Line 49">49</a>   have scaled := congrArg (fun a : ℝ =&gt; ρ ^ 2 * a) (cos_sq_add_sin_sq (arcsin (y / ρ)))</span>
+<span id="L50" class="line"><a href="#L50" aria-label="Line 50">50</a>   have positive := mul_nonneg rp.le cosine</span>
+<span id="L51" class="line"><a href="#L51" aria-label="Line 51">51</a>   nlinarith [congrArg (fun a : ℝ =&gt; a ^ 2) sine]</span>
+<span id="L52" class="line"><a href="#L52" aria-label="Line 52">52</a> </span>
+<span id="L53" class="line"><a href="#L53" aria-label="Line 53">53</a> /-- At every radius outside the elbow, the displayed angle lies on the actual straight ray. -/</span>
+<span id="L54" class="line"><a href="#L54" aria-label="Line 54">54</a> theorem ray_polar_coordinates {d c s ρ : ℝ} (dp : 0 &lt; d) (outward : 0 ≤ c)</span>
+<span id="L55" class="line"><a href="#L55" aria-label="Line 55">55</a>     (unit : c ^ 2 + s ^ 2 = 1) (outside : d ≤ ρ) :</span>
+<span id="L56" class="line"><a href="#L56" aria-label="Line 56">56</a>     ρ * cos (arcsin (travel d c s ρ * s / ρ)) = d + travel d c s ρ * c ∧</span>
+<span id="L57" class="line"><a href="#L57" aria-label="Line 57">57</a>     ρ * sin (arcsin (travel d c s ρ * s / ρ)) = travel d c s ρ * s := by</span>
+<span id="L58" class="line"><a href="#L58" aria-label="Line 58">58</a>   have spec := travel_spec dp outward unit outside</span>
+<span id="L59" class="line"><a href="#L59" aria-label="Line 59">59</a>   exact polar_of_right_circle (dp.trans_le outside)</span>
+<span id="L60" class="line"><a href="#L60" aria-label="Line 60">60</a>     (add_nonneg dp.le (mul_nonneg spec.1 outward)) spec.2</span>
+<span id="L61" class="line"><a href="#L61" aria-label="Line 61">61</a> </span>
+<span id="L62" class="line"><a href="#L62" aria-label="Line 62">62</a> /-- An outward ray cannot meet the same circle twice. -/</span>
+<span id="L63" class="line"><a href="#L63" aria-label="Line 63">63</a> theorem ray_circle_unique {d c s ρ t : ℝ} (dp : 0 &lt; d) (outward : 0 ≤ c)</span>
+<span id="L64" class="line"><a href="#L64" aria-label="Line 64">64</a>     (unit : c ^ 2 + s ^ 2 = 1) (outside : d ≤ ρ) (tp : 0 ≤ t)</span>
+<span id="L65" class="line"><a href="#L65" aria-label="Line 65">65</a>     (circle : (d + t * c) ^ 2 + (t * s) ^ 2 = ρ ^ 2) :</span>
+<span id="L66" class="line"><a href="#L66" aria-label="Line 66">66</a>     t = travel d c s ρ := by</span>
+<span id="L67" class="line"><a href="#L67" aria-label="Line 67">67</a>   have spec := travel_spec dp outward unit outside</span>
+<span id="L68" class="line"><a href="#L68" aria-label="Line 68">68</a>   have scaled₁ := congrArg (fun x : ℝ =&gt; t ^ 2 * x) unit</span>
+<span id="L69" class="line"><a href="#L69" aria-label="Line 69">69</a>   have scaled₂ := congrArg (fun x : ℝ =&gt; (travel d c s ρ) ^ 2 * x) unit</span>
+<span id="L70" class="line"><a href="#L70" aria-label="Line 70">70</a>   have dc := mul_nonneg dp.le outward</span>
+<span id="L71" class="line"><a href="#L71" aria-label="Line 71">71</a>   rcases lt_trichotomy t (travel d c s ρ) with less | same | greater</span>
+<span id="L72" class="line"><a href="#L72" aria-label="Line 72">72</a>   · have strict := mul_pos (sub_pos.mpr less)</span>
+<span id="L73" class="line"><a href="#L73" aria-label="Line 73">73</a>       (show 0 &lt; t + travel d c s ρ + 2 * d * c by nlinarith)</span>
+<span id="L74" class="line"><a href="#L74" aria-label="Line 74">74</a>     nlinarith</span>
+<span id="L75" class="line"><a href="#L75" aria-label="Line 75">75</a>   · exact same</span>
+<span id="L76" class="line"><a href="#L76" aria-label="Line 76">76</a>   · have strict := mul_pos (sub_pos.mpr greater)</span>
+<span id="L77" class="line"><a href="#L77" aria-label="Line 77">77</a>       (show 0 &lt; t + travel d c s ρ + 2 * d * c by nlinarith)</span>
+<span id="L78" class="line"><a href="#L78" aria-label="Line 78">78</a>     nlinarith</span>
+<span id="L79" class="line"><a href="#L79" aria-label="Line 79">79</a> </span>
+<span id="L80" class="line"><a href="#L80" aria-label="Line 80">80</a> /-- Angular displacement from an inner leg on the circle of radius `ρ`.</span>
+<span id="L81" class="line"><a href="#L81" aria-label="Line 81">81</a> It is zero before the elbow, and follows the straight outer ray afterwards. -/</span>
+<span id="L82" class="line"><a href="#L82" aria-label="Line 82">82</a> noncomputable def offset (d γ ρ : ℝ) : ℝ :=</span>
+<span id="L83" class="line"><a href="#L83" aria-label="Line 83">83</a>   if ρ &lt; d then 0 else</span>
+<span id="L84" class="line"><a href="#L84" aria-label="Line 84">84</a>     arcsin (travel d (cos (π - γ)) (sin (π - γ)) ρ * sin (π - γ) / ρ)</span>
+<span id="L85" class="line"><a href="#L85" aria-label="Line 85">85</a> </span>
+<span id="L86" class="line"><a href="#L86" aria-label="Line 86">86</a> /-- Before the elbow the boundary is the original radial segment. -/</span>
+<span id="L87" class="line"><a href="#L87" aria-label="Line 87">87</a> theorem inner_arm {d γ ρ : ℝ} (inside : ρ &lt; d) (θ : ℝ) :</span>
+<span id="L88" class="line"><a href="#L88" aria-label="Line 88">88</a>     ρ • direction (θ + offset d γ ρ) = ρ • direction θ := by</span>
+<span id="L89" class="line"><a href="#L89" aria-label="Line 89">89</a>   simp [offset, inside]</span>
+<span id="L90" class="line"><a href="#L90" aria-label="Line 90">90</a> </span>
+<span id="L91" class="line"><a href="#L91" aria-label="Line 91">91</a> /-- The polar and straight pieces agree at the elbow, including tangent rays. -/</span>
+<span id="L92" class="line"><a href="#L92" aria-label="Line 92">92</a> theorem offset_at_elbow {d γ : ℝ} (dp : 0 &lt; d)</span>
+<span id="L93" class="line"><a href="#L93" aria-label="Line 93">93</a>     (lower : π / 2 ≤ γ) (upper : γ ≤ 3 * π / 2) : offset d γ d = 0 := by</span>
+<span id="L94" class="line"><a href="#L94" aria-label="Line 94">94</a>   have outward : 0 ≤ cos (π - γ) := cos_nonneg_of_mem_Icc ⟨by linarith, by linarith⟩</span>
+<span id="L95" class="line"><a href="#L95" aria-label="Line 95">95</a>   have travel_zero := ray_circle_unique dp outward (cos_sq_add_sin_sq (π - γ))</span>
+<span id="L96" class="line"><a href="#L96" aria-label="Line 96">96</a>     le_rfl (le_refl 0) (by simp : (d + 0 * cos (π - γ)) ^ 2 + (0 * sin (π - γ)) ^ 2 = d ^ 2)</span>
+<span id="L97" class="line"><a href="#L97" aria-label="Line 97">97</a>   unfold offset</span>
+<span id="L98" class="line"><a href="#L98" aria-label="Line 98">98</a>   rw [if_neg (lt_irrefl d), ← travel_zero]</span>
+<span id="L99" class="line"><a href="#L99" aria-label="Line 99">99</a>   simp</span>
+<span id="L100" class="line"><a href="#L100" aria-label="Line 100">100</a> </span>
+<span id="L101" class="line"><a href="#L101" aria-label="Line 101">101</a> /-- Reflection reverses the displacement, so the other arm uses `-offset`. -/</span>
+<span id="L102" class="line"><a href="#L102" aria-label="Line 102">102</a> theorem offset_reflected (d γ ρ : ℝ) : offset d (2 * π - γ) ρ = -offset d γ ρ := by</span>
+<span id="L103" class="line"><a href="#L103" aria-label="Line 103">103</a>   unfold offset</span>
+<span id="L104" class="line"><a href="#L104" aria-label="Line 104">104</a>   split_ifs with inside</span>
+<span id="L105" class="line"><a href="#L105" aria-label="Line 105">105</a>   · simp</span>
+<span id="L106" class="line"><a href="#L106" aria-label="Line 106">106</a>   · rw [show π - (2 * π - γ) = -(π - γ) by ring, cos_neg, sin_neg]</span>
+<span id="L107" class="line"><a href="#L107" aria-label="Line 107">107</a>     simp [travel, neg_div, arcsin_neg]</span>
+<span id="L108" class="line"><a href="#L108" aria-label="Line 108">108</a> </span>
+<span id="L109" class="line"><a href="#L109" aria-label="Line 109">109</a> /-- Exact boundary points after rotating an arm through `θ`. -/</span>
+<span id="L110" class="line"><a href="#L110" aria-label="Line 110">110</a> theorem outer_arm {d γ ρ : ℝ} (dp : 0 &lt; d)</span>
+<span id="L111" class="line"><a href="#L111" aria-label="Line 111">111</a>     (lower : π / 2 ≤ γ) (upper : γ ≤ 3 * π / 2) (outside : d ≤ ρ) (θ : ℝ) :</span>
+<span id="L112" class="line"><a href="#L112" aria-label="Line 112">112</a>     ρ • direction (θ + offset d γ ρ) =</span>
+<span id="L113" class="line"><a href="#L113" aria-label="Line 113">113</a>       d • direction θ + travel d (cos (π - γ)) (sin (π - γ)) ρ • direction (θ + (π - γ)) := by</span>
+<span id="L114" class="line"><a href="#L114" aria-label="Line 114">114</a>   have outward : 0 ≤ cos (π - γ) := cos_nonneg_of_mem_Icc ⟨by linarith, by linarith⟩</span>
+<span id="L115" class="line"><a href="#L115" aria-label="Line 115">115</a>   have polar := ray_polar_coordinates dp outward (cos_sq_add_sin_sq (π - γ)) outside</span>
+<span id="L116" class="line"><a href="#L116" aria-label="Line 116">116</a>   simp only [cos_pi_sub, sin_pi_sub] at polar</span>
+<span id="L117" class="line"><a href="#L117" aria-label="Line 117">117</a>   unfold offset</span>
+<span id="L118" class="line"><a href="#L118" aria-label="Line 118">118</a>   rw [if_neg (not_lt_of_ge outside)]</span>
+<span id="L119" class="line"><a href="#L119" aria-label="Line 119">119</a>   ext i</span>
+<span id="L120" class="line"><a href="#L120" aria-label="Line 120">120</a>   fin_cases i &lt;;&gt;</span>
+<span id="L121" class="line"><a href="#L121" aria-label="Line 121">121</a>     simp [direction, PiLp.smul_apply, PiLp.add_apply, cos_add, sin_add]</span>
+<span id="L122" class="line"><a href="#L122" aria-label="Line 122">122</a>   · nlinarith [congrArg (fun x : ℝ =&gt; cos θ * x) polar.1,</span>
+<span id="L123" class="line"><a href="#L123" aria-label="Line 123">123</a>       congrArg (fun x : ℝ =&gt; sin θ * x) polar.2]</span>
+<span id="L124" class="line"><a href="#L124" aria-label="Line 124">124</a>   · nlinarith [congrArg (fun x : ℝ =&gt; sin θ * x) polar.1,</span>
+<span id="L125" class="line"><a href="#L125" aria-label="Line 125">125</a>       congrArg (fun x : ℝ =&gt; cos θ * x) polar.2]</span>
+<span id="L126" class="line"><a href="#L126" aria-label="Line 126">126</a> </span>
+<span id="L127" class="line"><a href="#L127" aria-label="Line 127">127</a> /-- The region between the two broken arms, described circle by circle.</span>
+<span id="L128" class="line"><a href="#L128" aria-label="Line 128">128</a> An empty angular interval gives an empty circle section; a full turn gives</span>
+<span id="L129" class="line"><a href="#L129" aria-label="Line 129">129</a> the whole circle. Thus bounded and unbounded wedges use the same formula. -/</span>
+<span id="L130" class="line"><a href="#L130" aria-label="Line 130">130</a> noncomputable def polarRegion (d γ lower upper : ℝ) : Set Plane := {z |</span>
+<span id="L131" class="line"><a href="#L131" aria-label="Line 131">131</a>   z = 0 ∨ ∃ ρ θ : ℝ, 0 &lt; ρ ∧ z = ρ • direction θ ∧</span>
+<span id="L132" class="line"><a href="#L132" aria-label="Line 132">132</a>     lower + offset d γ ρ ≤ θ ∧ θ ≤ upper - offset d γ ρ}</span>
+<span id="L133" class="line"><a href="#L133" aria-label="Line 133">133</a> </span>
+<span id="L134" class="line"><a href="#L134" aria-label="Line 134">134</a> /-- Rotating either arm away from the region only enlarges it.</span>
+<span id="L135" class="line"><a href="#L135" aria-label="Line 135">135</a> `outer_arm` verifies that the circle sections follow the actual straight rays. -/</span>
+<span id="L136" class="line"><a href="#L136" aria-label="Line 136">136</a> theorem rotate_arms {d γ lower₁ upper₁ lower₂ upper₂ : ℝ}</span>
+<span id="L137" class="line"><a href="#L137" aria-label="Line 137">137</a>     (lower_moves : lower₂ ≤ lower₁) (upper_moves : upper₁ ≤ upper₂) :</span>
+<span id="L138" class="line"><a href="#L138" aria-label="Line 138">138</a>     polarRegion d γ lower₁ upper₁ ⊆ polarRegion d γ lower₂ upper₂ := by</span>
+<span id="L139" class="line"><a href="#L139" aria-label="Line 139">139</a>   rintro z (zero | ⟨ρ, θ, positive, position, left, right⟩)</span>
+<span id="L140" class="line"><a href="#L140" aria-label="Line 140">140</a>   · exact Or.inl zero</span>
+<span id="L141" class="line"><a href="#L141" aria-label="Line 141">141</a>   · exact Or.inr ⟨ρ, θ, positive, position, by linarith, by linarith⟩</span>
+<span id="L142" class="line"><a href="#L142" aria-label="Line 142">142</a> </span>
+<span id="L143" class="line"><a href="#L143" aria-label="Line 143">143</a> end SixVertexUnfolding.Wedge</span>
+</pre></html>

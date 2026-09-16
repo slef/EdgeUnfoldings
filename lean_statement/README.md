@@ -329,3 +329,10 @@ The independent dependency-download workflow above has not been exercised here.
 For development, `--incremental` reuses local compiled files newer than their
 sources and local imports. The earlier clean checkpoint used the command above without
 that flag; this continuation used incremental verification.
+
+## Annotated star-unfolding paper
+
+[Interactive paper and Lean correspondence](star-paper/dist/index.html) covers
+Kiazyk–Lubiw Sections 1.1–2. See [maintenance notes](star-paper/README.md) for
+the fixed source snapshot and the distinction between checked restricted
+results and the unfinished general theorem.

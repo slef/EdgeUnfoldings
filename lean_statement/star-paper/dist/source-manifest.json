@@ -1,0 +1,152 @@
+{
+  "revision": "99e7591f252351d873bb51676f1294899fceecfe",
+  "date": "2026-09-16",
+  "declarations": 50,
+  "theorems": 31,
+  "sources": {
+    "CanonicalSixGraphs": {
+      "path": "SixVertexUnfolding/CanonicalSixGraphs.lean",
+      "sha256": "0cdbbf33dee6f6aaa5411cd0ab5a38807cc57627a0748e9be99c6562101c6da1"
+    },
+    "ClosedCutSet": {
+      "path": "SixVertexUnfolding/Geometry/ClosedCutSet.lean",
+      "sha256": "aa5004ee116f1b60b868629f6b5518e1cdb9d77d46de6821d43e9340d3e43664"
+    },
+    "CofacialStarCuts": {
+      "path": "SixVertexUnfolding/Geometry/CofacialStarCuts.lean",
+      "sha256": "0c7b8aee498bd8445fef847c78a7e5242e9ffcbe55896439f2cecdd8ef998053"
+    },
+    "CofacialStarEmbedding": {
+      "path": "SixVertexUnfolding/Geometry/CofacialStarEmbedding.lean",
+      "sha256": "86defbc1d1d91e26c0545a79f399c28fad39be3b9660a9407bffacb0c253e1d0"
+    },
+    "CutEdgeMetricModel": {
+      "path": "SixVertexUnfolding/Geometry/CutEdgeMetricModel.lean",
+      "sha256": "f08889cf37aefbbeb1533fb1bcf454896e8d306a9dc5aec86cd02d12a4c00f91"
+    },
+    "CutEdgeSourceAngles": {
+      "path": "SixVertexUnfolding/Geometry/CutEdgeSourceAngles.lean",
+      "sha256": "3a4479da675c30fc30c64f17895f7c30c16de8c80084d83a631baa07e1a6b7e0"
+    },
+    "CutEdgeTriangles": {
+      "path": "SixVertexUnfolding/Geometry/CutEdgeTriangles.lean",
+      "sha256": "eda1afeabcd2e58c2ec89e8a62544e04cc0b09a554fc474a65cf8705a9fb00dc"
+    },
+    "CutSetVertexLimits": {
+      "path": "SixVertexUnfolding/Geometry/CutSetVertexLimits.lean",
+      "sha256": "21cb01adfb8193f2802c519aad0326faeebc5218d4ece756d59040ff4e842f9a"
+    },
+    "CutTreeChainSeparation": {
+      "path": "SixVertexUnfolding/Geometry/CutTreeChainSeparation.lean",
+      "sha256": "06879b165e6d39d48d18322ac68f139a7ee347ed3f0bdf5e0f21ac936ddcfa1b"
+    },
+    "CutTreeCharts": {
+      "path": "SixVertexUnfolding/Geometry/CutTreeCharts.lean",
+      "sha256": "7c728b898e9ad96fdd8070119bb0666832d5c9c12913932635f816a402853c21"
+    },
+    "CutTreeConeCoverage": {
+      "path": "SixVertexUnfolding/Geometry/CutTreeConeCoverage.lean",
+      "sha256": "dbb52070a2da4aa5507b8e9948a9cc3c0ffbd79a04238912a31a9ed7320de2b2"
+    },
+    "CutTreeCurvature": {
+      "path": "SixVertexUnfolding/Geometry/CutTreeCurvature.lean",
+      "sha256": "38e833e92a552193e07ba85efa912dc04151827c48f4e8de1b355b820dfdacb9"
+    },
+    "CutTreeSourceBudget": {
+      "path": "SixVertexUnfolding/Geometry/CutTreeSourceBudget.lean",
+      "sha256": "8600f499f4e9d9f100f5ec073c0c09e336304430da3c4a2fdd929951d30bd37a"
+    },
+    "CutTreeTriangleCoverage": {
+      "path": "SixVertexUnfolding/Geometry/CutTreeTriangleCoverage.lean",
+      "sha256": "ef8da9ddfc98d5b50f0c4a3639872406d627b71268609fc9c026f6c1408798ca"
+    },
+    "Definitions": {
+      "path": "SixVertexUnfolding/Definitions.lean",
+      "sha256": "68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef"
+    },
+    "EmbeddedCutGraph": {
+      "path": "SixVertexUnfolding/Geometry/EmbeddedCutGraph.lean",
+      "sha256": "e162026d13a73fafa07b92ba1283e580152988d89724f543c274e03d90dfdd51"
+    },
+    "ExpandingRegionChains": {
+      "path": "SixVertexUnfolding/Geometry/ExpandingRegionChains.lean",
+      "sha256": "a0fb9481f8ddb4393b3da9663fb54b920e6ad716e77a7138a60c84e9e2daf144"
+    },
+    "GapKiteStep": {
+      "path": "SixVertexUnfolding/Geometry/GapKiteStep.lean",
+      "sha256": "8c8b12e4ad334446b14e24a5102657e14aa556bcf88232bd5697bc58c0cd20ed"
+    },
+    "GlobalKiteSeparation": {
+      "path": "SixVertexUnfolding/Geometry/GlobalKiteSeparation.lean",
+      "sha256": "08904ad739fa15bb906812c5869f3035642f4ec49e67908058aaf018e5f59387"
+    },
+    "InitialKiteWedge": {
+      "path": "SixVertexUnfolding/Geometry/InitialKiteWedge.lean",
+      "sha256": "6dce3b434fbc7e3a199856db5c28e7e75bb99e4b38c8d6aed3a0019082afef0b"
+    },
+    "JunctionWedgeStep": {
+      "path": "SixVertexUnfolding/Geometry/JunctionWedgeStep.lean",
+      "sha256": "ab06578dbf02f0f46866e885ed5caa228717f54ae098b6830c1711bc4d40df9c"
+    },
+    "MultipleShortestRoutes": {
+      "path": "SixVertexUnfolding/Geometry/MultipleShortestRoutes.lean",
+      "sha256": "23050b33c9b46baff6b494af80c1c4921bfcd48b7d8e4774f510e00abbaf8df4"
+    },
+    "RegularCutTree": {
+      "path": "SixVertexUnfolding/Geometry/RegularCutTree.lean",
+      "sha256": "324af0598e1fd9e027fdd0518f2c88ab6646df179592ae1e10dcc781f0464907"
+    },
+    "RetainedCutConnectivity": {
+      "path": "SixVertexUnfolding/Geometry/RetainedCutConnectivity.lean",
+      "sha256": "bc5e4bd9c751d098ed5e52887d311686752664379f5b8851972c6db7b1912aed"
+    },
+    "SixVertexGraphs": {
+      "path": "SixVertexUnfolding/Geometry/SixVertexGraphs.lean",
+      "sha256": "4317cd118b6c798490cbc45ae5024eefcf56c15dc90dbf6fe39f8f8c228e2f8f"
+    },
+    "SmallPolyhedronCutTree": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTree.lean",
+      "sha256": "d8c3d2512ab189fac07db833e31bdf7690a8598a26fdd08e1b483c9322d8e32c"
+    },
+    "SmallPolyhedronShortestRoutes": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronShortestRoutes.lean",
+      "sha256": "525363d66dc540d7799f8732de4571e32d42d42ad990622a940adf16793d0b03"
+    },
+    "SmallPolyhedronTerminalRays": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronTerminalRays.lean",
+      "sha256": "3837ed6d3adabf542527cef30fd4888d370d6c5481a8193eb2c790f0012e124f"
+    },
+    "StarLocalMetric": {
+      "path": "SixVertexUnfolding/Geometry/StarLocalMetric.lean",
+      "sha256": "f467ab8b728c44c72e8c8bb32b79fd4a83e544ae0e297f738bfed5fa4f7c3a83"
+    },
+    "StarOpenEmbedding": {
+      "path": "SixVertexUnfolding/Geometry/StarOpenEmbedding.lean",
+      "sha256": "bcc8d5c0403a1bdf12694a7ba1eb788735f72623186c8b219f42477fca390a6b"
+    },
+    "StarPolygonBoundary": {
+      "path": "SixVertexUnfolding/Geometry/StarPolygonBoundary.lean",
+      "sha256": "a9812afdb15149d90c87c8d7753eb8a63732a89efbc0c948fa94810683e3784c"
+    },
+    "UniqueRouteLeaves": {
+      "path": "SixVertexUnfolding/Geometry/UniqueRouteLeaves.lean",
+      "sha256": "a702c124af5c10aa8c490b9a722ee2c4dc0405b24ca2dcc8ab0efb132d00c4e0"
+    },
+    "VertexFanAngles": {
+      "path": "SixVertexUnfolding/Geometry/VertexFanAngles.lean",
+      "sha256": "2aed7155134da4f8fa7687f5caf7607f5f6ff074c44d8754b208ef89b8b6affb"
+    },
+    "WedgeRootMove": {
+      "path": "SixVertexUnfolding/Geometry/WedgeRootMove.lean",
+      "sha256": "be2cd9937923e6c7a5d24cef66bf9c9ae4d1dbe47c3ab095f23978153fb33c01"
+    },
+    "WedgeRotation": {
+      "path": "SixVertexUnfolding/Geometry/WedgeRotation.lean",
+      "sha256": "f8c7cc7380371f59e00b78db8e520905418fe9c8783eca85f8563165c7d8e4b0"
+    },
+    "WedgeStep": {
+      "path": "SixVertexUnfolding/Geometry/WedgeStep.lean",
+      "sha256": "4a9a85a9e647c5b636b2749ecae1bc25782a875beec34d85c3fbd04052dd24ce"
+    }
+  }
+}

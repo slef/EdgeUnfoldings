@@ -1,0 +1,391 @@
+Lean declaration check — 16 September 2026
+50 declarations resolved; 31 theorem axiom reports checked.
+Allowed axioms: propext, Classical.choice, Quot.sound.
+
+Checking star-paper/CheckExcerpts.lean
+SixVertexUnfolding.SmallGraphs.SixGraphKind : Type
+SixVertexUnfolding.ConvexPolyhedron.cutSet : (P : SixVertexUnfolding.ConvexPolyhedron) →
+  ↑(frontier P.body) → Set ↑(frontier P.body)
+SixVertexUnfolding.ConvexPolyhedron.UncutSurface : (P : SixVertexUnfolding.ConvexPolyhedron) → ↑(frontier P.body) → Type
+SixVertexUnfolding.ConvexPolyhedron.original_route_subset_starCuts : ∀ (P : SixVertexUnfolding.ConvexPolyhedron)
+  (a b : ↑(frontier P.body)),
+  ↑b ∈ P.vertices → ∀ (F : P.Face), ↑a ∈ ↑F → ↑b ∈ ↑F → ∀ route ∈ P.geodesicFiber a b, Set.range ⇑route ⊆ P.starCuts a
+'SixVertexUnfolding.ConvexPolyhedron.original_route_subset_starCuts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+SixVertexUnfolding.ConvexPolyhedron.starCuts : (P : SixVertexUnfolding.ConvexPolyhedron) →
+  ↑(frontier P.body) → Set ↑(frontier P.body)
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_star_embedding : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ (a : ↑(frontier P.body)) (source : Fin 6),
+      ↑a = ↑(graph.vertex source) →
+        (∀ (v : ↑P.Vertex), ∃ F, ↑a ∈ ↑F ∧ ↑v ∈ ↑F) →
+          ∃ develop,
+            Topology.IsOpenEmbedding ⇑develop ∧
+              Bornology.IsBounded (Set.range ⇑develop) ∧
+                IsPathConnected (Set.range ⇑develop) ∧
+                  (∃ edges, frontier (Set.range ⇑develop) = ⋃ e ∈ edges, segment ℝ e.1 e.2) ∧
+                    ∀ (b : P.UncutSurface a),
+                      ∃ radius > 0,
+                        ∀ (c d : P.UncutSurface a),
+                          dist ↑↑c ↑↑b < radius →
+                            dist ↑↑d ↑↑b < radius → dist (develop c) (develop d) = P.surfaceDist ↑↑c ↑↑d
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_star_embedding' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel : {P : SixVertexUnfolding.ConvexPolyhedron} →
+  {a : ↑(frontier P.body)} → (T : P.CutLocusTree a) → {u v : ↑T.vertices} → T.graph.Adj u v → Type
+@SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel.sourceAngle : {P : SixVertexUnfolding.ConvexPolyhedron} →
+  {a : ↑(frontier P.body)} →
+    {T : P.CutLocusTree a} →
+      {u v : ↑T.vertices} → {edge : T.graph.Adj u v} → SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel T edge → ℝ
+@SixVertexUnfolding.ConvexPolyhedron.CutEdgeTriangles : {P : SixVertexUnfolding.ConvexPolyhedron} →
+  {a : ↑(frontier P.body)} → (T : P.CutLocusTree a) → {u v : ↑T.vertices} → T.graph.Adj u v → Type
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.exists_cut_edge_triangles : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ (a : ↑(frontier P.body)) (T : P.CutLocusTree a) {u v : ↑T.vertices} (edge : T.graph.Adj u v),
+      Nonempty (SixVertexUnfolding.ConvexPolyhedron.CutEdgeTriangles T edge)
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.exists_cut_edge_triangles' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cutSet_eq_closure_multiple : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ (a : ↑(frontier P.body)), P.cutSet a = closure {b | ↑b ∈ P.multipleRouteLocus ↑a}
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cutSet_eq_closure_multiple' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.CutTreeChain.end_kites_nonoverlap : ∀ {P : SixVertexUnfolding.ConvexPolyhedron}
+  {a : ↑(frontier P.body)} {T : P.CutLocusTree a} {n : ℕ} (chain : SixVertexUnfolding.ConvexPolyhedron.CutTreeChain T n)
+  (charts : SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts T),
+  ∑ i, chain.sourceAngle charts i < Real.pi → Disjoint (charts.kite ⋯) (interior (charts.kite ⋯))
+'SixVertexUnfolding.ConvexPolyhedron.CutTreeChain.end_kites_nonoverlap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts : {P : SixVertexUnfolding.ConvexPolyhedron} →
+  {a : ↑(frontier P.body)} → P.CutLocusTree a → Type
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.incident_model_angles_cover_cone : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ (a : ↑(frontier P.body)) (T : P.CutLocusTree a) [inst : Fintype ↑T.vertices] [inst_1 : DecidableRel T.graph.Adj]
+      (models : (d : T.graph.Dart) → SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel T ⋯) (u : ↑T.vertices)
+      (pole : Fin 6), ↑u = ↑(graph.vertex pole) → graph.totalAngleAt pole ≤ T.incidentAngleSum models u
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.incident_model_angles_cover_cone' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.sum_cutTreeCurvature : ∀ {P : SixVertexUnfolding.ConvexPolyhedron}
+  (graph : P.SixVertexGraph) {a : ↑(frontier P.body)} (T : P.CutLocusTree a) [inst : Fintype ↑T.vertices]
+  (source : Fin 6), ↑a = ↑(graph.vertex source) → ∑ u, graph.cutTreeCurvature T u = 4 * Real.pi - graph.curvature source
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.sum_cutTreeCurvature' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.half_source_angle_sum_lt_pi : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ {a : ↑(frontier P.body)} (T : P.CutLocusTree a) [inst : Fintype ↑T.vertices] [inst_1 : DecidableRel T.graph.Adj]
+      (models : (d : T.graph.Dart) → SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel T ⋯) (source : Fin 6),
+      ↑a = ↑(graph.vertex source) → (∑ d, (models d).sourceAngle) / 2 < Real.pi
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.half_source_angle_sum_lt_pi' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.source_angle_sum_le : ∀ {P : SixVertexUnfolding.ConvexPolyhedron}
+  (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ {a : ↑(frontier P.body)} (T : P.CutLocusTree a) [inst : Fintype ↑T.vertices] [inst_1 : DecidableRel T.graph.Adj]
+      (models : (d : T.graph.Dart) → SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel T ⋯) (source : Fin 6),
+      ↑a = ↑(graph.vertex source) → ∑ d, (models d).sourceAngle ≤ graph.totalAngleAt source
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.source_angle_sum_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cut_tree_triangles_cover : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ (a : ↑(frontier P.body)) (T : P.CutLocusTree a)
+      (triangles : (d : T.graph.Dart) → SixVertexUnfolding.ConvexPolyhedron.CutEdgeTriangles T ⋯)
+      (b : ↑(frontier P.body)),
+      ∃ d,
+        b ∈
+          Set.range ⇑(SixVertexUnfolding.ConvexPolyhedron.closedRouteStripMap (triangles d).first) ∪
+            Set.range ⇑(SixVertexUnfolding.ConvexPolyhedron.closedRouteStripMap (triangles d).second)
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cut_tree_triangles_cover' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+SixVertexUnfolding.ConvexPolyhedron : Type
+SixVertexUnfolding.ConvexPolyhedron.body : SixVertexUnfolding.ConvexPolyhedron → Set SixVertexUnfolding.Space
+SixVertexUnfolding.ConvexPolyhedron.EmbeddedCutGraph : (P : SixVertexUnfolding.ConvexPolyhedron) →
+  ↑(frontier P.body) → Type
+SixVertexUnfolding.Wedge.RegionStep : Set SixVertexUnfolding.Plane →
+  Set SixVertexUnfolding.Plane → Set SixVertexUnfolding.Plane → Type
+SixVertexUnfolding.Wedge.finite_chain_endpoint_separation : ∀ (n : ℕ) (regions kites : ℕ → Set SixVertexUnfolding.Plane)
+  (steps : (i : Fin n) → SixVertexUnfolding.Wedge.RegionStep (regions ↑i) (regions (↑i + 1)) (kites ↑i))
+  (first last : Set SixVertexUnfolding.Plane),
+  first ⊆ regions 0 →
+    Disjoint (regions n) (interior last) →
+      ∃ frames,
+        frames 0 = AffineIsometryEquiv.refl ℝ SixVertexUnfolding.Plane ∧
+          (∀ (i : Fin n) (x : SixVertexUnfolding.Plane), (frames (↑i + 1)) ((steps i).motion x) = (frames ↑i) x) ∧
+            Disjoint first (interior (⇑(frames n) '' last))
+'SixVertexUnfolding.Wedge.finite_chain_endpoint_separation' depends on axioms: [propext, Classical.choice, Quot.sound]
+SixVertexUnfolding.Wedge.finite_chain_separation : ∀ (n : ℕ) (regions kites : ℕ → Set SixVertexUnfolding.Plane)
+  (steps : (i : Fin n) → SixVertexUnfolding.Wedge.RegionStep (regions ↑i) (regions (↑i + 1)) (kites ↑i)),
+  ∃ frames,
+    frames 0 = AffineIsometryEquiv.refl ℝ SixVertexUnfolding.Plane ∧
+      (∀ (i : Fin n) (x : SixVertexUnfolding.Plane), (frames (↑i + 1)) ((steps i).motion x) = (frames ↑i) x) ∧
+        (∀ (i j : ℕ), i < j → j < n → Disjoint (⇑(frames i) '' kites i) (interior (⇑(frames j) '' kites j))) ∧
+          (∀ j < n, Disjoint (regions 0) (interior (⇑(frames j) '' kites j))) ∧
+            ∀ (i j : ℕ), i ≤ j → j ≤ n → ⇑(frames i) '' regions i ⊆ ⇑(frames j) '' regions j
+'SixVertexUnfolding.Wedge.finite_chain_separation' depends on axioms: [propext, Classical.choice, Quot.sound]
+SixVertexUnfolding.Wedge.gapKite : SixVertexUnfolding.Plane → ℝ → ℝ → ℝ → ℝ → Set SixVertexUnfolding.Plane
+SixVertexUnfolding.Wedge.gap_rotate_and_move_with_sources : ∀ (z : SixVertexUnfolding.Plane) {d L α β γ δ ω : ℝ},
+  0 < d →
+    0 < L →
+      γ < δ →
+        δ < γ + 2 * Real.pi →
+          β ≤ γ ∧ δ ≤ α + 2 * Real.pi ∨ δ ≤ α ∧ β ≤ γ + 2 * Real.pi →
+            Real.pi / 2 ≤ ω →
+              ω +
+                    EuclideanGeometry.angle z (z + d • SixVertexUnfolding.direction δ)
+                      (z + L • SixVertexUnfolding.direction ((γ + δ) / 2)) ≤
+                  3 * Real.pi / 2 →
+                have y := z + L • SixVertexUnfolding.direction ((γ + δ) / 2);
+                have apex := EuclideanGeometry.angle z (z + d • SixVertexUnfolding.direction δ) y;
+                have W := {x | x - z ∈ SixVertexUnfolding.Wedge.polarRegion d ω α β};
+                have V := {x | x - z ∈ SixVertexUnfolding.Wedge.polarRegion d ω δ (γ + 2 * Real.pi)};
+                ∃ D Θ,
+                  0 < D ∧
+                    0 < Θ ∧
+                      Θ < Real.pi ∧
+                        z + d • SixVertexUnfolding.direction δ =
+                            y + D • SixVertexUnfolding.direction (Θ + (γ + δ) / 2) ∧
+                          z + d • SixVertexUnfolding.direction γ =
+                              y + D • SixVertexUnfolding.direction (2 * Real.pi - Θ + (γ + δ) / 2) ∧
+                            have W' :=
+                              {x |
+                                x - y ∈
+                                  SixVertexUnfolding.Wedge.polarRegion D (ω + apex) (Θ + (γ + δ) / 2)
+                                    (2 * Real.pi - Θ + (γ + δ) / 2)};
+                            W ⊆ V ∧
+                              Disjoint V (interior (SixVertexUnfolding.Wedge.gapKite z d L γ δ)) ∧
+                                W' = V ∪ SixVertexUnfolding.Wedge.gapKite z d L γ δ
+'SixVertexUnfolding.Wedge.gap_rotate_and_move_with_sources' depends on axioms: [propext, Classical.choice, Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.global_kites_nonoverlap : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ {a : ↑(frontier P.body)} (T : P.CutLocusTree a) (charts : SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts T)
+      (source : Fin 6),
+      ↑a = ↑(graph.vertex source) →
+        ∀ {u v w z : ↑T.vertices} (first : T.graph.Adj u v) (last : T.graph.Adj w z),
+          s(u, v) ≠ s(w, z) → Disjoint (charts.kite first) (interior (charts.kite last))
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.global_kites_nonoverlap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.IncidentTriangles.initial_kite_in_wedge : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} {a : ↑(frontier P.body)} {T : P.CutLocusTree a} {u v : ↑T.vertices}
+  {edge : T.graph.Adj u v} {chart : P.CutVoronoiChart a (T.vertexTarget u)} {φ : ℝ}
+  (D : SixVertexUnfolding.ConvexPolyhedron.IncidentTriangles T edge chart φ),
+  D.developedKite ⊆ D.incomingWedge (Real.pi / 2 + D.model.sourceAngle)
+'SixVertexUnfolding.ConvexPolyhedron.IncidentTriangles.initial_kite_in_wedge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.JunctionFan.wedge_step_with_parameters : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} {a : ↑(frontier P.body)} {T : P.CutLocusTree a} {u : ↑T.vertices}
+  (fan : SixVertexUnfolding.ConvexPolyhedron.JunctionFan T u)
+  (incoming outgoing : ↑(SixVertexUnfolding.circularGapMidpoints fan.order.angles fan.order.first fan.order.last)),
+  incoming ≠ outgoing →
+    ∀ (ω : ℝ),
+      Real.pi / 2 ≤ ω →
+        ω + (fan.triangles outgoing).model.sourceAngle ≤ 3 * Real.pi / 2 →
+          have z := fan.order.chart.origin;
+          have d := P.surfaceDist ↑a ↑(T.vertexTarget u);
+          have L := dist ↑u ↑↑(fan.order.neighbors outgoing);
+          have y := z + L • SixVertexUnfolding.direction ↑outgoing;
+          ∃ α β γ δ,
+            SixVertexUnfolding.IsCircularGap fan.order.angles fan.order.first fan.order.last α β ∧
+              SixVertexUnfolding.IsCircularGap fan.order.angles fan.order.first fan.order.last γ δ ∧
+                ↑incoming = (α + β) / 2 ∧
+                  ↑outgoing = (γ + δ) / 2 ∧
+                    ∃ D Θ,
+                      0 < D ∧
+                        0 < Θ ∧
+                          Θ < Real.pi ∧
+                            D = P.surfaceDist ↑a ↑(T.vertexTarget ↑(fan.order.neighbors outgoing)) ∧
+                              Real.pi - Θ =
+                                  EuclideanGeometry.angle (fan.triangles outgoing).model.first
+                                    (fan.triangles outgoing).model.right (fan.triangles outgoing).model.left ∧
+                                have W := {x | x - z ∈ SixVertexUnfolding.Wedge.polarRegion d ω α β};
+                                have V := {x | x - z ∈ SixVertexUnfolding.Wedge.polarRegion d ω δ (γ + 2 * Real.pi)};
+                                have W' :=
+                                  {x |
+                                    x - y ∈
+                                      SixVertexUnfolding.Wedge.polarRegion D
+                                        (ω + (fan.triangles outgoing).model.sourceAngle) (Θ + (γ + δ) / 2)
+                                        (2 * Real.pi - Θ + (γ + δ) / 2)};
+                                W ⊆ V ∧
+                                  Disjoint V (interior (SixVertexUnfolding.Wedge.gapKite z d L γ δ)) ∧
+                                    W' = V ∪ SixVertexUnfolding.Wedge.gapKite z d L γ δ
+'SixVertexUnfolding.ConvexPolyhedron.JunctionFan.wedge_step_with_parameters' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+SixVertexUnfolding.ConvexPolyhedron.multipleRouteLocus : SixVertexUnfolding.ConvexPolyhedron →
+  SixVertexUnfolding.Space → Set SixVertexUnfolding.Space
+SixVertexUnfolding.ConvexPolyhedron.CutLocusTree : (P : SixVertexUnfolding.ConvexPolyhedron) → ↑(frontier P.body) → Type
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_uncut_surface_pathConnected : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ (a : ↑(frontier P.body)), (∀ (v : ↑P.Vertex), ∃ F, ↑a ∈ ↑F ∧ ↑v ∈ ↑F) → IsPathConnected (P.starCuts a)ᶜ
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_uncut_surface_pathConnected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph : SixVertexUnfolding.ConvexPolyhedron → Type
+@SixVertexUnfolding.ConvexPolyhedron.small_cut_tree_open_edge_two_routes : ∀ {P : SixVertexUnfolding.ConvexPolyhedron},
+  P.vertices.card ≤ 6 →
+    (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+      ∀ (a : ↑(frontier P.body)) (T : P.CutLocusTree a) {u v : ↑T.vertices},
+        T.graph.Adj u v → ∀ (b : ↑(frontier P.body)), ↑b ∈ openSegment ℝ ↑u ↑v → Nat.card ↑(P.geodesicFiber a b) = 2
+'SixVertexUnfolding.ConvexPolyhedron.small_cut_tree_open_edge_two_routes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.small_exists_regular_cut_tree : ∀ {P : SixVertexUnfolding.ConvexPolyhedron},
+  P.vertices.card ≤ 6 →
+    (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+      ∀ (a : ↑(frontier P.body)), Nonempty (P.CutLocusTree a)
+'SixVertexUnfolding.ConvexPolyhedron.small_exists_regular_cut_tree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.small_shortest_routes_agree_of_meeting : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron},
+  P.vertices.card ≤ 6 →
+    (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+      ∀ {a b : SixVertexUnfolding.Space} (first second : P.SurfacePath a b),
+        a ≠ b →
+          first.IsShortest →
+            second.IsShortest →
+              first.length ≠ ⊤ →
+                second.length ≠ ⊤ →
+                  LipschitzWith first.length.toNNReal ⇑first.curve →
+                    LipschitzWith second.length.toNNReal ⇑second.curve →
+                      ∀ (m : ↑unitInterval),
+                        0 < m →
+                          m < 1 → first.curve m = second.curve m → ∀ (t : ↑unitInterval), first.curve t = second.curve t
+'SixVertexUnfolding.ConvexPolyhedron.small_shortest_routes_agree_of_meeting' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.small_geodesic_proper_prefix_outside_cutSet : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron},
+  P.vertices.card ≤ 6 →
+    (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+      ∀ f ∈ P.geodesicCurves, f 0 ≠ f 1 → ∀ t < 1, f t ∉ P.cutSet (f 0)
+'SixVertexUnfolding.ConvexPolyhedron.small_geodesic_proper_prefix_outside_cutSet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_locally_isometric : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ {a : ↑(frontier P.body)} {T : P.CutLocusTree a} (charts : SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts T)
+      (source : Fin 6),
+      ↑a = ↑(graph.vertex source) →
+        (∀ (v : ↑P.Vertex), ∃ F, ↑a ∈ ↑F ∧ ↑v ∈ ↑F) →
+          ∀ (b : P.UncutSurface a),
+            ∃ radius > 0,
+              ∀ (c d : P.UncutSurface a),
+                dist ↑↑c ↑↑b < radius →
+                  dist ↑↑d ↑↑b < radius → dist (charts.develop ↑c) (charts.develop ↑d) = P.surfaceDist ↑↑c ↑↑d
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_locally_isometric' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_isOpenEmbedding : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ {a : ↑(frontier P.body)} {T : P.CutLocusTree a} (charts : SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts T)
+      (source : Fin 6),
+      ↑a = ↑(graph.vertex source) →
+        (∀ (v : ↑P.Vertex), ∃ F, ↑a ∈ ↑F ∧ ↑v ∈ ↑F) → Topology.IsOpenEmbedding fun b => charts.develop ↑b
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_isOpenEmbedding' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_frontier_eq_segments : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ {a : ↑(frontier P.body)} {T : P.CutLocusTree a} (charts : SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts T)
+      (source : Fin 6),
+      ↑a = ↑(graph.vertex source) →
+        (∀ (v : ↑P.Vertex), ∃ F, ↑a ∈ ↑F ∧ ↑v ∈ ↑F) →
+          frontier (Set.range fun c => charts.develop ↑c) = ⋃ e ∈ charts.boundarySegments, segment ℝ e.1 e.2
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_frontier_eq_segments' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_source_leaf_iff_original : ∀
+  {P : SixVertexUnfolding.ConvexPolyhedron} (graph : P.SixVertexGraph),
+  (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) →
+    ∀ (a : ↑(frontier P.body)) (T : P.CutLocusTree a),
+      (∀ (v : ↑P.Vertex), ∃ F, ↑a ∈ ↑F ∧ ↑v ∈ ↑F) → ∀ (u : ↑T.vertices), (∃! v, T.graph.Adj u v) ↔ ↑u ∈ P.vertices
+'SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_source_leaf_iff_original' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan.totalAngle : {P : SixVertexUnfolding.ConvexPolyhedron} →
+  {pole : ↑P.Vertex} → {n : ℕ} → [inst : NeZero n] → P.VertexFaceFan pole n → ℝ
+@SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan.totalAngle_lt_two_pi : ∀ {P : SixVertexUnfolding.ConvexPolyhedron}
+  {pole : ↑P.Vertex} {n : ℕ} [inst : NeZero n] (fan : P.VertexFaceFan pole n),
+  P.vertices.card ≤ 6 →
+    (∀ (F : P.Face), (↑F ∩ ↑P.vertices).ncard = 3 ∨ (↑F ∩ ↑P.vertices).ncard = 4) → fan.totalAngle < 2 * Real.pi
+'SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan.totalAngle_lt_two_pi' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SixVertexUnfolding.Wedge.kite_subset_region : ∀ {h r q a b : ℝ},
+  0 < h → 0 ≤ h * b - r * a → SixVertexUnfolding.Wedge.kite h r q ⊆ SixVertexUnfolding.Wedge.region h q a b
+'SixVertexUnfolding.Wedge.kite_subset_region' depends on axioms: [propext, Classical.choice, Quot.sound]
+@SixVertexUnfolding.Wedge.move_root : ∀ {h r q a b : ℝ},
+  0 < h →
+    r ≤ q →
+      0 ≤ h * b - r * a →
+        SixVertexUnfolding.Wedge.region h q a b =
+          SixVertexUnfolding.Wedge.region h r a b ∪ SixVertexUnfolding.Wedge.kite h r q
+'SixVertexUnfolding.Wedge.move_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+@SixVertexUnfolding.Wedge.next_kite_outside : ∀ {h r q a b : ℝ},
+  0 < h →
+    0 ≤ h * b - q * a → Disjoint (SixVertexUnfolding.Wedge.region h r a b) (SixVertexUnfolding.Wedge.openKite h r q)
+'SixVertexUnfolding.Wedge.next_kite_outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+SixVertexUnfolding.Wedge.region : ℝ → ℝ → ℝ → ℝ → Set SixVertexUnfolding.Plane
+SixVertexUnfolding.Wedge.polarRegion : ℝ → ℝ → ℝ → ℝ → Set SixVertexUnfolding.Plane
+@SixVertexUnfolding.Wedge.rotate_arms : ∀ {d γ lower₁ upper₁ lower₂ upper₂ : ℝ},
+  lower₂ ≤ lower₁ →
+    upper₁ ≤ upper₂ →
+      SixVertexUnfolding.Wedge.polarRegion d γ lower₁ upper₁ ⊆ SixVertexUnfolding.Wedge.polarRegion d γ lower₂ upper₂
+'SixVertexUnfolding.Wedge.rotate_arms' depends on axioms: [propext, Classical.choice, Quot.sound]
+@SixVertexUnfolding.Wedge.ArmCoordinates.rotate_and_move : ∀ {h r a b d θ γ : ℝ},
+  SixVertexUnfolding.Wedge.ArmCoordinates h r a b d θ γ →
+    ∀ {q D Θ lower upper : ℝ},
+      r ≤ q →
+        0 < D →
+          0 < Θ →
+            Θ < Real.pi →
+              -q = D * Real.cos Θ →
+                h = D * Real.sin Θ →
+                  θ ≤ lower →
+                    upper ≤ 2 * Real.pi - θ →
+                      γ +
+                            EuclideanGeometry.angle (SixVertexUnfolding.Wedge.point r 0)
+                              (SixVertexUnfolding.Wedge.point 0 h) (SixVertexUnfolding.Wedge.point q 0) ≤
+                          3 * Real.pi / 2 →
+                        have α :=
+                          EuclideanGeometry.angle (SixVertexUnfolding.Wedge.point r 0)
+                            (SixVertexUnfolding.Wedge.point 0 h) (SixVertexUnfolding.Wedge.point q 0);
+                        have W :=
+                          {z |
+                            z - SixVertexUnfolding.Wedge.point r 0 ∈
+                              SixVertexUnfolding.Wedge.polarRegion d γ lower upper};
+                        have V :=
+                          {z |
+                            z - SixVertexUnfolding.Wedge.point r 0 ∈
+                              SixVertexUnfolding.Wedge.polarRegion d γ θ (2 * Real.pi - θ)};
+                        have W' :=
+                          {z |
+                            z - SixVertexUnfolding.Wedge.point q 0 ∈
+                              SixVertexUnfolding.Wedge.polarRegion D (γ + α) Θ (2 * Real.pi - Θ)};
+                        W ⊆ V ∧
+                          Disjoint V (interior (SixVertexUnfolding.Wedge.kite h r q)) ∧
+                            W' = V ∪ SixVertexUnfolding.Wedge.kite h r q
+'SixVertexUnfolding.Wedge.ArmCoordinates.rotate_and_move' depends on axioms: [propext, Classical.choice, Quot.sound]
+Checked 891 Lean files.

@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UniqueRouteLeaves.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>UniqueRouteLeaves.lean</h1><p>SixVertexUnfolding/Geometry/UniqueRouteLeaves.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.UniqueRouteCutVertex</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> import SixVertexUnfolding.Geometry.JunctionFan</span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> </span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> /-! For a source cofacial with every original vertex, all original</span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> nonsource vertices are leaves. Every internal junction therefore has</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> the flat fan already constructed for the wedge-chain argument. -/</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> </span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> </span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> open Set</span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> </span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> namespace EmbeddedCutGraph</span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> </span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a> /-- At least two original nonsource vertices occur among the cut-graph vertices. -/</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a> theorem vertices_nontrivial {P : ConvexPolyhedron} {a : frontier P.body}</span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a>     (K : P.EmbeddedCutGraph a) : Nontrivial K.vertices := by</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a>   classical</span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a>   have enough : 1 &lt; (P.vertices.erase (a : Space)).card := by</span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a>     have lower := P.four_le_vertex_count</span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a>     have bound := Finset.pred_card_le_card_erase (s := P.vertices) (a := (a : Space))</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a>     omega</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a>   obtain ⟨v, hv, w, hw, different⟩ := Finset.one_lt_card.mp enough</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a>   have first := K.original_vertex_mem (Finset.mem_erase.mp hv).2 (Finset.mem_erase.mp hv).1</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a>   have second := K.original_vertex_mem (Finset.mem_erase.mp hw).2 (Finset.mem_erase.mp hw).1</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>   exact ⟨⟨⟨v, first⟩, ⟨w, second⟩, fun same =&gt; different (congrArg Subtype.val same)⟩⟩</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a> </span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a> end EmbeddedCutGraph</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a> </span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a> namespace SixVertexGraph</span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a> </span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a> </span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a> include graph small_faces in</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a> /-- A unique-route cut-tree vertex is a leaf, in the exact one-neighbor sense. -/</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a> theorem unique_route_cut_vertex_is_leaf (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a>     (u : T.vertices) (unique : (P.geodesicFiber a (T.vertexTarget u)).Subsingleton) :</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a>     ∃! v, T.graph.Adj u v := by</span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a>   letI : Nontrivial T.vertices := T.toEmbeddedCutGraph.vertices_nontrivial</span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a>   obtain ⟨v, edge⟩ := T.tree.connected.preconnected.exists_adj_of_nontrivial u</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a>   exact ⟨v, edge, fun w other =&gt;</span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a>     graph.unique_route_cut_vertex_at_most_one_neighbor small_faces a T u unique w v other edge⟩</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a> </span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a> include graph small_faces in</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a> /-- If the source shares a face with every original vertex, the leaves</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a> are precisely the original nonsource vertices. -/</span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a> theorem cofacial_source_leaf_iff_original (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L49" class="line"><a href="#L49" aria-label="Line 49">49</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)</span>
+<span id="L50" class="line"><a href="#L50" aria-label="Line 50">50</a>     (u : T.vertices) : (∃! v, T.graph.Adj u v) ↔ (u : Space) ∈ P.vertices := by</span>
+<span id="L51" class="line"><a href="#L51" aria-label="Line 51">51</a>   constructor</span>
+<span id="L52" class="line"><a href="#L52" aria-label="Line 52">52</a>   · rintro ⟨v, edge, only_neighbor⟩</span>
+<span id="L53" class="line"><a href="#L53" aria-label="Line 53">53</a>     exact graph.cut_graph_leaf_is_vertex small_faces a T.toEmbeddedCutGraph u v edge only_neighbor</span>
+<span id="L54" class="line"><a href="#L54" aria-label="Line 54">54</a>   · intro original</span>
+<span id="L55" class="line"><a href="#L55" aria-label="Line 55">55</a>     obtain ⟨F, source, target⟩ := cofacial ⟨u, original⟩</span>
+<span id="L56" class="line"><a href="#L56" aria-label="Line 56">56</a>     exact graph.unique_route_cut_vertex_is_leaf small_faces a T u</span>
+<span id="L57" class="line"><a href="#L57" aria-label="Line 57">57</a>       (P.geodesicFiber_cofacial_unique a (T.vertexTarget u) F source target)</span>
+<span id="L58" class="line"><a href="#L58" aria-label="Line 58">58</a> </span>
+<span id="L59" class="line"><a href="#L59" aria-label="Line 59">59</a> include graph small_faces in</span>
+<span id="L60" class="line"><a href="#L60" aria-label="Line 60">60</a> /-- An actual passage between distinct incident edges cannot be at an</span>
+<span id="L61" class="line"><a href="#L61" aria-label="Line 61">61</a> original vertex for a cofacial source. -/</span>
+<span id="L62" class="line"><a href="#L62" aria-label="Line 62">62</a> theorem cofacial_source_internal_vertex_nonvertex (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L63" class="line"><a href="#L63" aria-label="Line 63">63</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)</span>
+<span id="L64" class="line"><a href="#L64" aria-label="Line 64">64</a>     (u v w : T.vertices) (first : T.graph.Adj u v) (second : T.graph.Adj u w)</span>
+<span id="L65" class="line"><a href="#L65" aria-label="Line 65">65</a>     (different : v ≠ w) : (u : Space) ∉ P.vertices := by</span>
+<span id="L66" class="line"><a href="#L66" aria-label="Line 66">66</a>   intro original</span>
+<span id="L67" class="line"><a href="#L67" aria-label="Line 67">67</a>   obtain ⟨F, source, target⟩ := cofacial ⟨u, original⟩</span>
+<span id="L68" class="line"><a href="#L68" aria-label="Line 68">68</a>   exact different (graph.cofacial_cut_vertex_at_most_one_neighbor small_faces a T u</span>
+<span id="L69" class="line"><a href="#L69" aria-label="Line 69">69</a>     F source target v w first second)</span>
+<span id="L70" class="line"><a href="#L70" aria-label="Line 70">70</a> </span>
+<span id="L71" class="line"><a href="#L71" aria-label="Line 71">71</a> include graph small_faces in</span>
+<span id="L72" class="line"><a href="#L72" aria-label="Line 72">72</a> /-- The real flat fan exists at every internal tree-path junction;</span>
+<span id="L73" class="line"><a href="#L73" aria-label="Line 73">73</a> there is no remaining singular-junction premise in this cofacial case. -/</span>
+<span id="L74" class="line"><a href="#L74" aria-label="Line 74">74</a> theorem cofacial_source_internal_junction_fan (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L75" class="line"><a href="#L75" aria-label="Line 75">75</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)</span>
+<span id="L76" class="line"><a href="#L76" aria-label="Line 76">76</a>     (u v w : T.vertices) (first : T.graph.Adj u v) (second : T.graph.Adj u w)</span>
+<span id="L77" class="line"><a href="#L77" aria-label="Line 77">77</a>     (different : v ≠ w) : Nonempty (JunctionFan T u) :=</span>
+<span id="L78" class="line"><a href="#L78" aria-label="Line 78">78</a>   graph.exists_junction_fan small_faces a T u</span>
+<span id="L79" class="line"><a href="#L79" aria-label="Line 79">79</a>     (graph.cofacial_source_internal_vertex_nonvertex small_faces a T cofacial u v w first second different)</span>
+<span id="L80" class="line"><a href="#L80" aria-label="Line 80">80</a> </span>
+<span id="L81" class="line"><a href="#L81" aria-label="Line 81">81</a> end SixVertexGraph</span>
+<span id="L82" class="line"><a href="#L82" aria-label="Line 82">82</a> end SixVertexUnfolding.ConvexPolyhedron</span>
+</pre></html>

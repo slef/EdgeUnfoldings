@@ -1,0 +1,551 @@
+[
+  {
+    "id": "star-definition",
+    "blocks": [
+      "definition-1"
+    ],
+    "title": "What is the star unfolding in Lean?",
+    "status": "restricted",
+    "statement": "Definitions present for cofacial cuts",
+    "proof": "Checked construction in restricted scope",
+    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
+    "note": "ConvexPolyhedron is the convex hull of its exact extreme vertices in ℝ³, with nonempty interior. The current starCuts removes straight source-to-vertex segments. These are shortest surface cuts when the source is cofacial with every vertex. This is not yet a definition of an arbitrary choice of shortest cuts for an arbitrary source.",
+    "refs": [
+      [
+        "Definitions",
+        "ConvexPolyhedron"
+      ],
+      [
+        "Definitions",
+        "ConvexPolyhedron.body"
+      ],
+      [
+        "CofacialStarCuts",
+        "starCuts"
+      ],
+      [
+        "CofacialStarCuts",
+        "UncutSurface"
+      ],
+      [
+        "CofacialStarCuts",
+        "original_route_subset_starCuts"
+      ]
+    ],
+    "steps": [],
+    "gap": "Define chosen shortest cuts for a general source and the corresponding cut surface. The existing UncutSurface must not silently be used for that more general object."
+  },
+  {
+    "id": "boundary-images",
+    "blocks": [
+      "boundary"
+    ],
+    "title": "Boundary images and equal cut lengths",
+    "status": "missing",
+    "statement": "Polygonal-boundary statement present; 2n count absent",
+    "proof": "Restricted boundary theorem checked",
+    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
+    "note": "The assembled development has an exact finite segment boundary. The paper’s alternating vertex/source images and its 2n (or 2(n−1)) boundary count have not been packaged as Lean statements. A finite polygonal boundary alone does not assert this combinatorial description.",
+    "refs": [
+      [
+        "StarPolygonBoundary",
+        "develop_frontier_eq_segments"
+      ]
+    ],
+    "steps": [],
+    "gap": "State and prove the boundary-image order/count if that part of Definition 1 is required."
+  },
+  {
+    "id": "tree",
+    "blocks": [
+      "cut-tree"
+    ],
+    "title": "The actual cut tree",
+    "status": "restricted",
+    "statement": "Definitions and tree statements present",
+    "proof": "Checked in the stated small-polyhedron scope",
+    "scope": "At most six vertices; every face triangular or quadrilateral. Arbitrary surface source.",
+    "note": "The new theorem constructs an exact finite embedded tree, not a graph covering a superset. Its definition augments the multiple-route locus by the nonsource original vertices. Equality with the paper’s closure definition has a checked canonical-graph theorem; that equality is not yet exported in the broader small-polyhedron scope.",
+    "refs": [
+      [
+        "MultipleShortestRoutes",
+        "multipleRouteLocus"
+      ],
+      [
+        "ClosedCutSet",
+        "cutSet"
+      ],
+      [
+        "EmbeddedCutGraph",
+        "EmbeddedCutGraph"
+      ],
+      [
+        "RegularCutTree",
+        "CutLocusTree"
+      ],
+      [
+        "SmallPolyhedronCutTree",
+        "small_exists_regular_cut_tree"
+      ],
+      [
+        "SmallPolyhedronCutTree",
+        "small_cut_tree_open_edge_two_routes"
+      ],
+      [
+        "CutSetVertexLimits",
+        "cutSet_eq_closure_multiple"
+      ]
+    ],
+    "steps": [
+      "Exact local Voronoi descriptions → finite straight segments.",
+      "Continuous retraction onto the cut set → contractibility → connectedness and acyclicity.",
+      "Mark original cut vertices and all junctions → exactly two shortest routes on an open tree edge."
+    ],
+    "gap": "The paper has no vertex-count or face-size restriction. Transfer the closure-identification theorem to the newer scope as well."
+  },
+  {
+    "id": "curve",
+    "blocks": [
+      "geodesic",
+      "definition-2",
+      "curve-sides",
+      "lemma-1",
+      "curve-images",
+      "curve-tree",
+      "curve-edges"
+    ],
+    "title": "§1.2 is included, but not formalized here",
+    "status": "outside",
+    "statement": "No matching curve-source declarations",
+    "proof": "Outside the point-star subproject",
+    "scope": "Geodesic or quasigeodesic curve sources.",
+    "note": "This section is reproduced because it lies in the requested range. SurfacePath and shortest-route definitions elsewhere in the project do not amount to the paper’s geodesic-curve star unfolding. Lemma 1, point/segment images, and the straight/parabolic cut-locus classification are not being claimed as proved.",
+    "refs": [],
+    "steps": [],
+    "gap": "No proof work on curve-source unfoldings is included in this checkpoint."
+  },
+  {
+    "id": "kite-partition",
+    "blocks": [
+      "kites"
+    ],
+    "title": "Build the actual radial triangles",
+    "status": "restricted",
+    "statement": "Route, metric-kite, and coverage statements present",
+    "proof": "Checked; construction still uses canonical graphs",
+    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces.",
+    "note": "The two basic shortest-route facts now hold without a canonical graph in the small-polyhedron scope. The complete two-triangle construction and its coverage theorem still use SixVertexGraph. Merely specifying equal distances in a metric model is not the whole surface partition.",
+    "refs": [
+      [
+        "SmallPolyhedronShortestRoutes",
+        "small_shortest_routes_agree_of_meeting"
+      ],
+      [
+        "SmallPolyhedronTerminalRays",
+        "small_geodesic_proper_prefix_outside_cutSet"
+      ],
+      [
+        "CutEdgeMetricModel",
+        "CutEdgeMetricModel"
+      ],
+      [
+        "CutEdgeTriangles",
+        "CutEdgeTriangles"
+      ],
+      [
+        "CutEdgeTriangles",
+        "exists_cut_edge_triangles"
+      ],
+      [
+        "CutTreeTriangleCoverage",
+        "cut_tree_triangles_cover"
+      ]
+    ],
+    "steps": [
+      "No branching/crossing of distinct shortest routes.",
+      "Proper shortest prefixes stay outside the cut set.",
+      "Construct both actual closed radial strips and develop them to metric triangles.",
+      "Prove their union covers the surface; later separation handles overlap."
+    ],
+    "gap": "Transfer the radial-triangle and junction constructions to the new small-polyhedron tree."
+  },
+  {
+    "id": "budget",
+    "blocks": [
+      "source-budget"
+    ],
+    "title": "The source-angle budget is the integration gap",
+    "status": "restricted",
+    "statement": "Angle definitions and restricted budget statements present",
+    "proof": "Local bound checked; global budget restricted",
+    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The global budget uses a source vertex.",
+    "note": "The local bound “surface angle < 2π” is proved at every original vertex of a small polyhedron. That does not by itself prove that all the developed kite angles fit into that cone. The global source-angle sum is proved for canonical graphs, using actual cone coverage and curvature accounting.",
+    "refs": [
+      [
+        "CutEdgeSourceAngles",
+        "sourceAngle"
+      ],
+      [
+        "VertexFanAngles",
+        "totalAngle"
+      ],
+      [
+        "VertexFanAngles",
+        "totalAngle_lt_two_pi"
+      ],
+      [
+        "CutTreeConeCoverage",
+        "incident_model_angles_cover_cone"
+      ],
+      [
+        "CutTreeCurvature",
+        "sum_cutTreeCurvature"
+      ],
+      [
+        "CutTreeSourceBudget",
+        "source_angle_sum_le"
+      ],
+      [
+        "CutTreeSourceBudget",
+        "half_source_angle_sum_lt_pi"
+      ]
+    ],
+    "steps": [
+      "Local surface angle: checked for all small polyhedra.",
+      "Incident radial triangles cover each cone: checked for canonical graphs.",
+      "Total curvature accounting: checked for canonical graphs.",
+      "Half the directed source-angle sum is < π: checked for canonical vertex sources."
+    ],
+    "gap": "Generalize the coverage and curvature arguments. The nonvertex-source case permits equality α(σ) = π; the current global result assumes a vertex source and gives a strict bound."
+  },
+  {
+    "id": "main",
+    "blocks": [
+      "theorem-1"
+    ],
+    "title": "Theorem 1 — what has actually been proved",
+    "status": "restricted",
+    "statement": "Restricted theorem present; full paper statement absent",
+    "proof": "Restricted theorem checked, no sorry",
+    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
+    "note": "cofacial_star_embedding constructs a continuous open embedding of the actual retained surface into the plane, with bounded connected image, finite straight-segment boundary, and exact local intrinsic isometry. This is a real proved checkpoint, but it is not Theorem 1 for every convex polyhedron and source. The cofacial hypothesis is impossible for the all-triangular octahedron, so this does not claim all four graph models admit such a source.",
+    "refs": [
+      [
+        "CofacialStarEmbedding",
+        "cofacial_star_embedding"
+      ],
+      [
+        "SixVertexGraphs",
+        "SixVertexGraph"
+      ],
+      [
+        "CanonicalSixGraphs",
+        "SixGraphKind"
+      ],
+      [
+        "CutTreeCharts",
+        "CutTreeCharts"
+      ],
+      [
+        "GlobalKiteSeparation",
+        "global_kites_nonoverlap"
+      ],
+      [
+        "StarOpenEmbedding",
+        "develop_isOpenEmbedding"
+      ],
+      [
+        "StarLocalMetric",
+        "develop_locally_isometric"
+      ],
+      [
+        "RetainedCutConnectivity",
+        "cofacial_uncut_surface_pathConnected"
+      ]
+    ],
+    "steps": [
+      "Construct the cut tree and coherent, covering radial charts.",
+      "Prove the angle budget and separate every pair of kites.",
+      "Glue the triangle maps and construct inverse neighborhoods.",
+      "Prove local intrinsic isometry and retained-surface connectivity.",
+      "Identify the exact finite-segment boundary."
+    ],
+    "gap": "Universal-vertex sources still need the geometric construction transferred. Arbitrary sources additionally need general star cuts and internal original-vertex junctions. No standalone full-scope Theorem 1 with a sorry has been added."
+  },
+  {
+    "id": "path",
+    "blocks": [
+      "path-reduction"
+    ],
+    "title": "Reduce any two kites to their tree path",
+    "status": "proved",
+    "statement": "Conditional chain and separation statements present",
+    "proof": "Checked, from explicit geometric inputs",
+    "scope": "Finite cut trees supplied with coherent CutTreeCharts and the source budget.",
+    "note": "The combinatorial path argument is proved. The final canonical-graph theorem supplies its source budget; it still receives charts whose original_leaves field rules out internal original vertices.",
+    "refs": [
+      [
+        "CutTreeCharts",
+        "CutTreeCharts"
+      ],
+      [
+        "CutTreeChainSeparation",
+        "end_kites_nonoverlap"
+      ],
+      [
+        "GlobalKiteSeparation",
+        "global_kites_nonoverlap"
+      ]
+    ],
+    "steps": [],
+    "gap": ""
+  },
+  {
+    "id": "wedge",
+    "blocks": [
+      "wedge-definition"
+    ],
+    "title": "W-wedges as actual planar sets",
+    "status": "defined",
+    "statement": "Definitions present",
+    "proof": "Definitions; geometry proved in downstream lemmas",
+    "scope": "Planar coordinates; no polyhedron classification is needed.",
+    "note": "The implementation uses a circle-by-circle description (polarRegion) and a Cartesian region for root movement. Both bounded and unbounded cases are included. These are set definitions, not a structure assuming the desired separation.",
+    "refs": [
+      [
+        "WedgeRotation",
+        "polarRegion"
+      ],
+      [
+        "WedgeRootMove",
+        "region"
+      ],
+      [
+        "GapKiteStep",
+        "gapKite"
+      ]
+    ],
+    "steps": [],
+    "gap": ""
+  },
+  {
+    "id": "invariant",
+    "blocks": [
+      "induction-goal",
+      "induction-step"
+    ],
+    "title": "The induction, decomposed",
+    "status": "proved",
+    "statement": "RegionStep and finite-chain statements present",
+    "proof": "Checked, conditional on actual steps",
+    "scope": "Sets in the plane and affine isometric changes of coordinates.",
+    "note": "The Lean induction tracks three facts separately: the old wedge is contained in an enlarged wedge, the enlarged wedge avoids the next kite’s interior, and moving coordinates turns their union into the new wedge. It explicitly transports every kite into one common plane.",
+    "refs": [
+      [
+        "ExpandingRegionChains",
+        "RegionStep"
+      ],
+      [
+        "ExpandingRegionChains",
+        "finite_chain_separation"
+      ],
+      [
+        "ExpandingRegionChains",
+        "finite_chain_endpoint_separation"
+      ]
+    ],
+    "steps": [
+      "contains: Wᵢ₋₁ ⊆ W′ᵢ.",
+      "avoids: W′ᵢ ∩ interior(kᵢ) = ∅.",
+      "updated: Wᵢ is the transported union W′ᵢ ∪ kᵢ.",
+      "Finite induction carries all earlier regions forward and separates the endpoints."
+    ],
+    "gap": ""
+  },
+  {
+    "id": "containment",
+    "blocks": [
+      "lemma-2",
+      "lemma-2-proof"
+    ],
+    "title": "Lemma 2 — a coordinate proof",
+    "status": "proved",
+    "statement": "Coordinate containment statements present",
+    "proof": "Checked, under explicit outward-angle conditions",
+    "scope": "Planar kites and wedges; coordinate formulations of the paper’s geometric step.",
+    "note": "The code does not reproduce the circular-sector proof line by line. It proves kite containment and complementary exclusion by coordinate inequalities, then translates the angle budget to these inequalities in rotate_and_move. The full geometric step bundles rotation, exclusion and root movement.",
+    "refs": [
+      [
+        "WedgeRootMove",
+        "kite_subset_region"
+      ],
+      [
+        "WedgeRootMove",
+        "next_kite_outside"
+      ],
+      [
+        "WedgeStep",
+        "rotate_and_move"
+      ],
+      [
+        "GapKiteStep",
+        "gap_rotate_and_move_with_sources"
+      ]
+    ],
+    "steps": [
+      "Containment: a nonnegative dot product keeps the outer ray pointing outward.",
+      "Exclusion: the outward condition at the new root keeps the next kite outside the old wedge.",
+      "Angle-to-coordinate translation connects these conditions to the cumulative budget."
+    ],
+    "gap": ""
+  },
+  {
+    "id": "base",
+    "blocks": [
+      "base-case"
+    ],
+    "title": "Base case for an actual kite",
+    "status": "proved",
+    "statement": "Statement present",
+    "proof": "Checked, given IncidentTriangles",
+    "scope": "An actual first radial kite; its far endpoint may be an original vertex.",
+    "note": "initial_kite_in_wedge encloses the complete first kite with exactly its own source-angle charge. The proof uses the already-checked planar move. Constructing IncidentTriangles in the broader polyhedral scope is still separate.",
+    "refs": [
+      [
+        "InitialKiteWedge",
+        "initial_kite_in_wedge"
+      ],
+      [
+        "GapKiteStep",
+        "gap_rotate_and_move_with_sources"
+      ]
+    ],
+    "steps": [],
+    "gap": ""
+  },
+  {
+    "id": "rotation",
+    "blocks": [
+      "rotate"
+    ],
+    "title": "Rotate the arms, then exclude the next kite",
+    "status": "restricted",
+    "statement": "Planar and flat-junction statements present",
+    "proof": "Checked with a flat JunctionFan and angle budget",
+    "scope": "Planar rotation is generic. The supplied surface junction fan is flat.",
+    "note": "rotate_arms is a direct set-containment theorem. JunctionFan.wedge_step_with_parameters obtains the correct gap order and actual kite angles from the surface chart. The current global chart structure excludes internal original vertices; this is where the paper’s singular-vertex situation still needs additional construction.",
+    "refs": [
+      [
+        "WedgeRotation",
+        "rotate_arms"
+      ],
+      [
+        "JunctionWedgeStep",
+        "wedge_step_with_parameters"
+      ],
+      [
+        "CutTreeCharts",
+        "CutTreeCharts"
+      ]
+    ],
+    "steps": [
+      "Get the circular order of the actual incoming and outgoing gaps.",
+      "Rotate to an enlarged wedge without losing the old region.",
+      "Use the complementary angle bound to exclude the outgoing kite."
+    ],
+    "gap": "Handle junctions at original vertices, where the surface cone angle is less than 2π. The journal text says “surface area”; in context it refers to surface angle. Its pᵢ/pᵢ₋₁ wording is retained in this transcription."
+  },
+  {
+    "id": "center",
+    "blocks": [
+      "move-center"
+    ],
+    "title": "Move the root and add exactly one kite",
+    "status": "proved",
+    "statement": "Statements present",
+    "proof": "Checked, with explicit angle budget",
+    "scope": "Planar region movement and actual flat-junction data.",
+    "note": "move_root proves an exact set equality, stronger than the needed containment. The geometric step identifies the next source radius, corner angle and source-angle increment. Editorial note: the paper’s phrase “to αᵢ” omits the fixed π/2 offset used in its wedge definition; the Lean formula retains ω + sourceAngle.",
+    "refs": [
+      [
+        "WedgeRootMove",
+        "move_root"
+      ],
+      [
+        "GapKiteStep",
+        "gap_rotate_and_move_with_sources"
+      ],
+      [
+        "JunctionWedgeStep",
+        "wedge_step_with_parameters"
+      ]
+    ],
+    "steps": [],
+    "gap": ""
+  },
+  {
+    "id": "exterior",
+    "blocks": [
+      "empty-regions",
+      "lemma-3"
+    ],
+    "title": "Lemma 3 has no complete matching theorem yet",
+    "status": "missing",
+    "statement": "Full geometric statement not yet declared",
+    "proof": "Unfinished; no literal sorry declaration",
+    "scope": "Exterior W-region at an arbitrary original vertex image.",
+    "note": "The finite-chain theorem preserves an initial empty region, which is useful infrastructure. There is not yet a theorem identifying that region with the paper’s exterior W for every vertex image and all possible incident cut edges.",
+    "refs": [
+      [
+        "ExpandingRegionChains",
+        "finite_chain_separation"
+      ]
+    ],
+    "steps": [],
+    "gap": "Define the exterior W at a boundary vertex image, connect it to every incident initial wedge, and conclude that the whole developed surface avoids its interior."
+  },
+  {
+    "id": "leaf",
+    "blocks": [
+      "lemma-3-leaf"
+    ],
+    "title": "Lemma 3 — the leaf case",
+    "status": "restricted",
+    "statement": "Leaf and abstract empty-region statements present",
+    "proof": "Components checked; paper-level corollary not assembled",
+    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
+    "note": "The leaf classification is proved for cofacial sources in canonical graphs. Finite-chain separation also keeps every later kite interior out of its initial region. These components have not been assembled into the exact closed-unfolding-versus-interior(W) assertion of Lemma 3.",
+    "refs": [
+      [
+        "UniqueRouteLeaves",
+        "cofacial_source_leaf_iff_original"
+      ],
+      [
+        "ExpandingRegionChains",
+        "finite_chain_separation"
+      ]
+    ],
+    "steps": [],
+    "gap": "Supply the geometric identification and the boundary/interior argument needed for the precise exterior-region assertion."
+  },
+  {
+    "id": "singular",
+    "blocks": [
+      "lemma-3-internal"
+    ],
+    "title": "Lemma 3 — an internal original vertex",
+    "status": "missing",
+    "statement": "General cone-junction / exterior-W bridge absent",
+    "proof": "Unfinished; no literal sorry declaration",
+    "scope": "Original polyhedron vertices with several incident cut-locus edges.",
+    "note": "The paper selects a tree path and uses W ⊆ W₀ for its chosen first edge. Our current CutTreeCharts instead requires every original cut vertex to be a leaf. Thus the existing global assembly cannot express this case merely by supplying another fan.",
+    "refs": [
+      [
+        "CutTreeCharts",
+        "CutTreeCharts"
+      ]
+    ],
+    "steps": [],
+    "gap": "Construct the singular cone junction and prove W ⊆ W₀ for each possible starting edge, then extend the assembly to those junctions."
+  }
+]

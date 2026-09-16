@@ -1,0 +1,11 @@
+{
+  "checked": "2026-09-16",
+  "declarations": 50,
+  "theorems": 31,
+  "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "result": "passed"
+}
