@@ -1,6 +1,7 @@
 """Regenerate the paper's exact Lean excerpts. Run from any directory."""
 from pathlib import Path
 import re, json, hashlib, subprocess, html
+from datetime import date
 
 site=Path(__file__).resolve().parent
 root=site.parent
@@ -50,7 +51,7 @@ for module,name in sorted(set(tuple(r) for a in annotations for r in a['refs']))
     (out/(module+'.html')).write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+html.escape(module)+'.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>'+html.escape(module)+'.lean</h1><p>'+html.escape(str(path.relative_to(root)))+' · exact source snapshot</p><pre>'+rendered+'</pre></html>')
     (out/(module+'.lean')).write_text(content)
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
-data=dict(annotations=annotations,declarations=decls,sources=sources,revision=revision,date='2026-09-16',paper=json.loads((site/'paper.json').read_text()),figures=json.loads((site/'figures.json').read_text()))
+data=dict(annotations=annotations,declarations=decls,sources=sources,revision=revision,date=date.today().isoformat(),paper=json.loads((site/'paper.json').read_text()),figures=json.loads((site/'figures.json').read_text()))
 (dist/'data.js').write_text('window.PAPER_DATA = '+json.dumps(data,ensure_ascii=False,indent=2)+';\n')
 # A reproducible audit input; it checks the full elaborated types and dependencies.
 checks=['import SixVertexUnfolding']

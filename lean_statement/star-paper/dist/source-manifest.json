@@ -1,13 +1,9 @@
 {
-  "revision": "99e7591f252351d873bb51676f1294899fceecfe",
+  "revision": "868314660f92ce4de8d4f846e1860b9e1945986b",
   "date": "2026-09-16",
-  "declarations": 50,
-  "theorems": 31,
+  "declarations": 56,
+  "theorems": 37,
   "sources": {
-    "CanonicalSixGraphs": {
-      "path": "SixVertexUnfolding/CanonicalSixGraphs.lean",
-      "sha256": "0cdbbf33dee6f6aaa5411cd0ab5a38807cc57627a0748e9be99c6562101c6da1"
-    },
     "ClosedCutSet": {
       "path": "SixVertexUnfolding/Geometry/ClosedCutSet.lean",
       "sha256": "aa5004ee116f1b60b868629f6b5518e1cdb9d77d46de6821d43e9340d3e43664"
@@ -15,10 +11,6 @@
     "CofacialStarCuts": {
       "path": "SixVertexUnfolding/Geometry/CofacialStarCuts.lean",
       "sha256": "0c7b8aee498bd8445fef847c78a7e5242e9ffcbe55896439f2cecdd8ef998053"
-    },
-    "CofacialStarEmbedding": {
-      "path": "SixVertexUnfolding/Geometry/CofacialStarEmbedding.lean",
-      "sha256": "86defbc1d1d91e26c0545a79f399c28fad39be3b9660a9407bffacb0c253e1d0"
     },
     "CutEdgeMetricModel": {
       "path": "SixVertexUnfolding/Geometry/CutEdgeMetricModel.lean",
@@ -43,22 +35,6 @@
     "CutTreeCharts": {
       "path": "SixVertexUnfolding/Geometry/CutTreeCharts.lean",
       "sha256": "7c728b898e9ad96fdd8070119bb0666832d5c9c12913932635f816a402853c21"
-    },
-    "CutTreeConeCoverage": {
-      "path": "SixVertexUnfolding/Geometry/CutTreeConeCoverage.lean",
-      "sha256": "dbb52070a2da4aa5507b8e9948a9cc3c0ffbd79a04238912a31a9ed7320de2b2"
-    },
-    "CutTreeCurvature": {
-      "path": "SixVertexUnfolding/Geometry/CutTreeCurvature.lean",
-      "sha256": "38e833e92a552193e07ba85efa912dc04151827c48f4e8de1b355b820dfdacb9"
-    },
-    "CutTreeSourceBudget": {
-      "path": "SixVertexUnfolding/Geometry/CutTreeSourceBudget.lean",
-      "sha256": "8600f499f4e9d9f100f5ec073c0c09e336304430da3c4a2fdd929951d30bd37a"
-    },
-    "CutTreeTriangleCoverage": {
-      "path": "SixVertexUnfolding/Geometry/CutTreeTriangleCoverage.lean",
-      "sha256": "ef8da9ddfc98d5b50f0c4a3639872406d627b71268609fc9c026f6c1408798ca"
     },
     "Definitions": {
       "path": "SixVertexUnfolding/Definitions.lean",
@@ -96,45 +72,81 @@
       "path": "SixVertexUnfolding/Geometry/RegularCutTree.lean",
       "sha256": "324af0598e1fd9e027fdd0518f2c88ab6646df179592ae1e10dcc781f0464907"
     },
-    "RetainedCutConnectivity": {
-      "path": "SixVertexUnfolding/Geometry/RetainedCutConnectivity.lean",
-      "sha256": "bc5e4bd9c751d098ed5e52887d311686752664379f5b8851972c6db7b1912aed"
+    "SmallPolyhedronCurvature": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCurvature.lean",
+      "sha256": "418d3be88ddfe21aa63244f0b7ea78321c863becd16ac21de4fb21739286af53"
     },
-    "SixVertexGraphs": {
-      "path": "SixVertexUnfolding/Geometry/SixVertexGraphs.lean",
-      "sha256": "4317cd118b6c798490cbc45ae5024eefcf56c15dc90dbf6fe39f8f8c228e2f8f"
+    "SmallPolyhedronCutEdgeTriangles": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutEdgeTriangles.lean",
+      "sha256": "d7ab773f715a5d3a0be99d80ee706842945b8ad8ccb5e0fe17134ea60222e11a"
     },
     "SmallPolyhedronCutTree": {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTree.lean",
       "sha256": "d8c3d2512ab189fac07db833e31bdf7690a8598a26fdd08e1b483c9322d8e32c"
     },
+    "SmallPolyhedronCutTreeCharts": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeCharts.lean",
+      "sha256": "e580c1a4506b3b39c75f04f5a217ab71af07997365765ac1ac2ce0a1f8d504b7"
+    },
+    "SmallPolyhedronCutTreeCurvature": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeCurvature.lean",
+      "sha256": "647a506e88a9036acbc6351105d055d14ec94fa34be30a984047d38846a3414d"
+    },
+    "SmallPolyhedronCutTreeTriangleCoverage": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeTriangleCoverage.lean",
+      "sha256": "8517dde0199d7910e9d7ae01a030c45ec7215076fa00f45d417a795b82c7d80b"
+    },
+    "SmallPolyhedronRetainedCutConnectivity": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronRetainedCutConnectivity.lean",
+      "sha256": "d8a2fbb77b77b5d422725812408819762868b0c5ffc4e6737760e37711894a2c"
+    },
     "SmallPolyhedronShortestRoutes": {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronShortestRoutes.lean",
       "sha256": "525363d66dc540d7799f8732de4571e32d42d42ad990622a940adf16793d0b03"
+    },
+    "SmallPolyhedronSourceBudget": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronSourceBudget.lean",
+      "sha256": "2449b460abae845d9887c243897b7f5414ac04f9c671c2af4bd1f7286d4b55df"
+    },
+    "SmallPolyhedronStarLocalMetric": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronStarLocalMetric.lean",
+      "sha256": "3658820b1ce91fbce70dd3186c962e87db27001626574c758b522d7424117759"
+    },
+    "SmallPolyhedronStarOpenEmbedding": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronStarOpenEmbedding.lean",
+      "sha256": "812957e79c30a67b11d6390904cbab0f86a0840e9e85960d0b9630a55f77ea0c"
+    },
+    "SmallPolyhedronStarPolygonBoundary": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronStarPolygonBoundary.lean",
+      "sha256": "ff00226592ed60e9353a11cbb4eeee0c476ab0e2c52e3a4e832020c9212aba66"
     },
     "SmallPolyhedronTerminalRays": {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronTerminalRays.lean",
       "sha256": "3837ed6d3adabf542527cef30fd4888d370d6c5481a8193eb2c790f0012e124f"
     },
-    "StarLocalMetric": {
-      "path": "SixVertexUnfolding/Geometry/StarLocalMetric.lean",
-      "sha256": "f467ab8b728c44c72e8c8bb32b79fd4a83e544ae0e297f738bfed5fa4f7c3a83"
+    "SmallPolyhedronUniqueRouteLeaves": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronUniqueRouteLeaves.lean",
+      "sha256": "2146f8c8425e7f4775ee61eeedf42a65ae73854e2a0ed82d7b84ac7e034a7350"
     },
-    "StarOpenEmbedding": {
-      "path": "SixVertexUnfolding/Geometry/StarOpenEmbedding.lean",
-      "sha256": "bcc8d5c0403a1bdf12694a7ba1eb788735f72623186c8b219f42477fca390a6b"
+    "UniversalStarEmbedding": {
+      "path": "SixVertexUnfolding/Geometry/UniversalStarEmbedding.lean",
+      "sha256": "537008d670dde4a286f148a143d8889da78feda4959d26a92d9c50c70e8fc2dc"
     },
-    "StarPolygonBoundary": {
-      "path": "SixVertexUnfolding/Geometry/StarPolygonBoundary.lean",
-      "sha256": "a9812afdb15149d90c87c8d7753eb8a63732a89efbc0c948fa94810683e3784c"
+    "UniversalStarKiteSeparation": {
+      "path": "SixVertexUnfolding/Geometry/UniversalStarKiteSeparation.lean",
+      "sha256": "cf3f20151ae1e8947e12a2591055ff977f9981f53bf35f6afa365d9344b1f0ef"
     },
-    "UniqueRouteLeaves": {
-      "path": "SixVertexUnfolding/Geometry/UniqueRouteLeaves.lean",
-      "sha256": "a702c124af5c10aa8c490b9a722ee2c4dc0405b24ca2dcc8ab0efb132d00c4e0"
+    "UniversalStarUnfolding": {
+      "path": "SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean",
+      "sha256": "f336cfcc35e4fcf180b00188e830d6d7a85c4fe89c18c4cb53225fb2b4f0e16f"
     },
     "VertexFanAngles": {
       "path": "SixVertexUnfolding/Geometry/VertexFanAngles.lean",
       "sha256": "2aed7155134da4f8fa7687f5caf7607f5f6ff074c44d8754b208ef89b8b6affb"
+    },
+    "VertexFanCutTreeConeCoverage": {
+      "path": "SixVertexUnfolding/Geometry/VertexFanCutTreeConeCoverage.lean",
+      "sha256": "85c5eb91dd84699cae7fc7c834d36b58c5b600c5fe2d4aa47ba5fb097a58d8b1"
     },
     "WedgeRootMove": {
       "path": "SixVertexUnfolding/Geometry/WedgeRootMove.lean",

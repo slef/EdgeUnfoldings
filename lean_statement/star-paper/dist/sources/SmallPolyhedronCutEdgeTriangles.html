@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SmallPolyhedronCutEdgeTriangles.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SmallPolyhedronCutEdgeTriangles.lean</h1><p>SixVertexUnfolding/Geometry/SmallPolyhedronCutEdgeTriangles.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.CutEdgeTriangles</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutEdgeStrips</span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutEdgeTriangleDevelopments</span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> </span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> /-! Keep the two actual radial developments of a cut edge together.</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> All fields are supplied by the existing geometric constructions.</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> </span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> Here the shortest-route inputs come from the actual vertex fans of a</span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> polyhedron with at most six vertices and triangular/quadrilateral faces.</span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> No canonical graph model is assumed. -/</span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> </span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> </span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a> open Set</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a> </span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a> variable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a> </span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a> include size small_faces in</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a> /-- Both complete radial triangles exist for every actual cut-tree edge. -/</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a> theorem small_exists_cut_edge_triangles (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a>     {u v : T.vertices} (edge : T.graph.Adj u v) : Nonempty (CutEdgeTriangles T edge) := by</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a>   obtain ⟨strips⟩ := small_exists_cut_edge_strips size small_faces a T edge</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>   obtain ⟨model, first, second, agrees, member, ⟨D⟩, ⟨E⟩⟩ :=</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>     small_exists_cut_edge_triangle_developments size small_faces a T edge strips</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>   exact ⟨⟨strips, model, first, second, agrees, member, D, E⟩⟩</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a> </span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a> end SixVertexUnfolding.ConvexPolyhedron</span>
+</pre></html>

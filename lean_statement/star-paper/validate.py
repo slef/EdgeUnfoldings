@@ -54,6 +54,11 @@ for b in D['paper']:
     assert not any(ord(c)<32 for c in b['text'])
 for js in ('app.js','data.js','hovers.js'):subprocess.run(['node','--check',str(dist/js)],check=True)
 v=json.loads((site/'verification.json').read_text())
+assert v['revision']==D['revision'] and v['declarations']==len(D['declarations'])
+assert D['revision'] in (dist/'index.html').read_text()
+manifest=json.loads((site/'source-manifest.json').read_text())
+assert manifest==json.loads((dist/'source-manifest.json').read_text())
+assert manifest['revision']==D['revision'] and manifest['declarations']==v['declarations']
 assert v['result']=='passed' and v['theorems']==sum(d['kind']=='theorem' for d in D['declarations'].values())
 assert 'sorryAx' not in (dist/'verification.txt').read_text()
 print(f'PASS: {len(D["paper"])} passages, {len(D["annotations"])} annotations, {len(D["declarations"])} exact declarations; all local assets, anchors, source hashes and JavaScript syntax valid.')

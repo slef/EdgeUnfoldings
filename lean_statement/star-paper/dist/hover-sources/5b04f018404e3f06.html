@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/FacetCornerAngles.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/FacetCornerAngles.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.FacetCornerNeighbors</span>
+<span id="L2" class="line"><a href="#L2">2</a> import Mathlib.Geometry.Euclidean.Triangle</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! Ordinary interior angles of original faces. The definition uses the</span>
+<span id="L5" class="line"><a href="#L5">5</a> two original edges at a corner; it is zero away from that face. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron.Face</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set EuclideanGeometry</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> variable {P : ConvexPolyhedron} (F : P.Face)</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> /-- The two original edges bounding a face at one of its vertices. -/</span>
+<span id="L14" class="line"><a href="#L14">14</a> structure CornerNeighbors (v : P.Vertex) where</span>
+<span id="L15" class="line"><a href="#L15">15</a>   left : P.Vertex</span>
+<span id="L16" class="line"><a href="#L16">16</a>   right : P.Vertex</span>
+<span id="L17" class="line"><a href="#L17">17</a>   distinct : left ≠ right</span>
+<span id="L18" class="line"><a href="#L18">18</a>   at_vertex : (v : Space) ∈ F.val</span>
+<span id="L19" class="line"><a href="#L19">19</a>   left_mem : (left : Space) ∈ F.val</span>
+<span id="L20" class="line"><a href="#L20">20</a>   right_mem : (right : Space) ∈ F.val</span>
+<span id="L21" class="line"><a href="#L21">21</a>   left_edge : P.edgeGraph.Adj v left</span>
+<span id="L22" class="line"><a href="#L22">22</a>   right_edge : P.edgeGraph.Adj v right</span>
+<span id="L23" class="line"><a href="#L23">23</a>   exhaust : ∀ w : P.Vertex, (w : Space) ∈ F.val → P.edgeGraph.Adj v w →</span>
+<span id="L24" class="line"><a href="#L24">24</a>     w = left ∨ w = right</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> /-- Every corner of a triangular or quadrilateral face has such a pair. -/</span>
+<span id="L27" class="line"><a href="#L27">27</a> theorem cornerNeighbors_nonempty</span>
+<span id="L28" class="line"><a href="#L28">28</a>     (small : (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L29" class="line"><a href="#L29">29</a>       (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (v : P.Vertex) (on_face : (v : Space) ∈ F.val) : Nonempty (F.CornerNeighbors v) := by</span>
+<span id="L31" class="line"><a href="#L31">31</a>   obtain ⟨b, edge, bF⟩ := F.exists_corner_edge small v on_face</span>
+<span id="L32" class="line"><a href="#L32">32</a>   obtain ⟨c, different, edge_c, cF, exhaust⟩ :=</span>
+<span id="L33" class="line"><a href="#L33">33</a>     F.exists_other_corner_neighbor small v b edge on_face bF</span>
+<span id="L34" class="line"><a href="#L34">34</a>   exact ⟨⟨b, c, different.symm, on_face, bF, cF, edge, edge_c, exhaust⟩⟩</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> /-- The ordinary face angle; absent corners contribute zero to sums. -/</span>
+<span id="L37" class="line"><a href="#L37">37</a> noncomputable def cornerAngle (v : P.Vertex) : ℝ := by</span>
+<span id="L38" class="line"><a href="#L38">38</a>   classical</span>
+<span id="L39" class="line"><a href="#L39">39</a>   exact if h : Nonempty (F.CornerNeighbors v) then</span>
+<span id="L40" class="line"><a href="#L40">40</a>     angle ((Classical.choice h).left : Space) v (Classical.choice h).right else 0</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> theorem cornerAngle_of_not_mem (v : P.Vertex) (outside : (v : Space) ∉ F.val) :</span>
+<span id="L43" class="line"><a href="#L43">43</a>     F.cornerAngle v = 0 := by</span>
+<span id="L44" class="line"><a href="#L44">44</a>   classical</span>
+<span id="L45" class="line"><a href="#L45">45</a>   have empty : ¬ Nonempty (F.CornerNeighbors v) := fun ⟨pair⟩ =&gt; outside pair.at_vertex</span>
+<span id="L46" class="line"><a href="#L46">46</a>   simp only [cornerAngle, dif_neg empty]</span>
+<span id="L47" class="line"><a href="#L47">47</a> </span>
+<span id="L48" class="line"><a href="#L48">48</a> /-- Computing the face angle is independent of the chosen ordering of its two edges. -/</span>
+<span id="L49" class="line"><a href="#L49">49</a> theorem cornerAngle_eq</span>
+<span id="L50" class="line"><a href="#L50">50</a>     (small : (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L51" class="line"><a href="#L51">51</a>       (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L52" class="line"><a href="#L52">52</a>     (v b c : P.Vertex) (distinct : b ≠ c)</span>
+<span id="L53" class="line"><a href="#L53">53</a>     (vF : (v : Space) ∈ F.val) (bF : (b : Space) ∈ F.val) (cF : (c : Space) ∈ F.val)</span>
+<span id="L54" class="line"><a href="#L54">54</a>     (vb : P.edgeGraph.Adj v b) (vc : P.edgeGraph.Adj v c) :</span>
+<span id="L55" class="line"><a href="#L55">55</a>     F.cornerAngle v = angle (b : Space) v c := by</span>
+<span id="L56" class="line"><a href="#L56">56</a>   classical</span>
+<span id="L57" class="line"><a href="#L57">57</a>   have exists_pair := F.cornerNeighbors_nonempty small v vF</span>
+<span id="L58" class="line"><a href="#L58">58</a>   rw [cornerAngle, dif_pos exists_pair]</span>
+<span id="L59" class="line"><a href="#L59">59</a>   let pair := Classical.choice exists_pair</span>
+<span id="L60" class="line"><a href="#L60">60</a>   change angle (pair.left : Space) v pair.right = angle (b : Space) v c</span>
+<span id="L61" class="line"><a href="#L61">61</a>   rcases pair.exhaust b bF vb with rfl | rfl &lt;;&gt;</span>
+<span id="L62" class="line"><a href="#L62">62</a>     rcases pair.exhaust c cF vc with rfl | rfl</span>
+<span id="L63" class="line"><a href="#L63">63</a>   · exact (distinct rfl).elim</span>
+<span id="L64" class="line"><a href="#L64">64</a>   · rfl</span>
+<span id="L65" class="line"><a href="#L65">65</a>   · exact angle_comm _ _ _</span>
+<span id="L66" class="line"><a href="#L66">66</a>   · exact (distinct rfl).elim</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> end SixVertexUnfolding.ConvexPolyhedron.Face</span></pre></html>

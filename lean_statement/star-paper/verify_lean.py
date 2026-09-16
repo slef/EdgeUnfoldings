@@ -9,7 +9,9 @@ text=result.stdout
 Path('/tmp/star-paper-lean-check.log').write_text(text)
 assert result.returncode==0,text
 names=re.findall(r"'([^']+)' depends on axioms: \[([^]]*)\]",text,re.S)
-expected=json.loads((site/'source-manifest.json').read_text())['theorems']
+manifest=json.loads((site/'source-manifest.json').read_text())
+expected=manifest['theorems']
+count=manifest['declarations']
 assert len(names)==expected,(len(names),expected)
 allowed={'propext','Classical.choice','Quot.sound'}
 for name,axioms in names:
@@ -17,6 +19,6 @@ for name,axioms in names:
 assert 'sorryAx' not in text and 'error:' not in text and 'warning:' not in text
 # Strip machine-specific absolute paths, retain all checked types and axiom reports.
 text=text.replace(str(root)+'/','')
-(site/'dist/verification.txt').write_text('Lean declaration check — 16 September 2026\n50 declarations resolved; 31 theorem axiom reports checked.\nAllowed axioms: propext, Classical.choice, Quot.sound.\n\n'+text)
-(site/'verification.json').write_text(json.dumps({'checked':'2026-09-16','declarations':50,'theorems':expected,'axioms':sorted(allowed),'result':'passed'},indent=2)+'\n')
-print(f'All 50 displayed declarations resolve; {len(names)} theorem dependency audits pass.')
+(site/'dist/verification.txt').write_text(f'Lean declaration check — {manifest["date"]}\nSnapshot: {manifest["revision"]}\n{count} declarations resolved; {expected} theorem axiom reports checked.\nAllowed axioms: propext, Classical.choice, Quot.sound.\n\n'+text)
+(site/'verification.json').write_text(json.dumps({'checked':manifest['date'],'revision':manifest['revision'],'declarations':count,'theorems':expected,'axioms':sorted(allowed),'result':'passed'},indent=2)+'\n')
+print(f'All {count} displayed declarations resolve; {len(names)} theorem dependency audits pass.')

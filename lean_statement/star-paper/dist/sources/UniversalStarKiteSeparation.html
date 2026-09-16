@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UniversalStarKiteSeparation.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>UniversalStarKiteSeparation.lean</h1><p>SixVertexUnfolding/Geometry/UniversalStarKiteSeparation.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.SmallPolyhedronSourceBudget</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutTreeCharts</span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> import SixVertexUnfolding.Geometry.CutTreeChainPaths</span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> </span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> /-! Global kite separation for the six-vertex universal-source star.</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> Every kite is placed in the same fixed plane; its angle budget has been</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> proved from the original faces rather than a prescribed graph model. -/</span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> </span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> </span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> open Set Real</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> </span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> variable {P : ConvexPolyhedron} (six : P.vertices.card = 6)</span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a>   {a : frontier P.body} (T : P.CutLocusTree a) (charts : CutTreeCharts T)</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a>   (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v)</span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a>   (at_source : (a : Space) = (source : Space))</span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a> </span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a> include six small_faces universal at_source in</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a> /-- Every simple chain fits within the actual source-angle budget. -/</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a> theorem universal_cut_tree_chain_source_budget {n : ℕ} (chain : CutTreeChain T n) :</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a>     (∑ i, chain.sourceAngle charts i) &lt; π := by</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a>   classical</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>   letI : Fintype P.Face := Fintype.ofFinite P.Face</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>   letI : Fintype T.vertices := T.finite_vertices.fintype</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>   letI : DecidableRel T.graph.Adj := Classical.decRel _</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a>   let models (d : T.graph.Dart) := (charts.triangles d.adj).model</span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a>   let selected := Finset.univ.image chain.dart</span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a>   have no_reverse : ∀ d ∈ selected, d.symm ∉ selected := by</span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a>     rintro d member reverse</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a>     obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp member</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>     obtain ⟨j, _, same⟩ := Finset.mem_image.mp reverse</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a>     exact chain.dart_ne_reverse i j same.symm</span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a>   have bound := (T.selected_source_angle_sum_le_half models selected no_reverse).trans_lt</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a>     (universal_half_source_angle_sum_lt_pi small_faces T models six source universal at_source)</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a>   have sum_eq : (∑ d ∈ selected, (models d).sourceAngle) = ∑ i, chain.sourceAngle charts i := by</span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a>     rw [Finset.sum_image]</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a>     · rfl</span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a>     · exact fun _ _ _ _ same =&gt; chain.dart_injective same</span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a>   rwa [sum_eq] at bound</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a> </span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a> include six small_faces universal at_source in</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a> /-- Distinct actual tree-edge kites have disjoint interiors in the common development. -/</span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a> theorem universal_global_kites_nonoverlap</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a>     {u v w z : T.vertices} (first : T.graph.Adj u v) (last : T.graph.Adj w z)</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a>     (different : s(u, v) ≠ s(w, z)) :</span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a>     Disjoint (charts.kite first) (interior (charts.kite last)) := by</span>
+<span id="L49" class="line"><a href="#L49" aria-label="Line 49">49</a>   obtain ⟨n, chain, first_same, last_same⟩ := T.exists_chain_between_edges first last different</span>
+<span id="L50" class="line"><a href="#L50" aria-label="Line 50">50</a>   have first_image : charts.kite (chain.edge 0) = charts.kite first :=</span>
+<span id="L51" class="line"><a href="#L51" aria-label="Line 51">51</a>     charts.kite_eq_of_same_edge _ first first_same</span>
+<span id="L52" class="line"><a href="#L52" aria-label="Line 52">52</a>   have last_image : charts.kite (chain.edge (Fin.last n).succ) = charts.kite last :=</span>
+<span id="L53" class="line"><a href="#L53" aria-label="Line 53">53</a>     charts.kite_eq_of_same_edge _ last last_same</span>
+<span id="L54" class="line"><a href="#L54" aria-label="Line 54">54</a>   rw [← first_image, ← last_image]</span>
+<span id="L55" class="line"><a href="#L55" aria-label="Line 55">55</a>   exact chain.end_kites_nonoverlap charts</span>
+<span id="L56" class="line"><a href="#L56" aria-label="Line 56">56</a>     (universal_cut_tree_chain_source_budget six small_faces T charts source universal at_source chain)</span>
+<span id="L57" class="line"><a href="#L57" aria-label="Line 57">57</a> </span>
+<span id="L58" class="line"><a href="#L58" aria-label="Line 58">58</a> include six small_faces universal at_source in</span>
+<span id="L59" class="line"><a href="#L59" aria-label="Line 59">59</a> /-- Construct the full covering chart collection with every pair of kites separated. -/</span>
+<span id="L60" class="line"><a href="#L60" aria-label="Line 60">60</a> theorem universal_exists_separated_cut_tree_charts :</span>
+<span id="L61" class="line"><a href="#L61" aria-label="Line 61">61</a>     ∃ charts : CutTreeCharts T,</span>
+<span id="L62" class="line"><a href="#L62" aria-label="Line 62">62</a>       ∀ {u v w z : T.vertices} (first : T.graph.Adj u v) (last : T.graph.Adj w z),</span>
+<span id="L63" class="line"><a href="#L63" aria-label="Line 63">63</a>         s(u, v) ≠ s(w, z) → Disjoint (charts.kite first) (interior (charts.kite last)) := by</span>
+<span id="L64" class="line"><a href="#L64" aria-label="Line 64">64</a>   obtain ⟨charts⟩ := small_universal_source_cut_tree_charts (show P.vertices.card ≤ 6 by omega)</span>
+<span id="L65" class="line"><a href="#L65" aria-label="Line 65">65</a>     small_faces a source at_source universal T</span>
+<span id="L66" class="line"><a href="#L66" aria-label="Line 66">66</a>   exact ⟨charts, fun first last different =&gt;</span>
+<span id="L67" class="line"><a href="#L67" aria-label="Line 67">67</a>     universal_global_kites_nonoverlap six small_faces T charts source universal at_source first last different⟩</span>
+<span id="L68" class="line"><a href="#L68" aria-label="Line 68">68</a> </span>
+<span id="L69" class="line"><a href="#L69" aria-label="Line 69">69</a> end SixVertexUnfolding.ConvexPolyhedron</span>
+</pre></html>

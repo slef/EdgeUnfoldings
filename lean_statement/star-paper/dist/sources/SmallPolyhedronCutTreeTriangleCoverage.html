@@ -1,0 +1,69 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SmallPolyhedronCutTreeTriangleCoverage.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SmallPolyhedronCutTreeTriangleCoverage.lean</h1><p>SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeTriangleCoverage.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.CutTreeTriangleCoverage</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutEdgeTriangles</span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutTreeRadialPartition</span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutTreeStripDensity</span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> </span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> /-! The finitely many closed radial triangles cover the actual whole</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> boundary, including all exceptional rays and cut points. This coverage</span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> does not identify the distinct copies needed in a later cut surface.</span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> </span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> Here the shortest-route inputs come from the actual vertex fans of a</span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> polyhedron with at most six vertices and triangular/quadrilateral faces.</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> No canonical graph model is assumed. -/</span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> </span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a> </span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a> open Set</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a> </span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a> variable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)</span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a> </span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a> include size small_faces in</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a> /-- Any choices of the actual paired developments cover the entire boundary. -/</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a> theorem small_cut_tree_triangles_cover (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>     (triangles : (d : T.graph.Dart) → CutEdgeTriangles T d.adj) (b : frontier P.body) :</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>     ∃ d, b ∈ range (closedRouteStripMap (triangles d).first) ∪</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>       range (closedRouteStripMap (triangles d).second) := by</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a>   classical</span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a>   letI : Fintype T.vertices := T.finite_vertices.fintype</span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a>   let covered : Set (frontier P.body) := ⋃ d,</span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a>     range (closedRouteStripMap (triangles d).first) ∪ range (closedRouteStripMap (triangles d).second)</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a>   have closed : IsClosed covered := isClosed_iUnion_of_finite (fun d =&gt;</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>     (isCompact_range (closedRouteStripMap (triangles d).first).continuous).isClosed.union</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a>       (isCompact_range (closedRouteStripMap (triangles d).second).continuous).isClosed)</span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a>   have included : {x : frontier P.body | x ≠ a ∧ x ∉ P.cutSet a ∧ x ∉ T.vertexRays} ⊆ covered := by</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a>     intro x hx</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a>     rcases small_cut_tree_radial_partition size small_faces a T</span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a>         (fun u v edge =&gt; (triangles ⟨(u, v), edge⟩).strips) x with</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a>       source | cut | ray | ⟨u, v, edge, inside⟩</span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a>     · exact (hx.1 source).elim</span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a>     · exact (hx.2.1 cut).elim</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a>     · exact (hx.2.2 ray).elim</span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a>     · apply mem_iUnion.mpr</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a>       refine ⟨⟨(u, v), edge⟩, ?_⟩</span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a>       rcases inside with first | second</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a>       · left</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a>         rw [← closure_routeStrip_eq _ _ (fun t =&gt; (triangles ⟨(u, v), edge⟩).agrees t |&gt;.1)]</span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a>         exact subset_closure first</span>
+<span id="L49" class="line"><a href="#L49" aria-label="Line 49">49</a>       · right</span>
+<span id="L50" class="line"><a href="#L50" aria-label="Line 50">50</a>         rw [← closure_routeStrip_eq _ _ (fun t =&gt; (triangles ⟨(u, v), edge⟩).agrees t |&gt;.2)]</span>
+<span id="L51" class="line"><a href="#L51" aria-label="Line 51">51</a>         exact subset_closure second</span>
+<span id="L52" class="line"><a href="#L52" aria-label="Line 52">52</a>   have all := closure_minimal included closed</span>
+<span id="L53" class="line"><a href="#L53" aria-label="Line 53">53</a>   rw [(small_cut_tree_strip_points_dense size small_faces a T).closure_eq] at all</span>
+<span id="L54" class="line"><a href="#L54" aria-label="Line 54">54</a>   exact mem_iUnion.mp (all (mem_univ b))</span>
+<span id="L55" class="line"><a href="#L55" aria-label="Line 55">55</a> </span>
+<span id="L56" class="line"><a href="#L56" aria-label="Line 56">56</a> include size small_faces in</span>
+<span id="L57" class="line"><a href="#L57" aria-label="Line 57">57</a> /-- Choose all actual paired developments simultaneously, with complete surface coverage. -/</span>
+<span id="L58" class="line"><a href="#L58" aria-label="Line 58">58</a> theorem small_exists_cut_tree_triangle_cover (a : frontier P.body) (T : P.CutLocusTree a) :</span>
+<span id="L59" class="line"><a href="#L59" aria-label="Line 59">59</a>     ∃ triangles : (d : T.graph.Dart) → CutEdgeTriangles T d.adj,</span>
+<span id="L60" class="line"><a href="#L60" aria-label="Line 60">60</a>       ∀ b : frontier P.body, ∃ d,</span>
+<span id="L61" class="line"><a href="#L61" aria-label="Line 61">61</a>         b ∈ range (closedRouteStripMap (triangles d).first) ∪</span>
+<span id="L62" class="line"><a href="#L62" aria-label="Line 62">62</a>           range (closedRouteStripMap (triangles d).second) := by</span>
+<span id="L63" class="line"><a href="#L63" aria-label="Line 63">63</a>   classical</span>
+<span id="L64" class="line"><a href="#L64" aria-label="Line 64">64</a>   let triangles (d : T.graph.Dart) : CutEdgeTriangles T d.adj :=</span>
+<span id="L65" class="line"><a href="#L65" aria-label="Line 65">65</a>     Classical.choice (small_exists_cut_edge_triangles size small_faces a T d.adj)</span>
+<span id="L66" class="line"><a href="#L66" aria-label="Line 66">66</a>   exact ⟨triangles, small_cut_tree_triangles_cover size small_faces a T triangles⟩</span>
+<span id="L67" class="line"><a href="#L67" aria-label="Line 67">67</a> </span>
+<span id="L68" class="line"><a href="#L68" aria-label="Line 68">68</a> end SixVertexUnfolding.ConvexPolyhedron</span>
+</pre></html>

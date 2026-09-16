@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/CutTreeChartSeparation.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/CutTreeChartSeparation.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.GlobalCutTreeKites</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! The geometric separation property used to assemble an injective star map.</span>
+<span id="L4" class="line"><a href="#L4">4</a> It is proved for universal sources in `UniversalStarKiteSeparation`; the</span>
+<span id="L5" class="line"><a href="#L5">5</a> gluing and inverse-chart arguments can use the property independently. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Set</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- Distinct tree-edge kites do not meet each other&#x27;s interiors. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> def KitesSeparated {P : ConvexPolyhedron} {a : frontier P.body}</span>
+<span id="L13" class="line"><a href="#L13">13</a>     {T : P.CutLocusTree a} (charts : CutTreeCharts T) : Prop :=</span>
+<span id="L14" class="line"><a href="#L14">14</a>   ∀ {u v w z : T.vertices} (first : T.graph.Adj u v) (last : T.graph.Adj w z),</span>
+<span id="L15" class="line"><a href="#L15">15</a>     s(u, v) ≠ s(w, z) → Disjoint (charts.kite first) (interior (charts.kite last))</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> end SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts</span></pre></html>

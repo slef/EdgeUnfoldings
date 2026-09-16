@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/SmallPolyhedronUniqueRouteLeaves.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/SmallPolyhedronUniqueRouteLeaves.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.SmallPolyhedronUniqueRouteCutVertex</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.UniqueRouteLeaves</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! Original nonsource vertices are leaves for a cofacial source on a</span>
+<span id="L5" class="line"><a href="#L5">5</a> small polyhedron. In particular, this applies to a universal vertex.</span>
+<span id="L6" class="line"><a href="#L6">6</a> The conclusion supplies the original-leaf field of the star charts;</span>
+<span id="L7" class="line"><a href="#L7">7</a> it does not assume that field as a geometric input. -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> open Set</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> variable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)</span>
+<span id="L14" class="line"><a href="#L14">14</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L15" class="line"><a href="#L15">15</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> include size small_faces in</span>
+<span id="L18" class="line"><a href="#L18">18</a> /-- A cut-tree vertex reached by a unique shortest route has exactly one neighbor. -/</span>
+<span id="L19" class="line"><a href="#L19">19</a> theorem small_unique_route_cut_vertex_is_leaf (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L20" class="line"><a href="#L20">20</a>     (u : T.vertices) (unique : (P.geodesicFiber a (T.vertexTarget u)).Subsingleton) :</span>
+<span id="L21" class="line"><a href="#L21">21</a>     ∃! v, T.graph.Adj u v := by</span>
+<span id="L22" class="line"><a href="#L22">22</a>   letI : Nontrivial T.vertices := T.toEmbeddedCutGraph.vertices_nontrivial</span>
+<span id="L23" class="line"><a href="#L23">23</a>   obtain ⟨v, edge⟩ := T.tree.connected.preconnected.exists_adj_of_nontrivial u</span>
+<span id="L24" class="line"><a href="#L24">24</a>   exact ⟨v, edge, fun w other =&gt;</span>
+<span id="L25" class="line"><a href="#L25">25</a>     small_unique_route_cut_vertex_at_most_one_neighbor size small_faces a T u unique w v other edge⟩</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> include size small_faces in</span>
+<span id="L28" class="line"><a href="#L28">28</a> /-- Every original cut vertex is a leaf when the source shares a face with every vertex. -/</span>
+<span id="L29" class="line"><a href="#L29">29</a> theorem small_cofacial_source_original_is_leaf (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)</span>
+<span id="L31" class="line"><a href="#L31">31</a>     (u : T.vertices) (original : (u : Space) ∈ P.vertices) :</span>
+<span id="L32" class="line"><a href="#L32">32</a>     ∃! v, T.graph.Adj u v := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>   obtain ⟨F, source, target⟩ := cofacial ⟨u, original⟩</span>
+<span id="L34" class="line"><a href="#L34">34</a>   exact small_unique_route_cut_vertex_is_leaf size small_faces a T u</span>
+<span id="L35" class="line"><a href="#L35">35</a>     (P.geodesicFiber_cofacial_unique a (T.vertexTarget u) F source target)</span>
+<span id="L36" class="line"><a href="#L36">36</a> </span>
+<span id="L37" class="line"><a href="#L37">37</a> include size small_faces in</span>
+<span id="L38" class="line"><a href="#L38">38</a> /-- An internal passage between different tree edges avoids all original vertices. -/</span>
+<span id="L39" class="line"><a href="#L39">39</a> theorem small_cofacial_source_internal_vertex_nonvertex</span>
+<span id="L40" class="line"><a href="#L40">40</a>     (a : frontier P.body) (T : P.CutLocusTree a)</span>
+<span id="L41" class="line"><a href="#L41">41</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)</span>
+<span id="L42" class="line"><a href="#L42">42</a>     (u v w : T.vertices) (first : T.graph.Adj u v) (second : T.graph.Adj u w)</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (different : v ≠ w) : (u : Space) ∉ P.vertices := by</span>
+<span id="L44" class="line"><a href="#L44">44</a>   intro original</span>
+<span id="L45" class="line"><a href="#L45">45</a>   obtain ⟨only, _, unique⟩ := small_cofacial_source_original_is_leaf size small_faces a T cofacial u original</span>
+<span id="L46" class="line"><a href="#L46">46</a>   exact different ((unique v first).trans (unique w second).symm)</span>
+<span id="L47" class="line"><a href="#L47">47</a> </span>
+<span id="L48" class="line"><a href="#L48">48</a> /-- A universal vertex shares an original face with every vertex, including itself. -/</span>
+<span id="L49" class="line"><a href="#L49">49</a> theorem universal_source_cofacial (a : frontier P.body) (source : P.Vertex)</span>
+<span id="L50" class="line"><a href="#L50">50</a>     (at_source : (a : Space) = (source : Space))</span>
+<span id="L51" class="line"><a href="#L51">51</a>     (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v) :</span>
+<span id="L52" class="line"><a href="#L52">52</a>     ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val := by</span>
+<span id="L53" class="line"><a href="#L53">53</a>   intro v</span>
+<span id="L54" class="line"><a href="#L54">54</a>   by_cases same : v = source</span>
+<span id="L55" class="line"><a href="#L55">55</a>   · obtain ⟨w, original, different⟩ := Finset.exists_mem_ne</span>
+<span id="L56" class="line"><a href="#L56">56</a>       (show 1 &lt; P.vertices.card by have := P.four_le_vertex_count; omega) (source : Space)</span>
+<span id="L57" class="line"><a href="#L57">57</a>     have distinct : (⟨w, original⟩ : P.Vertex) ≠ source :=</span>
+<span id="L58" class="line"><a href="#L58">58</a>       fun equal =&gt; different (congrArg Subtype.val equal)</span>
+<span id="L59" class="line"><a href="#L59">59</a>     obtain ⟨_, F, G, _, edge⟩ := universal ⟨w, original⟩ distinct</span>
+<span id="L60" class="line"><a href="#L60">60</a>     have inside : (source : Space) ∈ F.val ∩ G.val := by</span>
+<span id="L61" class="line"><a href="#L61">61</a>       rw [edge]</span>
+<span id="L62" class="line"><a href="#L62">62</a>       exact left_mem_segment ℝ _ _</span>
+<span id="L63" class="line"><a href="#L63">63</a>     exact ⟨F, by simpa only [at_source] using inside.1, by simpa only [same] using inside.1⟩</span>
+<span id="L64" class="line"><a href="#L64">64</a>   · obtain ⟨_, F, G, _, edge⟩ := universal v same</span>
+<span id="L65" class="line"><a href="#L65">65</a>     have first : (source : Space) ∈ F.val ∩ G.val := by</span>
+<span id="L66" class="line"><a href="#L66">66</a>       rw [edge]</span>
+<span id="L67" class="line"><a href="#L67">67</a>       exact left_mem_segment ℝ _ _</span>
+<span id="L68" class="line"><a href="#L68">68</a>     have last : (v : Space) ∈ F.val ∩ G.val := by</span>
+<span id="L69" class="line"><a href="#L69">69</a>       rw [edge]</span>
+<span id="L70" class="line"><a href="#L70">70</a>       exact right_mem_segment ℝ _ _</span>
+<span id="L71" class="line"><a href="#L71">71</a>     exact ⟨F, by simpa only [at_source] using first.1, last.1⟩</span>
+<span id="L72" class="line"><a href="#L72">72</a> </span>
+<span id="L73" class="line"><a href="#L73">73</a> include size small_faces in</span>
+<span id="L74" class="line"><a href="#L74">74</a> /-- Universal sources supply the original-leaf condition required by the star construction. -/</span>
+<span id="L75" class="line"><a href="#L75">75</a> theorem small_universal_source_original_is_leaf</span>
+<span id="L76" class="line"><a href="#L76">76</a>     (a : frontier P.body) (source : P.Vertex) (at_source : (a : Space) = (source : Space))</span>
+<span id="L77" class="line"><a href="#L77">77</a>     (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v)</span>
+<span id="L78" class="line"><a href="#L78">78</a>     (T : P.CutLocusTree a) (u : T.vertices) (original : (u : Space) ∈ P.vertices) :</span>
+<span id="L79" class="line"><a href="#L79">79</a>     ∃! v, T.graph.Adj u v :=</span>
+<span id="L80" class="line"><a href="#L80">80</a>   small_cofacial_source_original_is_leaf size small_faces a T</span>
+<span id="L81" class="line"><a href="#L81">81</a>     (universal_source_cofacial a source at_source universal) u original</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

@@ -1,0 +1,74 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/SmallPolyhedronSourceBudget.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/SmallPolyhedronSourceBudget.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.SmallPolyhedronCutTreeCurvature</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.VertexFanCutTreeConeCoverage</span>
+<span id="L3" class="line"><a href="#L3">3</a> import SixVertexUnfolding.Geometry.SmallPolyhedronJunctionAngleSum</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> /-! The source-angle budget for the six-vertex universal-source case.</span>
+<span id="L6" class="line"><a href="#L6">6</a> Local cone coverage, flat junction sums, and the global curvature bound</span>
+<span id="L7" class="line"><a href="#L7">7</a> all come from the actual polyhedron, with no canonical graph assumption. -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> open Set Real</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> variable {P : ConvexPolyhedron} [Fintype P.Face]</span>
+<span id="L14" class="line"><a href="#L14">14</a>   (size : P.vertices.card ≤ 6)</span>
+<span id="L15" class="line"><a href="#L15">15</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L16" class="line"><a href="#L16">16</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L17" class="line"><a href="#L17">17</a>   {a : frontier P.body} (T : P.CutLocusTree a)</span>
+<span id="L18" class="line"><a href="#L18">18</a>   [Fintype T.vertices] [DecidableRel T.graph.Adj]</span>
+<span id="L19" class="line"><a href="#L19">19</a>   (models : (d : T.graph.Dart) → CutEdgeMetricModel T d.adj)</span>
+<span id="L20" class="line"><a href="#L20">20</a> </span>
+<span id="L21" class="line"><a href="#L21">21</a> include size small_faces in</span>
+<span id="L22" class="line"><a href="#L22">22</a> /-- The original face-angle sum is bounded by all actual incident tree triangles. -/</span>
+<span id="L23" class="line"><a href="#L23">23</a> theorem small_incident_angles_cover_surfaceAngle (u : T.vertices) (v : P.Vertex)</span>
+<span id="L24" class="line"><a href="#L24">24</a>     (at_vertex : (u : Space) = (v : Space)) :</span>
+<span id="L25" class="line"><a href="#L25">25</a>     P.surfaceAngle v ≤ T.incidentAngleSum models u := by</span>
+<span id="L26" class="line"><a href="#L26">26</a>   have degree := P.edgeGraph_min_degree v</span>
+<span id="L27" class="line"><a href="#L27">27</a>   letI : NeZero (P.edgeGraph.degree v) := ⟨by omega⟩</span>
+<span id="L28" class="line"><a href="#L28">28</a>   obtain ⟨fan⟩ := P.exists_vertex_face_fan size small_faces v rfl</span>
+<span id="L29" class="line"><a href="#L29">29</a>   rw [← fan.totalAngle_eq_surfaceAngle size small_faces]</span>
+<span id="L30" class="line"><a href="#L30">30</a>   exact fan.incident_model_angles_cover_cone size small_faces a T models u at_vertex</span>
+<span id="L31" class="line"><a href="#L31">31</a> </span>
+<span id="L32" class="line"><a href="#L32">32</a> include size small_faces in</span>
+<span id="L33" class="line"><a href="#L33">33</a> /-- Tree angle accounting needs only a total-curvature upper bound. -/</span>
+<span id="L34" class="line"><a href="#L34">34</a> theorem small_source_angle_sum_le_of_curvature_bound</span>
+<span id="L35" class="line"><a href="#L35">35</a>     (curvature_bound : (∑ v : P.Vertex, P.vertexCurvature v) ≤ 4 * π)</span>
+<span id="L36" class="line"><a href="#L36">36</a>     (source : P.Vertex) (at_source : (a : Space) = (source : Space)) :</span>
+<span id="L37" class="line"><a href="#L37">37</a>     (∑ d, (models d).sourceAngle) ≤ P.surfaceAngle source := by</span>
+<span id="L38" class="line"><a href="#L38">38</a>   classical</span>
+<span id="L39" class="line"><a href="#L39">39</a>   have at_vertex (u : T.vertices) :</span>
+<span id="L40" class="line"><a href="#L40">40</a>       2 * π - T.originalCurvature u ≤ T.incidentAngleSum models u := by</span>
+<span id="L41" class="line"><a href="#L41">41</a>     by_cases original : (u : Space) ∈ P.vertices</span>
+<span id="L42" class="line"><a href="#L42">42</a>     · let v : P.Vertex := ⟨u, original⟩</span>
+<span id="L43" class="line"><a href="#L43">43</a>       rw [T.originalCurvature_at_vertex u v rfl, vertexCurvature, sub_sub_cancel]</span>
+<span id="L44" class="line"><a href="#L44">44</a>       exact small_incident_angles_cover_surfaceAngle size small_faces T models u v rfl</span>
+<span id="L45" class="line"><a href="#L45">45</a>     · rw [T.originalCurvature_at_nonvertex u original, sub_zero]</span>
+<span id="L46" class="line"><a href="#L46">46</a>       exact (small_sum_nonvertex_junction_angles size small_faces a T u original</span>
+<span id="L47" class="line"><a href="#L47">47</a>         (fun v =&gt; models (T.graph.dartOfNeighborSet u v))).ge</span>
+<span id="L48" class="line"><a href="#L48">48</a>   have total := Finset.sum_le_sum (fun u (_ : u ∈ Finset.univ) =&gt; at_vertex u)</span>
+<span id="L49" class="line"><a href="#L49">49</a>   rw [Finset.sum_sub_distrib, T.sum_originalCurvature source at_source] at total</span>
+<span id="L50" class="line"><a href="#L50">50</a>   simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul] at total</span>
+<span id="L51" class="line"><a href="#L51">51</a>   rw [show P.vertexCurvature source = 2 * π - P.surfaceAngle source from rfl] at total</span>
+<span id="L52" class="line"><a href="#L52">52</a>   have accounting := T.sum_source_and_vertex_angles models</span>
+<span id="L53" class="line"><a href="#L53">53</a>   linarith</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> include small_faces in</span>
+<span id="L56" class="line"><a href="#L56">56</a> /-- The complete source-angle budget for six vertices and a universal source. -/</span>
+<span id="L57" class="line"><a href="#L57">57</a> theorem universal_source_angle_sum_le (six : P.vertices.card = 6)</span>
+<span id="L58" class="line"><a href="#L58">58</a>     (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v)</span>
+<span id="L59" class="line"><a href="#L59">59</a>     (at_source : (a : Space) = (source : Space)) :</span>
+<span id="L60" class="line"><a href="#L60">60</a>     (∑ d, (models d).sourceAngle) ≤ P.surfaceAngle source :=</span>
+<span id="L61" class="line"><a href="#L61">61</a>   small_source_angle_sum_le_of_curvature_bound (by omega) small_faces T models</span>
+<span id="L62" class="line"><a href="#L62">62</a>     (universal_sum_vertexCurvature_le six small_faces source universal) source at_source</span>
+<span id="L63" class="line"><a href="#L63">63</a> </span>
+<span id="L64" class="line"><a href="#L64">64</a> include small_faces in</span>
+<span id="L65" class="line"><a href="#L65">65</a> /-- Each kite is counted twice by the directed sum; the half-sum is strictly below π. -/</span>
+<span id="L66" class="line"><a href="#L66">66</a> theorem universal_half_source_angle_sum_lt_pi (six : P.vertices.card = 6)</span>
+<span id="L67" class="line"><a href="#L67">67</a>     (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v)</span>
+<span id="L68" class="line"><a href="#L68">68</a>     (at_source : (a : Space) = (source : Space)) :</span>
+<span id="L69" class="line"><a href="#L69">69</a>     (∑ d, (models d).sourceAngle) / 2 &lt; π := by</span>
+<span id="L70" class="line"><a href="#L70">70</a>   have bound := universal_source_angle_sum_le small_faces T models six source universal at_source</span>
+<span id="L71" class="line"><a href="#L71">71</a>   have strict := surfaceAngle_lt_two_pi (show P.vertices.card ≤ 6 by omega) small_faces source</span>
+<span id="L72" class="line"><a href="#L72">72</a>   linarith</span>
+<span id="L73" class="line"><a href="#L73">73</a> </span>
+<span id="L74" class="line"><a href="#L74">74</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

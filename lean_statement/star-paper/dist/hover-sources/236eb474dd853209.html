@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.UniversalStarEmbedding</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.UniversalStarInteriors</span>
+<span id="L3" class="line"><a href="#L3">3</a> import SixVertexUnfolding.Reduction</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> /-! The completed universal-source star development yields an unfolding</span>
+<span id="L6" class="line"><a href="#L6">6</a> of the original whole faces, using the unchanged public definition. -/</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> open Set</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> /-- The universal-source star gives an edge unfolding in the remaining small-face family. -/</span>
+<span id="L13" class="line"><a href="#L13">13</a> theorem universal_star_has_edge_unfolding {P : ConvexPolyhedron} (six : P.vertices.card = 6)</span>
+<span id="L14" class="line"><a href="#L14">14</a>     (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L15" class="line"><a href="#L15">15</a>       (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L16" class="line"><a href="#L16">16</a>     (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v) :</span>
+<span id="L17" class="line"><a href="#L17">17</a>     P.HasEdgeUnfolding := by</span>
+<span id="L18" class="line"><a href="#L18">18</a>   let a : frontier P.body := ⟨source, P.vertex_mem_frontier source.property⟩</span>
+<span id="L19" class="line"><a href="#L19">19</a>   have cofacial := universal_source_cofacial a source rfl universal</span>
+<span id="L20" class="line"><a href="#L20">20</a>   obtain ⟨develop, embedding, _, _, _, locally_isometric⟩ :=</span>
+<span id="L21" class="line"><a href="#L21">21</a>     universal_star_embedding six small_faces a source rfl universal</span>
+<span id="L22" class="line"><a href="#L22">22</a>   exact edge_unfolding_of_star_development develop embedding.injective locally_isometric</span>
+<span id="L23" class="line"><a href="#L23">23</a>     (small_cofacial_uncut_surface_pathConnected (show P.vertices.card ≤ 6 by omega)</span>
+<span id="L24" class="line"><a href="#L24">24</a>       small_faces a cofacial).isConnected.isPreconnected</span>
+<span id="L25" class="line"><a href="#L25">25</a>     (P.universal_star_face_interiors_uncut a source rfl universal)</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> /-- With at most six vertices, a universal vertex always gives an edge unfolding.</span>
+<span id="L28" class="line"><a href="#L28">28</a> The earlier reduction handles smaller solids and faces with more than four vertices. -/</span>
+<span id="L29" class="line"><a href="#L29">29</a> theorem hasEdgeUnfolding_of_universal_vertex {P : ConvexPolyhedron}</span>
+<span id="L30" class="line"><a href="#L30">30</a>     (at_most_six : P.vertices.card ≤ 6) (source : P.Vertex)</span>
+<span id="L31" class="line"><a href="#L31">31</a>     (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v) :</span>
+<span id="L32" class="line"><a href="#L32">32</a>     P.HasEdgeUnfolding := by</span>
+<span id="L33" class="line"><a href="#L33">33</a>   rcases unfolding_or_remaining_cases P at_most_six with unfolded | ⟨six, small_faces⟩</span>
+<span id="L34" class="line"><a href="#L34">34</a>   · exact unfolded</span>
+<span id="L35" class="line"><a href="#L35">35</a>   · exact universal_star_has_edge_unfolding six small_faces source universal</span>
+<span id="L36" class="line"><a href="#L36">36</a> </span>
+<span id="L37" class="line"><a href="#L37">37</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

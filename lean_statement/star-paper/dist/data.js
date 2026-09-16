@@ -9,7 +9,7 @@ window.PAPER_DATA = {
       "status": "restricted",
       "statement": "Definitions present for cofacial cuts",
       "proof": "Checked construction in restricted scope",
-      "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
+      "scope": "Straight source-to-vertex cuts on a convex polyhedron. Their interpretation as shortest surface cuts uses a source sharing a face with every vertex.",
       "note": "ConvexPolyhedron is the convex hull of its exact extreme vertices in ℝ³, with nonempty interior. The current starCuts removes straight source-to-vertex segments. These are shortest surface cuts when the source is cofacial with every vertex. This is not yet a definition of an arbitrary choice of shortest cuts for an arbitrary source.",
       "refs": [
         [
@@ -36,7 +36,7 @@ window.PAPER_DATA = {
       "steps": [],
       "work": {
         "status": "complete",
-        "reason": "The cofacial-cut definitions are sufficient for a universal-vertex source: every source-to-vertex edge lies on the surface. The development of that cut surface is a separate unfinished construction.",
+        "reason": "The cofacial-cut definitions suffice for a universal vertex source: every source-to-vertex edge lies on the surface. The development of this cut surface is now constructed in the completed universal-source theorem.",
         "remaining": [],
         "beyond": [
           "Chosen shortest cuts for arbitrary sources, and their general cut surface, remain an extension beyond this milestone."
@@ -53,20 +53,20 @@ window.PAPER_DATA = {
       ],
       "title": "Boundary images and equal cut lengths",
       "status": "missing",
-      "statement": "Polygonal-boundary statement present; 2n count absent",
+      "statement": "Polygonal-boundary statement present; exact boundary-image count absent",
       "proof": "Restricted boundary theorem checked",
-      "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
-      "note": "The assembled development has an exact finite segment boundary. The paper’s alternating vertex/source images and its 2n (or 2(n−1)) boundary count have not been packaged as Lean statements. A finite polygonal boundary alone does not assert this combinatorial description.",
+      "scope": "At most six vertices; every face triangular or quadrilateral. The source shares a face with every vertex; the boundary theorem takes coherent charts and proved kite separation as inputs.",
+      "note": "The assembled universal-source development has an exact finite segment boundary. The paper’s alternating vertex/source images and its \\(2n\\) (or \\(2(n-1)\\)) boundary count have not been packaged as Lean statements. A finite polygonal boundary alone does not assert this combinatorial description.",
       "refs": [
         [
-          "StarPolygonBoundary",
-          "develop_frontier_eq_segments"
+          "SmallPolyhedronStarPolygonBoundary",
+          "small_develop_frontier_eq_segments"
         ]
       ],
       "steps": [],
       "work": {
         "status": "beyond",
-        "reason": "The exact alternating order and 2n boundary-image count are not needed by the current star-to-edge-unfolding construction. Their absence is not a remaining task for this milestone.",
+        "reason": "The exact alternating order and \\(2n\\) boundary-image count are not needed by the completed star-to-edge-unfolding construction. Their absence is not a remaining task for this milestone.",
         "remaining": [],
         "beyond": [
           "The paper’s boundary order and count have no matching complete statement/proof. A finite segment boundary does not establish them."
@@ -168,9 +168,9 @@ window.PAPER_DATA = {
       "title": "Build the actual radial triangles",
       "status": "restricted",
       "statement": "Route, metric-kite, and coverage statements present",
-      "proof": "Checked; construction still uses canonical graphs",
-      "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces.",
-      "note": "The two basic shortest-route facts now hold without a canonical graph in the small-polyhedron scope. The complete two-triangle construction and its coverage theorem still use SixVertexGraph. Merely specifying equal distances in a metric model is not the whole surface partition.",
+      "proof": "Actual triangles, coverage and coherent charts checked",
+      "scope": "At most six vertices; every face triangular or quadrilateral. Triangles and coverage allow an arbitrary surface source; the assembled charts use a source sharing a face with every vertex.",
+      "note": "Both actual radial triangles, their coverage of the surface, and coherent charts now have small-polyhedron proofs without a canonical graph assumption. The chart construction proves the original-vertex leaf condition and flat-junction compatibility; later separation handles overlap.",
       "refs": [
         [
           "SmallPolyhedronShortestRoutes",
@@ -189,12 +189,16 @@ window.PAPER_DATA = {
           "CutEdgeTriangles"
         ],
         [
-          "CutEdgeTriangles",
-          "exists_cut_edge_triangles"
+          "SmallPolyhedronCutEdgeTriangles",
+          "small_exists_cut_edge_triangles"
         ],
         [
-          "CutTreeTriangleCoverage",
-          "cut_tree_triangles_cover"
+          "SmallPolyhedronCutTreeTriangleCoverage",
+          "small_cut_tree_triangles_cover"
+        ],
+        [
+          "SmallPolyhedronCutTreeCharts",
+          "small_exists_universal_star_charts"
         ]
       ],
       "steps": [
@@ -204,11 +208,9 @@ window.PAPER_DATA = {
         "Prove their union covers the surface; later separation handles overlap."
       ],
       "work": {
-        "status": "todo",
-        "reason": "The existing construction still depends on the canonical nonuniversal graphs. It must be extended before it can supply the universal-source development.",
-        "remaining": [
-          "Transfer the actual radial-triangle construction, flat-junction charts and surface coverage to the new small-polyhedron cut tree."
-        ],
+        "status": "complete",
+        "reason": "The actual radial triangles, flat-junction charts and surface coverage have been constructed for small polyhedra, including every universal-source solid in this milestone.",
+        "remaining": [],
         "beyond": [],
         "depends_on": [
           "tree",
@@ -221,16 +223,24 @@ window.PAPER_DATA = {
       "blocks": [
         "source-budget"
       ],
-      "title": "The source-angle budget is the integration gap",
+      "title": "The source-angle budget",
       "status": "restricted",
-      "statement": "Angle definitions and restricted budget statements present",
-      "proof": "Local bound checked; global budget restricted",
-      "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The global budget uses a source vertex.",
-      "note": "The local bound “\\(\\text{surface angle} < 2\\pi\\)” is proved at every original vertex of a small polyhedron. That does not by itself prove that all the developed kite angles fit into that cone. The global source-angle sum is proved for canonical graphs, using actual cone coverage and curvature accounting.",
+      "statement": "Local cone coverage and complete universal-source budget present",
+      "proof": "Global budget checked, no assumed curvature or angle bound",
+      "scope": "Six vertices; every face triangular or quadrilateral. The source is an original vertex adjacent to every other vertex.",
+      "note": "The proof covers each original vertex cone by its actual incident radial triangles, accounts for the flat junctions and tree angles, and proves a sufficient total-curvature bound from the original faces. It yields a directed source-angle sum bounded by the source surface angle. Since that angle is \\(<2\\pi\\), the half-sum is \\(<\\pi\\). No canonical graph assumption is needed.",
       "refs": [
         [
           "CutEdgeSourceAngles",
           "sourceAngle"
+        ],
+        [
+          "SmallPolyhedronCurvature",
+          "surfaceAngle"
+        ],
+        [
+          "SmallPolyhedronCurvature",
+          "vertexCurvature"
         ],
         [
           "VertexFanAngles",
@@ -241,34 +251,36 @@ window.PAPER_DATA = {
           "totalAngle_lt_two_pi"
         ],
         [
-          "CutTreeConeCoverage",
+          "VertexFanCutTreeConeCoverage",
           "incident_model_angles_cover_cone"
         ],
         [
-          "CutTreeCurvature",
-          "sum_cutTreeCurvature"
+          "SmallPolyhedronCurvature",
+          "universal_sum_vertexCurvature_le"
         ],
         [
-          "CutTreeSourceBudget",
-          "source_angle_sum_le"
+          "SmallPolyhedronCutTreeCurvature",
+          "sum_originalCurvature"
         ],
         [
-          "CutTreeSourceBudget",
-          "half_source_angle_sum_lt_pi"
+          "SmallPolyhedronSourceBudget",
+          "universal_source_angle_sum_le"
+        ],
+        [
+          "SmallPolyhedronSourceBudget",
+          "universal_half_source_angle_sum_lt_pi"
         ]
       ],
       "steps": [
-        "Local surface angle: checked for all small polyhedra.",
-        "Incident radial triangles cover each cone: checked for canonical graphs.",
-        "Total curvature accounting: checked for canonical graphs.",
-        "Half the directed source-angle sum is \\(< \\pi\\): checked for canonical vertex sources."
+        "Local surface angle \\(<2\\pi\\): checked for all small polyhedra.",
+        "Incident radial triangles cover each original vertex cone: checked without a canonical graph.",
+        "Total vertex curvature \\(\\le4\\pi\\): proved for six vertices and a universal source; this bound suffices.",
+        "Tree angle accounting gives half the directed source-angle sum \\(<\\pi\\)."
       ],
       "work": {
-        "status": "todo",
-        "reason": "The local angle bound is complete, but the required global source-angle sum is not yet available for universal-vertex solids.",
-        "remaining": [
-          "Extend cone coverage and curvature accounting to the new local fans and derive the global budget for the universal vertex source."
-        ],
+        "status": "complete",
+        "reason": "The complete source-angle budget is proved from the geometry of the universal-source solid. The local cone bound, cone coverage and required curvature estimate are all supplied.",
+        "remaining": [],
         "beyond": [
           "An arbitrary nonvertex source permits equality in the half-angle budget. That case, and arbitrary vertex counts, belong to the broader theorem."
         ],
@@ -282,42 +294,42 @@ window.PAPER_DATA = {
       ],
       "title": "Theorem 1 — what has actually been proved",
       "status": "restricted",
-      "statement": "Restricted theorem present; full paper statement absent",
-      "proof": "Restricted theorem checked, no sorry",
-      "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
-      "note": "cofacial_star_embedding constructs a continuous open embedding of the actual retained surface into the plane, with bounded connected image, finite straight-segment boundary, and exact local intrinsic isometry. This is a real proved checkpoint, but it is not Theorem 1 for every convex polyhedron and source. The cofacial hypothesis is impossible for the all-triangular octahedron, so this does not claim all four graph models admit such a source.",
+      "statement": "Universal-source star theorem present; unrestricted paper theorem absent",
+      "proof": "Universal-source theorem and whole-face consequence checked, no sorry",
+      "scope": "Six vertices; every face triangular or quadrilateral. The source is an original vertex adjacent to every other vertex.",
+      "note": "universal_star_embedding constructs a continuous open embedding of the actual retained surface into the plane, with bounded path-connected image, finite straight-segment boundary, and exact local intrinsic isometry. The tree, charts, angle budget and separation are all proved from the solid. The displayed whole-face consequence also covers at most six vertices with a universal vertex, using the earlier reductions. Neither result claims the paper’s theorem for arbitrary sources and unrestricted polyhedra.",
       "refs": [
         [
-          "CofacialStarEmbedding",
-          "cofacial_star_embedding"
+          "UniversalStarEmbedding",
+          "universal_star_embedding"
         ],
         [
-          "SixVertexGraphs",
-          "SixVertexGraph"
-        ],
-        [
-          "CanonicalSixGraphs",
-          "SixGraphKind"
+          "UniversalStarUnfolding",
+          "hasEdgeUnfolding_of_universal_vertex"
         ],
         [
           "CutTreeCharts",
           "CutTreeCharts"
         ],
         [
-          "GlobalKiteSeparation",
-          "global_kites_nonoverlap"
+          "UniversalStarKiteSeparation",
+          "universal_exists_separated_cut_tree_charts"
         ],
         [
-          "StarOpenEmbedding",
-          "develop_isOpenEmbedding"
+          "UniversalStarKiteSeparation",
+          "universal_global_kites_nonoverlap"
         ],
         [
-          "StarLocalMetric",
-          "develop_locally_isometric"
+          "SmallPolyhedronStarOpenEmbedding",
+          "small_develop_isOpenEmbedding"
         ],
         [
-          "RetainedCutConnectivity",
-          "cofacial_uncut_surface_pathConnected"
+          "SmallPolyhedronStarLocalMetric",
+          "small_develop_locally_isometric"
+        ],
+        [
+          "SmallPolyhedronRetainedCutConnectivity",
+          "small_cofacial_uncut_surface_pathConnected"
         ]
       ],
       "steps": [
@@ -328,11 +340,9 @@ window.PAPER_DATA = {
         "Identify the exact finite-segment boundary."
       ],
       "work": {
-        "status": "todo",
-        "reason": "The proved cofacial checkpoint does not cover the universal-vertex family. Completing that family is the next star milestone, not merely an optional increase in paper coverage.",
-        "remaining": [
-          "Construct the universal-source charts and angle budget, then assemble the injective, locally isometric planar development."
-        ],
+        "status": "complete",
+        "reason": "The universal-source star milestone is complete. All five construction steps below are proved and assembled in universal_star_embedding; no geometric input or sorry remains for this scoped theorem.",
+        "remaining": [],
         "beyond": [
           "The full paper theorem for arbitrary sources and unrestricted convex polyhedra remains unfinished. It is not declared complete by finishing this milestone."
         ],
@@ -353,7 +363,7 @@ window.PAPER_DATA = {
       "statement": "Conditional chain and separation statements present",
       "proof": "Checked, from explicit geometric inputs",
       "scope": "Finite cut trees supplied with coherent CutTreeCharts and the source budget.",
-      "note": "The combinatorial path argument is proved. The final canonical-graph theorem supplies its source budget; it still receives charts whose original_leaves field rules out internal original vertices.",
+      "note": "The combinatorial path argument is proved. The displayed global theorems supply the source budget in their respective canonical-graph and universal-source scopes. For the universal-source theorem, the charts and original-leaf property are now constructed by the completed triangle and leaf components.",
       "refs": [
         [
           "CutTreeCharts",
@@ -366,12 +376,16 @@ window.PAPER_DATA = {
         [
           "GlobalKiteSeparation",
           "global_kites_nonoverlap"
+        ],
+        [
+          "UniversalStarKiteSeparation",
+          "universal_global_kites_nonoverlap"
         ]
       ],
       "steps": [],
       "work": {
         "status": "complete",
-        "reason": "The tree-path separation argument is checked under its displayed inputs. Constructing those inputs is tracked in the triangle, leaf and budget items; this component needs no new path argument.",
+        "reason": "The tree-path separation argument is checked. Its geometric and angle-budget inputs are now supplied by the completed triangle, leaf and budget components.",
         "remaining": [],
         "beyond": [],
         "depends_on": [
@@ -449,7 +463,7 @@ window.PAPER_DATA = {
       ],
       "work": {
         "status": "complete",
-        "reason": "The finite planar induction is checked. The surface construction must supply its step hypotheses; that work is tracked separately.",
+        "reason": "The finite planar induction is checked. The universal-source construction now supplies its step hypotheses through the completed charts and source-angle budget.",
         "remaining": [],
         "beyond": [],
         "depends_on": [
@@ -511,7 +525,7 @@ window.PAPER_DATA = {
       "statement": "Statement present",
       "proof": "Checked, given IncidentTriangles",
       "scope": "An actual first radial kite; its far endpoint may be an original vertex.",
-      "note": "initial_kite_in_wedge encloses the complete first kite with exactly its own source-angle charge. The proof uses the already-checked planar move. Constructing IncidentTriangles in the broader polyhedral scope is still separate.",
+      "note": "initial_kite_in_wedge encloses the complete first kite with exactly its own source-angle charge. The proof uses the checked planar move. Its IncidentTriangles input is supplied by the completed small-polyhedron radial-triangle construction.",
       "refs": [
         [
           "InitialKiteWedge",
@@ -525,7 +539,7 @@ window.PAPER_DATA = {
       "steps": [],
       "work": {
         "status": "complete",
-        "reason": "The first-kite lemma is checked given its actual radial-triangle input. Supplying that input for the new family is tracked in the triangle-construction item.",
+        "reason": "The first-kite lemma is checked, and its actual radial-triangle input is supplied by the completed small-polyhedron construction.",
         "remaining": [],
         "beyond": [],
         "depends_on": [
@@ -565,7 +579,7 @@ window.PAPER_DATA = {
       ],
       "work": {
         "status": "complete",
-        "reason": "The planar rotation and flat-junction step are checked. The planned universal-source construction uses only flat internal junctions once the cofacial-leaf transfer is proved.",
+        "reason": "The planar rotation and flat-junction step are checked. The proved leaf result ensures that every internal junction used by the universal-source construction is flat.",
         "remaining": [],
         "beyond": [
           "Singular junctions at original vertices require more work for arbitrary sources; they are not required by this milestone."
@@ -605,7 +619,7 @@ window.PAPER_DATA = {
       "steps": [],
       "work": {
         "status": "complete",
-        "reason": "The root-movement identity and its flat-junction step are checked. Constructing the needed surface data and budget is tracked separately.",
+        "reason": "The root-movement identity and flat-junction step are checked. The universal-source construction now supplies their surface data and angle budget.",
         "remaining": [],
         "beyond": [],
         "depends_on": [
@@ -650,14 +664,18 @@ window.PAPER_DATA = {
       ],
       "title": "Lemma 3 — the leaf case",
       "status": "restricted",
-      "statement": "Leaf and abstract empty-region statements present",
-      "proof": "Components checked; paper-level corollary not assembled",
-      "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
-      "note": "The leaf classification is proved for cofacial sources in canonical graphs. Finite-chain separation also keeps every later kite interior out of its initial region. These components have not been assembled into the exact closed-unfolding-versus-interior(W) assertion of Lemma 3.",
+      "statement": "Original cut vertices are leaves; full exterior-region assertion absent",
+      "proof": "Required leaf result checked; additional paper corollary not assembled",
+      "scope": "At most six vertices; every face triangular or quadrilateral. The source shares a face with every vertex; in particular this includes universal vertex sources.",
+      "note": "Every original cut-tree vertex is proved to be a leaf for a cofacial source. Thus a path through two different tree edges cannot have an original polyhedron vertex as its internal junction. This supplies exactly the leaf condition needed by the completed universal-source charts. The exact closed-unfolding-versus-interior-of-\\(W\\) assertion of Lemma 3 remains additional paper correspondence.",
       "refs": [
         [
-          "UniqueRouteLeaves",
-          "cofacial_source_leaf_iff_original"
+          "SmallPolyhedronUniqueRouteLeaves",
+          "small_cofacial_source_original_is_leaf"
+        ],
+        [
+          "SmallPolyhedronUniqueRouteLeaves",
+          "small_cofacial_source_internal_vertex_nonvertex"
         ],
         [
           "ExpandingRegionChains",
@@ -666,11 +684,9 @@ window.PAPER_DATA = {
       ],
       "steps": [],
       "work": {
-        "status": "todo",
-        "reason": "The cofacial-leaf classification must be extended to universal-vertex solids. This is required to justify using flat internal junctions, even though the full exterior-W assertion is not required.",
-        "remaining": [
-          "Prove that every nonsource original vertex is a leaf of the new small-polyhedron cut tree for a universal vertex source."
-        ],
+        "status": "complete",
+        "reason": "Every original cut vertex is proved to be a leaf for the cofacial source, including a universal vertex source. This required result is complete; the full exterior-region assertion is not needed by the direct separation proof.",
+        "remaining": [],
         "beyond": [
           "Assembling the exact closed-unfolding-versus-interior(W) assertion of Lemma 3 is additional paper coverage."
         ],
@@ -699,10 +715,10 @@ window.PAPER_DATA = {
       "steps": [],
       "work": {
         "status": "beyond",
-        "reason": "Internal original-vertex junctions are outside the universal-source milestone. Their exclusion there still depends on the leaf proof, which is explicitly marked “Still to do”.",
+        "reason": "Internal original-vertex junctions are outside the universal-source milestone. The completed leaf theorem excludes them in this case; handling them for arbitrary sources remains broader work.",
         "remaining": [],
         "beyond": [
-          "For the arbitrary-source theorem, construct singular-cone junctions, prove the paper’s W ⊆ W₀ comparison and extend the global assembly. This remains unfinished."
+          "For the arbitrary-source theorem, construct singular-cone junctions, prove the paper’s \\(W\\subseteq W_0\\) comparison and extend the global assembly. This remains unfinished."
         ],
         "depends_on": [
           "leaf"
@@ -711,17 +727,6 @@ window.PAPER_DATA = {
     }
   ],
   "declarations": {
-    "CanonicalSixGraphs:SixGraphKind": {
-      "name": "SixGraphKind",
-      "qualified": "SixVertexUnfolding.SmallGraphs.SixGraphKind",
-      "kind": "inductive",
-      "module": "CanonicalSixGraphs",
-      "line": 8,
-      "signature": "inductive SixGraphKind where\n  | octahedron\n  | minusEdge\n  | prismDiagonal\n  | prism\n  deriving DecidableEq, Fintype",
-      "context": "",
-      "namespace": "SixVertexUnfolding.SmallGraphs",
-      "proofHole": false
-    },
     "ClosedCutSet:cutSet": {
       "name": "cutSet",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.cutSet",
@@ -766,17 +771,6 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
-    "CofacialStarEmbedding:cofacial_star_embedding": {
-      "name": "cofacial_star_embedding",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_star_embedding",
-      "kind": "theorem",
-      "module": "CofacialStarEmbedding",
-      "line": 19,
-      "signature": "theorem cofacial_star_embedding {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n    (a : frontier P.body) (source : Fin 6) (at_source : (a : Space) = (graph.vertex source : Space))\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :\n    ∃ develop : C(P.UncutSurface a, Plane),\n      Topology.IsOpenEmbedding develop ∧ Bornology.IsBounded (range develop) ∧\n      IsPathConnected (range develop) ∧\n      (∃ edges : Finset (Plane × Plane), frontier (range develop) =\n        ⋃ e ∈ edges, segment ℝ e.1 e.2) ∧\n      ∀ b : P.UncutSurface a, ∃ radius > 0, ∀ c d : P.UncutSurface a,\n        dist (c.val : Space) (b.val : Space) < radius →\n        dist (d.val : Space) (b.val : Space) < radius →\n        dist (develop c) (develop d) = P.surfaceDist c.val d.val",
-      "context": "open Set",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
-      "proofHole": false
-    },
     "CutEdgeMetricModel:CutEdgeMetricModel": {
       "name": "CutEdgeMetricModel",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel",
@@ -810,17 +804,6 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
-    "CutEdgeTriangles:exists_cut_edge_triangles": {
-      "name": "exists_cut_edge_triangles",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.exists_cut_edge_triangles",
-      "kind": "theorem",
-      "module": "CutEdgeTriangles",
-      "line": 51,
-      "signature": "theorem exists_cut_edge_triangles (a : frontier P.body) (T : P.CutLocusTree a)\n    {u v : T.vertices} (edge : T.graph.Adj u v) : Nonempty (CutEdgeTriangles T edge)",
-      "context": "open Set\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude graph small_faces in",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
-      "proofHole": false
-    },
     "CutSetVertexLimits:cutSet_eq_closure_multiple": {
       "name": "cutSet_eq_closure_multiple",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cutSet_eq_closure_multiple",
@@ -852,61 +835,6 @@ window.PAPER_DATA = {
       "signature": "structure CutTreeCharts {P : ConvexPolyhedron} {a : frontier P.body} (T : P.CutLocusTree a) where\n  fan : ∀ u : T.vertices, (u : Space) ∉ P.vertices → JunctionFan T u\n  triangles : ∀ {u v : T.vertices} (edge : T.graph.Adj u v), PlacedCutEdgeTriangles T edge\n  at_fan : ∀ {u v : T.vertices} (edge : T.graph.Adj u v) (nonvertex : (u : Space) ∉ P.vertices),\n    triangles edge = ((fan u nonvertex).edgeTriangles edge).placed\n  original_leaves : ∀ u : T.vertices, (u : Space) ∈ P.vertices → ∃! v, T.graph.Adj u v\n  frames : CutTreeFrames T triangles\n  covers : ∀ b : frontier P.body, ∃ u v : T.vertices, ∃ edge : T.graph.Adj u v,\n    b ∈ (triangles edge).region",
       "context": "open Set",
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
-      "proofHole": false
-    },
-    "CutTreeConeCoverage:incident_model_angles_cover_cone": {
-      "name": "incident_model_angles_cover_cone",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.incident_model_angles_cover_cone",
-      "kind": "theorem",
-      "module": "CutTreeConeCoverage",
-      "line": 75,
-      "signature": "theorem incident_model_angles_cover_cone (a : frontier P.body) (T : P.CutLocusTree a)\n    [Fintype T.vertices] [DecidableRel T.graph.Adj]\n    (models : (d : T.graph.Dart) → CutEdgeMetricModel T d.adj)\n    (u : T.vertices) (pole : Fin 6) (at_vertex : (u : Space) = (graph.vertex pole : Space)) :\n    graph.totalAngleAt pole ≤ T.incidentAngleSum models u",
-      "context": "open Set EuclideanGeometry\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude small_faces in",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
-      "proofHole": false
-    },
-    "CutTreeCurvature:sum_cutTreeCurvature": {
-      "name": "sum_cutTreeCurvature",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.sum_cutTreeCurvature",
-      "kind": "theorem",
-      "module": "CutTreeCurvature",
-      "line": 39,
-      "signature": "theorem sum_cutTreeCurvature [Fintype T.vertices] (source : Fin 6)\n    (at_source : (a : Space) = (graph.vertex source : Space)) :\n    ∑ u, graph.cutTreeCurvature T u = 4 * π - graph.curvature source",
-      "context": "open Real Set\nopen scoped BigOperators\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n  {a : frontier P.body} (T : P.CutLocusTree a)",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
-      "proofHole": false
-    },
-    "CutTreeSourceBudget:half_source_angle_sum_lt_pi": {
-      "name": "half_source_angle_sum_lt_pi",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.half_source_angle_sum_lt_pi",
-      "kind": "theorem",
-      "module": "CutTreeSourceBudget",
-      "line": 28,
-      "signature": "theorem half_source_angle_sum_lt_pi (source : Fin 6)\n    (at_source : (a : Space) = (graph.vertex source : Space)) :\n    (∑ d, (models d).sourceAngle) / 2 < π",
-      "context": "open Set Real\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n    {a : frontier P.body} (T : P.CutLocusTree a)\n    [Fintype T.vertices] [DecidableRel T.graph.Adj]\n    (models : (d : T.graph.Dart) → CutEdgeMetricModel T d.adj)\ninclude small_faces in",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
-      "proofHole": false
-    },
-    "CutTreeSourceBudget:source_angle_sum_le": {
-      "name": "source_angle_sum_le",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.source_angle_sum_le",
-      "kind": "theorem",
-      "module": "CutTreeSourceBudget",
-      "line": 20,
-      "signature": "theorem source_angle_sum_le (source : Fin 6)\n    (at_source : (a : Space) = (graph.vertex source : Space)) :\n    ∑ d, (models d).sourceAngle ≤ graph.totalAngleAt source",
-      "context": "open Set Real\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n    {a : frontier P.body} (T : P.CutLocusTree a)\n    [Fintype T.vertices] [DecidableRel T.graph.Adj]\n    (models : (d : T.graph.Dart) → CutEdgeMetricModel T d.adj)\ninclude small_faces in",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
-      "proofHole": false
-    },
-    "CutTreeTriangleCoverage:cut_tree_triangles_cover": {
-      "name": "cut_tree_triangles_cover",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cut_tree_triangles_cover",
-      "kind": "theorem",
-      "module": "CutTreeTriangleCoverage",
-      "line": 19,
-      "signature": "theorem cut_tree_triangles_cover (a : frontier P.body) (T : P.CutLocusTree a)\n    (triangles : (d : T.graph.Dart) → CutEdgeTriangles T d.adj) (b : frontier P.body) :\n    ∃ d, b ∈ range (closedRouteStripMap (triangles d).first) ∪\n      range (closedRouteStripMap (triangles d).second)",
-      "context": "open Set\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude graph small_faces in",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
       "proofHole": false
     },
     "Definitions:ConvexPolyhedron": {
@@ -1052,25 +980,47 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
-    "RetainedCutConnectivity:cofacial_uncut_surface_pathConnected": {
-      "name": "cofacial_uncut_surface_pathConnected",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_uncut_surface_pathConnected",
-      "kind": "theorem",
-      "module": "RetainedCutConnectivity",
-      "line": 53,
-      "signature": "theorem cofacial_uncut_surface_pathConnected (a : frontier P.body)\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :\n    IsPathConnected (P.starCuts a)ᶜ",
-      "context": "open Set\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+    "SmallPolyhedronCurvature:surfaceAngle": {
+      "name": "surfaceAngle",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.surfaceAngle",
+      "kind": "def",
+      "module": "SmallPolyhedronCurvature",
+      "line": 16,
+      "signature": "noncomputable def surfaceAngle (P : ConvexPolyhedron) [Fintype P.Face] (v : P.Vertex) : ℝ :=\n  ∑ F : P.Face, F.cornerAngle v",
+      "context": "open Set Real\nvariable {P : ConvexPolyhedron} [Fintype P.Face]",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
-    "SixVertexGraphs:SixVertexGraph": {
-      "name": "SixVertexGraph",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
-      "kind": "structure",
-      "module": "SixVertexGraphs",
-      "line": 10,
-      "signature": "structure SixVertexGraph (P : ConvexPolyhedron) where\n  kind : SmallGraphs.SixGraphKind\n  vertex : Fin 6 ≃ P.Vertex\n  edges : ∀ i j : Fin 6, P.edgeGraph.Adj (vertex i) (vertex j) ↔\n    i ≠ j ∧ s(i, j) ∉ kind.missingEdges",
-      "context": "",
+    "SmallPolyhedronCurvature:universal_sum_vertexCurvature_le": {
+      "name": "universal_sum_vertexCurvature_le",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.universal_sum_vertexCurvature_le",
+      "kind": "theorem",
+      "module": "SmallPolyhedronCurvature",
+      "line": 67,
+      "signature": "theorem universal_sum_vertexCurvature_le (size : P.vertices.card = 6)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n    (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v) :\n    (∑ v : P.Vertex, P.vertexCurvature v) ≤ 4 * π",
+      "context": "open Set Real\nvariable {P : ConvexPolyhedron} [Fintype P.Face]",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronCurvature:vertexCurvature": {
+      "name": "vertexCurvature",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.vertexCurvature",
+      "kind": "def",
+      "module": "SmallPolyhedronCurvature",
+      "line": 20,
+      "signature": "noncomputable def vertexCurvature (P : ConvexPolyhedron) [Fintype P.Face] (v : P.Vertex) : ℝ :=\n  2 * π - P.surfaceAngle v",
+      "context": "open Set Real\nvariable {P : ConvexPolyhedron} [Fintype P.Face]",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronCutEdgeTriangles:small_exists_cut_edge_triangles": {
+      "name": "small_exists_cut_edge_triangles",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_exists_cut_edge_triangles",
+      "kind": "theorem",
+      "module": "SmallPolyhedronCutEdgeTriangles",
+      "line": 22,
+      "signature": "theorem small_exists_cut_edge_triangles (a : frontier P.body) (T : P.CutLocusTree a)\n    {u v : T.vertices} (edge : T.graph.Adj u v) : Nonempty (CutEdgeTriangles T edge)",
+      "context": "open Set\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude size small_faces in",
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
@@ -1096,6 +1046,50 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
+    "SmallPolyhedronCutTreeCharts:small_exists_universal_star_charts": {
+      "name": "small_exists_universal_star_charts",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_exists_universal_star_charts",
+      "kind": "theorem",
+      "module": "SmallPolyhedronCutTreeCharts",
+      "line": 58,
+      "signature": "theorem small_exists_universal_star_charts\n    (a : frontier P.body) (source : P.Vertex) (at_source : (a : Space) = (source : Space))\n    (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v) :\n    ∃ T : P.CutLocusTree a, Nonempty (CutTreeCharts T)",
+      "context": "open Set\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude size small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronCutTreeCurvature:sum_originalCurvature": {
+      "name": "sum_originalCurvature",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.CutLocusTree.sum_originalCurvature",
+      "kind": "theorem",
+      "module": "SmallPolyhedronCutTreeCurvature",
+      "line": 36,
+      "signature": "theorem sum_originalCurvature [Fintype T.vertices] (source : P.Vertex)\n    (at_source : (a : Space) = (source : Space)) :\n    (∑ u, T.originalCurvature u) = (∑ v : P.Vertex, P.vertexCurvature v) - P.vertexCurvature source",
+      "context": "open Set Real\nvariable {P : ConvexPolyhedron} [Fintype P.Face]\n  {a : frontier P.body} (T : P.CutLocusTree a)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.CutLocusTree",
+      "proofHole": false
+    },
+    "SmallPolyhedronCutTreeTriangleCoverage:small_cut_tree_triangles_cover": {
+      "name": "small_cut_tree_triangles_cover",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_cut_tree_triangles_cover",
+      "kind": "theorem",
+      "module": "SmallPolyhedronCutTreeTriangleCoverage",
+      "line": 24,
+      "signature": "theorem small_cut_tree_triangles_cover (a : frontier P.body) (T : P.CutLocusTree a)\n    (triangles : (d : T.graph.Dart) → CutEdgeTriangles T d.adj) (b : frontier P.body) :\n    ∃ d, b ∈ range (closedRouteStripMap (triangles d).first) ∪\n      range (closedRouteStripMap (triangles d).second)",
+      "context": "open Set\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude size small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronRetainedCutConnectivity:small_cofacial_uncut_surface_pathConnected": {
+      "name": "small_cofacial_uncut_surface_pathConnected",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_cofacial_uncut_surface_pathConnected",
+      "kind": "theorem",
+      "module": "SmallPolyhedronRetainedCutConnectivity",
+      "line": 57,
+      "signature": "theorem small_cofacial_uncut_surface_pathConnected (a : frontier P.body)\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :\n    IsPathConnected (P.starCuts a)ᶜ",
+      "context": "open Set\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
     "SmallPolyhedronShortestRoutes:small_shortest_routes_agree_of_meeting": {
       "name": "small_shortest_routes_agree_of_meeting",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_shortest_routes_agree_of_meeting",
@@ -1104,6 +1098,61 @@ window.PAPER_DATA = {
       "line": 62,
       "signature": "theorem small_shortest_routes_agree_of_meeting\n    (first second : P.SurfacePath a b) (different : a ≠ b)\n    (first_shortest : first.IsShortest) (second_shortest : second.IsShortest)\n    (first_finite : first.length ≠ ⊤) (second_finite : second.length ≠ ⊤)\n    (first_speed : LipschitzWith first.length.toNNReal first.curve)\n    (second_speed : LipschitzWith second.length.toNNReal second.curve)\n    (m : unitInterval) (after_start : 0 < m) (before_end : m < 1)\n    (meet : first.curve m = second.curve m) : ∀ t, first.curve t = second.curve t",
       "context": "open Set\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n  {a b : Space}\ninclude size small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronSourceBudget:universal_half_source_angle_sum_lt_pi": {
+      "name": "universal_half_source_angle_sum_lt_pi",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.universal_half_source_angle_sum_lt_pi",
+      "kind": "theorem",
+      "module": "SmallPolyhedronSourceBudget",
+      "line": 66,
+      "signature": "theorem universal_half_source_angle_sum_lt_pi (six : P.vertices.card = 6)\n    (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v)\n    (at_source : (a : Space) = (source : Space)) :\n    (∑ d, (models d).sourceAngle) / 2 < π",
+      "context": "open Set Real\nvariable {P : ConvexPolyhedron} [Fintype P.Face]\n  (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n  {a : frontier P.body} (T : P.CutLocusTree a)\n  [Fintype T.vertices] [DecidableRel T.graph.Adj]\n  (models : (d : T.graph.Dart) → CutEdgeMetricModel T d.adj)\ninclude small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronSourceBudget:universal_source_angle_sum_le": {
+      "name": "universal_source_angle_sum_le",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.universal_source_angle_sum_le",
+      "kind": "theorem",
+      "module": "SmallPolyhedronSourceBudget",
+      "line": 57,
+      "signature": "theorem universal_source_angle_sum_le (six : P.vertices.card = 6)\n    (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v)\n    (at_source : (a : Space) = (source : Space)) :\n    (∑ d, (models d).sourceAngle) ≤ P.surfaceAngle source",
+      "context": "open Set Real\nvariable {P : ConvexPolyhedron} [Fintype P.Face]\n  (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n  {a : frontier P.body} (T : P.CutLocusTree a)\n  [Fintype T.vertices] [DecidableRel T.graph.Adj]\n  (models : (d : T.graph.Dart) → CutEdgeMetricModel T d.adj)\ninclude small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronStarLocalMetric:small_develop_locally_isometric": {
+      "name": "small_develop_locally_isometric",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_develop_locally_isometric",
+      "kind": "theorem",
+      "module": "SmallPolyhedronStarLocalMetric",
+      "line": 20,
+      "signature": "theorem small_develop_locally_isometric {a : frontier P.body} {T : P.CutLocusTree a} (charts : CutTreeCharts T)\n    (separated : charts.KitesSeparated)\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)\n    (b : P.UncutSurface a) :\n    ∃ radius > 0, ∀ c d : P.UncutSurface a,\n      dist (c.val : Space) (b.val : Space) < radius →\n      dist (d.val : Space) (b.val : Space) < radius →\n      dist (charts.develop c.val) (charts.develop d.val) = P.surfaceDist c.val d.val",
+      "context": "open Set\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude size small_faces",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronStarOpenEmbedding:small_develop_isOpenEmbedding": {
+      "name": "small_develop_isOpenEmbedding",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_develop_isOpenEmbedding",
+      "kind": "theorem",
+      "module": "SmallPolyhedronStarOpenEmbedding",
+      "line": 59,
+      "signature": "theorem small_develop_isOpenEmbedding {a : frontier P.body} {T : P.CutLocusTree a} (charts : CutTreeCharts T)\n    (separated : charts.KitesSeparated)\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :\n    Topology.IsOpenEmbedding (fun b : P.UncutSurface a => charts.develop b.val)",
+      "context": "open Set Filter Topology\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SmallPolyhedronStarPolygonBoundary:small_develop_frontier_eq_segments": {
+      "name": "small_develop_frontier_eq_segments",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_develop_frontier_eq_segments",
+      "kind": "theorem",
+      "module": "SmallPolyhedronStarPolygonBoundary",
+      "line": 41,
+      "signature": "theorem small_develop_frontier_eq_segments {a : frontier P.body} {T : P.CutLocusTree a}\n    (charts : CutTreeCharts T) (separated : charts.KitesSeparated)\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :\n    frontier (range (fun c : P.UncutSurface a => charts.develop c.val)) =\n      ⋃ e ∈ charts.boundarySegments, segment ℝ e.1 e.2",
+      "context": "open Set Filter Topology\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)",
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
@@ -1118,48 +1167,70 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
-    "StarLocalMetric:develop_locally_isometric": {
-      "name": "develop_locally_isometric",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_locally_isometric",
+    "SmallPolyhedronUniqueRouteLeaves:small_cofacial_source_internal_vertex_nonvertex": {
+      "name": "small_cofacial_source_internal_vertex_nonvertex",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_cofacial_source_internal_vertex_nonvertex",
       "kind": "theorem",
-      "module": "StarLocalMetric",
-      "line": 18,
-      "signature": "theorem develop_locally_isometric {a : frontier P.body} {T : P.CutLocusTree a} (charts : CutTreeCharts T)\n    (source : Fin 6) (at_source : (a : Space) = (graph.vertex source : Space))\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)\n    (b : P.UncutSurface a) :\n    ∃ radius > 0, ∀ c d : P.UncutSurface a,\n      dist (c.val : Space) (b.val : Space) < radius →\n      dist (d.val : Space) (b.val : Space) < radius →\n      dist (charts.develop c.val) (charts.develop d.val) = P.surfaceDist c.val d.val",
-      "context": "open Set\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude graph small_faces",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "module": "SmallPolyhedronUniqueRouteLeaves",
+      "line": 39,
+      "signature": "theorem small_cofacial_source_internal_vertex_nonvertex\n    (a : frontier P.body) (T : P.CutLocusTree a)\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)\n    (u v w : T.vertices) (first : T.graph.Adj u v) (second : T.graph.Adj u w)\n    (different : v ≠ w) : (u : Space) ∉ P.vertices",
+      "context": "open Set\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude size small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
-    "StarOpenEmbedding:develop_isOpenEmbedding": {
-      "name": "develop_isOpenEmbedding",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_isOpenEmbedding",
+    "SmallPolyhedronUniqueRouteLeaves:small_cofacial_source_original_is_leaf": {
+      "name": "small_cofacial_source_original_is_leaf",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.small_cofacial_source_original_is_leaf",
       "kind": "theorem",
-      "module": "StarOpenEmbedding",
-      "line": 56,
-      "signature": "theorem develop_isOpenEmbedding {a : frontier P.body} {T : P.CutLocusTree a} (charts : CutTreeCharts T)\n    (source : Fin 6) (at_source : (a : Space) = (graph.vertex source : Space))\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :\n    Topology.IsOpenEmbedding (fun b : P.UncutSurface a => charts.develop b.val)",
-      "context": "open Set Filter Topology\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "module": "SmallPolyhedronUniqueRouteLeaves",
+      "line": 29,
+      "signature": "theorem small_cofacial_source_original_is_leaf (a : frontier P.body) (T : P.CutLocusTree a)\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)\n    (u : T.vertices) (original : (u : Space) ∈ P.vertices) :\n    ∃! v, T.graph.Adj u v",
+      "context": "open Set\nvariable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude size small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
-    "StarPolygonBoundary:develop_frontier_eq_segments": {
-      "name": "develop_frontier_eq_segments",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.develop_frontier_eq_segments",
+    "UniversalStarEmbedding:universal_star_embedding": {
+      "name": "universal_star_embedding",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.universal_star_embedding",
       "kind": "theorem",
-      "module": "StarPolygonBoundary",
+      "module": "UniversalStarEmbedding",
+      "line": 20,
+      "signature": "theorem universal_star_embedding {P : ConvexPolyhedron} (six : P.vertices.card = 6)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n    (a : frontier P.body) (source : P.Vertex) (at_source : (a : Space) = (source : Space))\n    (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v) :\n    ∃ develop : C(P.UncutSurface a, Plane),\n      Topology.IsOpenEmbedding develop ∧ Bornology.IsBounded (range develop) ∧\n      IsPathConnected (range develop) ∧\n      (∃ edges : Finset (Plane × Plane), frontier (range develop) =\n        ⋃ e ∈ edges, segment ℝ e.1 e.2) ∧\n      ∀ b : P.UncutSurface a, ∃ radius > 0, ∀ c d : P.UncutSurface a,\n        dist (c.val : Space) (b.val : Space) < radius →\n        dist (d.val : Space) (b.val : Space) < radius →\n        dist (develop c) (develop d) = P.surfaceDist c.val d.val",
+      "context": "open Set",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "UniversalStarKiteSeparation:universal_exists_separated_cut_tree_charts": {
+      "name": "universal_exists_separated_cut_tree_charts",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.universal_exists_separated_cut_tree_charts",
+      "kind": "theorem",
+      "module": "UniversalStarKiteSeparation",
       "line": 60,
-      "signature": "theorem develop_frontier_eq_segments {a : frontier P.body} {T : P.CutLocusTree a}\n    (charts : CutTreeCharts T) (source : Fin 6) (at_source : (a : Space) = (graph.vertex source : Space))\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :\n    frontier (range (fun c : P.UncutSurface a => charts.develop c.val)) =\n      ⋃ e ∈ charts.boundarySegments, segment ℝ e.1 e.2",
-      "context": "open Set\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "signature": "theorem universal_exists_separated_cut_tree_charts :\n    ∃ charts : CutTreeCharts T,\n      ∀ {u v w z : T.vertices} (first : T.graph.Adj u v) (last : T.graph.Adj w z),\n        s(u, v) ≠ s(w, z) → Disjoint (charts.kite first) (interior (charts.kite last))",
+      "context": "open Set Real\nvariable {P : ConvexPolyhedron} (six : P.vertices.card = 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n  {a : frontier P.body} (T : P.CutLocusTree a) (charts : CutTreeCharts T)\n  (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v)\n  (at_source : (a : Space) = (source : Space))\ninclude six small_faces universal at_source in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
-    "UniqueRouteLeaves:cofacial_source_leaf_iff_original": {
-      "name": "cofacial_source_leaf_iff_original",
-      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_source_leaf_iff_original",
+    "UniversalStarKiteSeparation:universal_global_kites_nonoverlap": {
+      "name": "universal_global_kites_nonoverlap",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.universal_global_kites_nonoverlap",
       "kind": "theorem",
-      "module": "UniqueRouteLeaves",
-      "line": 48,
-      "signature": "theorem cofacial_source_leaf_iff_original (a : frontier P.body) (T : P.CutLocusTree a)\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val)\n    (u : T.vertices) : (∃! v, T.graph.Adj u v) ↔ (u : Space) ∈ P.vertices",
-      "context": "open Set\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)",
-      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "module": "UniversalStarKiteSeparation",
+      "line": 45,
+      "signature": "theorem universal_global_kites_nonoverlap\n    {u v w z : T.vertices} (first : T.graph.Adj u v) (last : T.graph.Adj w z)\n    (different : s(u, v) ≠ s(w, z)) :\n    Disjoint (charts.kite first) (interior (charts.kite last))",
+      "context": "open Set Real\nvariable {P : ConvexPolyhedron} (six : P.vertices.card = 6)\n  (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n    (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n  {a : frontier P.body} (T : P.CutLocusTree a) (charts : CutTreeCharts T)\n  (source : P.Vertex) (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v)\n  (at_source : (a : Space) = (source : Space))\ninclude six small_faces universal at_source in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "UniversalStarUnfolding:hasEdgeUnfolding_of_universal_vertex": {
+      "name": "hasEdgeUnfolding_of_universal_vertex",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.hasEdgeUnfolding_of_universal_vertex",
+      "kind": "theorem",
+      "module": "UniversalStarUnfolding",
+      "line": 29,
+      "signature": "theorem hasEdgeUnfolding_of_universal_vertex {P : ConvexPolyhedron}\n    (at_most_six : P.vertices.card ≤ 6) (source : P.Vertex)\n    (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v) :\n    P.HasEdgeUnfolding",
+      "context": "open Set",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
     "VertexFanAngles:totalAngle": {
@@ -1181,6 +1252,17 @@ window.PAPER_DATA = {
       "line": 44,
       "signature": "theorem totalAngle_lt_two_pi (size : P.vertices.card ≤ 6)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4) : fan.totalAngle < 2 * π",
       "context": "open Set Real InnerProductGeometry\nvariable {P : ConvexPolyhedron} {pole : P.Vertex} {n : ℕ} [NeZero n]\n  (fan : P.VertexFaceFan pole n)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan",
+      "proofHole": false
+    },
+    "VertexFanCutTreeConeCoverage:incident_model_angles_cover_cone": {
+      "name": "incident_model_angles_cover_cone",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan.incident_model_angles_cover_cone",
+      "kind": "theorem",
+      "module": "VertexFanCutTreeConeCoverage",
+      "line": 76,
+      "signature": "theorem incident_model_angles_cover_cone (a : frontier P.body) (T : P.CutLocusTree a)\n    [Fintype T.vertices] [DecidableRel T.graph.Adj]\n    (models : (d : T.graph.Dart) → CutEdgeMetricModel T d.adj)\n    (u : T.vertices) (at_vertex : (u : Space) = (pole : Space)) :\n    fan.totalAngle ≤ T.incidentAngleSum models u",
+      "context": "open Set EuclideanGeometry\nvariable {P : ConvexPolyhedron} {pole : P.Vertex} {n : ℕ} [NeZero n]\n  (fan : P.VertexFaceFan pole n) (size : P.vertices.card ≤ 6)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude size small_faces in",
       "namespace": "SixVertexUnfolding.ConvexPolyhedron.VertexFaceFan",
       "proofHole": false
     },
@@ -1263,10 +1345,6 @@ window.PAPER_DATA = {
     }
   },
   "sources": {
-    "CanonicalSixGraphs": {
-      "path": "SixVertexUnfolding/CanonicalSixGraphs.lean",
-      "sha256": "0cdbbf33dee6f6aaa5411cd0ab5a38807cc57627a0748e9be99c6562101c6da1"
-    },
     "ClosedCutSet": {
       "path": "SixVertexUnfolding/Geometry/ClosedCutSet.lean",
       "sha256": "aa5004ee116f1b60b868629f6b5518e1cdb9d77d46de6821d43e9340d3e43664"
@@ -1274,10 +1352,6 @@ window.PAPER_DATA = {
     "CofacialStarCuts": {
       "path": "SixVertexUnfolding/Geometry/CofacialStarCuts.lean",
       "sha256": "0c7b8aee498bd8445fef847c78a7e5242e9ffcbe55896439f2cecdd8ef998053"
-    },
-    "CofacialStarEmbedding": {
-      "path": "SixVertexUnfolding/Geometry/CofacialStarEmbedding.lean",
-      "sha256": "86defbc1d1d91e26c0545a79f399c28fad39be3b9660a9407bffacb0c253e1d0"
     },
     "CutEdgeMetricModel": {
       "path": "SixVertexUnfolding/Geometry/CutEdgeMetricModel.lean",
@@ -1302,22 +1376,6 @@ window.PAPER_DATA = {
     "CutTreeCharts": {
       "path": "SixVertexUnfolding/Geometry/CutTreeCharts.lean",
       "sha256": "7c728b898e9ad96fdd8070119bb0666832d5c9c12913932635f816a402853c21"
-    },
-    "CutTreeConeCoverage": {
-      "path": "SixVertexUnfolding/Geometry/CutTreeConeCoverage.lean",
-      "sha256": "dbb52070a2da4aa5507b8e9948a9cc3c0ffbd79a04238912a31a9ed7320de2b2"
-    },
-    "CutTreeCurvature": {
-      "path": "SixVertexUnfolding/Geometry/CutTreeCurvature.lean",
-      "sha256": "38e833e92a552193e07ba85efa912dc04151827c48f4e8de1b355b820dfdacb9"
-    },
-    "CutTreeSourceBudget": {
-      "path": "SixVertexUnfolding/Geometry/CutTreeSourceBudget.lean",
-      "sha256": "8600f499f4e9d9f100f5ec073c0c09e336304430da3c4a2fdd929951d30bd37a"
-    },
-    "CutTreeTriangleCoverage": {
-      "path": "SixVertexUnfolding/Geometry/CutTreeTriangleCoverage.lean",
-      "sha256": "ef8da9ddfc98d5b50f0c4a3639872406d627b71268609fc9c026f6c1408798ca"
     },
     "Definitions": {
       "path": "SixVertexUnfolding/Definitions.lean",
@@ -1355,45 +1413,81 @@ window.PAPER_DATA = {
       "path": "SixVertexUnfolding/Geometry/RegularCutTree.lean",
       "sha256": "324af0598e1fd9e027fdd0518f2c88ab6646df179592ae1e10dcc781f0464907"
     },
-    "RetainedCutConnectivity": {
-      "path": "SixVertexUnfolding/Geometry/RetainedCutConnectivity.lean",
-      "sha256": "bc5e4bd9c751d098ed5e52887d311686752664379f5b8851972c6db7b1912aed"
+    "SmallPolyhedronCurvature": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCurvature.lean",
+      "sha256": "418d3be88ddfe21aa63244f0b7ea78321c863becd16ac21de4fb21739286af53"
     },
-    "SixVertexGraphs": {
-      "path": "SixVertexUnfolding/Geometry/SixVertexGraphs.lean",
-      "sha256": "4317cd118b6c798490cbc45ae5024eefcf56c15dc90dbf6fe39f8f8c228e2f8f"
+    "SmallPolyhedronCutEdgeTriangles": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutEdgeTriangles.lean",
+      "sha256": "d7ab773f715a5d3a0be99d80ee706842945b8ad8ccb5e0fe17134ea60222e11a"
     },
     "SmallPolyhedronCutTree": {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTree.lean",
       "sha256": "d8c3d2512ab189fac07db833e31bdf7690a8598a26fdd08e1b483c9322d8e32c"
     },
+    "SmallPolyhedronCutTreeCharts": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeCharts.lean",
+      "sha256": "e580c1a4506b3b39c75f04f5a217ab71af07997365765ac1ac2ce0a1f8d504b7"
+    },
+    "SmallPolyhedronCutTreeCurvature": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeCurvature.lean",
+      "sha256": "647a506e88a9036acbc6351105d055d14ec94fa34be30a984047d38846a3414d"
+    },
+    "SmallPolyhedronCutTreeTriangleCoverage": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeTriangleCoverage.lean",
+      "sha256": "8517dde0199d7910e9d7ae01a030c45ec7215076fa00f45d417a795b82c7d80b"
+    },
+    "SmallPolyhedronRetainedCutConnectivity": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronRetainedCutConnectivity.lean",
+      "sha256": "d8a2fbb77b77b5d422725812408819762868b0c5ffc4e6737760e37711894a2c"
+    },
     "SmallPolyhedronShortestRoutes": {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronShortestRoutes.lean",
       "sha256": "525363d66dc540d7799f8732de4571e32d42d42ad990622a940adf16793d0b03"
+    },
+    "SmallPolyhedronSourceBudget": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronSourceBudget.lean",
+      "sha256": "2449b460abae845d9887c243897b7f5414ac04f9c671c2af4bd1f7286d4b55df"
+    },
+    "SmallPolyhedronStarLocalMetric": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronStarLocalMetric.lean",
+      "sha256": "3658820b1ce91fbce70dd3186c962e87db27001626574c758b522d7424117759"
+    },
+    "SmallPolyhedronStarOpenEmbedding": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronStarOpenEmbedding.lean",
+      "sha256": "812957e79c30a67b11d6390904cbab0f86a0840e9e85960d0b9630a55f77ea0c"
+    },
+    "SmallPolyhedronStarPolygonBoundary": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronStarPolygonBoundary.lean",
+      "sha256": "ff00226592ed60e9353a11cbb4eeee0c476ab0e2c52e3a4e832020c9212aba66"
     },
     "SmallPolyhedronTerminalRays": {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronTerminalRays.lean",
       "sha256": "3837ed6d3adabf542527cef30fd4888d370d6c5481a8193eb2c790f0012e124f"
     },
-    "StarLocalMetric": {
-      "path": "SixVertexUnfolding/Geometry/StarLocalMetric.lean",
-      "sha256": "f467ab8b728c44c72e8c8bb32b79fd4a83e544ae0e297f738bfed5fa4f7c3a83"
+    "SmallPolyhedronUniqueRouteLeaves": {
+      "path": "SixVertexUnfolding/Geometry/SmallPolyhedronUniqueRouteLeaves.lean",
+      "sha256": "2146f8c8425e7f4775ee61eeedf42a65ae73854e2a0ed82d7b84ac7e034a7350"
     },
-    "StarOpenEmbedding": {
-      "path": "SixVertexUnfolding/Geometry/StarOpenEmbedding.lean",
-      "sha256": "bcc8d5c0403a1bdf12694a7ba1eb788735f72623186c8b219f42477fca390a6b"
+    "UniversalStarEmbedding": {
+      "path": "SixVertexUnfolding/Geometry/UniversalStarEmbedding.lean",
+      "sha256": "537008d670dde4a286f148a143d8889da78feda4959d26a92d9c50c70e8fc2dc"
     },
-    "StarPolygonBoundary": {
-      "path": "SixVertexUnfolding/Geometry/StarPolygonBoundary.lean",
-      "sha256": "a9812afdb15149d90c87c8d7753eb8a63732a89efbc0c948fa94810683e3784c"
+    "UniversalStarKiteSeparation": {
+      "path": "SixVertexUnfolding/Geometry/UniversalStarKiteSeparation.lean",
+      "sha256": "cf3f20151ae1e8947e12a2591055ff977f9981f53bf35f6afa365d9344b1f0ef"
     },
-    "UniqueRouteLeaves": {
-      "path": "SixVertexUnfolding/Geometry/UniqueRouteLeaves.lean",
-      "sha256": "a702c124af5c10aa8c490b9a722ee2c4dc0405b24ca2dcc8ab0efb132d00c4e0"
+    "UniversalStarUnfolding": {
+      "path": "SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean",
+      "sha256": "f336cfcc35e4fcf180b00188e830d6d7a85c4fe89c18c4cb53225fb2b4f0e16f"
     },
     "VertexFanAngles": {
       "path": "SixVertexUnfolding/Geometry/VertexFanAngles.lean",
       "sha256": "2aed7155134da4f8fa7687f5caf7607f5f6ff074c44d8754b208ef89b8b6affb"
+    },
+    "VertexFanCutTreeConeCoverage": {
+      "path": "SixVertexUnfolding/Geometry/VertexFanCutTreeConeCoverage.lean",
+      "sha256": "85c5eb91dd84699cae7fc7c834d36b58c5b600c5fe2d4aa47ba5fb097a58d8b1"
     },
     "WedgeRootMove": {
       "path": "SixVertexUnfolding/Geometry/WedgeRootMove.lean",
@@ -1408,7 +1502,7 @@ window.PAPER_DATA = {
       "sha256": "4a9a85a9e647c5b636b2749ecae1bc25782a875beec34d85c3fbd04052dd24ce"
     }
   },
-  "revision": "99e7591f252351d873bb51676f1294899fceecfe",
+  "revision": "868314660f92ce4de8d4f846e1860b9e1945986b",
   "date": "2026-09-16",
   "paper": [
     {
@@ -1609,9 +1703,9 @@ window.PAPER_DATA = {
     }
   ],
   "figures": {
-    "2": "The star unfolding from a point. a The polyhedron, the source point x, and the shortest paths from vertices to the source point. b The corresponding star unfolding. The cut locus is the internal tree drawn with solid grey edges. The kites are shown with dashed lines. The kite on cut locus edge e is shaded, and its source angle α(e) is indicated. Note that the unfolding shows the inside surface of the polyhedron.",
-    "3": "Illustration for the proof of Lemma 2. Angle θ is in the range [π/2 + α(e), 3π/2] and thus the outer leg of W lies between the tangents (dashed) to the circular arcs aₚ and a_q.",
-    "4": "Kite kᵢ₋₁ (shaded) and the corresponding W-wedge Wᵢ₋₁ (lightly shaded). In the base case, kite k₁ is outside the W-wedge W₀ (very lightly shaded), and W₁ contains k₁ ∪ W₀. To prove by induction that Wᵢ contains all previous kites, we expand Wᵢ₋₁, first rotating the legs about pᵢ₋₁ to the W-wedge W′ᵢ (dashed line), and then moving the center point to pᵢ to obtain Wᵢ. Note that although the figure shows kites kᵢ₋₁ and kᵢ sharing only a vertex, in non-degenerate situations cut locus vertices have degree 3, and two consecutive kites will share an edge as well.",
+    "2": "The star unfolding from a point. a The polyhedron, the source point \\(x\\), and the shortest paths from vertices to the source point. b The corresponding star unfolding. The cut locus is the internal tree drawn with solid grey edges. The kites are shown with dashed lines. The kite on cut locus edge \\(e\\) is shaded, and its source angle \\(\\alpha (e)\\) is indicated. Note that the unfolding shows the inside surface of the polyhedron.",
+    "3": "Illustration for the proof of Lemma 2. Angle \\(\\theta\\) is in the range \\([\\frac{\\pi}{2} + \\alpha (e), \\frac{3\\pi}{2}]\\) and thus the outer leg of \\(W\\) lies between the tangents (dashed) to the circular arcs \\(a_{p}\\) and \\(a_{q}\\).",
+    "4": "Kite \\(k_{i-1}\\) (shaded) and the corresponding \\(W\\)-wedge \\(W_{i-1}\\) (lightly shaded). In the base case, kite \\(k_{1}\\) is outside the \\(W\\)-wedge \\(W_{0}\\) (very lightly shaded), and \\(W_{1}\\) contains \\(k_{1} \\cup  W_{0}\\). To prove by induction that \\(W_{i}\\) contains all previous kites, we expand \\(W_{i-1}\\), first rotating the legs about \\(p_{i-1}\\) to the \\(W\\)-wedge \\(W^{\\prime}_{i}\\) (dashed line), and then moving the center point to \\(p_{i}\\) to obtain \\(W_{i}\\). Note that although the figure shows kites \\(k_{i-1}\\) and \\(k_{i}\\) sharing only a vertex, in non-degenerate situations cut locus vertices have degree 3, and two consecutive kites will share an edge as well.",
     "5": "Old sectors of emptiness (light grey) established by Aronov and O’Rourke and new empty regions (light grey + dark grey) established by Lemma 3."
   }
 };

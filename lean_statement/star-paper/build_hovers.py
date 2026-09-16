@@ -70,8 +70,13 @@ for module,records in raw['records'].items():
    content=(root/D['sources'][module]['path']).read_text();lines_here=content.splitlines(keepends=True)
    binding_path=root/D['sources'][module]['path']
    row,col=map(int,pos.split(':'));line_here=lines_here[row]
-   if re.match(r"^(?:(?:noncomputable|private|protected) )*(?:def|abbrev|theorem|structure|inductive)\s+"+re.escape(r['word'])+r"\b",line_here):
-    found_row=row;found_col=line_here.index(r['word'])
+   head=re.match(r"^(?:(?:noncomputable|private|protected) )*(?:def|abbrev|theorem|structure|inductive)\s+([\w.]+)",line_here)
+   # Lean can omit a target at the defining occurrence of a qualified name,
+   # e.g. the `body` token in `def ConvexPolyhedron.body`.
+   head_col=len(line_here[:head.start(1)].encode('utf-16-le'))//2 if head else -1
+   head_end=len(line_here[:head.end(1)].encode('utf-16-le'))//2 if head else -1
+   if head and head_col <= col < head_end:
+    found_row=row;found_col=head_col
    else:
     before=''.join(lines_here[:row])+line_here.encode('utf-16-le')[:col*2].decode('utf-16-le')
     structures=list(re.finditer(r'^structure\s+[^\n]+',before,re.M))
@@ -92,7 +97,7 @@ for module,records in raw['records'].items():
      at=candidates[0]
     else:
      # These two names are inherited from the explicitly named parent structure.
-     assert module=='RegularCutTree' and r['word'] in ('graph','vertices')
+     assert module=='RegularCutTree' and r['word'] in ('graph','vertices'), (module,pos,r['word'],line_here)
      assert 'extends P.EmbeddedCutGraph a where' in before
      binding_path=root/D['sources']['EmbeddedCutGraph']['path']
      content=binding_path.read_text()

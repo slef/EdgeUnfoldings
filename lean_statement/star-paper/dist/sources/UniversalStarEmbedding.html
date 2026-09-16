@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UniversalStarEmbedding.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>UniversalStarEmbedding.lean</h1><p>SixVertexUnfolding/Geometry/UniversalStarEmbedding.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.UniversalStarKiteSeparation</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> import SixVertexUnfolding.Geometry.SmallPolyhedronStarOpenEmbedding</span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> import SixVertexUnfolding.Geometry.SmallPolyhedronStarLocalMetric</span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> import SixVertexUnfolding.Geometry.SmallPolyhedronRetainedCutConnectivity</span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> import SixVertexUnfolding.Geometry.SmallPolyhedronStarPolygonBoundary</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> import SixVertexUnfolding.Geometry.StarBoundedImage</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> </span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> /-! The star theorem for the remaining six-vertex universal-source family.</span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> The cut tree, charts, nonoverlap, gluing, inverse disks, local metric,</span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> connectivity, and polygonal boundary are all constructed from the solid.</span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> The source is an original vertex adjacent to every other original vertex.</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> This is not the arbitrary-source star theorem. -/</span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> </span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a> </span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a> open Set</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a> </span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a> /-- Cutting the five edges from a universal vertex gives a bounded,</span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a> connected, nonoverlapping star development with polygonal boundary. -/</span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a> theorem universal_star_embedding {P : ConvexPolyhedron} (six : P.vertices.card = 6)</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a>     (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a>       (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a>     (a : frontier P.body) (source : P.Vertex) (at_source : (a : Space) = (source : Space))</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a>     (universal : ∀ v : P.Vertex, v ≠ source → P.edgeGraph.Adj source v) :</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>     ∃ develop : C(P.UncutSurface a, Plane),</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>       Topology.IsOpenEmbedding develop ∧ Bornology.IsBounded (range develop) ∧</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>       IsPathConnected (range develop) ∧</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a>       (∃ edges : Finset (Plane × Plane), frontier (range develop) =</span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a>         ⋃ e ∈ edges, segment ℝ e.1 e.2) ∧</span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a>       ∀ b : P.UncutSurface a, ∃ radius &gt; 0, ∀ c d : P.UncutSurface a,</span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a>         dist (c.val : Space) (b.val : Space) &lt; radius →</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a>         dist (d.val : Space) (b.val : Space) &lt; radius →</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>         dist (develop c) (develop d) = P.surfaceDist c.val d.val := by</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a>   have size : P.vertices.card ≤ 6 := by omega</span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a>   have cofacial := universal_source_cofacial a source at_source universal</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a>   obtain ⟨T⟩ := small_exists_regular_cut_tree size small_faces a</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a>   obtain ⟨charts, separated⟩ :=</span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a>     universal_exists_separated_cut_tree_charts six small_faces T source universal at_source</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a>   let develop : C(P.UncutSurface a, Plane) :=</span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a>     ⟨fun b =&gt; charts.develop b.val, small_develop_continuous size small_faces charts cofacial⟩</span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a>   letI : PathConnectedSpace (P.UncutSurface a) := isPathConnected_iff_pathConnectedSpace.mp</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a>     (small_cofacial_uncut_surface_pathConnected size small_faces a cofacial)</span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a>   exact ⟨develop, small_develop_isOpenEmbedding size small_faces charts separated cofacial,</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a>     charts.develop_range_bounded, isPathConnected_range develop.continuous,</span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a>     ⟨charts.boundarySegments, small_develop_frontier_eq_segments size small_faces charts separated cofacial⟩,</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a>     small_develop_locally_isometric size small_faces charts separated cofacial⟩</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a> </span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a> end SixVertexUnfolding.ConvexPolyhedron</span>
+</pre></html>

@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/SmallPolyhedronStarOpenEmbedding.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/SmallPolyhedronStarOpenEmbedding.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.StarOpenEmbedding</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.SmallPolyhedronStarInverseDisks</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! The assembled cofacial-source development is globally injective</span>
+<span id="L5" class="line"><a href="#L5">5</a> and identifies the retained surface with an open subset of the plane.</span>
+<span id="L6" class="line"><a href="#L6">6</a> This version uses the broader small-polyhedron route results. Where</span>
+<span id="L7" class="line"><a href="#L7">7</a> nonoverlap is needed, it is stated explicitly as separation of the charts. -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> open Set Filter Topology</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> variable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)</span>
+<span id="L14" class="line"><a href="#L14">14</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L15" class="line"><a href="#L15">15</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> include size small_faces</span>
+<span id="L18" class="line"><a href="#L18">18</a> </span>
+<span id="L19" class="line"><a href="#L19">19</a> /-- No two retained surface points are identified anywhere in the development. -/</span>
+<span id="L20" class="line"><a href="#L20">20</a> theorem small_develop_injective {a : frontier P.body} {T : P.CutLocusTree a} (charts : CutTreeCharts T)</span>
+<span id="L21" class="line"><a href="#L21">21</a>     (separated : charts.KitesSeparated)</span>
+<span id="L22" class="line"><a href="#L22">22</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :</span>
+<span id="L23" class="line"><a href="#L23">23</a>     Function.Injective (fun b : P.UncutSurface a =&gt; charts.develop b.val) := by</span>
+<span id="L24" class="line"><a href="#L24">24</a>   intro b c same</span>
+<span id="L25" class="line"><a href="#L25">25</a>   change charts.develop b.val = charts.develop c.val at same</span>
+<span id="L26" class="line"><a href="#L26">26</a>   obtain ⟨radius, positive, inverse, _, _, left_inverse⟩ :=</span>
+<span id="L27" class="line"><a href="#L27">27</a>     small_every_retained_point_has_inverse_disk size small_faces charts separated cofacial b</span>
+<span id="L28" class="line"><a href="#L28">28</a>   have b_in : charts.develop b.val ∈ Metric.ball (charts.develop b.val) radius := Metric.mem_ball_self positive</span>
+<span id="L29" class="line"><a href="#L29">29</a>   have c_in : charts.develop c.val ∈ Metric.ball (charts.develop b.val) radius := by rw [← same]; exact b_in</span>
+<span id="L30" class="line"><a href="#L30">30</a>   calc</span>
+<span id="L31" class="line"><a href="#L31">31</a>     b = inverse ⟨charts.develop b.val, b_in⟩ := (left_inverse b b_in).symm</span>
+<span id="L32" class="line"><a href="#L32">32</a>     _ = inverse ⟨charts.develop c.val, c_in⟩ := congrArg inverse (Subtype.ext same)</span>
+<span id="L33" class="line"><a href="#L33">33</a>     _ = c := left_inverse c c_in</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> /-- Open retained surface regions develop to open planar regions. -/</span>
+<span id="L36" class="line"><a href="#L36">36</a> theorem small_develop_isOpenMap {a : frontier P.body} {T : P.CutLocusTree a} (charts : CutTreeCharts T)</span>
+<span id="L37" class="line"><a href="#L37">37</a>     (separated : charts.KitesSeparated)</span>
+<span id="L38" class="line"><a href="#L38">38</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :</span>
+<span id="L39" class="line"><a href="#L39">39</a>     IsOpenMap (fun b : P.UncutSurface a =&gt; charts.develop b.val) := by</span>
+<span id="L40" class="line"><a href="#L40">40</a>   intro S openS</span>
+<span id="L41" class="line"><a href="#L41">41</a>   apply isOpen_iff_mem_nhds.mpr</span>
+<span id="L42" class="line"><a href="#L42">42</a>   rintro y ⟨b, b_in, rfl⟩</span>
+<span id="L43" class="line"><a href="#L43">43</a>   obtain ⟨radius, positive, inverse, _, right_inverse, left_inverse⟩ :=</span>
+<span id="L44" class="line"><a href="#L44">44</a>     small_every_retained_point_has_inverse_disk size small_faces charts separated cofacial b</span>
+<span id="L45" class="line"><a href="#L45">45</a>   let region : Set Plane := Subtype.val &#x27;&#x27; (inverse ⁻¹&#x27; S)</span>
+<span id="L46" class="line"><a href="#L46">46</a>   have open_region : IsOpen region := Metric.isOpen_ball.isOpenMap_subtype_val _</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (openS.preimage inverse.continuous)</span>
+<span id="L48" class="line"><a href="#L48">48</a>   have center_in : charts.develop b.val ∈ region := by</span>
+<span id="L49" class="line"><a href="#L49">49</a>     refine ⟨⟨charts.develop b.val, Metric.mem_ball_self positive⟩, ?_, rfl⟩</span>
+<span id="L50" class="line"><a href="#L50">50</a>     change inverse ⟨charts.develop b.val, Metric.mem_ball_self positive⟩ ∈ S</span>
+<span id="L51" class="line"><a href="#L51">51</a>     rw [left_inverse]</span>
+<span id="L52" class="line"><a href="#L52">52</a>     exact b_in</span>
+<span id="L53" class="line"><a href="#L53">53</a>   have covered : region ⊆ (fun c : P.UncutSurface a =&gt; charts.develop c.val) &#x27;&#x27; S := by</span>
+<span id="L54" class="line"><a href="#L54">54</a>     rintro x ⟨z, member, rfl⟩</span>
+<span id="L55" class="line"><a href="#L55">55</a>     exact ⟨inverse z, member, right_inverse z⟩</span>
+<span id="L56" class="line"><a href="#L56">56</a>   exact mem_of_superset (open_region.mem_nhds center_in) covered</span>
+<span id="L57" class="line"><a href="#L57">57</a> </span>
+<span id="L58" class="line"><a href="#L58">58</a> /-- The constructed development is an open embedding of the entire retained surface. -/</span>
+<span id="L59" class="line"><a href="#L59">59</a> theorem small_develop_isOpenEmbedding {a : frontier P.body} {T : P.CutLocusTree a} (charts : CutTreeCharts T)</span>
+<span id="L60" class="line"><a href="#L60">60</a>     (separated : charts.KitesSeparated)</span>
+<span id="L61" class="line"><a href="#L61">61</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :</span>
+<span id="L62" class="line"><a href="#L62">62</a>     Topology.IsOpenEmbedding (fun b : P.UncutSurface a =&gt; charts.develop b.val) :=</span>
+<span id="L63" class="line"><a href="#L63">63</a>   .of_continuous_injective_isOpenMap (small_develop_continuous size small_faces charts cofacial)</span>
+<span id="L64" class="line"><a href="#L64">64</a>     (small_develop_injective size small_faces charts separated cofacial)</span>
+<span id="L65" class="line"><a href="#L65">65</a>     (small_develop_isOpenMap size small_faces charts separated cofacial)</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

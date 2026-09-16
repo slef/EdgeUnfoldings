@@ -1,7 +1,8 @@
 {
   "checked": "2026-09-16",
-  "declarations": 50,
-  "theorems": 31,
+  "revision": "868314660f92ce4de8d4f846e1860b9e1945986b",
+  "declarations": 56,
+  "theorems": 37,
   "axioms": [
     "Classical.choice",
     "Quot.sound",

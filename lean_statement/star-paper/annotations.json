@@ -8,7 +8,7 @@
     "status": "restricted",
     "statement": "Definitions present for cofacial cuts",
     "proof": "Checked construction in restricted scope",
-    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
+    "scope": "Straight source-to-vertex cuts on a convex polyhedron. Their interpretation as shortest surface cuts uses a source sharing a face with every vertex.",
     "note": "ConvexPolyhedron is the convex hull of its exact extreme vertices in ℝ³, with nonempty interior. The current starCuts removes straight source-to-vertex segments. These are shortest surface cuts when the source is cofacial with every vertex. This is not yet a definition of an arbitrary choice of shortest cuts for an arbitrary source.",
     "refs": [
       [
@@ -35,7 +35,7 @@
     "steps": [],
     "work": {
       "status": "complete",
-      "reason": "The cofacial-cut definitions are sufficient for a universal-vertex source: every source-to-vertex edge lies on the surface. The development of that cut surface is a separate unfinished construction.",
+      "reason": "The cofacial-cut definitions suffice for a universal vertex source: every source-to-vertex edge lies on the surface. The development of this cut surface is now constructed in the completed universal-source theorem.",
       "remaining": [],
       "beyond": [
         "Chosen shortest cuts for arbitrary sources, and their general cut surface, remain an extension beyond this milestone."
@@ -52,20 +52,20 @@
     ],
     "title": "Boundary images and equal cut lengths",
     "status": "missing",
-    "statement": "Polygonal-boundary statement present; 2n count absent",
+    "statement": "Polygonal-boundary statement present; exact boundary-image count absent",
     "proof": "Restricted boundary theorem checked",
-    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
-    "note": "The assembled development has an exact finite segment boundary. The paper’s alternating vertex/source images and its 2n (or 2(n−1)) boundary count have not been packaged as Lean statements. A finite polygonal boundary alone does not assert this combinatorial description.",
+    "scope": "At most six vertices; every face triangular or quadrilateral. The source shares a face with every vertex; the boundary theorem takes coherent charts and proved kite separation as inputs.",
+    "note": "The assembled universal-source development has an exact finite segment boundary. The paper’s alternating vertex/source images and its \\(2n\\) (or \\(2(n-1)\\)) boundary count have not been packaged as Lean statements. A finite polygonal boundary alone does not assert this combinatorial description.",
     "refs": [
       [
-        "StarPolygonBoundary",
-        "develop_frontier_eq_segments"
+        "SmallPolyhedronStarPolygonBoundary",
+        "small_develop_frontier_eq_segments"
       ]
     ],
     "steps": [],
     "work": {
       "status": "beyond",
-      "reason": "The exact alternating order and 2n boundary-image count are not needed by the current star-to-edge-unfolding construction. Their absence is not a remaining task for this milestone.",
+      "reason": "The exact alternating order and \\(2n\\) boundary-image count are not needed by the completed star-to-edge-unfolding construction. Their absence is not a remaining task for this milestone.",
       "remaining": [],
       "beyond": [
         "The paper’s boundary order and count have no matching complete statement/proof. A finite segment boundary does not establish them."
@@ -167,9 +167,9 @@
     "title": "Build the actual radial triangles",
     "status": "restricted",
     "statement": "Route, metric-kite, and coverage statements present",
-    "proof": "Checked; construction still uses canonical graphs",
-    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces.",
-    "note": "The two basic shortest-route facts now hold without a canonical graph in the small-polyhedron scope. The complete two-triangle construction and its coverage theorem still use SixVertexGraph. Merely specifying equal distances in a metric model is not the whole surface partition.",
+    "proof": "Actual triangles, coverage and coherent charts checked",
+    "scope": "At most six vertices; every face triangular or quadrilateral. Triangles and coverage allow an arbitrary surface source; the assembled charts use a source sharing a face with every vertex.",
+    "note": "Both actual radial triangles, their coverage of the surface, and coherent charts now have small-polyhedron proofs without a canonical graph assumption. The chart construction proves the original-vertex leaf condition and flat-junction compatibility; later separation handles overlap.",
     "refs": [
       [
         "SmallPolyhedronShortestRoutes",
@@ -188,12 +188,16 @@
         "CutEdgeTriangles"
       ],
       [
-        "CutEdgeTriangles",
-        "exists_cut_edge_triangles"
+        "SmallPolyhedronCutEdgeTriangles",
+        "small_exists_cut_edge_triangles"
       ],
       [
-        "CutTreeTriangleCoverage",
-        "cut_tree_triangles_cover"
+        "SmallPolyhedronCutTreeTriangleCoverage",
+        "small_cut_tree_triangles_cover"
+      ],
+      [
+        "SmallPolyhedronCutTreeCharts",
+        "small_exists_universal_star_charts"
       ]
     ],
     "steps": [
@@ -203,11 +207,9 @@
       "Prove their union covers the surface; later separation handles overlap."
     ],
     "work": {
-      "status": "todo",
-      "reason": "The existing construction still depends on the canonical nonuniversal graphs. It must be extended before it can supply the universal-source development.",
-      "remaining": [
-        "Transfer the actual radial-triangle construction, flat-junction charts and surface coverage to the new small-polyhedron cut tree."
-      ],
+      "status": "complete",
+      "reason": "The actual radial triangles, flat-junction charts and surface coverage have been constructed for small polyhedra, including every universal-source solid in this milestone.",
+      "remaining": [],
       "beyond": [],
       "depends_on": [
         "tree",
@@ -220,16 +222,24 @@
     "blocks": [
       "source-budget"
     ],
-    "title": "The source-angle budget is the integration gap",
+    "title": "The source-angle budget",
     "status": "restricted",
-    "statement": "Angle definitions and restricted budget statements present",
-    "proof": "Local bound checked; global budget restricted",
-    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The global budget uses a source vertex.",
-    "note": "The local bound “\\(\\text{surface angle} < 2\\pi\\)” is proved at every original vertex of a small polyhedron. That does not by itself prove that all the developed kite angles fit into that cone. The global source-angle sum is proved for canonical graphs, using actual cone coverage and curvature accounting.",
+    "statement": "Local cone coverage and complete universal-source budget present",
+    "proof": "Global budget checked, no assumed curvature or angle bound",
+    "scope": "Six vertices; every face triangular or quadrilateral. The source is an original vertex adjacent to every other vertex.",
+    "note": "The proof covers each original vertex cone by its actual incident radial triangles, accounts for the flat junctions and tree angles, and proves a sufficient total-curvature bound from the original faces. It yields a directed source-angle sum bounded by the source surface angle. Since that angle is \\(<2\\pi\\), the half-sum is \\(<\\pi\\). No canonical graph assumption is needed.",
     "refs": [
       [
         "CutEdgeSourceAngles",
         "sourceAngle"
+      ],
+      [
+        "SmallPolyhedronCurvature",
+        "surfaceAngle"
+      ],
+      [
+        "SmallPolyhedronCurvature",
+        "vertexCurvature"
       ],
       [
         "VertexFanAngles",
@@ -240,34 +250,36 @@
         "totalAngle_lt_two_pi"
       ],
       [
-        "CutTreeConeCoverage",
+        "VertexFanCutTreeConeCoverage",
         "incident_model_angles_cover_cone"
       ],
       [
-        "CutTreeCurvature",
-        "sum_cutTreeCurvature"
+        "SmallPolyhedronCurvature",
+        "universal_sum_vertexCurvature_le"
       ],
       [
-        "CutTreeSourceBudget",
-        "source_angle_sum_le"
+        "SmallPolyhedronCutTreeCurvature",
+        "sum_originalCurvature"
       ],
       [
-        "CutTreeSourceBudget",
-        "half_source_angle_sum_lt_pi"
+        "SmallPolyhedronSourceBudget",
+        "universal_source_angle_sum_le"
+      ],
+      [
+        "SmallPolyhedronSourceBudget",
+        "universal_half_source_angle_sum_lt_pi"
       ]
     ],
     "steps": [
-      "Local surface angle: checked for all small polyhedra.",
-      "Incident radial triangles cover each cone: checked for canonical graphs.",
-      "Total curvature accounting: checked for canonical graphs.",
-      "Half the directed source-angle sum is \\(< \\pi\\): checked for canonical vertex sources."
+      "Local surface angle \\(<2\\pi\\): checked for all small polyhedra.",
+      "Incident radial triangles cover each original vertex cone: checked without a canonical graph.",
+      "Total vertex curvature \\(\\le4\\pi\\): proved for six vertices and a universal source; this bound suffices.",
+      "Tree angle accounting gives half the directed source-angle sum \\(<\\pi\\)."
     ],
     "work": {
-      "status": "todo",
-      "reason": "The local angle bound is complete, but the required global source-angle sum is not yet available for universal-vertex solids.",
-      "remaining": [
-        "Extend cone coverage and curvature accounting to the new local fans and derive the global budget for the universal vertex source."
-      ],
+      "status": "complete",
+      "reason": "The complete source-angle budget is proved from the geometry of the universal-source solid. The local cone bound, cone coverage and required curvature estimate are all supplied.",
+      "remaining": [],
       "beyond": [
         "An arbitrary nonvertex source permits equality in the half-angle budget. That case, and arbitrary vertex counts, belong to the broader theorem."
       ],
@@ -281,42 +293,42 @@
     ],
     "title": "Theorem 1 — what has actually been proved",
     "status": "restricted",
-    "statement": "Restricted theorem present; full paper statement absent",
-    "proof": "Restricted theorem checked, no sorry",
-    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
-    "note": "cofacial_star_embedding constructs a continuous open embedding of the actual retained surface into the plane, with bounded connected image, finite straight-segment boundary, and exact local intrinsic isometry. This is a real proved checkpoint, but it is not Theorem 1 for every convex polyhedron and source. The cofacial hypothesis is impossible for the all-triangular octahedron, so this does not claim all four graph models admit such a source.",
+    "statement": "Universal-source star theorem present; unrestricted paper theorem absent",
+    "proof": "Universal-source theorem and whole-face consequence checked, no sorry",
+    "scope": "Six vertices; every face triangular or quadrilateral. The source is an original vertex adjacent to every other vertex.",
+    "note": "universal_star_embedding constructs a continuous open embedding of the actual retained surface into the plane, with bounded path-connected image, finite straight-segment boundary, and exact local intrinsic isometry. The tree, charts, angle budget and separation are all proved from the solid. The displayed whole-face consequence also covers at most six vertices with a universal vertex, using the earlier reductions. Neither result claims the paper’s theorem for arbitrary sources and unrestricted polyhedra.",
     "refs": [
       [
-        "CofacialStarEmbedding",
-        "cofacial_star_embedding"
+        "UniversalStarEmbedding",
+        "universal_star_embedding"
       ],
       [
-        "SixVertexGraphs",
-        "SixVertexGraph"
-      ],
-      [
-        "CanonicalSixGraphs",
-        "SixGraphKind"
+        "UniversalStarUnfolding",
+        "hasEdgeUnfolding_of_universal_vertex"
       ],
       [
         "CutTreeCharts",
         "CutTreeCharts"
       ],
       [
-        "GlobalKiteSeparation",
-        "global_kites_nonoverlap"
+        "UniversalStarKiteSeparation",
+        "universal_exists_separated_cut_tree_charts"
       ],
       [
-        "StarOpenEmbedding",
-        "develop_isOpenEmbedding"
+        "UniversalStarKiteSeparation",
+        "universal_global_kites_nonoverlap"
       ],
       [
-        "StarLocalMetric",
-        "develop_locally_isometric"
+        "SmallPolyhedronStarOpenEmbedding",
+        "small_develop_isOpenEmbedding"
       ],
       [
-        "RetainedCutConnectivity",
-        "cofacial_uncut_surface_pathConnected"
+        "SmallPolyhedronStarLocalMetric",
+        "small_develop_locally_isometric"
+      ],
+      [
+        "SmallPolyhedronRetainedCutConnectivity",
+        "small_cofacial_uncut_surface_pathConnected"
       ]
     ],
     "steps": [
@@ -327,11 +339,9 @@
       "Identify the exact finite-segment boundary."
     ],
     "work": {
-      "status": "todo",
-      "reason": "The proved cofacial checkpoint does not cover the universal-vertex family. Completing that family is the next star milestone, not merely an optional increase in paper coverage.",
-      "remaining": [
-        "Construct the universal-source charts and angle budget, then assemble the injective, locally isometric planar development."
-      ],
+      "status": "complete",
+      "reason": "The universal-source star milestone is complete. All five construction steps below are proved and assembled in universal_star_embedding; no geometric input or sorry remains for this scoped theorem.",
+      "remaining": [],
       "beyond": [
         "The full paper theorem for arbitrary sources and unrestricted convex polyhedra remains unfinished. It is not declared complete by finishing this milestone."
       ],
@@ -352,7 +362,7 @@
     "statement": "Conditional chain and separation statements present",
     "proof": "Checked, from explicit geometric inputs",
     "scope": "Finite cut trees supplied with coherent CutTreeCharts and the source budget.",
-    "note": "The combinatorial path argument is proved. The final canonical-graph theorem supplies its source budget; it still receives charts whose original_leaves field rules out internal original vertices.",
+    "note": "The combinatorial path argument is proved. The displayed global theorems supply the source budget in their respective canonical-graph and universal-source scopes. For the universal-source theorem, the charts and original-leaf property are now constructed by the completed triangle and leaf components.",
     "refs": [
       [
         "CutTreeCharts",
@@ -365,12 +375,16 @@
       [
         "GlobalKiteSeparation",
         "global_kites_nonoverlap"
+      ],
+      [
+        "UniversalStarKiteSeparation",
+        "universal_global_kites_nonoverlap"
       ]
     ],
     "steps": [],
     "work": {
       "status": "complete",
-      "reason": "The tree-path separation argument is checked under its displayed inputs. Constructing those inputs is tracked in the triangle, leaf and budget items; this component needs no new path argument.",
+      "reason": "The tree-path separation argument is checked. Its geometric and angle-budget inputs are now supplied by the completed triangle, leaf and budget components.",
       "remaining": [],
       "beyond": [],
       "depends_on": [
@@ -448,7 +462,7 @@
     ],
     "work": {
       "status": "complete",
-      "reason": "The finite planar induction is checked. The surface construction must supply its step hypotheses; that work is tracked separately.",
+      "reason": "The finite planar induction is checked. The universal-source construction now supplies its step hypotheses through the completed charts and source-angle budget.",
       "remaining": [],
       "beyond": [],
       "depends_on": [
@@ -510,7 +524,7 @@
     "statement": "Statement present",
     "proof": "Checked, given IncidentTriangles",
     "scope": "An actual first radial kite; its far endpoint may be an original vertex.",
-    "note": "initial_kite_in_wedge encloses the complete first kite with exactly its own source-angle charge. The proof uses the already-checked planar move. Constructing IncidentTriangles in the broader polyhedral scope is still separate.",
+    "note": "initial_kite_in_wedge encloses the complete first kite with exactly its own source-angle charge. The proof uses the checked planar move. Its IncidentTriangles input is supplied by the completed small-polyhedron radial-triangle construction.",
     "refs": [
       [
         "InitialKiteWedge",
@@ -524,7 +538,7 @@
     "steps": [],
     "work": {
       "status": "complete",
-      "reason": "The first-kite lemma is checked given its actual radial-triangle input. Supplying that input for the new family is tracked in the triangle-construction item.",
+      "reason": "The first-kite lemma is checked, and its actual radial-triangle input is supplied by the completed small-polyhedron construction.",
       "remaining": [],
       "beyond": [],
       "depends_on": [
@@ -564,7 +578,7 @@
     ],
     "work": {
       "status": "complete",
-      "reason": "The planar rotation and flat-junction step are checked. The planned universal-source construction uses only flat internal junctions once the cofacial-leaf transfer is proved.",
+      "reason": "The planar rotation and flat-junction step are checked. The proved leaf result ensures that every internal junction used by the universal-source construction is flat.",
       "remaining": [],
       "beyond": [
         "Singular junctions at original vertices require more work for arbitrary sources; they are not required by this milestone."
@@ -604,7 +618,7 @@
     "steps": [],
     "work": {
       "status": "complete",
-      "reason": "The root-movement identity and its flat-junction step are checked. Constructing the needed surface data and budget is tracked separately.",
+      "reason": "The root-movement identity and flat-junction step are checked. The universal-source construction now supplies their surface data and angle budget.",
       "remaining": [],
       "beyond": [],
       "depends_on": [
@@ -649,14 +663,18 @@
     ],
     "title": "Lemma 3 — the leaf case",
     "status": "restricted",
-    "statement": "Leaf and abstract empty-region statements present",
-    "proof": "Components checked; paper-level corollary not assembled",
-    "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The source is an original vertex and shares a face with every original vertex.",
-    "note": "The leaf classification is proved for cofacial sources in canonical graphs. Finite-chain separation also keeps every later kite interior out of its initial region. These components have not been assembled into the exact closed-unfolding-versus-interior(W) assertion of Lemma 3.",
+    "statement": "Original cut vertices are leaves; full exterior-region assertion absent",
+    "proof": "Required leaf result checked; additional paper corollary not assembled",
+    "scope": "At most six vertices; every face triangular or quadrilateral. The source shares a face with every vertex; in particular this includes universal vertex sources.",
+    "note": "Every original cut-tree vertex is proved to be a leaf for a cofacial source. Thus a path through two different tree edges cannot have an original polyhedron vertex as its internal junction. This supplies exactly the leaf condition needed by the completed universal-source charts. The exact closed-unfolding-versus-interior-of-\\(W\\) assertion of Lemma 3 remains additional paper correspondence.",
     "refs": [
       [
-        "UniqueRouteLeaves",
-        "cofacial_source_leaf_iff_original"
+        "SmallPolyhedronUniqueRouteLeaves",
+        "small_cofacial_source_original_is_leaf"
+      ],
+      [
+        "SmallPolyhedronUniqueRouteLeaves",
+        "small_cofacial_source_internal_vertex_nonvertex"
       ],
       [
         "ExpandingRegionChains",
@@ -665,11 +683,9 @@
     ],
     "steps": [],
     "work": {
-      "status": "todo",
-      "reason": "The cofacial-leaf classification must be extended to universal-vertex solids. This is required to justify using flat internal junctions, even though the full exterior-W assertion is not required.",
-      "remaining": [
-        "Prove that every nonsource original vertex is a leaf of the new small-polyhedron cut tree for a universal vertex source."
-      ],
+      "status": "complete",
+      "reason": "Every original cut vertex is proved to be a leaf for the cofacial source, including a universal vertex source. This required result is complete; the full exterior-region assertion is not needed by the direct separation proof.",
+      "remaining": [],
       "beyond": [
         "Assembling the exact closed-unfolding-versus-interior(W) assertion of Lemma 3 is additional paper coverage."
       ],
@@ -698,10 +714,10 @@
     "steps": [],
     "work": {
       "status": "beyond",
-      "reason": "Internal original-vertex junctions are outside the universal-source milestone. Their exclusion there still depends on the leaf proof, which is explicitly marked “Still to do”.",
+      "reason": "Internal original-vertex junctions are outside the universal-source milestone. The completed leaf theorem excludes them in this case; handling them for arbitrary sources remains broader work.",
       "remaining": [],
       "beyond": [
-        "For the arbitrary-source theorem, construct singular-cone junctions, prove the paper’s W ⊆ W₀ comparison and extend the global assembly. This remains unfinished."
+        "For the arbitrary-source theorem, construct singular-cone junctions, prove the paper’s \\(W\\subseteq W_0\\) comparison and extend the global assembly. This remains unfinished."
       ],
       "depends_on": [
         "leaf"

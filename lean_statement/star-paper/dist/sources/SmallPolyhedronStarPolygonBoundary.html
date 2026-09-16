@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SmallPolyhedronStarPolygonBoundary.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SmallPolyhedronStarPolygonBoundary.lean</h1><p>SixVertexUnfolding/Geometry/SmallPolyhedronStarPolygonBoundary.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.StarPolygonBoundary</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> import SixVertexUnfolding.Geometry.SmallPolyhedronStarCutSegments</span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> </span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> /-! The developed star boundary is exactly a finite union of explicit</span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> closed straight segments. Degenerate segments retain all source copies.</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> This version uses the broader small-polyhedron route results. Where</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> nonoverlap is needed, it is stated explicitly as separation of the charts. -/</span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> </span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> </span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> open Set Filter Topology</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> </span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> variable {P : ConvexPolyhedron} (size : P.vertices.card ≤ 6)</span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a>   (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a>     (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a> </span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a> include size small_faces</span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a> </span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a> /-- Every listed segment is a cut copy, and every cut copy is on a listed segment. -/</span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a> theorem small_cutBoundaryImage_eq_segments {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a>     (charts : CutTreeCharts T)</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a>     charts.cutBoundaryImage = ⋃ e ∈ charts.boundarySegments, segment ℝ e.1 e.2 := by</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a>   ext x</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>   constructor</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>   · rintro ⟨d, b, cut, placed⟩</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>     obtain ⟨s, side, t, at_b, value⟩ := ((charts.global d.adj).places_iff_ray b x).mp placed</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a>     obtain ⟨e, listed, on_segment⟩ := (small_triangle_cut_image size small_faces (charts.global d.adj)</span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a>       cofacial side x).mp ⟨s, t, at_b.symm ▸ cut, value⟩</span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a>     exact mem_iUnion.mpr ⟨e, mem_iUnion.mpr ⟨(charts.mem_boundarySegments e).mpr ⟨d, side, listed⟩, on_segment⟩⟩</span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a>   · intro member</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a>     obtain ⟨e, member⟩ := mem_iUnion.mp member</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>     obtain ⟨listed, on_segment⟩ := mem_iUnion.mp member</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a>     obtain ⟨d, side, listed⟩ := (charts.mem_boundarySegments e).mp listed</span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a>     obtain ⟨s, t, cut, value⟩ := (small_triangle_cut_image size small_faces (charts.global d.adj)</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a>       cofacial side x).mpr ⟨e, listed, on_segment⟩</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a>     exact ⟨d, (charts.global d.adj).routes side s t, cut,</span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a>       ((charts.global d.adj).places_iff_ray _ _).mpr ⟨s, side, t, rfl, value⟩⟩</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a> </span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a> /-- The entire boundary is a finite union of whole straight cut segments. -/</span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a> theorem small_develop_frontier_eq_segments {a : frontier P.body} {T : P.CutLocusTree a}</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a>     (charts : CutTreeCharts T) (separated : charts.KitesSeparated)</span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a>     (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a>     frontier (range (fun c : P.UncutSurface a =&gt; charts.develop c.val)) =</span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a>       ⋃ e ∈ charts.boundarySegments, segment ℝ e.1 e.2 := by</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a>   rw [small_develop_frontier_eq_cutBoundaryImage size small_faces charts separated cofacial,</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a>     small_cutBoundaryImage_eq_segments size small_faces charts cofacial]</span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a> </span>
+<span id="L49" class="line"><a href="#L49" aria-label="Line 49">49</a> end SixVertexUnfolding.ConvexPolyhedron</span>
+</pre></html>

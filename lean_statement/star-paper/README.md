@@ -25,9 +25,9 @@ identity is recorded in `.openai/hosting.json`.
 - `export_sources.py`: export exact declarations, section context, full source,
   and source hashes. Its excerpt extraction follows the current source style;
   inspect regenerated signatures, especially statements containing `let`.
-- `CheckExcerpts.lean`: generated checks and axiom queries for all 50 declarations.
+- `CheckExcerpts.lean`: generated checks and axiom queries for all displayed declarations.
 - `verify_lean.py`: resolve the declarations against the existing compiled
-  project and check all 31 theorem axiom reports.
+  project and check every displayed theorem’s axiom report.
 - `collect_hovers.py`, `build_hovers.py`: capture real language-server hovers and
   source locations, then bundle portable cards and linked source snapshots.
 - `hover-index.json`: token positions, hover/type/documentation data and source
@@ -36,11 +36,12 @@ identity is recorded in `.openai/hosting.json`.
 - `dist/app.js`, `dist/style.css`: authored interaction and presentation.
 
 After a checked Lean checkpoint, update the correspondence manually, then run
-`python3 export_sources.py`, `python3 verify_lean.py /path/to/dependencies`,
-then `python3 collect_hovers.py /path/to/dependencies`,
-`python3 build_hovers.py /path/to/dependencies`, and `python3 render.py`. Update the displayed snapshot date/revision and
-verification totals when the checked checkpoint changes. The source manifest
-records the revision at export. Re-audit scope labels; they are not inferred
+`python3 export_sources.py`, `python3 verify_lean.py /path/to/mathlib-project`,
+then `python3 collect_hovers.py /path/to/mathlib-project/.lake/packages`,
+`python3 build_hovers.py /path/to/mathlib-project/.lake/packages`, and
+`python3 render.py`. The exporter records the current date/revision; verification
+counts and the displayed audit are derived from that snapshot. The source
+manifest records the revision at export. Re-audit scope labels; they are not inferred
 from a theorem name or from successful compilation. Run `python3 validate.py` for static integrity checks before publication.
 
 ## Mathematical typography
@@ -119,21 +120,27 @@ additional paper coverage and dependencies on other annotation groups.
 The old undifferentiated `gap` field is replaced by `work.remaining` and
 `work.beyond`.
 
-Work badges refer specifically to the next milestone documented in
-`../STAR_NEXT.md`: extend the star construction to universal-vertex sources
-in six-vertex solids with triangular/quadrilateral faces. This is not a
-new claim that the unrestricted point-star theorem is finished or cancelled.
-The actual cut-tree construction and cofacial-cut definitions suffice for
-that milestone. Radial-triangle transfer, the cofacial-leaf transfer, the
-global source-angle budget and their assembly remain required work.
+Work badges refer specifically to the universal-source milestone documented
+in `../STAR_NEXT.md`: the star construction for six-vertex solids with
+triangular/quadrilateral faces and a source adjacent to every other vertex.
+That milestone is now complete. The actual radial triangles, cofacial leaf
+property, global source-angle budget and final assembly are all proved.
+`universal_star_embedding` in `UniversalStarEmbedding.lean`
+is the main displayed checkpoint, with no assumed separation or angle budget.
+Its whole-face consequence covers all solids with at most six vertices and
+a universal vertex using the earlier reductions.
 
-Completed conditional components list the unfinished items that supply their
-inputs. The general-source singular-junction case is outside the milestone;
-the leaf transfer justifying its exclusion is still a required task. Exact
-boundary counts and the standalone exterior-W version of Lemma 3 are extra
-paper correspondence, not inputs to the current direct separation route.
+Conditional planar components link to the completed constructions supplying
+their inputs. Internal original-vertex junctions are excluded by the proved
+leaf result; handling them for arbitrary sources is outside this milestone.
+Exact boundary-image counts and the standalone exterior-W version of Lemma 3
+are extra paper correspondence, not inputs to the direct separation route.
 Curve-source unfoldings are deliberately outside the point-star subproject.
-An outside-milestone badge never means the corresponding claim is proved.
+An outside-milestone badge never means the corresponding paper claim is proved.
+
+The header derives completion counts from the annotations and audit counts
+from the verification record. Updating a proof still requires reviewing the
+correspondence and regenerating the snapshot; this page is not a live monitor.
 
 Review these editorial classifications when the target or proof route changes.
 Do not infer them from successful compilation, an empty `sorry` search or
