@@ -226,7 +226,7 @@ window.PAPER_DATA = {
       "statement": "Angle definitions and restricted budget statements present",
       "proof": "Local bound checked; global budget restricted",
       "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The global budget uses a source vertex.",
-      "note": "The local bound “surface angle < 2π” is proved at every original vertex of a small polyhedron. That does not by itself prove that all the developed kite angles fit into that cone. The global source-angle sum is proved for canonical graphs, using actual cone coverage and curvature accounting.",
+      "note": "The local bound “\\(\\text{surface angle} < 2\\pi\\)” is proved at every original vertex of a small polyhedron. That does not by itself prove that all the developed kite angles fit into that cone. The global source-angle sum is proved for canonical graphs, using actual cone coverage and curvature accounting.",
       "refs": [
         [
           "CutEdgeSourceAngles",
@@ -261,7 +261,7 @@ window.PAPER_DATA = {
         "Local surface angle: checked for all small polyhedra.",
         "Incident radial triangles cover each cone: checked for canonical graphs.",
         "Total curvature accounting: checked for canonical graphs.",
-        "Half the directed source-angle sum is < π: checked for canonical vertex sources."
+        "Half the directed source-angle sum is \\(< \\pi\\): checked for canonical vertex sources."
       ],
       "work": {
         "status": "todo",
@@ -442,9 +442,9 @@ window.PAPER_DATA = {
         ]
       ],
       "steps": [
-        "contains: Wᵢ₋₁ ⊆ W′ᵢ.",
-        "avoids: W′ᵢ ∩ interior(kᵢ) = ∅.",
-        "updated: Wᵢ is the transported union W′ᵢ ∪ kᵢ.",
+        "contains: \\(W_{i-1}\\subseteq W_i^{\\prime}\\).",
+        "avoids: \\(W_i^{\\prime}\\cap\\operatorname{interior}(k_i)=\\varnothing\\).",
+        "updated: \\(W_i\\) is the transported union \\(W_i^{\\prime}\\cup k_i\\).",
         "Finite induction carries all earlier regions forward and separates the endpoints."
       ],
       "work": {
@@ -543,7 +543,7 @@ window.PAPER_DATA = {
       "statement": "Planar and flat-junction statements present",
       "proof": "Checked with a flat JunctionFan and angle budget",
       "scope": "Planar rotation is generic. The supplied surface junction fan is flat.",
-      "note": "rotate_arms is a direct set-containment theorem. JunctionFan.wedge_step_with_parameters obtains the correct gap order and actual kite angles from the surface chart. The current global chart structure excludes internal original vertices; this is where the paper’s singular-vertex situation still needs additional construction. The journal says “surface area” here; the intended quantity is surface angle. Its pᵢ/pᵢ₋₁ wording is retained.",
+      "note": "rotate_arms is a direct set-containment theorem. JunctionFan.wedge_step_with_parameters obtains the correct gap order and actual kite angles from the surface chart. The current global chart structure excludes internal original vertices; this is where the paper’s singular-vertex situation still needs additional construction. The journal says “surface area” here; the intended quantity is surface angle. Its \\(p_i\\)/\\(p_{i-1}\\) wording is retained.",
       "refs": [
         [
           "WedgeRotation",
@@ -587,7 +587,7 @@ window.PAPER_DATA = {
       "statement": "Statements present",
       "proof": "Checked, with explicit angle budget",
       "scope": "Planar region movement and actual flat-junction data.",
-      "note": "move_root proves an exact set equality, stronger than the needed containment. The geometric step identifies the next source radius, corner angle and source-angle increment. Editorial note: the paper’s phrase “to αᵢ” omits the fixed π/2 offset used in its wedge definition; the Lean formula retains ω + sourceAngle.",
+      "note": "move_root proves an exact set equality, stronger than the needed containment. The geometric step identifies the next source radius, corner angle and source-angle increment. Editorial note: the paper’s phrase “to \\(\\alpha_i\\)” omits the fixed \\(\\frac{\\pi}{2}\\) offset used in its wedge definition; the Lean formula retains \\(\\omega+\\operatorname{sourceAngle}\\).",
       "refs": [
         [
           "WedgeRootMove",
@@ -689,7 +689,7 @@ window.PAPER_DATA = {
       "statement": "General cone-junction / exterior-W bridge absent",
       "proof": "Unfinished; no literal sorry declaration",
       "scope": "Original polyhedron vertices with several incident cut-locus edges.",
-      "note": "The paper selects a tree path and uses W ⊆ W₀ for its chosen first edge. Our current CutTreeCharts instead requires every original cut vertex to be a leaf. Thus the existing global assembly cannot express this case merely by supplying another fan.",
+      "note": "The paper selects a tree path and uses \\(W\\subseteq W_0\\) for its chosen first edge. Our current CutTreeCharts instead requires every original cut vertex to be a leaf. Thus the existing global assembly cannot express this case merely by supplying another fan.",
       "refs": [
         [
           "CutTreeCharts",
@@ -1415,21 +1415,21 @@ window.PAPER_DATA = {
       "id": "definition-1",
       "section": "1.1",
       "title": "Definition 1 · The point star",
-      "text": "Definition 1 Let P be a convex polyhedron, and let x be a point on P. The star unfolding, Sₓ, is a 2-dimensional polygon formed by cutting P along a shortest path from every vertex of P to x, and flattening the result into the plane. See Fig. 2. Note that there is a choice of cuts if a vertex has more than one shortest path to x.",
+      "text": "Definition 1 Let \\(P\\) be a convex polyhedron, and let \\(x\\) be a point on \\(P\\). The star unfolding, \\(S_{x}\\), is a 2-dimensional polygon formed by cutting \\(P\\) along a shortest path from every vertex of \\(P\\) to \\(x\\), and flattening the result into the plane. See Fig. 2. Note that there is a choice of cuts if a vertex has more than one shortest path to \\(x\\).",
       "kind": "claim"
     },
     {
       "id": "boundary",
       "section": "1.1",
       "title": "Boundary images",
-      "text": "If P has n vertices, then the polygon Sₓ will have 2n vertices in general, and 2(n − 1) vertices if x is located at a vertex of P. The vertices of Sₓ alternate around the boundary between vertex images, denoted vᵢ , that correspond to the vertices of P, and n ‘copies’ of x, called source images and denoted by xᵢ . See Fig. 2. The edges of Sₓ correspond to the shortest path cuts made from each vertex to x. Therefore, the two edges incident to any vertex image vᵢ are always the same length.",
+      "text": "If \\(P\\) has \\(n\\) vertices, then the polygon \\(S_{x}\\) will have \\(2n\\) vertices in general, and \\(2(n - 1)\\) vertices if \\(x\\) is located at a vertex of \\(P\\). The vertices of \\(S_{x}\\) alternate around the boundary between vertex images, denoted \\(v_{i}\\), that correspond to the vertices of \\(P\\), and \\(n\\) ‘copies’ of \\(x\\), called source images and denoted by \\(x_{i}\\). See Fig. 2. The edges of \\(S_{x}\\) correspond to the shortest path cuts made from each vertex to \\(x\\). Therefore, the two edges incident to any vertex image \\(v_{i}\\) are always the same length.",
       "kind": "paragraph"
     },
     {
       "id": "cut-tree",
       "section": "1.1",
       "title": "The cut locus is a tree",
-      "text": "The cut locus (or “ridge tree”), Tₓ, is the closure of the set of all points on the surface of P that have more than one shortest path to x. It is known that the cut locus is a tree [12], and that its edges are shortest paths [1] and thus correspond to straight-line segments in Sₓ. See Fig. 2b. As a corollary to their proof of non-overlap [3, Thm. 10.2], Aronov and O’Rourke proved that the cut locus is a subset of the Voronoi diagram of the images of x, but we will not use this result.",
+      "text": "The cut locus (or “ridge tree”), \\(T_{x}\\), is the closure of the set of all points on the surface of \\(P\\) that have more than one shortest path to \\(x\\). It is known that the cut locus is a tree [12], and that its edges are shortest paths [1] and thus correspond to straight-line segments in \\(S_{x}\\). See Fig. 2b. As a corollary to their proof of non-overlap [3, Thm. 10.2], Aronov and O’Rourke proved that the cut locus is a subset of the Voronoi diagram of the images of \\(x\\), but we will not use this result.",
       "kind": "paragraph"
     },
     {
@@ -1443,42 +1443,42 @@ window.PAPER_DATA = {
       "id": "geodesic",
       "section": "1.2",
       "title": "Geodesic and quasigeodesic curves",
-      "text": "Given a polyhedron P, a geodesic curve λ on P is a curve on the surface of P, such that at every interior point p of λ, the surface angle to either side of p is exactly π . If the surface angle to either side of p is at most π then the curve is called a quasigeodesic. We will only consider [quasi]geodesic curves that are simple, meaning there is no point of self-intersection between any two interior (i.e., non-endpoint) points of the curve.",
+      "text": "Given a polyhedron \\(P\\), a geodesic curve \\(\\lambda\\) on \\(P\\) is a curve on the surface of \\(P\\), such that at every interior point \\(p\\) of \\(\\lambda\\), the surface angle to either side of \\(p\\) is exactly \\(\\pi\\). If the surface angle to either side of \\(p\\) is at most \\(\\pi\\) then the curve is called a quasigeodesic. We will only consider [quasi]geodesic curves that are simple, meaning there is no point of self-intersection between any two interior (i.e., non-endpoint) points of the curve.",
       "kind": "paragraph"
     },
     {
       "id": "definition-2",
       "section": "1.2",
       "title": "Definition 2 · A curve source",
-      "text": "Definition 2 Let P be a convex polyhedron, and let λ be a simple geodesic curve on the surface of P. The geodesic star unfolding Sλ is a 2-dimensional polygon formed by cutting λ, and cutting a shortest path along the surface of P from every vertex vᵢ of P to λ, and flattening the result into the plane. See ahead to Fig. 6.",
+      "text": "Definition 2 Let \\(P\\) be a convex polyhedron, and let \\(\\lambda\\) be a simple geodesic curve on the surface of \\(P\\). The geodesic star unfolding \\(S_{\\lambda}\\) is a 2-dimensional polygon formed by cutting \\(\\lambda\\), and cutting a shortest path along the surface of \\(P\\) from every vertex \\(v_{i}\\) of \\(P\\) to \\(\\lambda\\), and flattening the result into the plane. See ahead to Fig. 6.",
       "kind": "claim"
     },
     {
       "id": "curve-sides",
       "section": "1.2",
       "title": "Endpoints and sides",
-      "text": "The endpoints of λ are labelled a and b and the two sides of λ are labelled s and t, with the convention that the clockwise order around λ on the outside surface of P is a, s, b, t. We distinguish shortest paths to λ that arrive at (or “report to”) a or b, and shortest paths that arrive at interior points of λ on side s or t. Any shortest path that arrives at an interior point of λ forms a right angle with λ, as shown by the following lemma, which is a special case of [9, Lem. 1].",
+      "text": "The endpoints of \\(\\lambda\\) are labelled \\(a\\) and \\(b\\) and the two sides of \\(\\lambda\\) are labelled \\(s\\) and \\(t\\), with the convention that the clockwise order around \\(\\lambda\\) on the outside surface of \\(P\\) is \\(a, s, b, t\\). We distinguish shortest paths to \\(\\lambda\\) that arrive at (or “report to”) \\(a\\) or \\(b\\), and shortest paths that arrive at interior points of \\(\\lambda\\) on side \\(s\\) or \\(t\\). Any shortest path that arrives at an interior point of \\(\\lambda\\) forms a right angle with \\(\\lambda\\), as shown by the following lemma, which is a special case of [9, Lem. 1].",
       "kind": "paragraph"
     },
     {
       "id": "lemma-1",
       "section": "1.2",
       "title": "Lemma 1 · Arrival angles",
-      "text": "Lemma 1 Let λ be a [quasi]geodesic curve on a convex polyhedron P, with points x₀ on λ and x not on λ such that xx₀ is a shortest path from x to λ. The angles formed between xx₀ and λ are at least π/2 to each side.",
+      "text": "Lemma 1 Let \\(\\lambda\\) be a [quasi]geodesic curve on a convex polyhedron \\(P\\), with points \\(x_{0}\\) on \\(\\lambda\\) and \\(x\\) not on \\(\\lambda\\) such that \\(xx_{0}\\) is a shortest path from \\(x\\) to \\(\\lambda\\). The angles formed between \\(xx_{0}\\) and \\(\\lambda\\) are at least \\(\\frac{\\pi}{2}\\) to each side.",
       "kind": "claim"
     },
     {
       "id": "curve-images",
       "section": "1.2",
       "title": "Point and segment images",
-      "text": "In the unfolding Sλ, a source image is either a copy of an endpoint (a or b), called a point image, or a sub-segment of λ corresponding to side s or t, called a segment image. (Note that a segment image might include one of the endpoints of λ.) Around a clockwise traversal of the boundary of Sλ we encounter source images in order a, s, b, t—this is because our convention is to draw the inside of the polyhedron’s surface facing up. Each consecutive pair of source images is separated by two edges of equal length joined at a vertex image, such that the edges correspond to the shortest path cut at the vertex.",
+      "text": "In the unfolding \\(S_{\\lambda}\\), a source image is either a copy of an endpoint (\\(a\\) or \\(b\\)), called a point image, or a sub-segment of \\(\\lambda\\) corresponding to side \\(s\\) or \\(t\\), called a segment image. (Note that a segment image might include one of the endpoints of \\(\\lambda\\).) Around a clockwise traversal of the boundary of \\(S_{\\lambda}\\) we encounter source images in order \\(a, s, b, t\\)—this is because our convention is to draw the inside of the polyhedron’s surface facing up. Each consecutive pair of source images is separated by two edges of equal length joined at a vertex image, such that the edges correspond to the shortest path cut at the vertex.",
       "kind": "paragraph"
     },
     {
       "id": "curve-tree",
       "section": "1.2",
       "title": "The geodesic cut locus",
-      "text": "The cut locus of a geodesic λ, denoted Tλ, is the closure of the set of all points on the surface of P that have more than one shortest path to λ. The cut locus of a geodesic is a tree [13]. (An alternate proof can be found in [4, Lem. 4]. The lemma applies to the outside of any closed convex curve on the surface of P—in the present situation, the closed convex curve is the set of points at some fixed distance ε from λ.) See ahead to Fig. 6.",
+      "text": "The cut locus of a geodesic \\(\\lambda\\), denoted \\(T_{\\lambda}\\), is the closure of the set of all points on the surface of \\(P\\) that have more than one shortest path to \\(\\lambda\\). The cut locus of a geodesic is a tree [13]. (An alternate proof can be found in [4, Lem. 4]. The lemma applies to the outside of any closed convex curve on the surface of \\(P\\)—in the present situation, the closed convex curve is the set of points at some fixed distance \\(\\varepsilon\\) from \\(\\lambda\\).) See ahead to Fig. 6.",
       "kind": "paragraph"
     },
     {
@@ -1499,112 +1499,112 @@ window.PAPER_DATA = {
       "id": "kites",
       "section": "2",
       "title": "Partition into congruent triangle pairs",
-      "text": "The most important idea of our proof is to partition the star unfolding into pairs of congruent triangles. Each vertex of the cut locus has three or more shortest paths to x on the surface of P. Add all these shortest paths as line segments in the star unfolding. We use the following basic properties of shortest paths: (1) no two shortest paths to x (or more generally, to a geodesic curve) cross each other [9, Lem. 2] (their lemma is stated for vertices of the polyhedron, but applies more generally); and (2) no shortest path crosses the cut locus [12, Lem. 4.2]. These properties imply that when we add the line segments corresponding to shortest paths between x and cut locus vertices, each edge of the cut locus will have a triangle to each side. Because all shortest paths from a cut locus vertex to the nearest source images have the same length, the two triangles to either side of a cut locus edge have corresponding sides of equal length, and therefore are congruent. We call each such pair of triangles a kite. The kite associated with cut locus edge e is denoted kite(e). The two images of x to each side of e are called the apex vertices of the kite. Observe that the kites form a partition of Sₓ. See Fig. 2b.",
+      "text": "The most important idea of our proof is to partition the star unfolding into pairs of congruent triangles. Each vertex of the cut locus has three or more shortest paths to \\(x\\) on the surface of \\(P\\). Add all these shortest paths as line segments in the star unfolding. We use the following basic properties of shortest paths: (1) no two shortest paths to \\(x\\) (or more generally, to a geodesic curve) cross each other [9, Lem. 2] (their lemma is stated for vertices of the polyhedron, but applies more generally); and (2) no shortest path crosses the cut locus [12, Lem. 4.2]. These properties imply that when we add the line segments corresponding to shortest paths between \\(x\\) and cut locus vertices, each edge of the cut locus will have a triangle to each side. Because all shortest paths from a cut locus vertex to the nearest source images have the same length, the two triangles to either side of a cut locus edge have corresponding sides of equal length, and therefore are congruent. We call each such pair of triangles a kite. The kite associated with cut locus edge \\(e\\) is denoted \\(\\operatorname{kite}(e)\\). The two images of \\(x\\) to each side of \\(e\\) are called the apex vertices of the kite. Observe that the kites form a partition of \\(S_{x}\\). See Fig. 2b.",
       "kind": "paragraph"
     },
     {
       "id": "source-budget",
       "section": "2",
       "title": "The source-angle budget",
-      "text": "We define the source angle of e, α(e), to be the interior angle at either apex of kite(e). See Fig. 2b. We extend this definition to paths as follows. For a path σ of cut locus edges, where σ = e₁, …, eₜ, the source angle of σ is α(σ) = ∑ᵢ₌₁ᵗ α(eᵢ). Observe that α(σ) ≤ π because 2α(σ) measures the total source angle at both apex vertices of every kite on the path, so this is bounded by the total surface angle at the source point x, which is bounded by 2π.",
+      "text": "We define the source angle of \\(e\\), \\(\\alpha (e)\\), to be the interior angle at either apex of \\(\\operatorname{kite}(e)\\). See Fig. 2b. We extend this definition to paths as follows. For a path \\(\\sigma\\) of cut locus edges, where \\(\\sigma  = e_{1}, \\ldots, e_{t}\\), the source angle of \\(\\sigma\\) is \\(\\alpha (\\sigma) = \\sum_{i=1}^{t} \\alpha (e_{i})\\). Observe that \\(\\alpha (\\sigma) \\le  \\pi\\) because \\(2\\alpha (\\sigma)\\) measures the total source angle at both apex vertices of every kite on the path, so this is bounded by the total surface angle at the source point \\(x\\), which is bounded by \\(2\\pi\\).",
       "kind": "paragraph"
     },
     {
       "id": "theorem-1",
       "section": "2",
       "title": "Theorem 1 · Non-overlap",
-      "text": "Theorem 1 [3, Thm. 9.1] The star unfolding Sₓ does not overlap.",
+      "text": "Theorem 1 [3, Thm. 9.1] The star unfolding \\(S_{x}\\) does not overlap.",
       "kind": "claim"
     },
     {
       "id": "path-reduction",
       "section": "2",
       "title": "Reduce to a path of kites",
-      "text": "Proof We will show that no two kites overlap. Consider two kites, and the path in the cut locus between them. Let e₁ , . . . , eₜ be the edges of the path in the cut locus with eᵢ joining cut locus vertices pᵢ₋₁ and pᵢ . Let kᵢ = kite(eᵢ ). We will show that k₁ and kₜ have disjoint interiors. We will define a sequence of regions W₁ , . . . , Wₜ₋₁ , called W-wedges, so that Wᵢ includes k₁ , . . . , kᵢ and excludes kᵢ₊₁ . Then Wₜ₋₁ includes k₁ and excludes kₜ , which will complete the proof.",
+      "text": "Proof We will show that no two kites overlap. Consider two kites, and the path in the cut locus between them. Let \\(e_{1}, \\ldots, e_{t}\\) be the edges of the path in the cut locus with \\(e_{i}\\) joining cut locus vertices \\(p_{i-1}\\) and \\(p_{i}\\). Let \\(k_{i} = \\operatorname{kite}(e_{i})\\). We will show that \\(k_{1}\\) and \\(k_{t}\\) have disjoint interiors. We will define a sequence of regions \\(W_{1}, \\ldots, W_{t-1}\\), called \\(W\\)-wedges, so that \\(W_{i}\\) includes \\(k_{1}, \\ldots, k_{i}\\) and excludes \\(k_{i+1}\\). Then \\(W_{t-1}\\) includes \\(k_{1}\\) and excludes \\(k_{t}\\), which will complete the proof.",
       "kind": "paragraph"
     },
     {
       "id": "wedge-definition",
       "section": "2",
       "title": "Define the W-wedges",
-      "text": "The boundary of the W-wedge Wᵢ consists of four edges, generally shaped like a ‘W’ and defined as follows. The center point of Wᵢ is the point pᵢ, where eᵢ and eᵢ₊₁ intersect; the inner legs are the edges of kᵢ that are incident to pᵢ; and the outer legs form an angle with the inner legs (on the side of kᵢ) of π/2 + αᵢ, where αᵢ = ∑ⱼ₌₁ⁱ α(eⱼ). The outer legs extend either to their point of intersection, or as infinite rays if they do not intersect. This boundary divides the plane into two regions and we define Wᵢ to be the region containing kᵢ in a neighbourhood of pᵢ. We also define W₀ to have center point p₀, with inner legs along the edges of k₁ and outer legs rotated outward (on the opposite side from k₁) by π/2. See Fig. 4. Note that αᵢ is in the range [0, π] as observed above.",
+      "text": "The boundary of the \\(W\\)-wedge \\(W_{i}\\) consists of four edges, generally shaped like a ‘\\(W\\)’ and defined as follows. The center point of \\(W_{i}\\) is the point \\(p_{i}\\), where \\(e_{i}\\) and \\(e_{i+1}\\) intersect; the inner legs are the edges of \\(k_{i}\\) that are incident to \\(p_{i}\\); and the outer legs form an angle with the inner legs (on the side of \\(k_{i}\\)) of \\(\\frac{\\pi}{2} + \\alpha _{i}\\), where \\(\\alpha _{i} = \\sum_{j=1}^{i} \\alpha (e_{j})\\). The outer legs extend either to their point of intersection, or as infinite rays if they do not intersect. This boundary divides the plane into two regions and we define \\(W_{i}\\) to be the region containing \\(k_{i}\\) in a neighbourhood of \\(p_{i}\\). We also define \\(W_{0}\\) to have center point \\(p_{0}\\), with inner legs along the edges of \\(k_{1}\\) and outer legs rotated outward (on the opposite side from \\(k_{1}\\)) by \\(\\frac{\\pi}{2}\\). See Fig. 4. Note that \\(\\alpha _{i}\\) is in the range \\([0, \\pi ]\\) as observed above.",
       "kind": "paragraph"
     },
     {
       "id": "induction-goal",
       "section": "2",
       "title": "The induction invariant",
-      "text": "We will prove by induction that kᵢ is outside Wᵢ₋₁ and that Wᵢ contains kᵢ ∪ Wᵢ₋₁ . At each step, including the base case, we will need the following:",
+      "text": "We will prove by induction that \\(k_{i}\\) is outside \\(W_{i-1}\\) and that \\(W_{i}\\) contains \\(k_{i} \\cup  W_{i-1}\\). At each step, including the base case, we will need the following:",
       "kind": "paragraph"
     },
     {
       "id": "lemma-2",
       "section": "2",
       "title": "Lemma 2 · Enclose one kite",
-      "text": "Lemma 2 Let p be an endpoint of cut locus edge e, and let W be a W-wedge centered at p such that the inner legs of W are edges of kite(e), and the outer legs are rotated out (on the side of kite(e)) by an angle θ in the range [π/2 + α(e), 3π/2]. Then kite(e) ⊆ W.",
+      "text": "Lemma 2 Let \\(p\\) be an endpoint of cut locus edge \\(e\\), and let \\(W\\) be a \\(W\\)-wedge centered at \\(p\\) such that the inner legs of \\(W\\) are edges of \\(\\operatorname{kite}(e)\\), and the outer legs are rotated out (on the side of \\(\\operatorname{kite}(e)\\)) by an angle \\(\\theta\\) in the range \\([\\frac{\\pi}{2} + \\alpha (e), \\frac{3\\pi}{2}]\\). Then \\(\\operatorname{kite}(e) \\subseteq  W\\).",
       "kind": "claim"
     },
     {
       "id": "lemma-2-proof",
       "section": "2",
       "title": "Proof of Lemma 2",
-      "text": "Proof Consider the two circular sectors aₚ and a_q centered at the endpoints p and q of e and bounded by the two incident kite edges as radii (see Fig. 3). At each apex of kite(e) the angles between the outer leg of W and the two sides of kite(e) are at least π/2. Thus the circular sector a_q is inside W, and the circular sector aₚ is outside W. This implies that kite(e) ⊆ W. □",
+      "text": "Proof Consider the two circular sectors \\(a_{p}\\) and \\(a_{q}\\) centered at the endpoints \\(p\\) and \\(q\\) of \\(e\\) and bounded by the two incident kite edges as radii (see Fig. 3). At each apex of \\(\\operatorname{kite}(e)\\) the angles between the outer leg of \\(W\\) and the two sides of \\(\\operatorname{kite}(e)\\) are at least \\(\\frac{\\pi}{2}\\). Thus the circular sector \\(a_{q}\\) is inside \\(W\\), and the circular sector \\(a_{p}\\) is outside \\(W\\). This implies that \\(\\operatorname{kite}(e) \\subseteq  W\\). □",
       "kind": "paragraph"
     },
     {
       "id": "base-case",
       "section": "2",
       "title": "Base case",
-      "text": "We are now ready to prove by induction that kᵢ is outside Wᵢ₋₁ and that Wᵢ contains kᵢ ∪ Wᵢ₋₁ . For the base case i = 1, k₁ is outside W₀ by the lemma above (applied to the outside of W₀ ), and W₁ contains k₁ ∪ W₀ by the same lemma.",
+      "text": "We are now ready to prove by induction that \\(k_{i}\\) is outside \\(W_{i-1}\\) and that \\(W_{i}\\) contains \\(k_{i} \\cup  W_{i-1}\\). For the base case \\(i = 1\\), \\(k_{1}\\) is outside \\(W_{0}\\) by the lemma above (applied to the outside of \\(W_{0}\\)), and \\(W_{1}\\) contains \\(k_{1} \\cup  W_{0}\\) by the same lemma.",
       "kind": "paragraph"
     },
     {
       "id": "induction-step",
       "section": "2",
       "title": "Induction step",
-      "text": "For the induction step we consider i > 1. Suppose by induction that Wᵢ₋₁ contains kᵢ₋₁ ∪ Wᵢ₋₂ . We will show how to transform Wᵢ₋₁ into Wᵢ in a way that makes it clear that kᵢ is outside Wᵢ₋₁ and Wᵢ contains kᵢ ∪ Wᵢ₋₁ .",
+      "text": "For the induction step we consider \\(i > 1\\). Suppose by induction that \\(W_{i-1}\\) contains \\(k_{i-1} \\cup  W_{i-2}\\). We will show how to transform \\(W_{i-1}\\) into \\(W_{i}\\) in a way that makes it clear that \\(k_{i}\\) is outside \\(W_{i-1}\\) and \\(W_{i}\\) contains \\(k_{i} \\cup  W_{i-1}\\).",
       "kind": "paragraph"
     },
     {
       "id": "rotate",
       "section": "2",
       "title": "First move · Rotate the arms",
-      "text": "Note that the unfolding does not overlap in the neighbourhood of point pᵢ—this is true whether pᵢ is a point with 2π surface area, or a vertex, which will be incident to a single cut. Thus the kites kᵢ and kᵢ₋₁, which are both incident to pᵢ, do not overlap. Rotate each of the inner legs of Wᵢ₋₁ about point pᵢ₋₁, away from kᵢ₋₁ to the edge of kᵢ. This is a rotation by 0° when an edge of kᵢ₋₁ is coincident with an edge of kᵢ. Keep the angle between inner and outer legs fixed throughout the rotation. Observe that all the kite edges incident to pᵢ₋₁ have the same length, so we really perform a rigid transformation on each half of the W. Call the resulting W-wedge W′ᵢ (shown as a dashed poly-line in Fig. 4). Notice that W′ᵢ contains Wᵢ₋₁, because the angle αᵢ₋₁ + π/2 is in the range [π/2, 3π/2] so the outer legs remain outside the rotation sector of the inner legs. (Here it is crucial that we added the extra π/2 to the initial angle.) That kᵢ is outside W′ᵢ follows from applying Lemma 2 to the outside of W′ᵢ, noting that αᵢ₋₁ + α(eᵢ) ≤ π so the angle αᵢ₋₁ + π/2 is in the range [π/2, 3π/2 − α(eᵢ)] and therefore the complementary angle is in the range [α(eᵢ) + π/2, 3π/2].",
+      "text": "Note that the unfolding does not overlap in the neighbourhood of point \\(p_{i}\\)—this is true whether \\(p_{i}\\) is a point with \\(2\\pi\\) surface area, or a vertex, which will be incident to a single cut. Thus the kites \\(k_{i}\\) and \\(k_{i-1}\\), which are both incident to \\(p_{i}\\), do not overlap. Rotate each of the inner legs of \\(W_{i-1}\\) about point \\(p_{i-1}\\), away from \\(k_{i-1}\\) to the edge of \\(k_{i}\\). This is a rotation by \\(0^{\\circ}\\) when an edge of \\(k_{i-1}\\) is coincident with an edge of \\(k_{i}\\). Keep the angle between inner and outer legs fixed throughout the rotation. Observe that all the kite edges incident to \\(p_{i-1}\\) have the same length, so we really perform a rigid transformation on each half of the \\(W\\). Call the resulting \\(W\\)-wedge \\(W^{\\prime}_{i}\\) (shown as a dashed poly-line in Fig. 4). Notice that \\(W^{\\prime}_{i}\\) contains \\(W_{i-1}\\), because the angle \\(\\alpha _{i-1} + \\frac{\\pi}{2}\\) is in the range \\([\\frac{\\pi}{2}, \\frac{3\\pi}{2}]\\) so the outer legs remain outside the rotation sector of the inner legs. (Here it is crucial that we added the extra \\(\\frac{\\pi}{2}\\) to the initial angle.) That \\(k_{i}\\) is outside \\(W^{\\prime}_{i}\\) follows from applying Lemma 2 to the outside of \\(W^{\\prime}_{i}\\), noting that \\(\\alpha _{i-1} + \\alpha (e_{i}) \\le  \\pi\\) so the angle \\(\\alpha _{i-1} + \\frac{\\pi}{2}\\) is in the range \\([\\frac{\\pi}{2}, \\frac{3\\pi}{2} - \\alpha (e_{i})]\\) and therefore the complementary angle is in the range \\([\\alpha (e_{i}) + \\frac{\\pi}{2}, \\frac{3\\pi}{2}]\\).",
       "kind": "paragraph"
     },
     {
       "id": "move-center",
       "section": "2",
       "title": "Second move · Move the center",
-      "text": "The second step of the transformation is to move the center point of W′ᵢ from pᵢ₋₁ to pᵢ, while keeping the outer legs fixed. The W-wedge increases until it contains kᵢ. The angle between inner and outer legs increases by α(eᵢ), to αᵢ. Thus the result is precisely Wᵢ, and therefore Wᵢ contains kᵢ ∪ Wᵢ₋₁.",
+      "text": "The second step of the transformation is to move the center point of \\(W^{\\prime}_{i}\\) from \\(p_{i-1}\\) to \\(p_{i}\\), while keeping the outer legs fixed. The \\(W\\)-wedge increases until it contains \\(k_{i}\\). The angle between inner and outer legs increases by \\(\\alpha (e_{i})\\), to \\(\\alpha _{i}\\). Thus the result is precisely \\(W_{i}\\), and therefore \\(W_{i}\\) contains \\(k_{i} \\cup  W_{i-1}\\).",
       "kind": "paragraph"
     },
     {
       "id": "empty-regions",
       "section": "2",
       "title": "A stronger empty-region result",
-      "text": "Our proof, like Aronov and O’Rourke’s, shows a stronger result that certain regions outside the star unfolding are empty. Aronov and O’Rourke [3] showed that at any vertex vᵢ adjacent to source images xᵢ and xᵢ₊₁ in the unfolding, no part of the unfolding enters the circular sector centered at vᵢ exterior to the unfolding near vᵢ and bounded by the radii vᵢ xᵢ and vᵢ xᵢ₊₁ . See Fig. 5. Our proof shows that larger regions are empty, as formalized in the following lemma.",
+      "text": "Our proof, like Aronov and O’Rourke’s, shows a stronger result that certain regions outside the star unfolding are empty. Aronov and O’Rourke [3] showed that at any vertex \\(v_{i}\\) adjacent to source images \\(x_{i}\\) and \\(x_{i+1}\\) in the unfolding, no part of the unfolding enters the circular sector centered at \\(v_{i}\\) exterior to the unfolding near \\(v_{i}\\) and bounded by the radii \\(v_{i} x_{i}\\) and \\(v_{i} x_{i+1}\\). See Fig. 5. Our proof shows that larger regions are empty, as formalized in the following lemma.",
       "kind": "paragraph"
     },
     {
       "id": "lemma-3",
       "section": "2",
       "title": "Lemma 3 · Exterior empty region",
-      "text": "Lemma 3 Let vᵢ be a vertex image adjacent to source images xᵢ and xᵢ₊₁ on the boundary of a star unfolding Sₓ, and let W be the region bounded by vᵢ xᵢ , vᵢ xᵢ₊₁ , and the rays extending from xᵢ and xᵢ₊₁ at right angles from these segments on the exterior side of vᵢ . Then no part of the unfolding intersects the interior of W .",
+      "text": "Lemma 3 Let \\(v_{i}\\) be a vertex image adjacent to source images \\(x_{i}\\) and \\(x_{i+1}\\) on the boundary of a star unfolding \\(S_{x}\\), and let \\(W\\) be the region bounded by \\(v_{i} x_{i}\\), \\(v_{i} x_{i+1}\\), and the rays extending from \\(x_{i}\\) and \\(x_{i+1}\\) at right angles from these segments on the exterior side of \\(v_{i}\\). Then no part of the unfolding intersects the interior of \\(W\\).",
       "kind": "claim"
     },
     {
       "id": "lemma-3-leaf",
       "section": "2",
       "title": "Lemma 3 · Leaf case",
-      "text": "Proof In non-degenerate situations, vᵢ is a leaf of the cut locus. Let e be the cut locus edge incident to vᵢ . For any kite k = kite( f ) of the unfolding, consider the path in the cut locus starting with e and ending with f , and apply the above proof to this path. Wedge W in the statement of the lemma is wedge W₀ in the proof, and the proof shows that kite k does not enter wedge W₀ .",
+      "text": "Proof In non-degenerate situations, \\(v_{i}\\) is a leaf of the cut locus. Let \\(e\\) be the cut locus edge incident to \\(v_{i}\\). For any kite \\(k = \\operatorname{kite}(f)\\) of the unfolding, consider the path in the cut locus starting with \\(e\\) and ending with \\(f\\), and apply the above proof to this path. Wedge \\(W\\) in the statement of the lemma is wedge \\(W_{0}\\) in the proof, and the proof shows that kite \\(k\\) does not enter wedge \\(W_{0}\\).",
       "kind": "paragraph"
     },
     {
       "id": "lemma-3-internal",
       "section": "2",
       "title": "Lemma 3 · Internal original vertex",
-      "text": "More generally, vᵢ may be an internal vertex of the cut locus with more than one incident cut locus edge, and we need a slight generalization of this argument. Consider any kite k = kite( f ) of the unfolding, and consider the path in the cut locus starting with vᵢ and ending with f . Apply the above proof to this path. The path will use one of the cut locus edges incident to vᵢ . The crucial observation is that wedge W in the statement of the lemma is a subset of wedge W₀ in the proof for this path. The proof shows that kite k does not enter wedge W₀ , and therefore k does not enter W . □",
+      "text": "More generally, \\(v_{i}\\) may be an internal vertex of the cut locus with more than one incident cut locus edge, and we need a slight generalization of this argument. Consider any kite \\(k = \\operatorname{kite}(f)\\) of the unfolding, and consider the path in the cut locus starting with \\(v_{i}\\) and ending with \\(f\\). Apply the above proof to this path. The path will use one of the cut locus edges incident to \\(v_{i}\\). The crucial observation is that wedge \\(W\\) in the statement of the lemma is a subset of wedge \\(W_{0}\\) in the proof for this path. The proof shows that kite \\(k\\) does not enter wedge \\(W_{0}\\), and therefore \\(k\\) does not enter \\(W\\). □",
       "kind": "paragraph"
     }
   ],

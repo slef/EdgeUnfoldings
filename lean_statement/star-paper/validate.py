@@ -23,6 +23,7 @@ for path,page in pages.items():
         assert target.exists(),(path,link)
         if u.fragment and target.suffix=='.html':assert unquote(u.fragment) in pages[target].ids,(path,link)
 D=json.loads((dist/'data.js').read_text().removeprefix('window.PAPER_DATA = ').rstrip(';\n'))
+assert D['paper']==json.loads((site/'paper.json').read_text())
 assert D['annotations']==json.loads((site/'annotations.json').read_text())
 annotation_ids={a['id'] for a in D['annotations']}
 for annotation in D['annotations']:
@@ -136,3 +137,33 @@ assert '<svg ' in logo and '<script' not in logo and 'lean-mark' not in (dist/'i
 for script in ('collect_hovers.py','build_hovers.py','render.py'):
     compile((site/script).read_text(),str(site/script),'exec')
 print(f'PASS: {len(H["symbols"])} contextual hover cards; all name lookups covered, declaration, field and constructor head hovers suppressed, in-page targets valid, excerpts unchanged, {len(H["sources"])} linked source snapshots verified.')
+
+# Every marked formula has both visual typesetting and accessible MathML.
+from math_typesetting import INLINE_MATH
+class FormulaMarkup(HTMLParser):
+    def __init__(self, text):
+        super().__init__(); self.formulas=[]; self.math=0; self.tex=[]; self.in_tex=False
+        self.feed(text)
+    def handle_starttag(self, tag, attrs):
+        attrs=dict(attrs)
+        if 'data-tex' in attrs:self.formulas.append(attrs['data-tex'])
+        if tag=='math':self.math+=1
+        if tag=='annotation' and attrs.get('encoding')=='application/x-tex':
+            self.in_tex=True; self.tex.append('')
+    def handle_endtag(self, tag):
+        if tag=='annotation':self.in_tex=False
+    def handle_data(self, data):
+        if self.in_tex:self.tex[-1]+=data
+math_page=FormulaMarkup((dist/'index.html').read_text())
+assert math_page.formulas==math_page.tex and len(math_page.formulas)==math_page.math
+assert math_page.math>0 and 'katex-error' not in (dist/'index.html').read_text()
+for text in [b['text'] for b in D['paper']]+list(json.loads((site/'figures.json').read_text()).values()):
+    prose=INLINE_MATH.sub('',text)
+    assert not re.search('[₀₁₂₃₄₅₆₇₈₉ᵢⱼₓₚₜ₌₋₊παλσθε∑≤⊆∪]',prose),prose
+    assert r'\(' not in prose and r'\)' not in prose
+    for formula in INLINE_MATH.findall(text):assert formula in math_page.formulas
+math_css=dist/'assets/katex/katex.min.css'
+for font in re.findall(r'url\(([^)]+)\)',math_css.read_text()):
+    assert (math_css.parent/font).is_file(),font
+subprocess.run(['node','--check',str(site/'render_math.cjs')],check=True)
+print(f'PASS: {math_page.math} formulas typeset with accessible MathML and bundled fonts; paper and caption notation fully marked.')

@@ -225,7 +225,7 @@
     "statement": "Angle definitions and restricted budget statements present",
     "proof": "Local bound checked; global budget restricted",
     "scope": "SixVertexGraph (the four nonuniversal six-vertex graph models), triangular/quadrilateral faces. The global budget uses a source vertex.",
-    "note": "The local bound “surface angle < 2π” is proved at every original vertex of a small polyhedron. That does not by itself prove that all the developed kite angles fit into that cone. The global source-angle sum is proved for canonical graphs, using actual cone coverage and curvature accounting.",
+    "note": "The local bound “\\(\\text{surface angle} < 2\\pi\\)” is proved at every original vertex of a small polyhedron. That does not by itself prove that all the developed kite angles fit into that cone. The global source-angle sum is proved for canonical graphs, using actual cone coverage and curvature accounting.",
     "refs": [
       [
         "CutEdgeSourceAngles",
@@ -260,7 +260,7 @@
       "Local surface angle: checked for all small polyhedra.",
       "Incident radial triangles cover each cone: checked for canonical graphs.",
       "Total curvature accounting: checked for canonical graphs.",
-      "Half the directed source-angle sum is < π: checked for canonical vertex sources."
+      "Half the directed source-angle sum is \\(< \\pi\\): checked for canonical vertex sources."
     ],
     "work": {
       "status": "todo",
@@ -441,9 +441,9 @@
       ]
     ],
     "steps": [
-      "contains: Wᵢ₋₁ ⊆ W′ᵢ.",
-      "avoids: W′ᵢ ∩ interior(kᵢ) = ∅.",
-      "updated: Wᵢ is the transported union W′ᵢ ∪ kᵢ.",
+      "contains: \\(W_{i-1}\\subseteq W_i^{\\prime}\\).",
+      "avoids: \\(W_i^{\\prime}\\cap\\operatorname{interior}(k_i)=\\varnothing\\).",
+      "updated: \\(W_i\\) is the transported union \\(W_i^{\\prime}\\cup k_i\\).",
       "Finite induction carries all earlier regions forward and separates the endpoints."
     ],
     "work": {
@@ -542,7 +542,7 @@
     "statement": "Planar and flat-junction statements present",
     "proof": "Checked with a flat JunctionFan and angle budget",
     "scope": "Planar rotation is generic. The supplied surface junction fan is flat.",
-    "note": "rotate_arms is a direct set-containment theorem. JunctionFan.wedge_step_with_parameters obtains the correct gap order and actual kite angles from the surface chart. The current global chart structure excludes internal original vertices; this is where the paper’s singular-vertex situation still needs additional construction. The journal says “surface area” here; the intended quantity is surface angle. Its pᵢ/pᵢ₋₁ wording is retained.",
+    "note": "rotate_arms is a direct set-containment theorem. JunctionFan.wedge_step_with_parameters obtains the correct gap order and actual kite angles from the surface chart. The current global chart structure excludes internal original vertices; this is where the paper’s singular-vertex situation still needs additional construction. The journal says “surface area” here; the intended quantity is surface angle. Its \\(p_i\\)/\\(p_{i-1}\\) wording is retained.",
     "refs": [
       [
         "WedgeRotation",
@@ -586,7 +586,7 @@
     "statement": "Statements present",
     "proof": "Checked, with explicit angle budget",
     "scope": "Planar region movement and actual flat-junction data.",
-    "note": "move_root proves an exact set equality, stronger than the needed containment. The geometric step identifies the next source radius, corner angle and source-angle increment. Editorial note: the paper’s phrase “to αᵢ” omits the fixed π/2 offset used in its wedge definition; the Lean formula retains ω + sourceAngle.",
+    "note": "move_root proves an exact set equality, stronger than the needed containment. The geometric step identifies the next source radius, corner angle and source-angle increment. Editorial note: the paper’s phrase “to \\(\\alpha_i\\)” omits the fixed \\(\\frac{\\pi}{2}\\) offset used in its wedge definition; the Lean formula retains \\(\\omega+\\operatorname{sourceAngle}\\).",
     "refs": [
       [
         "WedgeRootMove",
@@ -688,7 +688,7 @@
     "statement": "General cone-junction / exterior-W bridge absent",
     "proof": "Unfinished; no literal sorry declaration",
     "scope": "Original polyhedron vertices with several incident cut-locus edges.",
-    "note": "The paper selects a tree path and uses W ⊆ W₀ for its chosen first edge. Our current CutTreeCharts instead requires every original cut vertex to be a leaf. Thus the existing global assembly cannot express this case merely by supplying another fan.",
+    "note": "The paper selects a tree path and uses \\(W\\subseteq W_0\\) for its chosen first edge. Our current CutTreeCharts instead requires every original cut vertex to be a leaf. Thus the existing global assembly cannot express this case merely by supplying another fan.",
     "refs": [
       [
         "CutTreeCharts",

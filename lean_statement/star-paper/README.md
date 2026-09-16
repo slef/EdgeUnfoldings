@@ -13,8 +13,12 @@ are bundled, with no external JavaScript, fonts, or math service required.
 Serve `dist/` with any static HTTP server for a preview. The private Sites
 identity is recorded in `.openai/hosting.json`.
 
-- `paper.json`: reflowed original text; mathematical notation normalized.
-- `figures.json`: original captions.
+- `paper.json`: reflowed original text; inline formulas explicitly marked as `\(TeX\)`.
+- `math_typesetting.py`, `render_math.cjs`: render all marked formulas at build time
+  with pinned KaTeX 0.16.22, producing styled HTML and accessible MathML.
+- `vendor/katex/`: the pinned build-time renderer and its MIT license.
+- `dist/assets/katex/`: matching local mathematical fonts, stylesheet and license.
+- `figures.json`: original captions, using the same explicit math delimiters.
 - `annotations.json`: editorial paper coverage, milestone work status and declaration mapping.
 - `dist/assets/`: original figure crops and source-page comparisons, extracted
   from the user-supplied journal PDF. The full PDF is not committed.
@@ -38,6 +42,17 @@ then `python3 collect_hovers.py /path/to/dependencies`,
 verification totals when the checked checkpoint changes. The source manifest
 records the revision at export. Re-audit scope labels; they are not inferred
 from a theorem name or from successful compilation. Run `python3 validate.py` for static integrity checks before publication.
+
+## Mathematical typography
+
+Use `\( ... \)` for every inline formula, including single-letter variables,
+in the paper, captions, and editorial explanation text. For example,
+`\(S_x\)`, `\(2(n-1)\)`, and `\(\sum_{i=1}^{t}\alpha(e_i)\)`.
+Lean excerpts remain exact source code and do not pass through the math renderer.
+Run `python3 render.py` and `python3 validate.py` after a typography edit;
+there is no need to regenerate the Lean snapshot or hover data.
+The renderer rejects invalid TeX. All fonts are bundled, so the mathematical
+layout works offline without loading scripts or services in the browser.
 
 ## Reading interface
 
