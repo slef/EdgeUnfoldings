@@ -36,3 +36,17 @@
 @media print{.lean-hover{display:none}.lean-symbol{color:inherit;background:none;box-shadow:none}}
 
 .declaration:target{border-color:#386ee0;box-shadow:0 0 0 2px #386ee025}
+
+/* Work remaining and correspondence with the paper are independent. */
+.work-status{display:inline-block;border-radius:3px;padding:.2rem .45rem;font:600 .875rem/1.4 system-ui}
+.work-status.complete{color:var(--green);background:#eaf5ef}
+.work-status.todo{color:var(--amber);background:#fff0dc}
+.work-status.beyond{color:#586572;background:#edf0f3}
+.paper-coverage{color:var(--muted);background:none;font-weight:400}
+.milestone{font-size:.925rem;color:#334e64;margin:1rem 0;padding:.85rem 1rem;border:1px solid var(--line);border-radius:3px}
+.milestone p{margin:.4rem 0 0}
+.work-note{margin:0 0 .65rem;line-height:1.6}
+.work-dependencies{font-size:.85rem;color:var(--muted)}
+.beyond-note{background:#edf2f6;border-left:3px solid #9aaebd;padding:.7rem 1rem;margin:1rem 0}
+.gap ul,.beyond-note ul{padding-left:1.2rem;margin:.4rem 0}.gap li,.beyond-note li{margin:.35rem 0}
+.lean-note>summary{flex-wrap:wrap}

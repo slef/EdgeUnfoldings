@@ -33,7 +33,17 @@
       ]
     ],
     "steps": [],
-    "gap": "Define chosen shortest cuts for a general source and the corresponding cut surface. The existing UncutSurface must not silently be used for that more general object."
+    "work": {
+      "status": "complete",
+      "reason": "The cofacial-cut definitions are sufficient for a universal-vertex source: every source-to-vertex edge lies on the surface. The development of that cut surface is a separate unfinished construction.",
+      "remaining": [],
+      "beyond": [
+        "Chosen shortest cuts for arbitrary sources, and their general cut surface, remain an extension beyond this milestone."
+      ],
+      "depends_on": [
+        "main"
+      ]
+    }
   },
   {
     "id": "boundary-images",
@@ -53,7 +63,15 @@
       ]
     ],
     "steps": [],
-    "gap": "State and prove the boundary-image order/count if that part of Definition 1 is required."
+    "work": {
+      "status": "beyond",
+      "reason": "The exact alternating order and 2n boundary-image count are not needed by the current star-to-edge-unfolding construction. Their absence is not a remaining task for this milestone.",
+      "remaining": [],
+      "beyond": [
+        "The paper’s boundary order and count have no matching complete statement/proof. A finite segment boundary does not establish them."
+      ],
+      "depends_on": []
+    }
   },
   {
     "id": "tree",
@@ -101,7 +119,16 @@
       "Continuous retraction onto the cut set → contractibility → connectedness and acyclicity.",
       "Mark original cut vertices and all junctions → exactly two shortest routes on an open tree edge."
     ],
-    "gap": "The paper has no vertex-count or face-size restriction. Transfer the closure-identification theorem to the newer scope as well."
+    "work": {
+      "status": "complete",
+      "reason": "The exact finite cut tree is constructed in the required small-polyhedron scope, including universal-vertex solids and arbitrary surface sources. No further tree-existence proof is needed for this milestone.",
+      "remaining": [],
+      "beyond": [
+        "Exporting equality with the paper’s closure-based definition in the newer scope is an additional correspondence result, not an input required by the current assembly.",
+        "Removing the vertex-count and face-size restrictions belongs to the unrestricted theorem."
+      ],
+      "depends_on": []
+    }
   },
   {
     "id": "curve",
@@ -122,7 +149,15 @@
     "note": "This section is reproduced because it lies in the requested range. SurfacePath and shortest-route definitions elsewhere in the project do not amount to the paper’s geodesic-curve star unfolding. Lemma 1, point/segment images, and the straight/parabolic cut-locus classification are not being claimed as proved.",
     "refs": [],
     "steps": [],
-    "gap": "No proof work on curve-source unfoldings is included in this checkpoint."
+    "work": {
+      "status": "beyond",
+      "reason": "Curve-source unfolding is deliberately outside this point-star subproject. This section is included only as part of the requested paper excerpt.",
+      "remaining": [],
+      "beyond": [
+        "No curve-source proof work is planned here; none of these paper claims is being marked as proved."
+      ],
+      "depends_on": []
+    }
   },
   {
     "id": "kite-partition",
@@ -167,7 +202,18 @@
       "Construct both actual closed radial strips and develop them to metric triangles.",
       "Prove their union covers the surface; later separation handles overlap."
     ],
-    "gap": "Transfer the radial-triangle and junction constructions to the new small-polyhedron tree."
+    "work": {
+      "status": "todo",
+      "reason": "The existing construction still depends on the canonical nonuniversal graphs. It must be extended before it can supply the universal-source development.",
+      "remaining": [
+        "Transfer the actual radial-triangle construction, flat-junction charts and surface coverage to the new small-polyhedron cut tree."
+      ],
+      "beyond": [],
+      "depends_on": [
+        "tree",
+        "leaf"
+      ]
+    }
   },
   {
     "id": "budget",
@@ -216,7 +262,17 @@
       "Total curvature accounting: checked for canonical graphs.",
       "Half the directed source-angle sum is < π: checked for canonical vertex sources."
     ],
-    "gap": "Generalize the coverage and curvature arguments. The nonvertex-source case permits equality α(σ) = π; the current global result assumes a vertex source and gives a strict bound."
+    "work": {
+      "status": "todo",
+      "reason": "The local angle bound is complete, but the required global source-angle sum is not yet available for universal-vertex solids.",
+      "remaining": [
+        "Extend cone coverage and curvature accounting to the new local fans and derive the global budget for the universal vertex source."
+      ],
+      "beyond": [
+        "An arbitrary nonvertex source permits equality in the half-angle budget. That case, and arbitrary vertex counts, belong to the broader theorem."
+      ],
+      "depends_on": []
+    }
   },
   {
     "id": "main",
@@ -270,7 +326,21 @@
       "Prove local intrinsic isometry and retained-surface connectivity.",
       "Identify the exact finite-segment boundary."
     ],
-    "gap": "Universal-vertex sources still need the geometric construction transferred. Arbitrary sources additionally need general star cuts and internal original-vertex junctions. No standalone full-scope Theorem 1 with a sorry has been added."
+    "work": {
+      "status": "todo",
+      "reason": "The proved cofacial checkpoint does not cover the universal-vertex family. Completing that family is the next star milestone, not merely an optional increase in paper coverage.",
+      "remaining": [
+        "Construct the universal-source charts and angle budget, then assemble the injective, locally isometric planar development."
+      ],
+      "beyond": [
+        "The full paper theorem for arbitrary sources and unrestricted convex polyhedra remains unfinished. It is not declared complete by finishing this milestone."
+      ],
+      "depends_on": [
+        "kite-partition",
+        "budget",
+        "leaf"
+      ]
+    }
   },
   {
     "id": "path",
@@ -298,7 +368,17 @@
       ]
     ],
     "steps": [],
-    "gap": ""
+    "work": {
+      "status": "complete",
+      "reason": "The tree-path separation argument is checked under its displayed inputs. Constructing those inputs is tracked in the triangle, leaf and budget items; this component needs no new path argument.",
+      "remaining": [],
+      "beyond": [],
+      "depends_on": [
+        "kite-partition",
+        "leaf",
+        "budget"
+      ]
+    }
   },
   {
     "id": "wedge",
@@ -326,7 +406,13 @@
       ]
     ],
     "steps": [],
-    "gap": ""
+    "work": {
+      "status": "complete",
+      "reason": "The planar wedge definitions needed by the construction are present. This status records completion of definitions, not a claim that a definition is a proved theorem.",
+      "remaining": [],
+      "beyond": [],
+      "depends_on": []
+    }
   },
   {
     "id": "invariant",
@@ -360,7 +446,16 @@
       "updated: Wᵢ is the transported union W′ᵢ ∪ kᵢ.",
       "Finite induction carries all earlier regions forward and separates the endpoints."
     ],
-    "gap": ""
+    "work": {
+      "status": "complete",
+      "reason": "The finite planar induction is checked. The surface construction must supply its step hypotheses; that work is tracked separately.",
+      "remaining": [],
+      "beyond": [],
+      "depends_on": [
+        "kite-partition",
+        "budget"
+      ]
+    }
   },
   {
     "id": "containment",
@@ -397,7 +492,13 @@
       "Exclusion: the outward condition at the new root keeps the next kite outside the old wedge.",
       "Angle-to-coordinate translation connects these conditions to the cumulative budget."
     ],
-    "gap": ""
+    "work": {
+      "status": "complete",
+      "reason": "The needed containment and exclusion are proved by coordinate inequalities. Reproducing the paper’s different circular-sector argument is not an additional task.",
+      "remaining": [],
+      "beyond": [],
+      "depends_on": []
+    }
   },
   {
     "id": "base",
@@ -421,7 +522,15 @@
       ]
     ],
     "steps": [],
-    "gap": ""
+    "work": {
+      "status": "complete",
+      "reason": "The first-kite lemma is checked given its actual radial-triangle input. Supplying that input for the new family is tracked in the triangle-construction item.",
+      "remaining": [],
+      "beyond": [],
+      "depends_on": [
+        "kite-partition"
+      ]
+    }
   },
   {
     "id": "rotation",
@@ -433,7 +542,7 @@
     "statement": "Planar and flat-junction statements present",
     "proof": "Checked with a flat JunctionFan and angle budget",
     "scope": "Planar rotation is generic. The supplied surface junction fan is flat.",
-    "note": "rotate_arms is a direct set-containment theorem. JunctionFan.wedge_step_with_parameters obtains the correct gap order and actual kite angles from the surface chart. The current global chart structure excludes internal original vertices; this is where the paper’s singular-vertex situation still needs additional construction.",
+    "note": "rotate_arms is a direct set-containment theorem. JunctionFan.wedge_step_with_parameters obtains the correct gap order and actual kite angles from the surface chart. The current global chart structure excludes internal original vertices; this is where the paper’s singular-vertex situation still needs additional construction. The journal says “surface area” here; the intended quantity is surface angle. Its pᵢ/pᵢ₋₁ wording is retained.",
     "refs": [
       [
         "WedgeRotation",
@@ -453,7 +562,19 @@
       "Rotate to an enlarged wedge without losing the old region.",
       "Use the complementary angle bound to exclude the outgoing kite."
     ],
-    "gap": "Handle junctions at original vertices, where the surface cone angle is less than 2π. The journal text says “surface area”; in context it refers to surface angle. Its pᵢ/pᵢ₋₁ wording is retained in this transcription."
+    "work": {
+      "status": "complete",
+      "reason": "The planar rotation and flat-junction step are checked. The planned universal-source construction uses only flat internal junctions once the cofacial-leaf transfer is proved.",
+      "remaining": [],
+      "beyond": [
+        "Singular junctions at original vertices require more work for arbitrary sources; they are not required by this milestone."
+      ],
+      "depends_on": [
+        "kite-partition",
+        "leaf",
+        "budget"
+      ]
+    }
   },
   {
     "id": "center",
@@ -481,7 +602,16 @@
       ]
     ],
     "steps": [],
-    "gap": ""
+    "work": {
+      "status": "complete",
+      "reason": "The root-movement identity and its flat-junction step are checked. Constructing the needed surface data and budget is tracked separately.",
+      "remaining": [],
+      "beyond": [],
+      "depends_on": [
+        "kite-partition",
+        "budget"
+      ]
+    }
   },
   {
     "id": "exterior",
@@ -502,7 +632,15 @@
       ]
     ],
     "steps": [],
-    "gap": "Define the exterior W at a boundary vertex image, connect it to every incident initial wedge, and conclude that the whole developed surface avoids its interior."
+    "work": {
+      "status": "beyond",
+      "reason": "The current star-embedding route uses direct pairwise kite separation. It does not require a separate theorem with the full exterior-W conclusion of Lemma 3.",
+      "remaining": [],
+      "beyond": [
+        "The exact exterior-W definition, its identification at all vertex images and the closed-boundary avoidance conclusion remain unformalized. This paper result is not being claimed as proved."
+      ],
+      "depends_on": []
+    }
   },
   {
     "id": "leaf",
@@ -526,7 +664,19 @@
       ]
     ],
     "steps": [],
-    "gap": "Supply the geometric identification and the boundary/interior argument needed for the precise exterior-region assertion."
+    "work": {
+      "status": "todo",
+      "reason": "The cofacial-leaf classification must be extended to universal-vertex solids. This is required to justify using flat internal junctions, even though the full exterior-W assertion is not required.",
+      "remaining": [
+        "Prove that every nonsource original vertex is a leaf of the new small-polyhedron cut tree for a universal vertex source."
+      ],
+      "beyond": [
+        "Assembling the exact closed-unfolding-versus-interior(W) assertion of Lemma 3 is additional paper coverage."
+      ],
+      "depends_on": [
+        "tree"
+      ]
+    }
   },
   {
     "id": "singular",
@@ -546,6 +696,16 @@
       ]
     ],
     "steps": [],
-    "gap": "Construct the singular cone junction and prove W ⊆ W₀ for each possible starting edge, then extend the assembly to those junctions."
+    "work": {
+      "status": "beyond",
+      "reason": "Internal original-vertex junctions are outside the universal-source milestone. Their exclusion there still depends on the leaf proof, which is explicitly marked “Still to do”.",
+      "remaining": [],
+      "beyond": [
+        "For the arbitrary-source theorem, construct singular-cone junctions, prove the paper’s W ⊆ W₀ comparison and extend the global assembly. This remains unfinished."
+      ],
+      "depends_on": [
+        "leaf"
+      ]
+    }
   }
 ]

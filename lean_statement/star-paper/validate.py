@@ -23,6 +23,16 @@ for path,page in pages.items():
         assert target.exists(),(path,link)
         if u.fragment and target.suffix=='.html':assert unquote(u.fragment) in pages[target].ids,(path,link)
 D=json.loads((dist/'data.js').read_text().removeprefix('window.PAPER_DATA = ').rstrip(';\n'))
+assert D['annotations']==json.loads((site/'annotations.json').read_text())
+annotation_ids={a['id'] for a in D['annotations']}
+for annotation in D['annotations']:
+    work=annotation['work']
+    assert work['status'] in ('complete','todo','beyond')
+    assert work['reason'] and (bool(work['remaining'])==(work['status']=='todo'))
+    assert set(work['depends_on'])<=annotation_ids
+    assert annotation['id'] not in work['depends_on']
+    if work['status']=='beyond':assert work['beyond']
+    assert 'gap' not in annotation,'Use separate remaining and beyond-milestone obligations'
 all_blocks={b['id'] for b in D['paper']}
 used=set()
 for a in D['annotations']:

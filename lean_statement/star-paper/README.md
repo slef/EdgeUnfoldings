@@ -15,7 +15,7 @@ identity is recorded in `.openai/hosting.json`.
 
 - `paper.json`: reflowed original text; mathematical notation normalized.
 - `figures.json`: original captions.
-- `annotations.json`: editorial scope/status judgments and declaration mapping.
+- `annotations.json`: editorial paper coverage, milestone work status and declaration mapping.
 - `dist/assets/`: original figure crops and source-page comparisons, extracted
   from the user-supplied journal PDF. The full PDF is not committed.
 - `export_sources.py`: export exact declarations, section context, full source,
@@ -96,6 +96,34 @@ The same project source snapshot and scope caveats as the paper annotations
 continue to apply; hovers are inspection aids, not additional proof claims.
 
 ## Status semantics
+
+**Paper coverage and work remaining are independent.** The `status` field
+describes correspondence with the paper. Each annotation also has a `work`
+record: `complete`, `todo` or `beyond`, with a reason, remaining obligations,
+additional paper coverage and dependencies on other annotation groups.
+The old undifferentiated `gap` field is replaced by `work.remaining` and
+`work.beyond`.
+
+Work badges refer specifically to the next milestone documented in
+`../STAR_NEXT.md`: extend the star construction to universal-vertex sources
+in six-vertex solids with triangular/quadrilateral faces. This is not a
+new claim that the unrestricted point-star theorem is finished or cancelled.
+The actual cut-tree construction and cofacial-cut definitions suffice for
+that milestone. Radial-triangle transfer, the cofacial-leaf transfer, the
+global source-angle budget and their assembly remain required work.
+
+Completed conditional components list the unfinished items that supply their
+inputs. The general-source singular-junction case is outside the milestone;
+the leaf transfer justifying its exclusion is still a required task. Exact
+boundary counts and the standalone exterior-W version of Lemma 3 are extra
+paper correspondence, not inputs to the current direct separation route.
+Curve-source unfoldings are deliberately outside the point-star subproject.
+An outside-milestone badge never means the corresponding claim is proved.
+
+Review these editorial classifications when the target or proof route changes.
+Do not infer them from successful compilation, an empty `sorry` search or
+the presence of a related declaration. The page shows coverage separately
+so that a checked component can remain only a partial match for the paper.
 
 No new mathematical proof or `sorry` was added for this page. A missing full
 statement is distinct from a declaration containing `sorry`; a checked
