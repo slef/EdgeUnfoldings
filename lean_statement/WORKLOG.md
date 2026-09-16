@@ -1,0 +1,2575 @@
+## 2026-09-16 08:13 UTC — exact cut-locus tree without a canonical graph
+
+Completed the immediate cut-tree obligation described to the user. Added
+14 modules and 100 audited theorem declarations. Public Definitions and
+Statement are unchanged, including the original unfinished main theorem.
+
+`SmallPolyhedronCutTree.small_exists_regular_cut_tree` constructs an actual
+`P.CutLocusTree a` for any convex polyhedron with at most six vertices and
+triangular or quadrilateral faces. The source is any surface point. There
+is no canonical graph, universal vertex, or cofacial-source premise.
+`small_cut_tree_open_edge_two_routes` proves exactly two actual shortest
+routes at every interior point of a tree edge.
+
+The argument has four parts, each now checked in this larger scope:
+
+1. `SmallPolyhedronRouteStability`: face and edge branch isolation, local
+   route-count stability, closedness, and compactness of the actual
+   vertex-augmented cut set.
+2. `SmallPolyhedronRoutePrefixes`, `SmallPolyhedronFaceSources`,
+   `SmallPolyhedronFaceCompetitors`, `SmallPolyhedronFaceVoronoi`, and
+   the three corresponding `SmallPolyhedronEdge*` modules: unique proper
+   prefixes, stable actual sources, real competing surface paths, exact
+   finite local minima, and exact local Voronoi descriptions.
+   `SmallPolyhedronCutSegments` then proves finite crossing exceptions,
+   exact compact parameter intervals, an exact finite segment union, and
+   an embedded graph with any prescribed finite cut-point markings.
+3. `SmallPolyhedronRayExtensions`, `SmallPolyhedronTerminalRays`, and
+   `SmallPolyhedronCutRetraction`: noncut points permit strict extension,
+   cut points are terminal, and every nonsource point has a unique cut
+   endpoint depending continuously on it. This retracts the punctured
+   surface onto the cut set, proving it contractible. The existing generic
+   graph results give connectedness and acyclicity.
+4. `SmallPolyhedronJunctions`: distinct routes have distinct actual source
+   copies; finite source lists give global junction finiteness. Marking
+   junctions and original cut vertices yields the regular finite tree.
+
+This is the actual cut-set tree, not a graph merely covering the cut set.
+The global star embedding has not yet gained broader hypotheses. The next
+integration step is to use these route/tree results in the radial-triangle,
+flat-junction, and cofacial-leaf constructions. The principal remaining
+geometric obligation is the source-angle budget: general fan circle
+coordinates/coverage and total curvature accounting. A fully arbitrary-source
+star theorem still requires singular internal-vertex junctions as well.
+
+Progress: the cut-tree milestone is complete (closedness, exact finite
+segments, connectedness, acyclicity, and exceptional-point subdivision).
+This is step 1 of the plan explained to the user, not a 25% estimate of
+full-proof effort. The full star theorem remains unfinished.
+
+Validation: full incremental build and axiom audit passed: 892 Lean files,
+4,292 audited theorem declarations, only `propext`, `Classical.choice`, and
+`Quot.sound`. All Lean sources belong to the checked import closure. The
+only proof hole remains the original one in `Statement.lean`. The public
+Definitions and Statement SHA-256 hashes match the preceding checkpoint.
+No manuscript, dependency-checkout, or automation changes were made.
+
+## 2026-09-16 07:26 UTC — all-vertex avoidance and finite cut cover without a canonical graph
+
+The remaining degree-three/four local geometry is now constructed from
+the original polyhedron. Added 26 modules, all imported and audited.
+Public definitions and the main theorem statement are unchanged.
+
+`FacetCornerNeighbors` identifies exactly the two original edge neighbors
+on each incident triangular or quadrilateral face. `VertexNeighborLink`
+constructs the two-regular graph on actual edge neighbors. Its at-most-five
+vertices force connectedness; `SpanningCycleOrder` and `VertexNeighborOrder`
+give a cyclic order. `VertexFaceFan` supplies actual corner triangles.
+For quadrilaterals, a neighborhood excludes the remote triangle, proving
+that these corner triangles cover the whole local surface. `VertexFanIncidence`
+proves that every incident original face occurs exactly once.
+
+`VertexFanFigure` constructs the actual supporting rays and normals.
+`VertexFanAngles.totalAngle_lt_two_pi` now proves the strict surface-angle
+bound at every original vertex, covering degrees three, four, and five.
+The planar development/folding argument works with all three sector counts.
+Partial sums give cumulative angles; complementary angular routes select
+a short chord; the minimum of the slit radii gives uniform local detours.
+
+`SmallPolyhedronVertexAvoidance` constructs these fans and detours and proves
+that every simple finite shortest route has a vertex-free interior. It
+also proves the constant-speed version and existence of finite simple
+vertex-avoiding shortest paths. Scope: any convex polyhedron with at most
+six vertices and triangular/quadrilateral faces, with arbitrary surface
+endpoints. No universal vertex or canonical graph hypothesis remains.
+
+`SmallPolyhedronShortestRoutes` applies avoidance to finite normalized
+geodesic fibers, finite developed distance formulas, source images, and
+nonbranching/disjoint open traces. `SmallPolyhedronLocalDistance` and
+`SmallPolyhedronSourceUniqueness` give local fixed distance formulas and
+route uniqueness away from source-image ties. `SmallPolyhedronCutBisectors`
+and `SmallPolyhedronCutCover` construct a finite cofacial straight-segment
+cover of the entire actual cut set, including original edge and vertex
+points. This is containment, not yet an exact segment decomposition.
+
+Next: extend route stability/closedness, exact segment decomposition, and
+the embedded-tree construction beyond the canonical graph assumptions.
+The new fans also need circle coordinates/coverage and global curvature
+accounting for the source-angle budget. Arbitrary-source singular internal
+junctions remain outside the current global star construction. The existing
+cofacial canonical embedding theorem has not gained broader hypotheses yet.
+
+Bounded progress in the stated small-face scope: local surface angles,
+detours, and all-vertex avoidance are each 100%; finite-route/nonbranching
+inputs and the finite cut-cover milestone are complete. The full star
+theorem remains unfinished; no overall completion percentage is asserted.
+
+Validation: full incremental build and axiom audit passed, 878 Lean files /
+4,192 project theorem declarations, only `propext`, `Classical.choice`, and
+`Quot.sound`. All source files belong to the checked import closure.
+The sole original main-theorem `sorry` remains in `Statement.lean`; public
+Definitions and Statement hashes are unchanged. No separate manuscript,
+dependency-checkout, or automation changes.
+
+## 2026-09-16 06:53 UTC — five-face surface detour and vertex avoidance checked
+
+Added the twelve `FiveFaceFan*` modules and `UniversalVertexAvoidance`,
+all imported into the root library and axiom audit. The public definitions
+and theorem statement are unchanged.
+
+The actual five original faces have rigid planar developments with the
+proved total angle. Their inverse maps agree on every planar contact,
+giving a continuous finite surface folding. Small chords of angular width
+below pi fold to surface paths shorter than passing through the pole.
+The two possible angular routes sum to less than two pi, so choosing a
+slit always gives such a chord. A common radius works for all five slit
+choices, and the original face coverage yields a full surface neighborhood.
+
+`simple_shortest_avoids_universal_vertex` proves that a simple finite
+shortest path cannot contain the universal vertex internally. The
+constant-speed version and existence of finite simple avoiding shortest
+routes are also checked. These theorems construct their fan, angle bound,
+and detours from the actual polyhedron rather than assuming them.
+
+Scope: six vertices, triangular or quadrilateral faces, and avoidance of
+the chosen vertex joined to all five others. This does not yet prove
+avoidance of every vertex of such a solid or its star development.
+The remaining degree-three/four local geometry must be detached from
+the nonuniversal canonical graph models before the existing finite-route
+and nonbranching results can be applied globally. Cut-locus and source-cone
+integration remains substantive; arbitrary-source singular junctions
+also remain outside the current construction.
+
+Bounded progress: five-ray surface angle 100%; five-face local detour and
+vertex avoidance 100%. The full star theorem remains unfinished; these
+percentages do not measure the entire theorem.
+
+Validation: full incremental build and axiom audit passed, 852 Lean files /
+4,046 project theorem declarations. Every source file is in the checked
+import closure. Only `propext`, `Classical.choice`, and `Quot.sound` occur
+in library theorem dependencies. The sole original main-theorem `sorry`
+remains in `Statement.lean`; its hash and the public Definitions hash are
+unchanged. No separate manuscript or dependency checkout edits. No
+automation resumed.
+
+## 2026-09-16 06:26 UTC — five-ray surface-angle gap closed
+
+The requested enclosing-triangle argument is fully checked. Added
+`FiveRayCoordinates`, `FiveRaySupportChoice`, `FiveRayEnclosure`,
+`FiveRayPerimeter`, and `UniversalVertexCurvature`, all imported into the
+root library and axiom audit.
+
+Three consecutive rays provide affine coordinates. The actual supporting
+inequalities give a suitable cyclic start by an odd five-cycle argument.
+Extending the two incident sides to the opposite supporting line constructs
+the enclosing triangle. Supporting signs prove the order of all four
+points on its base, so both corner cuts satisfy the existing spherical
+perimeter theorem. No enclosure, ordering, or angle deficit is assumed.
+
+`FiveRayFan.sum_angles_lt_two_pi` proves the strict bound for every existing
+supported five-ray figure. `universal_vertex_angle_deficit` constructs that
+figure from the original polyhedron, retains all five incident faces and
+their coverage, and transfers the result to the actual spatial edge angles.
+Its polyhedron hypotheses remain six vertices, triangular/quadrilateral
+faces, and a universal source. This is not a completed star development.
+
+Bounded progress: the five-ray surface-angle milestone is 100% complete.
+The shorter local surface detour and shortest-route vertex avoidance
+remain, followed by extending the canonical cut-locus/source-cone machinery.
+The full star theorem remains unfinished; no overall percentage is asserted.
+
+Validation: complete incremental build passed, 839 Lean files / 3,968
+audited project theorem declarations, with only `propext`, `Classical.choice`,
+and `Quot.sound`. The sole original main-theorem `sorry` remains in
+`Statement.lean`. Public Definitions and Statement hashes are unchanged.
+No separate manuscript or dependency checkout edits. No automation resumed.
+
+## 2026-09-16 04:13 UTC — requested four-hour window finished
+
+The full build and axiom audit pass at 834 Lean files / 3,937 project
+theorem declarations. All 834 source files are in the build closure.
+The public definitions and statement retain their original hashes;
+the separate manuscript and dependency checkout were not edited.
+The existing heartbeat is paused. The full star theorem is unfinished;
+resume from `STAR_NEXT.md` and the explicitly unproved next steps in
+`FIVE_RAY_NEXT.md` only after a new user continuation.
+
+## 2026-09-16 04:05 UTC — polygonal star boundary and universal five-ray setup
+
+`CofacialStarEmbedding` now constructs the actual bounded, path-connected,
+open planar embedding with local intrinsic isometry and an exact finite
+straight-segment boundary. `StarPolygonClosure` identifies its closure
+with the actual closed-kite union. `StarCutBoundary` proves that triangle
+representations land in the open image exactly for uncut surface points,
+and on its boundary exactly for cut points. `StarCutParameters` and
+`StarPolygonBoundary` identify the complete cut sides without unproved
+boundary simplicity or assumptions about unrelated planar contacts.
+
+The scope is unchanged: a cofacial vertex source in a canonical
+`SixVertexGraph`, with triangular or quadrilateral faces. These graph
+models have no universal vertex, and the all-triangular octahedron has no
+cofacial source of the required kind. The existence theorem is not a
+universal-family result or an arbitrary-source star theorem.
+
+The generic whole-original-face conversion in `StarEdgeAssembly` is
+complete. `UniversalStarInteriors` proves its face-interior condition for
+a universal source. A universal-source development and its required
+connectivity remain to be supplied to that conversion.
+
+The universal-vertex setup is now constructive: the actual link is a
+five-cycle; its five distinct original triangular faces are cyclically
+ordered and exhaust all incident faces; the normalized directions form
+a strictly supported `FiveRayFan`; and those triangles cover the whole
+surface near the vertex. Normalization preserves the actual spatial
+angles. The five corners are each strictly exposed, not assumed extreme.
+
+The remaining concrete geometric target is the strict total five-ray
+angle bound, followed by a shorter surface detour and vertex avoidance.
+`SphericalCornerCut` proves the triangle angular-perimeter bound and
+corner-cut monotonicity, including a conditional two-cut pentagon bound.
+`SupportingLineExtension` constructs candidate outer corners given the
+required height inequalities. An enclosing-triangle configuration for
+the actual five-ray figure has NOT been constructed. None of these
+conditional lemmas is presented as the completed five-ray deficit.
+An informal affine-coordinate calculation for selecting the enclosing
+triangle is recorded in `FIVE_RAY_NEXT.md`; it is not yet a Lean proof.
+After avoidance, extension of the canonical cut-locus/source-cone
+machinery remains substantive work. Arbitrary-source internal original
+junctions also remain outside the current construction.
+
+Bounded progress: all five stated cofacial-star construction milestones
+are checked, and generic whole-face assembly is checked. No overall
+completion percentage is justified. The full star theorem remains open.
+Full validation: 834 Lean files / 3,937 audited theorem declarations,
+only `propext`, `Classical.choice`, and `Quot.sound`. The sole original
+main-theorem `sorry` and the 55-line Definitions / 15-line Statement are
+unchanged. No separate manuscript or dependency checkout edits.
+
+## 2026-09-16 03:18 UTC — connectivity and whole-edge assembly checked
+
+The actual retained surface is now proved path connected for cofacial
+sources in the four canonical graph models. `StarCutEndpoints` identifies
+the removed rays by original terminal vertices. `RetainedRadialPaths`
+joins each retained point to a nonvertex cut point; `CutTreeCoreGraph`
+and `RetainedCutConnectivity` join these terminal points through the tree
+after its original leaves are removed. `CofacialStarEmbedding` now includes
+a path-connected planar image.
+
+The separate conversion `StarEdgeAssembly.edge_unfolding_of_star_development`
+derives all fields of the public `EdgeUnfolding` from an injective local
+isometry, retained-surface connectivity, and cuts avoiding face interiors.
+Local planar rigidity gives one motion per whole face. Continuity extends
+agreement to retained boundaries, injectivity gives nonoverlap, a finite
+closed face cover gives a connected retained dual graph, and continuity
+along each open hinge supplies agreement at its original endpoints.
+`UniversalStarInteriors` discharges the face-interior cut condition for
+an actual universal source vertex, for any convex polyhedron.
+
+This conversion is stated for arbitrary polyhedra, not wrapped in the
+canonical graph hypotheses: the four canonical models themselves have
+no universal vertex. The constructed geometric star map still needs
+extension to the universal-vertex family. No universal-case development
+or whole main theorem is claimed here.
+
+Full checkpoint: **814 Lean files / 3,841 audited project theorem
+declarations**, only the three standard axioms. The sole original main
+theorem `sorry`, public definitions, and public statement are unchanged.
+Further work is checking the exact polygonal closure and cut boundary
+of the constructed star region.
+
+## 2026-09-16 02:38 UTC — global embedding and local metric checked
+
+`CofacialStarEmbedding.lean` now constructs a bounded open planar embedding
+of the actual boundary outside the explicit straight star cuts, preserving
+the intrinsic surface distance on a neighborhood of every retained point.
+The result assumes a source vertex cofacial with every original vertex and
+one of the four canonical `SixVertexGraph` models. It does not cover
+universal-vertex solids or arbitrary sources.
+
+All four local types are handled: triangle interiors, open cut-edge bases,
+retained junction rays, and nonvertex junctions. Junction triangles agree
+with the actual flat chart on small corner triangles; their angular sectors
+cover a full disk. Each retained ray has two actual triangles on opposite
+sides, glued continuously in the prescribed global frame. Dense interior
+uniqueness turns these foldings into true inverse disks everywhere.
+`StarOpenEmbedding` supplies global injectivity; `StarLocalMetric` supplies
+the exact local intrinsic distance equality. No local inverse assumptions
+remain in the final existence theorem.
+
+Full build and axiom audit pass: **795 files / 3,798 project theorem
+declarations**, only `propext`, `Classical.choice`, and `Quot.sound`.
+The original terminal `sorry` is unchanged. Public definitions and statement
+are unchanged. Completed bounded milestones: global kite separation, full
+map agreement/continuity, all inverse neighborhoods, and global embedding
+with local metric preservation (4/4). This is not a percentage of the full
+star theorem. Cut-boundary/whole-face assembly and the additional geometry
+needed for universal-vertex inputs remain unfinished.
+
+## 2026-09-16 01:53 UTC — inverse disks and metric bounds
+
+The continuous global development has a proved dense set of uniquely
+mapped triangle-interior points. `StarPatchDistance` proves it does not
+stretch convex physical or flat-chart patches, including patches crossing
+triangle boundaries. `KiteFolding` constructs the actual continuous inverse
+of a whole kite with finitely many rigid pieces. `KiteNeighborhood` gives
+a true inverse on a small planar disk at every retained point developed
+inside a kite. The reverse metric bound is available in
+`StarInversePatchMetric` once such a folding covers the developed patch.
+
+Full checkpoint: 766 Lean files / 3,736 audited project theorem declarations,
+only the three standard axioms. The star theorem is not yet complete:
+retained inter-kite rays and junction neighborhoods still need to be
+assembled, followed by the complete local metric statement. The construction
+continues to cover cofacial sources only. No overall percentage is asserted.
+
+## 2026-09-16 01:24 UTC — actual continuous development assembled
+
+`GlobalMapAgreement` proves that all triangle placements of an actual
+surface point agree outside the straight source-to-original-vertex cuts.
+`CofacialStarCuts` identifies these excluded rays geometrically.
+`StarDevelopmentMap` defines the common value, and
+`StarDevelopmentContinuity` proves continuity using the actual finite closed
+triangle cover. All ray labels and surface parametrizations are retained.
+This is a second completed bounded milestone; it does not yet prove the
+entire star net's metric/topological statement or its original-face transfer.
+
+Full build: 750 Lean files. Axiom audit: 3,693 project theorem declarations,
+only `propext`, `Classical.choice`, and `Quot.sound`. The sole unfinished
+proof remains the original terminal `sorry` in `Statement.lean`.
+
+## 2026-09-16 01:06 UTC — global kite separation checked
+
+The cofacial-source construction now has one fixed covering chart collection
+and common frames, with every distinct pair of unoriented cut-tree kites
+separated. All actual simple-chain angle bounds and wedge transitions are
+supplied by the original geometry. `TreeEdgeConnector` constructs a simple
+path having any two distinct tree edges as its ends; `CutTreeChainPaths`
+converts it to the finite geometric chain. This completes the bounded
+**global kite-separation milestone (100%)**, not the star theorem.
+
+The full build checks 738 files. The audit checks 3,660 project theorem
+declarations and permits only `propext`, `Classical.choice`, and `Quot.sound`.
+The original terminal `sorry` in `Statement.lean` is the only unfinished proof.
+Next: actual triangle-map agreement outside the original star-cut rays and
+cut-surface gluing. Arbitrary-source singular original junctions remain open.
+
+# Six-hour Lean session
+
+Started 2026-09-12 15:29 UTC; requested end approximately 21:29 UTC
+(06:29 on 13 September in Japan). Keep working in this thread through context
+compactions. Do not edit the separate research files. No subagents are authorized.
+
+Baseline: 323 hand-written proved theorems, 88 Lean files, 525 declarations in
+the axiom audit. One unfinished main-theorem `sorry`, none in the proved library.
+Public definitions unchanged, 55 lines. Overall estimate about 35% (30–45% range).
+
+Check command, using the existing dependency project read-only:
+
+```
+python3 check.py --dependencies /Users/sl/Dropbox/MyStuff/dev/lean-unfoldings --incremental
+```
+
+## Completed five-vertex milestone (16:00 UTC)
+
+The route below is now fully proved and integrated. `Bipyramid.lean` proves
+`every_convex_polyhedron_with_at_most_five_vertices`. All 15 face pairs are safe.
+The reduction now leaves exactly six vertices with triangles/quadrilaterals.
+Incremental build: 99 files, 361 hand-written proved theorems, 572 audited
+project theorem declarations. Only the original main-theorem sorry remains.
+The clean rebuild of the entire 99-file checkpoint also passed (16:10 UTC). Overall estimate 40%
+(range 35–50%); full geometric nonoverlap work about 35%.
+
+## Completed proof route
+
+Use names `A, B` for poles, `S` for the source, `U, V` for the other equator
+vertices. Central triangles are `AUV`, `BUV`; the four petals are `ASU`, `ASV`,
+`BSU`, `BSV`. The existing construction separates each cap and the central pair.
+
+1. Extract positive pole weights `a,b` and positive equator weights `s,u,v`
+   from the proved strict Radon crossing:
+   `a A + b B = s S + u U + v V`, with equal total weights.
+2. A squared-distance identity for these weights proves the missing pole-to-copy
+   distance comparisons. For the `BSU` source copy, only three pair distances
+   change when comparing the five original points with their planar placements:
+   `AB`, `SV`, and `AS`. The first two increase by existing one-hinge lemmas.
+   The weighted identity is
+   `a*b*ΔAB - a*s*ΔAS + s*v*ΔSV = -‖weighted planar sum‖² ≤ 0`.
+   Thus `ΔAS > 0`. The other three comparisons are symmetric.
+3. The four source petals then satisfy all vertex Voronoi comparisons, so every
+   pair of outer petals has disjoint interiors.
+4. A topological boundary-cover lemma can settle the four base/petal pairs.
+   For example, the boundary of `AUV` is covered by its three neighbors `ASU`,
+   `ASV`, `BUV`. An open connected set disjoint from the interiors of these
+   regular closed triangles misses the whole boundary. Thus an overlapping
+   bottom petal would be contained in `AUV`. This is impossible because its
+   bottom pole lies outside `AUV` (otherwise the whole `BUV` triangle would lie
+   inside `AUV`, contradicting the central pair's nonoverlap).
+
+A temporary numerical exploration of 20,000 generated convex bipyramids found
+no counterexample to the cross-pole distance comparisons. This is only proof
+search guidance; no numerical result will be used as a Lean premise.
+
+Useful Mathlib facts already located:
+
+- `inner_sum_smul_sum_smul_of_sum_eq_zero` in InnerProductSpace/Basic gives the
+  exact squared-distance identity for weights with total zero.
+- `convexHull_range_eq_exists_affineCombination` extracts the equator weights.
+- `AffineBasis.interior_convexHull` gives a route to the three-edge boundary
+  description of a nondegenerate planar triangle.
+- `Convex.closure_interior_eq_closure_of_nonempty_interior` and
+  `Disjoint.closure_right` handle the boundary-cover argument.
+
+The existing cap certificates need to retain their already-proved strict
+missing-vertex distance comparisons. The central development similarly needs
+to retain the already-proved strict pole-distance comparison.
+
+
+## Six-vertex foundations checkpoint (16:28 UTC)
+
+New checked modules: QuadrilateralVertices, QuadrilateralEdges,
+FacetEdgeCounting, FacetColoring, ThreeByThree, ThreeByThreeExclusion.
+They derive an actual quadrilateral's cyclic vertex order, four original edges,
+two nonedge diagonals, and weighted facet-edge double counting. For the remaining
+six-vertex family with no universal vertex, two triples cannot have all nine
+cross-edges. The contradiction uses 3*T+4*Q=2*E, T=2*I and E=I+9, rather than
+a general planarity theorem. Here I counts same-triple edges.
+
+Root imports the new endpoint. Incremental build and axiom audit passed:
+105 files, 394 hand-written proved theorems, 652 audited project declarations.
+The clean rebuild earlier covered the complete 99-file five-vertex checkpoint.
+Overall estimate remains about 40% (35–50% range); geometric progress through
+five vertices is complete. Public definition layer unchanged, 55 lines.
+
+Current next module: SixGraphPairing.lean. It lists the 15 possible matchings
+and 10 partitions of six named vertices into triples. The target finite lemma
+is: any six-vertex graph with degrees one or two either has a perfect matching
+or a split into two nonadjacent triples. Current proof tries finite simplification
+followed by `tauto`; ordinary kernel proofs only. Do NOT use bv_decide or
+native_decide: both use native evaluation axioms rejected by our audit.
+The eventual geometry application combines this lemma with ThreeByThreeExclusion
+to name three pairs of nonadjacent original vertices. This gives an octahedral
+completion, before distinguishing the four remaining complement graphs.
+
+Important implementation fix: use `P.originalEdges` from FacetEdgeCounting,
+which canonically builds a Finset via Set.Finite.toFinset. Direct uses of
+`P.edgeGraph.edgeFinset` can elaborate with different Fintype instances before
+and after `classical`, producing non-definitionally-equal sums. The canonical
+finset avoids this issue. Fintype P.Face is not global; theorem statements with
+sums over faces explicitly take [Fintype P.Face], and proofs may install
+`letI := Fintype.ofFinite P.Face`.
+
+
+## Pairing step, 16:40 UTC
+
+SixGraphPairingCases.lean is now CHECKED. It states the finite propositional
+lemma on 15 edge propositions, 6 no-isolated-vertex conditions, and 60
+no-three-neighbor conditions, concluding one of 15 perfect pairings or one of
+10 separated triple partitions. `grind (splits := 64)` proves it with normal
+kernel proof terms. The default `grind` split depth 9 was insufficient.
+The original attempt to expand all graph quantifiers and then run `tauto`
+was slow and was interrupted; the checked propositional helper avoids that.
+
+SixGraphPairing.lean wraps the propositional lemma in an ordinary SimpleGraph
+statement and provides explicit bijective pairing/triple label lists. Its latest
+compile passed before reaching OppositePairs.lean. Nonisolated witnesses are
+handled by six explicit finite cases; do not replace those with wholesale
+simp of 6^4 quantifiers (too slow, and adjacency orientations normalize oddly).
+
+SixVertexCuts.lean is CHECKED. It shows that for any six original vertex labels,
+an original edge must join {0,1} to {2,3}: delete {4,5} and apply the proved
+three-connectivity. This excludes the C4+P2 complement case. A generic label-
+constant-on-connected-graph lemma supports it. Root imports this file already.
+
+OppositePairs.lean defines three disjoint original nonedge pairs and applies
+SixGraphPairing plus ThreeByThreeExclusion to obtain them. The endpoint now compiles successfully. A degree-instance mismatch was fixed by stating the
+no_three_neighbors helper using Nat.card of neighborSet, then converting local
+degree bounds through card_neighborSet_eq_degree/Nat.card_eq_fintype_card.
+The root now imports OppositePairs and therefore SixGraphPairingCases; the expanded audit is running. Update inventory after it passes.
+
+Next classification route: Once opposite pairs are named, normalize them as
+01,23,45. Every other complement edge belongs to a matching (at most one extra
+edge at each vertex). Three-connectivity forbids the six ways two extra edges
+would form a C4 with two fixed pairs. There are exactly 45 remaining extra
+matchings: 1 of size 0, 12 of size 1, 24 of size 2, 8 of size 3. They are all
+pair-preserving relabelings of the four canonical complement graphs:
+3P2; P4+P2 (add12); P6 (add12,34); C6 (add12,34,50).
+A temporary Python enumeration checked this proof-search fact; it is NOT a
+Lean premise. Formalize it via another ordinary propositional case lemma and
+explicit finite permutations if useful. Avoid bv_decide/native_decide, which
+use native evaluation axioms and fail the audit. No subagents.
+
+Session deadline remains 21:29 UTC. At 16:40 only about 71 minutes have elapsed;
+continue the remaining nearly five hours, through context compactions.
+
+
+## Canonical graph classification in progress, 16:50 UTC
+
+Latest completed audit (before small refactors): 109 files, 685 audited project
+declarations. It includes OppositePairs, SixGraphPairing/Cases, SixVertexCuts.
+New `six_vertices_no_three_nonneighbors` in OppositePairs and `no_complement_square`
+in SixVertexCuts both compile in their updated modules.
+
+New unchecked endpoint: Geometry/SixVertexGraphs.lean. It defines the proof-only
+SixVertexGraph record (one of four canonical types, a Fin6 vertex equivalence,
+and the exact original-edge relation), and derives it from OppositePairs plus
+the pending finite classification.
+
+Pending finite chain:
+- PairedGraphCases.lean: 12 extra-edge propositions, 36 matching constraints,
+  6 square exclusions, 45 complete permitted assignments. `grind` on this large
+  full DNF timed out at 2M heartbeats. Replaced with an explicit, kernel-checked
+  proof tree under development: extract 42 named constraints, branch on unknown
+  propositions, derive every forced absence directly from a named constraint,
+  and simplify only the conclusion at 45 leaves. The generated proof is only
+  154 lines; no external computation is a premise. Current compiler session
+  32142 checks this module then CanonicalSixGraphs. Poll it next.
+- CanonicalSixGraphs.lean: the four canonical complement lists (3P2, P4+P2,
+  P6, C6), 45 concrete relabelings, and bijectivity checked by ordinary decide.
+- PairedGraphClassification.lean: graph-level wrapper. It derives the 36
+  matching clauses from no-three-neighbors plus base edges 01,23,45; derives
+  6 square exclusions from a generic no-complement-square hypothesis using
+  explicit bijective label arrays; then handles all 45 assignments. Before
+  finite adjacency simplification it clears the large hypotheses to avoid
+  unnecessary simplifier work. NOT YET COMPILED.
+- Geometry/SixVertexGraphs.lean: geometric assembly. NOT YET COMPILED.
+
+Warning from proof search: repeated `by_cases h : p <;> try simp_all` reused the
+same hypothesis name and left unexplained False subgoals after dropping the
+original constraints; that approach was discarded. The explicit proof tree
+uses unique names and derives each forced negative with an explicit proof.
+If any classification compile fails with huge diagnostics, cap returned output
+and inspect only the useful first errors. Don't run duplicate compilers on the
+same pending dependency; Ctrl-C through write_stdin works for these sessions.
+
+Root does NOT yet import the canonical graph classification chain. Add the
+SixVertexGraphs endpoint only when it compiles, then audit. Public definitions
+remain untouched. Deadline 21:29 UTC; over four and a half hours remain.
+
+## Exact six-vertex graph and facet classification completed, 17:12 UTC
+
+The entire canonical classification chain now compiles and is root-imported:
+PairedGraphCases, CanonicalSixGraphs, PairedGraphClassification,
+Geometry/SixVertexGraphs, CanonicalSixFaces, CanonicalFacetIncidence,
+Geometry/FacetLabels, QuadrilateralLabels, LabeledFacetIncidence,
+SixVertexFacets. The latest finished audit was 120 Lean files, 783 audited
+project theorem declarations (standard axioms only). This root had 431 explicit
+source theorem declarations including seven inline @[simp] theorems (424 under
+the earlier counter that omitted those seven).
+
+Every remaining six-vertex solid WITHOUT a universal vertex now has exactly one
+of four graph forms and the exact whole facet lists: octahedron 8 triangles;
+minusEdge 6 triangles +1 quad; prismDiagonal 4 triangles +2 quads; prism
+2 triangles +3 quads. Details and exact lists in SIX_VERTEX_STATUS.md.
+
+PairedGraphCases warnings fixed by using simp with only the literal hypotheses.
+PairedGraphClassification's 45 relabelings all passed. CanonicalSixFaces checks
+all 64 subsets by ordinary decide. CanonicalFacetIncidence proves 0/1 facet
+weights from edge incidence and (for the octahedron) nonedge cofacial uniqueness.
+Its four arithmetic proofs use omega. maxHeartbeats 3M needed for repeated
+explicit finite-sum simplification; full file takes about two minutes. Finishing
+filter simplification needs explicit Finset.filter_insert/filter_singleton.
+
+Also checked and just root-imported:
+- CommonFacetVertices: distinct facets containing a distinct pair force an edge;
+  nonedge pairs are cofacial in at most one facet.
+- QuadrilateralSplit: segment_split_at, quadrilateral_split, and
+  Face.Quadrilateral.face_eq_two_triangles (including closed boundaries).
+- NamedQuadrilateral: opposite_of_nonedge, quadrilateral_crossing_of_nonedge,
+  split_named_quadrilateral for specified corner arrays and nonedge diagonals.
+- NonoverlapReassembly: nonoverlap of pieces with dense interiors implies
+  nonoverlap of covered whole faces. No finite-index assumption needed.
+
+The next audit, session 46872, also passed: 123 files, 796 audited project
+theorem declarations. Update README inventory at the next checkpoint.
+
+Public Definitions.lean unchanged. Statement.lean's stale comment corrected to
+say all cases through five vertices are proved; actual statement unchanged and
+still the sole sorry. Research files remain untouched. No agents/automation.
+
+Potential next construction: all four graphs have the same octahedral
+triangulation obtained by adding a subset of the matching 12,34,05. The common
+8 triangles are the octahedron facet list in CanonicalSixFaces. Quad1245 splits
+along12; quad0134 along34; quad0235 along05. NamedQuadrilateral now supports
+proving these exact geometric decompositions. Octahedron and minus-edge cases
+have eligible source poles avoiding all auxiliary edges; prismDiagonal has two;
+prism has none for that particular star cut, so requires the manuscript's
+alternative construction. A triangulated surface certificate should retain
+whole original facet placements to make rigidity automatic.
+
+Session deadline remains 21:29 UTC. At 17:12 only 1h43 has elapsed; over four
+hours remain. Continue active work through compactions. Latest overall estimate
+was 40% (35–50% uncertainty); classification progress should not be confused
+with completed six-vertex nonoverlap geometry. Give a quantified checkpoint
+around 17:29 (two hours), then continue.
+
+## Common subdivision and actual curvature sum completed, 17:29 UTC
+
+Latest full root incremental audit: **129 Lean files, 845 audited theorem
+ declarations, 472 explicit source theorem declarations** (includes inline
+@[simp] theorems). Only standard propext/Classical.choice/Quot.sound. Sole sorry
+remains in Statement.lean. README inventory updated. SIX_VERTEX_STATUS.md updated.
+
+New checked/root-imported chain:
+- OctahedralTriangles.lean: Fin8 triangles 024,025,034,035,124,125,134,135;
+  exact original carrier facet for each kind; quadCorner arrays [1,4,2,5],
+  [3,0,4,1], [0,2,5,3], splitting along auxiliary12,34,05. quadPieces
+  [4,5], [2,6], [1,3]. Finite coverage and nonedge facts checked with decide.
+- Geometry/OctahedralSubdivision: labeledHull, triangle, trianglePoint;
+  actual triangleFace; each triangle nondegenerate and lies in its carrier.
+- Geometry/OctahedralCoverage: each actual quad splits into the specified two
+  triangles; every original whole facet equals the union of its assigned triangles.
+- Geometry/TriangleTopology: nondegenerate planar triangle spans plane,
+  has nonempty interior, and is closure of its interior.
+- Geometry/OctahedralReassembly: whole-facet rigidity makes every placed
+  subdivision triangle regular; pairwise nonoverlap across distinct carrier
+  facets implies whole-face nonoverlap; hasEdgeUnfolding_of_subdivision gives
+  the unchanged public certificate from a whole-face placement and hinge tree.
+- Geometry/OctahedralAngles: actual Euclidean cornerAngle, totalAngleAt,
+  curvature=2π-totalAngleAt; corner angles strictly between0 andπ;
+  triangle angle sumπ; totalAngleAt sum8π; curvature sum4π; everycurvature<2π.
+  **Positivity of curvature is NOT yet proved.**
+
+New currently compiling, NOT root imported: Geometry/SphericalAngles.lean.
+First compile only failed because ℝ≥0 notation needed `open scoped NNReal`.
+That was added and targeted recompile launched; poll current tool session.
+It proves positive height for a nonzero nonnegative combination of two rays;
+angle<π for positive-height rays; strict angular triangle inequality when the
+intermediate nonzero ray has nonpositive height; and a potentially useful strict
+four-ray perimeter bound below2π given crossing cone diagonals.
+
+IMPORTANT new proof strategy for the geometric curvature/link bridge:
+Mathlib DOES have the complete angular triangle inequality and equality cases
+in Geometry/Euclidean/Angle/Unoriented/TriangleInequality.lean.
+`InnerProductGeometry.angle_le_angle_add_angle x y z` works even with zero.
+`angle_eq_angle_add_angle_iff hy` (hy:y≠0) says equality iff endpointangleπ
+or y∈Submodule.span ℝ≥0 {x,z}. Positive height excludes endpointangleπ.
+
+Four-ray perimeter argument (implemented in SphericalAngles, awaiting check):
+all rays a,b,c,d have positive linear height. Suppose nonnegative coefficients
+αa+γc=βb+δd, and e=αa-βb≠0. Then e is in positive cone(a,-b) and cone(d,-c).
+Angle additivity gives angleab=angle(e,b)-angle(e,a) and
+anglecd=angle(e,c)-angle(e,d). Triangle inequalities for b,-e,c and d,e,a
+sum to perimeter≤2π. One is strict: if height(e)≤0, d,e,a is strict;
+otherwise b,-e,c is strict. This allows vanishing diagonal coefficients and
+thus flat subdivision corners. Need derive the crossing cone relation for
+actual vertex figures (four incident subdivision rays). VertexFigure.lean
+already normalizes all outgoing rays to a plane of height -1, proves their
+span is full3D and injectivity; VertexFigureEdges proves all figure corners
+are actual neighbors. Need show the four cyclic subdivision rays form the
+convex vertex-figure boundary (possibly one flat extra corner), hence their
+diagonals intersect. Facet support equations should give this directly; avoid
+assuming strict convexity at an auxiliary subdivision corner.
+
+Potential closed-link bound route (not implemented): for fixed start ray a,
+any direction q in the cone of the polygon lies in a spherical triangle
+(a,b,c) or(a,c,d), hence on a ray between a and a boundary point x on bc orcd.
+Angle(a,q)≤angle(a,x). The two boundary paths from a to x have lengths at
+least angle(a,x). If both equal, the angle equality characterization puts
+all four rays in span(a,x), contradicting full three-dimensional span.
+Thus 2*angle(a,q)<total perimeter. A finite path equality-to-cone lemma may
+help. No need for a general spherical-geometry package or shortest-path space.
+
+Two-hour commentary given at17:27: all≤5 complete; no-universal6 graph/facet
+classification+coverage/reassembly complete; actual curvature sum4π checked.
+Estimated overall45% (40–55% uncertainty), main nonoverlap still substantial.
+Deadline remains21:29UTC; **four more hours are authorized and remain**.
+Continue through compactions; no automation/subagents. Keep user commentary
+frequent (we sometimes slipped over60 seconds; improve this).
+
+## Four-ray positivity bridge started, 17:35 UTC
+
+Geometry/SphericalAngles.lean now **passes** after adding `open scoped NNReal`
+and changing repeated zero_smul simplification to simp only. Not yet root imported.
+Its strict quadrilateral angular perimeter theorem works with nonnegative
+crossing coefficients and e≠0; no general position assumption at flat corners.
+
+New Geometry/FourRayFan.lean currently being checked (poll tool session):
+proof-only record of four distinct rays at common linear height1, spanning
+Space, with a nonzero supporting linear side for each consecutive pair and all
+ray heights≤0 on each side. Lemmas side_has_negative, affinely_dependent,
+rotate, corner_in_neighbors. The last proves a corner in the hull of the other
+three is a flat corner between its two cyclic neighbors: taking side0 andside3
+of the convex combination forces opposite coefficientzero; otherwise both
+neighbor coefficientszero and opposite ray equalsown ray, contradiction.
+This file has never passed yet. SphericalAngles upstream does pass.
+
+Next generic proof: obtain a Radon partition of these four transverse points.
+Empty/full parts impossible. Singleton parts use corner_in_neighbors (after
+rotation) to produce intersection of diagonals02 and13. A two-two part already
+02|13 is desired; the other partitions01|23 and03|12 are impossible. To exclude
+intersection of opposite supporting sides: if an intersection point is interior
+to one segment, the OTHER side's supporting functional vanishes on both its
+endpoints, hence all four rays, contradicting full span/nonzero side. If the
+point is an endpoint of one segment, distinctness ensures it is interior to
+the other. Can use mem_openSegment_of_ne_left_right. No strict convexity needed.
+Use ordinary finite Finset(Fin4) enumeration for the16 Radon parts or ncard
+cases, rather than trying decide over arbitrary Set(Fin4) predicates.
+
+Once diagonal intersection obtained, nonnegative convex weights satisfy
+αa+γc=βb+δd. e=αa-βb cannot vanish: distinct transverse points at height1
+would then forceα=β and a=b, unlessα=β=0; in that latter caseγ=δ=1 forcesc=d.
+This supplies SphericalAngles.spherical_quadrilateral_perimeter_lt.
+
+Geometric instantiation plan: construct four cyclic rays at each original
+vertex via its existing VertexFigure (strict support normal, normalized height
+-1). All figure corners are original neighbors (VertexFigureEdges.corner_is_neighbor).
+The canonical opposite partner is a nonedge, so every corner belongs to the
+four other rays; corners_span then gives those four rays full3Dspan.
+Original carrier facet normals of consecutive subdivision triangles provide
+the supporting sides, including identical adjacent sides when an auxiliary
+corner is flat. Normalize height using minus the figure normal.
+
+Finite fan data still to write:
+fanNeighbor forv0/1=[2,4,3,5], v2/3=[0,4,1,5],v4/5=[0,2,1,3].
+fanTriangle v0=[0,2,3,1],v1=[4,6,7,5],v2=[0,4,5,1],v3=[2,6,7,3],
+v4=[0,4,6,2],v5=[1,5,7,3]. Eachtrianglecontainsv,neighbori,neighbor(i+1).
+After expressing actual totalAngleAt as the four consecutive ray angles,
+strict perimeter<2π gives **actual curvature positivity** for allfourtypes.
+The angular sum4π andcurvature<2π are already checked/rootimported.
+
+Deadline remains21:29UTC (3h54remain at17:35). Continue active work.
+
+## Actual curvature positivity completed; closed link nearly checked, 17:53 UTC
+
+Latest root audit **137 files, 919 audited project theorems, 506 explicit source
+theorem declarations** passed; README and status updated. Curvature_pos is now
+proved from the actual polyhedron, including flat auxiliary corners. No extra
+axioms. This root includes all four-ray positivity modules and geometric bridge.
+
+Completed modules since previous entry:
+- SphericalAngles, FourRayFan, FourRayDiagonals, FourRayPerimeter all checked.
+  Supported fan diagonals meet via Radon; flat singleton parts use
+  corner_in_neighbors; wrong2+2 parts contradict opposite_sides_disjoint.
+- OctahedralFans finite data all checked.
+- OctahedralVertexFigure: fanRay, fanRay_spans via figure.corners_span and
+  corner_is_neighbor, supporting sides from actual carrier facets, vertexFan.
+  Its ray is definitionally graph.fanRay v figure i; vertexFan_ray is @[simp].
+- OctahedralAngleIncidence: pure finite identity for any symmetric function of
+  three labels, avoiding expensive simplification through the geometry.
+  Monolithic geometric simp timed out1.5M; pure identity at2.5M passed quickly.
+- OctahedralCurvature: actualtotalAngleAt<2π andactualcurvature_pos.
+  Strictlower/uppercurvature andsum4π now all actual geometric theorems.
+
+New CHECKED but not root-imported yet:
+- SphericalSpan: mem_pair_cone_of_segment, angle_add_of_segment,
+  pair_cone_mem_subspace, angle_add_mem_subspace (equality puts middle ray
+  in the endpoint plane using positive heights to exclude opposite rays).
+- FourRayReverse: reverse cyclic fan fixesray0, andnot_contained_in_pair_span.
+- FourRayBoundaryLink: boundary_link_bound forp∈segmentray1ray2; ifboth
+  boundarypathinequalitiesequal, all4raysinspan(ray0,p), contradiction3Dspan.
+
+FourRayClosedLink.lean: triangle_link_bound, closed_link_bound,
+closed_link_bound_sum, closed_link_bound_from. First compiler only failed final
+rotation-sum simplification inonecase (commutativeaddition). Replaced that line
+with `fin_cases i <;> simp [rotate, Fin.sum_univ_four] <;> ring`; nowrechecking.
+This proves the strict half-perimeter bound for everypoint inclosedconvexhull
+ofall4rays, includingflatcorners/boundary, basedatanyray. Triangledecomposition
+uses alreadyprovedquadrilateral_split andcloseddiagonalintersection.
+
+New Geometry/OctahedralClosedLink.lean written and in same pendingcompiler:
+fan_hull_eq_figure_hull, vertex_direction_mem_fan, vertex_direction_angle,
+vertexFan_angle_sum, fan_vertex_link_bound, vertex_link_bound,
+vertex_angle_lt_half_deficit. The main bound is2*angle(a,v,b)<totalAngleAtv
+for a oneof4fanvertices(notvornonedgeopposite), b ANYotheroriginalvertex.
+It includes the opposite-pole direction required by the manuscript. No global
+spherical package or unproved geometric premise. This file has not been checked
+yet; pollcurrent compiler output for errors.
+
+No currentlyrunningothercompiler besides the targetedclosedlinkchain.
+Deadline21:29UTC; at17:53over3h35remain. Continueactiveworkthroughcompaction.
+
+## Closed link and full half-fan complete, 18:17 UTC
+
+Latest full incremental root verification: **152 files, 1020 audited project
+theorem declarations, 562 explicit source theorem declarations**. Standard
+axioms only; sole `sorry` is unchanged main theorem. Public definitions55lines
+unchanged. New additions are root-imported. README/SIX_VERTEX_STATUS updated.
+
+Completed after previous checkpoint:
+- OctahedralClosedLink and all dependencies pass.
+- OctahedralFans adds opposite_ne, opposite_opposite, corner_ne_opposite,
+  sum_poles_equator (finite identity for arbitrary real quantities).
+- OctahedralSelection supplies actual cornerAngle_link_bound/linkSlack_pos,
+  curvature_poles_equator, sharper pole, actual max-curvature slit, and combined
+  source/slit choice with half-fan alternative and all scalar curvature gates.
+- HalfFanMetric: cosine_increases and cosine_positive, then viewing_angle_le
+  for nonobtuse source and viewing_angle_acute otherwise. Actual triangles,
+  equal sides at equator, and longer developed pole distance.
+- OctahedralHalfFan.developed_petal_angle_bound applies that to actual spatial
+  poles/equator. Source link makes the obtuse branch force source curvature<π.
+- AngularSegment: order two points on a segment using lineMap parameters;
+  angle_le_of_segment_points uses additive intermediate angles.
+- PlanarRayTriangle: height_one_collinear, hull is segment, heightNormalize,
+  positive hull height, projected hull membership by barycentric weights,
+  triangle_angular_bound (all point pairs bounded by corner pairs in a common
+  open planar half-plane). Uses actual dimension2.
+- OutwardPatch: zero_triangle_hull_ray, zero_triangle_hull_angular_bound,
+  outward_patch_height from the base hinge perpendicular vector.
+- TriangleAngles.triangle_angle_of_distances.
+- OctahedralPatch.DevelopedPatch has pole/left/right/apex, five actual lengths,
+  outward side. Proves fan_noncollinear, pole_distance_ge, corner_angle_bounds.
+- OctahedralPatchSpan.angular_span_bound: for ANY x,y in the closed whole
+  patch hull, x,y≠pole, 2*angle(x,pole,y)<actual totalAngleAt(fanPole), assuming
+  source curvature≥π OR fan curvature≤π. Includes reflex patches/flat hinges.
+- OctahedralPatchConstruction: every rigid actual fan facet placement extends
+  to an outward actual patch; exists_developed_patch derived unconditionally
+  under small_faces. Individual patches do not yet give a simultaneous net.
+
+No running compiler at this checkpoint. Continue until21:29UTC (~3h12 remain).
+Next work: global outward development/shared-vertex sectors and the local
+separator, contact, opposite-petal geometry. Universal-six remains open.
+
+Pitfalls just resolved: proof-only section parameters need `include`;
+existential scalar needs `(t : ℝ)` or Lean chooses Nat from `0<t` and smul;
+law_cos uses products not squares and its distances need explicit reversals;
+fin_cases under a let-bound ray function required explicit `change` to numeric
+ray0/ray1/ray2 before simp/linarith (9cases in PatchSpan). IsLinearMap arguments
+to convex_halfSpace_gt use ⟨map_add,map_smul⟩, not a LinearMap value directly.
+
+## Coherent eight-triangle development completed, 18:33 UTC
+
+Full root audit: **161 files, 1102 audited theorem declarations, 612 explicit
+source theorem declarations**. All modules below root-imported, no new axioms.
+Only main Statement sorry remains. README and SIX_VERTEX_STATUS updated.
+Deadline still21:29UTC (~2h56 remain); continue active work.
+
+New completed modules:
+- PlanarDirections: direction θ := !₂[cosθ,sinθ], detxy=x0y1-x1y0, unit norm,
+  dot product/cross product trig identities, polar distance squared and radius,
+  direction_angle for0≤β−α≤π, detHeight continuous linear map and surjectivity.
+- SlitSeparator: exact half-angle determinant identity, strict negative height
+  of opposite slit copy and fan pole, opposite-patch cone directions, full cone
+  and closed finite slit negativity, separation from arbitrary left-side petal.
+  These coordinate/cone premises are NOT yet bridged from the net geometry.
+- PrescribedTrianglePlacement: F.exists_placement_at_triangle constructs a
+  rigid whole-facet map to any congruent triple of planar target points.
+  Uses canonical rigid plane placement, AffineBasis on the canonical triangle,
+  barycentric coords and Fintype.linearCombination, then span rigidity.
+- OctahedralFanCoordinates: actual fanAngle, positivity/<π, sum=totalAngleAt;
+  openingVertex pole slit:Fin5→Fin6 repeats first ray atlast, openingAngle
+  cumulative four actual angles, step identities, strictMono, last=total;
+  openingPoint with originalradiallength×direction, exactradius/base distances.
+- PlanarSectors: two closed angular intervals in one turn with eachwidth≤π
+  admit separator θ=max(left_end,right_end−π); radial_triangles_disjoint.
+- OctahedralFanSeparation: openingTriangle hull0/pointi/pointi+1;
+  all6fanpairs disjoint via angularorder,total<2π.
+- OctahedralFanDevelopment: rigid wholefacetplacements realizeeachfansector;
+  FanDevelopment structure place:Fin4→Space→AffinePlane withexactpole/left/right
+  andwholefacetrigidity; exists_fan_development; placed_triangle equals radial
+  triangle; nonoverlap; joined consecutivepairsonentireradialsegment.
+- OctahedralPetalPlacement: eachDevelopedPatch has rigidoriginalpetalfacet
+  placementatitsleft/right/apex usingprescribedtriangleplacement.
+- OctahedralDevelopment: Development graph small_faces source slit contains
+  coherent fan at opposite source,4patches for sectors slit+i withpole0,
+  sharedopeningpoint endpoints,4actualpetalfacetmaps withrigidity/points.
+  exists_development constructsallofit. fan_triangle/petal_triangle identify
+  exactclosedspatialpieceimages; attached_pair_nonoverlap andpetal_joined.
+  Thus10/28pairschecked(6fan+4attached), all7retainedhingesjoined. Auxiliary
+  whole-facetconsistency is explicitly stilllaterobligation, nofalsecertificate.
+
+No compiler running atcheckpoint. Nextplanned: finite8trianglehingetree and
+originalfacecertificatefortheoctahedronkindconditionalonlyonremaining12mixed
+and6petalpairs; thenadditionalshared-vertex/cutcontactgeometry. Genericgraph
+treecanfollowBipyramidTree:connectedviaexplicitpaths and7edgecount ordinary
+decide. Developmentfaceindex Bool×Fin4 where false=fan,true=petal;
+triangleindex uses fanTriangle(oppositesource)(slit+i) orfanTrianglesource.
+Foroctkind triangleFace labels=vertices andindexisbijective, givingFaceEquiv.
+
+Pitfalls: `extends` reserved word(usecrosses_gap); repeateddet_smul rewrites
+need simp only ratherthanrw. ForSpace distance commutation explicitlycoerce
+firstargument(:Space), otherwiseLeanbuilds subtype-dist theorem andrwmisses.
+Fin.orderomega needs `change i.val+1≤j.val`; simpleFin.succ/castSucc order was
+notexpandedautomatically. Setliteralsmustparenthesize eachcoercedpoint.
+
+
+## Nineteen pairs and explicit nine-comparison certificate, 19:04 UTC
+
+Full root audit passed: **178 files, 1206 audited theorem declarations, 670
+explicit source theorems**. Only the original Statement sorry remains.
+Public Definitions and Statement unchanged. No research files edited.
+
+HingeUniqueness, HingeIsometries, HingeSideOrder, RadialHinges prove planar
+triangle congruence, outward point uniqueness, rigid-motion invariance and
+signed radial hinge orientation. FourTriangleChain constructs one rigid
+polar frame for all five rays; FourTriangleSeparation proves all its pairs
+safe when the four angles total less than one turn.
+
+OctahedralPatchCorners, OctahedralFanHinges, OctahedralJunctionIncidence,
+OctahedralJunctionChain, OctahedralJunctionAngles, OctahedralJunctionTriangles
+connect the generic chain to the actual net at all three internal equator
+vertices. Nine additional pairs are proved, taking the total to19/28.
+
+OctahedralNet/Faces/Placement assemble the seven-edge hinge tree and exact
+original facets for the octahedron. Octahedron is conditional on18pairs;
+OctahedronNine reduces this to the explicit RemainingNine structure:
+V0/V3, V0/W3, V3/W0, V0/V2, V1/V3, and Vi/W(i+2). These9remain open.
+
+Overall estimate~55%, wide45–65% range; pair separation19/28=68% for this
+development only, not68% of the full theorem. All≤5andpyramids complete.
+
+Next: strengthen shared-vertex separation to closed intersection only at
+common vertex; actual local slit geometry and finite-contact algebra/
+containment, opposite cones, auxiliary whole-facet reassembly.
+Deadline21:29UTC; about2h25remain, CONTINUE WORK.
+
+
+## Contact inequalities and remote boundary reduction, 19:25 UTC
+
+Last complete root check:191files,1270audited project theorem declarations.
+All ContactProjection/ProjectionAt/SineBudget/OctahedralObtuseContact and
+OctahedralContactProjection checked, root-imported. The latter proves source
+curvature<pi for actual adjacentpetals fromONEclosedcontactcontainment;
+equalradiuses,distinctapexes,nonzeroarms,polemetriccomparisonallderived.
+StrictPlanarSectors/FourTriangleBoundary/OctahedralJunctionBoundary prove
+closednonneighboringjunctiontrianglesmeetonlyattheactualsharedvertex.
+
+BoundaryExclusion,OctahedralPlacedTopology/FanBoundary/RemotePairs prove
+all4remotepairsconditionalonlocal/oppositepairsand2closedfinitecutmisses.
+OctahedronCore assemblesunchangedpubliccertificatefromLocalPairs,
+OppositePetals,FiniteCutsClear. This doesNOTincrease19/28unconditionalpairs.
+
+Currentwork:actualcoordinatebridgeforlocal slitseparator.
+HingeDeterminantchecked:OppositeHingeSides iffproductofrawdeterminants≤0,
+planeinnercoordinates,determinantlinearities,unitaxisinnerdecomposition.
+PolarPointUniquenesschecked:radius+anglecosine+signedsideuniquelyfixpolar
+point;outward_radial_point/down add/subtractcorners.
+DirectionIdentitieschecked:directionaddpi,subpi,add2pi,2pi-minus.
+RadialBaseDirections CURRENT COMPILER:exactbasevectordirectionatleft/right
+ofarbitraryradialtriangle.Onlyradiusnormsimpfailed;addedsub_zero,zero_sub,
+norm_negandrerunning. These4modulesNOTyetrootimported.
+
+Next:outwardpetalcoordinateformulasfrombaseangles;actualfirst/lastslit
+cornerangleidentity,thenstrictlocalcrossing-gapbranchusingSlitSeparator.
+Thegeneralangular-lift/gapcasesandcontactcontainmentremainopen.
+Deadline21:29UTC (~2h04remain). CONTINUE, DONOTSTOPATCOMPACTION.
+
+
+## First complete local-separation branch,19:39UTC
+
+Allnewcoordinate moduleschecked. Rootbuildrunning (newimportReflexLocal).
+Explicit source theorem count:773. Mainpublicdefinitions/statementunchanged.
+
+OutwardPolarDirections derivescopiedapexdirectionatleft/rightofarbitrary
+positiveradialfantrianglefromactualoutwardpredicate andcornerangles.
+OctahedralPatchDirections givesactualpatchleftCorner/rightCornerandcopied
+cut/basevectorformulas. OctahedralSlitCoordinates givesfirstslit=rdir0,
+lastslit=rdir(-κfan),exactsumleftCorner0+rightCorner3=Γslit,
+lastcorner=π−κslit−ρ iffirstcorner=π+ρ, henceρ<π−κslit.
+
+PetalCutHalfplane provesactualpetal'swholeclosedhullleftoforientedcutedge.
+OctahedralReflexSeparator fullyderivesthefirstreflexseparatorinactualnet:
+ifκfan<ρ andπ≤2κslit+κfan, firstclosedpetalmisseswholelastpatchhull
+andclosedoppositeslitsegment. Nocoordinateorconeassumptionsremainthere.
+
+OctahedralPatchAngleBounds usesfantriangleanglesumandpetalcorner<πto
+proveω0+ρ<π. OctahedralReflexLocal useslastslitline toseparateV3/W0;
+combinedwithaboveseparatorprovesALL3LocalPairsforfirstreflexbranch.
+Readableentry:local_pairs_of_first_corner_crosses_gap
+(π+κfan<patch0.leftCorner)(π≤2κslit+κfan).
+
+Next:high-fancurvature branchκfan≥π (Γfan≤π). Half-fan bounds plus
+ordinaryangletriangleinequalityseparatewholefirst/lastpatchesexceptpole;
+petalsmisspolebyoutwardheight. Samehalffanexcludesbothremotefinitecuts
+usingtheiranchorangleΓ−ω0>Γ/2 andΓ−ω3>Γ/2. ThiswouldleaveONLY
+oppositepetalsforoctahedra inthatbranch. Otherlocalangularcasesandthe
+reflectedreflexbranchstillopen.
+
+Deadline21:29UTC,1h50remain. CONTINUEWORK.
+
+## Upper fan branch and opposite-petal coordinates, 20:12 UTC
+
+OctahedralHighFan proves all three local pairs and both closed finite-cut
+exclusions when fan curvature is at least pi, assuming the already stated
+half-fan alternative. Its octahedron corollary needs only the two opposite
+petal comparisons. These remain conditional; the unconditional base count
+is still 19/28 pairs.
+
+CaseASeparation proves strict separation of opposed apex cones using a
+virtual cut-ray triangle and the strict distance-sum inequality.
+BaseConeSeparation proves the Case B separating-line argument, including
+the flat width-pi boundary. Both are checked in explicit planar coordinates.
+
+OctahedralApexGap derives the actual dot product, signed area, and chord
+length of adjacent copied source edges from the common vertex curvature.
+PlaneOrientation and TriangleFrame are checked: a nonzero axis's dot product
+and determinant determine a planar vector, and every nondegenerate triangle
+has an upper rigid frame. OctahedralTriangleFrame derives the reversed-frame
+directions of both neighboring apex copies; upper-frame wrappers and
+TriangleCones are currently being checked. Next connect whole actual petals
+to the Case A cones and discharge the apex-angle bounds from curvature.
+
+Public Definitions.lean and Statement.lean unchanged. Latest full root audit
+was 202 files / 1337 theorem declarations, before HighFan and cone modules;
+all later completed targets were separately checked. A clean root rebuild
+and new axiom audit are due before the 21:29 UTC deadline.
+
+## Actual Case A/B and paired-pole wider cones, 20:33 UTC
+
+OctahedralCaseA now separates the actual closed opposite petals when the
+widened base-angle sum is below pi and the outer angles fit its cone.
+The fits follow from either source curvature at least pi or all curvatures
+at most pi. OctahedralCaseB now separates the actual closed petals when
+the widened angle sum and adjacent fan-corner sum are both at least pi,
+including equality. All lengths, directions, and cone containments are
+derived from this one net, with no coordinate hypotheses left over.
+
+WiderApexCones proves the manuscript's stronger half-sum outer-angle bound,
+using a weak separator when a cut side is exactly short and a strict sine
+separator beyond the narrow cone. WiderCutRays supplies the strict distance
+sum and displacement. OctahedralPairedBounds derives both wider angle bounds
+from actual link inequalities and source curvature >= opposite-pole curvature.
+OctahedralPairedCaseA connects these to the actual whole petals: Case A is
+now complete for the paired-pole rule. All modules separately checked.
+
+OctahedronAngleCriteria assembles a complete original-edge certificate in
+the high-fan region where both opposite comparisons are A or B. The small-fan
+pocket branch, other local branches and low-fan finite-cut contact remain open.
+The unconditional shared-pair count remains 19/28; A/B are case theorems.
+
+Next: the convex-slit local branch, then a clean root rebuild and updated
+axiom audit/documentation. Deadline21:29UTC, about56minutes remain.
+
+## Complete local lemma and closed flank boundary, 20:52 UTC
+
+SectorFlanks handles through-fan contact for fan angles up to a full turn,
+plus sine interpolation for short reflex extensions. OctahedralConvexSlit
+proves the nonreflex case, OctahedralShortReflexLocal both short-reflex cases,
+and OctahedralLastReflexSeparator/OctahedralLocal the reflected crossing case.
+The complete theorem `net.local_pairs` needs only the half-fan alternative
+and closed slit threshold. Straight corners and gap-threshold equality included.
+OctahedralLocalBoundary proves both closed flank petals miss the opposite
+closed finite slit. This is distinct from the two remote V1/V2 cut exclusions.
+
+OctahedralSelectedLocal derives the local hypotheses from actual source order
+and maximum-equator selection. OctahedronSix reduces the public octahedron
+certificate to exactly six remaining pairs. Base arbitrary-net count19/28;
+selected-net count22/28=79%. Case A is complete for the paired-pole rule,
+Case B complete, Case C pocket open. Low-fan finite-contact geometry, universal
+six-vertex case, and auxiliary/prism original-face consistency remain open.
+
+Latest complete root audit before the new local modules:228files,1464theorems.
+Current explicit source theorem count923. Minor warning cleanup and new
+selected-wrapper target are being checked; full clean rebuild follows.
+Public55-line definitions and15-line statement unchanged, onlyoriginalsorry.
+Overall effort estimate~60%, broad45–70%range. Deadline21:29UTC: CONTINUE.
+
+## First remote contact completed, 21:25 UTC
+
+The clean rebuild passed: 239 files and 1,510 audited theorem declarations.
+Three harmless tactic-style suggestions and the original Statement sorry warning.
+Seven additional files then compiled successfully:
+ConeTriangleContainment, FourTriangleCone, OctahedralContactEntry,
+OctahedralContactContainment, RayTriangleEntry, ReflexRadialTriangle,
+and OctahedralContactVisibility. The subsequent full root incremental check
+passed for 246 files and 1,531 audited theorems (944 explicit source theorems).
+A final OctahedronSix wrapper is being checked after that checkpoint.
+
+The first remote petal's WHOLE closed contact now reduces to its copied near
+cut edge. Contact forces a reflex corner. The outward hinge and determinant
+signs place the near corner inside the radial triangle; explicit positive
+ray scaling reaches a near edge before the original contact point. Closed
+fan separation excludes the hinge edge. The four-triangle complementary cone
+and local flank exclusion give finite contact containment. The existing
+metric projection lemma then forces source curvature strictly below pi.
+`first_remote_cut_clear_of_high_source` therefore excludes all closed V1
+contact under source curvature >= pi and the slit threshold, with no extra
+coordinate, visibility, reflex, or containment hypothesis.
+
+Public definitions and statement unchanged. The manuscript/research outside
+lean_statement was not edited. All local Lean files are root-imported; only
+Statement contains sorry. Added PROOF_GUIDE.md and synchronized README and
+SIX_VERTEX_STATUS. Overall estimate remains about60%, broad45–70%range;
+selected-net 22/28=79% is a separate, precisely counted indicator.
+
+### Next concrete contact step
+
+Reflect V1 visibility/containment to V2. Then connect the already proved
+Contact.finite_contact_curvature_budget to actual low-source-curvature contact.
+For the V1 contact let a=patch0.right, M=patch0.apex, P=patch1.apex,
+omega=openingAngle1, theta=patch0.rightCorner, delta=omega+kappa_fan,
+and ka=curvature(a). Existing direction formulas give
+M-a=s*direction(omega-pi+theta) and
+P-a=s*direction(omega-pi+theta+ka), with the same positive s.
+
+The contact point q=a+t(P-a), 0<t<=1, lies on the last slit of angle
+Gamma=2*pi-kappa_fan. Its determinant with direction Gamma yields
+r*sin(delta)=t*s*sin(theta+ka+delta). Containment of M in {a,0,q}
+gives s*sin(theta+delta)<=r*sin(delta). Across-gap contact gives
+0<delta<pi, while the reflex junction gives 0<theta+ka<pi.
+Thus positive contact forces theta+ka+delta<pi. Feed these actual
+identities to the scalar budget. The triangle angle sum and strict closed-link
+estimate at the slit should finish its remaining hypotheses. This paragraph
+is a plan for the next proof, not an assertion that these coordinate identities
+have already been packaged and checked in Lean.
+
+## Final verified inventory, 21:26 UTC
+
+The last OctahedronSix wrapper passed: for a selected high-curvature source
+outside the two pocket branches, only the V2 finite-cut exclusion is needed
+to conclude the public HasEdgeUnfolding statement. Full incremental root check:
+246 files, 1,532 audited theorem declarations, 945 explicit proved theorems.
+All proved-library source files are imported by the root. No additional
+axioms or sorries; only the original Statement warning. README, the short
+PROOF_GUIDE, and SIX_VERTEX_STATUS now reflect these exact boundaries.
+
+Compared with the six-hour baseline: 323 -> 945 explicit proved theorems,
+88 -> 246 checked files, 525 -> 1,532 audited declarations. These counts measure
+the verified library, not the fraction of the main theorem established.
+Effort estimate about35% -> about60%, with a broad final45–70%range.
+All <=5 vertex cases100%; selected octahedral triangle comparisons22/28=79%.
+The main theorem remains unfinished, with substantial gaps listed above.
+
+Session ended at 21:29 UTC (06:29 Japan), after the requested six hours.
+No Lean compilation is left running. Resume from the verified contact and
+certificate interfaces above; do not restart or modify the separate manuscript.
+
+## One-hour continuation, 23:26 UTC
+
+Requested one more hour; work until 00:26 UTC on 13 September (09:26 Japan).
+Baseline: 246 files, 945 explicit proved theorems, 1,532 audited declarations.
+Priority: mirrored V2 closed contact, then the actual low-curvature sine budget.
+Keep the public definitions and statement unchanged and edit only lean_statement.
+
+### Complete finite-contact milestone, 23:46 UTC
+
+Both remote closed-contact arguments are now complete in high- and low-source
+curvature cases. The reflected V2 argument derives the actual reflex corner,
+visibility, finite containment, and E1 projection obstruction. Determinants
+derive the two sine relations at each cut. The actual fan triangle angle sums
+and strict spatial links yield both E2 budgets. Curvature maximum selection
+discharges the threshold and both gates, including ties.
+
+`selected_finite_cuts_clear` has no geometric separation premise.
+`OctahedronTwo.hasEdgeUnfolding_of_two_comparisons` reduces the selected
+octahedron certificate to its two opposite-petal comparisons. The complete
+`hasEdgeUnfolding_of_selected_caseAB` covers both source-curvature branches
+outside the two pocket branches, with no cut-clearance premises.
+Full incremental root check passed: 261 files, 1,565 audited declarations.
+
+Now working on the small-fan pocket's actual base-ray directions and the
+strict below-base bound. Its polygon containment and hexagon-angle argument
+remain open. The existing Mathlib Polygon file has basic vertex/edge definitions,
+not a ready simple-polygon angle-sum or Jordan-curve theorem. Do not treat a
+conditional hexagon-angle identity as a proof of the actual pocket.
+Deadline 00:26 UTC; continue until then and finish with updated documentation/audit.
+
+
+### Pocket preparation and full contact completion, 00:20 UTC
+
+The requested one-hour run has completed both remote finite-cut arguments in
+all source-curvature branches. `selected_finite_cuts_clear` is unconditional
+apart from the actual source/slit selection. `OctahedronTwo` needs only the two
+opposite-petal comparisons; its selected Case A/B theorem needs no cut premise.
+The direct selected pair count is still 22/28: the four remote pairs are derived
+from the two opposite-petal comparisons, so they are not four new independent
+pair proofs.
+
+The actual base rays and cone containments are now proved. Case B was shortened
+from about 140 lines to 44 lines by reusing these containments. The small-fan contact
+and the other three pocket corners lie strictly below the middle base. Both
+candidate quadrilateral boundaries are constructed from hypothetical interior
+overlap, with all six side-pair intersections checked and a point avoiding any
+prescribed finite list of lines. Both protected patch interiors, and the middle
+fan interior, miss every closed boundary side. Whole closed patch triangles
+lie in the closures of the complement components containing their interior
+seeds. The actual apex-angle bounds for the final contradiction are proved.
+
+The enclosed region and the hexagon angle identification are NOT proved.
+`POCKET_NEXT.md` records a proposed internal-diagonal/triangle-union route.
+This is a plan, not a theorem or an assumed Jordan-curve result. The other open
+families remain universal-vertex six-vertex solids and the non-octahedral
+whole-facet/prism constructions.
+
+Full root checkpoint: 276 Lean files, 1,603 audited theorem declarations,
+1,020 explicit theorems. Two corner-nondegeneracy lemmas are being checked next;
+use the final entry below for the final inventory. All public definitions and
+Statement unchanged, 55 and 15 lines; only the original Statement sorry remains.
+All proved source files are imported by the root. All documentation links checked.
+Overall effort estimate about 65%, broad 55–75% range; this is not derived from
+line or theorem counts. At most 5 vertices and all pyramids: 100%; direct selected pairs: 22/28 = 79%;
+remote closed-cut exclusions: 2/2 = 100% for selected source and slit.
+
+
+### Final verified checkpoint, 00:22 UTC
+
+The two corner-nondegeneracy lemmas passed. A candidate quadrilateral has four
+distinct vertices, derived from its actual side intersections. All affected
+pocket modules and the complete root/Statement/Audit checks then passed.
+Final inventory: 276 checked Lean files; 1,022 explicit proved theorems;
+1,605 audited project theorem declarations, including private and generated
+ones. Only propext, Classical.choice, and Quot.sound are accepted. The sole
+warning is the original Statement sorry. No compilation remains running.
+
+This hour added 30 Lean modules and shortened the existing Case B proof.
+README, PROOF_GUIDE, SIX_VERTEX_STATUS, and POCKET_NEXT reflect the same exact
+unfinished boundary. Main theorem incomplete; public vocabulary unchanged;
+no changes outside lean_statement. Finish the requested hour at 00:26 UTC
+(09:26 Japan), then report the progress indicators above.
+
+
+Source-counter reconciliation: the older 945 count used only lines beginning
+with theorem/private theorem. It omitted 12 existing same-line attributed
+theorems. The complete explicit-source count is 957 at the start of this hour
+and 1,022 at the final checkpoint: 65 new explicit theorems in 30 new modules.
+The kernel-audit figures remain directly comparable: 1,532 -> 1,605.
+Do not report an increase of 77 source theorems; that would mix counting rules.
+
+One-hour continuation ended at 00:26 UTC (09:26 Japan), after the requested
+hour. Final compilation and audit passed; no compiler process remains running.
+Resume from POCKET_NEXT.md and the verified 276-file root, without restarting
+completed contact work or editing the separate mathematical manuscript.
+
+
+### Concrete pocket region and exact boundary, 2026-09-13 02:13 UTC
+
+Continued the Lean formalization only, starting at 01:21 UTC. Added 17 proof
+modules and 45 explicit theorems. The mathematical manuscripts were not edited.
+Definitions.lean and Statement.lean remain unchanged at 55 and 15 lines.
+
+Completed finite-polygon geometry:
+
+- SegmentCrossing gives an explicit closed-segment intersection from weak and
+  strict signed-side conditions. QuadrilateralDiagonal derives a separating
+  diagonal from the certified boundary and three avoided lines.
+- OctahedralPocketDiagonal applies that alternative to both actual overlap
+  candidates. There are no new position assumptions on the polyhedron.
+- JoinedTriangles proves exact intersection on the common diagonal.
+  TriangleEdgeHalfplanes and JoinedTriangleInterior put its open segment in
+  the interior of the union. JoinedTriangleFrontier initially gives frontier
+  coverage; TriangleEdgeFrontier and JoinedTriangleBoundary prove equality
+  with exactly the four outer sides, including their endpoints.
+- QuadrilateralRegion is the explicit two-triangle union. Its compactness,
+  strict affine height bounds, path-connected interior, regular closure, and
+  exact boundary are proved. The diagonal midpoint supplies a common center
+  for paths. The proof includes the possible straight pole corner.
+- ClosedRegionComponent and QuadrilateralRegionBoundary identify its open
+  and closed components in the complement of the four-side trace from a
+  seed known to lie in its interior.
+- OctahedralPocketRegion extends the actual vertex height bounds to the
+  entire region. The middle fan has a base vertex outside and its interior
+  avoids the frontier, so its interior is disjoint from the region interior.
+- OctahedralPocketCertificate assembles the actual region in both small-fan
+  overlap orientations. PocketContainment and the two actual-net seed
+  lemmas reduce whole protected-triangle containment to interior seeds.
+
+NOT completed: identifying the pole sector containing the protected patch,
+constructing the patch's interior seeds, or the angles after removing the
+patch. The seed lemmas have explicit seed premises; these have not been
+silently discharged or added to the main theorem. Universal-vertex six-vertex
+solids and the non-octahedral whole-facet/prism constructions also remain.
+Resume from POCKET_NEXT.md; the internal diagonal and exact boundary are now
+proved and should not be restarted.
+
+Verification: the full incremental root/Statement/Audit check passed with
+293 Lean files, 1,067 explicit proved theorems, and 1,656 audited project
+theorem declarations. All 291 proved-library source files are reachable from
+the root. Only propext, Classical.choice, and Quot.sound are accepted. The sole
+warning is the original Statement sorry, and a source scan found no other
+proof holes, extra axioms, or native/bv_decide calls. Every new or changed Lean
+file was compiled with the pinned compiler; the earlier clean dependency
+rebuild was not repeated. All documentation links passed. No compiler remains
+running.
+
+Progress: overall effort about 66%, with the same broad 55–75% uncertainty
+range; this is a judgment, not a theorem-count calculation. At most five
+vertices and all pyramids remain complete. Direct selected face pairs remain
+22/28 (79%); remote finite-cut exclusions remain 2/2 (100%). The new region
+geometry has not yet discharged the two opposite-petal comparisons.
+
+Public-file SHA-256: SixVertexUnfolding/Definitions.lean: 68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef
+Public-file SHA-256: Statement.lean: 7bedda81f1cb4ad57920b38b751af382f4b18b37ec4f2dfa6ccbf23715ffc548
+
+
+## 2026-09-13 walk session — verified octahedron checkpoint
+
+Started 02:13 UTC after the user requested completion while away for at least
+two hours. All changes remain confined to lean_statement; manuscripts and
+public Definitions/Statement have not been edited.
+
+COMPLETED: actual interior seeds and whole protected-patch containment in
+both pocket orientations; clockwise orientation; exact four-corner angle sum,
+including reflex corners; complementary petal-corner bounds; and both
+small-fan pocket contradictions. The proof uses the four-corner sum directly,
+so no six-sided polygon or post-excision angle theorem is needed.
+
+OctahedronComplete.hasEdgeUnfolding_of_octahedron now proves the actual public
+HasEdgeUnfolding predicate for the octahedron graph, with no remaining
+separation or angle-case premises. The full root, Statement, and axiom audit
+passed: 316 Lean files and 1,732 audited declarations, only propext,
+Classical.choice, and Quot.sound. The original Statement sorry remains.
+
+Subsequent work in progress: OctahedralAllPairs proves all 28 subdivision
+comparisons for every selected development (compiled). ContractedHinges is
+compiled. QuadrilateralPlacementAgreement and CommonFacetHinge are compiled.
+SubdivisionHinges / SubdivisionCertificate / FlatPetalAgreement / MinusEdge
+are being integrated; do not report the minus-edge case as proved until the
+full check succeeds. These additions are not yet all root-imported.
+
+Next objective: finish the single-quadrilateral minus-edge case by choosing
+source 4 or 5, proving its sole repeated carrier is an attached fan/petal
+pair, using flat_petal_agreement, and contracting its internal diagonal.
+Other six-vertex cases still include universal-vertex solids and both prism
+families. Do not restart the completed pocket work.
+
+## 2026-09-13 walk session — completed checkpoint
+
+All code for this checkpoint compiled and passed the complete root/Statement/
+axiom audit. The final result is **341 Lean files, 1,185 explicit proved
+theorems, and 1,816 audited project theorem declarations**. This adds 48 source
+modules, 118 explicit theorems, and 160 audited declarations to the start-of-run
+checkpoint (293 / 1,067 / 1,656). All 339 proved-library source files are
+reachable from the root. The only proof warning is the original Statement
+sorry; the proved library accepts only propext, Classical.choice, and Quot.sound.
+
+New complete six-vertex families:
+
+- Octahedron: both small-fan pocket orientations are excluded, completing
+  every angle branch and all 28/28 selected subdivision comparisons.
+- Octahedron minus one edge: flat-diagonal agreement reassembles the whole
+  original quadrilateral. Contracted hinge connectivity supplies a spanning
+  tree using only original edges. SixVertexRemaining gives wrappers without
+  a separate facet-size premise and eliminates both families from the main
+  remaining-case reduction.
+
+Other proved results:
+
+- OriginalCutSelection proves whole-face consistency and the complete public
+  unfolding whenever all five selected cuts are original edges. Both radial
+  and equatorial retained flat hinges have whole-facet agreement proofs.
+- PrismDiagonalSelection completes the region κ₁ ≤ κ₀ and κ₄ ≤ κ₅,
+  including ties, by choosing one of the degree-four endpoints and a largest
+  equator slit avoiding the forbidden diagonal.
+- PolygonPetal constructs a whole neighboring polygon outward from a base.
+  Rigidity, hinge agreement, all outward-side tests, separation from the base,
+  and strict free-vertex distance comparisons are proved.
+- PrismDome proves the actual prism is a dome with any quadrilateral as base.
+  DomeDevelopment constructs its whole-face flower. MetricCornerCones and
+  FacetSupportingCorner prove complete infinite-cone separation at a spatial
+  trihedral corner; DomeSharedCorner applies it to whole original facets.
+- PrismFlower indexes the five actual facets and proves 8/10 whole-face
+  comparisons. prism_unfolding_of_two_pairs needs exactly the opposite
+  quadrilateral pair 0235/1245 and triangle pair 135/024 at base 0134.
+- ParallelPetals proves disjoint closed images for parallel base hinges.
+  PrismParallelogram therefore completes the prism with this parallelogram
+  base, without assuming parallel triangular bases.
+- ExtendedHinge identifies the common line of neighboring facet planes and
+  extends hinge agreement. ExtendedHingeSides reanchors outwardness anywhere
+  on that line. These support the nonparallel prism branch still to be built.
+
+NOT completed: the main theorem; the universal-vertex six-vertex family; the
+nonparallel opposite-petal branches for ordinary prisms; and the remaining
+prism-with-diagonal regions. No external star/dome theorem has been installed
+or introduced as an axiom. The shortest-path star comparison would require
+additional formal geometry absent from this project.
+
+Resume from DOMES_NEXT.md for the ordinary prism. Its two remaining geometric
+comparisons are actual obligations; the existing cone separator alone does
+not yet construct the virtual corner and verify its supporting-plane signs.
+The pocket proof and whole-facet reassembly are complete and should not be
+restarted. PROOF_GUIDE.md and SIX_VERTEX_STATUS.md give the updated proof map.
+
+Progress assessment: common selected core 100% (28/28 triangle pairs);
+nonuniversal six-vertex graph families 50% (2/4 complete); ordinary prism
+flower 80% of whole-face comparisons (8/10 in arbitrary geometry), with its
+parallel branches and selected parallelogram-base case complete. Overall
+formalization effort is estimated at about 75%, with a broad 60–85% range.
+This is an effort estimate, not a theorem-count calculation or a proof that
+75% of all geometric configurations are covered.
+
+Verification command: python3 check.py --dependencies
+/Users/sl/Dropbox/MyStuff/dev/lean-unfoldings --incremental. Lean 4.29.1,
+autoImplicit=false, and the pinned Mathlib revision were checked. The core
+local dependency chain was rebuilt during this session; subsequent affected
+modules and the entire root audit were checked incrementally. No independent
+clean dependency installation was attempted.
+
+All changes are confined to lean_statement/. No mathematical manuscript was
+edited. Definitions.lean is still 55 lines with SHA-256
+68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef;
+Statement.lean is still 15 lines with SHA-256
+7bedda81f1cb4ad57920b38b751af382f4b18b37ec4f2dfa6ccbf23715ffc548.
+
+Final review: the prism corner-incidence proof now lists its twelve membership
+and exclusion steps explicitly for readability. The root/Statement/axiom audit
+was rerun after this change and passed with the same 341 / 1,185 / 1,816
+inventory. All local Markdown links resolve, every proof source is reachable
+from the root, and the public-file hashes match the start of the session.
+The proof guide was queued for display in the task's file panel. The main
+theorem remains unfinished; the progress indicators above are unchanged.
+
+
+## 2026-09-14 — complete dome and ordinary-prism case
+
+The ordinary prism is now completely proved in Lean, through the stronger
+`Dome.hasEdgeUnfolding` theorem for any number of vertices. All ten of the
+prism's whole-face pairs are separated. No parallelism hypothesis remains.
+
+The proof constructs the intersection of nonparallel extended hinges. Three
+normalized facet normals are linearly independent at a common point, so
+prescribed support heights supply an auxiliary common-petal point strictly
+inside the base halfspace. Supporting inequalities put whole facets in the
+two virtual corner cones. Extended plane rigidity, hinge agreement, and
+outwardness verify the existing metric cone separator. The zero-height case
+forces parallel hinges and uses the already proved exterior-halfplane result.
+The two-facets-per-edge rule supplies suitable endpoints for every petal pair.
+No auxiliary point is a surface vertex or a retained/cut surface edge.
+
+New files for this result: NormalizedFacetPlanes, ThreeFacetPlanes,
+ExtendedPetalSides, DomeVirtualCorner, DomeOppositePetals, DomeComplete,
+and PrismComplete. FacetCornerCone and ExtendedHinge have small proved
+extensions. SixVertexRemaining has an unconditional ordinary-prism wrapper
+and the stronger reduction to universal vertices or prism-with-diagonal.
+
+PrismDiagonalRegions enlarges the proved metric region: source 0 works for
+κ₁ ≤ κ₀ and κ₂ ≤ max(κ₃, κ₄, κ₅), while source 5 works for κ₄ ≤ κ₅ and
+κ₃ ≤ max(κ₀, κ₁, κ₂). Either source suffices, and all ties are covered.
+The strict alternatives left by these sufficient regions are proved too.
+
+SurfacePaths defines actual continuous boundary paths, using Mathlib total
+variation for arc length. Straight face paths have chord length and minimize
+among all continuous surface paths, including infinite-length paths.
+StraightShortestPaths proves that any shortest cofacial path stays on its
+straight segment. SixVertexStarCuts proves the original five-edge source
+spanning tree, shortestness of each cut, and nonintersection away from the
+source. These are genuine premises of the star theorem, not its nonoverlap
+conclusion. The cut-locus/kite partition and kite-chain separation are absent.
+
+The full root/Statement/axiom audit passed with **352 Lean files, 1,221
+explicit proved theorems, and 1,863 audited project theorem declarations**.
+This continuation adds **11 source modules and 36 explicit theorems** to the
+341 / 1,185 / 1,816 starting checkpoint. All 350 proved-library source modules
+are root reachable. The audit accepts only propext, Classical.choice, and
+Quot.sound; the only proof warning is the original Statement sorry.
+No native_decide, bv_decide, extra axioms, or hidden proof holes were added.
+
+The 55-line Definitions file is byte-for-byte unchanged (SHA-256
+68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef).
+The target proposition is unchanged and its file is still 15 lines. Its
+proof now invokes the stronger two-family reduction, so its proof-file hash
+is 4cc6ec337f16ae8c86aaf07ad79f57f42dd8a567014fc22f4dbea3f279c997d2.
+All edits remain inside lean_statement/. Mathematical manuscripts were not
+edited, and no Git operation changed the repository history.
+
+Progress: selected common core 100% (28/28 triangle pairs); ordinary prism
+100% (10/10 whole-face pairs); nonuniversal graph families 75% (3/4 complete).
+Overall effort estimate approximately 80%, broad range 65–90%; this is not a
+measure of metric configurations covered or a theorem-count percentage.
+The main theorem remains unfinished: universal-vertex nonoverlap and the
+remaining prism-with-diagonal switches/comparisons are substantial tasks.
+Resume from STAR_NEXT.md. DOMES_NEXT.md now documents a completed proof.
+
+## 2026-09-14 — shortest-path existence, finite subdivision, and simplicity
+
+This continuation completes the first previously open star foundation:
+existence and finite subdivision of general shortest surface routes. The
+results apply to arbitrary public convex polyhedra and boundary endpoints.
+They do not assume a shortest-path theorem or a nonoverlap conclusion.
+
+ArcLength proves that the existing length agrees with variation directly on
+the unit interval. Accumulated arc length is continuous and covers the whole
+interval from zero to total length. SurfaceReparameterization uses Mathlib's
+natural parametrization to replace every rectifiable curve by a Lipschitz
+curve with the same endpoints and surface image, and no greater length.
+The zero-length case and pauses are included.
+
+SurfacePathJoining proves exact length additivity for concatenation, including
+infinite lengths, and obtains rectifiable routes from connected facet walks.
+SurfacePathCompactness applies Arzelà–Ascoli to fixed-endpoint curves on the
+compact actual boundary with a common speed bound. Lower semicontinuity of
+total variation supplies a minimum. ShortestSurfacePaths then compares that
+minimum with every continuous surface path: longer competitors are immediate;
+any shorter one can be reparameterized into the same compact family. This
+removes the speed restriction from the shortestness conclusion.
+
+ShortestSubpaths proves that every portion of a shortest route is shortest.
+Together with the earlier cofacial chord theorem, this rules out leaving and
+revisiting a whole face. ShortestFaceSubdivision proves that face visit times
+are closed intervals. All face entry and exit times form a finite subdivision;
+each consecutive portion lies in one original facet, stays on the straight
+endpoint segment, and has chord length. ShortestSimplePaths proves that a
+speed bound equal to total length forces constant arc speed. Distinct boundary
+endpoints therefore admit an injective, rectifiable shortest route.
+
+The full library/Statement/axiom audit passed with **360 Lean files, 1,253
+explicit proved theorems, and 1,912 audited project theorem declarations**.
+This run adds **8 modules and 32 explicit theorems** to the previous
+352 / 1,221 / 1,863 checkpoint. All **358 proved-library source modules**
+are reachable from the root. The audit accepts only propext, Classical.choice,
+and Quot.sound. The only warning is the original terminal Statement sorry;
+there are no new holes, extra axioms, or native evaluation tactics.
+The full audit log is /tmp/edge-shortest-audit.log.
+
+Both public-file hashes are unchanged: Definitions is 55 lines with SHA-256
+68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef;
+Statement is 15 lines with SHA-256
+4cc6ec337f16ae8c86aaf07ad79f57f42dd8a567014fc22f4dbea3f279c997d2.
+All edits remain inside lean_statement/. The mathematical manuscripts and
+the dependency installation were read only. No Git history was changed.
+All local Markdown links resolve. SHORTEST_PATHS.md maps the new proofs.
+
+Progress: shortest-path milestone **3/3 complete** (existence, finite straight
+face subdivision, and simple constant-speed parametrization). The selected
+core remains **28/28 (100%)**, ordinary prism **10/10 (100%)**, and complete
+nonuniversal graph families **3/4 (75%)**. No additional graph family is closed.
+The overall effort estimate remains **about 80%, broad range 65–90%**;
+theorem counts do not measure the remaining geometric difficulty.
+
+The main theorem is still unfinished. Resume from STAR_NEXT.md: local
+continuation across edges and exclusion of intermediate vertices are still
+needed for the cut-locus construction. The cut-locus tree, kite partition,
+planar kite separation, transfer to whole original facets, and remaining
+prism-with-diagonal comparisons remain substantial obligations.
+
+
+## Three-hour continuation: flat charts and vertex avoidance (14 September, 19:12 UTC)
+
+The requested work window started at 17:28:45 UTC and continues until
+20:28:45 UTC. This is an intermediate checkpoint, not the end of the run.
+Only lean_statement files have been edited. The public definitions and
+main statement remain unchanged at 55 and 15 lines.
+
+The first checkpoint proved actual flat metric charts at every nonvertex
+boundary point, continuous inverses, affine shortest-path coordinates, and
+local nonbranching. Intrinsic distance is an attained finite metric with
+the actual boundary topology. These constructions added 27 modules and
+126 explicit theorems; the audit passed at 387 files and 2,112 declarations.
+
+The second checkpoint constructs finite rigid foldings and verifies their
+path-length bounds through a finite closed convex cover. It folds the
+four-triangle vertex fans back to actual surface triangles, proves exact
+contacts on radial hinges, constructs sufficiently small chord detours,
+and relates their polar angles to ordinary spatial angles. Complementary
+slit choices have angular separations summing to the actual total angle.
+Strict positive curvature therefore supplies a shorter route around every
+vertex in the four canonical six-vertex graph models. Simple shortest
+routes avoid those vertices, and global nonbranching/disjoint open traces
+now follow without an avoidance premise for these models.
+
+The full incremental build and axiom audit passed: **401 Lean files, 1,416
+explicit proved theorems, and 2,172 audited theorem declarations**. This is
+41 new modules, 163 explicit theorems, and 260 audited declarations over
+the start of this continuation. Audit log: /tmp/edge-vertex-avoidance-audit.log.
+Only propext, Classical.choice, and Quot.sound occur in proved dependencies.
+The original terminal sorry in Statement.lean remains the only proof hole.
+
+The main theorem is still unfinished. Selected core 28/28 and ordinary
+prism 10/10 remain complete; nonuniversal families remain 3/4. The overall
+working estimate remains about 80% (65–90% uncertainty), not a verified
+fraction of the final proof. Remaining star work includes the cut-locus
+tree, kite partition, separation, whole-face transfer, and vertex avoidance
+for the universal-vertex family. Next: bounded finite face itineraries.
+
+## Three-hour continuation: finite developments and route topology (14 September, 20:22 UTC)
+
+The work after the vertex-avoidance checkpoint builds bounded chronological
+face itineraries, fixed coherent outward developments, and the exact affine
+formula for the entire developed shortest route. A sequence has at most
+2 * Nat.card P.Face + 1 portions. Choosing the development independently of
+endpoints gives finite source-copy sets in fixed facet coordinates. No claim
+is made that every candidate code is admissible or that distance is the
+minimum over all candidates.
+
+For the four canonical graph models, actual normalized shortest routes are
+finite, including routes ending at vertices. Multiple-route targets inside
+one face lie on a finite arrangement of explicit bisectors. The arrangement
+is closed with empty interior, and the coordinate image of the multiple-route
+locus is nowhere dense there. It has not been identified with a finite tree.
+
+A compact family of all normalized geodesics allows both endpoints to vary.
+Every member corresponds to an actual shortest surface path, still compared
+against all continuous competitors. Compactness gives upper continuity of
+this family. Terminal source copies are recovered continuously from any
+earlier point in the target face; their finite set then prevents local
+splitting. For canonical models, uniqueness is open at targets belonging to
+one facet, the number of routes cannot increase near such a target, and the
+multiple-route locus is relatively closed there.
+
+For every public convex polyhedron, unique shortest routes vary continuously
+in the uniform metric. Every prefix is unique, and the entire unique-route
+target set contracts continuously to the source along those routes. This set
+is proved equal to the complement of the original multipleRouteLocus. The
+contractibility conclusion uses Mathlib's actual ContractibleSpace predicate.
+
+For the canonical models, a further extension argument proves that every
+proper prefix of any shortest route is unique even when its final endpoint
+has several shortest routes. Thus a shortest route cannot pass through the
+multiple-route locus before its end. Unique-route targets are dense in the
+entire boundary, including neighborhoods of edges and original vertices;
+the multiple-route locus has empty interior in the actual boundary topology.
+
+The verified inventory is **439 Lean files, 1,539 explicit proved theorems,
+and 2,366 audited project theorem declarations**. Relative to the start of
+this three-hour window: **79 new modules, 286 explicit theorems, and 454
+audited declarations**. All 437 proved library modules, including the root,
+are reachable from the root import. The audit accepts only propext,
+Classical.choice, and Quot.sound. Its only warning is the original terminal
+sorry in Statement.lean. Log: /tmp/edge-final-three-hour-audit.log.
+
+The public files remain byte-for-byte unchanged:
+
+- Definitions.lean: 55 lines; SHA256 68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef.
+- Statement.lean: 15 lines; SHA256 4cc6ec337f16ae8c86aaf07ad79f57f42dd8a567014fc22f4dbea3f279c997d2.
+
+Only lean_statement was edited; manuscript and dependency sources were read
+without changes. The proof guides' local links were checked. No new package,
+axiom, numerical proof certificate, or proof hole was introduced.
+
+The selected development remains 28/28 complete; ordinary-prism pairs remain
+10/10 complete; nonuniversal graph families remain 3/4 complete (75%). The
+main theorem is unfinished. The overall effort estimate remains about 80%,
+with a broad 65–90% uncertainty range. The 22.8% growth in explicit proved
+lemmas is a library-size measure, not an equivalent gain in theorem coverage.
+
+The remaining work is still general vertex avoidance for the universal-vertex
+family, the finite cut-locus tree and kite partition, kite-chain separation,
+transfer to original whole faces, and prism-diagonal fallback/switch proofs.
+CUT_LOCUS_FOUNDATIONS.md gives the new proof map and distinguishes the finite
+candidate line cover, the actual multiple-route locus, and the still-unproved
+full cut-locus identification.
+
+The final source review checked the distinction between candidate source
+copies and admissible routes, the nonempty-fiber justification for unique
+targets, and the scope of the canonical-model vertex-avoidance premises.
+The last cleanup reused the existing meeting-parameter uniqueness lemma in
+the proper-prefix argument. Its full incremental rebuild and axiom audit
+passed again with the same inventory and the sole original Statement warning.
+
+Three-hour work window completed at 20:28 UTC on 14 September 2026.
+Final status: checked library and documentation consistent; main theorem
+still unfinished, with no new proof holes and the original definitions intact.
+
+## Continuation on 15 September: actual local minima and cut-set topology
+
+Started 2026-09-15 02:57 UTC. The baseline was 439 Lean files,
+1,539 explicit proved theorems, and 2,366 audited theorem declarations.
+The manuscript and neighboring dependency project were read without changes.
+All retained edits are confined to lean_statement; no subagents were used.
+
+The central gap closed in this run is the nearby-competitor construction.
+An actual terminal source now supplies real surface paths to every nearby
+target in its face, with precisely the developed source-to-target length.
+A unique proper prefix provides the local distance formula; a straight
+segment in the final face extends it. This avoids assuming that arbitrary
+face-sequence candidates represent admissible paths.
+
+The new activeSources set contains exactly sources of actual shortest routes
+to a fixed target. It is finite and nonempty, and source copies are in
+bijection with normalized shortest routes. Compactness supplies selection
+among these sources at nearby targets, while the constructed competitors
+supply every upper bound. Intrinsic distance is therefore exactly their
+local minimum. A planar distance comparison that touches at an interior
+point identifies its source, giving both directions of the Voronoi
+characterization of the actual multiple-route locus.
+
+FaceCutLocusStructure proves that a point with exactly two routes has a
+whole local bisector neighborhood, and that only finitely many targets in
+each face interior have three or more routes. Voronoi ridges are closed,
+convex pieces of explicit straight lines. Finiteness of junctions uses the
+fact that three distinct planar sites have at most one equidistant center.
+
+At original edges, both incident face lists are transformed into common
+joined coordinates. Their actual terminal sources exist even for routes
+ending along the edge. Recovery is continuous in a metric neighborhood and
+cannot move between its finitely many possible values. Thus branches cannot
+split near any nonvertex target. Route counts cannot increase nearby,
+uniqueness persists, and multiple-route targets are closed throughout the
+nonvertex boundary, including edge interiors.
+
+For every public convex polyhedron, cofacial normalized shortest routes are
+unique, and every source has a neighborhood of unique-route targets. Hence
+the multiple-route locus cannot accumulate at its source. In canonical
+models, the explicit cutSet (multiple-route targets plus original vertices
+other than the source) is compact. Its complement contracts to the source
+along shortest routes and avoids the entire cutSet during the homotopy.
+This does not yet prove finite embedded-tree structure or identify every
+added original vertex as a limit of multiple-route points.
+
+Final verified inventory: **467 Lean files, 1,613 explicit proved theorems,
+and 2,454 audited project theorem declarations**. This run adds **28 modules,
+74 explicit theorems, and 88 audited declarations**. Every one of the 465
+proved library modules, including the root, is reachable from the root
+import. The full build and axiom audit pass; the sole warning is the original
+terminal sorry in Statement.lean. Audit log:
+`/tmp/edge-final-local-cut-audit.log`.
+
+The public files remain byte-for-byte unchanged:
+
+- Definitions.lean: 55 lines; SHA256 68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef.
+- Statement.lean: 15 lines; SHA256 4cc6ec337f16ae8c86aaf07ad79f57f42dd8a567014fc22f4dbea3f279c997d2.
+
+Quantified progress: the local face-interior milestone is **4/4 (100%)**:
+actual nearby competitors, finite local minimum, exact Voronoi description,
+and ordinary two-route points with finitely many junctions. Selected-core
+separations remain **28/28 (100%)**; ordinary-prism pairs remain **10/10
+(100%)**; complete nonuniversal graph families remain **3/4 (75%)**. The
+overall planning estimate remains about **80%, with 65–90% uncertainty**.
+The 4.8% increase in explicit theorem count is not a 4.8-point increase in
+main-theorem coverage. No additional complete graph family was closed.
+
+Next: extend exact local minima and Voronoi neighborhoods across edges using
+the now-checked joined-source recovery; prove vertex neighborhoods and
+assemble the finite cut-locus graph. The tree, shortest-path triangles,
+kite-chain separation, whole-original-face transfer, universal-family
+vertex avoidance, and prism-diagonal fallback/switches remain open.
+The main theorem is still unfinished.
+
+Checkpoint completed at 03:48 UTC on 15 September 2026. Final checks confirmed
+all 465 library modules are rooted, guide links resolve, public hashes match,
+and tracked files outside this formalization have no changes. The last Lean
+source change precedes the successful full audit; subsequent edits only
+updated the proof guides and this record.
+
+## Continuation on 15 September: edge diagrams, global junctions, and regular cut arcs
+
+Started 2026-09-15 04:03:59 UTC. The baseline was 467 Lean files,
+1,613 explicit proved theorems, and 2,454 audited project theorem declarations.
+All edits in this run are confined to lean_statement. No subagents, new
+packages, or modifications of the mathematical manuscripts were used.
+
+The exact local distance construction now crosses original edges. A metric
+patch combines a genuine folded planar sheet, its actual boundary coverage,
+and the local intrinsic-distance formula. An actual terminal source determines
+the full route distance. The shortest proper prefix is unique, and its local
+source formula extends to nearby targets in either incident face. Competitors
+are actual joined shortest surface paths with precisely the required length.
+No arbitrary candidate development is assumed to be an admissible route.
+
+The finite set of actual active edge sources is nonempty and in bijection
+with normalized shortest routes. Competitors supply all distance upper bounds;
+compactness supplies attainment by one of the old active sources. A local
+comparison identifies a touching source, so route uniqueness is equivalent
+to having one minimizer. The actual multiple-route locus is therefore exactly
+the local Voronoi boundary in joined edge coordinates. Exactly two routes give
+a full local bisector on both incident sides.
+
+Global finiteness of junctions is now proved. For a fixed original edge, one
+joined development and one finite candidate source list work independently
+of which point-centered metric patch is chosen. Every target with at least
+three routes gives three distinct sites with a common equidistant center.
+Such centers are finite for that fixed list. Taking the finite union over
+original edges, face interiors, and original vertices proves finiteness on
+the entire boundary, without a missing accumulation case near vertices.
+
+The junction definition explicitly requires three pairwise distinct actual
+routes. Its equivalence with a numerical route count is proved using the
+established finiteness of the route fiber in canonical models. Thus the
+definition's mathematical meaning does not rely on Nat.card's convention
+for infinite types.
+
+Outside the finite set of junctions and original vertices, every cut point
+has exactly two routes. CutLineCharts constructs a genuine flat neighborhood
+on which the multiple-route locus is exactly an explicit straight line.
+CutLineArcs turns it into an actual surface interval through the target in
+both directions, preserving intrinsic distance and covering all nearby
+multiple-route points. These arcs are injective; every open neighborhood of
+their center contains another cut point. Hence isolated cut points must
+belong to the finite exceptional set.
+
+Final verified inventory: **489 Lean files, 1,658 explicit proved theorems,
+and 2,529 audited project theorem declarations**. This run adds **22 modules,
+45 explicit theorems, and 75 audited declarations**. All **487 proved library
+modules**, including the root, are reachable from the root import. The full
+incremental build and axiom audit pass. The only warning is the original
+terminal sorry in Statement.lean. Audit log:
+`/tmp/edge-global-junction-audit.log`.
+
+The public files remain byte-for-byte unchanged:
+
+- Definitions.lean: 55 lines; SHA256 68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef.
+- Statement.lean: 15 lines; SHA256 4cc6ec337f16ae8c86aaf07ad79f57f42dd8a567014fc22f4dbea3f279c997d2.
+
+Quantified progress: the edge-interior milestone is **4/4 (100%)**:
+actual nearby competitors, finite local minimum, exact Voronoi description,
+and full two-route bisectors. Global junction finiteness and regular cut
+arcs are also checked. The previous face-interior milestone remains **4/4
+(100%)**; selected-core separations **28/28 (100%)**; ordinary-prism pairs
+**10/10 (100%)**; complete nonuniversal graph families **3/4 (75%)**. The
+overall planning estimate remains about **80%, with 65–90% uncertainty**.
+The 2.8% increase in explicit theorem count measures library growth, not an
+equivalent increase in main-theorem coverage. No additional complete graph
+family was closed.
+
+The next mathematical task is finite graph assembly. The local intervals
+must be shown to form finitely many graph edges and their ends at original
+vertices must be treated. One possible route is to subdivide the finite
+face candidate-line arrangements and prove that the actual closed cut set
+consists of whole interval pieces. Globally finite junctions rule out an
+infinite branching sequence but do not by themselves prove finite graph
+structure. The tree, shortest-path triangles, kite-chain separation,
+whole-original-face transfer, universal-family vertex avoidance, and
+prism-diagonal fallback/switches remain open. The main theorem is unfinished.
+
+## Continuation on 15 September: exact finite segments and embedded cut graph
+
+Started 2026-09-15 04:55:23 UTC. The baseline was 489 Lean files,
+1,658 explicit proved theorems, and 2,529 audited project theorem declarations.
+Only lean_statement was edited. No subagents or additional packages were used.
+
+The central result of this run is a constructed finite embedded graph whose
+trace is exactly the existing compact cutSet (multiple-route points plus
+original vertices other than the source). Its edges are straight segments
+in whole original facets. No graph vertex lies in an open edge, and two
+open edges can meet only if their unordered endpoint pairs agree.
+
+The finite decomposition uses a direct line argument. Along an affine line,
+the difference of two squared source distances is affine in the parameter.
+Two ties therefore force agreement along the whole line; otherwise there
+is at most one tie. A finite candidate source set gives finitely many
+exceptional parameters. The exact local Voronoi diagrams make cut membership
+persist along the line away from those parameters.
+
+A nondegenerate cofacial segment contains no original vertex in its interior.
+Any original facet through an interior point contains the entire segment,
+so its incident facets remain fixed. One face source list or one joined edge
+source list therefore works on the whole open segment. The cut intersection
+has finite parameter boundary. A compact real set with finite boundary is
+proved to be exactly a finite union of closed intervals, using its connected
+components and their extremal endpoints. Singleton cases are included.
+
+Each source bisector clipped to an original compact facet has a cofacial
+segment cover, obtained from an actual rigid affine line parametrization.
+These segments, together with original vertex chords covering the original
+edges and vertices, form a finite cover of the cut set. Intersecting each
+cover segment with the cut set yields an exact global finite union of
+closed cofacial segments. Extra cover pieces introduce no extra cut points:
+both directions of the final set equality are proved.
+
+The graph subdivision takes all segment endpoints and intersections of
+distinct supporting lines. This set is finite. Consecutive subdivision
+vertices on any given segment define the graph edges. Finite real neighbors
+prove exact trace coverage. At a putative crossing of open graph edges,
+the finite vertex set forces their supporting lines to agree; the absence
+of interior subdivision vertices then forces the same unordered endpoint
+pair. This also resolves partial collinear overlaps and duplicate cover
+segments without an embedding assumption.
+
+The finite interval presentation is a continuous surjection onto the actual
+cut set with its existing subspace topology. Compactness makes it a quotient
+map. The cut set is consequently locally path connected and has finitely
+many connected and path components, including at original vertices and
+junctions. Connectivity and acyclicity have not been inferred from these facts.
+
+Final verified inventory: **511 Lean files, 1,706 explicit proved theorems,
+and 2,599 audited project theorem declarations**. This run adds **22 modules,
+48 explicit theorems, and 70 audited declarations**. All **509 proved library
+modules**, including the root, are reachable from the root import. The full
+incremental build and axiom audit pass. The sole warning is the original
+terminal sorry in Statement.lean. Audit log:
+`/tmp/edge-finite-cut-graph-audit.log`.
+
+The public files remain byte-for-byte unchanged:
+
+- Definitions.lean: 55 lines; SHA256 68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef.
+- Statement.lean: 15 lines; SHA256 4cc6ec337f16ae8c86aaf07ad79f57f42dd8a567014fc22f4dbea3f279c997d2.
+
+Quantified progress: finite cut-graph assembly is **4/4 (100%)**: finite line
+crossings, exact finite segment intersections, global finite segment union,
+and an embedded finite graph with the exact cut-set trace. Selected-core
+separations remain **28/28 (100%)**; ordinary-prism comparisons **10/10
+(100%)**; complete nonuniversal graph families **3/4 (75%)**. The overall
+planning estimate remains about **80%, with 65–90% uncertainty**. The 2.9%
+growth in explicit theorem count is a library-size measure. No additional
+complete six-vertex graph family was closed.
+
+Next: prove the constructed graph connected and acyclic. The available
+sphere topology and contractible complement still need a formal tree
+argument. A possible geometric alternative is a continuous retraction of
+the punctured boundary obtained by extending shortest rays to the cut set;
+that construction is not yet proved. Original-vertex closure and leaf
+identifications, shortest-path triangles, kite-chain separation, transfer
+to whole original facets, universal-family vertex avoidance, and the
+prism-diagonal fallback/switches remain open. The main theorem is unfinished.
+
+## Continuation on 15 September: connected cut graph, ray retraction, and vertex limits
+
+First clock reading: 2026-09-15 08:04:52 UTC. The baseline was 511 Lean files,
+1,706 explicit proved theorems, and 2,599 audited theorem declarations. Work
+was confined to lean_statement. No subagents or additional packages were used.
+
+The finite embedded cut graph is now proved connected. Its actual trace is
+also contractible, and the vertex-augmented cut set is exactly the closure
+of the multiple-shortest-route locus. These conclusions hold for all four
+canonical six-vertex graph models with triangular or quadrilateral facets.
+The universal-vertex family still lacks the required general vertex avoidance.
+
+The proof takes the geometric ray route. The set of possible shortest
+extensions through a prescribed point is defined by equality in the actual
+intrinsic triangle inequality. This is a nonempty compact set, so it has a
+farthest endpoint. Concatenating genuine shortest paths and normalizing them
+realizes every such distance equality by a shortest route through the point.
+No ray existence or endpoint property is assumed.
+
+At a unique-route nonvertex target, the already proved local single-source
+distance formula permits strict continuation in a planar chart. The new
+proof treats face interiors and original edges separately, including folding
+a continuation across the edge crease. A farthest shortest extension must
+therefore terminate in the cut set. Conversely, every proper prefix of any
+shortest route avoids the entire vertex-augmented cut set. Cut points are
+exactly the nonsource points with no strict shortest extension.
+
+For uniqueness of the terminal endpoint, the earlier nonbranching argument
+is extended to equal-speed shortest routes with the same source but possibly
+different final endpoints. The intrinsic distance from the common source
+supplies the cross-distance bound. Flat affine coordinates identify the rays
+locally, and closed/open propagation identifies their entire curves. A genuine
+geodesic-prefix rescaling then compares arbitrary ray lengths. Two terminal
+cut endpoints reached through the same nonsource point must agree.
+
+The selected endpoint defines a retraction of the punctured boundary onto
+the cut set. Its graph is the closed intrinsic-distance equality relation.
+Projection along the compact cut-set factor proves continuity, including
+at original vertices and multiple-route points. The map fixes every cut
+point and is surjective. This does not require a continuous choice of shortest
+routes to cut points, which can have several routes.
+
+Removing the source from the polyhedral sphere leaves a path-connected
+space, so the cut set is path connected. Finite selected-vertex/edge traces
+are closed. If two such traces meet, selected vertices are graph-reachable,
+using the existing no-interior-vertex and no-crossing properties. A partition
+into reachable and unreachable vertices would separate the actual trace.
+This proves connectedness of every exact EmbeddedCutGraph, hence constructs
+a finite connected cut graph without adding connectedness as a data field.
+
+Stereographic projection also gives a homeomorphism of the punctured boundary
+to the ordinary plane. Composing its contraction with inclusion and the
+endpoint retraction contracts the cut set itself. The same contractibility
+is transported to cutSetInSpace, the actual spatial trace of the embedded graph.
+Graph acyclicity is still a separate unproved implication; it has not been
+silently inferred from this result.
+
+Finally, at least two original vertices other than the source belong to the
+cut set, by the existing four-vertex lower bound. A nontrivial connected T1
+space has no isolated points. Removing the finite original-vertex subset
+therefore leaves a dense set of actual multiple-route targets. Together with
+the earlier closure inclusion, this proves cutSet_eq_closure_multiple and
+resolves the previously open original-vertex closure obligation.
+
+New modules, in dependency order:
+
+- ShortestRayEndpoints, PlanarRayExtension, NoncutRayExtension,
+  ShortestExtensionPaths, MaximalRaysReachCutSet, CutSetTerminalRays.
+- SameSourceCrossDistances, SameSourceLocalNonbranching,
+  SameSourceNonbranching, SameSourceGeodesics, GeodesicRescaling,
+  UniqueCutEndpoint.
+- CutEndpointRetraction, CutSetConnected, EmbeddedGraphComponents,
+  ConnectedCutGraph, PuncturedBoundaryContraction, CutSetContractible,
+  CutSetVertexLimits.
+
+Final verified inventory: **530 Lean files, 1,759 explicit proved theorems,
+and 2,665 audited project theorem declarations**. This run adds **19 modules,
+53 explicit theorems, and 66 audited declarations**. All **528 proved library
+modules**, including the root, are reachable from the root import. The full
+incremental build and axiom audit pass; the sole warning is the original
+terminal sorry in Statement.lean. Audit log:
+`/tmp/edge-connected-cut-graph-audit.log`.
+
+The public files retain their original hashes and line counts:
+
+- Definitions.lean: 55 lines; SHA256 68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef.
+- Statement.lean: 15 lines; SHA256 4cc6ec337f16ae8c86aaf07ad79f57f42dd8a567014fc22f4dbea3f279c997d2.
+
+Quantified progress: finite cut-graph assembly remains **4/4 (100%)**. The
+two defining tree properties now stand at **1/2 (50%)**: connectedness is
+proved, acyclicity is not. This counts named properties, not equal amounts
+of proof work. In addition, the cut trace is contractible and original-vertex
+closure is proved. Selected-core separations remain **28/28 (100%)**;
+ordinary-prism comparisons **10/10 (100%)**; complete nonuniversal graph
+families **3/4 (75%)**. The overall planning estimate remains about **80%,
+with 65–90% uncertainty**. The 3.1% growth in explicit theorem count measures
+library size, not main-theorem coverage. No additional graph family was closed.
+
+Next: establish graph acyclicity from the contractible finite embedded trace.
+One possible route is to show that a graph cycle would force a noncontractible
+circle retract; neither that graph construction nor the required obstruction
+has been formalized here. Leaf identification, shortest-path triangles and
+the kite partition, planar kite-chain separation, transfer to whole original
+facets, universal-family vertex avoidance, and prism-diagonal fallback/switches
+remain open. The main theorem remains unfinished.
+
+
+## 2026-09-15 — three-hour session, first checkpoint: actual cut trees
+
+The authorized session began at 10:16:13 UTC and continues until 13:16:13 UTC.
+A bounded fifteen-minute heartbeat is attached to this task as a continuation
+backup. All edits remain under lean_statement; the public definition and
+statement files and the mathematical manuscript are unchanged.
+
+The actual embedded cut graph is now proved acyclic. For each oriented edge,
+a continuous map of its geometric trace winds once around the additive circle
+and sends all other edges to zero. Its values agree at endpoints. The existing
+contractibility of the trace and Mathlib homotopy lifting supply a continuous
+real lift. This real potential increases by one along the selected edge and
+stays constant on every other edge. A return walk avoiding that edge would
+contradict those values. Thus every edge is a bridge and the graph is a tree.
+
+Every leaf is also proved to be an original vertex. A finite straight graph
+has a neighborhood of each vertex containing only its incident edges. At a
+leaf, all nearby cut points lie on one cofacial segment. Regular cut arcs
+cannot end there, because their two directions contain distinct points at
+the same intrinsic distance from the center. At junctions the same argument
+uses a small planar circle. Three equal-distance active sites force at least
+two distinct Voronoi-boundary points on it: a connected set crossing between
+nearest-site regions meets a tie, and a circle remains connected after one
+point is removed. The chart construction covers original edge interiors as
+well as face interiors. This proves cut_graph_leaf_is_vertex without assuming
+any local junction-degree formula.
+
+Original extreme vertices cannot be hidden in graph-edge interiors, so all
+original vertices other than the source are graph vertices. The leaf count
+is bounded by the number of those vertices, hence by five at an original
+source in the canonical models. Adding finitely many degenerate cofacial
+segments marks any prescribed cut points without changing the trace. Marking
+all cut exceptions constructs CutLocusTree, whose open edges each have exactly
+two actual shortest routes.
+
+The full incremental build and axiom audit pass: **548 Lean files, 1,810
+explicit proved theorems, 2,742 audited project theorem declarations**.
+This checkpoint adds **18 modules, 51 explicit theorems, 77 audited
+declarations** to the preceding 530-file checkpoint. Audit log:
+`/tmp/edge-regular-cut-tree-audit.log`. Only the original terminal main-theorem
+sorry remains; the proved library uses only propext, Classical.choice, and
+Quot.sound.
+
+Progress: finite cut-graph assembly 4/4 (100%); tree properties 2/2 (100%)
+for the four canonical models; leaf identification and regular subdivision
+now proved. Completed nonuniversal families remain 3/4 (75%), selected-core
+separations 28/28 (100%), and ordinary-prism comparisons 10/10 (100%). The
+rough overall estimate remains about 80% (65–90% uncertainty). The main
+star partition, kite separation, whole-face transfer, universal-family
+vertex avoidance, and prism-diagonal fallback/switches remain unfinished.
+The timed session continues with the two route families along open cut edges.
+
+## 2026-09-15 — three-hour session, second checkpoint: radial triangles
+
+The session remains active until 13:16:13 UTC. The complete build and axiom
+audit pass at this checkpoint: **583 Lean files, 1,894 explicit proved
+theorems, 2,877 audited project theorem declarations**. Audit log:
+`/tmp/edge-triangle-topology-audit.log`. Compared with the session's starting
+point, this is **53 additional modules, 135 explicit theorems, and 212
+audited declarations**. The sole unfinished proof remains the original
+terminal main-theorem sorry. No new axiom is admitted.
+
+The actual shortest routes over regular targets form a two-sheet covering.
+On each open cut-tree edge, covering-space lifting gives two continuous
+branches with fixed labels. Their radial strips have injective parameters,
+are disjoint from each other and from strips over other edges, and avoid
+the source and cut set. The terminal-ray retraction identifies their exact
+coverage. Finitely many actual shortest routes to tree vertices give the
+remaining rays, and together these pieces cover the whole boundary.
+
+Each branch now extends continuously to both edge endpoints. The proof
+uses compactness of all normalized shortest curves and finiteness of each
+limiting geodesic fiber. A continuous curve with finitely many possible
+endpoint cluster points must converge: otherwise a separating distance
+sphere forces another cluster point. Thus the closed strip is exactly the
+closure of its open strip, with added points only on its endpoint rays,
+target edge, and common source.
+
+For each branch, its actual planar terminal source copy is locally constant
+and hence constant along a connected edge family. This is proved both for
+targets inside a face and for targets along an original hinge. Facet
+incidence stays constant inside a cut-tree edge, so those alternatives
+cover every edge. The two source copies are distinct and have equal
+distances to both base endpoints. Their planar triangles are nondegenerate
+and lie strictly on opposite sides of the base, meeting exactly there.
+Their radial distances equal the actual intrinsic distances along the
+entire closed edge.
+
+The closed surface strip and its planar metric triangle are homeomorphic
+via their radial parameters. Both are continuous images of a compact
+square, with precisely its zero-time side collapsed to the common source.
+The induced homeomorphism preserves distances on each individual shortest
+ray. **It is not yet proved to preserve distances across original-face
+portions.** This is the next geometric obligation; no global star
+nonoverlap theorem has been inferred merely from the topology.
+
+Progress indicators: finite cut-graph assembly 4/4; tree properties 2/2;
+radial partition milestones 5/5 (continuous branches, injectivity and
+disjointness, exact coverage, endpoint extensions, triangle topology).
+These are counts of named milestones, not equal-weight effort. Metric
+triangle models and individual-ray distances are proved. Completed
+nonuniversal families remain 3/4 (75%), selected-core separations 28/28,
+and ordinary-prism comparisons 10/10. The overall planning estimate remains
+about 80%, with 65–90% uncertainty. Facewise isometry, global kite-chain
+separation and angle budget, whole-face transfer, universal-family vertex
+avoidance, and prism-diagonal fallback/switches remain open.
+
+The session continues by linking radial triangle coordinates to the finite
+list of rigid original-face developments along actual shortest routes.
+
+
+## 2026-09-15 — three-hour session, third checkpoint: metric triangles and exact two-strip joins
+
+The authorized session runs from 10:16:13 to 13:16:13 UTC. At this checkpoint,
+the full build and axiom audit pass: **624 Lean files, 1,976 explicit proved
+theorems, and 3,013 audited project theorem declarations**. The audit log is
+`/tmp/edge-three-hour-final-audit.log`. Compared with the session's starting
+point, this is **94 additional modules, 217 explicit theorems, and 348
+audited declarations**. The sole unfinished proof remains the original
+terminal main-theorem sorry. The proved library uses only `propext`,
+`Classical.choice`, and `Quot.sound`.
+
+The geometric obligation left open at the second checkpoint is now closed
+locally. Along an entire shortest route, its developed point is selected
+from a finite list of actual rigid original-face placements. This is proved
+both in terminal face coordinates and in joined original-hinge coordinates.
+The finite list applies along the whole route, rather than just its terminal
+tail. Continuity extends those formulas to the closed strip.
+
+A continuous finite selection of maps with a common Lipschitz bound keeps
+that bound on a convex region. The proof first establishes a local centered
+distance estimate, propagates it along a compact interval, and then applies
+it to straight segments in the region. This gives the radial triangle's
+inverse a nonexpanding bound in ambient space. Folding a straight segment
+back to the surface also gives the corresponding intrinsic-distance upper
+bound. Nonexpanding projections of the face placements provide the reverse
+bound on convex original-face patches. The same argument in actual flat
+charts proves distance preservation across original hinges.
+
+`RadialStripTriangle` records the actual homeomorphism, its radial formula,
+the inverse bound, and the convex face/flat-chart metric guarantees.
+`CutEdgeTriangleDevelopments` constructs both such records for each actual
+cut-tree edge, using the chosen route branches and the same metric kite.
+These geometric data are conclusions of proved constructors, not additional
+unfolding assumptions.
+
+Open strips are now proved open in the actual boundary. Each point has an
+actual flat disk on which the development is an isometry. An isometry from
+an open planar region agrees with a single rigid planar motion, so this disk
+maps onto a full planar disk. Barycentric coordinates then identify the open
+strip exactly with the ordinary interior of the planar triangle.
+
+The exact boundary gluing facts are also checked. Distinct closed shortest
+rays can intersect only at their source, their common terminal point, or
+along an identical route. Distinct embedded cut edges meet only at common
+endpoints. Thus two strips over successive distinct tree edges intersect
+precisely in the intersection of their routes to the common tree vertex.
+If those endpoint routes are equal, the strip intersection is exactly that
+whole route.
+
+A planar motion aligns a shared route at every parameter value, with its
+required equal length supplied by the actual intrinsic-distance profiles.
+Reflection chooses the outward side. The resulting two nondegenerate
+triangles meet exactly along their shared ray. Rigid motions preserve the
+complete `RadialStripTriangle` record. A compact gluing argument matches all
+surface and planar fibers, producing one homeomorphism of the two unions
+that agrees with both original coordinate maps. `CutTreeTrianglePairs`
+combines these results into a checked `RadialTriangleJoin` for successive
+actual strips sharing an endpoint route.
+
+`CutEdgeSourceAngles` defines each kite's source angle and proves that both
+copies have the same angle, strictly between zero and pi. The relation of
+the sum of these angles to the actual total angle at the source remains
+unproved. The two-strip construction also does not establish coherence of
+all joins around a cut-tree junction.
+
+Progress indicators: public definitions and statement **100% unchanged**;
+completed nonuniversal families **3/4 (75%)**; selected-core comparisons
+**28/28 (100%)**; ordinary-prism comparisons **10/10 (100%)**. Tree
+connectedness and acyclicity are **2/2 checked** for canonical models.
+Radial-strip development and the exact shared-route two-strip join are now
+checked. These are named milestones, not equal-weight effort. The overall
+planning estimate remains **about 80%, with a rough range of 65–90%**.
+No additional complete graph family was closed in this session.
+
+Remaining work: coherent global placement around junctions and across the
+cut surface; the cumulative source-angle bound; planar W-wedge/kite-chain
+separation for distant kites; transfer to whole original facets and their
+retained original-hinge tree; intermediate-vertex avoidance for the
+universal-vertex family; and prism-diagonal fallback/switches. In particular,
+none of the canonical-model cut-tree results proves the universal-vertex
+case. The main theorem is still incomplete.
+
+The public files retain their original checksums:
+- `SixVertexUnfolding/Definitions.lean`: 55 lines,
+  `68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef`.
+- `Statement.lean`: 15 lines,
+  `4cc6ec337f16ae8c86aaf07ad79f57f42dd8a567014fc22f4dbea3f279c997d2`.
+
+All edits remain inside `lean_statement/`. The separate mathematical
+manuscripts and the pinned dependency checkout were left untouched.
+
+
+Final semantic review of the new joins: the shared-route equality is an
+explicit hypothesis, discharged only when the actual endpoint branches are
+identified. Merely sharing a cut-tree vertex does not establish it. The
+future global construction must also record the duplicated source and
+star-cut rays. In particular, the opposite triangles of one kite cannot be
+pasted by identifying every common point of their original boundary strips:
+their planar source copies are different. The new join theorem is for
+successive distinct edges and is not a substitute for that cut-surface model.
+These restrictions are recorded in STAR_NEXT.md to guide the next proof.
+
+
+### End of the requested window
+
+The three-hour session ended at 13:16 UTC (15:16 Brussels). The continuation
+heartbeat `lean-proof-three-hour-session` was paused at the deadline.
+The final checked inventory remains **624 files / 1,976 explicit proved
+theorems / 3,013 audited declarations**. All library modules are imported,
+all local proof-guide links resolve, and the public-file checksums match.
+No compiler process or unfinished experimental module remains. The main
+theorem remains incomplete, with its original single terminal sorry.
+The final progress estimate is unchanged at about **80% (65–90% range)**;
+completed nonuniversal families remain **3/4 (75%)**.
+
+### Progress estimate correction
+
+The earlier **80% overall estimate and 65–90% range are withdrawn**. There
+is no sound basis for estimating the remaining effort from the number of
+proved lemmas or completed graph families. README now states that explicitly
+and also removes the unsupported 90% foundations estimate. The historical
+checkpoint estimates above are superseded by this correction.
+
+The last session added checked local geometric constructions but closed no
+additional complete remaining case. The main bottleneck is the full
+star-unfolding argument used by the streamlined manuscript: an actual cut
+surface with duplicated boundary points, consistent global triangle
+placements, the cumulative source-angle bound, global kite separation,
+and whole-face transfer. The present cut-locus machinery also retains the
+canonical-model restriction; applying it to the universal-vertex family
+requires additional work. The prism-diagonal fallback and switches remain.
+
+Further progress should be assessed by closure of these explicit blocking
+obligations. The verified 3/4 nonuniversal-family count remains correct;
+it is not an estimate of overall proof effort. Before extending the local
+library further, the complete route from the new constructions to the
+remaining public theorem cases needs to be fixed and reviewed.
+
+### Focused wedge argument after reading Kiazyk's thesis
+
+The user asked to work directly on why a wedge expands while keeping the
+next kite outside, rather than adding more polyhedral foundations.
+
+Added two planar modules, with 20 explicit proved lemmas:
+
+- `WedgeRootMove.lean` uses Cartesian horizontal sections to define the
+  actual kite and the wedge's three geometric forms. It proves equality
+  with the union of two convex-hull triangles and identifies ordinary
+  planar interior. `root_step` proves that moving the root adds exactly
+  the intervening kite and that the old region misses its interior.
+  Two explicit dot-product inequalities encode the outward-ray conditions;
+  their relation to the angle range `[pi/2, 3*pi/2]` is checked.
+- `WedgeRotation.lean` derives the unique intersection of an outward ray
+  with each circle about the root, including the elbow and tangent cases.
+  It verifies the Cartesian polar coordinates and the rotated straight-ray
+  equation. For the resulting `polarRegion`, rotating the two arms outwards
+  enlarges the region on every circle.
+
+**The two region descriptions have not yet been identified in Lean.**
+`WEDGE_STEP.md` states that exact missing identity. In addition, the actual
+junction order and the change in outer-leg angle across an actual kite
+have not yet been connected to these planar lemmas. Thus this is progress
+on the named blocker, not completion of the integrated wedge step or the
+global star theorem.
+
+An independent numerical comparison of the Cartesian and polar membership
+formulas found zero mismatches in 40,000 deterministic samples (6,344
+bounded cases, 27,549 unbounded cases, and 6,107 bounded-complement cases).
+This diagnostic is not a proof and does not discharge the missing identity.
+
+Validation: the full incremental build checked **626 Lean files** and
+audited **3,045 project theorem declarations**, allowing only `propext`,
+`Classical.choice`, and `Quot.sound`. The new modules contain no `sorry`,
+`admit`, extra axiom, or unsafe declaration. The original terminal `sorry`
+in `Statement.lean` remains. Both public-file checksums still match the
+values recorded above. Edits were confined to `lean_statement/`.
+
+Progress indicators: two local Cartesian obligations (root movement and
+next-kite exclusion) are complete; rotation is checked in its polar model,
+with the connection to the Cartesian model still open. No additional
+complete polyhedron case was closed; the nonuniversal six-vertex family
+count is still **3/4 (75%)**. No overall effort percentage is asserted.
+
+### Cartesian/polar identity and the combined planar wedge step
+
+Closed the identity left open in the preceding checkpoint. The two region
+descriptions are now proved equal as sets of actual planar points, including
+the root, boundary rays, bounded regions, bounded complements, and threshold
+equalities. No numerical test or additional geometric axiom supplies this
+identity.
+
+Five new modules contain the construction:
+
+- `WedgeLevel` gives a continuous signed function whose nonpositive set is
+  exactly the Cartesian wedge. Its zeros lie on the actual inner segments
+  or outer rays, with no spurious boundaries introduced by the case split.
+- `WedgeCircleZeros` identifies the zeros on each upper semicircle with
+  the polar boundary angle, using the previously checked unique outward-ray
+  intersection with a circle.
+- `WedgeCircleSigns` uses continuity, those zeros, and the two axis signs
+  to identify the whole included arc. Empty and full arcs are included.
+- `WedgeCoordinates` reflects across the axis and includes the root to
+  prove `mem_region_iff_polar` and `cartesian_polar_bridge` for arbitrary
+  planar points. It also constructs the required polar coordinates from
+  a positive source-image height.
+- `WedgeStep` combines rotation, root movement, and exclusion. Moving the
+  root increases its source direction; `kite_apex_angle` identifies that
+  increase with the ordinary Euclidean angle at the kite's upper apex.
+  The outer rays stay fixed, and positive rescaling of their direction
+  vectors leaves the region unchanged. `rotate_and_move` proves
+  `W ⊆ V`, `Disjoint V (interior K)`, and `W' = V ∪ K`, returning `W'`
+  in the same polar form with outer angle increased by the kite angle.
+
+The last theorem takes explicit coordinate identities, outward angular
+order for the rotation, and the upper bound on the new outer angle. These
+are numerical hypotheses for a planar lemma, not assumed conclusions
+about a polyhedron. The actual cut-surface construction must still supply
+the junction order, consistent placements, and the cumulative source-angle
+bound along a tree path. That application and the global star theorem
+remain unfinished. The universal-vertex avoidance gap and prism-diagonal
+fallback also remain; no additional complete polyhedron case was closed.
+
+Validation: the full incremental build checked **631 Lean files** and
+audited **3,157 project theorem declarations**, with only `propext`,
+`Classical.choice`, and `Quot.sound` allowed. All five new modules are
+imported into the audited library and contain no `sorry`, `admit`, extra
+axiom, or unsafe declaration. The public definitions and statement retain
+their recorded SHA-256 checksums; the original single terminal `sorry`
+in `Statement.lean` remains. All edits are inside `lean_statement/`.
+
+Progress indicators: the two focused obligations for this run—the exact
+coordinate identity and its use in a combined planar step—are **2/2
+(100%) checked**. This is a local milestone, not an overall completion
+estimate. Completed nonuniversal six-vertex families remain **3/4 (75%)**;
+additional complete families in this run: **0**. No overall percentage is
+asserted.
+
+### Four-hour continuation: actual route order at nonvertex junctions
+
+The user authorized a four-hour session from 2026-09-15 18:32:31 UTC
+until 22:32:31 UTC (20:32:31–00:32:31 Brussels). The existing continuation
+heartbeat was updated for this window. `FOUR_HOUR_SESSION.md` records the
+deadline, current checkpoint, and next concrete proof.
+
+Strengthened the existing `CutVoronoiChart` with `source_routes`, which
+identifies its source copies with final straight portions of actual
+shortest routes. Both existing chart constructors prove the stronger
+property, for face interiors and for targets on original edges.
+`CutVoronoiRoutes` then proves a source/route bijection preserving that
+formula and one common terminal parameter interval for every route.
+Different source copies give different route samples on a common circle.
+
+`CircularSourceOrder` constructs a strictly increasing angular enumeration
+of all source copies in one half-open full turn. Its consecutive gaps and
+closing gap are proved empty of other source copies.
+`CircularVoronoiSectors` proves that a gap-bisecting ray has exactly its
+two endpoint sources nearest, with every other source strictly farther
+away. This includes gaps exceeding a half turn.
+
+`JunctionSourceOrder` transfers the angular enumeration to the actual
+shortest-route tails in the common flat chart. It also maps a sufficiently
+short positive portion of every consecutive and closing gap ray into the
+actual multiple-route locus. The converse, exhaustion of the local cut
+locus by these rays, remains open, as does identifying them with incident
+cut-tree edges and proving consistency of the triangle motions.
+`JUNCTION_ORDER.md` records these precise boundaries.
+
+Validation: the full incremental build checked **635 Lean files** and
+audited **3,184 project theorem declarations**, with only `propext`,
+`Classical.choice`, and `Quot.sound`. All modules are imported and the
+changed local guide links resolve. Both public-file checksums are unchanged.
+No new proof hole or axiom was introduced; the main statement retains its
+original terminal `sorry`. All edits remain inside `lean_statement/`.
+
+Progress: the first local milestone's three parts—actual route labels,
+angular enumeration, and construction of neighboring cut rays—are **3/3
+(100%) checked**. This is not completion of the full junction argument.
+Complete nonuniversal families remain **3/4 (75%)**, with **0** additional
+complete families in this checkpoint. No overall percentage is asserted.
+The four-hour session is still running.
+
+
+### 15 September 2026 — local junction exhaustion and edge incidence
+
+- Proved nearest-source classification on every angular gap and coverage
+  by all consecutive and closing gaps. The complete circular Voronoi
+  boundary is exactly the center and the listed gap rays; different rays
+  are disjoint away from the center.
+- Matched those rays to the actual embedded graph's incident edges through
+  their small-circle intersections. A connected trace avoiding graph
+  vertices stays in one open edge, giving a fixed ray-to-edge bijection
+  independent of the sufficiently small positive radius.
+- Full audit: **639 Lean files / 3,212 theorem declarations**, only
+  `propext`, `Classical.choice`, and `Quot.sound`. Public definition and
+  statement checksums unchanged; the original terminal `sorry` remains.
+- Two bounded local obligations (exhaustion and incidence): **2/2 checked**.
+  Complete nonuniversal families: **3/4 (75%), unchanged**. Endpoint branch
+  identification, coherent triangle placement, cumulative source-angle
+  bound, and global unfolding assembly remain open.
+
+
+### 15 September 2026 — branch labels and common junction placements
+
+Strengthened `CutVoronoiChart` with the actual local minimum-distance
+formula and stability of the distance formula near each represented route.
+Both existing chart constructors prove the added fields from prior face
+and edge results. No input hypothesis on the polyhedron was strengthened.
+
+Proved that distinct continuous shortest-route branches cannot merge at a
+nonvertex endpoint. Their two limiting copies are exactly the endpoints of
+the assigned circular gap. Placed the whole metric kite in the common chart,
+with its base on the matched ray and either ordering of the actual source
+labels respected. A small edge sample and the squared-distance identity
+supply the full metric comparison.
+
+Equal labels now identify the actual routes, and the chosen motions agree
+along the entire shared route. Consecutive gap triangles have exactly the
+radial segment as their planar intersection; their original surface strips
+have exactly the corresponding route as their intersection.
+`JunctionTriangleJoin.join_incident_triangles` glues them while retaining
+both prescribed motions and triangle maps. It does not choose an independent
+reflection for each pair.
+
+Validation: **649 Lean files / 3,238 audited theorem declarations**, using
+only the three permitted standard axioms. All ten new files are imported.
+The public definitions and statement retain their recorded checksums. No
+new proof hole or axiom was introduced. The main theorem's original terminal
+`sorry` remains; all edits are confined to `lean_statement/`.
+
+Progress: branch-pair identification, common metric placements, and
+prescribed-motion adjacent-triangle joins are **3/3 (100%) checked local
+milestones**. Complete nonuniversal families remain **3/4 (75%)**, with no
+additional complete family in this run. The full finite fan, global cut
+surface, exact wedge arm inequalities, cumulative angle bound, original
+vertex cases, and whole-face transfer remain open. No overall percentage
+is asserted. The four-hour continuation remains active through 22:32:31 UTC.
+
+
+### 15 September 2026 — complete nonvertex step and angle-counting reduction
+
+Constructed simultaneous labelled incident developments at every nonvertex
+cut-tree junction. Derived the precise arm inequalities, rigid coordinate
+changes, and the complete containment/exclusion/exact-addition step for
+any two distinct incident edges. Its increment is the actual metric kite’s
+source angle; its cumulative angle-budget premise remains explicit.
+
+Proved that the actual triangle corners at every flat junction sum to 2π.
+Proved edge-reversal angle identities independent of chosen coordinate
+models, and the complete tree-wide angle-counting formula. The original
+curvatures transfer exactly to the tree except for the absent source.
+The resulting total source-angle bound is now reduced to five original
+cone-coverage inequalities. Those inequalities remain unproved.
+
+Validation: **664 Lean files / 3,328 audited theorem declarations**, only
+the three standard permitted axioms. Fifteen new files imported. No new
+proof hole or axiom. Four bounded obligations (simultaneous fan data,
+actual nonvertex wedge step, flat corner sum, angle-counting reduction)
+are **4/4 checked**. Complete nonuniversal families remain **3/4 (75%)**;
+no overall percentage is asserted and the main theorem is unfinished.
+The continuation remains active through 22:32:31 UTC.
+
+
+### 15 September 2026 — actual cone coverage and complete path-angle budget
+
+Proved that the closed radial triangles cover the entire actual boundary,
+and that incident triangles suffice near every cut-tree vertex. Retained
+the existing finite rigid inverse face pieces in every radial development;
+all constructors and rigid-motion transport prove the added field. This
+supplies exact local radial distances and straight radial segments, also
+at original cone vertices. Small links are therefore covered with exactly
+matching planar and spatial radii.
+
+Constructed a continuous angular coordinate on the actual punctured
+four-sector vertex fan, with circumference equal to its actual cone angle.
+The spatial sector intersections include flat subdivision corners and the
+closing seam. Every direction occurs on each sufficiently small link.
+Parametrized actual triangle corner arcs by their ordinary corner angles.
+Chord comparison gives nonexpansion of angular distance within each
+original sector; a finite closed-cover argument extends it along the arc
+without assuming finitely many crossings. Mathlib's standard circle
+measure and closed-ball formula bound the image measure by interval length.
+
+`CutTreeConeCoverage` discharges all five original nonsource cone-angle
+inequalities, independently of metric model choices. `CutTreeSourceBudget`
+now proves the total directed source-angle bound and the strict π bound
+when every kite is counted once. `CutTreePathBudget` gives the strict π
+bound for every simple tree path and the resulting outer-angle range.
+No cone-coverage premise remains in those final theorems.
+
+Validation: **690 Lean files / 3,424 audited theorem declarations**, only
+the three standard permitted axioms. No new proof hole or axiom. The
+original terminal `sorry` remains. All new modules are root-imported.
+Progress: original nonsource cone inequalities **5/5 (100%)**, total and
+simple-path budgets both proved. Complete nonuniversal families remain
+**3/4 (75%)**, unchanged; no overall percentage is asserted.
+
+Next: compatibility of opposite-edge developments and successive wedge
+frames, global cut quotient retaining distinct source/star-cut copies,
+original-vertex junction geometry, path induction, and whole-face transfer.
+The separate universal-vertex five-ray avoidance and prism-diagonal
+fallback/switches also remain open. The authorized continuation remains
+active through 22:32:31 UTC. See `CONE_BUDGET.md` for the checked argument.
+
+
+### 15 September 2026 — compatible wedge chains and actual two-junction separation
+
+Proved whole-triangle agreement across opposite orientations of a cut edge,
+with one rigid motion and one fixed source-label correspondence. Transferred
+it to independently chosen junction charts. A radius-and-ordinary-angle
+characterization of centered wedges handles reflected charts; the returned
+radius and half-gap are identified with the actual next triangle. The same
+transition therefore transports the whole wedge and both full triangle maps.
+
+The planar gap kite is now proved equal to the actual two developed triangles.
+The complete `WedgeMove` constructor includes containment, interior exclusion,
+exact addition, both root positions, and full triangle agreement. Simple paths
+supply its numerical budget and the exact next accumulated angle sum. The
+edge-index adapter selects the data by actual tree edges.
+
+Proved initial-kite containment with exactly its source-angle charge, even
+when its far endpoint is an original vertex. Proved terminal exclusion without
+a chart beyond the final edge. Finite region iteration now constructs compatible
+frames in one plane, preserves enclosed regions, excludes earlier kites from
+later interiors, and separates the initially enclosed and terminally excluded
+sets. Actual one-junction and two-junction kite separation are checked, with
+all numerical budgets supplied by the actual source cone. The two-junction
+result retains the triangle-preserving transition as part of its witness.
+
+Validation at 22:20 UTC: **715 Lean files / 3,528 audited theorem declarations**,
+only the three standard permitted axioms. Public definition and statement
+hashes unchanged. No new proof hole or axiom; the original terminal `sorry`
+remains. All new modules are root-imported, and all edits remain confined to
+`lean_statement/`.
+
+Bounded progress: cone inequalities **5/5 (100%)**; complete nonuniversal
+families **3/4 (75%, unchanged)**. No overall completion percentage is asserted.
+The planar chain engine is checked, but its application to the whole cut
+surface is not yet constructed. Internal original-vertex junctions, global
+cut copies and placements, whole-face transfer, universal-vertex five-ray
+avoidance, and prism-diagonal fallback/switches remain explicit gaps.
+See `WEDGE_CHAINS.md` and the construction plan in `GLOBAL_ASSEMBLY.md`.
+
+
+Final proof checkpoint (22:27 UTC): **716 Lean files / 3,529 audited declarations**,
+including **2,262 explicitly written proved theorems**. All proof modules are
+imported; proof-map links and the two public file hashes are verified.
+`UniversalVertexFacets` adds the proved fact that every incident small facet
+of a universal vertex is triangular. Its five-neighbor link and detour still
+need construction. No further graph family is complete; percentages remain
+5/5 cone inequalities and 3/4 complete nonuniversal families.
+
+
+Four-hour continuation ended at 22:32:31 UTC. The app confirmed the existing
+heartbeat PAUSED at 22:32:40 UTC. Final checked inventory: 716 Lean files,
+2,262 explicit proved theorems, 3,529 audited declarations. The main theorem
+remains unfinished; the public definitions and statement are unchanged.
+# 2026-09-16 four-hour star-only continuation
+
+The user authorized 00:13:33–04:13:33 UTC (02:13:33–06:13:33 Brussels) and
+requested reports exclusively on the star unfolding theorem. The existing
+heartbeat was reactivated for that deadline.
+
+Checked at the first checkpoint: `TwoSidedBoundary`, `FlatChartRegions`,
+`ShortestRouteLine`, `RouteBoundarySides`, `StripEndpointBoundary`,
+`UniqueRouteCutVertex`, and `UniqueRouteLeaves`. The actual leaf theorem now
+has the missing converse under cofacial-source hypotheses: every original
+nonsource vertex is a leaf. More generally, every cut-tree vertex with a
+unique shortest route has exactly one neighbor. Thus every internal junction
+for these sources has an actual flat fan. The proof uses three disjoint open
+strips along one route and the fact that a local line has only two sides.
+No star-development or global nonoverlap conclusion is assumed.
+
+Global frames and the complete star development remain open. The singular
+case for arbitrary sources with multiple routes to an original vertex also
+remains open. No public definition or statement was changed.
