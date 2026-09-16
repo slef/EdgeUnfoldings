@@ -34,6 +34,19 @@ verification totals when the checked checkpoint changes. The source manifest
 records the revision at export. Re-audit scope labels; they are not inferred
 from a theorem name or from successful compilation. Run `python3 validate.py` for static integrity checks before publication.
 
+## Reading interface
+
+Lean inserts expand directly below each paper passage using native HTML
+`details`; opening them never scrolls or moves focus to another part of the
+page. The inserts and declaration foldouts work without JavaScript. The only
+script controls the global annotation visibility toggle.
+
+The neutral Lean wordmark means “view the formalization,” not “proved.”
+Definitions are labelled “Definition · Formalized”; only theorem declarations
+carry “Theorem · Proof checked.” A passage’s scope/coverage is recorded
+separately. The proof map provides ordinary navigation links, not annotation
+buttons that unexpectedly move the reader.
+
 ## Status semantics
 
 No new mathematical proof or `sorry` was added for this page. A missing full
