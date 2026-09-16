@@ -80,7 +80,10 @@ formulas, and the exact finite cut tree now also hold in this larger scope.
 The cut set is proved compact and contractible, its embedded graph is a
 tree, and subdivision at all junctions and original vertices leaves exactly
 two routes inside each open edge. These results allow arbitrary surface
-sources. The radial-triangle and cofacial-leaf constructions still need
-to use these broader inputs, and global source-angle accounting remains
-unfinished. See [STAR_NEXT.md](STAR_NEXT.md) for the
-exact next obligation and current scope.
+sources. The radial triangles and whole-surface coverage now use these
+broader inputs. For a cofacial source, original cut vertices are proved
+leaves, and the complete `CutTreeCharts` collection is constructed. Local
+cone coverage and the flat-junction full-turn sum are also checked without
+a canonical graph. Global curvature accounting, the resulting source-angle
+budget, and the transfer of nonoverlap/gluing remain unfinished.
+See [STAR_NEXT.md](STAR_NEXT.md) for the exact next obligation and scope.

@@ -1,12 +1,12 @@
 # Star unfolding: current proved result and next gap
 
-Checkpoint: 16 September 2026, 08:13 UTC. The full star theorem is unfinished.
+Checkpoint: 16 September 2026, 15:49 UTC. The full star theorem is unfinished.
 The public definitions and theorem statement are unchanged.
 
-The immediate cut-tree gap is now closed: `small_exists_regular_cut_tree`
-constructs the actual tree for any polyhedron with at most six vertices and
-triangular or quadrilateral faces, from any surface source. The broader
-star development and its source-angle budget remain unfinished.
+The actual cut tree, its radial triangles, and local cone-angle coverage
+are now proved without a canonical graph assumption. For a cofacial source,
+including a universal vertex, the complete chart collection is constructed.
+The broader global source-angle budget and star embedding remain unfinished.
 
 The supplied 2016 journal version has now been compared with the thesis:
 see [KIAZYK_2016_REVIEW.md](KIAZYK_2016_REVIEW.md). Its Section 2 is the
@@ -160,27 +160,74 @@ cofacial-source hypothesis is required for this tree result.
 
 The construction uses the existing geometric definitions; it does not
 assume tree structure or replace the actual cut set with a covering graph.
-The broader leaf classification, radial triangle construction, and global
-star embedding have not yet been transferred to this new scope.
+The radial triangle construction, surface coverage, and original-vertex
+leaf property have now been transferred as described below. A full
+leaf-if-and-only-if-original theorem in this broader scope is not claimed.
+
+## Actual radial triangles and cofacial charts: proved
+
+[SmallPolyhedronCutEdgeTriangles](SixVertexUnfolding/Geometry/SmallPolyhedronCutEdgeTriangles.lean)
+constructs both closed radial triangle developments along every actual
+cut-tree edge, with their surface homeomorphisms. The continuous route
+families, injectivity, disjointness, metric models, and folded triangle
+maps are proved from the broader shortest-route results.
+
+[SmallPolyhedronCutTreeTriangleCoverage](SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeTriangleCoverage.lean)
+proves these triangles cover the whole surface. These two constructions
+allow any surface source on a polyhedron with at most six vertices and
+triangular/quadrilateral faces.
+
+For a source sharing a face with every vertex,
+[SmallPolyhedronUniqueRouteLeaves](SixVertexUnfolding/Geometry/SmallPolyhedronUniqueRouteLeaves.lean)
+proves each original cut-tree vertex is a leaf. The actual nonvertex
+junction fans and consistent frames then assemble into `CutTreeCharts` in
+[SmallPolyhedronCutTreeCharts](SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeCharts.lean).
+Its short `small_exists_universal_star_charts` theorem constructs both the
+tree and the charts from a universal source. Coverage, flat junction
+compatibility, original leaves, and reverse-edge frames are all proved;
+global injectivity is a separate remaining step.
+
+## Local angle accounting without a canonical graph: proved
+
+[VertexFanSectorIntersections](SixVertexUnfolding/Geometry/VertexFanSectorIntersections.lean)
+uses actual supporting sides to identify every sector intersection.
+[VertexFanCircle](SixVertexUnfolding/Geometry/VertexFanCircle.lean) joins
+their angle coordinates modulo the actual total fan angle, including
+the closing seam, and proves continuity on the punctured fan.
+
+The circle metric comparison, complete small-circle coverage, folded
+triangle corner arcs, and incident-triangle neighborhood coverage give
+[VertexFanCutTreeConeCoverage](SixVertexUnfolding/Geometry/VertexFanCutTreeConeCoverage.lean):
+the sum of incident triangle corners is at least the original vertex's
+actual surface angle. This holds for every original cut vertex and any
+surface source in the small-polyhedron scope, independently of the chosen
+metric models. No numerical cone-coverage inequality is assumed.
+
+[SmallPolyhedronJunctionAngleSum](SixVertexUnfolding/Geometry/SmallPolyhedronJunctionAngleSum.lean)
+also proves that the corners around a flat cut-tree junction sum to exactly
+two pi. These are the two local inputs for the global angle budget.
 
 ## Next proof obligation
 
-Use the new cut-tree and route theorems in the existing radial-triangle
-and flat-junction constructions. For the first target, a universal vertex
-source, extend the cofacial-source leaf result as well; this is what lets
-the assembly use only flat internal junctions.
+The remaining angle step is **global curvature accounting**. Identify the
+sum of actual fan angles over all original vertices and prove the total
+curvature is four pi. The existing `OctahedralAngles.sum_curvature` uses a
+fixed eight-triangle subdivision of a canonical six-vertex graph; it does
+not yet establish that identity for the universal-vertex family.
 
-Extend the source-angle budget: the new local fans need their circle
-coordinates and coverage arguments, and the actual curvature sum must be
-accounted for across all incident faces. `CutTreeConeCoverage` and
-`CutTreeCurvature` still use the canonical graph geometry. This remains
-a real integration task, not just a missing final invocation.
+Once that identity is available, combine the checked local cone inequalities,
+flat full-turn identities, and tree angle accounting to bound all directed
+source angles by the source's actual surface angle. Its strict bound below
+two pi is already proved. Then transfer the existing global kite separation
+and retained-surface gluing to the broader chart construction.
+
 For a fully arbitrary-source star theorem, internal original-vertex
-junctions also remain to be handled. See [FIVE_RAY_NEXT.md](FIVE_RAY_NEXT.md).
+junctions also remain to be handled. They are unnecessary for the current
+cofacial/universal-source milestone. The full theorem is still unfinished.
 
 ## Validation
 
-The latest full checkpoint checks 892 Lean files and audits 4,292 project
+The latest full checkpoint checks 947 Lean files and audits 4,422 project
 theorem declarations using only `propext`, `Classical.choice`, and
 `Quot.sound`. Later checkpoints are recorded in [WORKLOG.md](WORKLOG.md).
 The sole original main-theorem `sorry` remains in `Statement.lean`;

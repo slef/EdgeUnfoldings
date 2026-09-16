@@ -83,15 +83,17 @@ fibers, finite developments, source images, and nonbranching.
 `SmallPolyhedronCutTree` now constructs the exact finite cut tree for this
 larger family, with all junctions and original cut vertices marked. The
 cut set is compact and contractible, and every open tree edge has exactly
-two shortest routes. Transfer of radial-triangle and cofacial-leaf
-constructions to these broader inputs remains. Circle
-coordinates for the new fans and global curvature/source-angle accounting
-also remain. The precise integration boundary is in `STAR_NEXT.md`.
+two shortest routes. The radial triangles, surface coverage, and cofacial
+original-leaf property have now been transferred, giving complete local
+charts at universal sources. Circle coordinates and the local cone-coverage
+inequalities are also proved for the new fans. Global curvature accounting,
+the source-angle budget, and the broader nonoverlap/gluing application
+remain. The precise integration boundary is in `STAR_NEXT.md`.
 
 The full star theorem remains unfinished. The surface-angle milestone
 and the local detour/avoidance milestone at every vertex are each 100%
 complete in the stated small-face scope; the subsequent global integration
 is not. The finite-route and exact cut-tree milestones are also complete.
 
-Full validation: 892 Lean files, 4,292 audited project theorem declarations,
+Full validation: 947 Lean files, 4,422 audited project theorem declarations,
 standard axioms only. Public definitions and statement remain unchanged.
