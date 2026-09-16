@@ -1,12 +1,14 @@
 # Star unfolding: current proved result and next gap
 
-Checkpoint: 16 September 2026, 15:49 UTC. The full star theorem is unfinished.
+Checkpoint: 16 September 2026, 16:24 UTC. The full star theorem is unfinished.
 The public definitions and theorem statement are unchanged.
 
 The actual cut tree, its radial triangles, and local cone-angle coverage
 are now proved without a canonical graph assumption. For a cofacial source,
 including a universal vertex, the complete chart collection is constructed.
-The broader global source-angle budget and star embedding remain unfinished.
+For six vertices with a universal source, the actual source-angle budget
+and global kite separation are now proved. The retained-surface embedding
+still needs to be transferred to this broader scope.
 
 The supplied 2016 journal version has now been compared with the thesis:
 see [KIAZYK_2016_REVIEW.md](KIAZYK_2016_REVIEW.md). Its Section 2 is the
@@ -184,8 +186,9 @@ junction fans and consistent frames then assemble into `CutTreeCharts` in
 [SmallPolyhedronCutTreeCharts](SixVertexUnfolding/Geometry/SmallPolyhedronCutTreeCharts.lean).
 Its short `small_exists_universal_star_charts` theorem constructs both the
 tree and the charts from a universal source. Coverage, flat junction
-compatibility, original leaves, and reverse-edge frames are all proved;
-global injectivity is a separate remaining step.
+compatibility, original leaves, and reverse-edge frames are all proved.
+Global kite separation is now proved below; injectivity of the assembled
+retained-surface map is a separate remaining step.
 
 ## Local angle accounting without a canonical graph: proved
 
@@ -207,19 +210,68 @@ metric models. No numerical cone-coverage inequality is assumed.
 also proves that the corners around a flat cut-tree junction sum to exactly
 two pi. These are the two local inputs for the global angle budget.
 
+## Universal-source global angle budget and kite separation: proved
+
+[UniversalVertexFaceCounting](SixVertexUnfolding/Geometry/UniversalVertexFaceCounting.lean)
+proves the needed face count directly. Five triangular faces meet the source,
+and at least two distinct faces exclude it. If there are `t` triangles and
+`q` quadrilaterals, edge double-counting gives `3t + 4q = 2E`, hence `t` is
+even. Together with `t ≥ 5` and `t + q ≥ 7`, this gives `t + 2q ≥ 8`.
+
+[FacetCornerAngles](SixVertexUnfolding/Geometry/FacetCornerAngles.lean)
+defines each actual corner angle using its two original face edges, and
+proves independence of their ordering. `QuadrilateralCornerAngles` splits
+angles along a crossing diagonal. `FacetAngleSums` then proves the ordinary
+angle sums of π and 2π for triangular and quadrilateral original faces.
+
+[SmallPolyhedronCurvature](SixVertexUnfolding/Geometry/SmallPolyhedronCurvature.lean)
+identifies every actual fan sum with the angles of all incident faces.
+Summing by faces gives total face angle at least 8π, hence total vertex
+curvature at most 4π. **This upper bound is sufficient**; a general Euler
+formula or the exact global curvature identity is unnecessary here.
+
+`SmallPolyhedronCutTreeCurvature` transfers each original curvature to the
+cut tree exactly once, omitting the source. The checked local cone and flat
+junction inequalities and the tree angle identity then yield
+[SmallPolyhedronSourceBudget](SixVertexUnfolding/Geometry/SmallPolyhedronSourceBudget.lean):
+
+```text
+sum of directed source angles ≤ actual surface angle at the source < 2π;
+half the directed sum < π.
+```
+
+[UniversalStarKiteSeparation](SixVertexUnfolding/Geometry/UniversalStarKiteSeparation.lean)
+applies that budget to every simple chain in the fixed global frames.
+`universal_global_kites_nonoverlap` proves that one kite is disjoint from the
+interior of every different tree-edge kite. `universal_exists_separated_cut_tree_charts`
+constructs the actual covering charts with this property. These results
+assume six vertices, triangular/quadrilateral faces, and a universal source;
+no canonical graph, numerical angle inequality, or nonoverlap premise is supplied.
+
 ## Next proof obligation
 
-The remaining angle step is **global curvature accounting**. Identify the
-sum of actual fan angles over all original vertices and prove the total
-curvature is four pi. The existing `OctahedralAngles.sum_curvature` uses a
-fixed eight-triangle subdivision of a canonical six-vertex graph; it does
-not yet establish that identity for the universal-vertex family.
+Transfer the existing **retained-surface gluing and embedding** construction
+to the broader charts. Kite-interior separation is now available, but it
+does not by itself identify shared boundary copies correctly or prove an
+open embedding of the uncut surface.
 
-Once that identity is available, combine the checked local cone inequalities,
-flat full-turn identities, and tree angle accounting to bound all directed
-source angles by the source's actual surface angle. Its strict bound below
-two pi is already proved. Then transfer the existing global kite separation
-and retained-surface gluing to the broader chart construction.
+1. Transfer the terminal-ray/star-cut characterization and agreement of
+   overlapping triangle maps to the broader shortest-route lemmas.
+2. Assemble the continuous map and transfer its inverse disks, including
+   cut-edge bases, retained endpoint rays, and flat junctions. These prove
+   global injectivity, openness, and local intrinsic isometry.
+3. Transfer retained-surface connectivity and the finite polygonal boundary
+   description, then invoke the existing whole-original-face conversion.
+
+The canonical implementations begin at `StarCutEndpoints`,
+`GlobalMapAgreement`, and `StarDevelopmentMap`; the resulting checkpoint
+is `CofacialStarEmbedding`. Reuse the generic planar and chart lemmas rather
+than introducing a canonical graph assumption for the universal family.
+
+Bounded progress: universal-source angle budget **1/1 complete (100%)**;
+global kite separation **1/1 complete (100%)**; full universal-source star
+embedding **0/1 complete**. These are milestone counts, not an overall
+proof-effort percentage.
 
 For a fully arbitrary-source star theorem, internal original-vertex
 junctions also remain to be handled. They are unnecessary for the current
@@ -227,7 +279,7 @@ cofacial/universal-source milestone. The full theorem is still unfinished.
 
 ## Validation
 
-The latest full checkpoint checks 947 Lean files and audits 4,422 project
+The latest full checkpoint checks 955 Lean files and audits 4,481 project
 theorem declarations using only `propext`, `Classical.choice`, and
 `Quot.sound`. Later checkpoints are recorded in [WORKLOG.md](WORKLOG.md).
 The sole original main-theorem `sorry` remains in `Statement.lean`;

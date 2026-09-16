@@ -84,6 +84,8 @@ sources. The radial triangles and whole-surface coverage now use these
 broader inputs. For a cofacial source, original cut vertices are proved
 leaves, and the complete `CutTreeCharts` collection is constructed. Local
 cone coverage and the flat-junction full-turn sum are also checked without
-a canonical graph. Global curvature accounting, the resulting source-angle
-budget, and the transfer of nonoverlap/gluing remain unfinished.
+a canonical graph. For six vertices with a universal source, a directly proved curvature upper
+bound now supplies the source-angle budget and global kite separation.
+The transfer of retained-surface gluing, inverse disks, connectivity, and
+polygonal boundary remains unfinished.
 See [STAR_NEXT.md](STAR_NEXT.md) for the exact next obligation and scope.

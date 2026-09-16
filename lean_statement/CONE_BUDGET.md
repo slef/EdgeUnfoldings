@@ -1,9 +1,17 @@
 # The checked source-angle budget
 
-The five original nonsource cone inequalities and the cumulative bound
-along every simple cut-tree path are now proved. This does not complete
-the star unfolding: global cut-surface assembly, compatible successive
-frames, original-vertex junctions, and whole-face transfer remain open.
+The source-angle budget is now proved both in the canonical graph scope
+and for six-vertex polyhedra with a universal source and triangular or
+quadrilateral faces. See [STAR_NEXT.md](STAR_NEXT.md) for the current
+checkpoint. The full universal-source star embedding remains unfinished.
+
+The universal-source extension uses `SmallPolyhedronSourceBudget`.
+Original face angles are summed directly; the face count gives total
+curvature at most 4π, which suffices for the budget. The local cone bounds
+and flat junction sums come from the broader actual chart construction.
+`UniversalStarKiteSeparation` applies this to all kites in the common plane.
+
+The older canonical implementation is mapped below.
 
 The argument has four concrete parts.
 
@@ -46,7 +54,7 @@ proves the same strict π bound for every simple path: a path never uses
 both orientations of an edge, and every source angle is positive. Its
 accumulated outer angle therefore lies in `[π/2, 3π/2)`.
 
-These results apply to the four canonical `SixVertexGraph` models and
-their actual cut trees. They do not supply the separate five-ray vertex
-avoidance theorem needed for the remaining universal-vertex family.
+The modules in the list above use the four canonical `SixVertexGraph`
+models. The broader vertex-avoidance, cone-coverage, and universal-source
+budget results are recorded in the current checkpoint linked above.
 No global unfolding conclusion is assumed in the argument.

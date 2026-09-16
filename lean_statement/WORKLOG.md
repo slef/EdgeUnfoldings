@@ -1,3 +1,43 @@
+## 2026-09-16 16:24 UTC — universal-source angle budget and kite separation
+
+Added eight proof modules, containing 28 explicitly written theorems and
+59 newly audited theorem declarations including generated/private ones.
+Public definitions and `Statement.lean` are unchanged. The main checkout
+and paper snapshot are untouched.
+
+The previous global-curvature obstacle is resolved with the weaker bound
+that the application actually needs. Five incident triangular faces and
+two distinct nonincident faces, together with edge double-counting, give
+face-angle weight at least eight. Actual corner angles sum to π or 2π;
+reindexing by original vertices identifies the complete fan angles. Thus
+the total original curvature is at most 4π. No general Euler formula or
+unproved global angle identity is assumed.
+
+The original curvatures transfer to the tree exactly once except for the
+source. Local cone coverage, flat junction sums, and tree angle accounting
+then prove that the directed source angles sum to at most the actual
+source angle, hence that their half-sum is strictly below π. This supplies
+the complete chain budget. `UniversalStarKiteSeparation` proves all distinct
+actual tree-edge kites are separated in the common global development and
+constructs covering charts with this property.
+
+Scope: six original vertices, triangular/quadrilateral original faces,
+and a universal source. No canonical `SixVertexGraph` assumption is used.
+The corner/fan identities and local inequalities have the broader scope
+documented in their individual statements.
+
+Validation: full incremental check and axiom audit passed, **955 Lean
+files / 4,481 audited project theorem declarations**, using only `propext`,
+`Classical.choice`, and `Quot.sound`. All eight new modules are root-imported.
+No new proof hole or axiom; the sole original main-theorem `sorry` remains.
+
+Bounded progress: universal-source angle budget **1/1 (100%)**, global kite
+separation **1/1 (100%)**, full universal-source star embedding **0/1 complete**.
+There is no reliable overall proof-effort percentage. The next task is
+retained-surface gluing and inverse disks, followed by connectivity and
+polygonal boundary. Arbitrary-source singular junctions are still outside
+this milestone. `STAR_NEXT.md` gives the exact next obligations.
+
 ## 2026-09-16 15:49 UTC — broader star charts and local cone coverage
 
 Added 55 proof modules, with 104 explicitly written theorem declarations.

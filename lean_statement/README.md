@@ -178,7 +178,7 @@ Continuation checkpoint, 16 September 2026 (Europe/Brussels):
 | Remote finite-cut exclusions | 2/2 complete (100%) for every selected source/slit, including endpoints and curvature-threshold equalities. |
 | General shortest-path milestone | 3/3 complete: existence among all continuous surface paths, finite straight face subdivision, and a simple constant-speed parametrization for distinct endpoints. This is a prerequisite, not star nonoverlap. |
 | Local shortest-path geometry | Flat metric charts and local nonbranching are proved for every polyhedron. Vertex avoidance, finite route fibers, and global disjointness now hold for every polyhedron with at most six vertices and triangular/quadrilateral faces, without a canonical graph premise. |
-| Extension to universal-vertex solids | The actual cut tree, complete radial triangle charts, and original-vertex leaves are proved. Local cone coverage and flat-junction angle sums are checked. Global curvature/source-angle accounting and the broader nonoverlap/gluing application remain. |
+| Extension to universal-vertex solids | The actual cut tree, complete radial triangle charts, and original-vertex leaves are proved. The actual curvature bound, source-angle budget, and global kite separation are now checked. Retained-surface gluing and the full star embedding remain. |
 | Finite route structure | For at most six vertices and triangular/quadrilateral faces, intrinsic distance is locally the minimum over actual active sources, both in faces and across original edges. These sources count actual routes bijectively, and their Voronoi boundary is exactly the nearby multiple-route locus. |
 | Face-interior cut-locus milestone | 4/4 checked: actual nearby competitors, finite local minimum, exact Voronoi description, and ordinary two-route points with finitely many junctions. This is a local prerequisite, not the global tree theorem. |
 | Edge-interior cut-locus milestone | 4/4 checked: actual nearby competitors, finite local minimum, exact Voronoi description, and full two-route bisectors. Both incident original faces are covered. |
@@ -190,17 +190,18 @@ Continuation checkpoint, 16 September 2026 (Europe/Brussels):
 | Route stability | For at most six vertices with triangular/quadrilateral faces, uniqueness persists and route counts cannot increase near any nonvertex target, including original edge interiors. The multiple-route locus is closed there. For every public polyhedron, it cannot accumulate at the source. |
 | Radial surface partition | For at most six vertices with triangular/quadrilateral faces, every cut-tree edge has two continuous closed route families and actual triangle developments. Their regions cover the entire boundary, for any surface source. |
 | Radial triangle geometry | Actual triangle developments, open strips, metric compatibility, flat junction fans, and coherent tree frames are checked without a canonical graph. Cofacial sources give complete CutTreeCharts. The global star embedding remains checked only in the canonical cofacial scope. |
-| Successive radial triangles | Actual strips sharing an endpoint route align outward. The broader cofacial chart construction now includes the actual flat fans and coherent frames. Global kite separation still needs the broader source-angle budget. |
-| Original nonsource cone inequalities | All original vertices are covered for at most six vertices with triangular/quadrilateral faces; no canonical graph premise. Global source-angle budgets remain proved in the canonical scope only. |
-| Wedge-chain geometry | The planar chain engine and its complete canonical cofacial star application are checked. Applying it to universal-vertex sources still requires the broader source-angle budget. |
+| Successive radial triangles | Actual strips sharing an endpoint route align outward. The broader cofacial chart construction now includes the actual flat fans and coherent frames. Global kite separation is now proved for six vertices with a universal source. |
+| Original nonsource cone inequalities | All original vertices are covered for at most six vertices with triangular/quadrilateral faces; no canonical graph premise. Global source-angle budgets are now also proved for six vertices with a universal source, using actual face angles. |
+| Wedge-chain geometry | The planar chain engine and its complete canonical cofacial star application are checked. The universal-source angle budget now also proves separation of all actual kites in their common plane; retained-surface gluing remains. |
 | Overall formalization effort completed | No reliable percentage. The previous 80% estimate and 65–90% range are withdrawn: global star nonoverlap and its application to the remaining cases still contain substantial unproved constructions. |
-| Exact checked inventory | 947 Lean files; 4,422 audited theorem declarations including generated and private declarations. |
+| Exact checked inventory | 955 Lean files; 4,481 audited theorem declarations including generated and private declarations. |
 
-The 16 September, 15:49 UTC checkpoint checks **947 files / 4,422 audited
+The 16 September, 16:24 UTC checkpoint checks **955 files / 4,481 audited
 declarations**. These counts measure checked work, not the percentage of
 the main theorem proved. The cofacial canonical star embedding and the
-generic whole-face conversion are proved. The extension to the universal
-family and arbitrary-source singular junctions remains unfinished.
+generic whole-face conversion are proved. The universal family now has
+checked source-angle accounting and global kite separation; its full star embedding and arbitrary-source singular
+junctions remain unfinished.
 See [STAR_NEXT.md](STAR_NEXT.md) for the exact remaining dependencies.
 
 [OctahedronComplete](SixVertexUnfolding/OctahedronComplete.lean) proves the

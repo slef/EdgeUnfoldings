@@ -13,6 +13,11 @@ rigid placement of each whole face in the plane, a tree of original-edge hinges,
 agreement on every retained hinge, and disjoint planar face interiors. All of
 these are requirements proved by a construction.
 
+For the current star-unfolding scope and next gap, read
+[STAR_NEXT.md](STAR_NEXT.md). The six-vertex universal-source case now has
+an actual cut tree, covering charts, a checked source-angle budget, and
+global kite separation. Its retained-surface embedding is still unfinished.
+
 ## The main proof, from top to bottom
 
 | Read | What it establishes |
@@ -104,13 +109,14 @@ shortest, so it cannot leave a face between two visits. The finitely many
 face entry and exit times give a subdivision into straight face portions.
 For distinct endpoints the route can be parametrized at constant arc speed
 without self-intersections. [SHORTEST_PATHS.md](SHORTEST_PATHS.md) maps these
-checked results. The cut-locus tree and star nonoverlap remain open.
+checked results. The cut-locus tree is now proved in the broader small-face
+scope; the full universal-source star embedding remains open.
 
 [LOCAL_GEODESICS.md](LOCAL_GEODESICS.md) maps the flat metric charts now
 constructed at every nonvertex boundary point. The affine shortest-path
 formula and local nonbranching are proved. Vertex avoidance and global
-nonbranching are also proved for all four canonical six-vertex graph models;
-the universal-vertex family still needs vertex avoidance.
+nonbranching are now proved for every polyhedron with at most six vertices
+and triangular/quadrilateral faces, including the universal-vertex family.
 
 [CUT_LOCUS_FOUNDATIONS.md](CUT_LOCUS_FOUNDATIONS.md) maps the bounded
 developments, actual local distance minima, and exact Voronoi description
