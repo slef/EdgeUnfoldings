@@ -1,0 +1,1318 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/Analysis/InnerProductSpace/PiL2.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/Analysis/InnerProductSpace/PiL2.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2020 Joseph Myers. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Joseph Myers, Sébastien Gouëzel, Heather Macbeth</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.Analysis.Normed.Lp.PiLp</span>
+<span id="L10" class="line"><a href="#L10">10</a> public import Mathlib.Analysis.Normed.Lp.Matrix</span>
+<span id="L11" class="line"><a href="#L11">11</a> public import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas</span>
+<span id="L12" class="line"><a href="#L12">12</a> public import Mathlib.LinearAlgebra.UnitaryGroup</span>
+<span id="L13" class="line"><a href="#L13">13</a> public import Mathlib.Util.Superscript</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-!</span>
+<span id="L16" class="line"><a href="#L16">16</a> # `L²` inner product space structure on finite products of inner product spaces</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> The `L²` norm on a finite product of inner product spaces is compatible with an inner product</span>
+<span id="L19" class="line"><a href="#L19">19</a> $$</span>
+<span id="L20" class="line"><a href="#L20">20</a> \langle x, y\rangle = \sum \langle x_i, y_i \rangle.</span>
+<span id="L21" class="line"><a href="#L21">21</a> $$</span>
+<span id="L22" class="line"><a href="#L22">22</a> This is recorded in this file as an inner product space instance on `PiLp 2`.</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> This file develops the notion of a finite-dimensional Hilbert space over `𝕜 = ℂ, ℝ`, referred to as</span>
+<span id="L25" class="line"><a href="#L25">25</a> `E`. We define an `OrthonormalBasis 𝕜 ι E` as a linear isometric equivalence</span>
+<span id="L26" class="line"><a href="#L26">26</a> between `E` and `EuclideanSpace 𝕜 ι`. Then `stdOrthonormalBasis` shows that such an equivalence</span>
+<span id="L27" class="line"><a href="#L27">27</a> always exists if `E` is finite dimensional. We provide language for converting between a basis</span>
+<span id="L28" class="line"><a href="#L28">28</a> that is orthonormal and an orthonormal basis (e.g. `Basis.toOrthonormalBasis`). We show that</span>
+<span id="L29" class="line"><a href="#L29">29</a> orthonormal bases for each summand in a direct sum of spaces can be combined into an orthonormal</span>
+<span id="L30" class="line"><a href="#L30">30</a> basis for the whole sum in `DirectSum.IsInternal.subordinateOrthonormalBasis`. In</span>
+<span id="L31" class="line"><a href="#L31">31</a> the last section, various properties of matrices are explored.</span>
+<span id="L32" class="line"><a href="#L32">32</a> </span>
+<span id="L33" class="line"><a href="#L33">33</a> ## Main definitions</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> - `EuclideanSpace 𝕜 n`: defined to be `PiLp 2 (n → 𝕜)` for any `Fintype n`, i.e., the space</span>
+<span id="L36" class="line"><a href="#L36">36</a>   from functions to `n` to `𝕜` with the `L²` norm. We register several instances on it (notably</span>
+<span id="L37" class="line"><a href="#L37">37</a>   that it is a finite-dimensional inner product space), and provide a `!ₚ[]` notation (for numeric</span>
+<span id="L38" class="line"><a href="#L38">38</a>   subscripts like `₂`) for the case when the indexing type is `Fin n`.</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> - `OrthonormalBasis 𝕜 ι`: defined to be an isometry to Euclidean space from a given</span>
+<span id="L41" class="line"><a href="#L41">41</a>   finite-dimensional inner product space, `E ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 ι`.</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> - `Basis.toOrthonormalBasis`: constructs an `OrthonormalBasis` for a finite-dimensional</span>
+<span id="L44" class="line"><a href="#L44">44</a>   Euclidean space from a `Basis` which is `Orthonormal`.</span>
+<span id="L45" class="line"><a href="#L45">45</a> </span>
+<span id="L46" class="line"><a href="#L46">46</a> - `Orthonormal.exists_orthonormalBasis_extension`: provides an existential result of an</span>
+<span id="L47" class="line"><a href="#L47">47</a>   `OrthonormalBasis` extending a given orthonormal set</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> - `exists_orthonormalBasis`: provides an orthonormal basis on a finite-dimensional vector space</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> - `stdOrthonormalBasis`: provides an arbitrarily-chosen `OrthonormalBasis` of a given</span>
+<span id="L52" class="line"><a href="#L52">52</a>   finite-dimensional inner product space</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> For consequences in infinite dimension (Hilbert bases, etc.), see the file</span>
+<span id="L55" class="line"><a href="#L55">55</a> `Analysis.InnerProductSpace.L2Space`.</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> -/</span>
+<span id="L58" class="line"><a href="#L58">58</a> </span>
+<span id="L59" class="line"><a href="#L59">59</a> @[expose] public section</span>
+<span id="L60" class="line"><a href="#L60">60</a> </span>
+<span id="L61" class="line"><a href="#L61">61</a> </span>
+<span id="L62" class="line"><a href="#L62">62</a> open Module Real Set Filter RCLike Submodule Function Uniformity Topology NNReal ENNReal</span>
+<span id="L63" class="line"><a href="#L63">63</a>   ComplexConjugate DirectSum WithLp</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> noncomputable section</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> variable {ι ι&#x27; 𝕜 : Type*} [RCLike 𝕜]</span>
+<span id="L68" class="line"><a href="#L68">68</a> variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]</span>
+<span id="L69" class="line"><a href="#L69">69</a> variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]</span>
+<span id="L70" class="line"><a href="#L70">70</a> variable {F&#x27; : Type*} [NormedAddCommGroup F&#x27;] [InnerProductSpace ℝ F&#x27;]</span>
+<span id="L71" class="line"><a href="#L71">71</a> </span>
+<span id="L72" class="line"><a href="#L72">72</a> local notation &quot;⟪&quot; x &quot;, &quot; y &quot;⟫&quot; =&gt; inner 𝕜 x y</span>
+<span id="L73" class="line"><a href="#L73">73</a> </span>
+<span id="L74" class="line"><a href="#L74">74</a> /-</span>
+<span id="L75" class="line"><a href="#L75">75</a> If `ι` is a finite type and each space `f i`, `i : ι`, is an inner product space,</span>
+<span id="L76" class="line"><a href="#L76">76</a> then `Π i, f i` is an inner product space as well. Since `Π i, f i` is endowed with the sup norm,</span>
+<span id="L77" class="line"><a href="#L77">77</a> we use instead `PiLp 2 f` for the product space, which is endowed with the `L^2` norm.</span>
+<span id="L78" class="line"><a href="#L78">78</a> -/</span>
+<span id="L79" class="line"><a href="#L79">79</a> instance PiLp.innerProductSpace {ι : Type*} [Fintype ι] (f : ι → Type*)</span>
+<span id="L80" class="line"><a href="#L80">80</a>     [∀ i, NormedAddCommGroup (f i)] [∀ i, InnerProductSpace 𝕜 (f i)] :</span>
+<span id="L81" class="line"><a href="#L81">81</a>     InnerProductSpace 𝕜 (PiLp 2 f) where</span>
+<span id="L82" class="line"><a href="#L82">82</a>   inner x y := ∑ i, ⟪x i, y i⟫</span>
+<span id="L83" class="line"><a href="#L83">83</a>   norm_sq_eq_re_inner x := by</span>
+<span id="L84" class="line"><a href="#L84">84</a>     simp only [PiLp.norm_sq_eq_of_L2, map_sum, ← norm_sq_eq_re_inner]</span>
+<span id="L85" class="line"><a href="#L85">85</a>   conj_inner_symm := by</span>
+<span id="L86" class="line"><a href="#L86">86</a>     intro x y</span>
+<span id="L87" class="line"><a href="#L87">87</a>     unfold inner</span>
+<span id="L88" class="line"><a href="#L88">88</a>     rw [map_sum]</span>
+<span id="L89" class="line"><a href="#L89">89</a>     apply Finset.sum_congr rfl</span>
+<span id="L90" class="line"><a href="#L90">90</a>     rintro z -</span>
+<span id="L91" class="line"><a href="#L91">91</a>     apply inner_conj_symm</span>
+<span id="L92" class="line"><a href="#L92">92</a>   add_left x y z :=</span>
+<span id="L93" class="line"><a href="#L93">93</a>     show (∑ i, ⟪x i + y i, z i⟫ = ∑ i, ⟪x i, z i⟫ + ∑ i, ⟪y i, z i⟫) by</span>
+<span id="L94" class="line"><a href="#L94">94</a>       simp only [inner_add_left, Finset.sum_add_distrib]</span>
+<span id="L95" class="line"><a href="#L95">95</a>   smul_left x y r :=</span>
+<span id="L96" class="line"><a href="#L96">96</a>     show (∑ i : ι, ⟪r • x i, y i⟫ = conj r * ∑ i, ⟪x i, y i⟫) by</span>
+<span id="L97" class="line"><a href="#L97">97</a>       simp only [Finset.mul_sum, inner_smul_left]</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> theorem PiLp.inner_apply {ι : Type*} [Fintype ι] {f : ι → Type*} [∀ i, NormedAddCommGroup (f i)]</span>
+<span id="L100" class="line"><a href="#L100">100</a>     [∀ i, InnerProductSpace 𝕜 (f i)] (x y : PiLp 2 f) : ⟪x, y⟫ = ∑ i, ⟪x i, y i⟫ :=</span>
+<span id="L101" class="line"><a href="#L101">101</a>   rfl</span>
+<span id="L102" class="line"><a href="#L102">102</a> </span>
+<span id="L103" class="line"><a href="#L103">103</a> /-- The standard real/complex Euclidean space, functions on a finite type. For an `n`-dimensional</span>
+<span id="L104" class="line"><a href="#L104">104</a> space use `EuclideanSpace 𝕜 (Fin n)`.</span>
+<span id="L105" class="line"><a href="#L105">105</a> </span>
+<span id="L106" class="line"><a href="#L106">106</a> For the case when `n = Fin _`, there is `!₂[x, y, ...]` notation for building elements of this type,</span>
+<span id="L107" class="line"><a href="#L107">107</a> analogous to `![x, y, ...]` notation. -/</span>
+<span id="L108" class="line"><a href="#L108">108</a> abbrev EuclideanSpace (𝕜 : Type*) (n : Type*) : Type _ :=</span>
+<span id="L109" class="line"><a href="#L109">109</a>   PiLp 2 fun _ : n =&gt; 𝕜</span>
+<span id="L110" class="line"><a href="#L110">110</a> </span>
+<span id="L111" class="line"><a href="#L111">111</a> section Notation</span>
+<span id="L112" class="line"><a href="#L112">112</a> open Lean Meta Elab Term Macro TSyntax PrettyPrinter.Delaborator SubExpr</span>
+<span id="L113" class="line"><a href="#L113">113</a> open Mathlib.Tactic (subscriptTerm)</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> /-- Notation for vectors in Lp space. `!₂[x, y, ...]` is a shorthand for</span>
+<span id="L116" class="line"><a href="#L116">116</a> `WithLp.toLp 2 ![x, y, ...]`, of type `EuclideanSpace _ (Fin _)`.</span>
+<span id="L117" class="line"><a href="#L117">117</a> </span>
+<span id="L118" class="line"><a href="#L118">118</a> This also works for other subscripts. -/</span>
+<span id="L119" class="line"><a href="#L119">119</a> syntax (name := PiLp.vecNotation) &quot;!&quot; noWs subscriptTerm noWs &quot;[&quot; term,* &quot;]&quot; : term</span>
+<span id="L120" class="line"><a href="#L120">120</a> macro_rules | `(!$p:subscript[$e:term,*]) =&gt; do</span>
+<span id="L121" class="line"><a href="#L121">121</a>   -- override the `Fin n.succ` to a literal</span>
+<span id="L122" class="line"><a href="#L122">122</a>   let n := e.getElems.size</span>
+<span id="L123" class="line"><a href="#L123">123</a>   `(WithLp.toLp $p (V := ∀ _ : Fin $(quote n), _) ![$e,*])</span>
+<span id="L124" class="line"><a href="#L124">124</a> </span>
+<span id="L125" class="line"><a href="#L125">125</a> /-- Unexpander for the `!₂[x, y, ...]` notation. -/</span>
+<span id="L126" class="line"><a href="#L126">126</a> @[app_delab WithLp.toLp]</span>
+<span id="L127" class="line"><a href="#L127">127</a> meta def EuclideanSpace.delabVecNotation : Delab :=</span>
+<span id="L128" class="line"><a href="#L128">128</a>   whenNotPPOption getPPExplicit &lt;| whenPPOption getPPNotation &lt;| withOverApp 3 do</span>
+<span id="L129" class="line"><a href="#L129">129</a>     -- check that the `WithLp.toLp _` is present</span>
+<span id="L130" class="line"><a href="#L130">130</a>     let p : Term ← withNaryArg 0 &lt;| delab</span>
+<span id="L131" class="line"><a href="#L131">131</a>     -- to be conservative, only allow subscripts which are numerals</span>
+<span id="L132" class="line"><a href="#L132">132</a>     guard &lt;| p matches `($_:num)</span>
+<span id="L133" class="line"><a href="#L133">133</a>     let `(![$elems,*]) := ← withNaryArg 2 delab | failure</span>
+<span id="L134" class="line"><a href="#L134">134</a>     `(!$p[$elems,*])</span>
+<span id="L135" class="line"><a href="#L135">135</a> </span>
+<span id="L136" class="line"><a href="#L136">136</a> end Notation</span>
+<span id="L137" class="line"><a href="#L137">137</a> </span>
+<span id="L138" class="line"><a href="#L138">138</a> theorem EuclideanSpace.nnnorm_eq {𝕜 : Type*} [RCLike 𝕜] {n : Type*} [Fintype n]</span>
+<span id="L139" class="line"><a href="#L139">139</a>     (x : EuclideanSpace 𝕜 n) : ‖x‖₊ = NNReal.sqrt (∑ i, ‖x i‖₊ ^ 2) :=</span>
+<span id="L140" class="line"><a href="#L140">140</a>   PiLp.nnnorm_eq_of_L2 x</span>
+<span id="L141" class="line"><a href="#L141">141</a> </span>
+<span id="L142" class="line"><a href="#L142">142</a> theorem EuclideanSpace.norm_eq {𝕜 : Type*} [RCLike 𝕜] {n : Type*} [Fintype n]</span>
+<span id="L143" class="line"><a href="#L143">143</a>     (x : EuclideanSpace 𝕜 n) : ‖x‖ = √(∑ i, ‖x i‖ ^ 2) := by</span>
+<span id="L144" class="line"><a href="#L144">144</a>   simpa only [Real.coe_sqrt, NNReal.coe_sum] using congr_arg ((↑) : ℝ≥0 → ℝ) x.nnnorm_eq</span>
+<span id="L145" class="line"><a href="#L145">145</a> </span>
+<span id="L146" class="line"><a href="#L146">146</a> theorem EuclideanSpace.norm_sq_eq {𝕜 : Type*} [RCLike 𝕜] {n : Type*} [Fintype n]</span>
+<span id="L147" class="line"><a href="#L147">147</a>     (x : EuclideanSpace 𝕜 n) : ‖x‖ ^ 2 = ∑ i, ‖x i‖ ^ 2 :=</span>
+<span id="L148" class="line"><a href="#L148">148</a>   PiLp.norm_sq_eq_of_L2 _ x</span>
+<span id="L149" class="line"><a href="#L149">149</a> </span>
+<span id="L150" class="line"><a href="#L150">150</a> theorem EuclideanSpace.real_norm_sq_eq {n : Type*} [Fintype n] (x : EuclideanSpace ℝ n) :</span>
+<span id="L151" class="line"><a href="#L151">151</a>     ‖x‖ ^ 2 = ∑ i, (x i) ^ 2 := by</span>
+<span id="L152" class="line"><a href="#L152">152</a>   simp [EuclideanSpace.norm_sq_eq]</span>
+<span id="L153" class="line"><a href="#L153">153</a> </span>
+<span id="L154" class="line"><a href="#L154">154</a> theorem EuclideanSpace.dist_eq {𝕜 : Type*} [RCLike 𝕜] {n : Type*} [Fintype n]</span>
+<span id="L155" class="line"><a href="#L155">155</a>     (x y : EuclideanSpace 𝕜 n) : dist x y = √(∑ i, dist (x i) (y i) ^ 2) :=</span>
+<span id="L156" class="line"><a href="#L156">156</a>   PiLp.dist_eq_of_L2 x y</span>
+<span id="L157" class="line"><a href="#L157">157</a> </span>
+<span id="L158" class="line"><a href="#L158">158</a> theorem EuclideanSpace.dist_sq_eq {𝕜 : Type*} [RCLike 𝕜] {n : Type*} [Fintype n]</span>
+<span id="L159" class="line"><a href="#L159">159</a>     (x y : EuclideanSpace 𝕜 n) : dist x y ^ 2 = ∑ i, dist (x i) (y i) ^ 2 :=</span>
+<span id="L160" class="line"><a href="#L160">160</a>   PiLp.dist_sq_eq_of_L2 x y</span>
+<span id="L161" class="line"><a href="#L161">161</a> </span>
+<span id="L162" class="line"><a href="#L162">162</a> theorem EuclideanSpace.nndist_eq {𝕜 : Type*} [RCLike 𝕜] {n : Type*} [Fintype n]</span>
+<span id="L163" class="line"><a href="#L163">163</a>     (x y : EuclideanSpace 𝕜 n) : nndist x y = NNReal.sqrt (∑ i, nndist (x i) (y i) ^ 2) :=</span>
+<span id="L164" class="line"><a href="#L164">164</a>   PiLp.nndist_eq_of_L2 x y</span>
+<span id="L165" class="line"><a href="#L165">165</a> </span>
+<span id="L166" class="line"><a href="#L166">166</a> theorem EuclideanSpace.edist_eq {𝕜 : Type*} [RCLike 𝕜] {n : Type*} [Fintype n]</span>
+<span id="L167" class="line"><a href="#L167">167</a>     (x y : EuclideanSpace 𝕜 n) : edist x y = (∑ i, edist (x i) (y i) ^ 2) ^ (1 / 2 : ℝ) :=</span>
+<span id="L168" class="line"><a href="#L168">168</a>   PiLp.edist_eq_of_L2 x y</span>
+<span id="L169" class="line"><a href="#L169">169</a> </span>
+<span id="L170" class="line"><a href="#L170">170</a> theorem EuclideanSpace.ball_zero_eq {n : Type*} [Fintype n] (r : ℝ) (hr : 0 ≤ r) :</span>
+<span id="L171" class="line"><a href="#L171">171</a>     Metric.ball (0 : EuclideanSpace ℝ n) r = {x | ∑ i, x i ^ 2 &lt; r ^ 2} := by</span>
+<span id="L172" class="line"><a href="#L172">172</a>   ext x</span>
+<span id="L173" class="line"><a href="#L173">173</a>   have : (0 : ℝ) ≤ ∑ i, x i ^ 2 := Finset.sum_nonneg fun _ _ =&gt; sq_nonneg _</span>
+<span id="L174" class="line"><a href="#L174">174</a>   simp_rw [mem_setOf, mem_ball_zero_iff, norm_eq, norm_eq_abs, sq_abs, sqrt_lt this hr]</span>
+<span id="L175" class="line"><a href="#L175">175</a> </span>
+<span id="L176" class="line"><a href="#L176">176</a> theorem EuclideanSpace.closedBall_zero_eq {n : Type*} [Fintype n] (r : ℝ) (hr : 0 ≤ r) :</span>
+<span id="L177" class="line"><a href="#L177">177</a>     Metric.closedBall (0 : EuclideanSpace ℝ n) r = {x | ∑ i, x i ^ 2 ≤ r ^ 2} := by</span>
+<span id="L178" class="line"><a href="#L178">178</a>   ext</span>
+<span id="L179" class="line"><a href="#L179">179</a>   simp_rw [mem_setOf, mem_closedBall_zero_iff, norm_eq, norm_eq_abs, sq_abs, sqrt_le_left hr]</span>
+<span id="L180" class="line"><a href="#L180">180</a> </span>
+<span id="L181" class="line"><a href="#L181">181</a> theorem EuclideanSpace.sphere_zero_eq {n : Type*} [Fintype n] (r : ℝ) (hr : 0 ≤ r) :</span>
+<span id="L182" class="line"><a href="#L182">182</a>     Metric.sphere (0 : EuclideanSpace ℝ n) r = {x | ∑ i, x i ^ 2 = r ^ 2} := by</span>
+<span id="L183" class="line"><a href="#L183">183</a>   ext x</span>
+<span id="L184" class="line"><a href="#L184">184</a>   have : (0 : ℝ) ≤ ∑ i, x i ^ 2 := Finset.sum_nonneg fun _ _ =&gt; sq_nonneg _</span>
+<span id="L185" class="line"><a href="#L185">185</a>   simp_rw [mem_setOf, mem_sphere_zero_iff_norm, norm_eq, norm_eq_abs, sq_abs,</span>
+<span id="L186" class="line"><a href="#L186">186</a>     Real.sqrt_eq_iff_eq_sq this hr]</span>
+<span id="L187" class="line"><a href="#L187">187</a> </span>
+<span id="L188" class="line"><a href="#L188">188</a> section</span>
+<span id="L189" class="line"><a href="#L189">189</a> </span>
+<span id="L190" class="line"><a href="#L190">190</a> instance EuclideanSpace.infinite [Nonempty ι] : Infinite (EuclideanSpace 𝕜 ι) :=</span>
+<span id="L191" class="line"><a href="#L191">191</a>   Module.Free.infinite 𝕜 _</span>
+<span id="L192" class="line"><a href="#L192">192</a> </span>
+<span id="L193" class="line"><a href="#L193">193</a> variable [Fintype ι]</span>
+<span id="L194" class="line"><a href="#L194">194</a> </span>
+<span id="L195" class="line"><a href="#L195">195</a> @[simp]</span>
+<span id="L196" class="line"><a href="#L196">196</a> theorem finrank_euclideanSpace :</span>
+<span id="L197" class="line"><a href="#L197">197</a>     Module.finrank 𝕜 (EuclideanSpace 𝕜 ι) = Fintype.card ι := by</span>
+<span id="L198" class="line"><a href="#L198">198</a>   convert (WithLp.linearEquiv 2 𝕜 (ι → 𝕜)).finrank_eq</span>
+<span id="L199" class="line"><a href="#L199">199</a>   simp</span>
+<span id="L200" class="line"><a href="#L200">200</a> </span>
+<span id="L201" class="line"><a href="#L201">201</a> theorem finrank_euclideanSpace_fin {n : ℕ} :</span>
+<span id="L202" class="line"><a href="#L202">202</a>     Module.finrank 𝕜 (EuclideanSpace 𝕜 (Fin n)) = n := by simp</span>
+<span id="L203" class="line"><a href="#L203">203</a> </span>
+<span id="L204" class="line"><a href="#L204">204</a> namespace EuclideanSpace</span>
+<span id="L205" class="line"><a href="#L205">205</a> </span>
+<span id="L206" class="line"><a href="#L206">206</a> scoped instance (n : ℕ) : Fact (Module.finrank 𝕜 (EuclideanSpace 𝕜 (Fin n)) = n) :=</span>
+<span id="L207" class="line"><a href="#L207">207</a>   ⟨finrank_euclideanSpace_fin⟩</span>
+<span id="L208" class="line"><a href="#L208">208</a> </span>
+<span id="L209" class="line"><a href="#L209">209</a> theorem inner_eq_star_dotProduct (x y : EuclideanSpace 𝕜 ι) :</span>
+<span id="L210" class="line"><a href="#L210">210</a>     ⟪x, y⟫ = ofLp y ⬝ᵥ star (ofLp x) := rfl</span>
+<span id="L211" class="line"><a href="#L211">211</a> </span>
+<span id="L212" class="line"><a href="#L212">212</a> lemma inner_toLp_toLp (x y : ι → 𝕜) :</span>
+<span id="L213" class="line"><a href="#L213">213</a>     ⟪toLp 2 x, toLp 2 y⟫ = dotProduct y (star x) := rfl</span>
+<span id="L214" class="line"><a href="#L214">214</a> </span>
+<span id="L215" class="line"><a href="#L215">215</a> section restrict₂</span>
+<span id="L216" class="line"><a href="#L216">216</a> </span>
+<span id="L217" class="line"><a href="#L217">217</a> variable {I J : Finset ι&#x27;}</span>
+<span id="L218" class="line"><a href="#L218">218</a> </span>
+<span id="L219" class="line"><a href="#L219">219</a> /-- The restriction from `EuclideanSpace 𝕜 J` to `EuclideanSpace 𝕜 I` when `I ⊆ J`. -/</span>
+<span id="L220" class="line"><a href="#L220">220</a> noncomputable</span>
+<span id="L221" class="line"><a href="#L221">221</a> def restrict₂ (hIJ : I ⊆ J) :</span>
+<span id="L222" class="line"><a href="#L222">222</a>     EuclideanSpace 𝕜 J →L[𝕜] EuclideanSpace 𝕜 I where</span>
+<span id="L223" class="line"><a href="#L223">223</a>   toFun x := toLp 2 (Finset.restrict₂ («π» := fun _ ↦ 𝕜) hIJ x.ofLp)</span>
+<span id="L224" class="line"><a href="#L224">224</a>   map_add&#x27; x y := by ext; simp</span>
+<span id="L225" class="line"><a href="#L225">225</a>   map_smul&#x27; m x := by ext; simp</span>
+<span id="L226" class="line"><a href="#L226">226</a>   cont := Continuous.comp&#x27; (by fun_prop) (continuous_pi (by dsimp; fun_prop))</span>
+<span id="L227" class="line"><a href="#L227">227</a> </span>
+<span id="L228" class="line"><a href="#L228">228</a> @[simp]</span>
+<span id="L229" class="line"><a href="#L229">229</a> lemma restrict₂_apply (hIJ : I ⊆ J) (x : EuclideanSpace 𝕜 J) (i : I) :</span>
+<span id="L230" class="line"><a href="#L230">230</a>     EuclideanSpace.restrict₂ hIJ x i = x ⟨i.1, hIJ i.2⟩ := rfl</span>
+<span id="L231" class="line"><a href="#L231">231</a> </span>
+<span id="L232" class="line"><a href="#L232">232</a> end restrict₂</span>
+<span id="L233" class="line"><a href="#L233">233</a> </span>
+<span id="L234" class="line"><a href="#L234">234</a> end EuclideanSpace</span>
+<span id="L235" class="line"><a href="#L235">235</a> </span>
+<span id="L236" class="line"><a href="#L236">236</a> /-- A finite, mutually orthogonal family of subspaces of `E`, which span `E`, induce an isometry</span>
+<span id="L237" class="line"><a href="#L237">237</a> from `E` to `PiLp 2` of the subspaces equipped with the `L2` inner product. -/</span>
+<span id="L238" class="line"><a href="#L238">238</a> def DirectSum.IsInternal.isometryL2OfOrthogonalFamily [DecidableEq ι] {V : ι → Submodule 𝕜 E}</span>
+<span id="L239" class="line"><a href="#L239">239</a>     (hV : DirectSum.IsInternal V)</span>
+<span id="L240" class="line"><a href="#L240">240</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) :</span>
+<span id="L241" class="line"><a href="#L241">241</a>     E ≃ₗᵢ[𝕜] PiLp 2 fun i =&gt; V i := by</span>
+<span id="L242" class="line"><a href="#L242">242</a>   let e₁ := DirectSum.linearEquivFunOnFintype 𝕜 ι fun i =&gt; V i</span>
+<span id="L243" class="line"><a href="#L243">243</a>   let e₂ := LinearEquiv.ofBijective (DirectSum.coeLinearMap V) hV</span>
+<span id="L244" class="line"><a href="#L244">244</a>   refine LinearEquiv.isometryOfInner ((e₂.symm.trans e₁).trans</span>
+<span id="L245" class="line"><a href="#L245">245</a>     (WithLp.linearEquiv 2 𝕜 (Π i, V i)).symm) ?_</span>
+<span id="L246" class="line"><a href="#L246">246</a>   suffices ∀ (v w : PiLp 2 fun i =&gt; V i), ⟪v, w⟫ = ⟪e₂ (e₁.symm v), e₂ (e₁.symm w)⟫ by</span>
+<span id="L247" class="line"><a href="#L247">247</a>     intro v₀ w₀</span>
+<span id="L248" class="line"><a href="#L248">248</a>     simp only [LinearEquiv.trans_apply]</span>
+<span id="L249" class="line"><a href="#L249">249</a>     convert this (toLp 2 (e₁ (e₂.symm v₀))) (toLp 2 (e₁ (e₂.symm w₀))) &lt;;&gt; simp</span>
+<span id="L250" class="line"><a href="#L250">250</a>   intro v w</span>
+<span id="L251" class="line"><a href="#L251">251</a>   trans ⟪∑ i, (V i).subtypeₗᵢ (v i), ∑ i, (V i).subtypeₗᵢ (w i)⟫</span>
+<span id="L252" class="line"><a href="#L252">252</a>   · simp only [sum_inner, hV&#x27;.inner_right_fintype, PiLp.inner_apply]</span>
+<span id="L253" class="line"><a href="#L253">253</a>   · congr &lt;;&gt; simp</span>
+<span id="L254" class="line"><a href="#L254">254</a> </span>
+<span id="L255" class="line"><a href="#L255">255</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L256" class="line"><a href="#L256">256</a> @[simp]</span>
+<span id="L257" class="line"><a href="#L257">257</a> theorem DirectSum.IsInternal.isometryL2OfOrthogonalFamily_symm_apply [DecidableEq ι]</span>
+<span id="L258" class="line"><a href="#L258">258</a>     {V : ι → Submodule 𝕜 E} (hV : DirectSum.IsInternal V)</span>
+<span id="L259" class="line"><a href="#L259">259</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) (w : PiLp 2 fun i =&gt; V i) :</span>
+<span id="L260" class="line"><a href="#L260">260</a>     (hV.isometryL2OfOrthogonalFamily hV&#x27;).symm w = ∑ i, (w i : E) := by</span>
+<span id="L261" class="line"><a href="#L261">261</a>   classical</span>
+<span id="L262" class="line"><a href="#L262">262</a>     let e₁ := DirectSum.linearEquivFunOnFintype 𝕜 ι fun i =&gt; V i</span>
+<span id="L263" class="line"><a href="#L263">263</a>     let e₂ := LinearEquiv.ofBijective (DirectSum.coeLinearMap V) hV</span>
+<span id="L264" class="line"><a href="#L264">264</a>     suffices ∀ v : ⨁ i, V i, e₂ v = ∑ i, e₁ v i by exact this (e₁.symm w)</span>
+<span id="L265" class="line"><a href="#L265">265</a>     simp [e₁, e₂, DirectSum.coeLinearMap, DirectSum.toModule, DFinsupp.lsum,</span>
+<span id="L266" class="line"><a href="#L266">266</a>       DFinsupp.sumAddHom_apply]</span>
+<span id="L267" class="line"><a href="#L267">267</a> </span>
+<span id="L268" class="line"><a href="#L268">268</a> end</span>
+<span id="L269" class="line"><a href="#L269">269</a> </span>
+<span id="L270" class="line"><a href="#L270">270</a> variable (ι 𝕜)</span>
+<span id="L271" class="line"><a href="#L271">271</a> </span>
+<span id="L272" class="line"><a href="#L272">272</a> /-- A shorthand for `PiLp.continuousLinearEquiv`. -/</span>
+<span id="L273" class="line"><a href="#L273">273</a> abbrev EuclideanSpace.equiv : EuclideanSpace 𝕜 ι ≃L[𝕜] ι → 𝕜 :=</span>
+<span id="L274" class="line"><a href="#L274">274</a>   PiLp.continuousLinearEquiv 2 𝕜 _</span>
+<span id="L275" class="line"><a href="#L275">275</a> </span>
+<span id="L276" class="line"><a href="#L276">276</a> variable {ι 𝕜}</span>
+<span id="L277" class="line"><a href="#L277">277</a> </span>
+<span id="L278" class="line"><a href="#L278">278</a> /-- The projection on the `i`-th coordinate of `EuclideanSpace 𝕜 ι`, as a linear map. -/</span>
+<span id="L279" class="line"><a href="#L279">279</a> abbrev EuclideanSpace.projₗ (i : ι) : EuclideanSpace 𝕜 ι →ₗ[𝕜] 𝕜 := PiLp.projₗ _ _ i</span>
+<span id="L280" class="line"><a href="#L280">280</a> </span>
+<span id="L281" class="line"><a href="#L281">281</a> /-- The projection on the `i`-th coordinate of `EuclideanSpace 𝕜 ι`, as a continuous linear map. -/</span>
+<span id="L282" class="line"><a href="#L282">282</a> abbrev EuclideanSpace.proj (i : ι) : StrongDual 𝕜 (EuclideanSpace 𝕜 ι) := PiLp.proj _ _ i</span>
+<span id="L283" class="line"><a href="#L283">283</a> </span>
+<span id="L284" class="line"><a href="#L284">284</a> @[simp]</span>
+<span id="L285" class="line"><a href="#L285">285</a> lemma EuclideanSpace.coe_proj {ι : Type*} (𝕜 : Type*) [RCLike 𝕜] {i : ι} :</span>
+<span id="L286" class="line"><a href="#L286">286</a>     ⇑(@proj ι 𝕜 _ i) = fun x ↦ x i := rfl</span>
+<span id="L287" class="line"><a href="#L287">287</a> </span>
+<span id="L288" class="line"><a href="#L288">288</a> section DecEq</span>
+<span id="L289" class="line"><a href="#L289">289</a> </span>
+<span id="L290" class="line"><a href="#L290">290</a> variable [DecidableEq ι]</span>
+<span id="L291" class="line"><a href="#L291">291</a> </span>
+<span id="L292" class="line"><a href="#L292">292</a> /-- The vector given in Euclidean space by being `a : 𝕜` at coordinate `i : ι` and `0 : 𝕜` at</span>
+<span id="L293" class="line"><a href="#L293">293</a> all other coordinates. -/</span>
+<span id="L294" class="line"><a href="#L294">294</a> abbrev EuclideanSpace.single (i : ι) (a : 𝕜) : EuclideanSpace 𝕜 ι := PiLp.single 2 i a</span>
+<span id="L295" class="line"><a href="#L295">295</a> </span>
+<span id="L296" class="line"><a href="#L296">296</a> @[deprecated PiLp.ofLp_single (since := &quot;2026-03-15&quot;)]</span>
+<span id="L297" class="line"><a href="#L297">297</a> lemma EuclideanSpace.ofLp_single (i : ι) (a : 𝕜) : ofLp (single i a) = Pi.single i a := by</span>
+<span id="L298" class="line"><a href="#L298">298</a>   simp</span>
+<span id="L299" class="line"><a href="#L299">299</a> </span>
+<span id="L300" class="line"><a href="#L300">300</a> @[deprecated PiLp.toLp_single (since := &quot;2026-03-15&quot;)]</span>
+<span id="L301" class="line"><a href="#L301">301</a> lemma EuclideanSpace.toLp_single (i : ι) (a : 𝕜) : toLp _ (Pi.single i a) = single i a := by</span>
+<span id="L302" class="line"><a href="#L302">302</a>   simp</span>
+<span id="L303" class="line"><a href="#L303">303</a> </span>
+<span id="L304" class="line"><a href="#L304">304</a> @[deprecated PiLp.single_apply (since := &quot;2026-03-15&quot;)]</span>
+<span id="L305" class="line"><a href="#L305">305</a> theorem EuclideanSpace.single_apply (i : ι) (a : 𝕜) (j : ι) :</span>
+<span id="L306" class="line"><a href="#L306">306</a>     (EuclideanSpace.single i a) j = ite (j = i) a 0 := by</span>
+<span id="L307" class="line"><a href="#L307">307</a>   simp</span>
+<span id="L308" class="line"><a href="#L308">308</a> </span>
+<span id="L309" class="line"><a href="#L309">309</a> @[deprecated PiLp.single_eq_zero_iff (since := &quot;2026-03-15&quot;)]</span>
+<span id="L310" class="line"><a href="#L310">310</a> theorem EuclideanSpace.single_eq_zero_iff {i : ι} {a : 𝕜} :</span>
+<span id="L311" class="line"><a href="#L311">311</a>     EuclideanSpace.single i a = 0 ↔ a = 0 := by simp</span>
+<span id="L312" class="line"><a href="#L312">312</a> </span>
+<span id="L313" class="line"><a href="#L313">313</a> variable [Fintype ι]</span>
+<span id="L314" class="line"><a href="#L314">314</a> </span>
+<span id="L315" class="line"><a href="#L315">315</a> theorem EuclideanSpace.inner_single_left (i : ι) (a : 𝕜) (v : EuclideanSpace 𝕜 ι) :</span>
+<span id="L316" class="line"><a href="#L316">316</a>     ⟪EuclideanSpace.single i (a : 𝕜), v⟫ = conj a * v i := by</span>
+<span id="L317" class="line"><a href="#L317">317</a>   simp [PiLp.inner_apply, apply_ite conj, mul_comm]</span>
+<span id="L318" class="line"><a href="#L318">318</a> </span>
+<span id="L319" class="line"><a href="#L319">319</a> theorem EuclideanSpace.inner_single_right (i : ι) (a : 𝕜) (v : EuclideanSpace 𝕜 ι) :</span>
+<span id="L320" class="line"><a href="#L320">320</a>     ⟪v, EuclideanSpace.single i (a : 𝕜)⟫ = a * conj (v i) := by simp [PiLp.inner_apply]</span>
+<span id="L321" class="line"><a href="#L321">321</a> </span>
+<span id="L322" class="line"><a href="#L322">322</a> @[deprecated PiLp.norm_single (since := &quot;2026-03-15&quot;)]</span>
+<span id="L323" class="line"><a href="#L323">323</a> theorem EuclideanSpace.norm_single (i : ι) (a : 𝕜) :</span>
+<span id="L324" class="line"><a href="#L324">324</a>     ‖EuclideanSpace.single i (a : 𝕜)‖ = ‖a‖ := by simp</span>
+<span id="L325" class="line"><a href="#L325">325</a> </span>
+<span id="L326" class="line"><a href="#L326">326</a> @[deprecated PiLp.nnnorm_single (since := &quot;2026-03-15&quot;)]</span>
+<span id="L327" class="line"><a href="#L327">327</a> theorem EuclideanSpace.nnnorm_single (i : ι) (a : 𝕜) :</span>
+<span id="L328" class="line"><a href="#L328">328</a>     ‖EuclideanSpace.single i (a : 𝕜)‖₊ = ‖a‖₊ := by simp</span>
+<span id="L329" class="line"><a href="#L329">329</a> </span>
+<span id="L330" class="line"><a href="#L330">330</a> @[deprecated PiLp.dist_single_same (since := &quot;2026-03-15&quot;)]</span>
+<span id="L331" class="line"><a href="#L331">331</a> theorem EuclideanSpace.dist_single_same (i : ι) (a b : 𝕜) :</span>
+<span id="L332" class="line"><a href="#L332">332</a>     dist (EuclideanSpace.single i (a : 𝕜)) (EuclideanSpace.single i (b : 𝕜)) = dist a b := by</span>
+<span id="L333" class="line"><a href="#L333">333</a>   simp</span>
+<span id="L334" class="line"><a href="#L334">334</a> </span>
+<span id="L335" class="line"><a href="#L335">335</a> @[deprecated PiLp.nndist_single_same (since := &quot;2026-03-15&quot;)]</span>
+<span id="L336" class="line"><a href="#L336">336</a> theorem EuclideanSpace.nndist_single_same (i : ι) (a b : 𝕜) :</span>
+<span id="L337" class="line"><a href="#L337">337</a>     nndist (EuclideanSpace.single i (a : 𝕜)) (EuclideanSpace.single i (b : 𝕜)) = nndist a b := by</span>
+<span id="L338" class="line"><a href="#L338">338</a>   simp</span>
+<span id="L339" class="line"><a href="#L339">339</a> </span>
+<span id="L340" class="line"><a href="#L340">340</a> @[deprecated PiLp.edist_single_same (since := &quot;2026-03-15&quot;)]</span>
+<span id="L341" class="line"><a href="#L341">341</a> theorem EuclideanSpace.edist_single_same (i : ι) (a b : 𝕜) :</span>
+<span id="L342" class="line"><a href="#L342">342</a>     edist (EuclideanSpace.single i (a : 𝕜)) (EuclideanSpace.single i (b : 𝕜)) = edist a b := by</span>
+<span id="L343" class="line"><a href="#L343">343</a>   simp</span>
+<span id="L344" class="line"><a href="#L344">344</a> </span>
+<span id="L345" class="line"><a href="#L345">345</a> /-- `EuclideanSpace.single` forms an orthonormal family. -/</span>
+<span id="L346" class="line"><a href="#L346">346</a> theorem EuclideanSpace.orthonormal_single :</span>
+<span id="L347" class="line"><a href="#L347">347</a>     Orthonormal 𝕜 fun i : ι =&gt; EuclideanSpace.single i (1 : 𝕜) := by</span>
+<span id="L348" class="line"><a href="#L348">348</a>   simp_rw [orthonormal_iff_ite, EuclideanSpace.inner_single_left, map_one, one_mul,</span>
+<span id="L349" class="line"><a href="#L349">349</a>     PiLp.single_apply]</span>
+<span id="L350" class="line"><a href="#L350">350</a>   intros</span>
+<span id="L351" class="line"><a href="#L351">351</a>   trivial</span>
+<span id="L352" class="line"><a href="#L352">352</a> </span>
+<span id="L353" class="line"><a href="#L353">353</a> theorem EuclideanSpace.piLpCongrLeft_single</span>
+<span id="L354" class="line"><a href="#L354">354</a>     {ι&#x27; : Type*} [Fintype ι&#x27;] [DecidableEq ι&#x27;] (e : ι&#x27; ≃ ι) (i&#x27; : ι&#x27;) (v : 𝕜) :</span>
+<span id="L355" class="line"><a href="#L355">355</a>     LinearIsometryEquiv.piLpCongrLeft 2 𝕜 𝕜 e (EuclideanSpace.single i&#x27; v) =</span>
+<span id="L356" class="line"><a href="#L356">356</a>       EuclideanSpace.single (e i&#x27;) v :=</span>
+<span id="L357" class="line"><a href="#L357">357</a>   LinearIsometryEquiv.piLpCongrLeft_single e i&#x27; _</span>
+<span id="L358" class="line"><a href="#L358">358</a> </span>
+<span id="L359" class="line"><a href="#L359">359</a> end DecEq</span>
+<span id="L360" class="line"><a href="#L360">360</a> </span>
+<span id="L361" class="line"><a href="#L361">361</a> section finAddEquivProd</span>
+<span id="L362" class="line"><a href="#L362">362</a> </span>
+<span id="L363" class="line"><a href="#L363">363</a> /-- The canonical linear homeomorphism between `EuclideanSpace 𝕜 (ι ⊕ κ)` and</span>
+<span id="L364" class="line"><a href="#L364">364</a> `EuclideanSpace 𝕜 ι × EuclideanSpace 𝕜 κ`.</span>
+<span id="L365" class="line"><a href="#L365">365</a> </span>
+<span id="L366" class="line"><a href="#L366">366</a> See `PiLp.sumPiLpEquivProdLpPiLp` for the isometry version,</span>
+<span id="L367" class="line"><a href="#L367">367</a> where the RHS is equipped with the Euclidean norm rather than the supremum norm. -/</span>
+<span id="L368" class="line"><a href="#L368">368</a> abbrev EuclideanSpace.sumEquivProd {𝕜 : Type*} [RCLike 𝕜] {ι κ : Type*} [Fintype ι] [Fintype κ] :</span>
+<span id="L369" class="line"><a href="#L369">369</a>     EuclideanSpace 𝕜 (ι ⊕ κ) ≃L[𝕜] EuclideanSpace 𝕜 ι × EuclideanSpace 𝕜 κ :=</span>
+<span id="L370" class="line"><a href="#L370">370</a>   (PiLp.sumPiLpEquivProdLpPiLp 2 _).toContinuousLinearEquiv.trans &lt;|</span>
+<span id="L371" class="line"><a href="#L371">371</a>     WithLp.prodContinuousLinearEquiv _ _ _ _</span>
+<span id="L372" class="line"><a href="#L372">372</a> </span>
+<span id="L373" class="line"><a href="#L373">373</a> /-- The canonical linear homeomorphism between `EuclideanSpace 𝕜 (Fin (n + m))` and</span>
+<span id="L374" class="line"><a href="#L374">374</a> `EuclideanSpace 𝕜 (Fin n) × EuclideanSpace 𝕜 (Fin m)`. -/</span>
+<span id="L375" class="line"><a href="#L375">375</a> abbrev EuclideanSpace.finAddEquivProd {𝕜 : Type*} [RCLike 𝕜] {n m : ℕ} :</span>
+<span id="L376" class="line"><a href="#L376">376</a>     EuclideanSpace 𝕜 (Fin (n + m)) ≃L[𝕜] EuclideanSpace 𝕜 (Fin n) × EuclideanSpace 𝕜 (Fin m) :=</span>
+<span id="L377" class="line"><a href="#L377">377</a>   (LinearIsometryEquiv.piLpCongrLeft 2 𝕜 𝕜 finSumFinEquiv.symm).toContinuousLinearEquiv.trans</span>
+<span id="L378" class="line"><a href="#L378">378</a>     sumEquivProd</span>
+<span id="L379" class="line"><a href="#L379">379</a> </span>
+<span id="L380" class="line"><a href="#L380">380</a> end finAddEquivProd</span>
+<span id="L381" class="line"><a href="#L381">381</a> </span>
+<span id="L382" class="line"><a href="#L382">382</a> variable (ι 𝕜 E)</span>
+<span id="L383" class="line"><a href="#L383">383</a> variable [Fintype ι]</span>
+<span id="L384" class="line"><a href="#L384">384</a> </span>
+<span id="L385" class="line"><a href="#L385">385</a> /-- An orthonormal basis on E is an identification of `E` with its dimensional-matching</span>
+<span id="L386" class="line"><a href="#L386">386</a> `EuclideanSpace 𝕜 ι`. -/</span>
+<span id="L387" class="line"><a href="#L387">387</a> structure OrthonormalBasis where ofRepr ::</span>
+<span id="L388" class="line"><a href="#L388">388</a>   /-- Linear isometry between `E` and `EuclideanSpace 𝕜 ι` representing the orthonormal basis. -/</span>
+<span id="L389" class="line"><a href="#L389">389</a>   repr : E ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 ι</span>
+<span id="L390" class="line"><a href="#L390">390</a> </span>
+<span id="L391" class="line"><a href="#L391">391</a> variable {ι 𝕜 E}</span>
+<span id="L392" class="line"><a href="#L392">392</a> </span>
+<span id="L393" class="line"><a href="#L393">393</a> namespace OrthonormalBasis</span>
+<span id="L394" class="line"><a href="#L394">394</a> </span>
+<span id="L395" class="line"><a href="#L395">395</a> theorem repr_injective :</span>
+<span id="L396" class="line"><a href="#L396">396</a>     Injective (repr : OrthonormalBasis ι 𝕜 E → E ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 ι) := fun f g h =&gt; by</span>
+<span id="L397" class="line"><a href="#L397">397</a>   cases f</span>
+<span id="L398" class="line"><a href="#L398">398</a>   cases g</span>
+<span id="L399" class="line"><a href="#L399">399</a>   congr</span>
+<span id="L400" class="line"><a href="#L400">400</a> </span>
+<span id="L401" class="line"><a href="#L401">401</a> /-- `b i` is the `i`th basis vector. -/</span>
+<span id="L402" class="line"><a href="#L402">402</a> instance instFunLike : FunLike (OrthonormalBasis ι 𝕜 E) ι E where</span>
+<span id="L403" class="line"><a href="#L403">403</a>   coe b i := by classical exact b.repr.symm (EuclideanSpace.single i (1 : 𝕜))</span>
+<span id="L404" class="line"><a href="#L404">404</a>   coe_injective&#x27; b b&#x27; h := repr_injective &lt;| LinearIsometryEquiv.toLinearEquiv_injective &lt;|</span>
+<span id="L405" class="line"><a href="#L405">405</a>     LinearEquiv.symm_bijective.injective &lt;| LinearEquiv.toLinearMap_injective &lt;| by</span>
+<span id="L406" class="line"><a href="#L406">406</a>       classical</span>
+<span id="L407" class="line"><a href="#L407">407</a>         rw [← LinearMap.cancel_right (WithLp.linearEquiv 2 𝕜 (_ → 𝕜)).symm.surjective]</span>
+<span id="L408" class="line"><a href="#L408">408</a>         simp +instances only</span>
+<span id="L409" class="line"><a href="#L409">409</a>         refine LinearMap.pi_ext fun i k =&gt; ?_</span>
+<span id="L410" class="line"><a href="#L410">410</a>         have : k = k • (1 : 𝕜) := by rw [smul_eq_mul, mul_one]</span>
+<span id="L411" class="line"><a href="#L411">411</a>         rw [this, Pi.single_smul]</span>
+<span id="L412" class="line"><a href="#L412">412</a>         replace h := congr_fun h i</span>
+<span id="L413" class="line"><a href="#L413">413</a>         simp only [LinearEquiv.comp_coe, map_smul, LinearEquiv.coe_coe, LinearEquiv.trans_apply,</span>
+<span id="L414" class="line"><a href="#L414">414</a>           coe_symm_linearEquiv, PiLp.toLp_single,</span>
+<span id="L415" class="line"><a href="#L415">415</a>           LinearIsometryEquiv.coe_symm_toLinearEquiv] at h ⊢</span>
+<span id="L416" class="line"><a href="#L416">416</a>         rw [h]</span>
+<span id="L417" class="line"><a href="#L417">417</a> </span>
+<span id="L418" class="line"><a href="#L418">418</a> @[simp]</span>
+<span id="L419" class="line"><a href="#L419">419</a> theorem coe_ofRepr [DecidableEq ι] (e : E ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 ι) :</span>
+<span id="L420" class="line"><a href="#L420">420</a>     ⇑(OrthonormalBasis.ofRepr e) = fun i =&gt; e.symm (EuclideanSpace.single i (1 : 𝕜)) := by</span>
+<span id="L421" class="line"><a href="#L421">421</a>   dsimp only [DFunLike.coe]</span>
+<span id="L422" class="line"><a href="#L422">422</a>   funext</span>
+<span id="L423" class="line"><a href="#L423">423</a>   congr!</span>
+<span id="L424" class="line"><a href="#L424">424</a> </span>
+<span id="L425" class="line"><a href="#L425">425</a> @[simp]</span>
+<span id="L426" class="line"><a href="#L426">426</a> protected theorem repr_symm_single [DecidableEq ι] (b : OrthonormalBasis ι 𝕜 E) (i : ι) :</span>
+<span id="L427" class="line"><a href="#L427">427</a>     b.repr.symm (EuclideanSpace.single i (1 : 𝕜)) = b i := by</span>
+<span id="L428" class="line"><a href="#L428">428</a>   dsimp only [DFunLike.coe]</span>
+<span id="L429" class="line"><a href="#L429">429</a>   congr!</span>
+<span id="L430" class="line"><a href="#L430">430</a> </span>
+<span id="L431" class="line"><a href="#L431">431</a> @[simp]</span>
+<span id="L432" class="line"><a href="#L432">432</a> protected theorem repr_self [DecidableEq ι] (b : OrthonormalBasis ι 𝕜 E) (i : ι) :</span>
+<span id="L433" class="line"><a href="#L433">433</a>     b.repr (b i) = EuclideanSpace.single i (1 : 𝕜) := by</span>
+<span id="L434" class="line"><a href="#L434">434</a>   rw [← b.repr_symm_single i, LinearIsometryEquiv.apply_symm_apply]</span>
+<span id="L435" class="line"><a href="#L435">435</a> </span>
+<span id="L436" class="line"><a href="#L436">436</a> protected theorem repr_apply_apply (b : OrthonormalBasis ι 𝕜 E) (v : E) (i : ι) :</span>
+<span id="L437" class="line"><a href="#L437">437</a>     b.repr v i = ⟪b i, v⟫ := by</span>
+<span id="L438" class="line"><a href="#L438">438</a>   classical</span>
+<span id="L439" class="line"><a href="#L439">439</a>     rw [← b.repr.inner_map_map (b i) v, b.repr_self i, EuclideanSpace.inner_single_left]</span>
+<span id="L440" class="line"><a href="#L440">440</a>     simp only [one_mul, map_one]</span>
+<span id="L441" class="line"><a href="#L441">441</a> </span>
+<span id="L442" class="line"><a href="#L442">442</a> @[simp]</span>
+<span id="L443" class="line"><a href="#L443">443</a> protected theorem orthonormal (b : OrthonormalBasis ι 𝕜 E) : Orthonormal 𝕜 b := by</span>
+<span id="L444" class="line"><a href="#L444">444</a>   classical</span>
+<span id="L445" class="line"><a href="#L445">445</a>     rw [orthonormal_iff_ite]</span>
+<span id="L446" class="line"><a href="#L446">446</a>     intro i j</span>
+<span id="L447" class="line"><a href="#L447">447</a>     rw [← b.repr.inner_map_map (b i) (b j), b.repr_self i, b.repr_self j,</span>
+<span id="L448" class="line"><a href="#L448">448</a>       EuclideanSpace.inner_single_left, PiLp.single_apply, map_one, one_mul]</span>
+<span id="L449" class="line"><a href="#L449">449</a> </span>
+<span id="L450" class="line"><a href="#L450">450</a> @[simp]</span>
+<span id="L451" class="line"><a href="#L451">451</a> lemma norm_eq_one (b : OrthonormalBasis ι 𝕜 E) (i : ι) :</span>
+<span id="L452" class="line"><a href="#L452">452</a>     ‖b i‖ = 1 := b.orthonormal.norm_eq_one i</span>
+<span id="L453" class="line"><a href="#L453">453</a> </span>
+<span id="L454" class="line"><a href="#L454">454</a> @[simp]</span>
+<span id="L455" class="line"><a href="#L455">455</a> lemma nnnorm_eq_one (b : OrthonormalBasis ι 𝕜 E) (i : ι) :</span>
+<span id="L456" class="line"><a href="#L456">456</a>     ‖b i‖₊ = 1 := b.orthonormal.nnnorm_eq_one i</span>
+<span id="L457" class="line"><a href="#L457">457</a> </span>
+<span id="L458" class="line"><a href="#L458">458</a> @[simp]</span>
+<span id="L459" class="line"><a href="#L459">459</a> lemma enorm_eq_one (b : OrthonormalBasis ι 𝕜 E) (i : ι) :</span>
+<span id="L460" class="line"><a href="#L460">460</a>     ‖b i‖ₑ = 1 := b.orthonormal.enorm_eq_one i</span>
+<span id="L461" class="line"><a href="#L461">461</a> </span>
+<span id="L462" class="line"><a href="#L462">462</a> @[simp]</span>
+<span id="L463" class="line"><a href="#L463">463</a> lemma inner_eq_zero (b : OrthonormalBasis ι 𝕜 E) {i j : ι} (hij : i ≠ j) :</span>
+<span id="L464" class="line"><a href="#L464">464</a>     ⟪b i, b j⟫ = 0 := b.orthonormal.inner_eq_zero hij</span>
+<span id="L465" class="line"><a href="#L465">465</a> </span>
+<span id="L466" class="line"><a href="#L466">466</a> lemma inner_eq_one (b : OrthonormalBasis ι 𝕜 E) (i : ι) : ⟪b i, b i⟫ = 1 := by</span>
+<span id="L467" class="line"><a href="#L467">467</a>   simp</span>
+<span id="L468" class="line"><a href="#L468">468</a> </span>
+<span id="L469" class="line"><a href="#L469">469</a> lemma inner_eq_ite [DecidableEq ι] (b : OrthonormalBasis ι 𝕜 E) (i j : ι) :</span>
+<span id="L470" class="line"><a href="#L470">470</a>     ⟪b i, b j⟫ = if i = j then 1 else 0 := by</span>
+<span id="L471" class="line"><a href="#L471">471</a>   by_cases h : i = j &lt;;&gt; simp [h]</span>
+<span id="L472" class="line"><a href="#L472">472</a> </span>
+<span id="L473" class="line"><a href="#L473">473</a> /-- The `Basis ι 𝕜 E` underlying the `OrthonormalBasis` -/</span>
+<span id="L474" class="line"><a href="#L474">474</a> protected def toBasis (b : OrthonormalBasis ι 𝕜 E) : Basis ι 𝕜 E :=</span>
+<span id="L475" class="line"><a href="#L475">475</a>   Basis.ofEquivFun (b.repr.toLinearEquiv.trans (WithLp.linearEquiv 2 𝕜 (ι → 𝕜)))</span>
+<span id="L476" class="line"><a href="#L476">476</a> </span>
+<span id="L477" class="line"><a href="#L477">477</a> @[simp]</span>
+<span id="L478" class="line"><a href="#L478">478</a> protected theorem coe_toBasis (b : OrthonormalBasis ι 𝕜 E) : (⇑b.toBasis : ι → E) = ⇑b := rfl</span>
+<span id="L479" class="line"><a href="#L479">479</a> </span>
+<span id="L480" class="line"><a href="#L480">480</a> @[simp]</span>
+<span id="L481" class="line"><a href="#L481">481</a> protected theorem coe_toBasis_repr (b : OrthonormalBasis ι 𝕜 E) :</span>
+<span id="L482" class="line"><a href="#L482">482</a>     b.toBasis.equivFun = b.repr.toLinearEquiv.trans (WithLp.linearEquiv 2 𝕜 (ι → 𝕜)) :=</span>
+<span id="L483" class="line"><a href="#L483">483</a>   Basis.equivFun_ofEquivFun _</span>
+<span id="L484" class="line"><a href="#L484">484</a> </span>
+<span id="L485" class="line"><a href="#L485">485</a> @[simp]</span>
+<span id="L486" class="line"><a href="#L486">486</a> protected theorem coe_toBasis_repr_apply (b : OrthonormalBasis ι 𝕜 E) (x : E) (i : ι) :</span>
+<span id="L487" class="line"><a href="#L487">487</a>     b.toBasis.repr x i = b.repr x i := by</span>
+<span id="L488" class="line"><a href="#L488">488</a>   simp [← Basis.equivFun_apply]</span>
+<span id="L489" class="line"><a href="#L489">489</a> </span>
+<span id="L490" class="line"><a href="#L490">490</a> protected theorem sum_repr (b : OrthonormalBasis ι 𝕜 E) (x : E) : ∑ i, b.repr x i • b i = x := by</span>
+<span id="L491" class="line"><a href="#L491">491</a>   simp_rw [← b.coe_toBasis_repr_apply, ← b.coe_toBasis]</span>
+<span id="L492" class="line"><a href="#L492">492</a>   exact b.toBasis.sum_repr x</span>
+<span id="L493" class="line"><a href="#L493">493</a> </span>
+<span id="L494" class="line"><a href="#L494">494</a> open scoped InnerProductSpace in</span>
+<span id="L495" class="line"><a href="#L495">495</a> protected theorem sum_repr&#x27; (b : OrthonormalBasis ι 𝕜 E) (x : E) : ∑ i, ⟪b i, x⟫_𝕜 • b i = x := by</span>
+<span id="L496" class="line"><a href="#L496">496</a>   nth_rw 2 [← (b.sum_repr x)]</span>
+<span id="L497" class="line"><a href="#L497">497</a>   simp_rw [b.repr_apply_apply x]</span>
+<span id="L498" class="line"><a href="#L498">498</a> </span>
+<span id="L499" class="line"><a href="#L499">499</a> protected theorem sum_repr_symm (b : OrthonormalBasis ι 𝕜 E) (v : EuclideanSpace 𝕜 ι) :</span>
+<span id="L500" class="line"><a href="#L500">500</a>     ∑ i, v i • b i = b.repr.symm v := by simpa using (b.toBasis.equivFun_symm_apply v).symm</span>
+<span id="L501" class="line"><a href="#L501">501</a> </span>
+<span id="L502" class="line"><a href="#L502">502</a> protected theorem sum_inner_mul_inner (b : OrthonormalBasis ι 𝕜 E) (x y : E) :</span>
+<span id="L503" class="line"><a href="#L503">503</a>     ∑ i, ⟪x, b i⟫ * ⟪b i, y⟫ = ⟪x, y⟫ := by</span>
+<span id="L504" class="line"><a href="#L504">504</a>   have := congr_arg (innerSL 𝕜 x) (b.sum_repr y)</span>
+<span id="L505" class="line"><a href="#L505">505</a>   rw [map_sum] at this</span>
+<span id="L506" class="line"><a href="#L506">506</a>   convert this</span>
+<span id="L507" class="line"><a href="#L507">507</a>   rw [map_smul, b.repr_apply_apply, mul_comm]</span>
+<span id="L508" class="line"><a href="#L508">508</a>   simp</span>
+<span id="L509" class="line"><a href="#L509">509</a> </span>
+<span id="L510" class="line"><a href="#L510">510</a> lemma sum_sq_norm_inner_right (b : OrthonormalBasis ι 𝕜 E) (x : E) :</span>
+<span id="L511" class="line"><a href="#L511">511</a>     ∑ i, ‖⟪b i, x⟫‖ ^ 2 = ‖x‖ ^ 2 := by</span>
+<span id="L512" class="line"><a href="#L512">512</a>   rw [@norm_eq_sqrt_re_inner 𝕜, ← OrthonormalBasis.sum_inner_mul_inner b x x, map_sum]</span>
+<span id="L513" class="line"><a href="#L513">513</a>   simp_rw [inner_mul_symm_re_eq_norm, norm_mul, ← inner_conj_symm x, starRingEnd_apply,</span>
+<span id="L514" class="line"><a href="#L514">514</a>     norm_star, ← pow_two]</span>
+<span id="L515" class="line"><a href="#L515">515</a>   rw [Real.sq_sqrt]</span>
+<span id="L516" class="line"><a href="#L516">516</a>   exact Fintype.sum_nonneg fun _ ↦ by positivity</span>
+<span id="L517" class="line"><a href="#L517">517</a> </span>
+<span id="L518" class="line"><a href="#L518">518</a> lemma sum_sq_norm_inner_left (b : OrthonormalBasis ι 𝕜 E) (x : E) :</span>
+<span id="L519" class="line"><a href="#L519">519</a>     ∑ i, ‖⟪x, b i⟫‖ ^ 2 = ‖x‖ ^ 2 := by</span>
+<span id="L520" class="line"><a href="#L520">520</a>   convert sum_sq_norm_inner_right b x using 2 with i -</span>
+<span id="L521" class="line"><a href="#L521">521</a>   rw [← inner_conj_symm, RCLike.norm_conj]</span>
+<span id="L522" class="line"><a href="#L522">522</a> </span>
+<span id="L523" class="line"><a href="#L523">523</a> open scoped RealInnerProductSpace in</span>
+<span id="L524" class="line"><a href="#L524">524</a> theorem sum_sq_inner_right {E : Type*} [NormedAddCommGroup E]</span>
+<span id="L525" class="line"><a href="#L525">525</a>     [InnerProductSpace ℝ E] (b : OrthonormalBasis ι ℝ E) (x : E) :</span>
+<span id="L526" class="line"><a href="#L526">526</a>     ∑ i : ι, ⟪b i, x⟫ ^ 2 = ‖x‖ ^ 2 := by</span>
+<span id="L527" class="line"><a href="#L527">527</a>   rw [← b.sum_sq_norm_inner_right]</span>
+<span id="L528" class="line"><a href="#L528">528</a>   simp</span>
+<span id="L529" class="line"><a href="#L529">529</a> </span>
+<span id="L530" class="line"><a href="#L530">530</a> open scoped RealInnerProductSpace in</span>
+<span id="L531" class="line"><a href="#L531">531</a> theorem sum_sq_inner_left {ι E : Type*} [NormedAddCommGroup E]</span>
+<span id="L532" class="line"><a href="#L532">532</a>     [InnerProductSpace ℝ E] [Fintype ι] (b : OrthonormalBasis ι ℝ E) (x : E) :</span>
+<span id="L533" class="line"><a href="#L533">533</a>     ∑ i : ι, ⟪x, b i⟫ ^ 2 = ‖x‖ ^ 2 := by</span>
+<span id="L534" class="line"><a href="#L534">534</a>   simp_rw [← b.sum_sq_inner_right, real_inner_comm]</span>
+<span id="L535" class="line"><a href="#L535">535</a> </span>
+<span id="L536" class="line"><a href="#L536">536</a> lemma norm_le_card_mul_iSup_norm_inner (b : OrthonormalBasis ι 𝕜 E) (x : E) :</span>
+<span id="L537" class="line"><a href="#L537">537</a>     ‖x‖ ≤ √(Fintype.card ι) * ⨆ i, ‖⟪b i, x⟫‖ := by</span>
+<span id="L538" class="line"><a href="#L538">538</a>   calc ‖x‖</span>
+<span id="L539" class="line"><a href="#L539">539</a>   _ = √(∑ i, ‖⟪b i, x⟫‖ ^ 2) := by rw [sum_sq_norm_inner_right, Real.sqrt_sq (by positivity)]</span>
+<span id="L540" class="line"><a href="#L540">540</a>   _ ≤ √(∑ _ : ι, (⨆ j, ‖⟪b j, x⟫‖) ^ 2) := by</span>
+<span id="L541" class="line"><a href="#L541">541</a>     gcongr with i</span>
+<span id="L542" class="line"><a href="#L542">542</a>     exact le_ciSup (f := fun j ↦ ‖⟪b j, x⟫‖) (by simp) i</span>
+<span id="L543" class="line"><a href="#L543">543</a>   _ = √(Fintype.card ι) * ⨆ i, ‖⟪b i, x⟫‖ := by</span>
+<span id="L544" class="line"><a href="#L544">544</a>     simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, Nat.cast_nonneg, Real.sqrt_mul]</span>
+<span id="L545" class="line"><a href="#L545">545</a>     congr</span>
+<span id="L546" class="line"><a href="#L546">546</a>     rw [Real.sqrt_sq]</span>
+<span id="L547" class="line"><a href="#L547">547</a>     cases isEmpty_or_nonempty ι</span>
+<span id="L548" class="line"><a href="#L548">548</a>     · simp</span>
+<span id="L549" class="line"><a href="#L549">549</a>     · exact le_ciSup_of_le (by simp) (Nonempty.some inferInstance) (by positivity)</span>
+<span id="L550" class="line"><a href="#L550">550</a> </span>
+<span id="L551" class="line"><a href="#L551">551</a> protected theorem orthogonalProjection_apply_eq_sum {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]</span>
+<span id="L552" class="line"><a href="#L552">552</a>     (b : OrthonormalBasis ι 𝕜 U) (x : E) :</span>
+<span id="L553" class="line"><a href="#L553">553</a>     U.orthogonalProjection x = ∑ i, ⟪(b i : E), x⟫ • b i := by</span>
+<span id="L554" class="line"><a href="#L554">554</a>   simpa only [b.repr_apply_apply, inner_orthogonalProjection_eq_of_mem_left] using</span>
+<span id="L555" class="line"><a href="#L555">555</a>     (b.sum_repr (U.orthogonalProjection x)).symm</span>
+<span id="L556" class="line"><a href="#L556">556</a> </span>
+<span id="L557" class="line"><a href="#L557">557</a> @[deprecated (since := &quot;2025-12-31&quot;)] alias orthogonalProjection_eq_sum :=</span>
+<span id="L558" class="line"><a href="#L558">558</a>   OrthonormalBasis.orthogonalProjection_apply_eq_sum</span>
+<span id="L559" class="line"><a href="#L559">559</a> </span>
+<span id="L560" class="line"><a href="#L560">560</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L561" class="line"><a href="#L561">561</a> protected theorem orthogonalProjection_eq_sum_rankOne {U : Submodule 𝕜 E}</span>
+<span id="L562" class="line"><a href="#L562">562</a>     [U.HasOrthogonalProjection] (b : OrthonormalBasis ι 𝕜 U) :</span>
+<span id="L563" class="line"><a href="#L563">563</a>     U.orthogonalProjection = ∑ i, InnerProductSpace.rankOne 𝕜 (b i) (b i : E) := by</span>
+<span id="L564" class="line"><a href="#L564">564</a>   ext; simp [b.orthogonalProjection_apply_eq_sum]</span>
+<span id="L565" class="line"><a href="#L565">565</a> </span>
+<span id="L566" class="line"><a href="#L566">566</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L567" class="line"><a href="#L567">567</a> protected theorem starProjection_eq_sum_rankOne {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]</span>
+<span id="L568" class="line"><a href="#L568">568</a>     (b : OrthonormalBasis ι 𝕜 U) :</span>
+<span id="L569" class="line"><a href="#L569">569</a>     U.starProjection = ∑ i, InnerProductSpace.rankOne 𝕜 (b i : E) (b i : E) := by</span>
+<span id="L570" class="line"><a href="#L570">570</a>   ext; simp [starProjection, b.orthogonalProjection_eq_sum_rankOne]</span>
+<span id="L571" class="line"><a href="#L571">571</a> </span>
+<span id="L572" class="line"><a href="#L572">572</a> lemma sum_rankOne_eq_id (b : OrthonormalBasis ι 𝕜 E) :</span>
+<span id="L573" class="line"><a href="#L573">573</a>     ∑ i, InnerProductSpace.rankOne 𝕜 (b i) (b i) = .id 𝕜 E := by ext; simp [b.sum_repr&#x27;]</span>
+<span id="L574" class="line"><a href="#L574">574</a> </span>
+<span id="L575" class="line"><a href="#L575">575</a> /-- Mapping an orthonormal basis along a `LinearIsometryEquiv`. -/</span>
+<span id="L576" class="line"><a href="#L576">576</a> protected def map {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]</span>
+<span id="L577" class="line"><a href="#L577">577</a>     (b : OrthonormalBasis ι 𝕜 E) (L : E ≃ₗᵢ[𝕜] G) : OrthonormalBasis ι 𝕜 G where</span>
+<span id="L578" class="line"><a href="#L578">578</a>   repr := L.symm.trans b.repr</span>
+<span id="L579" class="line"><a href="#L579">579</a> </span>
+<span id="L580" class="line"><a href="#L580">580</a> @[simp]</span>
+<span id="L581" class="line"><a href="#L581">581</a> protected theorem map_apply {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]</span>
+<span id="L582" class="line"><a href="#L582">582</a>     (b : OrthonormalBasis ι 𝕜 E) (L : E ≃ₗᵢ[𝕜] G) (i : ι) : b.map L i = L (b i) :=</span>
+<span id="L583" class="line"><a href="#L583">583</a>   rfl</span>
+<span id="L584" class="line"><a href="#L584">584</a> </span>
+<span id="L585" class="line"><a href="#L585">585</a> @[simp]</span>
+<span id="L586" class="line"><a href="#L586">586</a> protected theorem toBasis_map {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]</span>
+<span id="L587" class="line"><a href="#L587">587</a>     (b : OrthonormalBasis ι 𝕜 E) (L : E ≃ₗᵢ[𝕜] G) :</span>
+<span id="L588" class="line"><a href="#L588">588</a>     (b.map L).toBasis = b.toBasis.map L.toLinearEquiv :=</span>
+<span id="L589" class="line"><a href="#L589">589</a>   rfl</span>
+<span id="L590" class="line"><a href="#L590">590</a> </span>
+<span id="L591" class="line"><a href="#L591">591</a> /-- A basis that is orthonormal is an orthonormal basis. -/</span>
+<span id="L592" class="line"><a href="#L592">592</a> def _root_.Module.Basis.toOrthonormalBasis (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v) :</span>
+<span id="L593" class="line"><a href="#L593">593</a>     OrthonormalBasis ι 𝕜 E :=</span>
+<span id="L594" class="line"><a href="#L594">594</a>   OrthonormalBasis.ofRepr &lt;|</span>
+<span id="L595" class="line"><a href="#L595">595</a>     LinearEquiv.isometryOfInner (v.equivFun.trans (WithLp.linearEquiv 2 𝕜 (ι → 𝕜)).symm)</span>
+<span id="L596" class="line"><a href="#L596">596</a>       (by</span>
+<span id="L597" class="line"><a href="#L597">597</a>         intro x y</span>
+<span id="L598" class="line"><a href="#L598">598</a>         let p : EuclideanSpace 𝕜 ι := toLp 2 (v.equivFun x)</span>
+<span id="L599" class="line"><a href="#L599">599</a>         let q : EuclideanSpace 𝕜 ι := toLp 2 (v.equivFun y)</span>
+<span id="L600" class="line"><a href="#L600">600</a>         have key : ⟪p, q⟫ = ⟪∑ i, p i • v i, ∑ i, q i • v i⟫ := by</span>
+<span id="L601" class="line"><a href="#L601">601</a>           simp [inner_sum, inner_smul_right, hv.inner_left_fintype, PiLp.inner_apply]</span>
+<span id="L602" class="line"><a href="#L602">602</a>         convert key</span>
+<span id="L603" class="line"><a href="#L603">603</a>         · rw [← v.equivFun.symm_apply_apply x, v.equivFun_symm_apply]</span>
+<span id="L604" class="line"><a href="#L604">604</a>         · rw [← v.equivFun.symm_apply_apply y, v.equivFun_symm_apply])</span>
+<span id="L605" class="line"><a href="#L605">605</a> </span>
+<span id="L606" class="line"><a href="#L606">606</a> @[simp]</span>
+<span id="L607" class="line"><a href="#L607">607</a> theorem _root_.Module.Basis.coe_toOrthonormalBasis_repr (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v) :</span>
+<span id="L608" class="line"><a href="#L608">608</a>     ((v.toOrthonormalBasis hv).repr : E → EuclideanSpace 𝕜 ι) =</span>
+<span id="L609" class="line"><a href="#L609">609</a>     v.equivFun.trans (WithLp.linearEquiv 2 𝕜 (ι → 𝕜)).symm :=</span>
+<span id="L610" class="line"><a href="#L610">610</a>   rfl</span>
+<span id="L611" class="line"><a href="#L611">611</a> </span>
+<span id="L612" class="line"><a href="#L612">612</a> @[simp]</span>
+<span id="L613" class="line"><a href="#L613">613</a> theorem _root_.Module.Basis.coe_toOrthonormalBasis_repr_symm</span>
+<span id="L614" class="line"><a href="#L614">614</a>     (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v) :</span>
+<span id="L615" class="line"><a href="#L615">615</a>     ((v.toOrthonormalBasis hv).repr.symm : EuclideanSpace 𝕜 ι → E) =</span>
+<span id="L616" class="line"><a href="#L616">616</a>     (WithLp.linearEquiv 2 𝕜 (ι → 𝕜)).trans v.equivFun.symm :=</span>
+<span id="L617" class="line"><a href="#L617">617</a>   rfl</span>
+<span id="L618" class="line"><a href="#L618">618</a> </span>
+<span id="L619" class="line"><a href="#L619">619</a> @[simp]</span>
+<span id="L620" class="line"><a href="#L620">620</a> theorem _root_.Module.Basis.toBasis_toOrthonormalBasis (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v) :</span>
+<span id="L621" class="line"><a href="#L621">621</a>     (v.toOrthonormalBasis hv).toBasis = v := by</span>
+<span id="L622" class="line"><a href="#L622">622</a>   simp only [OrthonormalBasis.toBasis, Basis.toOrthonormalBasis,</span>
+<span id="L623" class="line"><a href="#L623">623</a>     LinearEquiv.isometryOfInner_toLinearEquiv]</span>
+<span id="L624" class="line"><a href="#L624">624</a>   exact v.ofEquivFun_equivFun</span>
+<span id="L625" class="line"><a href="#L625">625</a> </span>
+<span id="L626" class="line"><a href="#L626">626</a> @[simp]</span>
+<span id="L627" class="line"><a href="#L627">627</a> theorem _root_.Module.Basis.coe_toOrthonormalBasis (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v) :</span>
+<span id="L628" class="line"><a href="#L628">628</a>     (v.toOrthonormalBasis hv : ι → E) = (v : ι → E) :=</span>
+<span id="L629" class="line"><a href="#L629">629</a>   calc</span>
+<span id="L630" class="line"><a href="#L630">630</a>     (v.toOrthonormalBasis hv : ι → E) = ((v.toOrthonormalBasis hv).toBasis : ι → E) := by</span>
+<span id="L631" class="line"><a href="#L631">631</a>       classical rw [OrthonormalBasis.coe_toBasis]</span>
+<span id="L632" class="line"><a href="#L632">632</a>     _ = (v : ι → E) := by simp</span>
+<span id="L633" class="line"><a href="#L633">633</a> </span>
+<span id="L634" class="line"><a href="#L634">634</a> section Singleton</span>
+<span id="L635" class="line"><a href="#L635">635</a> variable {ι 𝕜 : Type*} [Unique ι] [RCLike 𝕜]</span>
+<span id="L636" class="line"><a href="#L636">636</a> </span>
+<span id="L637" class="line"><a href="#L637">637</a> variable (ι 𝕜) in</span>
+<span id="L638" class="line"><a href="#L638">638</a> /-- `OrthonormalBasis.singleton ι 𝕜` is the orthonormal basis sending the unique element of `ι` to</span>
+<span id="L639" class="line"><a href="#L639">639</a> `1 : 𝕜`. -/</span>
+<span id="L640" class="line"><a href="#L640">640</a> protected noncomputable def singleton : OrthonormalBasis ι 𝕜 𝕜 :=</span>
+<span id="L641" class="line"><a href="#L641">641</a>   (Basis.singleton ι 𝕜).toOrthonormalBasis (by simp [orthonormal_iff_ite, Unique.eq_default])</span>
+<span id="L642" class="line"><a href="#L642">642</a> </span>
+<span id="L643" class="line"><a href="#L643">643</a> @[simp]</span>
+<span id="L644" class="line"><a href="#L644">644</a> theorem singleton_apply (i) : OrthonormalBasis.singleton ι 𝕜 i = 1 := Basis.singleton_apply _ _ _</span>
+<span id="L645" class="line"><a href="#L645">645</a> </span>
+<span id="L646" class="line"><a href="#L646">646</a> @[simp]</span>
+<span id="L647" class="line"><a href="#L647">647</a> theorem singleton_repr (x i) : (OrthonormalBasis.singleton ι 𝕜).repr x i = x :=</span>
+<span id="L648" class="line"><a href="#L648">648</a>   Basis.singleton_repr _ _ _ _</span>
+<span id="L649" class="line"><a href="#L649">649</a> </span>
+<span id="L650" class="line"><a href="#L650">650</a> @[simp]</span>
+<span id="L651" class="line"><a href="#L651">651</a> theorem coe_singleton : ⇑(OrthonormalBasis.singleton ι 𝕜) = 1 := by</span>
+<span id="L652" class="line"><a href="#L652">652</a>   ext; simp</span>
+<span id="L653" class="line"><a href="#L653">653</a> </span>
+<span id="L654" class="line"><a href="#L654">654</a> @[simp]</span>
+<span id="L655" class="line"><a href="#L655">655</a> theorem toBasis_singleton : (OrthonormalBasis.singleton ι 𝕜).toBasis = Basis.singleton ι 𝕜 :=</span>
+<span id="L656" class="line"><a href="#L656">656</a>   Basis.toBasis_toOrthonormalBasis _ _</span>
+<span id="L657" class="line"><a href="#L657">657</a> </span>
+<span id="L658" class="line"><a href="#L658">658</a> end Singleton</span>
+<span id="L659" class="line"><a href="#L659">659</a> </span>
+<span id="L660" class="line"><a href="#L660">660</a> /-- `Pi.orthonormalBasis (B : ∀ i, OrthonormalBasis (ι i) 𝕜 (E i))` is the</span>
+<span id="L661" class="line"><a href="#L661">661</a> `Σ i, ι i`-indexed orthonormal basis on `Π i, E i` given by `B i` on each component. -/</span>
+<span id="L662" class="line"><a href="#L662">662</a> protected def _root_.Pi.orthonormalBasis {η : Type*} [Fintype η] {ι : η → Type*}</span>
+<span id="L663" class="line"><a href="#L663">663</a>     [∀ i, Fintype (ι i)] {𝕜 : Type*} [RCLike 𝕜] {E : η → Type*} [∀ i, NormedAddCommGroup (E i)]</span>
+<span id="L664" class="line"><a href="#L664">664</a>     [∀ i, InnerProductSpace 𝕜 (E i)] (B : ∀ i, OrthonormalBasis (ι i) 𝕜 (E i)) :</span>
+<span id="L665" class="line"><a href="#L665">665</a>     OrthonormalBasis ((i : η) × ι i) 𝕜 (PiLp 2 E) where</span>
+<span id="L666" class="line"><a href="#L666">666</a>   repr := .trans</span>
+<span id="L667" class="line"><a href="#L667">667</a>       (.piLpCongrRight 2 fun i =&gt; (B i).repr)</span>
+<span id="L668" class="line"><a href="#L668">668</a>       (.symm &lt;| .piLpCurry 𝕜 2 fun _ _ =&gt; 𝕜)</span>
+<span id="L669" class="line"><a href="#L669">669</a> </span>
+<span id="L670" class="line"><a href="#L670">670</a> theorem _root_.Pi.orthonormalBasis.toBasis {η : Type*} [Fintype η] {ι : η → Type*}</span>
+<span id="L671" class="line"><a href="#L671">671</a>     [∀ i, Fintype (ι i)] {𝕜 : Type*} [RCLike 𝕜] {E : η → Type*} [∀ i, NormedAddCommGroup (E i)]</span>
+<span id="L672" class="line"><a href="#L672">672</a>     [∀ i, InnerProductSpace 𝕜 (E i)] (B : ∀ i, OrthonormalBasis (ι i) 𝕜 (E i)) :</span>
+<span id="L673" class="line"><a href="#L673">673</a>     (Pi.orthonormalBasis B).toBasis =</span>
+<span id="L674" class="line"><a href="#L674">674</a>       ((Pi.basis fun i : η ↦ (B i).toBasis).map (WithLp.linearEquiv 2 _ _).symm) := by ext; rfl</span>
+<span id="L675" class="line"><a href="#L675">675</a> </span>
+<span id="L676" class="line"><a href="#L676">676</a> @[simp]</span>
+<span id="L677" class="line"><a href="#L677">677</a> theorem _root_.Pi.orthonormalBasis_apply {η : Type*} [Fintype η] [DecidableEq η] {ι : η → Type*}</span>
+<span id="L678" class="line"><a href="#L678">678</a>     [∀ i, Fintype (ι i)] {𝕜 : Type*} [RCLike 𝕜] {E : η → Type*} [∀ i, NormedAddCommGroup (E i)]</span>
+<span id="L679" class="line"><a href="#L679">679</a>     [∀ i, InnerProductSpace 𝕜 (E i)] (B : ∀ i, OrthonormalBasis (ι i) 𝕜 (E i))</span>
+<span id="L680" class="line"><a href="#L680">680</a>     (j : (i : η) × (ι i)) :</span>
+<span id="L681" class="line"><a href="#L681">681</a>     Pi.orthonormalBasis B j = PiLp.single 2 j.fst (B j.fst j.snd) := by</span>
+<span id="L682" class="line"><a href="#L682">682</a>   classical</span>
+<span id="L683" class="line"><a href="#L683">683</a>   ext k</span>
+<span id="L684" class="line"><a href="#L684">684</a>   obtain ⟨i, j⟩ := j</span>
+<span id="L685" class="line"><a href="#L685">685</a>   simp only [Pi.orthonormalBasis, coe_ofRepr, LinearIsometryEquiv.symm_trans,</span>
+<span id="L686" class="line"><a href="#L686">686</a>     LinearIsometryEquiv.symm_symm, LinearIsometryEquiv.piLpCongrRight_symm,</span>
+<span id="L687" class="line"><a href="#L687">687</a>     LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.piLpCongrRight_apply,</span>
+<span id="L688" class="line"><a href="#L688">688</a>     LinearIsometryEquiv.piLpCurry_apply, PiLp.ofLp_single, PiLp.toLp_apply,</span>
+<span id="L689" class="line"><a href="#L689">689</a>     Sigma.curry_single (γ := fun _ _ =&gt; 𝕜)]</span>
+<span id="L690" class="line"><a href="#L690">690</a>   obtain rfl | hi := Decidable.eq_or_ne i k</span>
+<span id="L691" class="line"><a href="#L691">691</a>   · simp</span>
+<span id="L692" class="line"><a href="#L692">692</a>   · simp [hi]</span>
+<span id="L693" class="line"><a href="#L693">693</a> </span>
+<span id="L694" class="line"><a href="#L694">694</a> @[simp]</span>
+<span id="L695" class="line"><a href="#L695">695</a> theorem _root_.Pi.orthonormalBasis_repr {η : Type*} [Fintype η] {ι : η → Type*}</span>
+<span id="L696" class="line"><a href="#L696">696</a>     [∀ i, Fintype (ι i)] {𝕜 : Type*} [RCLike 𝕜] {E : η → Type*} [∀ i, NormedAddCommGroup (E i)]</span>
+<span id="L697" class="line"><a href="#L697">697</a>     [∀ i, InnerProductSpace 𝕜 (E i)] (B : ∀ i, OrthonormalBasis (ι i) 𝕜 (E i)) (x : (i : η) → E i)</span>
+<span id="L698" class="line"><a href="#L698">698</a>     (j : (i : η) × (ι i)) :</span>
+<span id="L699" class="line"><a href="#L699">699</a>     (Pi.orthonormalBasis B).repr (toLp 2 x) j = (B j.fst).repr (x j.fst) j.snd := rfl</span>
+<span id="L700" class="line"><a href="#L700">700</a> </span>
+<span id="L701" class="line"><a href="#L701">701</a> variable {v : ι → E}</span>
+<span id="L702" class="line"><a href="#L702">702</a> </span>
+<span id="L703" class="line"><a href="#L703">703</a> /-- A finite orthonormal set that spans is an orthonormal basis -/</span>
+<span id="L704" class="line"><a href="#L704">704</a> protected def mk (hon : Orthonormal 𝕜 v) (hsp : ⊤ ≤ Submodule.span 𝕜 (Set.range v)) :</span>
+<span id="L705" class="line"><a href="#L705">705</a>     OrthonormalBasis ι 𝕜 E :=</span>
+<span id="L706" class="line"><a href="#L706">706</a>   (Basis.mk (Orthonormal.linearIndependent hon) hsp).toOrthonormalBasis (by rwa [Basis.coe_mk])</span>
+<span id="L707" class="line"><a href="#L707">707</a> </span>
+<span id="L708" class="line"><a href="#L708">708</a> @[simp]</span>
+<span id="L709" class="line"><a href="#L709">709</a> protected theorem coe_mk (hon : Orthonormal 𝕜 v) (hsp : ⊤ ≤ Submodule.span 𝕜 (Set.range v)) :</span>
+<span id="L710" class="line"><a href="#L710">710</a>     ⇑(OrthonormalBasis.mk hon hsp) = v := by</span>
+<span id="L711" class="line"><a href="#L711">711</a>   classical rw [OrthonormalBasis.mk, _root_.Module.Basis.coe_toOrthonormalBasis, Basis.coe_mk]</span>
+<span id="L712" class="line"><a href="#L712">712</a> </span>
+<span id="L713" class="line"><a href="#L713">713</a> /-- Any finite subset of an orthonormal family is an `OrthonormalBasis` for its span. -/</span>
+<span id="L714" class="line"><a href="#L714">714</a> protected def span [DecidableEq E] {v&#x27; : ι&#x27; → E} (h : Orthonormal 𝕜 v&#x27;) (s : Finset ι&#x27;) :</span>
+<span id="L715" class="line"><a href="#L715">715</a>     OrthonormalBasis s 𝕜 (span 𝕜 (s.image v&#x27; : Set E)) :=</span>
+<span id="L716" class="line"><a href="#L716">716</a>   let e₀&#x27; : Basis s 𝕜 _ :=</span>
+<span id="L717" class="line"><a href="#L717">717</a>     Basis.span (h.linearIndependent.comp ((↑) : s → ι&#x27;) Subtype.val_injective)</span>
+<span id="L718" class="line"><a href="#L718">718</a>   let e₀ : OrthonormalBasis s 𝕜 _ :=</span>
+<span id="L719" class="line"><a href="#L719">719</a>     OrthonormalBasis.mk</span>
+<span id="L720" class="line"><a href="#L720">720</a>       (by</span>
+<span id="L721" class="line"><a href="#L721">721</a>         convert orthonormal_span (h.comp ((↑) : s → ι&#x27;) Subtype.val_injective)</span>
+<span id="L722" class="line"><a href="#L722">722</a>         simp [e₀&#x27;, Basis.span_apply])</span>
+<span id="L723" class="line"><a href="#L723">723</a>       e₀&#x27;.span_eq.ge</span>
+<span id="L724" class="line"><a href="#L724">724</a>   let φ : span 𝕜 (s.image v&#x27; : Set E) ≃ₗᵢ[𝕜] span 𝕜 (range (v&#x27; ∘ ((↑) : s → ι&#x27;))) :=</span>
+<span id="L725" class="line"><a href="#L725">725</a>     LinearIsometryEquiv.ofEq _ _</span>
+<span id="L726" class="line"><a href="#L726">726</a>       (by</span>
+<span id="L727" class="line"><a href="#L727">727</a>         rw [Finset.coe_image, image_eq_range]</span>
+<span id="L728" class="line"><a href="#L728">728</a>         rfl)</span>
+<span id="L729" class="line"><a href="#L729">729</a>   e₀.map φ.symm</span>
+<span id="L730" class="line"><a href="#L730">730</a> </span>
+<span id="L731" class="line"><a href="#L731">731</a> @[simp]</span>
+<span id="L732" class="line"><a href="#L732">732</a> protected theorem span_apply [DecidableEq E] {v&#x27; : ι&#x27; → E} (h : Orthonormal 𝕜 v&#x27;) (s : Finset ι&#x27;)</span>
+<span id="L733" class="line"><a href="#L733">733</a>     (i : s) : (OrthonormalBasis.span h s i : E) = v&#x27; i := by</span>
+<span id="L734" class="line"><a href="#L734">734</a>   simp only [OrthonormalBasis.span, Basis.span_apply, LinearIsometryEquiv.ofEq_symm,</span>
+<span id="L735" class="line"><a href="#L735">735</a>     OrthonormalBasis.map_apply, OrthonormalBasis.coe_mk, LinearIsometryEquiv.coe_ofEq_apply,</span>
+<span id="L736" class="line"><a href="#L736">736</a>     comp_apply]</span>
+<span id="L737" class="line"><a href="#L737">737</a> </span>
+<span id="L738" class="line"><a href="#L738">738</a> open Submodule</span>
+<span id="L739" class="line"><a href="#L739">739</a> </span>
+<span id="L740" class="line"><a href="#L740">740</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L741" class="line"><a href="#L741">741</a> /-- A finite orthonormal family of vectors whose span has trivial orthogonal complement is an</span>
+<span id="L742" class="line"><a href="#L742">742</a> orthonormal basis. -/</span>
+<span id="L743" class="line"><a href="#L743">743</a> protected def mkOfOrthogonalEqBot (hon : Orthonormal 𝕜 v) (hsp : (span 𝕜 (Set.range v))ᗮ = ⊥) :</span>
+<span id="L744" class="line"><a href="#L744">744</a>     OrthonormalBasis ι 𝕜 E :=</span>
+<span id="L745" class="line"><a href="#L745">745</a>   OrthonormalBasis.mk hon</span>
+<span id="L746" class="line"><a href="#L746">746</a>     (by</span>
+<span id="L747" class="line"><a href="#L747">747</a>       refine Eq.ge ?_</span>
+<span id="L748" class="line"><a href="#L748">748</a>       haveI : FiniteDimensional 𝕜 (span 𝕜 (range v)) :=</span>
+<span id="L749" class="line"><a href="#L749">749</a>         FiniteDimensional.span_of_finite 𝕜 (finite_range v)</span>
+<span id="L750" class="line"><a href="#L750">750</a>       haveI : CompleteSpace (span 𝕜 (range v)) := FiniteDimensional.complete 𝕜 _</span>
+<span id="L751" class="line"><a href="#L751">751</a>       rwa [orthogonal_eq_bot_iff] at hsp)</span>
+<span id="L752" class="line"><a href="#L752">752</a> </span>
+<span id="L753" class="line"><a href="#L753">753</a> @[simp]</span>
+<span id="L754" class="line"><a href="#L754">754</a> protected theorem coe_of_orthogonal_eq_bot_mk (hon : Orthonormal 𝕜 v)</span>
+<span id="L755" class="line"><a href="#L755">755</a>     (hsp : (span 𝕜 (Set.range v))ᗮ = ⊥) : ⇑(OrthonormalBasis.mkOfOrthogonalEqBot hon hsp) = v :=</span>
+<span id="L756" class="line"><a href="#L756">756</a>   OrthonormalBasis.coe_mk hon _</span>
+<span id="L757" class="line"><a href="#L757">757</a> </span>
+<span id="L758" class="line"><a href="#L758">758</a> variable [Fintype ι&#x27;]</span>
+<span id="L759" class="line"><a href="#L759">759</a> </span>
+<span id="L760" class="line"><a href="#L760">760</a> /-- `b.reindex (e : ι ≃ ι&#x27;)` is an `OrthonormalBasis` indexed by `ι&#x27;` -/</span>
+<span id="L761" class="line"><a href="#L761">761</a> def reindex (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι&#x27;) : OrthonormalBasis ι&#x27; 𝕜 E :=</span>
+<span id="L762" class="line"><a href="#L762">762</a>   OrthonormalBasis.ofRepr (b.repr.trans (LinearIsometryEquiv.piLpCongrLeft 2 𝕜 𝕜 e))</span>
+<span id="L763" class="line"><a href="#L763">763</a> </span>
+<span id="L764" class="line"><a href="#L764">764</a> protected theorem reindex_apply (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι&#x27;) (i&#x27; : ι&#x27;) :</span>
+<span id="L765" class="line"><a href="#L765">765</a>     (b.reindex e) i&#x27; = b (e.symm i&#x27;) := by</span>
+<span id="L766" class="line"><a href="#L766">766</a>   classical</span>
+<span id="L767" class="line"><a href="#L767">767</a>     dsimp [reindex]</span>
+<span id="L768" class="line"><a href="#L768">768</a>     rw [coe_ofRepr]</span>
+<span id="L769" class="line"><a href="#L769">769</a>     dsimp</span>
+<span id="L770" class="line"><a href="#L770">770</a>     rw [← b.repr_symm_single, LinearIsometryEquiv.piLpCongrLeft_symm,</span>
+<span id="L771" class="line"><a href="#L771">771</a>       EuclideanSpace.piLpCongrLeft_single]</span>
+<span id="L772" class="line"><a href="#L772">772</a> </span>
+<span id="L773" class="line"><a href="#L773">773</a> @[simp]</span>
+<span id="L774" class="line"><a href="#L774">774</a> theorem reindex_toBasis (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι&#x27;) :</span>
+<span id="L775" class="line"><a href="#L775">775</a>     (b.reindex e).toBasis = b.toBasis.reindex e := Basis.eq_ofRepr_eq_repr fun _ ↦ congr_fun rfl</span>
+<span id="L776" class="line"><a href="#L776">776</a> </span>
+<span id="L777" class="line"><a href="#L777">777</a> @[simp]</span>
+<span id="L778" class="line"><a href="#L778">778</a> protected theorem coe_reindex (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι&#x27;) :</span>
+<span id="L779" class="line"><a href="#L779">779</a>     ⇑(b.reindex e) = b ∘ e.symm :=</span>
+<span id="L780" class="line"><a href="#L780">780</a>   funext (b.reindex_apply e)</span>
+<span id="L781" class="line"><a href="#L781">781</a> </span>
+<span id="L782" class="line"><a href="#L782">782</a> @[simp]</span>
+<span id="L783" class="line"><a href="#L783">783</a> protected theorem repr_reindex (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι&#x27;) (x : E) (i&#x27; : ι&#x27;) :</span>
+<span id="L784" class="line"><a href="#L784">784</a>     (b.reindex e).repr x i&#x27; = b.repr x (e.symm i&#x27;) := by</span>
+<span id="L785" class="line"><a href="#L785">785</a>   classical</span>
+<span id="L786" class="line"><a href="#L786">786</a>   rw [OrthonormalBasis.repr_apply_apply, b.repr_apply_apply, OrthonormalBasis.coe_reindex,</span>
+<span id="L787" class="line"><a href="#L787">787</a>     comp_apply]</span>
+<span id="L788" class="line"><a href="#L788">788</a> </span>
+<span id="L789" class="line"><a href="#L789">789</a> end OrthonormalBasis</span>
+<span id="L790" class="line"><a href="#L790">790</a> </span>
+<span id="L791" class="line"><a href="#L791">791</a> namespace EuclideanSpace</span>
+<span id="L792" class="line"><a href="#L792">792</a> </span>
+<span id="L793" class="line"><a href="#L793">793</a> variable (𝕜 ι)</span>
+<span id="L794" class="line"><a href="#L794">794</a> </span>
+<span id="L795" class="line"><a href="#L795">795</a> /-- The basis `Pi.basisFun`, bundled as an orthonormal basis of `EuclideanSpace 𝕜 ι`. -/</span>
+<span id="L796" class="line"><a href="#L796">796</a> noncomputable def basisFun : OrthonormalBasis ι 𝕜 (EuclideanSpace 𝕜 ι) :=</span>
+<span id="L797" class="line"><a href="#L797">797</a>   ⟨LinearIsometryEquiv.refl _ _⟩</span>
+<span id="L798" class="line"><a href="#L798">798</a> </span>
+<span id="L799" class="line"><a href="#L799">799</a> @[simp]</span>
+<span id="L800" class="line"><a href="#L800">800</a> theorem basisFun_apply [DecidableEq ι] (i : ι) : basisFun ι 𝕜 i = EuclideanSpace.single i 1 :=</span>
+<span id="L801" class="line"><a href="#L801">801</a>   PiLp.basisFun_apply _ _ _ _</span>
+<span id="L802" class="line"><a href="#L802">802</a> </span>
+<span id="L803" class="line"><a href="#L803">803</a> @[simp]</span>
+<span id="L804" class="line"><a href="#L804">804</a> theorem basisFun_repr (x : EuclideanSpace 𝕜 ι) (i : ι) : (basisFun ι 𝕜).repr x i = x i := rfl</span>
+<span id="L805" class="line"><a href="#L805">805</a> </span>
+<span id="L806" class="line"><a href="#L806">806</a> @[simp]</span>
+<span id="L807" class="line"><a href="#L807">807</a> theorem basisFun_inner (x : EuclideanSpace 𝕜 ι) (i : ι) : ⟪basisFun ι 𝕜 i, x⟫ = x i := by</span>
+<span id="L808" class="line"><a href="#L808">808</a>   simp [← OrthonormalBasis.repr_apply_apply]</span>
+<span id="L809" class="line"><a href="#L809">809</a> </span>
+<span id="L810" class="line"><a href="#L810">810</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L811" class="line"><a href="#L811">811</a> @[simp]</span>
+<span id="L812" class="line"><a href="#L812">812</a> theorem inner_basisFun_real (x : EuclideanSpace ℝ ι) (i : ι) :</span>
+<span id="L813" class="line"><a href="#L813">813</a>     inner ℝ x (basisFun ι ℝ i) = x i := by</span>
+<span id="L814" class="line"><a href="#L814">814</a>   rw [real_inner_comm, basisFun_inner]</span>
+<span id="L815" class="line"><a href="#L815">815</a> </span>
+<span id="L816" class="line"><a href="#L816">816</a> theorem basisFun_toBasis : (basisFun ι 𝕜).toBasis = PiLp.basisFun _ 𝕜 ι := rfl</span>
+<span id="L817" class="line"><a href="#L817">817</a> </span>
+<span id="L818" class="line"><a href="#L818">818</a> end EuclideanSpace</span>
+<span id="L819" class="line"><a href="#L819">819</a> </span>
+<span id="L820" class="line"><a href="#L820">820</a> instance OrthonormalBasis.instInhabited : Inhabited (OrthonormalBasis ι 𝕜 (EuclideanSpace 𝕜 ι)) :=</span>
+<span id="L821" class="line"><a href="#L821">821</a>   ⟨EuclideanSpace.basisFun ι 𝕜⟩</span>
+<span id="L822" class="line"><a href="#L822">822</a> </span>
+<span id="L823" class="line"><a href="#L823">823</a> namespace OrthonormalBasis</span>
+<span id="L824" class="line"><a href="#L824">824</a> </span>
+<span id="L825" class="line"><a href="#L825">825</a> variable {E&#x27; : Type*} [Fintype ι&#x27;] [NormedAddCommGroup E&#x27;] [InnerProductSpace 𝕜 E&#x27;]</span>
+<span id="L826" class="line"><a href="#L826">826</a>     (b : OrthonormalBasis ι 𝕜 E) (b&#x27; : OrthonormalBasis ι&#x27; 𝕜 E&#x27;) (e : ι ≃ ι&#x27;)</span>
+<span id="L827" class="line"><a href="#L827">827</a> </span>
+<span id="L828" class="line"><a href="#L828">828</a> /-- The `LinearIsometryEquiv` which maps an orthonormal basis to another. This is a convenience</span>
+<span id="L829" class="line"><a href="#L829">829</a> wrapper around `Orthonormal.equiv`. -/</span>
+<span id="L830" class="line"><a href="#L830">830</a> protected def equiv : E ≃ₗᵢ[𝕜] E&#x27; :=</span>
+<span id="L831" class="line"><a href="#L831">831</a>   b.repr.trans &lt;| .trans (.piLpCongrLeft _ _ _ e) b&#x27;.repr.symm</span>
+<span id="L832" class="line"><a href="#L832">832</a> </span>
+<span id="L833" class="line"><a href="#L833">833</a> @[simp]</span>
+<span id="L834" class="line"><a href="#L834">834</a> lemma equiv_symm : (b.equiv b&#x27; e).symm = b&#x27;.equiv b e.symm := by</span>
+<span id="L835" class="line"><a href="#L835">835</a>   apply b&#x27;.toBasis.ext_linearIsometryEquiv</span>
+<span id="L836" class="line"><a href="#L836">836</a>   simp [OrthonormalBasis.equiv]</span>
+<span id="L837" class="line"><a href="#L837">837</a> </span>
+<span id="L838" class="line"><a href="#L838">838</a> @[simp]</span>
+<span id="L839" class="line"><a href="#L839">839</a> lemma equiv_apply_basis (i : ι) : b.equiv b&#x27; e (b i) = b&#x27; (e i) := by</span>
+<span id="L840" class="line"><a href="#L840">840</a>   classical</span>
+<span id="L841" class="line"><a href="#L841">841</a>   simp only [OrthonormalBasis.equiv, LinearIsometryEquiv.trans_apply, OrthonormalBasis.repr_self]</span>
+<span id="L842" class="line"><a href="#L842">842</a>   refine DFunLike.congr rfl ?_</span>
+<span id="L843" class="line"><a href="#L843">843</a>   ext j</span>
+<span id="L844" class="line"><a href="#L844">844</a>   simp</span>
+<span id="L845" class="line"><a href="#L845">845</a> </span>
+<span id="L846" class="line"><a href="#L846">846</a> @[simp]</span>
+<span id="L847" class="line"><a href="#L847">847</a> lemma equiv_self_rfl : b.equiv b (.refl ι) = .refl 𝕜 E := by</span>
+<span id="L848" class="line"><a href="#L848">848</a>   apply b.toBasis.ext_linearIsometryEquiv</span>
+<span id="L849" class="line"><a href="#L849">849</a>   simp</span>
+<span id="L850" class="line"><a href="#L850">850</a> </span>
+<span id="L851" class="line"><a href="#L851">851</a> lemma equiv_apply (x : E) : b.equiv b&#x27; e x = ∑ i, b.repr x i • b&#x27; (e i) := by</span>
+<span id="L852" class="line"><a href="#L852">852</a>   nth_rw 1 [← b.sum_repr x, map_sum]</span>
+<span id="L853" class="line"><a href="#L853">853</a>   simp_rw [map_smul, equiv_apply_basis]</span>
+<span id="L854" class="line"><a href="#L854">854</a> </span>
+<span id="L855" class="line"><a href="#L855">855</a> lemma equiv_apply_euclideanSpace (x : EuclideanSpace 𝕜 ι) :</span>
+<span id="L856" class="line"><a href="#L856">856</a>     (EuclideanSpace.basisFun ι 𝕜).equiv b (Equiv.refl ι) x = ∑ i, x i • b i := by</span>
+<span id="L857" class="line"><a href="#L857">857</a>   simp_rw [equiv_apply, EuclideanSpace.basisFun_repr, Equiv.refl_apply]</span>
+<span id="L858" class="line"><a href="#L858">858</a> </span>
+<span id="L859" class="line"><a href="#L859">859</a> lemma coe_equiv_euclideanSpace :</span>
+<span id="L860" class="line"><a href="#L860">860</a>     ⇑((EuclideanSpace.basisFun ι 𝕜).equiv b (Equiv.refl ι)) = fun x ↦ ∑ i, x i • b i := by</span>
+<span id="L861" class="line"><a href="#L861">861</a>   simp_rw [← equiv_apply_euclideanSpace]</span>
+<span id="L862" class="line"><a href="#L862">862</a> </span>
+<span id="L863" class="line"><a href="#L863">863</a> end OrthonormalBasis</span>
+<span id="L864" class="line"><a href="#L864">864</a> </span>
+<span id="L865" class="line"><a href="#L865">865</a> section Complex</span>
+<span id="L866" class="line"><a href="#L866">866</a> </span>
+<span id="L867" class="line"><a href="#L867">867</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L868" class="line"><a href="#L868">868</a> /-- `![1, I]` is an orthonormal basis for `ℂ` considered as a real inner product space. -/</span>
+<span id="L869" class="line"><a href="#L869">869</a> def Complex.orthonormalBasisOneI : OrthonormalBasis (Fin 2) ℝ ℂ :=</span>
+<span id="L870" class="line"><a href="#L870">870</a>   Complex.basisOneI.toOrthonormalBasis</span>
+<span id="L871" class="line"><a href="#L871">871</a>     (by</span>
+<span id="L872" class="line"><a href="#L872">872</a>       rw [orthonormal_iff_ite]</span>
+<span id="L873" class="line"><a href="#L873">873</a>       intro i; fin_cases i &lt;;&gt; intro j &lt;;&gt; fin_cases j &lt;;&gt; simp [real_inner_eq_re_inner])</span>
+<span id="L874" class="line"><a href="#L874">874</a> </span>
+<span id="L875" class="line"><a href="#L875">875</a> @[simp]</span>
+<span id="L876" class="line"><a href="#L876">876</a> theorem Complex.orthonormalBasisOneI_repr_apply (z : ℂ) :</span>
+<span id="L877" class="line"><a href="#L877">877</a>     Complex.orthonormalBasisOneI.repr z = ![z.re, z.im] :=</span>
+<span id="L878" class="line"><a href="#L878">878</a>   rfl</span>
+<span id="L879" class="line"><a href="#L879">879</a> </span>
+<span id="L880" class="line"><a href="#L880">880</a> @[simp]</span>
+<span id="L881" class="line"><a href="#L881">881</a> theorem Complex.orthonormalBasisOneI_repr_symm_apply (x : EuclideanSpace ℝ (Fin 2)) :</span>
+<span id="L882" class="line"><a href="#L882">882</a>     Complex.orthonormalBasisOneI.repr.symm x = x 0 + x 1 * I :=</span>
+<span id="L883" class="line"><a href="#L883">883</a>   rfl</span>
+<span id="L884" class="line"><a href="#L884">884</a> </span>
+<span id="L885" class="line"><a href="#L885">885</a> @[simp]</span>
+<span id="L886" class="line"><a href="#L886">886</a> theorem Complex.toBasis_orthonormalBasisOneI :</span>
+<span id="L887" class="line"><a href="#L887">887</a>     Complex.orthonormalBasisOneI.toBasis = Complex.basisOneI :=</span>
+<span id="L888" class="line"><a href="#L888">888</a>   Basis.toBasis_toOrthonormalBasis _ _</span>
+<span id="L889" class="line"><a href="#L889">889</a> </span>
+<span id="L890" class="line"><a href="#L890">890</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L891" class="line"><a href="#L891">891</a> @[simp]</span>
+<span id="L892" class="line"><a href="#L892">892</a> theorem Complex.coe_orthonormalBasisOneI :</span>
+<span id="L893" class="line"><a href="#L893">893</a>     (Complex.orthonormalBasisOneI : Fin 2 → ℂ) = ![1, I] := by</span>
+<span id="L894" class="line"><a href="#L894">894</a>   simp [Complex.orthonormalBasisOneI]</span>
+<span id="L895" class="line"><a href="#L895">895</a> </span>
+<span id="L896" class="line"><a href="#L896">896</a> /-- The isometry between `ℂ` and a two-dimensional real inner product space given by a basis. -/</span>
+<span id="L897" class="line"><a href="#L897">897</a> def Complex.isometryOfOrthonormal (v : OrthonormalBasis (Fin 2) ℝ F) : ℂ ≃ₗᵢ[ℝ] F :=</span>
+<span id="L898" class="line"><a href="#L898">898</a>   Complex.orthonormalBasisOneI.repr.trans v.repr.symm</span>
+<span id="L899" class="line"><a href="#L899">899</a> </span>
+<span id="L900" class="line"><a href="#L900">900</a> @[simp]</span>
+<span id="L901" class="line"><a href="#L901">901</a> theorem Complex.map_isometryOfOrthonormal (v : OrthonormalBasis (Fin 2) ℝ F) (f : F ≃ₗᵢ[ℝ] F&#x27;) :</span>
+<span id="L902" class="line"><a href="#L902">902</a>     Complex.isometryOfOrthonormal (v.map f) = (Complex.isometryOfOrthonormal v).trans f := by</span>
+<span id="L903" class="line"><a href="#L903">903</a>   simp only [isometryOfOrthonormal, OrthonormalBasis.map, LinearIsometryEquiv.symm_trans,</span>
+<span id="L904" class="line"><a href="#L904">904</a>     LinearIsometryEquiv.symm_symm]</span>
+<span id="L905" class="line"><a href="#L905">905</a>   -- Porting note: `LinearIsometryEquiv.trans_assoc` doesn&#x27;t trigger in the `simp` above</span>
+<span id="L906" class="line"><a href="#L906">906</a>   rw [LinearIsometryEquiv.trans_assoc]</span>
+<span id="L907" class="line"><a href="#L907">907</a> </span>
+<span id="L908" class="line"><a href="#L908">908</a> theorem Complex.isometryOfOrthonormal_symm_apply (v : OrthonormalBasis (Fin 2) ℝ F) (f : F) :</span>
+<span id="L909" class="line"><a href="#L909">909</a>     (Complex.isometryOfOrthonormal v).symm f =</span>
+<span id="L910" class="line"><a href="#L910">910</a>       (v.toBasis.coord 0 f : ℂ) + (v.toBasis.coord 1 f : ℂ) * I := by</span>
+<span id="L911" class="line"><a href="#L911">911</a>   simp [Complex.isometryOfOrthonormal]</span>
+<span id="L912" class="line"><a href="#L912">912</a> </span>
+<span id="L913" class="line"><a href="#L913">913</a> theorem Complex.isometryOfOrthonormal_apply (v : OrthonormalBasis (Fin 2) ℝ F) (z : ℂ) :</span>
+<span id="L914" class="line"><a href="#L914">914</a>     Complex.isometryOfOrthonormal v z = z.re • v 0 + z.im • v 1 := by</span>
+<span id="L915" class="line"><a href="#L915">915</a>   simp [Complex.isometryOfOrthonormal, ← v.sum_repr_symm]</span>
+<span id="L916" class="line"><a href="#L916">916</a> </span>
+<span id="L917" class="line"><a href="#L917">917</a> end Complex</span>
+<span id="L918" class="line"><a href="#L918">918</a> </span>
+<span id="L919" class="line"><a href="#L919">919</a> open Module</span>
+<span id="L920" class="line"><a href="#L920">920</a> </span>
+<span id="L921" class="line"><a href="#L921">921</a> /-! ### Matrix representation of an orthonormal basis with respect to another -/</span>
+<span id="L922" class="line"><a href="#L922">922</a> </span>
+<span id="L923" class="line"><a href="#L923">923</a> </span>
+<span id="L924" class="line"><a href="#L924">924</a> section ToMatrix</span>
+<span id="L925" class="line"><a href="#L925">925</a> </span>
+<span id="L926" class="line"><a href="#L926">926</a> variable [DecidableEq ι]</span>
+<span id="L927" class="line"><a href="#L927">927</a> </span>
+<span id="L928" class="line"><a href="#L928">928</a> section</span>
+<span id="L929" class="line"><a href="#L929">929</a> open scoped Matrix</span>
+<span id="L930" class="line"><a href="#L930">930</a> </span>
+<span id="L931" class="line"><a href="#L931">931</a> /-- A version of `OrthonormalBasis.toMatrix_orthonormalBasis_mem_unitary` that works for bases with</span>
+<span id="L932" class="line"><a href="#L932">932</a> different index types. -/</span>
+<span id="L933" class="line"><a href="#L933">933</a> @[simp]</span>
+<span id="L934" class="line"><a href="#L934">934</a> theorem OrthonormalBasis.toMatrix_orthonormalBasis_conjTranspose_mul_self [Fintype ι&#x27;]</span>
+<span id="L935" class="line"><a href="#L935">935</a>     (a : OrthonormalBasis ι&#x27; 𝕜 E) (b : OrthonormalBasis ι 𝕜 E) :</span>
+<span id="L936" class="line"><a href="#L936">936</a>     (a.toBasis.toMatrix b)ᴴ * a.toBasis.toMatrix b = 1 := by</span>
+<span id="L937" class="line"><a href="#L937">937</a>   ext i j</span>
+<span id="L938" class="line"><a href="#L938">938</a>   convert a.repr.inner_map_map (b i) (b j)</span>
+<span id="L939" class="line"><a href="#L939">939</a>   · simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, star_def, PiLp.inner_apply,</span>
+<span id="L940" class="line"><a href="#L940">940</a>       inner_apply&#x27;]</span>
+<span id="L941" class="line"><a href="#L941">941</a>     congr</span>
+<span id="L942" class="line"><a href="#L942">942</a>   · rw [orthonormal_iff_ite.mp b.orthonormal i j, Matrix.one_apply]</span>
+<span id="L943" class="line"><a href="#L943">943</a> </span>
+<span id="L944" class="line"><a href="#L944">944</a> /-- A version of `OrthonormalBasis.toMatrix_orthonormalBasis_mem_unitary` that works for bases with</span>
+<span id="L945" class="line"><a href="#L945">945</a> different index types. -/</span>
+<span id="L946" class="line"><a href="#L946">946</a> @[simp]</span>
+<span id="L947" class="line"><a href="#L947">947</a> theorem OrthonormalBasis.toMatrix_orthonormalBasis_self_mul_conjTranspose [Fintype ι&#x27;]</span>
+<span id="L948" class="line"><a href="#L948">948</a>     (a : OrthonormalBasis ι 𝕜 E) (b : OrthonormalBasis ι&#x27; 𝕜 E) :</span>
+<span id="L949" class="line"><a href="#L949">949</a>     a.toBasis.toMatrix b * (a.toBasis.toMatrix b)ᴴ = 1 := by</span>
+<span id="L950" class="line"><a href="#L950">950</a>   classical</span>
+<span id="L951" class="line"><a href="#L951">951</a>   rw [Matrix.mul_eq_one_comm_of_equiv (a.toBasis.indexEquiv b.toBasis),</span>
+<span id="L952" class="line"><a href="#L952">952</a>     a.toMatrix_orthonormalBasis_conjTranspose_mul_self b]</span>
+<span id="L953" class="line"><a href="#L953">953</a> </span>
+<span id="L954" class="line"><a href="#L954">954</a> variable (a b : OrthonormalBasis ι 𝕜 E)</span>
+<span id="L955" class="line"><a href="#L955">955</a> </span>
+<span id="L956" class="line"><a href="#L956">956</a> /-- The change-of-basis matrix between two orthonormal bases `a`, `b` is a unitary matrix. -/</span>
+<span id="L957" class="line"><a href="#L957">957</a> theorem OrthonormalBasis.toMatrix_orthonormalBasis_mem_unitary :</span>
+<span id="L958" class="line"><a href="#L958">958</a>     a.toBasis.toMatrix b ∈ Matrix.unitaryGroup ι 𝕜 := by</span>
+<span id="L959" class="line"><a href="#L959">959</a>   rw [Matrix.mem_unitaryGroup_iff&#x27;]</span>
+<span id="L960" class="line"><a href="#L960">960</a>   exact a.toMatrix_orthonormalBasis_conjTranspose_mul_self b</span>
+<span id="L961" class="line"><a href="#L961">961</a> </span>
+<span id="L962" class="line"><a href="#L962">962</a> /-- The determinant of the change-of-basis matrix between two orthonormal bases `a`, `b` has</span>
+<span id="L963" class="line"><a href="#L963">963</a> unit length. -/</span>
+<span id="L964" class="line"><a href="#L964">964</a> @[simp]</span>
+<span id="L965" class="line"><a href="#L965">965</a> theorem OrthonormalBasis.det_to_matrix_orthonormalBasis : ‖a.toBasis.det b‖ = 1 := by</span>
+<span id="L966" class="line"><a href="#L966">966</a>   have := (Matrix.det_of_mem_unitary (a.toMatrix_orthonormalBasis_mem_unitary b)).2</span>
+<span id="L967" class="line"><a href="#L967">967</a>   rw [star_def, RCLike.mul_conj] at this</span>
+<span id="L968" class="line"><a href="#L968">968</a>   norm_cast at this</span>
+<span id="L969" class="line"><a href="#L969">969</a>   rwa [pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero] at this</span>
+<span id="L970" class="line"><a href="#L970">970</a> </span>
+<span id="L971" class="line"><a href="#L971">971</a> end</span>
+<span id="L972" class="line"><a href="#L972">972</a> </span>
+<span id="L973" class="line"><a href="#L973">973</a> section Real</span>
+<span id="L974" class="line"><a href="#L974">974</a> </span>
+<span id="L975" class="line"><a href="#L975">975</a> variable (a b : OrthonormalBasis ι ℝ F)</span>
+<span id="L976" class="line"><a href="#L976">976</a> </span>
+<span id="L977" class="line"><a href="#L977">977</a> /-- The change-of-basis matrix between two orthonormal bases `a`, `b` is an orthogonal matrix. -/</span>
+<span id="L978" class="line"><a href="#L978">978</a> theorem OrthonormalBasis.toMatrix_orthonormalBasis_mem_orthogonal :</span>
+<span id="L979" class="line"><a href="#L979">979</a>     a.toBasis.toMatrix b ∈ Matrix.orthogonalGroup ι ℝ :=</span>
+<span id="L980" class="line"><a href="#L980">980</a>   a.toMatrix_orthonormalBasis_mem_unitary b</span>
+<span id="L981" class="line"><a href="#L981">981</a> </span>
+<span id="L982" class="line"><a href="#L982">982</a> /-- The determinant of the change-of-basis matrix between two orthonormal bases `a`, `b` is ±1. -/</span>
+<span id="L983" class="line"><a href="#L983">983</a> theorem OrthonormalBasis.det_to_matrix_orthonormalBasis_real :</span>
+<span id="L984" class="line"><a href="#L984">984</a>     a.toBasis.det b = 1 ∨ a.toBasis.det b = -1 := by</span>
+<span id="L985" class="line"><a href="#L985">985</a>   rw [← sq_eq_one_iff]</span>
+<span id="L986" class="line"><a href="#L986">986</a>   simpa [unitary, sq] using Matrix.det_of_mem_unitary (a.toMatrix_orthonormalBasis_mem_unitary b)</span>
+<span id="L987" class="line"><a href="#L987">987</a> </span>
+<span id="L988" class="line"><a href="#L988">988</a> end Real</span>
+<span id="L989" class="line"><a href="#L989">989</a> </span>
+<span id="L990" class="line"><a href="#L990">990</a> end ToMatrix</span>
+<span id="L991" class="line"><a href="#L991">991</a> </span>
+<span id="L992" class="line"><a href="#L992">992</a> /-! ### Existence of orthonormal basis, etc. -/</span>
+<span id="L993" class="line"><a href="#L993">993</a> </span>
+<span id="L994" class="line"><a href="#L994">994</a> </span>
+<span id="L995" class="line"><a href="#L995">995</a> section FiniteDimensional</span>
+<span id="L996" class="line"><a href="#L996">996</a> </span>
+<span id="L997" class="line"><a href="#L997">997</a> variable {v : Set E}</span>
+<span id="L998" class="line"><a href="#L998">998</a> variable {A : ι → Submodule 𝕜 E}</span>
+<span id="L999" class="line"><a href="#L999">999</a> </span>
+<span id="L1000" class="line"><a href="#L1000">1000</a> /-- Given an internal direct sum decomposition of a module `M`, and an orthonormal basis for each</span>
+<span id="L1001" class="line"><a href="#L1001">1001</a> of the components of the direct sum, the disjoint union of these orthonormal bases is an</span>
+<span id="L1002" class="line"><a href="#L1002">1002</a> orthonormal basis for `M`. -/</span>
+<span id="L1003" class="line"><a href="#L1003">1003</a> noncomputable def DirectSum.IsInternal.collectedOrthonormalBasis</span>
+<span id="L1004" class="line"><a href="#L1004">1004</a>     (hV : OrthogonalFamily 𝕜 (fun i =&gt; A i) fun i =&gt; (A i).subtypeₗᵢ) [DecidableEq ι]</span>
+<span id="L1005" class="line"><a href="#L1005">1005</a>     (hV_sum : DirectSum.IsInternal fun i =&gt; A i) {α : ι → Type*} [∀ i, Fintype (α i)]</span>
+<span id="L1006" class="line"><a href="#L1006">1006</a>     (v_family : ∀ i, OrthonormalBasis (α i) 𝕜 (A i)) : OrthonormalBasis (Σ i, α i) 𝕜 E :=</span>
+<span id="L1007" class="line"><a href="#L1007">1007</a>   (hV_sum.collectedBasis fun i =&gt; (v_family i).toBasis).toOrthonormalBasis &lt;| by</span>
+<span id="L1008" class="line"><a href="#L1008">1008</a>     simpa using</span>
+<span id="L1009" class="line"><a href="#L1009">1009</a>       hV.orthonormal_sigma_orthonormal (show ∀ i, Orthonormal 𝕜 (v_family i).toBasis by simp)</span>
+<span id="L1010" class="line"><a href="#L1010">1010</a> </span>
+<span id="L1011" class="line"><a href="#L1011">1011</a> theorem DirectSum.IsInternal.collectedOrthonormalBasis_mem [DecidableEq ι]</span>
+<span id="L1012" class="line"><a href="#L1012">1012</a>     (h : DirectSum.IsInternal A) {α : ι → Type*} [∀ i, Fintype (α i)]</span>
+<span id="L1013" class="line"><a href="#L1013">1013</a>     (hV : OrthogonalFamily 𝕜 (fun i =&gt; A i) fun i =&gt; (A i).subtypeₗᵢ)</span>
+<span id="L1014" class="line"><a href="#L1014">1014</a>     (v : ∀ i, OrthonormalBasis (α i) 𝕜 (A i)) (a : Σ i, α i) :</span>
+<span id="L1015" class="line"><a href="#L1015">1015</a>     h.collectedOrthonormalBasis hV v a ∈ A a.1 := by</span>
+<span id="L1016" class="line"><a href="#L1016">1016</a>   simp [DirectSum.IsInternal.collectedOrthonormalBasis]</span>
+<span id="L1017" class="line"><a href="#L1017">1017</a> </span>
+<span id="L1018" class="line"><a href="#L1018">1018</a> variable [FiniteDimensional 𝕜 E]</span>
+<span id="L1019" class="line"><a href="#L1019">1019</a> </span>
+<span id="L1020" class="line"><a href="#L1020">1020</a> /-- In a finite-dimensional `InnerProductSpace`, any orthonormal subset can be extended to an</span>
+<span id="L1021" class="line"><a href="#L1021">1021</a> orthonormal basis. -/</span>
+<span id="L1022" class="line"><a href="#L1022">1022</a> theorem Orthonormal.exists_orthonormalBasis_extension (hv : Orthonormal 𝕜 ((↑) : v → E)) :</span>
+<span id="L1023" class="line"><a href="#L1023">1023</a>     ∃ (u : Finset E) (b : OrthonormalBasis u 𝕜 E), v ⊆ u ∧ ⇑b = ((↑) : u → E) := by</span>
+<span id="L1024" class="line"><a href="#L1024">1024</a>   obtain ⟨u₀, hu₀s, hu₀, hu₀_max⟩ := exists_maximal_orthonormal hv</span>
+<span id="L1025" class="line"><a href="#L1025">1025</a>   rw [maximal_orthonormal_iff_orthogonalComplement_eq_bot hu₀] at hu₀_max</span>
+<span id="L1026" class="line"><a href="#L1026">1026</a>   have hu₀_finite : u₀.Finite := hu₀.linearIndependent.setFinite</span>
+<span id="L1027" class="line"><a href="#L1027">1027</a>   let u : Finset E := hu₀_finite.toFinset</span>
+<span id="L1028" class="line"><a href="#L1028">1028</a>   let fu : ↥u ≃ ↥u₀ := hu₀_finite.subtypeEquivToFinset.symm</span>
+<span id="L1029" class="line"><a href="#L1029">1029</a>   have hu : Orthonormal 𝕜 ((↑) : u → E) := by simpa using hu₀.comp _ fu.injective</span>
+<span id="L1030" class="line"><a href="#L1030">1030</a>   refine ⟨u, OrthonormalBasis.mkOfOrthogonalEqBot hu ?_, ?_, ?_⟩</span>
+<span id="L1031" class="line"><a href="#L1031">1031</a>   · simpa [u] using hu₀_max</span>
+<span id="L1032" class="line"><a href="#L1032">1032</a>   · simpa [u] using hu₀s</span>
+<span id="L1033" class="line"><a href="#L1033">1033</a>   · simp</span>
+<span id="L1034" class="line"><a href="#L1034">1034</a> </span>
+<span id="L1035" class="line"><a href="#L1035">1035</a> theorem Orthonormal.exists_orthonormalBasis_extension_of_card_eq {ι : Type*} [Fintype ι]</span>
+<span id="L1036" class="line"><a href="#L1036">1036</a>     (card_ι : finrank 𝕜 E = Fintype.card ι) {v : ι → E} {s : Set ι}</span>
+<span id="L1037" class="line"><a href="#L1037">1037</a>     (hv : Orthonormal 𝕜 (s.restrict v)) : ∃ b : OrthonormalBasis ι 𝕜 E, ∀ i ∈ s, b i = v i := by</span>
+<span id="L1038" class="line"><a href="#L1038">1038</a>   have hsv : Injective (s.restrict v) := hv.linearIndependent.injective</span>
+<span id="L1039" class="line"><a href="#L1039">1039</a>   have hX : Orthonormal 𝕜 ((↑) : Set.range (s.restrict v) → E) := by</span>
+<span id="L1040" class="line"><a href="#L1040">1040</a>     rwa [orthonormal_subtype_range hsv]</span>
+<span id="L1041" class="line"><a href="#L1041">1041</a>   obtain ⟨Y, b₀, hX, hb₀⟩ := hX.exists_orthonormalBasis_extension</span>
+<span id="L1042" class="line"><a href="#L1042">1042</a>   have hιY : Fintype.card ι = Y.card := by</span>
+<span id="L1043" class="line"><a href="#L1043">1043</a>     refine card_ι.symm.trans ?_</span>
+<span id="L1044" class="line"><a href="#L1044">1044</a>     exact Module.finrank_eq_card_finset_basis b₀.toBasis</span>
+<span id="L1045" class="line"><a href="#L1045">1045</a>   have hvsY : s.MapsTo v Y := (s.mapsTo_image v).mono_right (by rwa [← range_restrict])</span>
+<span id="L1046" class="line"><a href="#L1046">1046</a>   have hsv&#x27; : Set.InjOn v s := by</span>
+<span id="L1047" class="line"><a href="#L1047">1047</a>     rw [Set.injOn_iff_injective]</span>
+<span id="L1048" class="line"><a href="#L1048">1048</a>     exact hsv</span>
+<span id="L1049" class="line"><a href="#L1049">1049</a>   obtain ⟨g, hg⟩ := hvsY.exists_equiv_extend_of_card_eq hιY hsv&#x27;</span>
+<span id="L1050" class="line"><a href="#L1050">1050</a>   use b₀.reindex g.symm</span>
+<span id="L1051" class="line"><a href="#L1051">1051</a>   intro i hi</span>
+<span id="L1052" class="line"><a href="#L1052">1052</a>   simp [hb₀, hg i hi]</span>
+<span id="L1053" class="line"><a href="#L1053">1053</a> </span>
+<span id="L1054" class="line"><a href="#L1054">1054</a> variable (𝕜 E)</span>
+<span id="L1055" class="line"><a href="#L1055">1055</a> </span>
+<span id="L1056" class="line"><a href="#L1056">1056</a> /-- A finite-dimensional inner product space admits an orthonormal basis. -/</span>
+<span id="L1057" class="line"><a href="#L1057">1057</a> theorem _root_.exists_orthonormalBasis :</span>
+<span id="L1058" class="line"><a href="#L1058">1058</a>     ∃ (w : Finset E) (b : OrthonormalBasis w 𝕜 E), ⇑b = ((↑) : w → E) :=</span>
+<span id="L1059" class="line"><a href="#L1059">1059</a>   let ⟨w, hw, _, hw&#x27;&#x27;⟩ := (orthonormal_empty 𝕜 E).exists_orthonormalBasis_extension</span>
+<span id="L1060" class="line"><a href="#L1060">1060</a>   ⟨w, hw, hw&#x27;&#x27;⟩</span>
+<span id="L1061" class="line"><a href="#L1061">1061</a> </span>
+<span id="L1062" class="line"><a href="#L1062">1062</a> /-- A finite-dimensional `InnerProductSpace` has an orthonormal basis. -/</span>
+<span id="L1063" class="line"><a href="#L1063">1063</a> irreducible_def stdOrthonormalBasis : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E := by</span>
+<span id="L1064" class="line"><a href="#L1064">1064</a>   let b := Classical.choose (Classical.choose_spec &lt;| exists_orthonormalBasis 𝕜 E)</span>
+<span id="L1065" class="line"><a href="#L1065">1065</a>   rw [finrank_eq_card_basis b.toBasis]</span>
+<span id="L1066" class="line"><a href="#L1066">1066</a>   exact b.reindex (Fintype.equivFinOfCardEq rfl)</span>
+<span id="L1067" class="line"><a href="#L1067">1067</a> </span>
+<span id="L1068" class="line"><a href="#L1068">1068</a> /-- An orthonormal basis of `ℝ` is made either of the vector `1`, or of the vector `-1`. -/</span>
+<span id="L1069" class="line"><a href="#L1069">1069</a> theorem orthonormalBasis_one_dim (b : OrthonormalBasis ι ℝ ℝ) :</span>
+<span id="L1070" class="line"><a href="#L1070">1070</a>     (⇑b = fun _ =&gt; (1 : ℝ)) ∨ ⇑b = fun _ =&gt; (-1 : ℝ) := by</span>
+<span id="L1071" class="line"><a href="#L1071">1071</a>   have : Unique ι := b.toBasis.unique</span>
+<span id="L1072" class="line"><a href="#L1072">1072</a>   have : b default = 1 ∨ b default = -1 := by</span>
+<span id="L1073" class="line"><a href="#L1073">1073</a>     have : ‖b default‖ = 1 := b.orthonormal.1 _</span>
+<span id="L1074" class="line"><a href="#L1074">1074</a>     rwa [Real.norm_eq_abs, abs_eq (zero_le_one&#x27; ℝ)] at this</span>
+<span id="L1075" class="line"><a href="#L1075">1075</a>   rw [eq_const_of_unique b]</span>
+<span id="L1076" class="line"><a href="#L1076">1076</a>   grind</span>
+<span id="L1077" class="line"><a href="#L1077">1077</a> </span>
+<span id="L1078" class="line"><a href="#L1078">1078</a> variable {𝕜 E}</span>
+<span id="L1079" class="line"><a href="#L1079">1079</a> </span>
+<span id="L1080" class="line"><a href="#L1080">1080</a> section SubordinateOrthonormalBasis</span>
+<span id="L1081" class="line"><a href="#L1081">1081</a> </span>
+<span id="L1082" class="line"><a href="#L1082">1082</a> open DirectSum</span>
+<span id="L1083" class="line"><a href="#L1083">1083</a> </span>
+<span id="L1084" class="line"><a href="#L1084">1084</a> variable {n : ℕ} (hn : finrank 𝕜 E = n) [DecidableEq ι] {V : ι → Submodule 𝕜 E} (hV : IsInternal V)</span>
+<span id="L1085" class="line"><a href="#L1085">1085</a> </span>
+<span id="L1086" class="line"><a href="#L1086">1086</a> /-- Exhibit a bijection between `Fin n` and the index set of a certain basis of an `n`-dimensional</span>
+<span id="L1087" class="line"><a href="#L1087">1087</a> inner product space `E`.  This should not be accessed directly, but only via the subsequent API. -/</span>
+<span id="L1088" class="line"><a href="#L1088">1088</a> irreducible_def DirectSum.IsInternal.sigmaOrthonormalBasisIndexEquiv</span>
+<span id="L1089" class="line"><a href="#L1089">1089</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) :</span>
+<span id="L1090" class="line"><a href="#L1090">1090</a>     (Σ i, Fin (finrank 𝕜 (V i))) ≃ Fin n :=</span>
+<span id="L1091" class="line"><a href="#L1091">1091</a>   let b := hV.collectedOrthonormalBasis hV&#x27; fun i =&gt; stdOrthonormalBasis 𝕜 (V i)</span>
+<span id="L1092" class="line"><a href="#L1092">1092</a>   Fintype.equivFinOfCardEq &lt;| (Module.finrank_eq_card_basis b.toBasis).symm.trans hn</span>
+<span id="L1093" class="line"><a href="#L1093">1093</a> </span>
+<span id="L1094" class="line"><a href="#L1094">1094</a> /-- An `n`-dimensional `InnerProductSpace` equipped with a decomposition as an internal direct</span>
+<span id="L1095" class="line"><a href="#L1095">1095</a> sum has an orthonormal basis indexed by `Fin n` and subordinate to that direct sum. -/</span>
+<span id="L1096" class="line"><a href="#L1096">1096</a> irreducible_def DirectSum.IsInternal.subordinateOrthonormalBasis</span>
+<span id="L1097" class="line"><a href="#L1097">1097</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) :</span>
+<span id="L1098" class="line"><a href="#L1098">1098</a>     OrthonormalBasis (Fin n) 𝕜 E :=</span>
+<span id="L1099" class="line"><a href="#L1099">1099</a>   (hV.collectedOrthonormalBasis hV&#x27; fun i =&gt; stdOrthonormalBasis 𝕜 (V i)).reindex</span>
+<span id="L1100" class="line"><a href="#L1100">1100</a>     (hV.sigmaOrthonormalBasisIndexEquiv hn hV&#x27;)</span>
+<span id="L1101" class="line"><a href="#L1101">1101</a> </span>
+<span id="L1102" class="line"><a href="#L1102">1102</a> /-- An `n`-dimensional `InnerProductSpace` equipped with a decomposition as an internal direct</span>
+<span id="L1103" class="line"><a href="#L1103">1103</a> sum has an orthonormal basis indexed by `Fin n` and subordinate to that direct sum. This function</span>
+<span id="L1104" class="line"><a href="#L1104">1104</a> provides the mapping by which it is subordinate. -/</span>
+<span id="L1105" class="line"><a href="#L1105">1105</a> irreducible_def DirectSum.IsInternal.subordinateOrthonormalBasisIndex (a : Fin n)</span>
+<span id="L1106" class="line"><a href="#L1106">1106</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) : ι :=</span>
+<span id="L1107" class="line"><a href="#L1107">1107</a>   ((hV.sigmaOrthonormalBasisIndexEquiv hn hV&#x27;).symm a).1</span>
+<span id="L1108" class="line"><a href="#L1108">1108</a> </span>
+<span id="L1109" class="line"><a href="#L1109">1109</a> /-- The basis constructed in `DirectSum.IsInternal.subordinateOrthonormalBasis` is subordinate to</span>
+<span id="L1110" class="line"><a href="#L1110">1110</a> the `OrthogonalFamily` in question. -/</span>
+<span id="L1111" class="line"><a href="#L1111">1111</a> theorem DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate (a : Fin n)</span>
+<span id="L1112" class="line"><a href="#L1112">1112</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) :</span>
+<span id="L1113" class="line"><a href="#L1113">1113</a>     hV.subordinateOrthonormalBasis hn hV&#x27; a ∈ V (hV.subordinateOrthonormalBasisIndex hn a hV&#x27;) := by</span>
+<span id="L1114" class="line"><a href="#L1114">1114</a>   simpa only [DirectSum.IsInternal.subordinateOrthonormalBasis, OrthonormalBasis.coe_reindex,</span>
+<span id="L1115" class="line"><a href="#L1115">1115</a>     DirectSum.IsInternal.subordinateOrthonormalBasisIndex] using</span>
+<span id="L1116" class="line"><a href="#L1116">1116</a>     hV.collectedOrthonormalBasis_mem hV&#x27; (fun i =&gt; stdOrthonormalBasis 𝕜 (V i))</span>
+<span id="L1117" class="line"><a href="#L1117">1117</a>       ((hV.sigmaOrthonormalBasisIndexEquiv hn hV&#x27;).symm a)</span>
+<span id="L1118" class="line"><a href="#L1118">1118</a> </span>
+<span id="L1119" class="line"><a href="#L1119">1119</a> theorem DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq</span>
+<span id="L1120" class="line"><a href="#L1120">1120</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) {i : ι} (hi : V i ≠ ⊥) :</span>
+<span id="L1121" class="line"><a href="#L1121">1121</a>     ∃ a : Fin n, hV.subordinateOrthonormalBasisIndex hn a hV&#x27; = i := by</span>
+<span id="L1122" class="line"><a href="#L1122">1122</a>   use hV.sigmaOrthonormalBasisIndexEquiv hn hV&#x27; ⟨i, ⟨0, by grind [finrank_eq_zero (S := V i)]⟩⟩</span>
+<span id="L1123" class="line"><a href="#L1123">1123</a>   simp [subordinateOrthonormalBasisIndex_def]</span>
+<span id="L1124" class="line"><a href="#L1124">1124</a> </span>
+<span id="L1125" class="line"><a href="#L1125">1125</a> private def DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv</span>
+<span id="L1126" class="line"><a href="#L1126">1126</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) (i : ι) :</span>
+<span id="L1127" class="line"><a href="#L1127">1127</a>     {a : Fin n // hV.subordinateOrthonormalBasisIndex hn a hV&#x27; = i} ≃ Fin (finrank 𝕜 (V i)) where</span>
+<span id="L1128" class="line"><a href="#L1128">1128</a>   toFun a := Fin.cast (by rw [← subordinateOrthonormalBasisIndex_def, a.property])</span>
+<span id="L1129" class="line"><a href="#L1129">1129</a>     ((hV.sigmaOrthonormalBasisIndexEquiv hn hV&#x27;).symm a).snd</span>
+<span id="L1130" class="line"><a href="#L1130">1130</a>   invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV&#x27; ⟨i, b⟩,</span>
+<span id="L1131" class="line"><a href="#L1131">1131</a>     by simp [subordinateOrthonormalBasisIndex_def]⟩</span>
+<span id="L1132" class="line"><a href="#L1132">1132</a>   left_inv := by grind [subordinateOrthonormalBasisIndex_def, Fin.cast_eq_self]</span>
+<span id="L1133" class="line"><a href="#L1133">1133</a>   right_inv := by grind</span>
+<span id="L1134" class="line"><a href="#L1134">1134</a> </span>
+<span id="L1135" class="line"><a href="#L1135">1135</a> theorem DirectSum.IsInternal.card_filter_subordinateOrthonormalBasisIndex_eq</span>
+<span id="L1136" class="line"><a href="#L1136">1136</a>     (hV&#x27; : OrthogonalFamily 𝕜 (fun i =&gt; V i) fun i =&gt; (V i).subtypeₗᵢ) (i : ι) :</span>
+<span id="L1137" class="line"><a href="#L1137">1137</a>     Finset.card {a | hV.subordinateOrthonormalBasisIndex hn a hV&#x27; = i} = finrank 𝕜 (V i) := by</span>
+<span id="L1138" class="line"><a href="#L1138">1138</a>   apply Finset.card_eq_of_equiv_fin</span>
+<span id="L1139" class="line"><a href="#L1139">1139</a>   simpa using hV.subordinateOrthonormalBasisIndexFiberEquiv hn hV&#x27; i</span>
+<span id="L1140" class="line"><a href="#L1140">1140</a> </span>
+<span id="L1141" class="line"><a href="#L1141">1141</a> end SubordinateOrthonormalBasis</span>
+<span id="L1142" class="line"><a href="#L1142">1142</a> </span>
+<span id="L1143" class="line"><a href="#L1143">1143</a> end FiniteDimensional</span>
+<span id="L1144" class="line"><a href="#L1144">1144</a> </span>
+<span id="L1145" class="line"><a href="#L1145">1145</a> /-- Given a natural number `n` one less than the `finrank` of a finite-dimensional inner product</span>
+<span id="L1146" class="line"><a href="#L1146">1146</a> space, there exists an isometry from the orthogonal complement of a nonzero singleton to</span>
+<span id="L1147" class="line"><a href="#L1147">1147</a> `EuclideanSpace 𝕜 (Fin n)`. -/</span>
+<span id="L1148" class="line"><a href="#L1148">1148</a> def OrthonormalBasis.fromOrthogonalSpanSingleton (n : ℕ) [Fact (finrank 𝕜 E = n + 1)] {v : E}</span>
+<span id="L1149" class="line"><a href="#L1149">1149</a>     (hv : v ≠ 0) : OrthonormalBasis (Fin n) 𝕜 (𝕜 ∙ v)ᗮ :=</span>
+<span id="L1150" class="line"><a href="#L1150">1150</a>   have : FiniteDimensional 𝕜 E := .of_fact_finrank_eq_succ (K := 𝕜) (V := E) n</span>
+<span id="L1151" class="line"><a href="#L1151">1151</a>   (stdOrthonormalBasis _ _).reindex &lt;| finCongr &lt;| finrank_orthogonal_span_singleton hv</span>
+<span id="L1152" class="line"><a href="#L1152">1152</a> </span>
+<span id="L1153" class="line"><a href="#L1153">1153</a> section LinearIsometry</span>
+<span id="L1154" class="line"><a href="#L1154">1154</a> </span>
+<span id="L1155" class="line"><a href="#L1155">1155</a> variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [FiniteDimensional 𝕜 V]</span>
+<span id="L1156" class="line"><a href="#L1156">1156</a> variable {S : Submodule 𝕜 V} {L : S →ₗᵢ[𝕜] V}</span>
+<span id="L1157" class="line"><a href="#L1157">1157</a> </span>
+<span id="L1158" class="line"><a href="#L1158">1158</a> open Module</span>
+<span id="L1159" class="line"><a href="#L1159">1159</a> </span>
+<span id="L1160" class="line"><a href="#L1160">1160</a> set_option backward.isDefEq.respectTransparency false in</span>
+<span id="L1161" class="line"><a href="#L1161">1161</a> /-- Let `S` be a subspace of a finite-dimensional complex inner product space `V`.  A linear</span>
+<span id="L1162" class="line"><a href="#L1162">1162</a> isometry mapping `S` into `V` can be extended to a full isometry of `V`.</span>
+<span id="L1163" class="line"><a href="#L1163">1163</a> </span>
+<span id="L1164" class="line"><a href="#L1164">1164</a> TODO:  The case when `S` is a finite-dimensional subspace of an infinite-dimensional `V`. -/</span>
+<span id="L1165" class="line"><a href="#L1165">1165</a> noncomputable def LinearIsometry.extend (L : S →ₗᵢ[𝕜] V) : V →ₗᵢ[𝕜] V := by</span>
+<span id="L1166" class="line"><a href="#L1166">1166</a>   -- Build an isometry from Sᗮ to L(S)ᗮ through `EuclideanSpace`</span>
+<span id="L1167" class="line"><a href="#L1167">1167</a>   let d := finrank 𝕜 Sᗮ</span>
+<span id="L1168" class="line"><a href="#L1168">1168</a>   let LS := LinearMap.range L.toLinearMap</span>
+<span id="L1169" class="line"><a href="#L1169">1169</a>   have E : Sᗮ ≃ₗᵢ[𝕜] LSᗮ := by</span>
+<span id="L1170" class="line"><a href="#L1170">1170</a>     have dim_LS_perp : finrank 𝕜 LSᗮ = d :=</span>
+<span id="L1171" class="line"><a href="#L1171">1171</a>       calc</span>
+<span id="L1172" class="line"><a href="#L1172">1172</a>         finrank 𝕜 LSᗮ = finrank 𝕜 V - finrank 𝕜 LS := by</span>
+<span id="L1173" class="line"><a href="#L1173">1173</a>           simp only [← LS.finrank_add_finrank_orthogonal, add_tsub_cancel_left]</span>
+<span id="L1174" class="line"><a href="#L1174">1174</a>         _ = finrank 𝕜 V - finrank 𝕜 S := by</span>
+<span id="L1175" class="line"><a href="#L1175">1175</a>           simp only [LS, LinearMap.finrank_range_of_inj L.injective]</span>
+<span id="L1176" class="line"><a href="#L1176">1176</a>         _ = finrank 𝕜 Sᗮ := by simp only [← S.finrank_add_finrank_orthogonal, add_tsub_cancel_left]</span>
+<span id="L1177" class="line"><a href="#L1177">1177</a>     exact</span>
+<span id="L1178" class="line"><a href="#L1178">1178</a>       (stdOrthonormalBasis 𝕜 Sᗮ).repr.trans</span>
+<span id="L1179" class="line"><a href="#L1179">1179</a>         ((stdOrthonormalBasis 𝕜 LSᗮ).reindex &lt;| finCongr dim_LS_perp).repr.symm</span>
+<span id="L1180" class="line"><a href="#L1180">1180</a>   let L3 := LSᗮ.subtypeₗᵢ.comp E.toLinearIsometry</span>
+<span id="L1181" class="line"><a href="#L1181">1181</a>   -- Project onto S and Sᗮ</span>
+<span id="L1182" class="line"><a href="#L1182">1182</a>   haveI : CompleteSpace S := FiniteDimensional.complete 𝕜 S</span>
+<span id="L1183" class="line"><a href="#L1183">1183</a>   haveI : CompleteSpace V := FiniteDimensional.complete 𝕜 V</span>
+<span id="L1184" class="line"><a href="#L1184">1184</a>   let p1 := S.orthogonalProjection.toLinearMap</span>
+<span id="L1185" class="line"><a href="#L1185">1185</a>   let p2 := Sᗮ.orthogonalProjection.toLinearMap</span>
+<span id="L1186" class="line"><a href="#L1186">1186</a>   -- Build a linear map from the isometries on S and Sᗮ</span>
+<span id="L1187" class="line"><a href="#L1187">1187</a>   let M := L.toLinearMap.comp p1 + L3.toLinearMap.comp p2</span>
+<span id="L1188" class="line"><a href="#L1188">1188</a>   -- Prove that M is an isometry</span>
+<span id="L1189" class="line"><a href="#L1189">1189</a>   have M_norm_map : ∀ x : V, ‖M x‖ = ‖x‖ := by</span>
+<span id="L1190" class="line"><a href="#L1190">1190</a>     intro x</span>
+<span id="L1191" class="line"><a href="#L1191">1191</a>     -- Apply M to the orthogonal decomposition of x</span>
+<span id="L1192" class="line"><a href="#L1192">1192</a>     have Mx_decomp : M x = L (p1 x) + L3 (p2 x) := by</span>
+<span id="L1193" class="line"><a href="#L1193">1193</a>       simp only [M, LinearMap.add_apply, LinearMap.comp_apply, LinearMap.comp_apply,</span>
+<span id="L1194" class="line"><a href="#L1194">1194</a>         LinearIsometry.coe_toLinearMap]</span>
+<span id="L1195" class="line"><a href="#L1195">1195</a>     -- Mx_decomp is the orthogonal decomposition of M x</span>
+<span id="L1196" class="line"><a href="#L1196">1196</a>     have Mx_orth : ⟪L (p1 x), L3 (p2 x)⟫ = 0 := by</span>
+<span id="L1197" class="line"><a href="#L1197">1197</a>       have Lp1x : L (p1 x) ∈ LinearMap.range L.toLinearMap :=</span>
+<span id="L1198" class="line"><a href="#L1198">1198</a>         LinearMap.mem_range_self L.toLinearMap (p1 x)</span>
+<span id="L1199" class="line"><a href="#L1199">1199</a>       have Lp2x : L3 (p2 x) ∈ (LinearMap.range L.toLinearMap)ᗮ := by</span>
+<span id="L1200" class="line"><a href="#L1200">1200</a>         simp only [LS,</span>
+<span id="L1201" class="line"><a href="#L1201">1201</a>           ← Submodule.range_subtype LSᗮ]</span>
+<span id="L1202" class="line"><a href="#L1202">1202</a>         apply LinearMap.mem_range_self</span>
+<span id="L1203" class="line"><a href="#L1203">1203</a>       apply Submodule.inner_right_of_mem_orthogonal Lp1x Lp2x</span>
+<span id="L1204" class="line"><a href="#L1204">1204</a>     -- Apply the Pythagorean theorem and simplify</span>
+<span id="L1205" class="line"><a href="#L1205">1205</a>     rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sq_eq_add_norm_sq_projection x S]</span>
+<span id="L1206" class="line"><a href="#L1206">1206</a>     simp only [sq, Mx_decomp]</span>
+<span id="L1207" class="line"><a href="#L1207">1207</a>     rw [norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (L (p1 x)) (L3 (p2 x)) Mx_orth]</span>
+<span id="L1208" class="line"><a href="#L1208">1208</a>     simp only [p1, p2, LinearIsometry.norm_map,</span>
+<span id="L1209" class="line"><a href="#L1209">1209</a>       ContinuousLinearMap.coe_coe, Submodule.coe_norm]</span>
+<span id="L1210" class="line"><a href="#L1210">1210</a>   exact</span>
+<span id="L1211" class="line"><a href="#L1211">1211</a>     { toLinearMap := M</span>
+<span id="L1212" class="line"><a href="#L1212">1212</a>       norm_map&#x27; := M_norm_map }</span>
+<span id="L1213" class="line"><a href="#L1213">1213</a> </span>
+<span id="L1214" class="line"><a href="#L1214">1214</a> theorem LinearIsometry.extend_apply (L : S →ₗᵢ[𝕜] V) (s : S) : L.extend s = L s := by</span>
+<span id="L1215" class="line"><a href="#L1215">1215</a>   simp only [LinearIsometry.extend, ← LinearIsometry.coe_toLinearMap]</span>
+<span id="L1216" class="line"><a href="#L1216">1216</a>   simp only [add_eq_left, LinearIsometry.coe_toLinearMap,</span>
+<span id="L1217" class="line"><a href="#L1217">1217</a>     LinearIsometryEquiv.coe_toLinearIsometry, LinearIsometry.coe_comp, Function.comp_apply,</span>
+<span id="L1218" class="line"><a href="#L1218">1218</a>     orthogonalProjection_mem_subspace_eq_self, LinearMap.coe_comp, ContinuousLinearMap.coe_coe,</span>
+<span id="L1219" class="line"><a href="#L1219">1219</a>     Submodule.coe_subtype, LinearMap.add_apply, Submodule.coe_eq_zero,</span>
+<span id="L1220" class="line"><a href="#L1220">1220</a>     LinearIsometryEquiv.map_eq_zero_iff, Submodule.coe_subtypeₗᵢ,</span>
+<span id="L1221" class="line"><a href="#L1221">1221</a>     orthogonalProjection_mem_subspace_orthogonalComplement_eq_zero, Submodule.orthogonal_orthogonal,</span>
+<span id="L1222" class="line"><a href="#L1222">1222</a>     Submodule.coe_mem]</span>
+<span id="L1223" class="line"><a href="#L1223">1223</a> </span>
+<span id="L1224" class="line"><a href="#L1224">1224</a> end LinearIsometry</span>
+<span id="L1225" class="line"><a href="#L1225">1225</a> </span>
+<span id="L1226" class="line"><a href="#L1226">1226</a> section Matrix</span>
+<span id="L1227" class="line"><a href="#L1227">1227</a> </span>
+<span id="L1228" class="line"><a href="#L1228">1228</a> open Matrix</span>
+<span id="L1229" class="line"><a href="#L1229">1229</a> </span>
+<span id="L1230" class="line"><a href="#L1230">1230</a> variable {m n : Type*}</span>
+<span id="L1231" class="line"><a href="#L1231">1231</a> </span>
+<span id="L1232" class="line"><a href="#L1232">1232</a> namespace Matrix</span>
+<span id="L1233" class="line"><a href="#L1233">1233</a> </span>
+<span id="L1234" class="line"><a href="#L1234">1234</a> variable [Fintype n] [DecidableEq n]</span>
+<span id="L1235" class="line"><a href="#L1235">1235</a> </span>
+<span id="L1236" class="line"><a href="#L1236">1236</a> /-- A shorthand for `Matrix.toLpLin 2 2`. -/</span>
+<span id="L1237" class="line"><a href="#L1237">1237</a> abbrev toEuclideanLin : Matrix m n 𝕜 ≃ₗ[𝕜] EuclideanSpace 𝕜 n →ₗ[𝕜] EuclideanSpace 𝕜 m :=</span>
+<span id="L1238" class="line"><a href="#L1238">1238</a>   toLpLin 2 2</span>
+<span id="L1239" class="line"><a href="#L1239">1239</a> </span>
+<span id="L1240" class="line"><a href="#L1240">1240</a> @[deprecated toLpLin_toLp (since := &quot;2026-01-22&quot;)]</span>
+<span id="L1241" class="line"><a href="#L1241">1241</a> lemma toEuclideanLin_toLp (A : Matrix m n 𝕜) (x : n → 𝕜) :</span>
+<span id="L1242" class="line"><a href="#L1242">1242</a>     Matrix.toEuclideanLin A (toLp _ x) = toLp _ (Matrix.toLin&#x27; A x) := rfl</span>
+<span id="L1243" class="line"><a href="#L1243">1243</a> </span>
+<span id="L1244" class="line"><a href="#L1244">1244</a> @[deprecated ofLp_toLpLin (since := &quot;2026-01-22&quot;)]</span>
+<span id="L1245" class="line"><a href="#L1245">1245</a> theorem piLp_ofLp_toEuclideanLin (A : Matrix m n 𝕜) (x : EuclideanSpace 𝕜 n) :</span>
+<span id="L1246" class="line"><a href="#L1246">1246</a>     ofLp (Matrix.toEuclideanLin A x) = Matrix.toLin&#x27; A (ofLp x) :=</span>
+<span id="L1247" class="line"><a href="#L1247">1247</a>   rfl</span>
+<span id="L1248" class="line"><a href="#L1248">1248</a> </span>
+<span id="L1249" class="line"><a href="#L1249">1249</a> @[deprecated toLpLin_apply (since := &quot;2026-01-22&quot;)]</span>
+<span id="L1250" class="line"><a href="#L1250">1250</a> theorem toEuclideanLin_apply (M : Matrix m n 𝕜) (v : EuclideanSpace 𝕜 n) :</span>
+<span id="L1251" class="line"><a href="#L1251">1251</a>     toEuclideanLin M v = toLp _ (M *ᵥ ofLp v) := rfl</span>
+<span id="L1252" class="line"><a href="#L1252">1252</a> </span>
+<span id="L1253" class="line"><a href="#L1253">1253</a> @[deprecated ofLp_toLpLin (since := &quot;2026-01-22&quot;)]</span>
+<span id="L1254" class="line"><a href="#L1254">1254</a> theorem ofLp_toEuclideanLin_apply (M : Matrix m n 𝕜) (v : EuclideanSpace 𝕜 n) :</span>
+<span id="L1255" class="line"><a href="#L1255">1255</a>     ofLp (toEuclideanLin M v) = M *ᵥ ofLp v :=</span>
+<span id="L1256" class="line"><a href="#L1256">1256</a>   rfl</span>
+<span id="L1257" class="line"><a href="#L1257">1257</a> </span>
+<span id="L1258" class="line"><a href="#L1258">1258</a> @[deprecated toLpLin_toLp (since := &quot;2026-01-22&quot;)]</span>
+<span id="L1259" class="line"><a href="#L1259">1259</a> theorem toEuclideanLin_apply_piLp_toLp (M : Matrix m n 𝕜) (v : n → 𝕜) :</span>
+<span id="L1260" class="line"><a href="#L1260">1260</a>     toEuclideanLin M (toLp _ v) = toLp _ (M *ᵥ v) :=</span>
+<span id="L1261" class="line"><a href="#L1261">1261</a>   rfl</span>
+<span id="L1262" class="line"><a href="#L1262">1262</a> </span>
+<span id="L1263" class="line"><a href="#L1263">1263</a> -- `Matrix.toEuclideanLin` is the same as `Matrix.toLin` applied to `PiLp.basisFun`,</span>
+<span id="L1264" class="line"><a href="#L1264">1264</a> @[deprecated toLpLin_eq_toLin (since := &quot;2026-01-22&quot;)]</span>
+<span id="L1265" class="line"><a href="#L1265">1265</a> theorem toEuclideanLin_eq_toLin [Finite m] :</span>
+<span id="L1266" class="line"><a href="#L1266">1266</a>     (toEuclideanLin : Matrix m n 𝕜 ≃ₗ[𝕜] _) =</span>
+<span id="L1267" class="line"><a href="#L1267">1267</a>       Matrix.toLin (PiLp.basisFun _ _ _) (PiLp.basisFun _ _ _) :=</span>
+<span id="L1268" class="line"><a href="#L1268">1268</a>   rfl</span>
+<span id="L1269" class="line"><a href="#L1269">1269</a> </span>
+<span id="L1270" class="line"><a href="#L1270">1270</a> open EuclideanSpace in</span>
+<span id="L1271" class="line"><a href="#L1271">1271</a> lemma toEuclideanLin_eq_toLin_orthonormal [Fintype m] :</span>
+<span id="L1272" class="line"><a href="#L1272">1272</a>     toEuclideanLin = toLin (basisFun n 𝕜).toBasis (basisFun m 𝕜).toBasis :=</span>
+<span id="L1273" class="line"><a href="#L1273">1273</a>   rfl</span>
+<span id="L1274" class="line"><a href="#L1274">1274</a> </span>
+<span id="L1275" class="line"><a href="#L1275">1275</a> end Matrix</span>
+<span id="L1276" class="line"><a href="#L1276">1276</a> </span>
+<span id="L1277" class="line"><a href="#L1277">1277</a> local notation &quot;⟪&quot; x &quot;, &quot; y &quot;⟫ₑ&quot; =&gt; inner 𝕜 (toLp 2 x) (toLp 2 y)</span>
+<span id="L1278" class="line"><a href="#L1278">1278</a> </span>
+<span id="L1279" class="line"><a href="#L1279">1279</a> /-- The inner product of a row of `A` and a row of `B` is an entry of `B * Aᴴ`. -/</span>
+<span id="L1280" class="line"><a href="#L1280">1280</a> theorem inner_matrix_row_row [Fintype n] (A B : Matrix m n 𝕜) (i j : m) :</span>
+<span id="L1281" class="line"><a href="#L1281">1281</a>     ⟪A i, B j⟫ₑ = (B * Aᴴ) j i := by</span>
+<span id="L1282" class="line"><a href="#L1282">1282</a>   simp [PiLp.inner_apply, dotProduct, mul_apply&#x27;]</span>
+<span id="L1283" class="line"><a href="#L1283">1283</a> </span>
+<span id="L1284" class="line"><a href="#L1284">1284</a> /-- The inner product of a column of `A` and a column of `B` is an entry of `Aᴴ * B`. -/</span>
+<span id="L1285" class="line"><a href="#L1285">1285</a> theorem inner_matrix_col_col [Fintype m] (A B : Matrix m n 𝕜) (i j : n) :</span>
+<span id="L1286" class="line"><a href="#L1286">1286</a>     ⟪Aᵀ i, Bᵀ j⟫ₑ = (Aᴴ * B) i j := by</span>
+<span id="L1287" class="line"><a href="#L1287">1287</a>   simp [PiLp.inner_apply, dotProduct, mul_apply&#x27;, mul_comm]</span>
+<span id="L1288" class="line"><a href="#L1288">1288</a> </span>
+<span id="L1289" class="line"><a href="#L1289">1289</a> /-- The matrix representation of `innerSL 𝕜 x` given by an orthonormal basis `b` and `b₂`</span>
+<span id="L1290" class="line"><a href="#L1290">1290</a> is equal to `vecMulVec (star b₂) (star (b.repr x))`. -/</span>
+<span id="L1291" class="line"><a href="#L1291">1291</a> theorem LinearMap.toMatrix_innerₛₗ_apply [Fintype n] [DecidableEq n] [Fintype m]</span>
+<span id="L1292" class="line"><a href="#L1292">1292</a>     (b : OrthonormalBasis n 𝕜 E) (b₂ : OrthonormalBasis m 𝕜 𝕜) (x : E) :</span>
+<span id="L1293" class="line"><a href="#L1293">1293</a>     (innerₛₗ 𝕜 x).toMatrix b.toBasis b₂.toBasis = vecMulVec (star b₂) (star (b.repr x)) := by</span>
+<span id="L1294" class="line"><a href="#L1294">1294</a>   ext; simp [LinearMap.toMatrix_apply, vecMulVec_apply, OrthonormalBasis.repr_apply_apply, mul_comm]</span>
+<span id="L1295" class="line"><a href="#L1295">1295</a> </span>
+<span id="L1296" class="line"><a href="#L1296">1296</a> @[deprecated (since := &quot;2026-01-03&quot;)] alias toMatrix_innerSL_apply :=</span>
+<span id="L1297" class="line"><a href="#L1297">1297</a>   LinearMap.toMatrix_innerₛₗ_apply</span>
+<span id="L1298" class="line"><a href="#L1298">1298</a> </span>
+<span id="L1299" class="line"><a href="#L1299">1299</a> end Matrix</span>
+<span id="L1300" class="line"><a href="#L1300">1300</a> </span>
+<span id="L1301" class="line"><a href="#L1301">1301</a> open ContinuousLinearMap LinearMap in</span>
+<span id="L1302" class="line"><a href="#L1302">1302</a> theorem InnerProductSpace.toMatrix_rankOne {𝕜 E F ι ι&#x27; : Type*} [RCLike 𝕜]</span>
+<span id="L1303" class="line"><a href="#L1303">1303</a>     [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]</span>
+<span id="L1304" class="line"><a href="#L1304">1304</a>     [Finite ι] [Fintype ι&#x27;] [DecidableEq ι&#x27;] (x : E) (y : F) (b : Module.Basis ι 𝕜 E)</span>
+<span id="L1305" class="line"><a href="#L1305">1305</a>     (b&#x27; : OrthonormalBasis ι&#x27; 𝕜 F) :</span>
+<span id="L1306" class="line"><a href="#L1306">1306</a>     (rankOne 𝕜 x y).toMatrix b&#x27;.toBasis b = .vecMulVec (b.repr x) (star (b&#x27;.repr y)) := by</span>
+<span id="L1307" class="line"><a href="#L1307">1307</a>   have := Fintype.ofFinite ι</span>
+<span id="L1308" class="line"><a href="#L1308">1308</a>   rw [rankOne_def&#x27;, ContinuousLinearMap.coe_comp, toLinearMap_toSpanSingleton,</span>
+<span id="L1309" class="line"><a href="#L1309">1309</a>     toMatrix_comp _ (OrthonormalBasis.singleton Unit 𝕜).toBasis, toMatrix_toSpanSingleton,</span>
+<span id="L1310" class="line"><a href="#L1310">1310</a>     toLinearMap_innerSL_apply, toMatrix_innerₛₗ_apply, OrthonormalBasis.toBasis_singleton,</span>
+<span id="L1311" class="line"><a href="#L1311">1311</a>     Basis.coe_singleton, Matrix.vecMulVec_one, OrthonormalBasis.coe_singleton, star_one,</span>
+<span id="L1312" class="line"><a href="#L1312">1312</a>     Matrix.one_vecMulVec, Matrix.vecMulVec_eq Unit]</span>
+<span id="L1313" class="line"><a href="#L1313">1313</a> </span>
+<span id="L1314" class="line"><a href="#L1314">1314</a> open Matrix LinearMap EuclideanSpace in</span>
+<span id="L1315" class="line"><a href="#L1315">1315</a> theorem InnerProductSpace.symm_toEuclideanLin_rankOne {𝕜 m n : Type*} [RCLike 𝕜] [Fintype m]</span>
+<span id="L1316" class="line"><a href="#L1316">1316</a>     [Fintype n] [DecidableEq n] (x : EuclideanSpace 𝕜 m) (y : EuclideanSpace 𝕜 n) :</span>
+<span id="L1317" class="line"><a href="#L1317">1317</a>     toEuclideanLin.symm (rankOne 𝕜 x y) = .vecMulVec x (star y) := by</span>
+<span id="L1318" class="line"><a href="#L1318">1318</a>   simp [toLpLin, toMatrix&#x27;, ← ext_iff, vecMulVec_apply, inner_single_right, mul_comm]</span></pre></html>

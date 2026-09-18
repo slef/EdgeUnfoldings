@@ -1,0 +1,86 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/TwoRayCones.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/TwoRayCones.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.HingeDeterminant</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Two explicit generating rays suffice for the opposite-petal cone comparisons. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> /-- The closed cone of nonnegative combinations of two planar vectors. -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> def twoRayCone (e f : Plane) : Set Plane :=</span>
+<span id="L9" class="line"><a href="#L9">9</a>   {x | ∃ a b : ℝ, 0 ≤ a ∧ 0 ≤ b ∧ x = a • e + b • f}</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- Its translate at an apex. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> def translatedCone (p e f : Plane) : Set Plane := {x | x - p ∈ twoRayCone e f}</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> theorem twoRayCone_convex (e f : Plane) : Convex ℝ (twoRayCone e f) := by</span>
+<span id="L15" class="line"><a href="#L15">15</a>   rintro x ⟨a, b, ha, hb, rfl⟩ y ⟨c, d, hc, hd, rfl⟩ s t hs ht total</span>
+<span id="L16" class="line"><a href="#L16">16</a>   refine ⟨s * a + t * c, s * b + t * d,</span>
+<span id="L17" class="line"><a href="#L17">17</a>     add_nonneg (mul_nonneg hs ha) (mul_nonneg ht hc),</span>
+<span id="L18" class="line"><a href="#L18">18</a>     add_nonneg (mul_nonneg hs hb) (mul_nonneg ht hd), ?_⟩</span>
+<span id="L19" class="line"><a href="#L19">19</a>   module</span>
+<span id="L20" class="line"><a href="#L20">20</a> </span>
+<span id="L21" class="line"><a href="#L21">21</a> theorem zero_mem_twoRayCone (e f : Plane) : (0 : Plane) ∈ twoRayCone e f :=</span>
+<span id="L22" class="line"><a href="#L22">22</a>   ⟨0, 0, le_rfl, le_rfl, by simp⟩</span>
+<span id="L23" class="line"><a href="#L23">23</a> </span>
+<span id="L24" class="line"><a href="#L24">24</a> /-- Nonparallel generating rays have unique coefficients. -/</span>
+<span id="L25" class="line"><a href="#L25">25</a> theorem twoRay_coefficients_unique (e f : Plane) (independent : det e f ≠ 0)</span>
+<span id="L26" class="line"><a href="#L26">26</a>     (a b c d : ℝ) (equal : a • e + b • f = c • e + d • f) : a = c ∧ b = d := by</span>
+<span id="L27" class="line"><a href="#L27">27</a>   have along_e := congrArg (fun x =&gt; det e x) equal</span>
+<span id="L28" class="line"><a href="#L28">28</a>   have along_f := congrArg (fun x =&gt; det f x) equal</span>
+<span id="L29" class="line"><a href="#L29">29</a>   simp only [det_add_right, det_smul_right, det_self, mul_zero, zero_add, add_zero] at along_e along_f</span>
+<span id="L30" class="line"><a href="#L30">30</a>   have reverse_ne : det f e ≠ 0 := by rw [det_swap]; exact neg_ne_zero.mpr independent</span>
+<span id="L31" class="line"><a href="#L31">31</a>   have first_product : (a - c) * det f e = 0 := by nlinarith</span>
+<span id="L32" class="line"><a href="#L32">32</a>   have second_product : (b - d) * det e f = 0 := by nlinarith</span>
+<span id="L33" class="line"><a href="#L33">33</a>   exact ⟨sub_eq_zero.mp ((mul_eq_zero.mp first_product).resolve_right reverse_ne),</span>
+<span id="L34" class="line"><a href="#L34">34</a>     sub_eq_zero.mp ((mul_eq_zero.mp second_product).resolve_right independent)⟩</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> /-- Two cones pointing toward each other cannot meet when the displacement has negative total coefficients. -/</span>
+<span id="L37" class="line"><a href="#L37">37</a> theorem opposed_cones_disjoint_of_sum (p q e f : Plane) (independent : det e f ≠ 0)</span>
+<span id="L38" class="line"><a href="#L38">38</a>     (a b : ℝ) (displacement : q - p = a • e + b • f) (negative_sum : a + b &lt; 0) :</span>
+<span id="L39" class="line"><a href="#L39">39</a>     Disjoint (translatedCone p e f) (translatedCone q (-e) (-f)) := by</span>
+<span id="L40" class="line"><a href="#L40">40</a>   apply Set.disjoint_left.mpr</span>
+<span id="L41" class="line"><a href="#L41">41</a>   rintro x ⟨s, t, hs, ht, left⟩ ⟨u, v, hu, hv, right⟩</span>
+<span id="L42" class="line"><a href="#L42">42</a>   have combination : q - p = (s + u) • e + (t + v) • f := by</span>
+<span id="L43" class="line"><a href="#L43">43</a>     calc</span>
+<span id="L44" class="line"><a href="#L44">44</a>       q - p = (x - p) - (x - q) := by module</span>
+<span id="L45" class="line"><a href="#L45">45</a>       _ = (s + u) • e + (t + v) • f := by rw [left, right]; module</span>
+<span id="L46" class="line"><a href="#L46">46</a>   have coefficients := twoRay_coefficients_unique e f independent a b (s + u) (t + v)</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (displacement.symm.trans combination)</span>
+<span id="L48" class="line"><a href="#L48">48</a>   obtain ⟨first, second⟩ := coefficients</span>
+<span id="L49" class="line"><a href="#L49">49</a>   linarith</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> /-- This is the strict distance-sum contradiction in the first opposite-petal case. -/</span>
+<span id="L52" class="line"><a href="#L52">52</a> theorem opposed_cones_disjoint_of_lengths (p q e f : Plane) (independent : det e f ≠ 0)</span>
+<span id="L53" class="line"><a href="#L53">53</a>     (s t L R : ℝ) (displacement : q - p = (s - L) • e + (t - R) • f)</span>
+<span id="L54" class="line"><a href="#L54">54</a>     (shorter : s + t &lt; L + R) : Disjoint (translatedCone p e f) (translatedCone q (-e) (-f)) :=</span>
+<span id="L55" class="line"><a href="#L55">55</a>   opposed_cones_disjoint_of_sum p q e f independent (s - L) (t - R) displacement (by linarith)</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> theorem mem_twoRayCone_iff_dets (e f x : Plane) (positive : 0 &lt; det e f) :</span>
+<span id="L58" class="line"><a href="#L58">58</a>     x ∈ twoRayCone e f ↔ 0 ≤ det e x ∧ 0 ≤ det x f := by</span>
+<span id="L59" class="line"><a href="#L59">59</a>   constructor</span>
+<span id="L60" class="line"><a href="#L60">60</a>   · rintro ⟨a, b, ha, hb, rfl⟩</span>
+<span id="L61" class="line"><a href="#L61">61</a>     constructor</span>
+<span id="L62" class="line"><a href="#L62">62</a>     · rw [det_add_right, det_smul_right, det_smul_right, det_self, mul_zero, zero_add]</span>
+<span id="L63" class="line"><a href="#L63">63</a>       exact mul_nonneg hb positive.le</span>
+<span id="L64" class="line"><a href="#L64">64</a>     · rw [det_add_left, det_smul_left, det_smul_left, det_self, mul_zero, add_zero]</span>
+<span id="L65" class="line"><a href="#L65">65</a>       exact mul_nonneg ha positive.le</span>
+<span id="L66" class="line"><a href="#L66">66</a>   · rintro ⟨left, right⟩</span>
+<span id="L67" class="line"><a href="#L67">67</a>     refine ⟨det x f / det e f, det e x / det e f, div_nonneg right positive.le, div_nonneg left positive.le, ?_⟩</span>
+<span id="L68" class="line"><a href="#L68">68</a>     ext i</span>
+<span id="L69" class="line"><a href="#L69">69</a>     fin_cases i &lt;;&gt; simp only [PiLp.add_apply, PiLp.smul_apply, smul_eq_mul]</span>
+<span id="L70" class="line"><a href="#L70">70</a>     · change x 0 = det x f / det e f * e 0 + det e x / det e f * f 0</span>
+<span id="L71" class="line"><a href="#L71">71</a>       field_simp [positive.ne&#x27;]</span>
+<span id="L72" class="line"><a href="#L72">72</a>       simp only [det]</span>
+<span id="L73" class="line"><a href="#L73">73</a>       ring</span>
+<span id="L74" class="line"><a href="#L74">74</a>     · change x 1 = det x f / det e f * e 1 + det e x / det e f * f 1</span>
+<span id="L75" class="line"><a href="#L75">75</a>       field_simp [positive.ne&#x27;]</span>
+<span id="L76" class="line"><a href="#L76">76</a>       simp only [det]</span>
+<span id="L77" class="line"><a href="#L77">77</a>       ring</span>
+<span id="L78" class="line"><a href="#L78">78</a> </span>
+<span id="L79" class="line"><a href="#L79">79</a> /-- Every direction in a sector of width below pi belongs to the cone generated by its boundary rays. -/</span>
+<span id="L80" class="line"><a href="#L80">80</a> theorem direction_mem_twoRayCone (α β θ : ℝ) (width_pos : 0 &lt; β - α) (width_small : β - α &lt; Real.pi)</span>
+<span id="L81" class="line"><a href="#L81">81</a>     (lower : α ≤ θ) (upper : θ ≤ β) : direction θ ∈ twoRayCone (direction α) (direction β) := by</span>
+<span id="L82" class="line"><a href="#L82">82</a>   apply (mem_twoRayCone_iff_dets _ _ _ (by rw [direction_det]; exact Real.sin_pos_of_pos_of_lt_pi width_pos width_small)).mpr</span>
+<span id="L83" class="line"><a href="#L83">83</a>   constructor &lt;;&gt; rw [direction_det] &lt;;&gt;</span>
+<span id="L84" class="line"><a href="#L84">84</a>     apply Real.sin_nonneg_of_nonneg_of_le_pi &lt;;&gt; linarith</span>
+<span id="L85" class="line"><a href="#L85">85</a> </span>
+<span id="L86" class="line"><a href="#L86">86</a> end SixVertexUnfolding</span></pre></html>

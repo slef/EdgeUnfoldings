@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/OctahedralNetPlacement.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/OctahedralNetPlacement.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.OctahedralNetFaces</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! The eight constructed maps satisfy the original-facet rigidity and hinge obligations. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> open OctahedralTriangles OctahedralNet</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> variable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}</span>
+<span id="L10" class="line"><a href="#L10">10</a> variable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L11" class="line"><a href="#L11">11</a>   (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}</span>
+<span id="L12" class="line"><a href="#L12">12</a> variable (net : graph.Development small_faces source slit)</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> /-- The actual affine map at a fan or petal position of the constructed net. -/</span>
+<span id="L15" class="line"><a href="#L15">15</a> def place (index : FaceIndex) : Space →ᵃ[ℝ] Plane := if index.1 then net.petal index.2 else net.fan.place index.2</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> /-- Every indexed map is rigid on its whole original carrier facet. -/</span>
+<span id="L18" class="line"><a href="#L18">18</a> theorem rigid_netFace (index : FaceIndex) :</span>
+<span id="L19" class="line"><a href="#L19">19</a>     ∀ x ∈ (graph.netFace small_faces source slit index).val,</span>
+<span id="L20" class="line"><a href="#L20">20</a>       ∀ y ∈ (graph.netFace small_faces source slit index).val,</span>
+<span id="L21" class="line"><a href="#L21">21</a>         dist (net.place index x) (net.place index y) = dist x y := by</span>
+<span id="L22" class="line"><a href="#L22">22</a>   obtain ⟨petal, i⟩ := index</span>
+<span id="L23" class="line"><a href="#L23">23</a>   cases petal</span>
+<span id="L24" class="line"><a href="#L24">24</a>   · exact net.fan.rigid i</span>
+<span id="L25" class="line"><a href="#L25">25</a>   · exact net.petal_rigid i</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> variable (octahedral : graph.kind = .octahedron)</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> include octahedral in</span>
+<span id="L30" class="line"><a href="#L30">30</a> /-- The prescribed seven hinges agree on the entire intersections of their original facets. -/</span>
+<span id="L31" class="line"><a href="#L31">31</a> theorem joined_netFace (x y : FaceIndex) (adjacent : hinges.Adj x y) :</span>
+<span id="L32" class="line"><a href="#L32">32</a>     ∀ p ∈ (graph.netFace small_faces source slit x).val ∩ (graph.netFace small_faces source slit y).val,</span>
+<span id="L33" class="line"><a href="#L33">33</a>       net.place x p = net.place y p := by</span>
+<span id="L34" class="line"><a href="#L34">34</a>   have fan_joined (i : Fin 3) :</span>
+<span id="L35" class="line"><a href="#L35">35</a>       ∀ p ∈ (graph.netFace small_faces source slit (false, i.castSucc)).val ∩</span>
+<span id="L36" class="line"><a href="#L36">36</a>         (graph.netFace small_faces source slit (false, i.succ)).val,</span>
+<span id="L37" class="line"><a href="#L37">37</a>           net.place (false, i.castSucc) p = net.place (false, i.succ) p := by</span>
+<span id="L38" class="line"><a href="#L38">38</a>     rw [graph.netFace_intersection_pair small_faces octahedral source slit _ _ _ _ (fan_common_vertices source slit i)]</span>
+<span id="L39" class="line"><a href="#L39">39</a>     exact net.fan.joined i</span>
+<span id="L40" class="line"><a href="#L40">40</a>   have petal_joined (i : Fin 4) :</span>
+<span id="L41" class="line"><a href="#L41">41</a>       ∀ p ∈ (graph.netFace small_faces source slit (false, i)).val ∩</span>
+<span id="L42" class="line"><a href="#L42">42</a>         (graph.netFace small_faces source slit (true, i)).val,</span>
+<span id="L43" class="line"><a href="#L43">43</a>           net.place (false, i) p = net.place (true, i) p := by</span>
+<span id="L44" class="line"><a href="#L44">44</a>     rw [graph.netFace_intersection_pair small_faces octahedral source slit _ _ _ _ (petal_common_vertices source slit i)]</span>
+<span id="L45" class="line"><a href="#L45">45</a>     exact net.petal_joined i</span>
+<span id="L46" class="line"><a href="#L46">46</a>   rcases hinge_cases x y adjacent with ⟨i, rfl, rfl⟩ | ⟨i, rfl, rfl⟩ | ⟨i, rfl, rfl⟩ | ⟨i, rfl, rfl⟩</span>
+<span id="L47" class="line"><a href="#L47">47</a>   · exact fan_joined i</span>
+<span id="L48" class="line"><a href="#L48">48</a>   · intro p hp</span>
+<span id="L49" class="line"><a href="#L49">49</a>     exact (fan_joined i p ⟨hp.2, hp.1⟩).symm</span>
+<span id="L50" class="line"><a href="#L50">50</a>   · exact petal_joined i</span>
+<span id="L51" class="line"><a href="#L51">51</a>   · intro p hp</span>
+<span id="L52" class="line"><a href="#L52">52</a>     exact (petal_joined i p ⟨hp.2, hp.1⟩).symm</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> include octahedral in</span>
+<span id="L55" class="line"><a href="#L55">55</a> /-- Only the twelve nonattached mixed pairs and six petal pairs remain to prove nonoverlap. -/</span>
+<span id="L56" class="line"><a href="#L56">56</a> theorem nonoverlap_of_remaining_pairs</span>
+<span id="L57" class="line"><a href="#L57">57</a>     (mixed : ∀ i j : Fin 4, i ≠ j →</span>
+<span id="L58" class="line"><a href="#L58">58</a>       Disjoint (interior (net.fan.place i &#x27;&#x27; graph.triangle (fanTriangle (opposite source) (slit + i))))</span>
+<span id="L59" class="line"><a href="#L59">59</a>         (interior (net.petal j &#x27;&#x27; graph.triangle (fanTriangle source (slit + j)))))</span>
+<span id="L60" class="line"><a href="#L60">60</a>     (petals : ∀ i j : Fin 4, i ≠ j →</span>
+<span id="L61" class="line"><a href="#L61">61</a>       Disjoint (interior (net.petal i &#x27;&#x27; graph.triangle (fanTriangle source (slit + i))))</span>
+<span id="L62" class="line"><a href="#L62">62</a>         (interior (net.petal j &#x27;&#x27; graph.triangle (fanTriangle source (slit + j))))) :</span>
+<span id="L63" class="line"><a href="#L63">63</a>     ∀ x y : FaceIndex, x ≠ y →</span>
+<span id="L64" class="line"><a href="#L64">64</a>       Disjoint (interior (net.place x &#x27;&#x27; (graph.netFace small_faces source slit x).val))</span>
+<span id="L65" class="line"><a href="#L65">65</a>         (interior (net.place y &#x27;&#x27; (graph.netFace small_faces source slit y).val)) := by</span>
+<span id="L66" class="line"><a href="#L66">66</a>   rintro ⟨left, i⟩ ⟨right, j⟩ different</span>
+<span id="L67" class="line"><a href="#L67">67</a>   rw [graph.netFace_eq_triangle small_faces octahedral, graph.netFace_eq_triangle small_faces octahedral]</span>
+<span id="L68" class="line"><a href="#L68">68</a>   cases left &lt;;&gt; cases right</span>
+<span id="L69" class="line"><a href="#L69">69</a>   · exact net.fan.nonoverlap i j (fun same =&gt; different (Prod.ext rfl same))</span>
+<span id="L70" class="line"><a href="#L70">70</a>   · by_cases same : i = j</span>
+<span id="L71" class="line"><a href="#L71">71</a>     · subst j</span>
+<span id="L72" class="line"><a href="#L72">72</a>       exact net.attached_pair_nonoverlap i</span>
+<span id="L73" class="line"><a href="#L73">73</a>     · exact mixed i j same</span>
+<span id="L74" class="line"><a href="#L74">74</a>   · by_cases same : j = i</span>
+<span id="L75" class="line"><a href="#L75">75</a>     · subst j</span>
+<span id="L76" class="line"><a href="#L76">76</a>       exact (net.attached_pair_nonoverlap i).symm</span>
+<span id="L77" class="line"><a href="#L77">77</a>     · exact (mixed j i same).symm</span>
+<span id="L78" class="line"><a href="#L78">78</a>   · exact petals i j (fun same =&gt; different (Prod.ext rfl same))</span>
+<span id="L79" class="line"><a href="#L79">79</a> </span>
+<span id="L80" class="line"><a href="#L80">80</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development</span></pre></html>

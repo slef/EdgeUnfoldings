@@ -1,8 +1,12 @@
 {
-  "checked": "2026-09-16",
-  "revision": "868314660f92ce4de8d4f846e1860b9e1945986b",
-  "declarations": 56,
-  "theorems": 37,
+  "checked": "2026-09-18",
+  "revision": "89c65cea4e76e08959b07b8123e0b9d62e5ff7e1",
+  "declarations": 100,
+  "theorems": 71,
+  "proved_theorems": 70,
+  "unfinished": [
+    "SixVertexUnfolding.every_convex_polyhedron_with_at_most_six_vertices"
+  ],
   "axioms": [
     "Classical.choice",
     "Quot.sound",

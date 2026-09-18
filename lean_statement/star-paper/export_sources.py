@@ -8,11 +8,15 @@ root=site.parent
 dist=site/'dist'
 out=dist/'sources'; out.mkdir(exist_ok=True)
 annotations=json.loads((site/'annotations.json').read_text())
+overview=json.loads((site/'overview.json').read_text())
+all_refs=[r for a in annotations for r in a['refs']] + [r for section in overview['sections'] for passage in section['passages'] for r in passage['lean']['refs']]
 sources={}; decls={}
 rx=re.compile(r'^(?:(?:noncomputable|private|protected) )*(theorem|def|abbrev|structure|inductive) ([\w.]+)',re.M)
-for module,name in sorted(set(tuple(r) for a in annotations for r in a['refs'])):
-    paths=list((root/'SixVertexUnfolding').rglob(module+'.lean'))
-    assert len(paths)==1,(module,paths)
+for module,name in sorted(set(map(tuple,all_refs))):
+    paths=[root/'Statement.lean'] if module=='Statement' else list((root/'SixVertexUnfolding').rglob(module+'.lean'))
+    paths=[p for p in paths if any(m[2]==name for m in rx.finditer(p.read_text()))]
+    assert len(paths)==1,(module,name,paths)
+    assert module not in sources or sources[module]['path']==str(paths[0].relative_to(root)),('ambiguous module basename',module)
     path=paths[0]; content=path.read_text(); lines=content.splitlines()
     matches=[m for m in rx.finditer(content) if m[2]==name]
     assert len(matches)==1,(module,name)
@@ -45,21 +49,21 @@ for module,name in sorted(set(tuple(r) for a in annotations for r in a['refs']))
     context='\n'.join(f['context'][j] for f in frames for j in range(len(f['context'])))
     key=module+':'+name
     decls[key]=dict(name=name,qualified=namespace+'.'+name,kind=kind,module=module,line=start+1,signature=signature,context=context,namespace=namespace,proofHole=bool(re.search(r'\bsorry\b',body)))
-    assert not decls[key]['proofHole'],key
+    assert not decls[key]['proofHole'] or key=='Statement:every_convex_polyhedron_with_at_most_six_vertices',key
     sources[module]=dict(path=str(path.relative_to(root)),sha256=hashlib.sha256(content.encode()).hexdigest())
     rendered=''.join(f'<span id="L{i}" class="line"><a href="#L{i}" aria-label="Line {i}">{i}</a> {html.escape(l)}</span>\n' for i,l in enumerate(lines,1))
-    (out/(module+'.html')).write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+html.escape(module)+'.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>'+html.escape(module)+'.lean</h1><p>'+html.escape(str(path.relative_to(root)))+' · exact source snapshot</p><pre>'+rendered+'</pre></html>')
+    (out/(module+'.html')).write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+html.escape(module)+'.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../proof.html">← Full proof</a> · <a href="../index.html">Star chapter</a><h1>'+html.escape(module)+'.lean</h1><p>'+html.escape(str(path.relative_to(root)))+' · exact source snapshot</p><pre>'+rendered+'</pre></html>')
     (out/(module+'.lean')).write_text(content)
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
-data=dict(annotations=annotations,declarations=decls,sources=sources,revision=revision,date=date.today().isoformat(),paper=json.loads((site/'paper.json').read_text()),figures=json.loads((site/'figures.json').read_text()))
+data=dict(annotations=annotations,overview=overview,declarations=decls,sources=sources,revision=revision,date=date.today().isoformat(),paper=json.loads((site/'paper.json').read_text()),figures=json.loads((site/'figures.json').read_text()))
 (dist/'data.js').write_text('window.PAPER_DATA = '+json.dumps(data,ensure_ascii=False,indent=2)+';\n')
 # A reproducible audit input; it checks the full elaborated types and dependencies.
-checks=['import SixVertexUnfolding']
+checks=['import SixVertexUnfolding', 'import Statement']
 for d in decls.values():
     checks+=['#check @'+d['qualified']]
     if d['kind']=='theorem': checks+=['#print axioms '+d['qualified']]
 (site/'CheckExcerpts.lean').write_text('\n'.join(checks)+'\n')
-manifest=dict(revision=revision,date=data['date'],declarations=len(decls),theorems=sum(d['kind']=='theorem' for d in decls.values()),sources=sources)
+manifest=dict(revision=revision,date=data['date'],declarations=len(decls),theorems=sum(d['kind']=='theorem' for d in decls.values()),unfinished=[d['qualified'] for d in decls.values() if d['proofHole']],sources=sources)
 (site/'source-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 (dist/'source-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print(f'Exported {len(decls)} declarations from {len(sources)} source files at {revision}.')

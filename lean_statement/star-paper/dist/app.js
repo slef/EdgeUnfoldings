@@ -42,8 +42,11 @@ function definitionLink(d) {
   const nearby = active.closest(".lean-note");
   const target = candidates.find(el => nearby && nearby.contains(el)) || candidates[0];
   const path = `${esc(location.path)}:${location.line}`;
+  const other = (window.LEAN_DECLARATION_LINKS || []).find(entry =>
+    d.origin === "This project" && entry.path === location.path && entry.start <= location.line && location.line <= entry.end);
   return target
     ? `<p class="hover-location"><a class="definition-jump" href="#${esc(target.id)}">View definition on this page →</a><br><span>${path}</span></p>`
+    : other ? `<p class="hover-location"><a href="${esc(other.href)}">View definition in the interactive paper →</a><br><span>${path}</span></p>`
     : `<p class="hover-location"><a href="${esc(location.href)}" target="_blank" rel="noopener">${path} ↗</a></p>`;
 }
 function revealDefinition(id, updateHistory = false) {

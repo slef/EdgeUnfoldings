@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Curvature/PairedPoles.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Curvature/PairedPoles.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Curvature.Selection</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-!</span>
+<span id="L4" class="line"><a href="#L4">4</a> The positive-remainder identity in PAIRED_POLE_RULE.md.</span>
+<span id="L5" class="line"><a href="#L5">5</a> `lam, ν, ρ` are the three petal apex angles; `η` is the fourth petal&#x27;s apex.</span>
+<span id="L6" class="line"><a href="#L6">6</a> `ξ, ζ` are its base angles, at vertices with curvatures `ka, kb`.</span>
+<span id="L7" class="line"><a href="#L7">7</a> `K` is the sum of the other two equator curvatures.</span>
+<span id="L8" class="line"><a href="#L8">8</a> The spherical-link inequalities are explicit hypotheses, not asserted here.</span>
+<span id="L9" class="line"><a href="#L9">9</a> -/</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> namespace SixVertexUnfolding.PairedPoles</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> open Real</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> noncomputable def linkSlack (curvature angle : ℝ) : ℝ :=</span>
+<span id="L16" class="line"><a href="#L16">16</a>   (2 * π - curvature) - 2 * angle</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> variable {kv kw K ka kb η lam ν ρ ξ ζ : ℝ}</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> /-- Eliminate the fourth petal and the complementary curvatures. -/</span>
+<span id="L21" class="line"><a href="#L21">21</a> theorem left_remainder_identity</span>
+<span id="L22" class="line"><a href="#L22">22</a>     (source_sum : η + lam + ν + ρ = 2 * π - kv)</span>
+<span id="L23" class="line"><a href="#L23">23</a>     (fourth_triangle : ξ + ζ = π - η)</span>
+<span id="L24" class="line"><a href="#L24">24</a>     (total_curvature : kv + kw + K + ka + kb = 4 * π) :</span>
+<span id="L25" class="line"><a href="#L25">25</a>     2 * π + K - 2 * lam - ν =</span>
+<span id="L26" class="line"><a href="#L26">26</a>       (kv - kw) + (linkSlack ka ξ + linkSlack kb ζ) + ν + 2 * ρ := by</span>
+<span id="L27" class="line"><a href="#L27">27</a>   unfold linkSlack</span>
+<span id="L28" class="line"><a href="#L28">28</a>   linarith</span>
+<span id="L29" class="line"><a href="#L29">29</a> </span>
+<span id="L30" class="line"><a href="#L30">30</a> theorem right_remainder_identity</span>
+<span id="L31" class="line"><a href="#L31">31</a>     (source_sum : η + lam + ν + ρ = 2 * π - kv)</span>
+<span id="L32" class="line"><a href="#L32">32</a>     (fourth_triangle : ξ + ζ = π - η)</span>
+<span id="L33" class="line"><a href="#L33">33</a>     (total_curvature : kv + kw + K + ka + kb = 4 * π) :</span>
+<span id="L34" class="line"><a href="#L34">34</a>     2 * π + K - 2 * ρ - ν =</span>
+<span id="L35" class="line"><a href="#L35">35</a>       (kv - kw) + (linkSlack ka ξ + linkSlack kb ζ) + ν + 2 * lam := by</span>
+<span id="L36" class="line"><a href="#L36">36</a>   unfold linkSlack</span>
+<span id="L37" class="line"><a href="#L37">37</a>   linarith</span>
+<span id="L38" class="line"><a href="#L38">38</a> </span>
+<span id="L39" class="line"><a href="#L39">39</a> /-- Source order and the fourth petal&#x27;s strict link bounds give both Case A bounds. -/</span>
+<span id="L40" class="line"><a href="#L40">40</a> theorem wider_caseA_bounds</span>
+<span id="L41" class="line"><a href="#L41">41</a>     (source_sum : η + lam + ν + ρ = 2 * π - kv)</span>
+<span id="L42" class="line"><a href="#L42">42</a>     (fourth_triangle : ξ + ζ = π - η)</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (total_curvature : kv + kw + K + ka + kb = 4 * π)</span>
+<span id="L44" class="line"><a href="#L44">44</a>     (source_order : kw ≤ kv)</span>
+<span id="L45" class="line"><a href="#L45">45</a>     (left_pos : 0 &lt; lam) (middle_pos : 0 &lt; ν) (right_pos : 0 &lt; ρ)</span>
+<span id="L46" class="line"><a href="#L46">46</a>     (link_a : 0 &lt; linkSlack ka ξ) (link_b : 0 &lt; linkSlack kb ζ) :</span>
+<span id="L47" class="line"><a href="#L47">47</a>     lam &lt; (π + (π - ν + K)) / 2 ∧ ρ &lt; (π + (π - ν + K)) / 2 := by</span>
+<span id="L48" class="line"><a href="#L48">48</a>   have left_identity := left_remainder_identity source_sum fourth_triangle total_curvature</span>
+<span id="L49" class="line"><a href="#L49">49</a>   have right_identity := right_remainder_identity source_sum fourth_triangle total_curvature</span>
+<span id="L50" class="line"><a href="#L50">50</a>   constructor &lt;;&gt; linarith</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> /-- The additional angle-sum premise follows from the omitted fourth petal. -/</span>
+<span id="L53" class="line"><a href="#L53">53</a> theorem caseA_angle_sum</span>
+<span id="L54" class="line"><a href="#L54">54</a>     (source_sum : η + lam + ν + ρ = 2 * π - kv)</span>
+<span id="L55" class="line"><a href="#L55">55</a>     (fourth_pos : 0 &lt; η) (source_pos : 0 &lt; kv) (base_pos : 0 &lt; K) :</span>
+<span id="L56" class="line"><a href="#L56">56</a>     lam + ρ + ν &lt; 2 * π + K := by</span>
+<span id="L57" class="line"><a href="#L57">57</a>   linarith</span>
+<span id="L58" class="line"><a href="#L58">58</a> </span>
+<span id="L59" class="line"><a href="#L59">59</a> end SixVertexUnfolding.PairedPoles</span></pre></html>

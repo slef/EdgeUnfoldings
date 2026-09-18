@@ -1,0 +1,96 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/OctahedralPairedCaseA.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/OctahedralPairedCaseA.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.OctahedralPairedBounds</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.WiderCutRays</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! Case A is automatic for the actual petals under the sharper-pole rule. -/</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> open Real EuclideanGeometry OctahedralTriangles</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> variable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}</span>
+<span id="L11" class="line"><a href="#L11">11</a> variable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L12" class="line"><a href="#L12">12</a>   (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}</span>
+<span id="L13" class="line"><a href="#L13">13</a> variable (net : graph.Development small_faces source slit)</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-- The paired-pole curvature inequality alone supplies both wider angle bounds;</span>
+<span id="L16" class="line"><a href="#L16">16</a> all remaining inputs are derived from the same actual development. -/</span>
+<span id="L17" class="line"><a href="#L17">17</a> theorem opposite_petals_caseA_of_paired_poles (i : Fin 2)</span>
+<span id="L18" class="line"><a href="#L18">18</a>     (source_order : graph.curvature (opposite source) ≤ graph.curvature source)</span>
+<span id="L19" class="line"><a href="#L19">19</a>     (narrow : net.widenedLeft i + net.widenedRight i &lt; π) :</span>
+<span id="L20" class="line"><a href="#L20">20</a>     net.Separated (true, i.castSucc.castSucc) (true, i.succ.succ) := by</span>
+<span id="L21" class="line"><a href="#L21">21</a>   let previous := net.patch i.castSucc.castSucc</span>
+<span id="L22" class="line"><a href="#L22">22</a>   let middle := net.patch i.castSucc.succ</span>
+<span id="L23" class="line"><a href="#L23">23</a>   let next := net.patch i.succ.succ</span>
+<span id="L24" class="line"><a href="#L24">24</a>   let base := dist middle.left middle.right</span>
+<span id="L25" class="line"><a href="#L25">25</a>   let s := dist middle.left middle.apex</span>
+<span id="L26" class="line"><a href="#L26">26</a>   let t := dist middle.right middle.apex</span>
+<span id="L27" class="line"><a href="#L27">27</a>   let φ := angle middle.right middle.left middle.apex</span>
+<span id="L28" class="line"><a href="#L28">28</a>   let ψ := angle middle.left middle.right middle.apex</span>
+<span id="L29" class="line"><a href="#L29">29</a>   let α := net.widenedLeft i</span>
+<span id="L30" class="line"><a href="#L30">30</a>   let β := net.widenedRight i</span>
+<span id="L31" class="line"><a href="#L31">31</a>   let lam := net.petalApexAngle i.castSucc.castSucc</span>
+<span id="L32" class="line"><a href="#L32">32</a>   let rho := net.petalApexAngle i.succ.succ</span>
+<span id="L33" class="line"><a href="#L33">33</a>   have lam_small : lam &lt; π := net.petalApexAngle_lt_pi _</span>
+<span id="L34" class="line"><a href="#L34">34</a>   have rho_small : rho &lt; π := net.petalApexAngle_lt_pi _</span>
+<span id="L35" class="line"><a href="#L35">35</a>   have bounds := net.opposite_wider_apex_bounds i source_order</span>
+<span id="L36" class="line"><a href="#L36">36</a>   have base_pos : 0 &lt; base := dist_pos.mpr (ne₁₂_of_not_collinear middle.petal_noncollinear)</span>
+<span id="L37" class="line"><a href="#L37">37</a>   have s_pos : 0 &lt; s := dist_pos.mpr (ne₁₃_of_not_collinear middle.petal_noncollinear)</span>
+<span id="L38" class="line"><a href="#L38">38</a>   have t_pos : 0 &lt; t := dist_pos.mpr (ne₂₃_of_not_collinear middle.petal_noncollinear)</span>
+<span id="L39" class="line"><a href="#L39">39</a>   have φ_pos : 0 &lt; φ := by</span>
+<span id="L40" class="line"><a href="#L40">40</a>     apply angle_pos_of_not_collinear</span>
+<span id="L41" class="line"><a href="#L41">41</a>     simpa only [Set.insert_comm] using middle.petal_noncollinear</span>
+<span id="L42" class="line"><a href="#L42">42</a>   have ψ_pos : 0 &lt; ψ := angle_pos_of_not_collinear middle.petal_noncollinear</span>
+<span id="L43" class="line"><a href="#L43">43</a>   have left_wider : φ &lt; α := by</span>
+<span id="L44" class="line"><a href="#L44">44</a>     have positive := graph.curvature_pos small_faces (fanNeighbor source ((slit + i.castSucc.castSucc) + 1))</span>
+<span id="L45" class="line"><a href="#L45">45</a>     change φ &lt; φ + _</span>
+<span id="L46" class="line"><a href="#L46">46</a>     linarith</span>
+<span id="L47" class="line"><a href="#L47">47</a>   have right_wider : ψ &lt; β := by</span>
+<span id="L48" class="line"><a href="#L48">48</a>     have positive := graph.curvature_pos small_faces (fanNeighbor source ((slit + i.castSucc.succ) + 1))</span>
+<span id="L49" class="line"><a href="#L49">49</a>     change ψ &lt; ψ + _</span>
+<span id="L50" class="line"><a href="#L50">50</a>     linarith</span>
+<span id="L51" class="line"><a href="#L51">51</a>   obtain ⟨motion, first, second, apex⟩ := exists_upper_triangle_frame middle.left middle.right middle.apex middle.petal_noncollinear</span>
+<span id="L52" class="line"><a href="#L52">52</a>   have reverses := net.upper_patch_frame_reverses i.castSucc.succ motion first second apex</span>
+<span id="L53" class="line"><a href="#L53">53</a>   have middle_right := upper_triangle_frame_right _ _ _ middle.petal_noncollinear motion first second apex</span>
+<span id="L54" class="line"><a href="#L54">54</a>   have at_previous := net.previous_apex_in_upper_frame i.castSucc motion first second apex</span>
+<span id="L55" class="line"><a href="#L55">55</a>   change motion previous.apex = s • direction α at at_previous</span>
+<span id="L56" class="line"><a href="#L56">56</a>   have at_next := net.next_apex_in_upper_frame i.succ motion first second apex</span>
+<span id="L57" class="line"><a href="#L57">57</a>   change motion next.apex = base • direction 0 + t • direction (π - ψ -</span>
+<span id="L58" class="line"><a href="#L58">58</a>     graph.curvature (fanNeighbor source ((slit + i.castSucc.succ) + 1))) at at_next</span>
+<span id="L59" class="line"><a href="#L59">59</a>   have right_direction : π - ψ - graph.curvature (fanNeighbor source ((slit + i.castSucc.succ) + 1)) = π - β := by</span>
+<span id="L60" class="line"><a href="#L60">60</a>     change π - ψ - _ = π - (ψ + _)</span>
+<span id="L61" class="line"><a href="#L61">61</a>     ring</span>
+<span id="L62" class="line"><a href="#L62">62</a>   rw [right_direction] at at_next</span>
+<span id="L63" class="line"><a href="#L63">63</a>   have cones := CutRays.caseA_wider_cones base s t α β φ ψ lam rho (motion middle.apex)</span>
+<span id="L64" class="line"><a href="#L64">64</a>     base_pos s_pos t_pos φ_pos ψ_pos left_wider right_wider narrow apex middle_right</span>
+<span id="L65" class="line"><a href="#L65">65</a>     (net.petalApexAngle_pos _) lam_small (net.petalApexAngle_pos _) rho_small</span>
+<span id="L66" class="line"><a href="#L66">66</a>     (net.opposite_outer_angle_sum i) bounds.1.le bounds.2.le</span>
+<span id="L67" class="line"><a href="#L67">67</a>   rw [show π + α = α + π by ring] at cones</span>
+<span id="L68" class="line"><a href="#L68">68</a>   have shared_left : motion previous.right = 0 := by</span>
+<span id="L69" class="line"><a href="#L69">69</a>     change motion (net.patch i.castSucc.castSucc).right = 0</span>
+<span id="L70" class="line"><a href="#L70">70</a>     rw [net.consecutive_patch_corner]</span>
+<span id="L71" class="line"><a href="#L71">71</a>     exact first</span>
+<span id="L72" class="line"><a href="#L72">72</a>   have shared_right : motion next.left = base • direction 0 := by</span>
+<span id="L73" class="line"><a href="#L73">73</a>     change motion (net.patch i.succ.succ).left = _</span>
+<span id="L74" class="line"><a href="#L74">74</a>     rw [← net.consecutive_patch_corner i.succ]</span>
+<span id="L75" class="line"><a href="#L75">75</a>     exact second</span>
+<span id="L76" class="line"><a href="#L76">76</a>   have left_edge : motion previous.right - motion previous.apex = s • direction (α + π) := by</span>
+<span id="L77" class="line"><a href="#L77">77</a>     rw [shared_left, at_previous, direction_add_pi]</span>
+<span id="L78" class="line"><a href="#L78">78</a>     module</span>
+<span id="L79" class="line"><a href="#L79">79</a>   have right_edge : motion next.left - motion next.apex = t • direction (-β) := by</span>
+<span id="L80" class="line"><a href="#L80">80</a>     have direction_eq : direction (π - β) = -direction (-β) := by</span>
+<span id="L81" class="line"><a href="#L81">81</a>       rw [show π - β = -β + π by ring, direction_add_pi]</span>
+<span id="L82" class="line"><a href="#L82">82</a>     rw [shared_right, at_next, direction_eq]</span>
+<span id="L83" class="line"><a href="#L83">83</a>     module</span>
+<span id="L84" class="line"><a href="#L84">84</a>   have left_contained := net.petal_image_in_clockwise_cone i.castSucc.castSucc motion reverses s (α + π - lam) (α + π)</span>
+<span id="L85" class="line"><a href="#L85">85</a>     s_pos left_edge (by rw [angle_comm]; change lam ≤ _; linarith) (by linarith)</span>
+<span id="L86" class="line"><a href="#L86">86</a>   have right_contained := net.petal_image_in_counterclockwise_cone i.succ.succ motion reverses t (-β) (-β + rho)</span>
+<span id="L87" class="line"><a href="#L87">87</a>     t_pos right_edge (by change rho ≤ _; linarith) (by linarith)</span>
+<span id="L88" class="line"><a href="#L88">88</a>   rw [at_previous] at left_contained</span>
+<span id="L89" class="line"><a href="#L89">89</a>   rw [at_next] at right_contained</span>
+<span id="L90" class="line"><a href="#L90">90</a>   have safe := cones.mono (interior_mono left_contained) (interior_mono right_contained)</span>
+<span id="L91" class="line"><a href="#L91">91</a>   change Disjoint (interior (motion.toHomeomorph &#x27;&#x27; net.placedTriangle (true, i.castSucc.castSucc)))</span>
+<span id="L92" class="line"><a href="#L92">92</a>     (interior (motion.toHomeomorph &#x27;&#x27; net.placedTriangle (true, i.succ.succ))) at safe</span>
+<span id="L93" class="line"><a href="#L93">93</a>   rw [← motion.toHomeomorph.image_interior, ← motion.toHomeomorph.image_interior] at safe</span>
+<span id="L94" class="line"><a href="#L94">94</a>   exact (Set.disjoint_image_iff motion.injective).mp safe</span>
+<span id="L95" class="line"><a href="#L95">95</a> </span>
+<span id="L96" class="line"><a href="#L96">96</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development</span></pre></html>

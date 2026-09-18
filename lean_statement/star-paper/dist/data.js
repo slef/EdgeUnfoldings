@@ -726,7 +726,848 @@ window.PAPER_DATA = {
       }
     }
   ],
+  "overview": {
+    "title": "Edge unfoldings through six vertices",
+    "subtitle": "The streamlined proof, with its Lean formalization",
+    "source": {
+      "path": "n6/TIDY_PROOF.md",
+      "sha256": "4233c697df589957930f2ccb31df4724b53159cceedf64f36e56ccbc0a3ee14c",
+      "url": "https://slef.github.io/EdgeUnfoldings/n6/TIDY_PROOF.html"
+    },
+    "sections": [
+      {
+        "id": "statement",
+        "title": "The theorem and its meaning",
+        "passages": [
+          {
+            "id": "target",
+            "title": "Every convex polyhedron with at most six vertices has an edge unfolding",
+            "paragraphs": [
+              "The polyhedron is a bounded, full-dimensional convex solid in \\(\\mathbb R^3\\), with at most six genuine vertices. We seek a connected planar development of its whole faces, joined along original edges, with disjoint face interiors. Boundary contact is allowed.",
+              "The written argument below covers all cases. The Lean proof is complete except for part of the prism-with-diagonal case. The exact target statement is already present; its final branch still contains one sorry."
+            ],
+            "lean": {
+              "state": "open",
+              "relation": "One case remains",
+              "explanation": [
+                "The statement below is the original target. It is not a checked proof of the full theorem: its prism-with-diagonal branch still uses sorry. Every other displayed theorem is audited separately for proof dependencies."
+              ],
+              "refs": [
+                [
+                  "Statement",
+                  "every_convex_polyhedron_with_at_most_six_vertices"
+                ]
+              ],
+              "steps": [],
+              "remaining": [
+                "Complete the prism-with-diagonal family outside the already proved curvature regions, then close the target’s last branch."
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "definitions",
+            "title": "Whole original faces, original hinges",
+            "paragraphs": [
+              "A face is a whole two-dimensional intersection with a supporting plane. An edge unfolding assigns a rigid planar placement to each face and a tree of retained original-edge hinges. Placements agree along each retained hinge, and different face interiors do not overlap.",
+              "Auxiliary diagonals can be used inside the proof, but the final certificate must place each original face as one rigid piece."
+            ],
+            "lean": {
+              "state": "definitions",
+              "relation": "Public definitions",
+              "explanation": [
+                "These are the public definitions used by every completed case. They do not assume a graph classification, a triangulation, or a particular construction."
+              ],
+              "refs": [
+                [
+                  "Definitions",
+                  "Space"
+                ],
+                [
+                  "Definitions",
+                  "Plane"
+                ],
+                [
+                  "Definitions",
+                  "ConvexPolyhedron"
+                ],
+                [
+                  "Definitions",
+                  "ConvexPolyhedron.body"
+                ],
+                [
+                  "Definitions",
+                  "affineDimension"
+                ],
+                [
+                  "Definitions",
+                  "ConvexPolyhedron.IsFace"
+                ],
+                [
+                  "Definitions",
+                  "ConvexPolyhedron.Face"
+                ],
+                [
+                  "Definitions",
+                  "ConvexPolyhedron.ShareEdge"
+                ],
+                [
+                  "Definitions",
+                  "EdgeUnfolding"
+                ],
+                [
+                  "Definitions",
+                  "ConvexPolyhedron.HasEdgeUnfolding"
+                ]
+              ],
+              "steps": [],
+              "remaining": []
+            },
+            "links": []
+          }
+        ]
+      },
+      {
+        "id": "classification",
+        "title": "Reduce to a few geometric cases",
+        "passages": [
+          {
+            "id": "small-cases",
+            "title": "First remove the smaller solids and pyramids",
+            "paragraphs": [
+              "Every solid with at most five vertices is already handled. Every convex pyramid is handled as well, with its base kept whole. In particular, a six-vertex solid with a pentagonal face is a pyramid.",
+              "It therefore suffices to consider exactly six vertices, with every original face triangular or quadrilateral."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "Different argument for the smaller cases",
+              "explanation": [
+                "The streamlined manuscript handles four and five vertices through a universal vertex. Lean also has independent tetrahedron, pyramid and triangular-bipyramid constructions. The reduction below uses those completed proofs."
+              ],
+              "refs": [
+                [
+                  "Bipyramid",
+                  "every_convex_polyhedron_with_at_most_five_vertices"
+                ],
+                [
+                  "Pyramid",
+                  "every_convex_pyramid_has_edge_unfolding"
+                ],
+                [
+                  "Reduction",
+                  "unfolding_or_remaining_cases"
+                ]
+              ],
+              "steps": [
+                "Unfold the four- and five-vertex cases.",
+                "Unfold a six-vertex pyramid if a pentagonal face occurs.",
+                "Retain only six vertices with triangular or quadrilateral faces."
+              ],
+              "remaining": []
+            },
+            "links": []
+          },
+          {
+            "id": "four-graphs",
+            "title": "Without a universal vertex, only four graphs remain",
+            "paragraphs": [
+              "A universal vertex is adjacent to every other vertex. If there is none, each of the six vertices has degree three or four. In the complement graph \\(H\\), every degree is therefore one or two.",
+              "The streamlined classification lists the path and cycle components of \\(H\\). The possibilities involving two triples force a \\(K_{3,3}\\); \\(C_4+P_2\\) contradicts connectivity after deleting two vertices. The four surviving types and their whole faces are listed below. These are combinatorial types, with no symmetry or metric regularity assumed."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "Same classification, direct geometric derivation",
+              "explanation": [
+                "Lean derives the four forms and the exact whole-face lists from the convex hull. It proves the needed connectivity and edge-incidence facts geometrically, excludes the complete bipartite configuration, and uses a finite relabeling argument. It does not import the manuscript’s general planarity or planar-embedding uniqueness theorems."
+              ],
+              "refs": [
+                [
+                  "SixVertexGraphs",
+                  "SixVertexGraph"
+                ],
+                [
+                  "SixVertexGraphs",
+                  "exists_six_vertex_graph"
+                ],
+                [
+                  "SixVertexFacets",
+                  "labeledFacets_eq"
+                ]
+              ],
+              "steps": [
+                "Derive geometric adjacency and the small-degree constraints.",
+                "Exclude the forbidden configurations using geometric incidence and connectivity.",
+                "Produce canonical labels and identify every whole supporting facet."
+              ],
+              "remaining": []
+            },
+            "links": [],
+            "table": {
+              "columns": [
+                "Complement",
+                "Original graph",
+                "Whole faces"
+              ],
+              "rows": [
+                [
+                  "\\(P_2+P_2+P_2\\)",
+                  "Octahedron",
+                  "8 triangles"
+                ],
+                [
+                  "\\(P_4+P_2\\)",
+                  "Octahedron minus an edge",
+                  "6 triangles, 1 quadrilateral"
+                ],
+                [
+                  "\\(P_6\\)",
+                  "Prism with a diagonal",
+                  "4 triangles, 2 quadrilaterals"
+                ],
+                [
+                  "\\(C_6\\)",
+                  "Triangular prism",
+                  "2 triangles, 3 quadrilaterals"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "direct-cases",
+        "title": "Universal vertices and ordinary prisms",
+        "passages": [
+          {
+            "id": "universal-case",
+            "title": "Cut the star of a universal vertex",
+            "paragraphs": [
+              "Every edge from a universal vertex is a shortest surface path: its length attains the Euclidean distance between its endpoints. The star construction develops the surface after cutting those edges into the plane without overlap.",
+              "This completes the universal-vertex branch. The detailed star-unfolding chapter explains the cut tree, radial triangles, source-angle budget, separation, gluing and local metric."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "Required star theorem proved in Lean",
+              "explanation": [
+                "universal_star_embedding constructs the development for six vertices with triangular/quadrilateral faces. The whole-face consequence, together with the earlier reductions, covers every polyhedron with at most six vertices having a universal vertex. The arbitrary-source star theorem is not assumed as an axiom."
+              ],
+              "refs": [
+                [
+                  "UniversalStarUnfolding",
+                  "hasEdgeUnfolding_of_universal_vertex"
+                ],
+                [
+                  "UniversalStarEmbedding",
+                  "universal_star_embedding"
+                ]
+              ],
+              "steps": [
+                "Prove the source-edge cuts are shortest.",
+                "Construct and separate the developed radial kites.",
+                "Glue the retained surface and transfer the development to whole original faces."
+              ],
+              "remaining": []
+            },
+            "links": [
+              [
+                "Read the detailed star-unfolding chapter",
+                "index.html#theorem-1"
+              ]
+            ]
+          },
+          {
+            "id": "ordinary-prism",
+            "title": "An ordinary triangular prism is a dome",
+            "paragraphs": [
+              "A dome has a base face sharing an edge with every other face. Retain those base hinges and flatten the other faces outward. The dome theorem proves that the resulting flower has disjoint face interiors.",
+              "Any quadrilateral of an ordinary triangular prism is such a base. The argument applies to every convex realization of that graph; the triangular faces need not be parallel."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "The cited dome result is proved locally",
+              "explanation": [
+                "The manuscript invokes an established dome theorem. Lean constructs the whole-face flower and proves its nonoverlap. Parallel hinges give separating halfplanes; nonparallel hinges use the supporting planes and a virtual corner."
+              ],
+              "refs": [
+                [
+                  "DomeComplete",
+                  "hasEdgeUnfolding"
+                ],
+                [
+                  "SixVertexRemaining",
+                  "every_convex_triangular_prism"
+                ]
+              ],
+              "steps": [
+                "Place each side face rigidly across its base edge.",
+                "Separate every pair of outward petals.",
+                "Assemble the original hinge tree and whole-face unfolding."
+              ],
+              "remaining": []
+            },
+            "links": []
+          }
+        ]
+      },
+      {
+        "id": "shared-core",
+        "title": "The shared eight-triangle construction",
+        "passages": [
+          {
+            "id": "curvature",
+            "title": "Curvature and uncut auxiliary diagonals",
+            "paragraphs": [
+              "Write \\(\\kappa_v\\) for \\(2\\pi\\) minus the total face angle at a vertex \\(v\\). In the remaining four graph models, the geometric angle sums give \\(0<\\kappa_v<2\\pi\\) and \\(\\sum_v\\kappa_v=4\\pi\\).",
+              "Complete the relevant face pattern to an octahedral subdivision by adding flat diagonals inside quadrilaterals. They are bookkeeping hinges, not cuts. The common development contains four fan triangles and four outward petals."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "Geometric angle data",
+              "explanation": [
+                "The curvature quantities are computed from actual spatial face angles. The eight subdivision triangles cover the whole original faces. Flat auxiliary corners are included in the strict link estimates used downstream."
+              ],
+              "refs": [
+                [
+                  "OctahedralAngles",
+                  "curvature"
+                ],
+                [
+                  "OctahedralAngles",
+                  "sum_curvature"
+                ],
+                [
+                  "OctahedralAngles",
+                  "curvature_lt_two_pi"
+                ],
+                [
+                  "OctahedralCurvature",
+                  "curvature_pos"
+                ]
+              ],
+              "steps": [],
+              "remaining": []
+            },
+            "links": []
+          },
+          {
+            "id": "separation",
+            "title": "Separate every pair of developed triangles",
+            "paragraphs": [
+              "The shared core proves local separation, rules out contact with the finite cut edges, and separates opposite petals by the Case A and Case B cone arguments or the small-fan pocket argument. The final boundary comparisons complete all twenty-eight unordered pairs.",
+              "The inputs are a source at least as curved as its opposite pole, and a slit at a maximum-curvature equator vertex. The conclusion is separation of the actual developed triangles, with no remaining pair-comparison assumptions."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "Same conclusion; some geometric steps differ",
+              "explanation": [
+                "The finite-contact and opposite-petal proofs are assembled in selected_triangles_nonoverlap. Lean’s pocket proof constructs a quadrilateral from hypothetical overlap, contains the omitted fan and patch, then derives a four-corner angle contradiction. This is a checked alternative to the manuscript’s shorter presentation; it does not formalize every sentence of that presentation."
+              ],
+              "refs": [
+                [
+                  "OctahedralAllPairs",
+                  "selected_triangles_nonoverlap"
+                ],
+                [
+                  "OctahedralFiniteContact",
+                  "selected_finite_cuts_clear"
+                ],
+                [
+                  "OctahedralPairedCaseA",
+                  "opposite_petals_caseA_of_paired_poles"
+                ],
+                [
+                  "OctahedralPocketContradiction",
+                  "first_opposite_petals_of_small_fan"
+                ]
+              ],
+              "steps": [
+                "Separate neighboring fan and petal pieces.",
+                "Use actual finite cut segments to exclude remote contact.",
+                "Separate opposite petals by the cone or pocket argument.",
+                "Assemble all 28 unordered pairs."
+              ],
+              "remaining": []
+            },
+            "links": [
+              [
+                "Shared geometric details in the manuscript",
+                "https://slef.github.io/EdgeUnfoldings/n6/TIDY_CORE.html"
+              ]
+            ]
+          },
+          {
+            "id": "whole-faces",
+            "title": "Recover whole original faces",
+            "paragraphs": [
+              "Triangle separation is only an intermediate result. Whenever two triangles belong to the same quadrilateral, their rigid maps must agree on the whole face. Contracting the retained flat hinges then leaves a tree of original-edge hinges.",
+              "The whole faces inherit nonoverlap from their constituent triangles. Thus no auxiliary diagonal becomes a cut in the final edge unfolding."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "Checked reassembly",
+              "explanation": [
+                "The certificate requires agreement on every repeated carrier face and proves the public HasEdgeUnfolding conclusion. The minus-edge proof supplies that agreement for its one quadrilateral."
+              ],
+              "refs": [
+                [
+                  "SubdivisionCertificate",
+                  "hasEdgeUnfolding_of_consistent_subdivision"
+                ],
+                [
+                  "MinusEdge",
+                  "Development.minusEdge_consistent"
+                ]
+              ],
+              "steps": [
+                "Show the rigid placements agree across each uncut flat diagonal.",
+                "Choose one placement for each original face.",
+                "Contract flat subdivision hinges and retain original-edge connectivity.",
+                "Transfer triangle nonoverlap to whole-face nonoverlap."
+              ],
+              "remaining": []
+            },
+            "links": []
+          }
+        ]
+      },
+      {
+        "id": "paired-poles",
+        "title": "One paired-pole rule: octahedron and minus-edge",
+        "passages": [
+          {
+            "id": "paired-rule",
+            "title": "Choose the sharper of two opposite poles",
+            "paragraphs": [
+              "Fix an opposite pair \\(v,w\\), choose the endpoint with \\(\\kappa_v\\ge\\kappa_w\\) as source, and choose a maximum-curvature equator vertex for the fifth cut. The fourth petal supplies a positive-remainder identity that makes both wider Case A bounds automatic.",
+              "If \\(\\lambda,\\nu,\\rho\\) are the three relevant petal apex angles, \\(K\\) is the relevant base-curvature sum, and \\(L_a,L_b>0\\) are the fourth petal’s link slacks, one identity is \\(2\\pi+K-2\\lambda-\\nu=(\\kappa_v-\\kappa_w)+L_a+L_b+\\nu+2\\rho\\). The reflected identity supplies the other bound. Tied pole curvatures are allowed."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "The paired-pole identity is formalized",
+              "explanation": [
+                "The algebraic identities are checked with explicit face-angle and curvature hypotheses. OctahedralPairedCaseA supplies those hypotheses from the actual development and obtains geometric separation. Thus the identity is connected to the polyhedron, rather than left as a conditional algebra fact."
+              ],
+              "refs": [
+                [
+                  "PairedPoles",
+                  "left_remainder_identity"
+                ],
+                [
+                  "PairedPoles",
+                  "wider_caseA_bounds"
+                ],
+                [
+                  "OctahedralPairedCaseA",
+                  "opposite_petals_caseA_of_paired_poles"
+                ]
+              ],
+              "steps": [],
+              "remaining": []
+            },
+            "links": []
+          },
+          {
+            "id": "octahedron-minus",
+            "title": "Two complete original-edge cases",
+            "paragraphs": [
+              "For an octahedron, the selected star edges and fifth slit are original edges, so the shared construction gives an edge unfolding.",
+              "For the octahedron-minus-edge graph, choose the suitable opposite degree-four poles. All selected cuts remain original, and the sole quadrilateral diagonal stays uncut. Whole-face agreement gives a rigid placement of that quadrilateral and completes this family."
+            ],
+            "lean": {
+              "state": "proved",
+              "relation": "Complete case theorems",
+              "explanation": [
+                "Both theorems below conclude the public unfolding predicate for the whole convex polyhedron. The proof modules use their own canonical labels; the geometric types, not numerical vertex names, identify these cases."
+              ],
+              "refs": [
+                [
+                  "SixVertexRemaining",
+                  "every_convex_octahedron"
+                ],
+                [
+                  "SixVertexRemaining",
+                  "every_convex_octahedron_minus_edge"
+                ]
+              ],
+              "steps": [],
+              "remaining": []
+            },
+            "links": []
+          }
+        ]
+      },
+      {
+        "id": "prism-setup",
+        "title": "Prism with a diagonal: what is checked, what remains",
+        "passages": [
+          {
+            "id": "prism-regions",
+            "title": "Some curvature regions are already complete",
+            "paragraphs": [
+              "The only unfinished graph family has four triangles and two quadrilaterals. Existing Lean theorems already unfold it whenever one of two source-and-slit curvature conditions holds. Outside those regions, the streamlined manuscript supplies alternative candidates and two switching arguments.",
+              "The following sections explain that written argument and identify its formalized pieces. A proved numerical inequality alone does not certify the corresponding geometric net."
+            ],
+            "lean": {
+              "state": "partial",
+              "relation": "Complete subregions; family still open",
+              "explanation": [
+                "The displayed region theorems have full HasEdgeUnfolding conclusions. Their numeric vertex labels are Lean’s canonical labels, not the manuscript labels used below. No unproved identification with the manuscript’s particular fallback tree is claimed."
+              ],
+              "refs": [
+                [
+                  "PrismDiagonalRegions",
+                  "hasEdgeUnfolding_of_prismDiagonal_first_region"
+                ],
+                [
+                  "PrismDiagonalRegions",
+                  "hasEdgeUnfolding_of_prismDiagonal_last_region"
+                ],
+                [
+                  "PrismDiagonalRegions",
+                  "prismDiagonal_unfolding_or_strict_obstructions"
+                ]
+              ],
+              "steps": [],
+              "remaining": [
+                "Construct and certify the alternative original-edge nets outside these regions."
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "cofacial-comparison",
+            "title": "Compare a near-star with a shortest-path star",
+            "paragraphs": [
+              "Let a degree-four source \\(v\\) and its sole nonneighbor \\(w\\) lie opposite in a quadrilateral \\(Q\\), whose other corners are \\(c,d\\). The straight face diagonal \\(vw\\) is the fifth shortest cut. Its two pieces of \\(Q\\) are leaves of the star net. Removing them leaves the other faces in the same relative positions as in the near-star \\(\\operatorname{star}(v)+wc\\). Thus pairs outside \\(Q\\) are safe.",
+              "The cofacial gate \\(\\kappa_w\\le\\pi\\) and \\(\\kappa_c+\\kappa_w\\ge\\pi\\) settles the other obligations except one specified Case A pair. That final pair is tested using the full outer-face apex cones."
+            ],
+            "lean": {
+              "state": "partial",
+              "relation": "Star theorem available; comparison not assembled",
+              "explanation": [
+                "The canonical cofacial star-embedding theorem is proved and can supply nonoverlap for the comparison star. The matching of retained face placements, deletion of leaf pieces, and transfer to each candidate still need geometric Lean theorems. This is more than the universal-vertex star theorem alone."
+              ],
+              "refs": [
+                [
+                  "CofacialStarEmbedding",
+                  "cofacial_star_embedding"
+                ],
+                [
+                  "WiderApexCones",
+                  "wider_apex_cones"
+                ]
+              ],
+              "steps": [],
+              "remaining": [
+                "Identify the candidate’s retained faces with the corresponding cofacial-star development.",
+                "Prove the geometric cofacial gate for the required candidate and original outer faces.",
+                "Transfer the cone bounds to the whole-face comparisons."
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "prism-candidates",
+            "title": "Five original-edge candidates",
+            "paragraphs": [
+              "Use the manuscript’s original face labels \\(A=021\\), \\(B=0352\\), \\(C=013\\), \\(D=1254\\), \\(E=143\\), \\(F=345\\). Let \\(X_i\\) be the full corner angle of face \\(X\\) at vertex \\(i\\). Diagonals \\(05\\) and \\(24\\) are used only as uncut auxiliary hinges.",
+              "The four near-stars are \\(\\operatorname{star}(1)+25\\), \\(\\operatorname{star}(1)+54\\), \\(\\operatorname{star}(3)+20\\), and \\(\\operatorname{star}(3)+25\\). The fifth candidate is the fixed tree \\(T=\\{02,12,25,35,45\\}\\). Here \\(\\operatorname{star}(i)\\) consists of the four original edges incident to \\(i\\)."
+            ],
+            "lean": {
+              "state": "open",
+              "relation": "Candidate family not yet certified in Lean",
+              "explanation": [
+                "The written proof uses these five fixed original-edge trees. The current region theorems do not constitute a formal certificate for this entire five-candidate family."
+              ],
+              "refs": [],
+              "steps": [],
+              "remaining": [
+                "Define the five candidates on the actual labeled face structure, relate the labels to the geometric graph, and construct their whole-face developments."
+              ]
+            },
+            "links": []
+          }
+        ]
+      },
+      {
+        "id": "fallback",
+        "title": "The fixed fallback and the two cap views",
+        "passages": [
+          {
+            "id": "one-pair",
+            "title": "Only the two quadrilaterals need the final comparison",
+            "paragraphs": [
+              "The retained adjacencies of \\(T\\) are \\(C-A\\), \\(C-B\\), \\(C-E\\), \\(E-D\\), \\(E-F\\). Every pair except \\(A/F\\) and \\(B/D\\) has a common retained vertex.",
+              "For \\(A/F\\), compare with the cofacial shortest-path star at vertex \\(2\\). Removing the four leaf triangles cut from the two quadrilaterals leaves exactly the chain \\(A-C-E-F\\), with the same hinges as \\(T\\). Star nonoverlap settles that pair. Only \\(B/D\\) remains."
+            ],
+            "lean": {
+              "state": "open",
+              "relation": "Geometric fallback reduction remains",
+              "explanation": [
+                "The cofacial star theorem is available. The stated placement comparison and the reduction of this particular tree to its quadrilateral pair have not yet been assembled in Lean."
+              ],
+              "refs": [
+                [
+                  "CofacialStarEmbedding",
+                  "cofacial_star_embedding"
+                ]
+              ],
+              "steps": [],
+              "remaining": [
+                "Construct the fallback tree and its face placements.",
+                "Certify the common-vertex comparisons and the cofacial-star comparison for the remaining triangle pair."
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "two-views",
+            "title": "Look at the quadrilateral pair from either cap",
+            "paragraphs": [
+              "View \\(B/D\\) around cap \\(A\\), with base \\(01\\) and copied apex \\(2\\), or around cap \\(F\\), with base \\(34\\) and copied apex \\(5\\). The central angles satisfy \\(\\Sigma_A=\\pi-C_3+E_1\\), \\(\\Sigma_F=\\pi-E_1+C_3\\), and \\(\\Sigma_A+\\Sigma_F=2\\pi\\).",
+              "At least one view has central angle at least \\(\\pi\\). Its Case B is settled by the base-cone criterion; its Case A is settled by the apex-cone criterion whenever that view’s angle bounds hold. Consequently, if both views have safe Case A branches, the fallback is safe. A Case A branch that is impossible needs no separator."
+            ],
+            "lean": {
+              "state": "partial",
+              "relation": "Numerical alternative checked; geometric application open",
+              "explanation": [
+                "one_view_at_least_pi proves the numerical alternative from the stated sum. The actual two cap views, their central-angle identities and the implication from their Case A tests to nonoverlap of the fallback still need construction."
+              ],
+              "refs": [
+                [
+                  "Prism",
+                  "one_view_at_least_pi"
+                ]
+              ],
+              "steps": [],
+              "remaining": [
+                "Prove the two-view identities for the actual developed quadrilaterals.",
+                "Combine the geometric Case A and Case B conclusions into a fallback-net certificate."
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "cap-budget",
+            "title": "If both cap-curvature sums are large enough, use the fallback",
+            "paragraphs": [
+              "Let \\(C_A=\\kappa_0+\\kappa_1+\\kappa_2\\) and \\(C_F=\\kappa_3+\\kappa_4+\\kappa_5\\), so \\(C_A+C_F=4\\pi\\). At a degree-three source, \\(\\lambda+\\rho+\\nu=2\\pi-\\kappa_p\\), and \\(2\\lambda+\\nu-2\\pi-K=\\lambda-\\rho-(\\kappa_p+K)\\).",
+              "If the relevant cap sum \\(\\kappa_p+K\\) is at least \\(\\pi\\), the right side is negative because \\(0<\\lambda,\\rho<\\pi\\). The reflected inequality supplies the other wider Case A bound. Thus if both \\(C_A\\) and \\(C_F\\) are at least \\(\\pi\\), both views pass and \\(T\\) works."
+            ],
+            "lean": {
+              "state": "partial",
+              "relation": "Cap inequalities checked; net theorem still needed",
+              "explanation": [
+                "The algebraic identity and both wider-angle inequalities are Lean theorems. They take actual angle sums and bounds as hypotheses. The remaining work is to supply those hypotheses from the chosen cap developments and connect them to the fallback’s geometric certificate."
+              ],
+              "refs": [
+                [
+                  "Prism",
+                  "cap_identity"
+                ],
+                [
+                  "Prism",
+                  "cap_wider_bounds"
+                ]
+              ],
+              "steps": [],
+              "remaining": [
+                "Instantiate these numerical inequalities with the actual two cap views and conclude that the fallback is an edge unfolding."
+              ]
+            },
+            "links": []
+          }
+        ]
+      },
+      {
+        "id": "switches",
+        "title": "Two switches cover the remaining prism shapes",
+        "passages": [
+          {
+            "id": "switch-one",
+            "title": "Switch 1: a sharp end vertex",
+            "paragraphs": [
+              "If both \\(\\kappa_2\\) and \\(\\kappa_5\\) are at least \\(\\pi\\), both views are safe. Otherwise reflect the labels so \\(\\kappa_2\\ge\\pi\\) and \\(\\kappa_5<\\pi\\). Compare \\(N=\\operatorname{star}(1)+25\\) with \\(T\\), and put \\(K=\\kappa_3+\\kappa_4\\). The near-star passes if \\(K\\ge E_1\\), or \\(E_1\\le\\pi/2\\), or both its wider outer-angle bounds hold.",
+              "Define \\(f_C=2C_1+E_1-2\\pi-K\\), \\(f_D=2D_1+E_1-2\\pi-K\\), \\(g_B=2B_5+F_5-2\\pi-K\\), \\(g_D=2D_5+F_5-2\\pi-K\\), and \\(L_{Xi}=(2\\pi-\\kappa_i)-2X_i>0\\). The face-angle identities give:",
+              "\\(-f_C=C_0+F_5+(\\pi-B_3)+(\\pi-C_1)+(\\pi-D_4)\\).",
+              "\\(-f_D-g_D=2D_2+E_1+F_5+2(\\pi-B_3)+2(\\pi-C_3)\\).",
+              "\\(-f_D-g_B=L_{A0}+L_{A2}+L_{B5}+\\kappa_1+2C_1+(\\pi-B_3)+(\\pi-C_3)+(\\pi-D_4)+2(E_1-\\pi/2)\\).",
+              "The first identity gives \\(f_C<0\\). If \\(N\\) fails its closed tests, then \\(E_1>\\pi/2\\) and \\(f_D>0\\); the last two identities force \\(g_B,g_D<0\\). They settle the upper view of \\(T\\), while \\(\\kappa_2\\ge\\pi\\) settles its lower view. Thus \\(N\\) or \\(T\\) works."
+            ],
+            "lean": {
+              "state": "open",
+              "relation": "Switch not yet formalized",
+              "explanation": [
+                "The geometric sharp-end switch and these exact manuscript identities are not currently linked to Lean declarations. Existing general angle and cone lemmas are supporting infrastructure, not a proof of this switch."
+              ],
+              "refs": [],
+              "steps": [],
+              "remaining": [
+                "Establish the three identities from actual face-angle sums and the strict link inequalities.",
+                "Prove that failure of the near-star tests forces the fallback’s geometric hypotheses."
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "switch-two",
+            "title": "Switch 2: two curvature gates",
+            "paragraphs": [
+              "Assume \\(\\kappa_2\\le\\pi\\), \\(\\kappa_0+\\kappa_2\\ge\\pi\\), and \\(\\kappa_0+\\kappa_1\\ge\\pi\\). Compare \\(M=\\operatorname{star}(3)+20\\) with \\(T\\). The near-star is safe when \\(F_3\\le\\pi/2\\); the fallback is safe when \\(F_5\\le\\pi/2\\).",
+              "The first condition settles the near-star’s residual Case A pair. The second settles the fallback’s upper Case A view; its lower view cannot be Case A because \\(\\kappa_0+\\kappa_1\\ge\\pi>A_2\\). At least one of \\(F_3,F_5\\) is nonobtuse, since they are angles of the same nondegenerate triangle. Hence \\(M\\) or \\(T\\) works."
+            ],
+            "lean": {
+              "state": "partial",
+              "relation": "Angle alternative checked; switch geometry open",
+              "explanation": [
+                "The numerical fact that these two angles cannot both be obtuse is proved. The candidate-specific cofacial gate, the whole-face cone applications and the final choice between nets remain unformalized."
+              ],
+              "refs": [
+                [
+                  "Prism",
+                  "one_middle_angle_nonobtuse"
+                ]
+              ],
+              "steps": [],
+              "remaining": [
+                "Show the first angle alternative certifies the near-star and the second certifies the fallback."
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "exhaustion",
+            "title": "Why these candidates cover every shape",
+            "paragraphs": [
+              "If both cap sums are at least \\(\\pi\\), use \\(T\\). Otherwise exactly one cap has sum below \\(\\pi\\) and the other above \\(3\\pi\\). Reflect so \\(C_A>3\\pi\\) and \\(C_F<\\pi\\); in particular \\(\\kappa_5<\\pi\\).",
+              "If \\(\\kappa_2\\ge\\pi\\), apply Switch 1. If \\(\\kappa_2<\\pi\\), then \\(\\kappa_0+\\kappa_2=C_A-\\kappa_1>\\pi\\) and \\(\\kappa_0+\\kappa_1=C_A-\\kappa_2>2\\pi\\), so Switch 2 applies. Reflection exchanges \\(0\\leftrightarrow4\\), \\(1\\leftrightarrow3\\), \\(2\\leftrightarrow5\\), fixes \\(T\\), and supplies the other two near-stars.",
+              "An explicit selection is possible: for \\(\\kappa_2<\\pi\\), choose \\(M\\) when \\(F_3\\le\\pi/2\\), and \\(T\\) otherwise. For \\(\\kappa_2\\ge\\pi\\), choose \\(N\\) if \\(K\\ge E_1\\), or \\(E_1\\le\\pi/2\\), or \\(2D_1+E_1\\le2\\pi+K\\); otherwise choose \\(T\\). Undo the reflection. Every equality belongs to a closed successful branch."
+            ],
+            "lean": {
+              "state": "partial",
+              "relation": "Numerical exhaustion checked; geometric assembly open",
+              "explanation": [
+                "The cap alternatives, low-cap bounds and high-cap gates are proved as real inequalities. The final selector still needs the geometric net theorems from the preceding sections and a checked relabeling/reflection. The case split alone does not finish the prism family."
+              ],
+              "refs": [
+                [
+                  "Prism",
+                  "cap_cases"
+                ],
+                [
+                  "Prism",
+                  "low_cap_vertices"
+                ],
+                [
+                  "Prism",
+                  "high_cap_forces_gates"
+                ]
+              ],
+              "steps": [],
+              "remaining": [
+                "Supply the fallback and both switching certificates.",
+                "Transfer the reflected labels and prove the selector always returns a valid original-edge unfolding."
+              ]
+            },
+            "links": []
+          }
+        ]
+      },
+      {
+        "id": "assembly",
+        "title": "Where the Lean proof currently stops",
+        "passages": [
+          {
+            "id": "final-assembly",
+            "title": "One unfinished branch in the main theorem",
+            "paragraphs": [
+              "The reductions, universal-vertex case, octahedron, minus-edge case and ordinary prism are proved. The main proof already uses these results. Its last branch is the prism-with-diagonal family, which is only partially covered by the existing curvature-region theorems.",
+              "To finish, certify the remaining prism constructions above and feed the resulting whole-family theorem into that branch. The broader arbitrary-source star theorem and stronger every-slit statements are not required by this route."
+            ],
+            "lean": {
+              "state": "partial",
+              "relation": "Complete reduction; one geometric family remains",
+              "explanation": [
+                "The reduction displayed below is fully proved. The unfinished target at the start of this page consumes it and closes the universal branch with universal_star_has_edge_unfolding. Only the prism branch uses sorry. Several undeclared geometric lemmas remain inside that branch; one sorry is not a measure of the remaining effort."
+              ],
+              "refs": [
+                [
+                  "SixVertexRemaining",
+                  "unfolding_or_universal_or_prismDiagonal"
+                ]
+              ],
+              "steps": [
+                "Apply the smaller-case and face-size reductions.",
+                "Use the four-graph classification when there is no universal vertex.",
+                "Apply the completed case theorems.",
+                "Finish the prism-with-diagonal branch."
+              ],
+              "remaining": [
+                "Complete the candidate geometry, comparison arguments and switches shown above."
+              ]
+            },
+            "links": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "title": "At most five vertices",
+        "target": "small-cases",
+        "state": "proved",
+        "note": "Independent small-solid constructions"
+      },
+      {
+        "title": "Six vertices with a pentagonal face",
+        "target": "small-cases",
+        "state": "proved",
+        "note": "Pyramid reduction"
+      },
+      {
+        "title": "Universal vertex",
+        "target": "universal-case",
+        "state": "proved",
+        "note": "Completed star construction"
+      },
+      {
+        "title": "Octahedron",
+        "target": "octahedron-minus",
+        "state": "proved",
+        "note": "Selected eight-triangle development"
+      },
+      {
+        "title": "Octahedron minus an edge",
+        "target": "octahedron-minus",
+        "state": "proved",
+        "note": "Quadrilateral kept whole"
+      },
+      {
+        "title": "Ordinary triangular prism",
+        "target": "ordinary-prism",
+        "state": "proved",
+        "note": "Dome unfolding"
+      },
+      {
+        "title": "Prism with a diagonal",
+        "target": "prism-regions",
+        "state": "partial",
+        "note": "Curvature regions proved; remaining switches open"
+      }
+    ]
+  },
   "declarations": {
+    "Bipyramid:every_convex_polyhedron_with_at_most_five_vertices": {
+      "name": "every_convex_polyhedron_with_at_most_five_vertices",
+      "qualified": "SixVertexUnfolding.every_convex_polyhedron_with_at_most_five_vertices",
+      "kind": "theorem",
+      "module": "Bipyramid",
+      "line": 30,
+      "signature": "theorem every_convex_polyhedron_with_at_most_five_vertices (P : ConvexPolyhedron)\n    (at_most_five : P.vertices.card ≤ 5) : P.HasEdgeUnfolding",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
     "ClosedCutSet:cutSet": {
       "name": "cutSet",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.cutSet",
@@ -769,6 +1610,17 @@ window.PAPER_DATA = {
       "signature": "def starCuts (P : ConvexPolyhedron) (a : frontier P.body) : Set (frontier P.body) :=\n  {b | ∃ v : P.Vertex, (b : Space) ∈ segment ℝ (a : Space) (v : Space)}",
       "context": "open Set",
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "CofacialStarEmbedding:cofacial_star_embedding": {
+      "name": "cofacial_star_embedding",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_star_embedding",
+      "kind": "theorem",
+      "module": "CofacialStarEmbedding",
+      "line": 19,
+      "signature": "theorem cofacial_star_embedding {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4)\n    (a : frontier P.body) (source : Fin 6) (at_source : (a : Space) = (graph.vertex source : Space))\n    (cofacial : ∀ v : P.Vertex, ∃ F : P.Face, (a : Space) ∈ F.val ∧ (v : Space) ∈ F.val) :\n    ∃ develop : C(P.UncutSurface a, Plane),\n      Topology.IsOpenEmbedding develop ∧ Bornology.IsBounded (range develop) ∧\n      IsPathConnected (range develop) ∧\n      (∃ edges : Finset (Plane × Plane), frontier (range develop) =\n        ⋃ e ∈ edges, segment ℝ e.1 e.2) ∧\n      ∀ b : P.UncutSurface a, ∃ radius > 0, ∀ c d : P.UncutSurface a,\n        dist (c.val : Space) (b.val : Space) < radius →\n        dist (d.val : Space) (b.val : Space) < radius →\n        dist (develop c) (develop d) = P.surfaceDist c.val d.val",
+      "context": "open Set",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
       "proofHole": false
     },
     "CutEdgeMetricModel:CutEdgeMetricModel": {
@@ -848,6 +1700,50 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding",
       "proofHole": false
     },
+    "Definitions:ConvexPolyhedron.Face": {
+      "name": "ConvexPolyhedron.Face",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.Face",
+      "kind": "def",
+      "module": "Definitions",
+      "line": 31,
+      "signature": "def ConvexPolyhedron.Face (P : ConvexPolyhedron) :=\n  {F : Set Space // P.IsFace F}",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "Definitions:ConvexPolyhedron.HasEdgeUnfolding": {
+      "name": "ConvexPolyhedron.HasEdgeUnfolding",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.HasEdgeUnfolding",
+      "kind": "def",
+      "module": "Definitions",
+      "line": 52,
+      "signature": "def ConvexPolyhedron.HasEdgeUnfolding (P : ConvexPolyhedron) : Prop :=\n  Nonempty (EdgeUnfolding P)",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "Definitions:ConvexPolyhedron.IsFace": {
+      "name": "ConvexPolyhedron.IsFace",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.IsFace",
+      "kind": "def",
+      "module": "Definitions",
+      "line": 24,
+      "signature": "def ConvexPolyhedron.IsFace (P : ConvexPolyhedron) (F : Set Space) : Prop :=\n  affineDimension F = 2 ∧\n  ∃ (n : Space) (h : ℝ), n ≠ 0 ∧\n    (∀ x ∈ P.body, inner ℝ n x ≤ h) ∧\n    F = {x ∈ P.body | inner ℝ n x = h}",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "Definitions:ConvexPolyhedron.ShareEdge": {
+      "name": "ConvexPolyhedron.ShareEdge",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.ShareEdge",
+      "kind": "def",
+      "module": "Definitions",
+      "line": 36,
+      "signature": "def ConvexPolyhedron.ShareEdge (P : ConvexPolyhedron) (F G : P.Face) : Prop :=\n  affineDimension (F.val ∩ G.val) = 1",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
     "Definitions:ConvexPolyhedron.body": {
       "name": "ConvexPolyhedron.body",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.body",
@@ -857,6 +1753,61 @@ window.PAPER_DATA = {
       "signature": "def ConvexPolyhedron.body (P : ConvexPolyhedron) : Set Space :=\n  convexHull ℝ (P.vertices : Set Space)",
       "context": "",
       "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "Definitions:EdgeUnfolding": {
+      "name": "EdgeUnfolding",
+      "qualified": "SixVertexUnfolding.EdgeUnfolding",
+      "kind": "structure",
+      "module": "Definitions",
+      "line": 39,
+      "signature": "structure EdgeUnfolding (P : ConvexPolyhedron) where\n  place : P.Face → Space → Plane\n  hinges : SimpleGraph P.Face\n  tree : hinges.IsTree\n  original_edges : ∀ F G, hinges.Adj F G → P.ShareEdge F G\n  rigid : ∀ F, ∀ x ∈ F.val, ∀ y ∈ F.val,\n    dist (place F x) (place F y) = dist x y\n  joined : ∀ F G, hinges.Adj F G → ∀ x ∈ F.val ∩ G.val,\n    place F x = place G x\n  nonoverlap : ∀ F G, F ≠ G →\n    Disjoint (interior (place F '' F.val))\n             (interior (place G '' G.val))",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "Definitions:Plane": {
+      "name": "Plane",
+      "qualified": "SixVertexUnfolding.Plane",
+      "kind": "abbrev",
+      "module": "Definitions",
+      "line": 6,
+      "signature": "abbrev Plane := EuclideanSpace ℝ (Fin 2)",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "Definitions:Space": {
+      "name": "Space",
+      "qualified": "SixVertexUnfolding.Space",
+      "kind": "abbrev",
+      "module": "Definitions",
+      "line": 5,
+      "signature": "abbrev Space := EuclideanSpace ℝ (Fin 3)",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "Definitions:affineDimension": {
+      "name": "affineDimension",
+      "qualified": "SixVertexUnfolding.affineDimension",
+      "kind": "def",
+      "module": "Definitions",
+      "line": 9,
+      "signature": "noncomputable def affineDimension (s : Set Space) : ℕ :=\n  Module.finrank ℝ (affineSpan ℝ s).direction",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "DomeComplete:hasEdgeUnfolding": {
+      "name": "hasEdgeUnfolding",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.Dome.hasEdgeUnfolding",
+      "kind": "theorem",
+      "module": "DomeComplete",
+      "line": 53,
+      "signature": "theorem hasEdgeUnfolding (dome : P.Dome) : P.HasEdgeUnfolding",
+      "context": "variable {P : ConvexPolyhedron} {dome : P.Dome}",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.Dome",
       "proofHole": false
     },
     "EmbeddedCutGraph:EmbeddedCutGraph": {
@@ -958,6 +1909,17 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding.ConvexPolyhedron.JunctionFan",
       "proofHole": false
     },
+    "MinusEdge:Development.minusEdge_consistent": {
+      "name": "Development.minusEdge_consistent",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.minusEdge_consistent",
+      "kind": "theorem",
+      "module": "MinusEdge",
+      "line": 24,
+      "signature": "theorem Development.minusEdge_consistent (net : graph.Development small_faces source slit)\n    (kind : graph.kind = .minusEdge) (poles : source = 4 ∨ source = 5)\n    (x y : FaceIndex) (same : graph.netFace small_faces source slit x = graph.netFace small_faces source slit y) :\n    Set.EqOn (net.place x) (net.place y) (graph.netFace small_faces source slit y).val",
+      "context": "open OctahedralTriangles OctahedralNet\nvariable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}\nvariable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
     "MultipleShortestRoutes:multipleRouteLocus": {
       "name": "multipleRouteLocus",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.multipleRouteLocus",
@@ -969,6 +1931,248 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
+    "OctahedralAllPairs:selected_triangles_nonoverlap": {
+      "name": "selected_triangles_nonoverlap",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.selected_triangles_nonoverlap",
+      "kind": "theorem",
+      "module": "OctahedralAllPairs",
+      "line": 55,
+      "signature": "theorem selected_triangles_nonoverlap\n    (source_order : graph.curvature (opposite source) ≤ graph.curvature source)\n    (maximal : ∀ i, graph.curvature (fanNeighbor source i) ≤ graph.curvature (fanNeighbor source slit)) :\n    ∀ x y : FaceIndex, x ≠ y → net.Separated x y",
+      "context": "open OctahedralTriangles OctahedralNet\nvariable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}\nvariable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}\nvariable (net : graph.Development small_faces source slit)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development",
+      "proofHole": false
+    },
+    "OctahedralAngles:curvature": {
+      "name": "curvature",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.curvature",
+      "kind": "def",
+      "module": "OctahedralAngles",
+      "line": 20,
+      "signature": "noncomputable def curvature (v : Fin 6) : ℝ := 2 * Real.pi - graph.totalAngleAt v",
+      "context": "open OctahedralTriangles EuclideanGeometry\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
+    "OctahedralAngles:curvature_lt_two_pi": {
+      "name": "curvature_lt_two_pi",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.curvature_lt_two_pi",
+      "kind": "theorem",
+      "module": "OctahedralAngles",
+      "line": 84,
+      "signature": "theorem curvature_lt_two_pi (v : Fin 6) : graph.curvature v < 2 * Real.pi",
+      "context": "open OctahedralTriangles EuclideanGeometry\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
+    "OctahedralAngles:sum_curvature": {
+      "name": "sum_curvature",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.sum_curvature",
+      "kind": "theorem",
+      "module": "OctahedralAngles",
+      "line": 66,
+      "signature": "theorem sum_curvature : ∑ v : Fin 6, graph.curvature v = 4 * Real.pi",
+      "context": "open OctahedralTriangles EuclideanGeometry\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
+    "OctahedralCurvature:curvature_pos": {
+      "name": "curvature_pos",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.curvature_pos",
+      "kind": "theorem",
+      "module": "OctahedralCurvature",
+      "line": 53,
+      "signature": "theorem curvature_pos\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4) (v : Fin 6) : 0 < graph.curvature v",
+      "context": "open OctahedralTriangles\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
+    "OctahedralFiniteContact:selected_finite_cuts_clear": {
+      "name": "selected_finite_cuts_clear",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.selected_finite_cuts_clear",
+      "kind": "theorem",
+      "module": "OctahedralFiniteContact",
+      "line": 76,
+      "signature": "theorem selected_finite_cuts_clear\n    (source_order : graph.curvature (opposite source) ≤ graph.curvature source)\n    (maximal : ∀ i, graph.curvature (fanNeighbor source i) ≤ graph.curvature (fanNeighbor source slit)) :\n    net.FiniteCutsClear",
+      "context": "open Real EuclideanGeometry OctahedralTriangles\nvariable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}\nvariable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}\nvariable (net : graph.Development small_faces source slit)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development",
+      "proofHole": false
+    },
+    "OctahedralPairedCaseA:opposite_petals_caseA_of_paired_poles": {
+      "name": "opposite_petals_caseA_of_paired_poles",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.opposite_petals_caseA_of_paired_poles",
+      "kind": "theorem",
+      "module": "OctahedralPairedCaseA",
+      "line": 17,
+      "signature": "theorem opposite_petals_caseA_of_paired_poles (i : Fin 2)\n    (source_order : graph.curvature (opposite source) ≤ graph.curvature source)\n    (narrow : net.widenedLeft i + net.widenedRight i < π) :\n    net.Separated (true, i.castSucc.castSucc) (true, i.succ.succ)",
+      "context": "open Real EuclideanGeometry OctahedralTriangles\nvariable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}\nvariable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}\nvariable (net : graph.Development small_faces source slit)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development",
+      "proofHole": false
+    },
+    "OctahedralPocketContradiction:first_opposite_petals_of_small_fan": {
+      "name": "first_opposite_petals_of_small_fan",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.first_opposite_petals_of_small_fan",
+      "kind": "theorem",
+      "module": "OctahedralPocketContradiction",
+      "line": 44,
+      "signature": "theorem first_opposite_petals_of_small_fan\n    (source_order : graph.curvature (opposite source) ≤ graph.curvature source)\n    (maximal : ∀ i, graph.curvature (fanNeighbor source i) ≤ graph.curvature (fanNeighbor source slit))\n    (small : net.leftFanCorner 0 + net.rightFanCorner 0 < π) : net.Separated (true, 0) (true, 2)",
+      "context": "open Real OctahedralTriangles\nvariable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}\nvariable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}\nvariable (net : graph.Development small_faces source slit)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development",
+      "proofHole": false
+    },
+    "PairedPoles:left_remainder_identity": {
+      "name": "left_remainder_identity",
+      "qualified": "SixVertexUnfolding.PairedPoles.left_remainder_identity",
+      "kind": "theorem",
+      "module": "PairedPoles",
+      "line": 21,
+      "signature": "theorem left_remainder_identity\n    (source_sum : η + lam + ν + ρ = 2 * π - kv)\n    (fourth_triangle : ξ + ζ = π - η)\n    (total_curvature : kv + kw + K + ka + kb = 4 * π) :\n    2 * π + K - 2 * lam - ν =\n      (kv - kw) + (linkSlack ka ξ + linkSlack kb ζ) + ν + 2 * ρ",
+      "context": "open Real\nvariable {kv kw K ka kb η lam ν ρ ξ ζ : ℝ}",
+      "namespace": "SixVertexUnfolding.PairedPoles",
+      "proofHole": false
+    },
+    "PairedPoles:wider_caseA_bounds": {
+      "name": "wider_caseA_bounds",
+      "qualified": "SixVertexUnfolding.PairedPoles.wider_caseA_bounds",
+      "kind": "theorem",
+      "module": "PairedPoles",
+      "line": 40,
+      "signature": "theorem wider_caseA_bounds\n    (source_sum : η + lam + ν + ρ = 2 * π - kv)\n    (fourth_triangle : ξ + ζ = π - η)\n    (total_curvature : kv + kw + K + ka + kb = 4 * π)\n    (source_order : kw ≤ kv)\n    (left_pos : 0 < lam) (middle_pos : 0 < ν) (right_pos : 0 < ρ)\n    (link_a : 0 < linkSlack ka ξ) (link_b : 0 < linkSlack kb ζ) :\n    lam < (π + (π - ν + K)) / 2 ∧ ρ < (π + (π - ν + K)) / 2",
+      "context": "open Real\nvariable {kv kw K ka kb η lam ν ρ ξ ζ : ℝ}",
+      "namespace": "SixVertexUnfolding.PairedPoles",
+      "proofHole": false
+    },
+    "Prism:cap_cases": {
+      "name": "cap_cases",
+      "qualified": "SixVertexUnfolding.Prism.cap_cases",
+      "kind": "theorem",
+      "module": "Prism",
+      "line": 25,
+      "signature": "theorem cap_cases {lower upper : ℝ} (total : lower + upper = 4 * π) :\n    (π ≤ lower ∧ π ≤ upper) ∨\n    (3 * π < lower ∧ upper < π) ∨\n    (3 * π < upper ∧ lower < π)",
+      "context": "open Real",
+      "namespace": "SixVertexUnfolding.Prism",
+      "proofHole": false
+    },
+    "Prism:cap_identity": {
+      "name": "cap_identity",
+      "qualified": "SixVertexUnfolding.Prism.cap_identity",
+      "kind": "theorem",
+      "module": "Prism",
+      "line": 10,
+      "signature": "theorem cap_identity {lam ρ ν kp K : ℝ}\n    (source_sum : lam + ρ + ν = 2 * π - kp) :\n    2 * lam + ν - 2 * π - K = lam - ρ - (kp + K)",
+      "context": "open Real",
+      "namespace": "SixVertexUnfolding.Prism",
+      "proofHole": false
+    },
+    "Prism:cap_wider_bounds": {
+      "name": "cap_wider_bounds",
+      "qualified": "SixVertexUnfolding.Prism.cap_wider_bounds",
+      "kind": "theorem",
+      "module": "Prism",
+      "line": 16,
+      "signature": "theorem cap_wider_bounds {lam ρ ν kp K : ℝ}\n    (source_sum : lam + ρ + ν = 2 * π - kp)\n    (left_pos : 0 < lam) (left_lt : lam < π)\n    (right_pos : 0 < ρ) (right_lt : ρ < π)\n    (cap_high : π ≤ kp + K) :\n    lam < (π + (π - ν + K)) / 2 ∧ ρ < (π + (π - ν + K)) / 2",
+      "context": "open Real",
+      "namespace": "SixVertexUnfolding.Prism",
+      "proofHole": false
+    },
+    "Prism:high_cap_forces_gates": {
+      "name": "high_cap_forces_gates",
+      "qualified": "SixVertexUnfolding.Prism.high_cap_forces_gates",
+      "kind": "theorem",
+      "module": "Prism",
+      "line": 42,
+      "signature": "theorem high_cap_forces_gates {k0 k1 k2 : ℝ}\n    (cap_high : 3 * π < k0 + k1 + k2)\n    (vertex_bound : k1 < 2 * π) (end_low : k2 < π) :\n    π < k0 + k2 ∧ 2 * π < k0 + k1",
+      "context": "open Real",
+      "namespace": "SixVertexUnfolding.Prism",
+      "proofHole": false
+    },
+    "Prism:low_cap_vertices": {
+      "name": "low_cap_vertices",
+      "qualified": "SixVertexUnfolding.Prism.low_cap_vertices",
+      "kind": "theorem",
+      "module": "Prism",
+      "line": 36,
+      "signature": "theorem low_cap_vertices {a b c : ℝ}\n    (a_pos : 0 < a) (b_pos : 0 < b) (c_pos : 0 < c)\n    (cap_low : a + b + c < π) : a < π ∧ b < π ∧ c < π",
+      "context": "open Real",
+      "namespace": "SixVertexUnfolding.Prism",
+      "proofHole": false
+    },
+    "Prism:one_middle_angle_nonobtuse": {
+      "name": "one_middle_angle_nonobtuse",
+      "qualified": "SixVertexUnfolding.Prism.one_middle_angle_nonobtuse",
+      "kind": "theorem",
+      "module": "Prism",
+      "line": 49,
+      "signature": "theorem one_middle_angle_nonobtuse {a b c : ℝ}\n    (triangle_sum : a + b + c = π) (third_pos : 0 < c) :\n    a ≤ π / 2 ∨ b ≤ π / 2",
+      "context": "open Real",
+      "namespace": "SixVertexUnfolding.Prism",
+      "proofHole": false
+    },
+    "Prism:one_view_at_least_pi": {
+      "name": "one_view_at_least_pi",
+      "qualified": "SixVertexUnfolding.Prism.one_view_at_least_pi",
+      "kind": "theorem",
+      "module": "Prism",
+      "line": 57,
+      "signature": "theorem one_view_at_least_pi {lower upper : ℝ}\n    (view_sum : lower + upper = 2 * π) : π ≤ lower ∨ π ≤ upper",
+      "context": "open Real",
+      "namespace": "SixVertexUnfolding.Prism",
+      "proofHole": false
+    },
+    "PrismDiagonalRegions:hasEdgeUnfolding_of_prismDiagonal_first_region": {
+      "name": "hasEdgeUnfolding_of_prismDiagonal_first_region",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.hasEdgeUnfolding_of_prismDiagonal_first_region",
+      "kind": "theorem",
+      "module": "PrismDiagonalRegions",
+      "line": 15,
+      "signature": "theorem hasEdgeUnfolding_of_prismDiagonal_first_region (kind : graph.kind = .prismDiagonal)\n    (source_order : graph.curvature 1 ≤ graph.curvature 0)\n    (slit_order : graph.curvature 2 ≤ max (graph.curvature 3) (max (graph.curvature 4) (graph.curvature 5))) :\n    P.HasEdgeUnfolding",
+      "context": "open OctahedralTriangles\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\nvariable (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
+    "PrismDiagonalRegions:hasEdgeUnfolding_of_prismDiagonal_last_region": {
+      "name": "hasEdgeUnfolding_of_prismDiagonal_last_region",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.hasEdgeUnfolding_of_prismDiagonal_last_region",
+      "kind": "theorem",
+      "module": "PrismDiagonalRegions",
+      "line": 41,
+      "signature": "theorem hasEdgeUnfolding_of_prismDiagonal_last_region (kind : graph.kind = .prismDiagonal)\n    (source_order : graph.curvature 4 ≤ graph.curvature 5)\n    (slit_order : graph.curvature 3 ≤ max (graph.curvature 0) (max (graph.curvature 1) (graph.curvature 2))) :\n    P.HasEdgeUnfolding",
+      "context": "open OctahedralTriangles\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\nvariable (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
+    "PrismDiagonalRegions:prismDiagonal_unfolding_or_strict_obstructions": {
+      "name": "prismDiagonal_unfolding_or_strict_obstructions",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.prismDiagonal_unfolding_or_strict_obstructions",
+      "kind": "theorem",
+      "module": "PrismDiagonalRegions",
+      "line": 67,
+      "signature": "theorem prismDiagonal_unfolding_or_strict_obstructions (kind : graph.kind = .prismDiagonal) :\n    P.HasEdgeUnfolding ∨\n      ((graph.curvature 0 < graph.curvature 1 ∨\n        max (graph.curvature 3) (max (graph.curvature 4) (graph.curvature 5)) < graph.curvature 2) ∧\n       (graph.curvature 5 < graph.curvature 4 ∨\n        max (graph.curvature 0) (max (graph.curvature 1) (graph.curvature 2)) < graph.curvature 3))",
+      "context": "open OctahedralTriangles\nvariable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)\nvariable (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4)\ninclude small_faces in",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
+    "Pyramid:every_convex_pyramid_has_edge_unfolding": {
+      "name": "every_convex_pyramid_has_edge_unfolding",
+      "qualified": "SixVertexUnfolding.every_convex_pyramid_has_edge_unfolding",
+      "kind": "theorem",
+      "module": "Pyramid",
+      "line": 12,
+      "signature": "theorem every_convex_pyramid_has_edge_unfolding (P : ConvexPolyhedron) (p : P.Pyramid) :\n    P.HasEdgeUnfolding",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "Reduction:unfolding_or_remaining_cases": {
+      "name": "unfolding_or_remaining_cases",
+      "qualified": "SixVertexUnfolding.unfolding_or_remaining_cases",
+      "kind": "theorem",
+      "module": "Reduction",
+      "line": 35,
+      "signature": "theorem unfolding_or_remaining_cases (P : ConvexPolyhedron) (at_most_six : P.vertices.card ≤ 6) :\n    P.HasEdgeUnfolding ∨\n      (P.vertices.card = 6 ∧ ∀ F : P.Face,\n        (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n        (F.val ∩ (P.vertices : Set Space)).ncard = 4)",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
     "RegularCutTree:CutLocusTree": {
       "name": "CutLocusTree",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.CutLocusTree",
@@ -978,6 +2182,83 @@ window.PAPER_DATA = {
       "signature": "structure CutLocusTree (P : ConvexPolyhedron) (a : frontier P.body) extends P.EmbeddedCutGraph a where\n  tree : graph.IsTree\n  exceptional_vertices : ∀ b ∈ P.cutExceptions a, (b : Space) ∈ vertices",
       "context": "open Set",
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SixVertexFacets:labeledFacets_eq": {
+      "name": "labeledFacets_eq",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.labeledFacets_eq",
+      "kind": "theorem",
+      "module": "SixVertexFacets",
+      "line": 33,
+      "signature": "theorem labeledFacets_eq\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4) :\n    labeledFacets graph.vertex = graph.kind.facets",
+      "context": "variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "proofHole": false
+    },
+    "SixVertexGraphs:SixVertexGraph": {
+      "name": "SixVertexGraph",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph",
+      "kind": "structure",
+      "module": "SixVertexGraphs",
+      "line": 10,
+      "signature": "structure SixVertexGraph (P : ConvexPolyhedron) where\n  kind : SmallGraphs.SixGraphKind\n  vertex : Fin 6 ≃ P.Vertex\n  edges : ∀ i j : Fin 6, P.edgeGraph.Adj (vertex i) (vertex j) ↔\n    i ≠ j ∧ s(i, j) ∉ kind.missingEdges",
+      "context": "",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SixVertexGraphs:exists_six_vertex_graph": {
+      "name": "exists_six_vertex_graph",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.exists_six_vertex_graph",
+      "kind": "theorem",
+      "module": "SixVertexGraphs",
+      "line": 17,
+      "signature": "theorem exists_six_vertex_graph (P : ConvexPolyhedron) (size : P.vertices.card = 6)\n    (no_universal : ¬ ∃ v : P.Vertex, ∀ w, w ≠ v → P.edgeGraph.Adj v w)\n    (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n      (F.val ∩ (P.vertices : Set Space)).ncard = 4) : Nonempty P.SixVertexGraph",
+      "context": "",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron",
+      "proofHole": false
+    },
+    "SixVertexRemaining:every_convex_octahedron": {
+      "name": "every_convex_octahedron",
+      "qualified": "SixVertexUnfolding.every_convex_octahedron",
+      "kind": "theorem",
+      "module": "SixVertexRemaining",
+      "line": 16,
+      "signature": "theorem every_convex_octahedron (P : ConvexPolyhedron) (graph : P.SixVertexGraph)\n    (octahedral : graph.kind = .octahedron) : P.HasEdgeUnfolding",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "SixVertexRemaining:every_convex_octahedron_minus_edge": {
+      "name": "every_convex_octahedron_minus_edge",
+      "qualified": "SixVertexUnfolding.every_convex_octahedron_minus_edge",
+      "kind": "theorem",
+      "module": "SixVertexRemaining",
+      "line": 23,
+      "signature": "theorem every_convex_octahedron_minus_edge (P : ConvexPolyhedron) (graph : P.SixVertexGraph)\n    (kind : graph.kind = .minusEdge) : P.HasEdgeUnfolding",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "SixVertexRemaining:every_convex_triangular_prism": {
+      "name": "every_convex_triangular_prism",
+      "qualified": "SixVertexUnfolding.every_convex_triangular_prism",
+      "kind": "theorem",
+      "module": "SixVertexRemaining",
+      "line": 30,
+      "signature": "theorem every_convex_triangular_prism (P : ConvexPolyhedron) (graph : P.SixVertexGraph)\n    (kind : graph.kind = .prism) : P.HasEdgeUnfolding",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
+    },
+    "SixVertexRemaining:unfolding_or_universal_or_prismDiagonal": {
+      "name": "unfolding_or_universal_or_prismDiagonal",
+      "qualified": "SixVertexUnfolding.unfolding_or_universal_or_prismDiagonal",
+      "kind": "theorem",
+      "module": "SixVertexRemaining",
+      "line": 56,
+      "signature": "theorem unfolding_or_universal_or_prismDiagonal (P : ConvexPolyhedron) (at_most_six : P.vertices.card ≤ 6) :\n    P.HasEdgeUnfolding ∨\n      (P.vertices.card = 6 ∧\n        (∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n          (F.val ∩ (P.vertices : Set Space)).ncard = 4) ∧\n        ((∃ v : P.Vertex, ∀ w, w ≠ v → P.edgeGraph.Adj v w) ∨\n          ∃ graph : P.SixVertexGraph, graph.kind = .prismDiagonal))",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
       "proofHole": false
     },
     "SmallPolyhedronCurvature:surfaceAngle": {
@@ -1189,6 +2470,28 @@ window.PAPER_DATA = {
       "namespace": "SixVertexUnfolding.ConvexPolyhedron",
       "proofHole": false
     },
+    "Statement:every_convex_polyhedron_with_at_most_six_vertices": {
+      "name": "every_convex_polyhedron_with_at_most_six_vertices",
+      "qualified": "SixVertexUnfolding.every_convex_polyhedron_with_at_most_six_vertices",
+      "kind": "theorem",
+      "module": "Statement",
+      "line": 8,
+      "signature": "theorem every_convex_polyhedron_with_at_most_six_vertices\n    (P : ConvexPolyhedron) (at_most_six : P.vertices.card ≤ 6) :\n    P.HasEdgeUnfolding",
+      "context": "",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": true
+    },
+    "SubdivisionCertificate:hasEdgeUnfolding_of_consistent_subdivision": {
+      "name": "hasEdgeUnfolding_of_consistent_subdivision",
+      "qualified": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.hasEdgeUnfolding_of_consistent_subdivision",
+      "kind": "theorem",
+      "module": "SubdivisionCertificate",
+      "line": 18,
+      "signature": "theorem hasEdgeUnfolding_of_consistent_subdivision\n    (source_order : graph.curvature (opposite source) ≤ graph.curvature source)\n    (maximal : ∀ i, graph.curvature (fanNeighbor source i) ≤ graph.curvature (fanNeighbor source slit))\n    (consistent : ∀ x y : FaceIndex, graph.netFace small_faces source slit x = graph.netFace small_faces source slit y →\n      Set.EqOn (net.place x) (net.place y) (graph.netFace small_faces source slit y).val) : P.HasEdgeUnfolding",
+      "context": "open OctahedralTriangles OctahedralNet\nvariable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}\nvariable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨\n  (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}\nvariable (net : graph.Development small_faces source slit)",
+      "namespace": "SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development",
+      "proofHole": false
+    },
     "UniversalStarEmbedding:universal_star_embedding": {
       "name": "universal_star_embedding",
       "qualified": "SixVertexUnfolding.ConvexPolyhedron.universal_star_embedding",
@@ -1342,9 +2645,24 @@ window.PAPER_DATA = {
       "context": "open Real Set\nvariable {h r a b d θ γ : ℝ} (C : ArmCoordinates h r a b d θ γ)",
       "namespace": "SixVertexUnfolding.Wedge.ArmCoordinates",
       "proofHole": false
+    },
+    "WiderApexCones:wider_apex_cones": {
+      "name": "wider_apex_cones",
+      "qualified": "SixVertexUnfolding.wider_apex_cones",
+      "kind": "theorem",
+      "module": "WiderApexCones",
+      "line": 139,
+      "signature": "theorem wider_apex_cones (p q : Plane) (δ θ lam rho A B : ℝ)\n    (θ_pos : 0 < θ) (θ_small : θ < π)\n    (lam_pos : 0 < lam) (lam_small : lam < π) (rho_pos : 0 < rho) (rho_small : rho < π)\n    (angle_sum : lam + rho < π + θ)\n    (left_bound : lam ≤ (π + θ) / 2) (right_bound : rho ≤ (π + θ) / 2)\n    (strict_sum : A + B < 0)\n    (displacement : q - p = A • direction (δ + θ) + B • direction δ) :\n    Disjoint (interior (translatedCone p (direction (δ + θ - lam)) (direction (δ + θ))))\n      (interior (translatedCone q (-direction δ) (-direction (δ + rho))))",
+      "context": "open Real",
+      "namespace": "SixVertexUnfolding",
+      "proofHole": false
     }
   },
   "sources": {
+    "Bipyramid": {
+      "path": "SixVertexUnfolding/Bipyramid.lean",
+      "sha256": "da1041b0a759e39fded3934f03c52535e68281270491fa7d8a712a3201c14eee"
+    },
     "ClosedCutSet": {
       "path": "SixVertexUnfolding/Geometry/ClosedCutSet.lean",
       "sha256": "aa5004ee116f1b60b868629f6b5518e1cdb9d77d46de6821d43e9340d3e43664"
@@ -1352,6 +2670,10 @@ window.PAPER_DATA = {
     "CofacialStarCuts": {
       "path": "SixVertexUnfolding/Geometry/CofacialStarCuts.lean",
       "sha256": "0c7b8aee498bd8445fef847c78a7e5242e9ffcbe55896439f2cecdd8ef998053"
+    },
+    "CofacialStarEmbedding": {
+      "path": "SixVertexUnfolding/Geometry/CofacialStarEmbedding.lean",
+      "sha256": "86defbc1d1d91e26c0545a79f399c28fad39be3b9660a9407bffacb0c253e1d0"
     },
     "CutEdgeMetricModel": {
       "path": "SixVertexUnfolding/Geometry/CutEdgeMetricModel.lean",
@@ -1381,6 +2703,10 @@ window.PAPER_DATA = {
       "path": "SixVertexUnfolding/Definitions.lean",
       "sha256": "68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef"
     },
+    "DomeComplete": {
+      "path": "SixVertexUnfolding/Geometry/DomeComplete.lean",
+      "sha256": "7a6defa10700350fc835acc21ac4485bf428bea878e7c4db20b4eda66ad47412"
+    },
     "EmbeddedCutGraph": {
       "path": "SixVertexUnfolding/Geometry/EmbeddedCutGraph.lean",
       "sha256": "e162026d13a73fafa07b92ba1283e580152988d89724f543c274e03d90dfdd51"
@@ -1405,13 +2731,73 @@ window.PAPER_DATA = {
       "path": "SixVertexUnfolding/Geometry/JunctionWedgeStep.lean",
       "sha256": "ab06578dbf02f0f46866e885ed5caa228717f54ae098b6830c1711bc4d40df9c"
     },
+    "MinusEdge": {
+      "path": "SixVertexUnfolding/MinusEdge.lean",
+      "sha256": "45bf80b80f32e1a5a312b49a2cc780afbe0d0c0c5533c4e1ed9030c861ce1300"
+    },
     "MultipleShortestRoutes": {
       "path": "SixVertexUnfolding/Geometry/MultipleShortestRoutes.lean",
       "sha256": "23050b33c9b46baff6b494af80c1c4921bfcd48b7d8e4774f510e00abbaf8df4"
     },
+    "OctahedralAllPairs": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralAllPairs.lean",
+      "sha256": "71bc3fe18387e1caa3481b763d559545fd63d49e7928bf4006f15b2e058f3fd9"
+    },
+    "OctahedralAngles": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralAngles.lean",
+      "sha256": "a67d51a84973fe814e77616a9d81fb7a1ce0d95dccdbe2a42723e63630898105"
+    },
+    "OctahedralCurvature": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralCurvature.lean",
+      "sha256": "87a130f8bdaf42a0231a857ec4b1a3645bcf4100bc63433986a9c9a3cf3a39e2"
+    },
+    "OctahedralFiniteContact": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralFiniteContact.lean",
+      "sha256": "165c2f096a17aa547b8f76d17beb53fe06859422d592c2b99c7e6a39f83d7740"
+    },
+    "OctahedralPairedCaseA": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralPairedCaseA.lean",
+      "sha256": "2933e9d2befa08b697361aca6dfb2f72441f560d043978f1acaf0ee8d1688850"
+    },
+    "OctahedralPocketContradiction": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralPocketContradiction.lean",
+      "sha256": "5fa85732fd01e78477de896cb639833aa04a5c8881f0b091ea98974a3ae07744"
+    },
+    "PairedPoles": {
+      "path": "SixVertexUnfolding/Curvature/PairedPoles.lean",
+      "sha256": "a684f917079f2c4c2847f203f87a44565c1ba40b1270e8cb8438b4f59260ccf6"
+    },
+    "Prism": {
+      "path": "SixVertexUnfolding/Curvature/Prism.lean",
+      "sha256": "deffd9fbab3aca201405a8c57a06cddd96ece3a1dd02ee11698448bb859a3c8c"
+    },
+    "PrismDiagonalRegions": {
+      "path": "SixVertexUnfolding/PrismDiagonalRegions.lean",
+      "sha256": "081ff1494580e126af92e66aaf264f09ceec28a401da986db2805c4a3e11820e"
+    },
+    "Pyramid": {
+      "path": "SixVertexUnfolding/Pyramid.lean",
+      "sha256": "2b2f80772d459279c3683237caae6b0a5494d36ed40d9b38f4ce1bb761c699cd"
+    },
+    "Reduction": {
+      "path": "SixVertexUnfolding/Reduction.lean",
+      "sha256": "68738e14600a5e5d9a63314a9f7118c3437fcfcc3d827126b156eae71aae91fa"
+    },
     "RegularCutTree": {
       "path": "SixVertexUnfolding/Geometry/RegularCutTree.lean",
       "sha256": "324af0598e1fd9e027fdd0518f2c88ab6646df179592ae1e10dcc781f0464907"
+    },
+    "SixVertexFacets": {
+      "path": "SixVertexUnfolding/Geometry/SixVertexFacets.lean",
+      "sha256": "fb62f535b6e10a785b7042bacbc5dbc8a81b795379e3a349ea9108067d237d99"
+    },
+    "SixVertexGraphs": {
+      "path": "SixVertexUnfolding/Geometry/SixVertexGraphs.lean",
+      "sha256": "4317cd118b6c798490cbc45ae5024eefcf56c15dc90dbf6fe39f8f8c228e2f8f"
+    },
+    "SixVertexRemaining": {
+      "path": "SixVertexUnfolding/SixVertexRemaining.lean",
+      "sha256": "38b0a6cbf06171043cf4639b285286b97cd741efe68787c696b9ba607e045b34"
     },
     "SmallPolyhedronCurvature": {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCurvature.lean",
@@ -1469,6 +2855,14 @@ window.PAPER_DATA = {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronUniqueRouteLeaves.lean",
       "sha256": "2146f8c8425e7f4775ee61eeedf42a65ae73854e2a0ed82d7b84ac7e034a7350"
     },
+    "Statement": {
+      "path": "Statement.lean",
+      "sha256": "31f35e148479ea750e4b8586817e4f162be664c32575240bee279a381e5f86b1"
+    },
+    "SubdivisionCertificate": {
+      "path": "SixVertexUnfolding/Geometry/SubdivisionCertificate.lean",
+      "sha256": "5f35a07c6404fbda8a728fa12d91da560594c95c9bb0f81d983a83433a0ecf49"
+    },
     "UniversalStarEmbedding": {
       "path": "SixVertexUnfolding/Geometry/UniversalStarEmbedding.lean",
       "sha256": "537008d670dde4a286f148a143d8889da78feda4959d26a92d9c50c70e8fc2dc"
@@ -1500,10 +2894,14 @@ window.PAPER_DATA = {
     "WedgeStep": {
       "path": "SixVertexUnfolding/Geometry/WedgeStep.lean",
       "sha256": "4a9a85a9e647c5b636b2749ecae1bc25782a875beec34d85c3fbd04052dd24ce"
+    },
+    "WiderApexCones": {
+      "path": "SixVertexUnfolding/Geometry/WiderApexCones.lean",
+      "sha256": "68d1f026209e0b0a0124d005ec30e5b588a8adf0a239961e29c05136fc7805d0"
     }
   },
-  "revision": "868314660f92ce4de8d4f846e1860b9e1945986b",
-  "date": "2026-09-16",
+  "revision": "89c65cea4e76e08959b07b8123e0b9d62e5ff7e1",
+  "date": "2026-09-18",
   "paper": [
     {
       "id": "definition-1",

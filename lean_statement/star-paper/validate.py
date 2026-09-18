@@ -25,6 +25,13 @@ for path,page in pages.items():
 D=json.loads((dist/'data.js').read_text().removeprefix('window.PAPER_DATA = ').rstrip(';\n'))
 assert D['paper']==json.loads((site/'paper.json').read_text())
 assert D['annotations']==json.loads((site/'annotations.json').read_text())
+assert D['overview']==json.loads((site/'overview.json').read_text())
+for section in D['overview']['sections']:
+    for passage in section['passages']:
+        info=passage['lean']
+        assert info['state'] in ('proved','partial','open','definitions')
+        assert bool(info['remaining'])==(info['state'] in ('partial','open')),passage['id']
+        for ref in info['refs']:assert ':'.join(ref) in D['declarations']
 annotation_ids={a['id'] for a in D['annotations']}
 for annotation in D['annotations']:
     work=annotation['work']
@@ -44,7 +51,7 @@ for key,d in D['declarations'].items():
     source=(dist/'sources'/f'{d["module"]}.lean').read_text()
     assert d['signature'] in source,(key,'excerpt changed')
     assert not re.search(r'\blet\s+\w+\s*$',d['signature']),(key,'truncated at let binding')
-    assert not d['proofHole']
+    assert not d['proofHole'] or key=='Statement:every_convex_polyhedron_with_at_most_six_vertices'
     assert f'L{d["line"]}' in pages[dist/'sources'/f'{d["module"]}.html'].ids
 for module,s in D['sources'].items():
     for path in (site.parent/s['path'],dist/'sources'/f'{module}.lean'):
@@ -52,7 +59,7 @@ for module,s in D['sources'].items():
 for b in D['paper']:
     assert not re.search(r'\b102[1-6]\b',b['text']),'page header inside paragraph'
     assert not any(ord(c)<32 for c in b['text'])
-for js in ('app.js','data.js','hovers.js'):subprocess.run(['node','--check',str(dist/js)],check=True)
+for js in ('app.js','data.js','hovers.js','declaration-links.js'):subprocess.run(['node','--check',str(dist/js)],check=True)
 v=json.loads((site/'verification.json').read_text())
 assert v['revision']==D['revision'] and v['declarations']==len(D['declarations'])
 assert D['revision'] in (dist/'index.html').read_text()
@@ -60,7 +67,8 @@ manifest=json.loads((site/'source-manifest.json').read_text())
 assert manifest==json.loads((dist/'source-manifest.json').read_text())
 assert manifest['revision']==D['revision'] and manifest['declarations']==v['declarations']
 assert v['result']=='passed' and v['theorems']==sum(d['kind']=='theorem' for d in D['declarations'].values())
-assert 'sorryAx' not in (dist/'verification.txt').read_text()
+assert v['unfinished']==['SixVertexUnfolding.every_convex_polyhedron_with_at_most_six_vertices']
+assert v['proved_theorems']==v['theorems']-len(v['unfinished'])
 print(f'PASS: {len(D["paper"])} passages, {len(D["annotations"])} annotations, {len(D["declarations"])} exact declarations; all local assets, anchors, source hashes and JavaScript syntax valid.')
 
 # Hover markup must preserve every character of the checked excerpts.
@@ -99,12 +107,12 @@ class Excerpts(HTMLParser):
             key,field=self.current.rsplit(':',1)
             assert ''.join(self.text)==D['declarations'][key][field],self.current
             self.seen.add(self.current); self.current=None
-excerpt_page=Excerpts((dist/'index.html').read_text())
+excerpt_page=Excerpts((dist/'index.html').read_text()+(dist/'proof.html').read_text())
 for key,d in D['declarations'].items():
     matching=[t for t in excerpt_page.targets if t['data-source-path']==D['sources'][d['module']]['path'] and int(t['data-source-start'])==d['line']]
     assert matching,(key,'missing in-page definition target')
     assert all(int(t['data-source-end'])==d['line']+len(d['signature'].splitlines())-1 for t in matching)
-    assert all(t['id'] in pages[dist/'index.html'].ids for t in matching)
+    assert all(t['id'] in (pages[dist/'index.html'].ids | pages[dist/'proof.html'].ids) for t in matching)
 keywords=set("theorem def abbrev structure inductive noncomputable private protected where extends variable variables open scoped include namespace end in fun let by if then else match with do return have show from forall Prop Type Type* Sort true false".split())
 for key,d in D['declarations'].items():
     for field in ('signature','context'):
@@ -139,7 +147,7 @@ for key,source in H['sources'].items():
     assert source['sha256'] in {hashlib.sha256((reconstructed+end).encode()).hexdigest() for end in ('','\n')},source['path']
 logo=(dist/'assets/lean-logo.svg').read_text()
 assert '<svg ' in logo and '<script' not in logo and 'lean-mark' not in (dist/'index.html').read_text()
-for script in ('collect_hovers.py','build_hovers.py','render.py'):
+for script in ('collect_hovers.py','build_hovers.py','render.py','render_overview.py'):
     compile((site/script).read_text(),str(site/script),'exec')
 print(f'PASS: {len(H["symbols"])} contextual hover cards; all name lookups covered, declaration, field and constructor head hovers suppressed, in-page targets valid, excerpts unchanged, {len(H["sources"])} linked source snapshots verified.')
 
@@ -159,7 +167,7 @@ class FormulaMarkup(HTMLParser):
         if tag=='annotation':self.in_tex=False
     def handle_data(self, data):
         if self.in_tex:self.tex[-1]+=data
-math_page=FormulaMarkup((dist/'index.html').read_text())
+math_page=FormulaMarkup((dist/'index.html').read_text()+(dist/'proof.html').read_text())
 assert math_page.formulas==math_page.tex and len(math_page.formulas)==math_page.math
 assert math_page.math>0 and 'katex-error' not in (dist/'index.html').read_text()
 for text in [b['text'] for b in D['paper']]+list(json.loads((site/'figures.json').read_text()).values()):
@@ -172,3 +180,22 @@ for font in re.findall(r'url\(([^)]+)\)',math_css.read_text()):
     assert (math_css.parent/font).is_file(),font
 subprocess.run(['node','--check',str(site/'render_math.cjs')],check=True)
 print(f'PASS: {math_page.math} formulas typeset with accessible MathML and bundled fonts; paper and caption notation fully marked.')
+
+# The visible target must stay explicitly unfinished; proved cards cannot hide holes.
+for target in excerpt_page.targets:
+    assert target['data-proof-status'] in ('definition','proved','unfinished')
+unfinished_cards=[t for t in excerpt_page.targets if t['data-proof-status']=='unfinished']
+assert len(unfinished_cards)==1 and unfinished_cards[0]['data-source-path']=='Statement.lean'
+assert 'Unfinished · contains sorry' in (dist/'proof.html').read_text()
+for section in D['overview']['sections']:
+    assert section['id'] in pages[dist/'proof.html'].ids
+    for passage in section['passages']:
+        assert passage['id'] in pages[dist/'proof.html'].ids
+        for text in passage['paragraphs']:
+            prose=INLINE_MATH.sub('',text)
+            assert not re.search('[₀₁₂₃₄₅₆₇₈₉ᵢⱼₓₚₜ₌₋₊παλσθε∑≤⊆∪]',prose),prose
+for entry in json.loads((dist/'declaration-links.js').read_text().removeprefix('window.LEAN_DECLARATION_LINKS = ').rstrip(';\n')):
+    url=urlsplit(entry['href'])
+    assert url.fragment in pages[dist/url.path].ids
+assert hashlib.sha256((site.parents[1]/D['overview']['source']['path']).read_bytes()).hexdigest()==D['overview']['source']['sha256']
+print('PASS: full-proof cases, unfinished target, cross-chapter definition links and manuscript provenance verified.')

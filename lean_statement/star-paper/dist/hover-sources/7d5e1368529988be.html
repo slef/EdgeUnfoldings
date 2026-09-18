@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/OctahedronCore.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/OctahedronCore.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.OctahedronNine</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.OctahedralRemotePairs</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! The remaining octahedron geometry is confined to the local pairs, opposite petals, and finite cuts. -/</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> open OctahedralTriangles</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> variable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}</span>
+<span id="L11" class="line"><a href="#L11">11</a> variable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L12" class="line"><a href="#L12">12</a>   (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}</span>
+<span id="L13" class="line"><a href="#L13">13</a> variable (net : graph.Development small_faces source slit)</span>
+<span id="L14" class="line"><a href="#L14">14</a> </span>
+<span id="L15" class="line"><a href="#L15">15</a> /-- The two closed remote petals miss the corresponding closed finite slit segments. -/</span>
+<span id="L16" class="line"><a href="#L16">16</a> structure FiniteCutsClear : Prop where</span>
+<span id="L17" class="line"><a href="#L17">17</a>   last : Disjoint (net.placedTriangle (true, 1)) (segment ℝ 0 (graph.openingPoint (opposite source) slit 4))</span>
+<span id="L18" class="line"><a href="#L18">18</a>   first : Disjoint (net.placedTriangle (true, 2)) (segment ℝ 0 (graph.openingPoint (opposite source) slit 0))</span>
+<span id="L19" class="line"><a href="#L19">19</a> </span>
+<span id="L20" class="line"><a href="#L20">20</a> /-- The local slit lemma supplies these three nonoverlap conclusions. -/</span>
+<span id="L21" class="line"><a href="#L21">21</a> structure LocalPairs : Prop where</span>
+<span id="L22" class="line"><a href="#L22">22</a>   petals : net.Separated (true, 0) (true, 3)</span>
+<span id="L23" class="line"><a href="#L23">23</a>   left : net.Separated (true, 0) (false, 3)</span>
+<span id="L24" class="line"><a href="#L24">24</a>   right : net.Separated (true, 3) (false, 0)</span>
+<span id="L25" class="line"><a href="#L25">25</a> </span>
+<span id="L26" class="line"><a href="#L26">26</a> /-- The two opposite-petal comparisons, for this same development. -/</span>
+<span id="L27" class="line"><a href="#L27">27</a> structure OppositePetals : Prop where</span>
+<span id="L28" class="line"><a href="#L28">28</a>   even : net.Separated (true, 0) (true, 2)</span>
+<span id="L29" class="line"><a href="#L29">29</a>   odd : net.Separated (true, 1) (true, 3)</span>
+<span id="L30" class="line"><a href="#L30">30</a> </span>
+<span id="L31" class="line"><a href="#L31">31</a> /-- The boundary argument discharges all four remote pairs from these three geometric inputs. -/</span>
+<span id="L32" class="line"><a href="#L32">32</a> theorem remainingNine_of_core (local_pairs : net.LocalPairs) (opposite_pairs : net.OppositePetals)</span>
+<span id="L33" class="line"><a href="#L33">33</a>     (cuts : net.FiniteCutsClear) : net.RemainingNine where</span>
+<span id="L34" class="line"><a href="#L34">34</a>   slit_petals := local_pairs.petals</span>
+<span id="L35" class="line"><a href="#L35">35</a>   slit_left := local_pairs.left</span>
+<span id="L36" class="line"><a href="#L36">36</a>   slit_right := local_pairs.right</span>
+<span id="L37" class="line"><a href="#L37">37</a>   opposite_even := opposite_pairs.even</span>
+<span id="L38" class="line"><a href="#L38">38</a>   opposite_odd := opposite_pairs.odd</span>
+<span id="L39" class="line"><a href="#L39">39</a>   remote := by</span>
+<span id="L40" class="line"><a href="#L40">40</a>     intro i</span>
+<span id="L41" class="line"><a href="#L41">41</a>     fin_cases i</span>
+<span id="L42" class="line"><a href="#L42">42</a>     · exact net.remote_zero local_pairs.left opposite_pairs.even</span>
+<span id="L43" class="line"><a href="#L43">43</a>     · exact net.remote_one cuts.last opposite_pairs.odd</span>
+<span id="L44" class="line"><a href="#L44">44</a>     · exact net.remote_two cuts.first opposite_pairs.even</span>
+<span id="L45" class="line"><a href="#L45">45</a>     · exact net.remote_three local_pairs.right opposite_pairs.odd</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> /-- Finishing the three remaining geometric lemmas yields the unchanged original-edge unfolding predicate. -/</span>
+<span id="L48" class="line"><a href="#L48">48</a> theorem hasEdgeUnfolding_of_core (octahedral : graph.kind = .octahedron)</span>
+<span id="L49" class="line"><a href="#L49">49</a>     (local_pairs : net.LocalPairs) (opposite_pairs : net.OppositePetals) (cuts : net.FiniteCutsClear) :</span>
+<span id="L50" class="line"><a href="#L50">50</a>     P.HasEdgeUnfolding :=</span>
+<span id="L51" class="line"><a href="#L51">51</a>   net.hasEdgeUnfolding_of_nine_comparisons octahedral (net.remainingNine_of_core local_pairs opposite_pairs cuts)</span>
+<span id="L52" class="line"><a href="#L52">52</a> </span>
+<span id="L53" class="line"><a href="#L53">53</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development</span></pre></html>

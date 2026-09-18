@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Pyramid.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Pyramid.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.PyramidPetal</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.PyramidCertificate</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-!</span>
+<span id="L5" class="line"><a href="#L5">5</a> The complete pyramid case: keep the original polygonal base whole and unfold</span>
+<span id="L6" class="line"><a href="#L6">6</a> every triangular side outward along its original base edge.</span>
+<span id="L7" class="line"><a href="#L7">7</a> -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> namespace SixVertexUnfolding</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-- Every convex pyramid, with any number of base vertices, has an original-edge unfolding. -/</span>
+<span id="L12" class="line"><a href="#L12">12</a> theorem every_convex_pyramid_has_edge_unfolding (P : ConvexPolyhedron) (p : P.Pyramid) :</span>
+<span id="L13" class="line"><a href="#L13">13</a>     P.HasEdgeUnfolding := by</span>
+<span id="L14" class="line"><a href="#L14">14</a>   classical</span>
+<span id="L15" class="line"><a href="#L15">15</a>   obtain ⟨left, left_rigid⟩ := p.base.exists_rigid_placement</span>
+<span id="L16" class="line"><a href="#L16">16</a>   have placements (F : P.Face) : ∃ right : Space →ᵃ[ℝ] Plane,</span>
+<span id="L17" class="line"><a href="#L17">17</a>       (∀ x ∈ F.val, ∀ y ∈ F.val, dist (right x) (right y) = dist x y) ∧</span>
+<span id="L18" class="line"><a href="#L18">18</a>       (∀ x : P.Vertex, (x : Space) ∈ F.val → (x : Space) ∈ p.base.val → right x = left x) ∧</span>
+<span id="L19" class="line"><a href="#L19">19</a>       (F = p.base → right = left) ∧</span>
+<span id="L20" class="line"><a href="#L20">20</a>       (F ≠ p.base → Disjoint (interior (left &#x27;&#x27; p.base.val)) (interior (right &#x27;&#x27; F.val)) ∧</span>
+<span id="L21" class="line"><a href="#L21">21</a>         ∀ x : P.Vertex, (x : Space) ∈ p.base.val → (x : Space) ∉ F.val →</span>
+<span id="L22" class="line"><a href="#L22">22</a>           dist (x : Space) p.apex &lt; dist (left x) (right p.apex)) := by</span>
+<span id="L23" class="line"><a href="#L23">23</a>     by_cases is_base : F = p.base</span>
+<span id="L24" class="line"><a href="#L24">24</a>     · subst F</span>
+<span id="L25" class="line"><a href="#L25">25</a>       exact ⟨left, left_rigid, fun _ _ _ =&gt; rfl, fun _ =&gt; rfl,</span>
+<span id="L26" class="line"><a href="#L26">26</a>         fun impossible =&gt; False.elim (impossible rfl)⟩</span>
+<span id="L27" class="line"><a href="#L27">27</a>     · obtain ⟨right, rigid, joined, safe, farther⟩ := p.exists_petal F is_base left left_rigid</span>
+<span id="L28" class="line"><a href="#L28">28</a>       exact ⟨right, rigid, joined, fun equal =&gt; False.elim (is_base equal), fun _ =&gt; ⟨safe, farther⟩⟩</span>
+<span id="L29" class="line"><a href="#L29">29</a>   choose copy rigid joined fixed_base petals using placements</span>
+<span id="L30" class="line"><a href="#L30">30</a>   have base_copy : copy p.base = left := fixed_base p.base rfl</span>
+<span id="L31" class="line"><a href="#L31">31</a>   apply p.unfolding_of_copies copy rigid</span>
+<span id="L32" class="line"><a href="#L32">32</a>   · intro F x xF xB</span>
+<span id="L33" class="line"><a href="#L33">33</a>     rw [base_copy]</span>
+<span id="L34" class="line"><a href="#L34">34</a>     exact joined F x xF xB</span>
+<span id="L35" class="line"><a href="#L35">35</a>   · intro F side</span>
+<span id="L36" class="line"><a href="#L36">36</a>     rw [base_copy]</span>
+<span id="L37" class="line"><a href="#L37">37</a>     exact (petals F side).1</span>
+<span id="L38" class="line"><a href="#L38">38</a>   · intro F side x xB xF</span>
+<span id="L39" class="line"><a href="#L39">39</a>     rw [base_copy]</span>
+<span id="L40" class="line"><a href="#L40">40</a>     exact (petals F side).2 x xB xF</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> /-- A facet containing all but one original vertex is a pyramid base. -/</span>
+<span id="L43" class="line"><a href="#L43">43</a> theorem has_edge_unfolding_of_large_face (P : ConvexPolyhedron) (base : P.Face)</span>
+<span id="L44" class="line"><a href="#L44">44</a>     (one_missing : (base.val ∩ (P.vertices : Set Space)).ncard + 1 = P.vertices.card) :</span>
+<span id="L45" class="line"><a href="#L45">45</a>     P.HasEdgeUnfolding := by</span>
+<span id="L46" class="line"><a href="#L46">46</a>   obtain ⟨v, vertex, outside⟩ := base.exists_vertex_outside</span>
+<span id="L47" class="line"><a href="#L47">47</a>   have base_vertices : base.val ∩ (P.vertices : Set Space) = (P.vertices : Set Space) \ {v} := by</span>
+<span id="L48" class="line"><a href="#L48">48</a>     apply Set.eq_of_subset_of_ncard_le</span>
+<span id="L49" class="line"><a href="#L49">49</a>     · rintro x ⟨xB, xP⟩</span>
+<span id="L50" class="line"><a href="#L50">50</a>       exact ⟨xP, fun same =&gt; outside (same ▸ xB)⟩</span>
+<span id="L51" class="line"><a href="#L51">51</a>     · rw [Set.ncard_diff_singleton_of_mem vertex, Set.ncard_coe_finset]</span>
+<span id="L52" class="line"><a href="#L52">52</a>       omega</span>
+<span id="L53" class="line"><a href="#L53">53</a>     · exact P.vertices.finite_toSet.diff</span>
+<span id="L54" class="line"><a href="#L54">54</a>   apply every_convex_pyramid_has_edge_unfolding P</span>
+<span id="L55" class="line"><a href="#L55">55</a>   refine {</span>
+<span id="L56" class="line"><a href="#L56">56</a>     base := base</span>
+<span id="L57" class="line"><a href="#L57">57</a>     apex := ⟨v, vertex⟩</span>
+<span id="L58" class="line"><a href="#L58">58</a>     apex_outside := outside</span>
+<span id="L59" class="line"><a href="#L59">59</a>     other_vertices := ?_</span>
+<span id="L60" class="line"><a href="#L60">60</a>   }</span>
+<span id="L61" class="line"><a href="#L61">61</a>   intro x different</span>
+<span id="L62" class="line"><a href="#L62">62</a>   have member : (x : Space) ∈ (P.vertices : Set Space) \ {v} :=</span>
+<span id="L63" class="line"><a href="#L63">63</a>     ⟨x.property, fun same =&gt; different (Subtype.ext same)⟩</span>
+<span id="L64" class="line"><a href="#L64">64</a>   rw [← base_vertices] at member</span>
+<span id="L65" class="line"><a href="#L65">65</a>   exact member.1</span>
+<span id="L66" class="line"><a href="#L66">66</a> </span>
+<span id="L67" class="line"><a href="#L67">67</a> /-- The five-vertex configuration with a quadrilateral facet is completely unfolded. -/</span>
+<span id="L68" class="line"><a href="#L68">68</a> theorem every_five_vertex_polyhedron_with_quadrilateral_face (P : ConvexPolyhedron)</span>
+<span id="L69" class="line"><a href="#L69">69</a>     (five_vertices : P.vertices.card = 5) (base : P.Face)</span>
+<span id="L70" class="line"><a href="#L70">70</a>     (quadrilateral : (base.val ∩ (P.vertices : Set Space)).ncard = 4) :</span>
+<span id="L71" class="line"><a href="#L71">71</a>     P.HasEdgeUnfolding := by</span>
+<span id="L72" class="line"><a href="#L72">72</a>   apply has_edge_unfolding_of_large_face P base</span>
+<span id="L73" class="line"><a href="#L73">73</a>   omega</span>
+<span id="L74" class="line"><a href="#L74">74</a> </span>
+<span id="L75" class="line"><a href="#L75">75</a> /-- The six-vertex configuration with a pentagonal facet is completely unfolded. -/</span>
+<span id="L76" class="line"><a href="#L76">76</a> theorem every_six_vertex_polyhedron_with_pentagonal_face (P : ConvexPolyhedron)</span>
+<span id="L77" class="line"><a href="#L77">77</a>     (six_vertices : P.vertices.card = 6) (base : P.Face)</span>
+<span id="L78" class="line"><a href="#L78">78</a>     (pentagon : (base.val ∩ (P.vertices : Set Space)).ncard = 5) :</span>
+<span id="L79" class="line"><a href="#L79">79</a>     P.HasEdgeUnfolding := by</span>
+<span id="L80" class="line"><a href="#L80">80</a>   apply has_edge_unfolding_of_large_face P base</span>
+<span id="L81" class="line"><a href="#L81">81</a>   omega</span>
+<span id="L82" class="line"><a href="#L82">82</a> </span>
+<span id="L83" class="line"><a href="#L83">83</a> end SixVertexUnfolding</span></pre></html>

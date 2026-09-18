@@ -1,9 +1,16 @@
 {
-  "revision": "868314660f92ce4de8d4f846e1860b9e1945986b",
-  "date": "2026-09-16",
-  "declarations": 56,
-  "theorems": 37,
+  "revision": "89c65cea4e76e08959b07b8123e0b9d62e5ff7e1",
+  "date": "2026-09-18",
+  "declarations": 100,
+  "theorems": 71,
+  "unfinished": [
+    "SixVertexUnfolding.every_convex_polyhedron_with_at_most_six_vertices"
+  ],
   "sources": {
+    "Bipyramid": {
+      "path": "SixVertexUnfolding/Bipyramid.lean",
+      "sha256": "da1041b0a759e39fded3934f03c52535e68281270491fa7d8a712a3201c14eee"
+    },
     "ClosedCutSet": {
       "path": "SixVertexUnfolding/Geometry/ClosedCutSet.lean",
       "sha256": "aa5004ee116f1b60b868629f6b5518e1cdb9d77d46de6821d43e9340d3e43664"
@@ -11,6 +18,10 @@
     "CofacialStarCuts": {
       "path": "SixVertexUnfolding/Geometry/CofacialStarCuts.lean",
       "sha256": "0c7b8aee498bd8445fef847c78a7e5242e9ffcbe55896439f2cecdd8ef998053"
+    },
+    "CofacialStarEmbedding": {
+      "path": "SixVertexUnfolding/Geometry/CofacialStarEmbedding.lean",
+      "sha256": "86defbc1d1d91e26c0545a79f399c28fad39be3b9660a9407bffacb0c253e1d0"
     },
     "CutEdgeMetricModel": {
       "path": "SixVertexUnfolding/Geometry/CutEdgeMetricModel.lean",
@@ -40,6 +51,10 @@
       "path": "SixVertexUnfolding/Definitions.lean",
       "sha256": "68c780075a74cbe7fa8f51dcc3831d2ef1b7da9ee5f39d204f122cbd9dac35ef"
     },
+    "DomeComplete": {
+      "path": "SixVertexUnfolding/Geometry/DomeComplete.lean",
+      "sha256": "7a6defa10700350fc835acc21ac4485bf428bea878e7c4db20b4eda66ad47412"
+    },
     "EmbeddedCutGraph": {
       "path": "SixVertexUnfolding/Geometry/EmbeddedCutGraph.lean",
       "sha256": "e162026d13a73fafa07b92ba1283e580152988d89724f543c274e03d90dfdd51"
@@ -64,13 +79,73 @@
       "path": "SixVertexUnfolding/Geometry/JunctionWedgeStep.lean",
       "sha256": "ab06578dbf02f0f46866e885ed5caa228717f54ae098b6830c1711bc4d40df9c"
     },
+    "MinusEdge": {
+      "path": "SixVertexUnfolding/MinusEdge.lean",
+      "sha256": "45bf80b80f32e1a5a312b49a2cc780afbe0d0c0c5533c4e1ed9030c861ce1300"
+    },
     "MultipleShortestRoutes": {
       "path": "SixVertexUnfolding/Geometry/MultipleShortestRoutes.lean",
       "sha256": "23050b33c9b46baff6b494af80c1c4921bfcd48b7d8e4774f510e00abbaf8df4"
     },
+    "OctahedralAllPairs": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralAllPairs.lean",
+      "sha256": "71bc3fe18387e1caa3481b763d559545fd63d49e7928bf4006f15b2e058f3fd9"
+    },
+    "OctahedralAngles": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralAngles.lean",
+      "sha256": "a67d51a84973fe814e77616a9d81fb7a1ce0d95dccdbe2a42723e63630898105"
+    },
+    "OctahedralCurvature": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralCurvature.lean",
+      "sha256": "87a130f8bdaf42a0231a857ec4b1a3645bcf4100bc63433986a9c9a3cf3a39e2"
+    },
+    "OctahedralFiniteContact": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralFiniteContact.lean",
+      "sha256": "165c2f096a17aa547b8f76d17beb53fe06859422d592c2b99c7e6a39f83d7740"
+    },
+    "OctahedralPairedCaseA": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralPairedCaseA.lean",
+      "sha256": "2933e9d2befa08b697361aca6dfb2f72441f560d043978f1acaf0ee8d1688850"
+    },
+    "OctahedralPocketContradiction": {
+      "path": "SixVertexUnfolding/Geometry/OctahedralPocketContradiction.lean",
+      "sha256": "5fa85732fd01e78477de896cb639833aa04a5c8881f0b091ea98974a3ae07744"
+    },
+    "PairedPoles": {
+      "path": "SixVertexUnfolding/Curvature/PairedPoles.lean",
+      "sha256": "a684f917079f2c4c2847f203f87a44565c1ba40b1270e8cb8438b4f59260ccf6"
+    },
+    "Prism": {
+      "path": "SixVertexUnfolding/Curvature/Prism.lean",
+      "sha256": "deffd9fbab3aca201405a8c57a06cddd96ece3a1dd02ee11698448bb859a3c8c"
+    },
+    "PrismDiagonalRegions": {
+      "path": "SixVertexUnfolding/PrismDiagonalRegions.lean",
+      "sha256": "081ff1494580e126af92e66aaf264f09ceec28a401da986db2805c4a3e11820e"
+    },
+    "Pyramid": {
+      "path": "SixVertexUnfolding/Pyramid.lean",
+      "sha256": "2b2f80772d459279c3683237caae6b0a5494d36ed40d9b38f4ce1bb761c699cd"
+    },
+    "Reduction": {
+      "path": "SixVertexUnfolding/Reduction.lean",
+      "sha256": "68738e14600a5e5d9a63314a9f7118c3437fcfcc3d827126b156eae71aae91fa"
+    },
     "RegularCutTree": {
       "path": "SixVertexUnfolding/Geometry/RegularCutTree.lean",
       "sha256": "324af0598e1fd9e027fdd0518f2c88ab6646df179592ae1e10dcc781f0464907"
+    },
+    "SixVertexFacets": {
+      "path": "SixVertexUnfolding/Geometry/SixVertexFacets.lean",
+      "sha256": "fb62f535b6e10a785b7042bacbc5dbc8a81b795379e3a349ea9108067d237d99"
+    },
+    "SixVertexGraphs": {
+      "path": "SixVertexUnfolding/Geometry/SixVertexGraphs.lean",
+      "sha256": "4317cd118b6c798490cbc45ae5024eefcf56c15dc90dbf6fe39f8f8c228e2f8f"
+    },
+    "SixVertexRemaining": {
+      "path": "SixVertexUnfolding/SixVertexRemaining.lean",
+      "sha256": "38b0a6cbf06171043cf4639b285286b97cd741efe68787c696b9ba607e045b34"
     },
     "SmallPolyhedronCurvature": {
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronCurvature.lean",
@@ -128,6 +203,14 @@
       "path": "SixVertexUnfolding/Geometry/SmallPolyhedronUniqueRouteLeaves.lean",
       "sha256": "2146f8c8425e7f4775ee61eeedf42a65ae73854e2a0ed82d7b84ac7e034a7350"
     },
+    "Statement": {
+      "path": "Statement.lean",
+      "sha256": "31f35e148479ea750e4b8586817e4f162be664c32575240bee279a381e5f86b1"
+    },
+    "SubdivisionCertificate": {
+      "path": "SixVertexUnfolding/Geometry/SubdivisionCertificate.lean",
+      "sha256": "5f35a07c6404fbda8a728fa12d91da560594c95c9bb0f81d983a83433a0ecf49"
+    },
     "UniversalStarEmbedding": {
       "path": "SixVertexUnfolding/Geometry/UniversalStarEmbedding.lean",
       "sha256": "537008d670dde4a286f148a143d8889da78feda4959d26a92d9c50c70e8fc2dc"
@@ -159,6 +242,10 @@
     "WedgeStep": {
       "path": "SixVertexUnfolding/Geometry/WedgeStep.lean",
       "sha256": "4a9a85a9e647c5b636b2749ecae1bc25782a875beec34d85c3fbd04052dd24ce"
+    },
+    "WiderApexCones": {
+      "path": "SixVertexUnfolding/Geometry/WiderApexCones.lean",
+      "sha256": "68d1f026209e0b0a0124d005ec30e5b588a8adf0a239961e29c05136fc7805d0"
     }
   }
 }

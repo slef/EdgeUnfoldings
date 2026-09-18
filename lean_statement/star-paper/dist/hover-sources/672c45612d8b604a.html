@@ -1,0 +1,88 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/PrismDiagonalRegions.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/PrismDiagonalRegions.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.PrismDiagonalSelection</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Larger explicit curvature regions in which a maximum slit is an original edge. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> open OctahedralTriangles</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L10" class="line"><a href="#L10">10</a> variable (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L11" class="line"><a href="#L11">11</a>   (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> include small_faces in</span>
+<span id="L14" class="line"><a href="#L14">14</a> /-- Source 0 works whenever it is the sharper pole and vertex 2 is not the unique equator maximum. -/</span>
+<span id="L15" class="line"><a href="#L15">15</a> theorem hasEdgeUnfolding_of_prismDiagonal_first_region (kind : graph.kind = .prismDiagonal)</span>
+<span id="L16" class="line"><a href="#L16">16</a>     (source_order : graph.curvature 1 ≤ graph.curvature 0)</span>
+<span id="L17" class="line"><a href="#L17">17</a>     (slit_order : graph.curvature 2 ≤ max (graph.curvature 3) (max (graph.curvature 4) (graph.curvature 5))) :</span>
+<span id="L18" class="line"><a href="#L18">18</a>     P.HasEdgeUnfolding := by</span>
+<span id="L19" class="line"><a href="#L19">19</a>   have alternative : ∃ other : Fin 4, other ≠ 0 ∧</span>
+<span id="L20" class="line"><a href="#L20">20</a>       graph.curvature (fanNeighbor 0 0) ≤ graph.curvature (fanNeighbor 0 other) := by</span>
+<span id="L21" class="line"><a href="#L21">21</a>     rcases le_max_iff.mp slit_order with h | h</span>
+<span id="L22" class="line"><a href="#L22">22</a>     · exact ⟨2, by decide, h⟩</span>
+<span id="L23" class="line"><a href="#L23">23</a>     rcases le_max_iff.mp h with h | h</span>
+<span id="L24" class="line"><a href="#L24">24</a>     · exact ⟨1, by decide, h⟩</span>
+<span id="L25" class="line"><a href="#L25">25</a>     · exact ⟨3, by decide, h⟩</span>
+<span id="L26" class="line"><a href="#L26">26</a>   obtain ⟨other, different, comparison⟩ := alternative</span>
+<span id="L27" class="line"><a href="#L27">27</a>   obtain ⟨slit, avoids, maximal⟩ := equator_maximum_avoiding</span>
+<span id="L28" class="line"><a href="#L28">28</a>     (fun i =&gt; graph.curvature (fanNeighbor 0 i)) 0 other different comparison</span>
+<span id="L29" class="line"><a href="#L29">29</a>   apply graph.hasEdgeUnfolding_of_original_cut_selection small_faces 0 slit source_order maximal</span>
+<span id="L30" class="line"><a href="#L30">30</a>   · intro j</span>
+<span id="L31" class="line"><a href="#L31">31</a>     apply (graph.edges _ _).mpr</span>
+<span id="L32" class="line"><a href="#L32">32</a>     rw [kind]</span>
+<span id="L33" class="line"><a href="#L33">33</a>     exact (by decide : ∀ j, SmallGraphs.SixGraphKind.prismDiagonal.adjacent 0 (fanNeighbor 0 j)) j</span>
+<span id="L34" class="line"><a href="#L34">34</a>   · apply (graph.edges _ _).mpr</span>
+<span id="L35" class="line"><a href="#L35">35</a>     rw [kind]</span>
+<span id="L36" class="line"><a href="#L36">36</a>     exact (by decide : ∀ slit : Fin 4, slit ≠ 0 →</span>
+<span id="L37" class="line"><a href="#L37">37</a>       SmallGraphs.SixGraphKind.prismDiagonal.adjacent (opposite 0) (fanNeighbor 0 slit)) slit avoids</span>
+<span id="L38" class="line"><a href="#L38">38</a> </span>
+<span id="L39" class="line"><a href="#L39">39</a> include small_faces in</span>
+<span id="L40" class="line"><a href="#L40">40</a> /-- Source 5 gives the reflected region, with all equality cases included. -/</span>
+<span id="L41" class="line"><a href="#L41">41</a> theorem hasEdgeUnfolding_of_prismDiagonal_last_region (kind : graph.kind = .prismDiagonal)</span>
+<span id="L42" class="line"><a href="#L42">42</a>     (source_order : graph.curvature 4 ≤ graph.curvature 5)</span>
+<span id="L43" class="line"><a href="#L43">43</a>     (slit_order : graph.curvature 3 ≤ max (graph.curvature 0) (max (graph.curvature 1) (graph.curvature 2))) :</span>
+<span id="L44" class="line"><a href="#L44">44</a>     P.HasEdgeUnfolding := by</span>
+<span id="L45" class="line"><a href="#L45">45</a>   have alternative : ∃ other : Fin 4, other ≠ 3 ∧</span>
+<span id="L46" class="line"><a href="#L46">46</a>       graph.curvature (fanNeighbor 5 3) ≤ graph.curvature (fanNeighbor 5 other) := by</span>
+<span id="L47" class="line"><a href="#L47">47</a>     rcases le_max_iff.mp slit_order with h | h</span>
+<span id="L48" class="line"><a href="#L48">48</a>     · exact ⟨0, by decide, h⟩</span>
+<span id="L49" class="line"><a href="#L49">49</a>     rcases le_max_iff.mp h with h | h</span>
+<span id="L50" class="line"><a href="#L50">50</a>     · exact ⟨2, by decide, h⟩</span>
+<span id="L51" class="line"><a href="#L51">51</a>     · exact ⟨1, by decide, h⟩</span>
+<span id="L52" class="line"><a href="#L52">52</a>   obtain ⟨other, different, comparison⟩ := alternative</span>
+<span id="L53" class="line"><a href="#L53">53</a>   obtain ⟨slit, avoids, maximal⟩ := equator_maximum_avoiding</span>
+<span id="L54" class="line"><a href="#L54">54</a>     (fun i =&gt; graph.curvature (fanNeighbor 5 i)) 3 other different comparison</span>
+<span id="L55" class="line"><a href="#L55">55</a>   apply graph.hasEdgeUnfolding_of_original_cut_selection small_faces 5 slit source_order maximal</span>
+<span id="L56" class="line"><a href="#L56">56</a>   · intro j</span>
+<span id="L57" class="line"><a href="#L57">57</a>     apply (graph.edges _ _).mpr</span>
+<span id="L58" class="line"><a href="#L58">58</a>     rw [kind]</span>
+<span id="L59" class="line"><a href="#L59">59</a>     exact (by decide : ∀ j, SmallGraphs.SixGraphKind.prismDiagonal.adjacent 5 (fanNeighbor 5 j)) j</span>
+<span id="L60" class="line"><a href="#L60">60</a>   · apply (graph.edges _ _).mpr</span>
+<span id="L61" class="line"><a href="#L61">61</a>     rw [kind]</span>
+<span id="L62" class="line"><a href="#L62">62</a>     exact (by decide : ∀ slit : Fin 4, slit ≠ 3 →</span>
+<span id="L63" class="line"><a href="#L63">63</a>       SmallGraphs.SixGraphKind.prismDiagonal.adjacent (opposite 5) (fanNeighbor 5 slit)) slit avoids</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> include small_faces in</span>
+<span id="L66" class="line"><a href="#L66">66</a> /-- Outside the completed regions, each eligible source has one strictly forbidden maximum. -/</span>
+<span id="L67" class="line"><a href="#L67">67</a> theorem prismDiagonal_unfolding_or_strict_obstructions (kind : graph.kind = .prismDiagonal) :</span>
+<span id="L68" class="line"><a href="#L68">68</a>     P.HasEdgeUnfolding ∨</span>
+<span id="L69" class="line"><a href="#L69">69</a>       ((graph.curvature 0 &lt; graph.curvature 1 ∨</span>
+<span id="L70" class="line"><a href="#L70">70</a>         max (graph.curvature 3) (max (graph.curvature 4) (graph.curvature 5)) &lt; graph.curvature 2) ∧</span>
+<span id="L71" class="line"><a href="#L71">71</a>        (graph.curvature 5 &lt; graph.curvature 4 ∨</span>
+<span id="L72" class="line"><a href="#L72">72</a>         max (graph.curvature 0) (max (graph.curvature 1) (graph.curvature 2)) &lt; graph.curvature 3)) := by</span>
+<span id="L73" class="line"><a href="#L73">73</a>   by_cases first : graph.curvature 1 ≤ graph.curvature 0 ∧</span>
+<span id="L74" class="line"><a href="#L74">74</a>       graph.curvature 2 ≤ max (graph.curvature 3) (max (graph.curvature 4) (graph.curvature 5))</span>
+<span id="L75" class="line"><a href="#L75">75</a>   · exact Or.inl (graph.hasEdgeUnfolding_of_prismDiagonal_first_region small_faces kind first.1 first.2)</span>
+<span id="L76" class="line"><a href="#L76">76</a>   by_cases last : graph.curvature 4 ≤ graph.curvature 5 ∧</span>
+<span id="L77" class="line"><a href="#L77">77</a>       graph.curvature 3 ≤ max (graph.curvature 0) (max (graph.curvature 1) (graph.curvature 2))</span>
+<span id="L78" class="line"><a href="#L78">78</a>   · exact Or.inl (graph.hasEdgeUnfolding_of_prismDiagonal_last_region small_faces kind last.1 last.2)</span>
+<span id="L79" class="line"><a href="#L79">79</a>   push Not at first last</span>
+<span id="L80" class="line"><a href="#L80">80</a>   refine Or.inr ⟨?_, ?_⟩</span>
+<span id="L81" class="line"><a href="#L81">81</a>   · by_cases h : graph.curvature 1 ≤ graph.curvature 0</span>
+<span id="L82" class="line"><a href="#L82">82</a>     · exact Or.inr (first h)</span>
+<span id="L83" class="line"><a href="#L83">83</a>     · exact Or.inl (lt_of_not_ge h)</span>
+<span id="L84" class="line"><a href="#L84">84</a>   · by_cases h : graph.curvature 4 ≤ graph.curvature 5</span>
+<span id="L85" class="line"><a href="#L85">85</a>     · exact Or.inr (last h)</span>
+<span id="L86" class="line"><a href="#L86">86</a>     · exact Or.inl (lt_of_not_ge h)</span>
+<span id="L87" class="line"><a href="#L87">87</a> </span>
+<span id="L88" class="line"><a href="#L88">88</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span></pre></html>

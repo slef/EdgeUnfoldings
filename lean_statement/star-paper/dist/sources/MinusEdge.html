@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MinusEdge.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../proof.html">← Full proof</a> · <a href="../index.html">Star chapter</a><h1>MinusEdge.lean</h1><p>SixVertexUnfolding/MinusEdge.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding.Geometry.SubdivisionCertificate</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> import SixVertexUnfolding.Geometry.FlatPetalAgreement</span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> </span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> /-! The octahedron-minus-edge case keeps its sole quadrilateral diagonal uncut by choosing poles 4 and 5. -/</span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> </span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> </span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> open OctahedralTriangles OctahedralNet</span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> </span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> set_option maxRecDepth 10000 in</span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a> set_option maxHeartbeats 2000000 in</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a> /-- With these poles, the only repeated carrier is one attached fan-petal pair. -/</span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a> theorem minusEdge_cofacial_indices : ∀ (source : Fin 6), source = 4 ∨ source = 5 →</span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a>     ∀ (slit : Fin 4) (x y : FaceIndex),</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a>       carrier .minusEdge (OctahedralNet.triangle source slit x) = carrier .minusEdge (OctahedralNet.triangle source slit y) →</span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a>         x = y ∨ (∃ i : Fin 4, x = (false, i) ∧ y = (true, i)) ∨</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a>           (∃ i : Fin 4, x = (true, i) ∧ y = (false, i)) := by decide</span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a> </span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a> variable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}</span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a> variable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a>   (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a> </span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a> /-- The two pieces of the quadrilateral use the same placement on the whole original face. -/</span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a> theorem Development.minusEdge_consistent (net : graph.Development small_faces source slit)</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a>     (kind : graph.kind = .minusEdge) (poles : source = 4 ∨ source = 5)</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>     (x y : FaceIndex) (same : graph.netFace small_faces source slit x = graph.netFace small_faces source slit y) :</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>     Set.EqOn (net.place x) (net.place y) (graph.netFace small_faces source slit y).val := by</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a>   have labels := congrArg (fun F : P.Face =&gt; F.vertexLabels graph.vertex) same</span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a>   change (graph.triangleFace small_faces _).vertexLabels graph.vertex =</span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a>     (graph.triangleFace small_faces _).vertexLabels graph.vertex at labels</span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a>   rw [graph.triangleFace_labels, graph.triangleFace_labels, kind] at labels</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a>   rcases minusEdge_cofacial_indices source poles slit x y labels with rfl | ⟨i, rfl, rfl⟩ | ⟨i, rfl, rfl⟩</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>   · exact fun _ _ =&gt; rfl</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a>   · rw [← same]</span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a>     exact net.flat_petal_agreement i same</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a>   · exact (net.flat_petal_agreement i same.symm).symm</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a> </span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a> /-- Every convex solid with this original graph has an original-edge unfolding with its quadrilateral kept whole. -/</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a> theorem hasEdgeUnfolding_of_minusEdge (graph : P.SixVertexGraph)</span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a>     (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a>       (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a>     (kind : graph.kind = .minusEdge) : P.HasEdgeUnfolding := by</span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a>   obtain ⟨source, endpoints, source_order⟩ := graph.exists_sharper_pole 4</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a>   have poles : source = 4 ∨ source = 5 := by</span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a>     simpa only [show opposite 4 = 5 from rfl] using endpoints</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a>   obtain ⟨slit, maximal, _, _⟩ := graph.exists_curvature_slit small_faces source</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a>   obtain ⟨net⟩ := graph.exists_development small_faces source slit</span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a>   exact net.hasEdgeUnfolding_of_consistent_subdivision source_order maximal (net.minusEdge_consistent kind poles)</span>
+<span id="L49" class="line"><a href="#L49" aria-label="Line 49">49</a> </span>
+<span id="L50" class="line"><a href="#L50" aria-label="Line 50">50</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span>
+</pre></html>

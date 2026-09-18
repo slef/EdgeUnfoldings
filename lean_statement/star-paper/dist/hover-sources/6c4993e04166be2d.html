@@ -1,0 +1,99 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/OctahedralDevelopment.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/OctahedralDevelopment.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.OctahedralFanDevelopment</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.OctahedralPetalPlacement</span>
+<span id="L3" class="line"><a href="#L3">3</a> </span>
+<span id="L4" class="line"><a href="#L4">4</a> /-! One coherent four-triangle fan with its four outward petals, at any source and slit. -/</span>
+<span id="L5" class="line"><a href="#L5">5</a> </span>
+<span id="L6" class="line"><a href="#L6">6</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> open OctahedralTriangles</span>
+<span id="L9" class="line"><a href="#L9">9</a> </span>
+<span id="L10" class="line"><a href="#L10">10</a> variable {P : ConvexPolyhedron} (graph : P.SixVertexGraph)</span>
+<span id="L11" class="line"><a href="#L11">11</a> variable (small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L12" class="line"><a href="#L12">12</a>   (F.val ∩ (P.vertices : Set Space)).ncard = 4)</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> /-- The eight developed triangles share the chosen fan opening and four outward equator hinges.</span>
+<span id="L15" class="line"><a href="#L15">15</a> Whole-facet consistency across auxiliary hinges is a later reassembly obligation. -/</span>
+<span id="L16" class="line"><a href="#L16">16</a> structure Development (source : Fin 6) (slit : Fin 4) where</span>
+<span id="L17" class="line"><a href="#L17">17</a>   fan : graph.FanDevelopment small_faces (opposite source) slit</span>
+<span id="L18" class="line"><a href="#L18">18</a>   patch : ∀ i : Fin 4, graph.DevelopedPatch source (slit + i)</span>
+<span id="L19" class="line"><a href="#L19">19</a>   patch_pole : ∀ i, (patch i).pole = 0</span>
+<span id="L20" class="line"><a href="#L20">20</a>   patch_left : ∀ i, (patch i).left = graph.openingPoint (opposite source) slit i.castSucc</span>
+<span id="L21" class="line"><a href="#L21">21</a>   patch_right : ∀ i, (patch i).right = graph.openingPoint (opposite source) slit i.succ</span>
+<span id="L22" class="line"><a href="#L22">22</a>   petal : Fin 4 → Space →ᵃ[ℝ] Plane</span>
+<span id="L23" class="line"><a href="#L23">23</a>   petal_left : ∀ i, petal i (graph.vertex (fanNeighbor source (slit + i))) = (patch i).left</span>
+<span id="L24" class="line"><a href="#L24">24</a>   petal_right : ∀ i, petal i (graph.vertex (fanNeighbor source ((slit + i) + 1))) = (patch i).right</span>
+<span id="L25" class="line"><a href="#L25">25</a>   petal_apex : ∀ i, petal i (graph.vertex source) = (patch i).apex</span>
+<span id="L26" class="line"><a href="#L26">26</a>   petal_rigid : ∀ i, ∀ x ∈ (graph.triangleFace small_faces (fanTriangle source (slit + i))).val,</span>
+<span id="L27" class="line"><a href="#L27">27</a>     ∀ y ∈ (graph.triangleFace small_faces (fanTriangle source (slit + i))).val,</span>
+<span id="L28" class="line"><a href="#L28">28</a>       dist (petal i x) (petal i y) = dist x y</span>
+<span id="L29" class="line"><a href="#L29">29</a> </span>
+<span id="L30" class="line"><a href="#L30">30</a> /-- Every source and every slit admit this simultaneous outward development. -/</span>
+<span id="L31" class="line"><a href="#L31">31</a> theorem exists_development (source : Fin 6) (slit : Fin 4) : Nonempty (graph.Development small_faces source slit) := by</span>
+<span id="L32" class="line"><a href="#L32">32</a>   classical</span>
+<span id="L33" class="line"><a href="#L33">33</a>   obtain ⟨fan⟩ := graph.exists_fan_development small_faces (opposite source) slit</span>
+<span id="L34" class="line"><a href="#L34">34</a>   have patches : ∀ i : Fin 4, ∃ patch : graph.DevelopedPatch source (slit + i),</span>
+<span id="L35" class="line"><a href="#L35">35</a>       patch.pole = 0 ∧ patch.left = graph.openingPoint (opposite source) slit i.castSucc ∧</span>
+<span id="L36" class="line"><a href="#L36">36</a>       patch.right = graph.openingPoint (opposite source) slit i.succ := by</span>
+<span id="L37" class="line"><a href="#L37">37</a>     intro i</span>
+<span id="L38" class="line"><a href="#L38">38</a>     obtain ⟨patch, pole, left, right⟩ := graph.exists_patch_of_fan_placement small_faces source (slit + i)</span>
+<span id="L39" class="line"><a href="#L39">39</a>       (fan.place i) (fan.rigid i)</span>
+<span id="L40" class="line"><a href="#L40">40</a>     have paired : ∀ s j, fanNeighbor (opposite s) j = fanNeighbor s j := by decide</span>
+<span id="L41" class="line"><a href="#L41">41</a>     refine ⟨patch, ?_, ?_, ?_⟩</span>
+<span id="L42" class="line"><a href="#L42">42</a>     · rw [pole, fan.at_pole]</span>
+<span id="L43" class="line"><a href="#L43">43</a>     · rw [left, ← paired source (slit + i), fan.at_left]</span>
+<span id="L44" class="line"><a href="#L44">44</a>     · rw [right, ← paired source ((slit + i) + 1), fan.at_right]</span>
+<span id="L45" class="line"><a href="#L45">45</a>   choose patch patch_pole patch_left patch_right using patches</span>
+<span id="L46" class="line"><a href="#L46">46</a>   choose petal petal_left petal_right petal_apex petal_rigid using</span>
+<span id="L47" class="line"><a href="#L47">47</a>     fun i =&gt; (patch i).exists_petal_placement small_faces</span>
+<span id="L48" class="line"><a href="#L48">48</a>   exact ⟨⟨fan, patch, patch_pole, patch_left, patch_right, petal, petal_left, petal_right, petal_apex, petal_rigid⟩⟩</span>
+<span id="L49" class="line"><a href="#L49">49</a> </span>
+<span id="L50" class="line"><a href="#L50">50</a> namespace Development</span>
+<span id="L51" class="line"><a href="#L51">51</a> </span>
+<span id="L52" class="line"><a href="#L52">52</a> variable {graph small_faces} {source : Fin 6} {slit : Fin 4}</span>
+<span id="L53" class="line"><a href="#L53">53</a> variable (net : graph.Development small_faces source slit)</span>
+<span id="L54" class="line"><a href="#L54">54</a> </span>
+<span id="L55" class="line"><a href="#L55">55</a> /-- The actual fan triangle has the three corners recorded by its patch. -/</span>
+<span id="L56" class="line"><a href="#L56">56</a> theorem fan_triangle (i : Fin 4) :</span>
+<span id="L57" class="line"><a href="#L57">57</a>     net.fan.place i &#x27;&#x27; graph.triangle (fanTriangle (opposite source) (slit + i)) =</span>
+<span id="L58" class="line"><a href="#L58">58</a>       convexHull ℝ ({(net.patch i).pole, (net.patch i).left, (net.patch i).right} : Set Plane) := by</span>
+<span id="L59" class="line"><a href="#L59">59</a>   rw [net.fan.placed_triangle, net.patch_pole, net.patch_left, net.patch_right]</span>
+<span id="L60" class="line"><a href="#L60">60</a>   rfl</span>
+<span id="L61" class="line"><a href="#L61">61</a> </span>
+<span id="L62" class="line"><a href="#L62">62</a> /-- The actual petal has exactly its copied apex and the two common hinge endpoints. -/</span>
+<span id="L63" class="line"><a href="#L63">63</a> theorem petal_triangle (i : Fin 4) :</span>
+<span id="L64" class="line"><a href="#L64">64</a>     net.petal i &#x27;&#x27; graph.triangle (fanTriangle source (slit + i)) =</span>
+<span id="L65" class="line"><a href="#L65">65</a>       convexHull ℝ ({(net.patch i).apex, (net.patch i).left, (net.patch i).right} : Set Plane) := by</span>
+<span id="L66" class="line"><a href="#L66">66</a>   rw [triangle, fanTriangle_vertices, graph.labeledHull_triple, (net.petal i).image_convexHull,</span>
+<span id="L67" class="line"><a href="#L67">67</a>     Set.image_insert_eq, Set.image_insert_eq, Set.image_singleton,</span>
+<span id="L68" class="line"><a href="#L68">68</a>     net.petal_apex, net.petal_left, net.petal_right]</span>
+<span id="L69" class="line"><a href="#L69">69</a> </span>
+<span id="L70" class="line"><a href="#L70">70</a> /-- Every petal is disjoint in interior from the fan triangle carrying it. -/</span>
+<span id="L71" class="line"><a href="#L71">71</a> theorem attached_pair_nonoverlap (i : Fin 4) :</span>
+<span id="L72" class="line"><a href="#L72">72</a>     Disjoint (interior (net.fan.place i &#x27;&#x27; graph.triangle (fanTriangle (opposite source) (slit + i))))</span>
+<span id="L73" class="line"><a href="#L73">73</a>       (interior (net.petal i &#x27;&#x27; graph.triangle (fanTriangle source (slit + i)))) := by</span>
+<span id="L74" class="line"><a href="#L74">74</a>   rw [net.fan_triangle, net.petal_triangle]</span>
+<span id="L75" class="line"><a href="#L75">75</a>   have reorder (x a b : Plane) : ({x, a, b} : Set Plane) = {a, b, x} := by</span>
+<span id="L76" class="line"><a href="#L76">76</a>     ext z</span>
+<span id="L77" class="line"><a href="#L77">77</a>     simp only [Set.mem_insert_iff, Set.mem_singleton_iff]</span>
+<span id="L78" class="line"><a href="#L78">78</a>     tauto</span>
+<span id="L79" class="line"><a href="#L79">79</a>   rw [reorder (net.patch i).pole, reorder (net.patch i).apex]</span>
+<span id="L80" class="line"><a href="#L80">80</a>   exact opposite_triangles_disjoint _ _ _ _ (net.patch i).fan_noncollinear (net.patch i).outward</span>
+<span id="L81" class="line"><a href="#L81">81</a> </span>
+<span id="L82" class="line"><a href="#L82">82</a> /-- The petal and its fan triangle agree on the entire equator hinge. -/</span>
+<span id="L83" class="line"><a href="#L83">83</a> theorem petal_joined (i : Fin 4) :</span>
+<span id="L84" class="line"><a href="#L84">84</a>     ∀ x ∈ segment ℝ (graph.vertex (fanNeighbor source (slit + i)) : Space)</span>
+<span id="L85" class="line"><a href="#L85">85</a>       (graph.vertex (fanNeighbor source ((slit + i) + 1))), net.fan.place i x = net.petal i x := by</span>
+<span id="L86" class="line"><a href="#L86">86</a>   have paired : ∀ s j, fanNeighbor (opposite s) j = fanNeighbor s j := by decide</span>
+<span id="L87" class="line"><a href="#L87">87</a>   have agree : Set.EqOn (net.fan.place i) (net.petal i)</span>
+<span id="L88" class="line"><a href="#L88">88</a>       ({(graph.vertex (fanNeighbor source (slit + i)) : Space),</span>
+<span id="L89" class="line"><a href="#L89">89</a>         (graph.vertex (fanNeighbor source ((slit + i) + 1)) : Space)} : Set Space) := by</span>
+<span id="L90" class="line"><a href="#L90">90</a>     rintro x (rfl | rfl)</span>
+<span id="L91" class="line"><a href="#L91">91</a>     · rw [net.petal_left, net.patch_left, ← paired source (slit + i), net.fan.at_left]</span>
+<span id="L92" class="line"><a href="#L92">92</a>     · rw [net.petal_right, net.patch_right, ← paired source ((slit + i) + 1), net.fan.at_right]</span>
+<span id="L93" class="line"><a href="#L93">93</a>   intro x member</span>
+<span id="L94" class="line"><a href="#L94">94</a>   apply AffineMap.eqOn_affineSpan agree</span>
+<span id="L95" class="line"><a href="#L95">95</a>   rw [← convexHull_pair] at member</span>
+<span id="L96" class="line"><a href="#L96">96</a>   exact convexHull_subset_affineSpan _ member</span>
+<span id="L97" class="line"><a href="#L97">97</a> </span>
+<span id="L98" class="line"><a href="#L98">98</a> end Development</span>
+<span id="L99" class="line"><a href="#L99">99</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph</span></pre></html>

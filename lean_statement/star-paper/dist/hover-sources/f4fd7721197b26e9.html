@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/DomeDevelopment.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/DomeDevelopment.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.PolygonPetal</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! A face-star development of a dome, with whole facets and all base-petal comparisons proved. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> /-- A dome has one original base facet adjacent to every other facet. -/</span>
+<span id="L8" class="line"><a href="#L8">8</a> structure Dome (P : ConvexPolyhedron) where</span>
+<span id="L9" class="line"><a href="#L9">9</a>   base : P.Face</span>
+<span id="L10" class="line"><a href="#L10">10</a>   side_shares_base : ∀ F : P.Face, F ≠ base → P.ShareEdge base F</span>
+<span id="L11" class="line"><a href="#L11">11</a> </span>
+<span id="L12" class="line"><a href="#L12">12</a> namespace Dome</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> variable {P : ConvexPolyhedron} (dome : P.Dome)</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> /-- The original hinges around the base contain a tree on all whole facets. -/</span>
+<span id="L17" class="line"><a href="#L17">17</a> theorem exists_face_star :</span>
+<span id="L18" class="line"><a href="#L18">18</a>     ∃ hinges : SimpleGraph P.Face, hinges.IsTree ∧ hinges ≤ P.dualGraph ∧</span>
+<span id="L19" class="line"><a href="#L19">19</a>       ∀ F G, hinges.Adj F G → F = dome.base ∨ G = dome.base := by</span>
+<span id="L20" class="line"><a href="#L20">20</a>   let star : SimpleGraph P.Face := {</span>
+<span id="L21" class="line"><a href="#L21">21</a>     Adj := fun F G =&gt; F ≠ G ∧ (F = dome.base ∨ G = dome.base)</span>
+<span id="L22" class="line"><a href="#L22">22</a>     symm := fun _ _ h =&gt; ⟨h.1.symm, h.2.symm⟩</span>
+<span id="L23" class="line"><a href="#L23">23</a>     loopless := ⟨fun _ h =&gt; h.1 rfl⟩ }</span>
+<span id="L24" class="line"><a href="#L24">24</a>   have connected : star.Connected := by</span>
+<span id="L25" class="line"><a href="#L25">25</a>     rw [SimpleGraph.connected_iff_exists_forall_reachable]</span>
+<span id="L26" class="line"><a href="#L26">26</a>     refine ⟨dome.base, ?_⟩</span>
+<span id="L27" class="line"><a href="#L27">27</a>     intro F</span>
+<span id="L28" class="line"><a href="#L28">28</a>     by_cases same : dome.base = F</span>
+<span id="L29" class="line"><a href="#L29">29</a>     · subst F</span>
+<span id="L30" class="line"><a href="#L30">30</a>       exact SimpleGraph.Reachable.rfl</span>
+<span id="L31" class="line"><a href="#L31">31</a>     · exact (show star.Adj dome.base F from ⟨same, Or.inl rfl⟩).reachable</span>
+<span id="L32" class="line"><a href="#L32">32</a>   obtain ⟨hinges, inside_star, tree⟩ := connected.exists_isTree_le</span>
+<span id="L33" class="line"><a href="#L33">33</a>   refine ⟨hinges, tree, ?_, fun _ _ edge =&gt; (inside_star edge).2⟩</span>
+<span id="L34" class="line"><a href="#L34">34</a>   intro F G edge</span>
+<span id="L35" class="line"><a href="#L35">35</a>   obtain ⟨different, at_base⟩ := inside_star edge</span>
+<span id="L36" class="line"><a href="#L36">36</a>   rcases at_base with rfl | rfl</span>
+<span id="L37" class="line"><a href="#L37">37</a>   · exact dome.side_shares_base G different.symm</span>
+<span id="L38" class="line"><a href="#L38">38</a>   · exact dome.base.shareEdge_symm F (dome.side_shares_base F different)</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> /-- Intermediate construction: the base is separated from every attached whole facet. -/</span>
+<span id="L41" class="line"><a href="#L41">41</a> structure Development where</span>
+<span id="L42" class="line"><a href="#L42">42</a>   place : P.Face → Space →ᵃ[ℝ] Plane</span>
+<span id="L43" class="line"><a href="#L43">43</a>   rigid : ∀ F, ∀ x ∈ F.val, ∀ y ∈ F.val, dist (place F x) (place F y) = dist x y</span>
+<span id="L44" class="line"><a href="#L44">44</a>   joined : ∀ F, Set.EqOn (place dome.base) (place F) (dome.base.val ∩ F.val)</span>
+<span id="L45" class="line"><a href="#L45">45</a>   base_safe : ∀ F, F ≠ dome.base →</span>
+<span id="L46" class="line"><a href="#L46">46</a>     Disjoint (interior (place dome.base &#x27;&#x27; dome.base.val)) (interior (place F &#x27;&#x27; F.val))</span>
+<span id="L47" class="line"><a href="#L47">47</a>   farther : ∀ F, F ≠ dome.base → ∀ x y : P.Vertex,</span>
+<span id="L48" class="line"><a href="#L48">48</a>     (x : Space) ∈ dome.base.val → (x : Space) ∉ F.val →</span>
+<span id="L49" class="line"><a href="#L49">49</a>     (y : Space) ∈ F.val → (y : Space) ∉ dome.base.val →</span>
+<span id="L50" class="line"><a href="#L50">50</a>     dist (x : Space) y &lt; dist (place dome.base x) (place F y)</span>
+<span id="L51" class="line"><a href="#L51">51</a>   outward : ∀ F, F ≠ dome.base →</span>
+<span id="L52" class="line"><a href="#L52">52</a>     ∀ a ∈ (dome.base.val ∩ F.val) ∩ (P.vertices : Set Space),</span>
+<span id="L53" class="line"><a href="#L53">53</a>     ∀ b ∈ (dome.base.val ∩ F.val) ∩ (P.vertices : Set Space), a ≠ b →</span>
+<span id="L54" class="line"><a href="#L54">54</a>     ∀ x ∈ dome.base.val, ∀ y ∈ F.val,</span>
+<span id="L55" class="line"><a href="#L55">55</a>       OppositeHingeSides (place dome.base a) (place dome.base b) (place dome.base x) (place F y)</span>
+<span id="L56" class="line"><a href="#L56">56</a> </span>
+<span id="L57" class="line"><a href="#L57">57</a> /-- Construct all outward polygonal attachments with no assumptions about their mutual separation. -/</span>
+<span id="L58" class="line"><a href="#L58">58</a> theorem exists_development : Nonempty dome.Development := by</span>
+<span id="L59" class="line"><a href="#L59">59</a>   classical</span>
+<span id="L60" class="line"><a href="#L60">60</a>   obtain ⟨base_place, base_rigid⟩ := dome.base.exists_rigid_placement</span>
+<span id="L61" class="line"><a href="#L61">61</a>   have attachments (F : {F : P.Face // F ≠ dome.base}) :=</span>
+<span id="L62" class="line"><a href="#L62">62</a>     dome.base.exists_polygon_petal F.val (dome.side_shares_base F.val F.property) base_place base_rigid</span>
+<span id="L63" class="line"><a href="#L63">63</a>   choose side rigid joined base_safe farther outward using attachments</span>
+<span id="L64" class="line"><a href="#L64">64</a>   let place (F : P.Face) : Space →ᵃ[ℝ] Plane :=</span>
+<span id="L65" class="line"><a href="#L65">65</a>     if h : F = dome.base then base_place else side ⟨F, h⟩</span>
+<span id="L66" class="line"><a href="#L66">66</a>   have at_base : place dome.base = base_place := by simp [place]</span>
+<span id="L67" class="line"><a href="#L67">67</a>   have at_side (F : P.Face) (h : F ≠ dome.base) : place F = side ⟨F, h⟩ := by simp [place, h]</span>
+<span id="L68" class="line"><a href="#L68">68</a>   refine ⟨⟨place, ?_, ?_, ?_, ?_, ?_⟩⟩</span>
+<span id="L69" class="line"><a href="#L69">69</a>   · intro F</span>
+<span id="L70" class="line"><a href="#L70">70</a>     by_cases h : F = dome.base</span>
+<span id="L71" class="line"><a href="#L71">71</a>     · subst F</span>
+<span id="L72" class="line"><a href="#L72">72</a>       rw [at_base]</span>
+<span id="L73" class="line"><a href="#L73">73</a>       exact base_rigid</span>
+<span id="L74" class="line"><a href="#L74">74</a>     · rw [at_side F h]</span>
+<span id="L75" class="line"><a href="#L75">75</a>       exact rigid ⟨F, h⟩</span>
+<span id="L76" class="line"><a href="#L76">76</a>   · intro F</span>
+<span id="L77" class="line"><a href="#L77">77</a>     by_cases h : F = dome.base</span>
+<span id="L78" class="line"><a href="#L78">78</a>     · subst F</span>
+<span id="L79" class="line"><a href="#L79">79</a>       exact fun _ _ =&gt; rfl</span>
+<span id="L80" class="line"><a href="#L80">80</a>     · rw [at_base, at_side F h]</span>
+<span id="L81" class="line"><a href="#L81">81</a>       exact joined ⟨F, h⟩</span>
+<span id="L82" class="line"><a href="#L82">82</a>   · intro F h</span>
+<span id="L83" class="line"><a href="#L83">83</a>     rw [at_base, at_side F h]</span>
+<span id="L84" class="line"><a href="#L84">84</a>     exact base_safe ⟨F, h⟩</span>
+<span id="L85" class="line"><a href="#L85">85</a>   · intro F h</span>
+<span id="L86" class="line"><a href="#L86">86</a>     rw [at_base, at_side F h]</span>
+<span id="L87" class="line"><a href="#L87">87</a>     exact farther ⟨F, h⟩</span>
+<span id="L88" class="line"><a href="#L88">88</a>   · intro F h</span>
+<span id="L89" class="line"><a href="#L89">89</a>     rw [at_base, at_side F h]</span>
+<span id="L90" class="line"><a href="#L90">90</a>     exact outward ⟨F, h⟩</span>
+<span id="L91" class="line"><a href="#L91">91</a> </span>
+<span id="L92" class="line"><a href="#L92">92</a> /-- After the remaining petal-pair comparisons, the development is a public original-edge unfolding. -/</span>
+<span id="L93" class="line"><a href="#L93">93</a> theorem Development.hasEdgeUnfolding (net : dome.Development)</span>
+<span id="L94" class="line"><a href="#L94">94</a>     (petals_safe : ∀ F G : P.Face, F ≠ dome.base → G ≠ dome.base → F ≠ G →</span>
+<span id="L95" class="line"><a href="#L95">95</a>       Disjoint (interior (net.place F &#x27;&#x27; F.val)) (interior (net.place G &#x27;&#x27; G.val))) :</span>
+<span id="L96" class="line"><a href="#L96">96</a>     P.HasEdgeUnfolding := by</span>
+<span id="L97" class="line"><a href="#L97">97</a>   obtain ⟨hinges, tree, original, star⟩ := dome.exists_face_star</span>
+<span id="L98" class="line"><a href="#L98">98</a>   refine ⟨⟨fun F =&gt; net.place F, hinges, tree, fun _ _ edge =&gt; original edge, net.rigid, ?_, ?_⟩⟩</span>
+<span id="L99" class="line"><a href="#L99">99</a>   · intro F G edge x hx</span>
+<span id="L100" class="line"><a href="#L100">100</a>     rcases star F G edge with rfl | rfl</span>
+<span id="L101" class="line"><a href="#L101">101</a>     · exact net.joined G hx</span>
+<span id="L102" class="line"><a href="#L102">102</a>     · exact (net.joined F ⟨hx.2, hx.1⟩).symm</span>
+<span id="L103" class="line"><a href="#L103">103</a>   · intro F G different</span>
+<span id="L104" class="line"><a href="#L104">104</a>     by_cases fbase : F = dome.base</span>
+<span id="L105" class="line"><a href="#L105">105</a>     · subst F</span>
+<span id="L106" class="line"><a href="#L106">106</a>       exact net.base_safe G different.symm</span>
+<span id="L107" class="line"><a href="#L107">107</a>     by_cases gbase : G = dome.base</span>
+<span id="L108" class="line"><a href="#L108">108</a>     · subst G</span>
+<span id="L109" class="line"><a href="#L109">109</a>       exact (net.base_safe F different).symm</span>
+<span id="L110" class="line"><a href="#L110">110</a>     exact petals_safe F G fbase gbase different</span>
+<span id="L111" class="line"><a href="#L111">111</a> </span>
+<span id="L112" class="line"><a href="#L112">112</a> end Dome</span>
+<span id="L113" class="line"><a href="#L113">113</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

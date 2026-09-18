@@ -1,0 +1,31 @@
+.full-proof .paper-header{padding-bottom:1.3rem;margin-bottom:1.4rem}
+.full-proof h1{font-size:clamp(2.15rem,3.3vw,3rem);max-width:19ch}
+.overview-subtitle{font-size:1rem;color:var(--muted);margin:0}
+.overview-status{border-left:3px solid #ae6b21;background:#fff6e8;padding:.9rem 1.15rem;margin-bottom:1.7rem;font-size:1rem}
+.overview-status p{margin:.35rem 0 0;line-height:1.55}
+.overview h2{font:600 1.4rem/1.4 Georgia,serif;margin:1rem 0 .45rem}
+.overview-intro{font-size:.95rem;color:var(--muted);margin:0 0 1rem}
+.table-scroll{overflow-x:auto;max-width:100%;margin:1.2rem 0}
+.proof-table{width:100%;border-collapse:collapse;font-size:.925rem;text-align:left}
+.proof-table th,.proof-table td{padding:.7rem .7rem;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5}
+.proof-table thead th{font-weight:600;color:var(--muted);font-size:.875rem;border-bottom:2px solid #b5c7d5}
+.proof-table th:first-child,.proof-table td:first-child{padding-left:0}
+.proof-table tbody th{font-weight:550}
+.case-table td:last-child{color:var(--muted);font-size:.875rem}
+.case-table tr:last-child{background:#fff9ef}
+.case-table tr:last-child th{padding-left:.7rem}
+.contents{padding:.8rem 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.contents>summary{color:var(--blue);font-weight:550}
+.contents ol{padding-left:1.5rem;columns:2;column-gap:2.5rem}
+.contents li{padding:.25rem 0;break-inside:avoid}
+.full-proof .passage{margin:1.8rem 0 2.2rem}
+.full-proof .passage h3{font:600 1.2rem/1.4 Georgia,serif;margin:.8rem 0}
+.full-proof .paper-text+.paper-text{margin-top:.8rem}
+.full-proof .paper-text.formula-row{overflow-x:auto;padding:.6rem 0;max-width:100%;font-size:1rem}
+.chapter-links{font-size:.925rem;margin:.9rem 0}
+.route-note{color:#31566e}
+.declaration[data-proof-status="unfinished"]{border-color:#b77b37}
+.declaration[data-proof-status="unfinished"] .declaration-meta{color:#87450a;font-weight:600}
+.full-proof .editorial code{overflow-wrap:anywhere}
+@media(max-width:650px){.case-table td:last-child{display:none}.case-table thead th:last-child{display:none}.proof-table{font-size:.9rem}.proof-table th,.proof-table td{padding:.65rem .4rem}.contents ol{columns:1}.full-proof h1{max-width:none}.full-proof .paper-text.formula-row{font-size:.925rem}}
+@media print{.overview-status{background:none}.contents{display:none}.case-table a{text-decoration:none}.full-proof .passage{break-inside:auto}.full-proof .formula-row{overflow:visible}}

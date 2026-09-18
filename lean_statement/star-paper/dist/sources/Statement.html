@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Statement.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../proof.html">← Full proof</a> · <a href="../index.html">Star chapter</a><h1>Statement.lean</h1><p>Statement.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import SixVertexUnfolding</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> </span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> namespace SixVertexUnfolding</span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> </span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> -- The original target, with its definitions unchanged in Definitions.lean.</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> -- The universal-source star case is proved; only the prism with a diagonal remains.</span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> -- See README.md for the proved dependencies. This is the only project sorry.</span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> theorem every_convex_polyhedron_with_at_most_six_vertices</span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a>     (P : ConvexPolyhedron) (at_most_six : P.vertices.card ≤ 6) :</span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a>     P.HasEdgeUnfolding := by</span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a>   rcases unfolding_or_universal_or_prismDiagonal P at_most_six with unfolded | remaining</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a>   · exact unfolded</span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a>   · rcases remaining with ⟨six, small_faces, universal | ⟨graph, kind⟩⟩</span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a>     · obtain ⟨source, universal⟩ := universal</span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a>       exact ConvexPolyhedron.universal_star_has_edge_unfolding six small_faces source universal</span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a>     · sorry</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a> </span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a> end SixVertexUnfolding</span>
+</pre></html>

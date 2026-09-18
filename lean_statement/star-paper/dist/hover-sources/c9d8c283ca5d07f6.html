@@ -1,0 +1,71 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/OctahedralPocketContradiction.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/OctahedralPocketContradiction.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.OctahedralPocketOrientation</span>
+<span id="L2" class="line"><a href="#L2">2</a> import SixVertexUnfolding.Geometry.OctahedralPocketAngleIdentities</span>
+<span id="L3" class="line"><a href="#L3">3</a> import SixVertexUnfolding.Geometry.OctahedralPocketBudget</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> /-! A small-fan overlap would require more angle at the omitted petal apex than its curvature budget allows. -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> namespace SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> open Real OctahedralTriangles</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> variable {P : ConvexPolyhedron} {graph : P.SixVertexGraph}</span>
+<span id="L12" class="line"><a href="#L12">12</a> variable {small_faces : ∀ F : P.Face, (F.val ∩ (P.vertices : Set Space)).ncard = 3 ∨</span>
+<span id="L13" class="line"><a href="#L13">13</a>   (F.val ∩ (P.vertices : Set Space)).ncard = 4} {source : Fin 6} {slit : Fin 4}</span>
+<span id="L14" class="line"><a href="#L14">14</a> variable (net : graph.Development small_faces source slit)</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> /-- The last pair of opposite petals cannot overlap in the small-fan case. -/</span>
+<span id="L17" class="line"><a href="#L17">17</a> theorem last_opposite_petals_of_small_fan</span>
+<span id="L18" class="line"><a href="#L18">18</a>     (source_order : graph.curvature (opposite source) ≤ graph.curvature source)</span>
+<span id="L19" class="line"><a href="#L19">19</a>     (maximal : ∀ i, graph.curvature (fanNeighbor source i) ≤ graph.curvature (fanNeighbor source slit))</span>
+<span id="L20" class="line"><a href="#L20">20</a>     (small : net.leftFanCorner 1 + net.rightFanCorner 1 &lt; π) : net.Separated (true, 1) (true, 3) := by</span>
+<span id="L21" class="line"><a href="#L21">21</a>   by_contra overlap</span>
+<span id="L22" class="line"><a href="#L22">22</a>   obtain ⟨p, left, right, boundary, diagonal⟩ := net.exists_last_pocket_diagonal source_order maximal overlap</span>
+<span id="L23" class="line"><a href="#L23">23</a>   have orientation := net.last_pocket_clockwise source_order maximal small p</span>
+<span id="L24" class="line"><a href="#L24">24</a>     (interior_subset left) (interior_subset right) boundary diagonal</span>
+<span id="L25" class="line"><a href="#L25">25</a>   have total := clockwise_quadrilateral_angle_sum (net.patch 1).left p (net.patch 3).right 0 orientation</span>
+<span id="L26" class="line"><a href="#L26">26</a>   have contact := clockwise_quadrilateral_contact_pos (net.patch 1).left p (net.patch 3).right 0 orientation</span>
+<span id="L27" class="line"><a href="#L27">27</a>   have distinct := boundary.corners_distinct</span>
+<span id="L28" class="line"><a href="#L28">28</a>   have at_left := net.petal_left_exterior_corner 1 p (interior_subset left) distinct.1.symm</span>
+<span id="L29" class="line"><a href="#L29">29</a>   have at_right := net.petal_right_exterior_corner 3 p (interior_subset right) distinct.2.2.2.1</span>
+<span id="L30" class="line"><a href="#L30">30</a>   have at_pole := net.last_pocket_pole_corner</span>
+<span id="L31" class="line"><a href="#L31">31</a>   have junction := net.junction_corner_sum 0</span>
+<span id="L32" class="line"><a href="#L32">32</a>   change (net.patch 0).rightCorner + (net.patch 1).leftCorner =</span>
+<span id="L33" class="line"><a href="#L33">33</a>     graph.totalAngleAt (fanNeighbor source ((slit + 0) + 1)) at junction</span>
+<span id="L34" class="line"><a href="#L34">34</a>   simp only [add_zero] at junction</span>
+<span id="L35" class="line"><a href="#L35">35</a>   have slit_sum := net.slit_corner_sum</span>
+<span id="L36" class="line"><a href="#L36">36</a>   have patch_sum := net.patch_corner_angle_sum 0</span>
+<span id="L37" class="line"><a href="#L37">37</a>   change (net.patch 0).leftCorner + (net.patch 0).rightCorner +</span>
+<span id="L38" class="line"><a href="#L38">38</a>     (graph.openingAngle (opposite source) slit 1 - 0) + net.petalApexAngle 0 = 2 * π at patch_sum</span>
+<span id="L39" class="line"><a href="#L39">39</a>   have budget := (net.selected_pocket_angle_bounds maximal).1</span>
+<span id="L40" class="line"><a href="#L40">40</a>   unfold curvature at at_pole budget</span>
+<span id="L41" class="line"><a href="#L41">41</a>   linarith</span>
+<span id="L42" class="line"><a href="#L42">42</a> </span>
+<span id="L43" class="line"><a href="#L43">43</a> /-- The reflected first pair is excluded by the omitted last petal&#x27;s angle budget. -/</span>
+<span id="L44" class="line"><a href="#L44">44</a> theorem first_opposite_petals_of_small_fan</span>
+<span id="L45" class="line"><a href="#L45">45</a>     (source_order : graph.curvature (opposite source) ≤ graph.curvature source)</span>
+<span id="L46" class="line"><a href="#L46">46</a>     (maximal : ∀ i, graph.curvature (fanNeighbor source i) ≤ graph.curvature (fanNeighbor source slit))</span>
+<span id="L47" class="line"><a href="#L47">47</a>     (small : net.leftFanCorner 0 + net.rightFanCorner 0 &lt; π) : net.Separated (true, 0) (true, 2) := by</span>
+<span id="L48" class="line"><a href="#L48">48</a>   by_contra overlap</span>
+<span id="L49" class="line"><a href="#L49">49</a>   obtain ⟨p, left, right, boundary, diagonal⟩ := net.exists_first_pocket_diagonal source_order maximal overlap</span>
+<span id="L50" class="line"><a href="#L50">50</a>   have orientation := net.first_pocket_clockwise source_order maximal small p</span>
+<span id="L51" class="line"><a href="#L51">51</a>     (interior_subset left) (interior_subset right) boundary diagonal</span>
+<span id="L52" class="line"><a href="#L52">52</a>   have total := clockwise_quadrilateral_angle_sum (net.patch 0).left p (net.patch 2).right 0 orientation</span>
+<span id="L53" class="line"><a href="#L53">53</a>   have contact := clockwise_quadrilateral_contact_pos (net.patch 0).left p (net.patch 2).right 0 orientation</span>
+<span id="L54" class="line"><a href="#L54">54</a>   have distinct := boundary.corners_distinct</span>
+<span id="L55" class="line"><a href="#L55">55</a>   have at_left := net.petal_left_exterior_corner 0 p (interior_subset left) distinct.1.symm</span>
+<span id="L56" class="line"><a href="#L56">56</a>   have at_right := net.petal_right_exterior_corner 2 p (interior_subset right) distinct.2.2.2.1</span>
+<span id="L57" class="line"><a href="#L57">57</a>   have at_pole := net.first_pocket_pole_corner</span>
+<span id="L58" class="line"><a href="#L58">58</a>   have junction := net.junction_corner_sum 2</span>
+<span id="L59" class="line"><a href="#L59">59</a>   change (net.patch 2).rightCorner + (net.patch 3).leftCorner =</span>
+<span id="L60" class="line"><a href="#L60">60</a>     graph.totalAngleAt (fanNeighbor source ((slit + 2) + 1)) at junction</span>
+<span id="L61" class="line"><a href="#L61">61</a>   rw [add_assoc, show (2 : Fin 4) + 1 = 3 by decide] at junction</span>
+<span id="L62" class="line"><a href="#L62">62</a>   have slit_sum := net.slit_corner_sum</span>
+<span id="L63" class="line"><a href="#L63">63</a>   have patch_sum := net.patch_corner_angle_sum 3</span>
+<span id="L64" class="line"><a href="#L64">64</a>   change (net.patch 3).leftCorner + (net.patch 3).rightCorner +</span>
+<span id="L65" class="line"><a href="#L65">65</a>     (graph.openingAngle (opposite source) slit 4 - graph.openingAngle (opposite source) slit 3) +</span>
+<span id="L66" class="line"><a href="#L66">66</a>     net.petalApexAngle 3 = 2 * π at patch_sum</span>
+<span id="L67" class="line"><a href="#L67">67</a>   have budget := (net.selected_pocket_angle_bounds maximal).2</span>
+<span id="L68" class="line"><a href="#L68">68</a>   unfold curvature at at_pole budget</span>
+<span id="L69" class="line"><a href="#L69">69</a>   linarith</span>
+<span id="L70" class="line"><a href="#L70">70</a> </span>
+<span id="L71" class="line"><a href="#L71">71</a> end SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development</span></pre></html>

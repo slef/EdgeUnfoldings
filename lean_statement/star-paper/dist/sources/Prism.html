@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prism.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../proof.html">← Full proof</a> · <a href="../index.html">Star chapter</a><h1>Prism.lean</h1><p>SixVertexUnfolding/Curvature/Prism.lean · exact source snapshot</p><pre><span id="L1" class="line"><a href="#L1" aria-label="Line 1">1</a> import Mathlib</span>
+<span id="L2" class="line"><a href="#L2" aria-label="Line 2">2</a> </span>
+<span id="L3" class="line"><a href="#L3" aria-label="Line 3">3</a> /-! The cap budgets and gate selection in PRISM_CAP_RULE.md; no geometric net is assumed. -/</span>
+<span id="L4" class="line"><a href="#L4" aria-label="Line 4">4</a> </span>
+<span id="L5" class="line"><a href="#L5" aria-label="Line 5">5</a> namespace SixVertexUnfolding.Prism</span>
+<span id="L6" class="line"><a href="#L6" aria-label="Line 6">6</a> </span>
+<span id="L7" class="line"><a href="#L7" aria-label="Line 7">7</a> open Real</span>
+<span id="L8" class="line"><a href="#L8" aria-label="Line 8">8</a> </span>
+<span id="L9" class="line"><a href="#L9" aria-label="Line 9">9</a> /-- At a degree-three source, the wider-angle deficit is a cap-curvature deficit. -/</span>
+<span id="L10" class="line"><a href="#L10" aria-label="Line 10">10</a> theorem cap_identity {lam ρ ν kp K : ℝ}</span>
+<span id="L11" class="line"><a href="#L11" aria-label="Line 11">11</a>     (source_sum : lam + ρ + ν = 2 * π - kp) :</span>
+<span id="L12" class="line"><a href="#L12" aria-label="Line 12">12</a>     2 * lam + ν - 2 * π - K = lam - ρ - (kp + K) := by</span>
+<span id="L13" class="line"><a href="#L13" aria-label="Line 13">13</a>   linarith</span>
+<span id="L14" class="line"><a href="#L14" aria-label="Line 14">14</a> </span>
+<span id="L15" class="line"><a href="#L15" aria-label="Line 15">15</a> /-- A cap sum of at least pi supplies both wider Case A angle bounds. -/</span>
+<span id="L16" class="line"><a href="#L16" aria-label="Line 16">16</a> theorem cap_wider_bounds {lam ρ ν kp K : ℝ}</span>
+<span id="L17" class="line"><a href="#L17" aria-label="Line 17">17</a>     (source_sum : lam + ρ + ν = 2 * π - kp)</span>
+<span id="L18" class="line"><a href="#L18" aria-label="Line 18">18</a>     (left_pos : 0 &lt; lam) (left_lt : lam &lt; π)</span>
+<span id="L19" class="line"><a href="#L19" aria-label="Line 19">19</a>     (right_pos : 0 &lt; ρ) (right_lt : ρ &lt; π)</span>
+<span id="L20" class="line"><a href="#L20" aria-label="Line 20">20</a>     (cap_high : π ≤ kp + K) :</span>
+<span id="L21" class="line"><a href="#L21" aria-label="Line 21">21</a>     lam &lt; (π + (π - ν + K)) / 2 ∧ ρ &lt; (π + (π - ν + K)) / 2 := by</span>
+<span id="L22" class="line"><a href="#L22" aria-label="Line 22">22</a>   constructor &lt;;&gt; linarith</span>
+<span id="L23" class="line"><a href="#L23" aria-label="Line 23">23</a> </span>
+<span id="L24" class="line"><a href="#L24" aria-label="Line 24">24</a> /-- The two-cap decision includes the equality cases in the first branch. -/</span>
+<span id="L25" class="line"><a href="#L25" aria-label="Line 25">25</a> theorem cap_cases {lower upper : ℝ} (total : lower + upper = 4 * π) :</span>
+<span id="L26" class="line"><a href="#L26" aria-label="Line 26">26</a>     (π ≤ lower ∧ π ≤ upper) ∨</span>
+<span id="L27" class="line"><a href="#L27" aria-label="Line 27">27</a>     (3 * π &lt; lower ∧ upper &lt; π) ∨</span>
+<span id="L28" class="line"><a href="#L28" aria-label="Line 28">28</a>     (3 * π &lt; upper ∧ lower &lt; π) := by</span>
+<span id="L29" class="line"><a href="#L29" aria-label="Line 29">29</a>   by_cases lower_high : π ≤ lower</span>
+<span id="L30" class="line"><a href="#L30" aria-label="Line 30">30</a>   · by_cases upper_high : π ≤ upper</span>
+<span id="L31" class="line"><a href="#L31" aria-label="Line 31">31</a>     · exact Or.inl ⟨lower_high, upper_high⟩</span>
+<span id="L32" class="line"><a href="#L32" aria-label="Line 32">32</a>     · exact Or.inr (Or.inl ⟨by linarith, by linarith⟩)</span>
+<span id="L33" class="line"><a href="#L33" aria-label="Line 33">33</a>   · exact Or.inr (Or.inr ⟨by linarith, by linarith⟩)</span>
+<span id="L34" class="line"><a href="#L34" aria-label="Line 34">34</a> </span>
+<span id="L35" class="line"><a href="#L35" aria-label="Line 35">35</a> /-- A cap below pi has every positive constituent below pi. -/</span>
+<span id="L36" class="line"><a href="#L36" aria-label="Line 36">36</a> theorem low_cap_vertices {a b c : ℝ}</span>
+<span id="L37" class="line"><a href="#L37" aria-label="Line 37">37</a>     (a_pos : 0 &lt; a) (b_pos : 0 &lt; b) (c_pos : 0 &lt; c)</span>
+<span id="L38" class="line"><a href="#L38" aria-label="Line 38">38</a>     (cap_low : a + b + c &lt; π) : a &lt; π ∧ b &lt; π ∧ c &lt; π := by</span>
+<span id="L39" class="line"><a href="#L39" aria-label="Line 39">39</a>   exact ⟨by linarith, by linarith, by linarith⟩</span>
+<span id="L40" class="line"><a href="#L40" aria-label="Line 40">40</a> </span>
+<span id="L41" class="line"><a href="#L41" aria-label="Line 41">41</a> /-- The low-end branch of a high cap supplies both gates for Switch 2. -/</span>
+<span id="L42" class="line"><a href="#L42" aria-label="Line 42">42</a> theorem high_cap_forces_gates {k0 k1 k2 : ℝ}</span>
+<span id="L43" class="line"><a href="#L43" aria-label="Line 43">43</a>     (cap_high : 3 * π &lt; k0 + k1 + k2)</span>
+<span id="L44" class="line"><a href="#L44" aria-label="Line 44">44</a>     (vertex_bound : k1 &lt; 2 * π) (end_low : k2 &lt; π) :</span>
+<span id="L45" class="line"><a href="#L45" aria-label="Line 45">45</a>     π &lt; k0 + k2 ∧ 2 * π &lt; k0 + k1 := by</span>
+<span id="L46" class="line"><a href="#L46" aria-label="Line 46">46</a>   exact ⟨by linarith, by linarith⟩</span>
+<span id="L47" class="line"><a href="#L47" aria-label="Line 47">47</a> </span>
+<span id="L48" class="line"><a href="#L48" aria-label="Line 48">48</a> /-- The two middle angles used by Switch 2 cannot both be obtuse. -/</span>
+<span id="L49" class="line"><a href="#L49" aria-label="Line 49">49</a> theorem one_middle_angle_nonobtuse {a b c : ℝ}</span>
+<span id="L50" class="line"><a href="#L50" aria-label="Line 50">50</a>     (triangle_sum : a + b + c = π) (third_pos : 0 &lt; c) :</span>
+<span id="L51" class="line"><a href="#L51" aria-label="Line 51">51</a>     a ≤ π / 2 ∨ b ≤ π / 2 := by</span>
+<span id="L52" class="line"><a href="#L52" aria-label="Line 52">52</a>   by_cases first : a ≤ π / 2</span>
+<span id="L53" class="line"><a href="#L53" aria-label="Line 53">53</a>   · exact Or.inl first</span>
+<span id="L54" class="line"><a href="#L54" aria-label="Line 54">54</a>   · exact Or.inr (by linarith)</span>
+<span id="L55" class="line"><a href="#L55" aria-label="Line 55">55</a> </span>
+<span id="L56" class="line"><a href="#L56" aria-label="Line 56">56</a> /-- One of the two views of the fallback has central angle at least pi. -/</span>
+<span id="L57" class="line"><a href="#L57" aria-label="Line 57">57</a> theorem one_view_at_least_pi {lower upper : ℝ}</span>
+<span id="L58" class="line"><a href="#L58" aria-label="Line 58">58</a>     (view_sum : lower + upper = 2 * π) : π ≤ lower ∨ π ≤ upper := by</span>
+<span id="L59" class="line"><a href="#L59" aria-label="Line 59">59</a>   by_cases first : π ≤ lower</span>
+<span id="L60" class="line"><a href="#L60" aria-label="Line 60">60</a>   · exact Or.inl first</span>
+<span id="L61" class="line"><a href="#L61" aria-label="Line 61">61</a>   · exact Or.inr (by linarith)</span>
+<span id="L62" class="line"><a href="#L62" aria-label="Line 62">62</a> </span>
+<span id="L63" class="line"><a href="#L63" aria-label="Line 63">63</a> end SixVertexUnfolding.Prism</span>
+</pre></html>

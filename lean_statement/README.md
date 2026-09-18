@@ -22,6 +22,11 @@ checkpoint policy, build instructions, and planned links from the interactive
 paper. [STAR_NEXT.md](STAR_NEXT.md) is the current star-theorem checkpoint;
 read it before older continuation notes.
 
+Read the [interactive full-proof overview](star-paper/dist/proof.html) for the
+case map, mathematical exposition and expandable checked Lean statements.
+It links to the detailed [star-unfolding chapter](star-paper/dist/index.html)
+and explicitly marks the remaining prism-with-diagonal steps.
+
 ## Reading order
 
 [PROOF_GUIDE.md](PROOF_GUIDE.md) is a short overview of the proof and its exact

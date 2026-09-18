@@ -1,18 +1,28 @@
-# Star unfolding: annotated paper
+# Edge unfolding: interactive Lean proof
 
-A private reading edition of Kiazyk–Lubiw (2016), Sections 1.1 through the end
-of Section 2, with original Figures 2–5 and a paper-to-Lean correspondence.
+Two linked reading pages share exact Lean excerpts, checked proof dependencies,
+mathematical typesetting and language-server hover definitions:
+
+- `dist/proof.html`: the full six-vertex proof, adapted from the streamlined
+  manuscript, with a case overview and explicit remaining prism obligations.
+- `dist/index.html`: the detailed star-unfolding chapter, a private reading
+  edition of Kiazyk–Lubiw (2016), Sections 1.1 through the end of Section 2,
+  with original Figures 2–5 and a paper-to-Lean correspondence.
 The site lives entirely inside the Lean worktree. It does not alter `n6/`,
 the main status page, or another worktree. Integration into the public paper
 remains a separate change.
 
 ## Read and maintain
 
-`dist/index.html` works as a local static page; all assets and Lean excerpts
+`dist/proof.html` and `dist/index.html` work as local static pages; all assets and Lean excerpts
 are bundled, with no external JavaScript, fonts, or math service required.
 Serve `dist/` with any static HTTP server for a preview. The private Sites
 identity is recorded in `.openai/hosting.json`.
 
+- `overview.json`: the edited full-proof narrative, case map, mathematical source
+  hash and passage-level Lean correspondence; `render_overview.py` renders it.
+- `dist/overview.css`: full-proof layout additions to the shared reading design.
+- `dist/declaration-links.js`: generated cross-chapter definition destinations.
 - `paper.json`: reflowed original text; inline formulas explicitly marked as `\(TeX\)`.
 - `math_typesetting.py`, `render_math.cjs`: render all marked formulas at build time
   with pinned KaTeX 0.16.22, producing styled HTML and accessible MathML.
@@ -147,7 +157,16 @@ Do not infer them from successful compilation, an empty `sorry` search or
 the presence of a related declaration. The page shows coverage separately
 so that a checked component can remain only a partial match for the paper.
 
-No new mathematical proof or `sorry` was added for this page. A missing full
+No new mathematical proof or `sorry` was added for these pages. The shared
+export now includes the existing main target, explicitly labelled unfinished.
+Verification permits `sorryAx` only for that exact target; every other displayed
+theorem must use only the three standard allowed axioms. The target is excluded
+from the proved-theorem count. The star chapter still displays only proved theorems.
+
+The full-proof annotations independently record whether a result is proved,
+partially formalized, not yet proved, or a definition. Their explanation states
+whether Lean follows the manuscript’s argument or another route. Each incomplete
+passage lists concrete remaining work, including undeclared geometric lemmas. A missing full
 statement is distinct from a declaration containing `sorry`; a checked
 conditional planar theorem is distinct from the construction of its inputs.
 The full paper Theorem 1 and Lemma 3 remain unfinished in this formalization.

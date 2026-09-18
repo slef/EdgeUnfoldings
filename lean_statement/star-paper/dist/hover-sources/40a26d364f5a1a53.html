@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SixVertexUnfolding/Geometry/LabeledFacetIncidence.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>SixVertexUnfolding/Geometry/LabeledFacetIncidence.lean</h1><p>This project · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> import SixVertexUnfolding.Geometry.FacetLabels</span>
+<span id="L2" class="line"><a href="#L2">2</a> </span>
+<span id="L3" class="line"><a href="#L3">3</a> /-! Original edge incidence transferred to finite sets of original vertex labels. -/</span>
+<span id="L4" class="line"><a href="#L4">4</a> </span>
+<span id="L5" class="line"><a href="#L5">5</a> namespace SixVertexUnfolding.ConvexPolyhedron</span>
+<span id="L6" class="line"><a href="#L6">6</a> </span>
+<span id="L7" class="line"><a href="#L7">7</a> variable {P : ConvexPolyhedron} (index : Fin 6 ≃ P.Vertex)</span>
+<span id="L8" class="line"><a href="#L8">8</a> </span>
+<span id="L9" class="line"><a href="#L9">9</a> /-- All original facets, recorded by their sets of original vertex labels. -/</span>
+<span id="L10" class="line"><a href="#L10">10</a> noncomputable def labeledFacets : Finset (Finset (Fin 6)) :=</span>
+<span id="L11" class="line"><a href="#L11">11</a>   (Set.range (fun F : P.Face =&gt; F.vertexLabels index)).toFinite.toFinset</span>
+<span id="L12" class="line"><a href="#L12">12</a> </span>
+<span id="L13" class="line"><a href="#L13">13</a> @[simp] theorem mem_labeledFacets (vertices : Finset (Fin 6)) :</span>
+<span id="L14" class="line"><a href="#L14">14</a>     vertices ∈ labeledFacets index ↔ ∃ F : P.Face, F.vertexLabels index = vertices := by</span>
+<span id="L15" class="line"><a href="#L15">15</a>   simp [labeledFacets]</span>
+<span id="L16" class="line"><a href="#L16">16</a> </span>
+<span id="L17" class="line"><a href="#L17">17</a> /-- An original edge occurs in exactly two of the labeled original facets. -/</span>
+<span id="L18" class="line"><a href="#L18">18</a> theorem labeledFacets_edge_count (i j : Fin 6) (edge : P.edgeGraph.Adj (index i) (index j)) :</span>
+<span id="L19" class="line"><a href="#L19">19</a>     ((labeledFacets index).filter (fun face =&gt; i ∈ face ∧ j ∈ face)).card = 2 := by</span>
+<span id="L20" class="line"><a href="#L20">20</a>   classical</span>
+<span id="L21" class="line"><a href="#L21">21</a>   obtain ⟨F, G, different, iF, jF, iG, jG, only_two⟩ := P.edge_incident_faces (index i) (index j) edge</span>
+<span id="L22" class="line"><a href="#L22">22</a>   have pair : (labeledFacets index).filter (fun face =&gt; i ∈ face ∧ j ∈ face) =</span>
+<span id="L23" class="line"><a href="#L23">23</a>       {F.vertexLabels index, G.vertexLabels index} := by</span>
+<span id="L24" class="line"><a href="#L24">24</a>     ext vertices</span>
+<span id="L25" class="line"><a href="#L25">25</a>     simp only [Finset.mem_filter, mem_labeledFacets, Finset.mem_insert, Finset.mem_singleton]</span>
+<span id="L26" class="line"><a href="#L26">26</a>     constructor</span>
+<span id="L27" class="line"><a href="#L27">27</a>     · rintro ⟨⟨H, rfl⟩, hi, hj⟩</span>
+<span id="L28" class="line"><a href="#L28">28</a>       rcases only_two H ((H.mem_vertexLabels index i).mp hi) ((H.mem_vertexLabels index j).mp hj) with rfl | rfl</span>
+<span id="L29" class="line"><a href="#L29">29</a>       exacts [Or.inl rfl, Or.inr rfl]</span>
+<span id="L30" class="line"><a href="#L30">30</a>     · rintro (rfl | rfl)</span>
+<span id="L31" class="line"><a href="#L31">31</a>       · exact ⟨⟨F, rfl⟩, (F.mem_vertexLabels index i).mpr iF, (F.mem_vertexLabels index j).mpr jF⟩</span>
+<span id="L32" class="line"><a href="#L32">32</a>       · exact ⟨⟨G, rfl⟩, (G.mem_vertexLabels index i).mpr iG, (G.mem_vertexLabels index j).mpr jG⟩</span>
+<span id="L33" class="line"><a href="#L33">33</a>   rw [pair, Finset.card_pair]</span>
+<span id="L34" class="line"><a href="#L34">34</a>   exact (Face.vertexLabels_injective index).ne different</span>
+<span id="L35" class="line"><a href="#L35">35</a> </span>
+<span id="L36" class="line"><a href="#L36">36</a> /-- A distinct nonedge pair occurs together in at most one labeled original facet. -/</span>
+<span id="L37" class="line"><a href="#L37">37</a> theorem labeledFacets_nonedge_count (i j : Fin 6) (different : i ≠ j)</span>
+<span id="L38" class="line"><a href="#L38">38</a>     (nonedge : ¬ P.edgeGraph.Adj (index i) (index j)) :</span>
+<span id="L39" class="line"><a href="#L39">39</a>     ((labeledFacets index).filter (fun face =&gt; i ∈ face ∧ j ∈ face)).card ≤ 1 := by</span>
+<span id="L40" class="line"><a href="#L40">40</a>   classical</span>
+<span id="L41" class="line"><a href="#L41">41</a>   apply Finset.card_le_one.mpr</span>
+<span id="L42" class="line"><a href="#L42">42</a>   intro left left_mem right right_mem</span>
+<span id="L43" class="line"><a href="#L43">43</a>   obtain ⟨left_mem, il, jl⟩ := Finset.mem_filter.mp left_mem</span>
+<span id="L44" class="line"><a href="#L44">44</a>   obtain ⟨right_mem, ir, jr⟩ := Finset.mem_filter.mp right_mem</span>
+<span id="L45" class="line"><a href="#L45">45</a>   obtain ⟨F, rfl⟩ := (mem_labeledFacets index left).mp left_mem</span>
+<span id="L46" class="line"><a href="#L46">46</a>   obtain ⟨G, rfl⟩ := (mem_labeledFacets index right).mp right_mem</span>
+<span id="L47" class="line"><a href="#L47">47</a>   rw [Face.eq_of_common_nonedge_labels index F G i j different nonedge il jl ir jr]</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> end SixVertexUnfolding.ConvexPolyhedron</span></pre></html>

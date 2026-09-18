@@ -1,0 +1,154 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathlib/LinearAlgebra/Dimension/Finrank.lean</title><style>body{margin:2rem;font:16px/1.6 system-ui;color:#18334b}pre{font:14px/1.6 ui-monospace,monospace;overflow:auto}.line{display:block;min-height:1.6em}.line:target{background:#fff0b8}a{color:#52697e}.line a{display:inline-block;width:3em;text-align:right;text-decoration:none}</style><a href="../index.html">← Annotated paper</a><h1>Mathlib/LinearAlgebra/Dimension/Finrank.lean</h1><p>Mathlib · bundled source snapshot</p><pre><span id="L1" class="line"><a href="#L1">1</a> /-</span>
+<span id="L2" class="line"><a href="#L2">2</a> Copyright (c) 2019 Chris Hughes. All rights reserved.</span>
+<span id="L3" class="line"><a href="#L3">3</a> Released under Apache 2.0 license as described in the file LICENSE.</span>
+<span id="L4" class="line"><a href="#L4">4</a> Authors: Chris Hughes, Anne Baanen</span>
+<span id="L5" class="line"><a href="#L5">5</a> -/</span>
+<span id="L6" class="line"><a href="#L6">6</a> module</span>
+<span id="L7" class="line"><a href="#L7">7</a> </span>
+<span id="L8" class="line"><a href="#L8">8</a> public import Mathlib.SetTheory.Cardinal.ToNat</span>
+<span id="L9" class="line"><a href="#L9">9</a> public import Mathlib.LinearAlgebra.Dimension.Basic</span>
+<span id="L10" class="line"><a href="#L10">10</a> </span>
+<span id="L11" class="line"><a href="#L11">11</a> /-!</span>
+<span id="L12" class="line"><a href="#L12">12</a> # Finite dimension of vector spaces</span>
+<span id="L13" class="line"><a href="#L13">13</a> </span>
+<span id="L14" class="line"><a href="#L14">14</a> Definition of the rank of a module, or dimension of a vector space, as a natural number.</span>
+<span id="L15" class="line"><a href="#L15">15</a> </span>
+<span id="L16" class="line"><a href="#L16">16</a> ## Main definitions</span>
+<span id="L17" class="line"><a href="#L17">17</a> </span>
+<span id="L18" class="line"><a href="#L18">18</a> Defined is `Module.finrank`, the dimension of a finite-dimensional space, returning a</span>
+<span id="L19" class="line"><a href="#L19">19</a> `Nat`, as opposed to `Module.rank`, which returns a `Cardinal`. When the space has infinite</span>
+<span id="L20" class="line"><a href="#L20">20</a> dimension, its `finrank` is by convention set to `0`.</span>
+<span id="L21" class="line"><a href="#L21">21</a> </span>
+<span id="L22" class="line"><a href="#L22">22</a> The definition of `finrank` does not assume a `FiniteDimensional` instance, but lemmas might.</span>
+<span id="L23" class="line"><a href="#L23">23</a> Import `LinearAlgebra.FiniteDimensional` to get access to these additional lemmas.</span>
+<span id="L24" class="line"><a href="#L24">24</a> </span>
+<span id="L25" class="line"><a href="#L25">25</a> Formulas for the dimension are given for linear equivs, in `LinearEquiv.finrank_eq`.</span>
+<span id="L26" class="line"><a href="#L26">26</a> </span>
+<span id="L27" class="line"><a href="#L27">27</a> ## Implementation notes</span>
+<span id="L28" class="line"><a href="#L28">28</a> </span>
+<span id="L29" class="line"><a href="#L29">29</a> Most results are deduced from the corresponding results for the general dimension (as a cardinal),</span>
+<span id="L30" class="line"><a href="#L30">30</a> in `Dimension.lean`. Not all results have been ported yet.</span>
+<span id="L31" class="line"><a href="#L31">31</a> </span>
+<span id="L32" class="line"><a href="#L32">32</a> You should not assume that there has been any effort to state lemmas as generally as possible.</span>
+<span id="L33" class="line"><a href="#L33">33</a> -/</span>
+<span id="L34" class="line"><a href="#L34">34</a> </span>
+<span id="L35" class="line"><a href="#L35">35</a> @[expose] public section</span>
+<span id="L36" class="line"><a href="#L36">36</a> </span>
+<span id="L37" class="line"><a href="#L37">37</a> </span>
+<span id="L38" class="line"><a href="#L38">38</a> universe u v w</span>
+<span id="L39" class="line"><a href="#L39">39</a> </span>
+<span id="L40" class="line"><a href="#L40">40</a> open Cardinal Submodule Module Function</span>
+<span id="L41" class="line"><a href="#L41">41</a> </span>
+<span id="L42" class="line"><a href="#L42">42</a> variable {R : Type u} {M : Type v} {N : Type w}</span>
+<span id="L43" class="line"><a href="#L43">43</a> variable [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N]</span>
+<span id="L44" class="line"><a href="#L44">44</a> </span>
+<span id="L45" class="line"><a href="#L45">45</a> namespace Module</span>
+<span id="L46" class="line"><a href="#L46">46</a> </span>
+<span id="L47" class="line"><a href="#L47">47</a> section Semiring</span>
+<span id="L48" class="line"><a href="#L48">48</a> </span>
+<span id="L49" class="line"><a href="#L49">49</a> /-- The rank of a module as a natural number.</span>
+<span id="L50" class="line"><a href="#L50">50</a> </span>
+<span id="L51" class="line"><a href="#L51">51</a> For a finite-dimensional vector space `V` over a field `k`, `Module.finrank k V` is equal to</span>
+<span id="L52" class="line"><a href="#L52">52</a> the dimension of `V` over `k`.</span>
+<span id="L53" class="line"><a href="#L53">53</a> </span>
+<span id="L54" class="line"><a href="#L54">54</a> For a general module `M` over a ring `R`, `Module.finrank R M` is defined to be the supremum of the</span>
+<span id="L55" class="line"><a href="#L55">55</a> cardinalities of the `R`-linearly independent subsets of `M`, if this supremum is finite. It is</span>
+<span id="L56" class="line"><a href="#L56">56</a> defined by convention to be `0` if this supremum is infinite. See `Module.rank` for a</span>
+<span id="L57" class="line"><a href="#L57">57</a> cardinal-valued version where infinite rank modules have rank an infinite cardinal.</span>
+<span id="L58" class="line"><a href="#L58">58</a> </span>
+<span id="L59" class="line"><a href="#L59">59</a> Note that if `R` is not a field then there can exist modules `M` with `¬(Module.Finite R M)` but</span>
+<span id="L60" class="line"><a href="#L60">60</a> `finrank R M ≠ 0`. For example `ℚ` has `finrank` equal to `1` over `ℤ`, because the nonempty</span>
+<span id="L61" class="line"><a href="#L61">61</a> `ℤ`-linearly independent subsets of `ℚ` are precisely the nonzero singletons. -/</span>
+<span id="L62" class="line"><a href="#L62">62</a> noncomputable def finrank (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] : ℕ :=</span>
+<span id="L63" class="line"><a href="#L63">63</a>   Cardinal.toNat (Module.rank R M)</span>
+<span id="L64" class="line"><a href="#L64">64</a> </span>
+<span id="L65" class="line"><a href="#L65">65</a> @[simp] theorem finrank_subsingleton [Subsingleton R] : finrank R M = 1 := by</span>
+<span id="L66" class="line"><a href="#L66">66</a>   rw [finrank, rank_subsingleton, map_one]</span>
+<span id="L67" class="line"><a href="#L67">67</a> </span>
+<span id="L68" class="line"><a href="#L68">68</a> theorem finrank_eq_of_rank_eq {n : ℕ} (h : Module.rank R M = ↑n) : finrank R M = n := by</span>
+<span id="L69" class="line"><a href="#L69">69</a>   simp [finrank, h]</span>
+<span id="L70" class="line"><a href="#L70">70</a> </span>
+<span id="L71" class="line"><a href="#L71">71</a> lemma rank_eq_one_iff_finrank_eq_one : Module.rank R M = 1 ↔ finrank R M = 1 :=</span>
+<span id="L72" class="line"><a href="#L72">72</a>   Cardinal.toNat_eq_one.symm</span>
+<span id="L73" class="line"><a href="#L73">73</a> </span>
+<span id="L74" class="line"><a href="#L74">74</a> /-- This is like `rank_eq_one_iff_finrank_eq_one` but works for `2`, `3`, `4`, ... -/</span>
+<span id="L75" class="line"><a href="#L75">75</a> lemma rank_eq_ofNat_iff_finrank_eq_ofNat (n : ℕ) [Nat.AtLeastTwo n] :</span>
+<span id="L76" class="line"><a href="#L76">76</a>     Module.rank R M = OfNat.ofNat n ↔ finrank R M = OfNat.ofNat n :=</span>
+<span id="L77" class="line"><a href="#L77">77</a>   Cardinal.toNat_eq_ofNat.symm</span>
+<span id="L78" class="line"><a href="#L78">78</a> </span>
+<span id="L79" class="line"><a href="#L79">79</a> theorem finrank_le_of_rank_le {n : ℕ} (h : Module.rank R M ≤ ↑n) : finrank R M ≤ n := by</span>
+<span id="L80" class="line"><a href="#L80">80</a>   rwa [← Cardinal.toNat_le_iff_le_of_lt_aleph0, toNat_natCast] at h</span>
+<span id="L81" class="line"><a href="#L81">81</a>   · exact h.trans_lt natCast_lt_aleph0</span>
+<span id="L82" class="line"><a href="#L82">82</a>   · exact natCast_lt_aleph0</span>
+<span id="L83" class="line"><a href="#L83">83</a> </span>
+<span id="L84" class="line"><a href="#L84">84</a> theorem finrank_lt_of_rank_lt {n : ℕ} (h : Module.rank R M &lt; ↑n) : finrank R M &lt; n := by</span>
+<span id="L85" class="line"><a href="#L85">85</a>   rwa [← Cardinal.toNat_lt_iff_lt_of_lt_aleph0, toNat_natCast] at h</span>
+<span id="L86" class="line"><a href="#L86">86</a>   · exact h.trans natCast_lt_aleph0</span>
+<span id="L87" class="line"><a href="#L87">87</a>   · exact natCast_lt_aleph0</span>
+<span id="L88" class="line"><a href="#L88">88</a> </span>
+<span id="L89" class="line"><a href="#L89">89</a> theorem lt_rank_of_lt_finrank {n : ℕ} (h : n &lt; finrank R M) : ↑n &lt; Module.rank R M := by</span>
+<span id="L90" class="line"><a href="#L90">90</a>   rwa [← Cardinal.toNat_lt_iff_lt_of_lt_aleph0, toNat_natCast]</span>
+<span id="L91" class="line"><a href="#L91">91</a>   · exact natCast_lt_aleph0</span>
+<span id="L92" class="line"><a href="#L92">92</a>   · contrapose! h</span>
+<span id="L93" class="line"><a href="#L93">93</a>     rw [finrank, Cardinal.toNat_apply_of_aleph0_le h]</span>
+<span id="L94" class="line"><a href="#L94">94</a>     exact n.zero_le</span>
+<span id="L95" class="line"><a href="#L95">95</a> </span>
+<span id="L96" class="line"><a href="#L96">96</a> theorem one_lt_rank_of_one_lt_finrank (h : 1 &lt; finrank R M) : 1 &lt; Module.rank R M := by</span>
+<span id="L97" class="line"><a href="#L97">97</a>   simpa using lt_rank_of_lt_finrank h</span>
+<span id="L98" class="line"><a href="#L98">98</a> </span>
+<span id="L99" class="line"><a href="#L99">99</a> theorem finrank_le_finrank_of_rank_le_rank</span>
+<span id="L100" class="line"><a href="#L100">100</a>     (h : lift.{w} (Module.rank R M) ≤ Cardinal.lift.{v} (Module.rank R N))</span>
+<span id="L101" class="line"><a href="#L101">101</a>     (h&#x27; : Module.rank R N &lt; ℵ₀) : finrank R M ≤ finrank R N := by</span>
+<span id="L102" class="line"><a href="#L102">102</a>   simpa only [toNat_lift] using toNat_le_toNat h (lift_lt_aleph0.mpr h&#x27;)</span>
+<span id="L103" class="line"><a href="#L103">103</a> </span>
+<span id="L104" class="line"><a href="#L104">104</a> end Semiring</span>
+<span id="L105" class="line"><a href="#L105">105</a> </span>
+<span id="L106" class="line"><a href="#L106">106</a> end Module</span>
+<span id="L107" class="line"><a href="#L107">107</a> </span>
+<span id="L108" class="line"><a href="#L108">108</a> theorem CommSemiring.finrank_self (R) [CommSemiring R] : Module.finrank R R = 1 :=</span>
+<span id="L109" class="line"><a href="#L109">109</a>   finrank_eq_of_rank_eq (rank_self R)</span>
+<span id="L110" class="line"><a href="#L110">110</a> </span>
+<span id="L111" class="line"><a href="#L111">111</a> open Module</span>
+<span id="L112" class="line"><a href="#L112">112</a> </span>
+<span id="L113" class="line"><a href="#L113">113</a> namespace LinearEquiv</span>
+<span id="L114" class="line"><a href="#L114">114</a> </span>
+<span id="L115" class="line"><a href="#L115">115</a> /-- The dimension of a finite-dimensional space is preserved under linear equivalence. -/</span>
+<span id="L116" class="line"><a href="#L116">116</a> theorem finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finrank R N := by</span>
+<span id="L117" class="line"><a href="#L117">117</a>   unfold finrank</span>
+<span id="L118" class="line"><a href="#L118">118</a>   rw [← Cardinal.toNat_lift, f.lift_rank_eq, Cardinal.toNat_lift]</span>
+<span id="L119" class="line"><a href="#L119">119</a> </span>
+<span id="L120" class="line"><a href="#L120">120</a> /-- Pushforwards of finite-dimensional submodules along a `LinearEquiv` have the same finrank. -/</span>
+<span id="L121" class="line"><a href="#L121">121</a> theorem finrank_map_eq (f : M ≃ₗ[R] N) (p : Submodule R M) :</span>
+<span id="L122" class="line"><a href="#L122">122</a>     finrank R (p.map (f : M →ₗ[R] N)) = finrank R p :=</span>
+<span id="L123" class="line"><a href="#L123">123</a>   (f.submoduleMap p).finrank_eq.symm</span>
+<span id="L124" class="line"><a href="#L124">124</a> </span>
+<span id="L125" class="line"><a href="#L125">125</a> end LinearEquiv</span>
+<span id="L126" class="line"><a href="#L126">126</a> </span>
+<span id="L127" class="line"><a href="#L127">127</a> /-- The dimensions of the domain and range of an injective linear map are equal. -/</span>
+<span id="L128" class="line"><a href="#L128">128</a> theorem LinearMap.finrank_range_of_inj {f : M →ₗ[R] N} (hf : Function.Injective f) :</span>
+<span id="L129" class="line"><a href="#L129">129</a>     finrank R (LinearMap.range f) = finrank R M := by rw [(LinearEquiv.ofInjective f hf).finrank_eq]</span>
+<span id="L130" class="line"><a href="#L130">130</a> </span>
+<span id="L131" class="line"><a href="#L131">131</a> @[simp]</span>
+<span id="L132" class="line"><a href="#L132">132</a> theorem Submodule.finrank_map_subtype_eq (p : Submodule R M) (q : Submodule R p) :</span>
+<span id="L133" class="line"><a href="#L133">133</a>     finrank R (q.map p.subtype) = finrank R q :=</span>
+<span id="L134" class="line"><a href="#L134">134</a>   (Submodule.equivSubtypeMap p q).symm.finrank_eq</span>
+<span id="L135" class="line"><a href="#L135">135</a> </span>
+<span id="L136" class="line"><a href="#L136">136</a> variable (R M)</span>
+<span id="L137" class="line"><a href="#L137">137</a> </span>
+<span id="L138" class="line"><a href="#L138">138</a> @[simp]</span>
+<span id="L139" class="line"><a href="#L139">139</a> theorem finrank_top : finrank R (⊤ : Submodule R M) = finrank R M := by</span>
+<span id="L140" class="line"><a href="#L140">140</a>   unfold finrank</span>
+<span id="L141" class="line"><a href="#L141">141</a>   simp</span>
+<span id="L142" class="line"><a href="#L142">142</a> </span>
+<span id="L143" class="line"><a href="#L143">143</a> namespace Algebra</span>
+<span id="L144" class="line"><a href="#L144">144</a> </span>
+<span id="L145" class="line"><a href="#L145">145</a> /-- If `S₀ / R₀` and `S₁ / R₁` are algebras, `i : R₀ ≃+* R₁` and `j : S₀ ≃+* S₁` are</span>
+<span id="L146" class="line"><a href="#L146">146</a> ring isomorphisms, such that `R₀ → R₁ → S₁` and `R₀ → S₀ → S₁` commute,</span>
+<span id="L147" class="line"><a href="#L147">147</a> then the `finrank` of `S₀ / R₀` is equal to the finrank of `S₁ / R₁`. -/</span>
+<span id="L148" class="line"><a href="#L148">148</a> theorem finrank_eq_of_equiv_equiv {R₀ S₀ : Type*} [CommSemiring R₀] [Semiring S₀] [Algebra R₀ S₀]</span>
+<span id="L149" class="line"><a href="#L149">149</a>     {R₁ S₁ : Type*} [CommSemiring R₁] [Semiring S₁] [Algebra R₁ S₁] (i : R₀ ≃+* R₁) (j : S₀ ≃+* S₁)</span>
+<span id="L150" class="line"><a href="#L150">150</a>     (hc : (algebraMap R₁ S₁).comp i.toRingHom = j.toRingHom.comp (algebraMap R₀ S₀)) :</span>
+<span id="L151" class="line"><a href="#L151">151</a>     Module.finrank R₀ S₀ = Module.finrank R₁ S₁ := by</span>
+<span id="L152" class="line"><a href="#L152">152</a>   simpa using (congr_arg Cardinal.toNat (lift_rank_eq_of_equiv_equiv i j hc))</span>
+<span id="L153" class="line"><a href="#L153">153</a> </span>
+<span id="L154" class="line"><a href="#L154">154</a> end Algebra</span></pre></html>

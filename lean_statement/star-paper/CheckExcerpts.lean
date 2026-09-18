@@ -1,9 +1,14 @@
 import SixVertexUnfolding
+import Statement
+#check @SixVertexUnfolding.every_convex_polyhedron_with_at_most_five_vertices
+#print axioms SixVertexUnfolding.every_convex_polyhedron_with_at_most_five_vertices
 #check @SixVertexUnfolding.ConvexPolyhedron.cutSet
 #check @SixVertexUnfolding.ConvexPolyhedron.UncutSurface
 #check @SixVertexUnfolding.ConvexPolyhedron.original_route_subset_starCuts
 #print axioms SixVertexUnfolding.ConvexPolyhedron.original_route_subset_starCuts
 #check @SixVertexUnfolding.ConvexPolyhedron.starCuts
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_star_embedding
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.cofacial_star_embedding
 #check @SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel
 #check @SixVertexUnfolding.ConvexPolyhedron.CutEdgeMetricModel.sourceAngle
 #check @SixVertexUnfolding.ConvexPolyhedron.CutEdgeTriangles
@@ -13,7 +18,17 @@ import SixVertexUnfolding
 #print axioms SixVertexUnfolding.ConvexPolyhedron.CutTreeChain.end_kites_nonoverlap
 #check @SixVertexUnfolding.ConvexPolyhedron.CutTreeCharts
 #check @SixVertexUnfolding.ConvexPolyhedron
+#check @SixVertexUnfolding.ConvexPolyhedron.Face
+#check @SixVertexUnfolding.ConvexPolyhedron.HasEdgeUnfolding
+#check @SixVertexUnfolding.ConvexPolyhedron.IsFace
+#check @SixVertexUnfolding.ConvexPolyhedron.ShareEdge
 #check @SixVertexUnfolding.ConvexPolyhedron.body
+#check @SixVertexUnfolding.EdgeUnfolding
+#check @SixVertexUnfolding.Plane
+#check @SixVertexUnfolding.Space
+#check @SixVertexUnfolding.affineDimension
+#check @SixVertexUnfolding.ConvexPolyhedron.Dome.hasEdgeUnfolding
+#print axioms SixVertexUnfolding.ConvexPolyhedron.Dome.hasEdgeUnfolding
 #check @SixVertexUnfolding.ConvexPolyhedron.EmbeddedCutGraph
 #check @SixVertexUnfolding.Wedge.RegionStep
 #check @SixVertexUnfolding.Wedge.finite_chain_endpoint_separation
@@ -29,8 +44,66 @@ import SixVertexUnfolding
 #print axioms SixVertexUnfolding.ConvexPolyhedron.IncidentTriangles.initial_kite_in_wedge
 #check @SixVertexUnfolding.ConvexPolyhedron.JunctionFan.wedge_step_with_parameters
 #print axioms SixVertexUnfolding.ConvexPolyhedron.JunctionFan.wedge_step_with_parameters
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.minusEdge_consistent
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.minusEdge_consistent
 #check @SixVertexUnfolding.ConvexPolyhedron.multipleRouteLocus
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.selected_triangles_nonoverlap
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.selected_triangles_nonoverlap
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.curvature
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.curvature_lt_two_pi
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.curvature_lt_two_pi
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.sum_curvature
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.sum_curvature
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.curvature_pos
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.curvature_pos
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.selected_finite_cuts_clear
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.selected_finite_cuts_clear
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.opposite_petals_caseA_of_paired_poles
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.opposite_petals_caseA_of_paired_poles
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.first_opposite_petals_of_small_fan
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.first_opposite_petals_of_small_fan
+#check @SixVertexUnfolding.PairedPoles.left_remainder_identity
+#print axioms SixVertexUnfolding.PairedPoles.left_remainder_identity
+#check @SixVertexUnfolding.PairedPoles.wider_caseA_bounds
+#print axioms SixVertexUnfolding.PairedPoles.wider_caseA_bounds
+#check @SixVertexUnfolding.Prism.cap_cases
+#print axioms SixVertexUnfolding.Prism.cap_cases
+#check @SixVertexUnfolding.Prism.cap_identity
+#print axioms SixVertexUnfolding.Prism.cap_identity
+#check @SixVertexUnfolding.Prism.cap_wider_bounds
+#print axioms SixVertexUnfolding.Prism.cap_wider_bounds
+#check @SixVertexUnfolding.Prism.high_cap_forces_gates
+#print axioms SixVertexUnfolding.Prism.high_cap_forces_gates
+#check @SixVertexUnfolding.Prism.low_cap_vertices
+#print axioms SixVertexUnfolding.Prism.low_cap_vertices
+#check @SixVertexUnfolding.Prism.one_middle_angle_nonobtuse
+#print axioms SixVertexUnfolding.Prism.one_middle_angle_nonobtuse
+#check @SixVertexUnfolding.Prism.one_view_at_least_pi
+#print axioms SixVertexUnfolding.Prism.one_view_at_least_pi
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.hasEdgeUnfolding_of_prismDiagonal_first_region
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.hasEdgeUnfolding_of_prismDiagonal_first_region
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.hasEdgeUnfolding_of_prismDiagonal_last_region
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.hasEdgeUnfolding_of_prismDiagonal_last_region
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.prismDiagonal_unfolding_or_strict_obstructions
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.prismDiagonal_unfolding_or_strict_obstructions
+#check @SixVertexUnfolding.every_convex_pyramid_has_edge_unfolding
+#print axioms SixVertexUnfolding.every_convex_pyramid_has_edge_unfolding
+#check @SixVertexUnfolding.unfolding_or_remaining_cases
+#print axioms SixVertexUnfolding.unfolding_or_remaining_cases
 #check @SixVertexUnfolding.ConvexPolyhedron.CutLocusTree
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.labeledFacets_eq
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.labeledFacets_eq
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph
+#check @SixVertexUnfolding.ConvexPolyhedron.exists_six_vertex_graph
+#print axioms SixVertexUnfolding.ConvexPolyhedron.exists_six_vertex_graph
+#check @SixVertexUnfolding.every_convex_octahedron
+#print axioms SixVertexUnfolding.every_convex_octahedron
+#check @SixVertexUnfolding.every_convex_octahedron_minus_edge
+#print axioms SixVertexUnfolding.every_convex_octahedron_minus_edge
+#check @SixVertexUnfolding.every_convex_triangular_prism
+#print axioms SixVertexUnfolding.every_convex_triangular_prism
+#check @SixVertexUnfolding.unfolding_or_universal_or_prismDiagonal
+#print axioms SixVertexUnfolding.unfolding_or_universal_or_prismDiagonal
 #check @SixVertexUnfolding.ConvexPolyhedron.surfaceAngle
 #check @SixVertexUnfolding.ConvexPolyhedron.universal_sum_vertexCurvature_le
 #print axioms SixVertexUnfolding.ConvexPolyhedron.universal_sum_vertexCurvature_le
@@ -67,6 +140,10 @@ import SixVertexUnfolding
 #print axioms SixVertexUnfolding.ConvexPolyhedron.small_cofacial_source_internal_vertex_nonvertex
 #check @SixVertexUnfolding.ConvexPolyhedron.small_cofacial_source_original_is_leaf
 #print axioms SixVertexUnfolding.ConvexPolyhedron.small_cofacial_source_original_is_leaf
+#check @SixVertexUnfolding.every_convex_polyhedron_with_at_most_six_vertices
+#print axioms SixVertexUnfolding.every_convex_polyhedron_with_at_most_six_vertices
+#check @SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.hasEdgeUnfolding_of_consistent_subdivision
+#print axioms SixVertexUnfolding.ConvexPolyhedron.SixVertexGraph.Development.hasEdgeUnfolding_of_consistent_subdivision
 #check @SixVertexUnfolding.ConvexPolyhedron.universal_star_embedding
 #print axioms SixVertexUnfolding.ConvexPolyhedron.universal_star_embedding
 #check @SixVertexUnfolding.ConvexPolyhedron.universal_exists_separated_cut_tree_charts
@@ -92,3 +169,5 @@ import SixVertexUnfolding
 #print axioms SixVertexUnfolding.Wedge.rotate_arms
 #check @SixVertexUnfolding.Wedge.ArmCoordinates.rotate_and_move
 #print axioms SixVertexUnfolding.Wedge.ArmCoordinates.rotate_and_move
+#check @SixVertexUnfolding.wider_apex_cones
+#print axioms SixVertexUnfolding.wider_apex_cones
