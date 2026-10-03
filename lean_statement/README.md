@@ -288,6 +288,46 @@ original-edge spanning tree to obtain an abstract disk is a separate
 possible strengthening. It is not an additional hypothesis of the public
 target, nor a gap in the completed universal-source star construction.
 
+## Prism continuation — 3 October 2026
+
+The prism angle calculations are now tied to the actual original faces, in the
+streamlined manuscript’s labeling. This is a geometric connection, not an
+assumption that abstract angle variables describe a solid.
+
+- [PrismDiagonalFaces](SixVertexUnfolding/Geometry/PrismDiagonalFaces.lean)
+  identifies the six whole faces and proves their full corner-angle bounds,
+  strict link slacks, and face-angle sums.
+- [PrismDiagonalAngleSums](SixVertexUnfolding/Geometry/PrismDiagonalAngleSums.lean)
+  proves that the full-face sums give the existing geometric curvature. Its
+  quadrilateral angle splits use actual crossing diagonals.
+- [PrismDiagonalSwitchAngles](SixVertexUnfolding/Geometry/PrismDiagonalSwitchAngles.lean)
+  proves all **3/3 Switch 1 identities** and the actual angle alternatives for
+  **both switches**. Failure of the near-star angle tests forces both upper
+  fallback bounds strictly, with no assumed angle identities or link slacks.
+- [PrismDiagonalCapAngles](SixVertexUnfolding/Geometry/PrismDiagonalCapAngles.lean)
+  proves the actual cap-curvature split and both cap-based wider-angle bounds.
+- [PrismDiagonalIncidence](SixVertexUnfolding/Geometry/PrismDiagonalIncidence.lean)
+  enumerates all original faces, proves cofaciality for the four required source
+  labels, and certifies the fallback’s five original hinges as a tree.
+- [PrismDiagonalFallback](SixVertexUnfolding/Geometry/PrismDiagonalFallback.lean)
+  constructs the six whole polygons outward along that tree. Rigidity, hinge
+  agreement, outward-side conditions, and **5/15 face-pair separations** are
+  proved. The remaining ten comparisons are explicit in the theorem that
+  converts this development to the public edge-unfolding definition.
+
+**Remaining:** construct the near-star candidates, transfer the
+cofacial-star comparisons to the outward fallback, prove its two-view separation, and apply
+the checked angle alternatives to those developments. The main theorem still
+has its one prism `sorry`; **3/4 nonuniversal graph families** are complete.
+This checkpoint does not assign an overall effort percentage.
+
+**Verification:** the full incremental check compiled **998 Lean files** and
+successfully audited **4,646 project theorem declarations**. Their dependencies
+use only `propext`, `Classical.choice`, and `Quot.sound`. The only `sorry` warning
+remains in the separately checked main theorem in `Statement.lean`; none of the
+six new modules adds an unfinished proof. The interactive website still shows
+its earlier source snapshot and has not been republished for this checkpoint.
+
 ## Checking
 
 The project pins Lean **4.29.1** and Mathlib commit

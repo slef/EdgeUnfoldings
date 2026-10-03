@@ -481,6 +481,8 @@ import SixVertexUnfolding.Curvature.Selection
 import SixVertexUnfolding.Curvature.PairedPoles
 import SixVertexUnfolding.Curvature.Obstructions
 import SixVertexUnfolding.Curvature.Prism
+import SixVertexUnfolding.Geometry.PrismDiagonalCapAngles
+import SixVertexUnfolding.Geometry.PrismDiagonalFallback
 import SixVertexUnfolding.SmallGraphs
 
 /-! Proved foundations and lemmas. The unfinished main theorem is kept in Statement.lean. -/
