@@ -315,18 +315,42 @@ assumption that abstract angle variables describe a solid.
   proved. The remaining ten comparisons are explicit in the theorem that
   converts this development to the public edge-unfolding definition.
 
-**Remaining:** construct the near-star candidates, transfer the
-cofacial-star comparisons to the outward fallback, prove its two-view separation, and apply
-the checked angle alternatives to those developments. The main theorem still
-has its one prism `sorry`; **3/4 nonuniversal graph families** are complete.
-This checkpoint does not assign an overall effort percentage.
+### Geometric continuation: only B/D remains in the fallback
 
-**Verification:** the full incremental check compiled **998 Lean files** and
-successfully audited **4,646 project theorem declarations**. Their dependencies
-use only `propext`, `Classical.choice`, and `Quot.sound`. The only `sorry` warning
-remains in the separately checked main theorem in `Statement.lean`; none of the
-six new modules adds an unfinished proof. The interactive website still shows
-its earlier source snapshot and has not been republished for this checkpoint.
+The fallback now has **14/15 face-pair separations proved (93.3% by pair count)**,
+up from 5/15. This is a count of comparisons in this one construction, not a
+percentage of the full theorem or of the remaining effort.
+
+- [PrismDiagonalStarCore](SixVertexUnfolding/Geometry/PrismDiagonalStarCore.lean)
+  proves that all cuts from vertex 2 lie in quadrilaterals B and D. The proved
+  cofacial star therefore supplies the intact, joined chain A-C-E-F, with all
+  six of its pairs separated, including the opposite caps A/F.
+- [PrismDiagonalStarFallback](SixVertexUnfolding/Geometry/PrismDiagonalStarFallback.lean)
+  attaches B and D outward to that chain. A separate geometric lemma derives
+  the outward-side condition from nonoverlap of joined whole faces.
+- [PrismDiagonalFanSeparation](SixVertexUnfolding/Geometry/PrismDiagonalFanSeparation.lean)
+  and [PrismDiagonalShortFanSeparation](SixVertexUnfolding/Geometry/PrismDiagonalShortFanSeparation.lean)
+  prove all comparisons around uncut vertices 1, 3, 0, and 4. These use full
+  original-face angles and whole quadrilateral corner cones. Their sums are
+  the actual surface angles, strictly less than one turn by positive curvature.
+- [PrismDiagonalOnePair](SixVertexUnfolding/Geometry/PrismDiagonalOnePair.lean)
+  assembles the result: for every convex realization of this graph there is an
+  outward fallback with no possible overlap except B/D. Separating B/D gives
+  an edge unfolding in the unchanged public definition.
+
+**Remaining:** prove the B/D two-view criterion, construct the near-star
+alternatives where the fallback tests fail, and apply the checked angle
+selection and reflection arguments. B/D separation is not asserted for every
+shape. The main theorem still has its one prism `sorry`;
+**3/4 nonuniversal graph families** are complete.
+
+**Verification:** the complete check now compiles **1,010 Lean files** and
+successfully audits **4,724 project theorem declarations**. All audited
+project dependencies use only `propext`, `Classical.choice`, and `Quot.sound`.
+The twelve new geometric modules contain no unfinished proofs; the only
+`sorry` warning remains in the separately checked main theorem in
+`Statement.lean`. The interactive website still shows its earlier source
+snapshot and has not been republished for this checkpoint.
 
 ## Checking
 
