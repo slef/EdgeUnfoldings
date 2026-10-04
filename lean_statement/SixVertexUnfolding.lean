@@ -485,6 +485,9 @@ import SixVertexUnfolding.Geometry.PrismDiagonalCapAngles
 import SixVertexUnfolding.Geometry.PrismDiagonalFallback
 import SixVertexUnfolding.Geometry.PrismDiagonalOnePair
 import SixVertexUnfolding.Geometry.PrismDiagonalTwoViewCaseB
+import SixVertexUnfolding.Geometry.PrismDiagonalHighCaps
+import SixVertexUnfolding.Geometry.PrismDiagonalSwitchFallback
+import SixVertexUnfolding.PrismDiagonalNoSharpVertices
 import SixVertexUnfolding.SmallGraphs
 
 /-! Proved foundations and lemmas. The unfinished main theorem is kept in Statement.lean. -/

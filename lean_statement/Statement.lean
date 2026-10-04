@@ -19,6 +19,9 @@ theorem every_convex_polyhedron_with_at_most_six_vertices
       · rcases graph.prismDiagonal_unfolding_or_narrow_cap (small_faces := small_faces) kind with
           unfolded | narrow_cap
         · exact unfolded
-        · sorry
+        · rcases graph.prism_cap_cases with high_caps | low_cap
+          · exact graph.prismDiagonal_hasEdgeUnfolding_of_high_caps (small_faces := small_faces)
+              kind high_caps.1 high_caps.2
+          · sorry
 
 end SixVertexUnfolding

@@ -393,19 +393,70 @@ followed by the checked switch/cap selection and reflection arguments.
 not an estimate of work remaining. The interactive website is still the
 previous published snapshot.
 
-The next geometric bridge is to contain B and D in their cones **at the two
-copies of the cut vertex**, using the full quadrilateral corner angles. The
-common cap frame now fixes the copied-vertex coordinates. The existing
-`CutRays.caseA_wider_cones` supplies planar separation once that whole-face
-containment is proved; `PrismDiagonalCapAngles` supplies the cap-based angle
-bounds. This will complete the fallback when both cap-curvature sums are at
-least π, before constructing the near-star alternatives for the other shapes.
+The copied-source cone bridge identified here is completed in the next checkpoint.
 
 **Verification:** the full incremental check passes **1,017 Lean files** and
 **4,755 audited project theorem declarations**. The audit permits only
 `propext`, `Classical.choice`, and `Quot.sound`; all seven new Lean modules
 are free of unfinished proofs. The separately checked main statement retains
 its one known `sorry`, now under the explicit residual hypotheses.
+
+## Case A and the complete high-cap branch — 4 October 2026
+
+The fixed fallback is now proved to be an edge unfolding whenever **both
+triangular cap-curvature sums are at least π**. This is the main cap-rule
+branch of the streamlined proof, including equality. It combines the two
+Case B views with both newly proved Case A views using their wider-angle
+bounds. The theorem concludes the unchanged public `HasEdgeUnfolding`.
+
+- [PolygonCornerDirections](SixVertexUnfolding/Geometry/PolygonCornerDirections.lean)
+  uses one face vertex to determine the orientation of a whole supporting
+  corner cone. [TwoFanCaseA](SixVertexUnfolding/Geometry/TwoFanCaseA.lean)
+  applies the existing wider-cone separator in the common cap frame.
+- [PrismDiagonalCornerCones](SixVertexUnfolding/Geometry/PrismDiagonalCornerCones.lean),
+  [PrismDiagonalCapViews](SixVertexUnfolding/Geometry/PrismDiagonalCapViews.lean),
+  and [PrismDiagonalCapCornerCones](SixVertexUnfolding/Geometry/PrismDiagonalCapCornerCones.lean)
+  derive the whole quadrilateral containment, full corner angles, witness
+  vertices, copied edge lengths, and polar directions from the actual solid.
+- [PrismDiagonalCaseA](SixVertexUnfolding/Geometry/PrismDiagonalCaseA.lean)
+  proves both actual Case A views, with explicit wider-angle tests, and
+  supplies those tests when the corresponding cap sum is at least π.
+- [PrismDiagonalHighCaps](SixVertexUnfolding/Geometry/PrismDiagonalHighCaps.lean)
+  chooses the appropriate view and completes all **15/15 whole-face pairs**
+  under the two cap gates. It is now used in the main theorem.
+- [PrismDiagonalNoSharpVertices](SixVertexUnfolding/PrismDiagonalNoSharpVertices.lean)
+  gives the useful consequence: **every prism with a diagonal whose vertex
+  curvatures are all at most π has an edge unfolding**. Each cap must then
+  carry at least π because their combined curvature is 4π.
+- [PrismDiagonalSwitchFallback](SixVertexUnfolding/Geometry/PrismDiagonalSwitchFallback.lean)
+  completes Switch 1's fallback arm: if vertex 2 is sharp and the near-star
+  angle tests fail, the checked switch identities now yield an actual net.
+
+**Remaining:** the near-star constructions and their geometric comparisons,
+including the nonobtuse-middle alternative needed by the switches, and the
+reflected assembly. The main theorem's single `sorry` is now confined to
+shapes with **one cap below π and the other above 3π**, outside the previously
+completed regions. The new Switch 1 result is available for that assembly.
+
+**Progress:** both wider-angle Case A views are complete (**2/2**), as are
+both Case B views (**2/2**). All **15/15 pairs** are separated in the high-cap
+region; the unconditional fallback guarantee remains **14/15**. Still
+**3/4 nonuniversal graph families** are complete. These are local proof and
+case counts, not percentages of the total remaining effort. The published
+interactive website has not been refreshed for this checkpoint.
+
+The next local comparison is the nonobtuse-middle argument in
+`n6/TIDY_CORE.md`: positive barycentric coordinates show that both copied cut
+rays are shorter than the virtual triangle's sides. The angle-sum bound then
+makes at least one of the two outer angles satisfy the wider test, so the
+existing one-sided cone separators apply. That comparison remains to be
+formalized; it is not assumed by any of the new checked theorems.
+
+**Verification:** the complete incremental check passes **1,026 Lean files**
+and **4,792 audited project theorem declarations**, allowing only `propext`,
+`Classical.choice`, and `Quot.sound`. All nine new Lean modules have complete
+proofs. The only `sorry` warning remains in the separately checked main
+theorem, under its reduced low-cap hypotheses.
 
 ## Checking
 
