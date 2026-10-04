@@ -13,6 +13,12 @@ theorem every_convex_polyhedron_with_at_most_six_vertices
   · rcases remaining with ⟨six, small_faces, universal | ⟨graph, kind⟩⟩
     · obtain ⟨source, universal⟩ := universal
       exact ConvexPolyhedron.universal_star_has_edge_unfolding six small_faces source universal
-    · sorry
+    · rcases graph.prismDiagonal_unfolding_or_strict_obstructions small_faces kind with
+        unfolded | obstructions
+      · exact unfolded
+      · rcases graph.prismDiagonal_unfolding_or_narrow_cap (small_faces := small_faces) kind with
+          unfolded | narrow_cap
+        · exact unfolded
+        · sorry
 
 end SixVertexUnfolding

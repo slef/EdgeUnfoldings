@@ -3,8 +3,9 @@
 The target theorem is still unfinished. The public vocabulary is only
 [55 lines](SixVertexUnfolding/Definitions.lean), and the target is in
 [Statement.lean](Statement.lean). Neither statement nor definition layer has been enlarged to accommodate the
-proof machinery. The target proof closes the universal branch of the two-family reduction. You do not need to read the geometric helper modules to read
-the statement.
+proof machinery. The target proof closes the universal branch and several
+explicit regions of the remaining prism-with-diagonal branch. You do not need
+to read the geometric helper modules to read the statement.
 
 `ConvexPolyhedron` is the convex hull of finitely many genuine extreme points
 in three-dimensional Euclidean space, with nonempty interior. A face is a whole
@@ -29,6 +30,7 @@ and polygonal boundary, and its whole-face edge-unfolding consequence.
 | [OctahedronComplete.lean](SixVertexUnfolding/OctahedronComplete.lean) | Every convex octahedron has the required original-edge unfolding. All angle cases, face comparisons, and hinge obligations are complete. |
 | [MinusEdge.lean](SixVertexUnfolding/MinusEdge.lean) | The octahedron-minus-edge case, with its sole quadrilateral kept as one rigid original facet. Complete. |
 | [PrismDiagonalSelection.lean](SixVertexUnfolding/PrismDiagonalSelection.lean) | Prism-with-diagonal when both degree-four endpoints are sharper than their opposite poles. Complete for this region. |
+| [PrismDiagonalTwoViewCaseB.lean](SixVertexUnfolding/Geometry/PrismDiagonalTwoViewCaseB.lean) | Prism-with-diagonal when each triangular cap’s base curvatures cover its apex angle. Both Case B views and all 15 whole-face comparisons are complete for this region. |
 | [PrismComplete.lean](SixVertexUnfolding/PrismComplete.lean) | Every ordinary triangular prism. Complete, without parallelism assumptions, using the general dome theorem. |
 | [UniversalStarUnfolding.lean](SixVertexUnfolding/Geometry/UniversalStarUnfolding.lean) | Every convex polyhedron with at most six vertices and a universal vertex has an edge unfolding. Complete. |
 | [SixVertexRemaining.lean](SixVertexUnfolding/SixVertexRemaining.lean) | Supplies the two-family reduction; the universal branch is now closed by UniversalStarUnfolding. |

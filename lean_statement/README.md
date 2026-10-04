@@ -352,6 +352,61 @@ The twelve new geometric modules contain no unfinished proofs; the only
 `Statement.lean`. The interactive website still shows its earlier source
 snapshot and has not been republished for this checkpoint.
 
+## Two-view Case B continuation — 4 October 2026
+
+The fallback's B/D comparison is now proved in **both Case B views**, using
+its actual original quadrilaterals. The polar coordinates are derived from
+the retained outward hinges; they are not additional placement assumptions.
+
+- [FanPolarFrames](SixVertexUnfolding/Geometry/FanPolarFrames.lean) propagates
+  ray coordinates through an outward vertex fan in any prescribed rigid frame.
+  [TwoFanFrame](SixVertexUnfolding/Geometry/TwoFanFrame.lean) puts the two fans
+  of one triangular cap in a common frame.
+- [TwoFanBaseSeparation](SixVertexUnfolding/Geometry/TwoFanBaseSeparation.lean)
+  separates their outer whole-face corner cones when the outer and middle
+  angle sums are both at least π. Equality is included.
+- [PrismDiagonalLowerCaseB](SixVertexUnfolding/Geometry/PrismDiagonalLowerCaseB.lean)
+  applies this to B and D in the lower view.
+  [PrismDiagonalUpperCaseB](SixVertexUnfolding/Geometry/PrismDiagonalUpperCaseB.lean)
+  proves the upper view by reversing the actual fans. Each result gives a
+  public `HasEdgeUnfolding` theorem under its explicit angle bounds.
+- [PrismDiagonalTwoViewCaseB](SixVertexUnfolding/Geometry/PrismDiagonalTwoViewCaseB.lean)
+  proves that the middle sums add to 2π and chooses the appropriate view.
+  In particular, the complete fallback works whenever
+
+  $$
+  A_2 \le \kappa_0 + \kappa_1 \quad\text{and}\quad F_5 \le \kappa_3 + \kappa_4.
+  $$
+
+These inequalities use the manuscript's vertex labels, actual original face
+angles, and actual vertex curvatures. They mean that each cap's base
+curvatures cover its apex angle. All **15/15 face pairs** are separated in
+this region. Without the angle conditions, the established guarantee remains
+**14/15 pairs**; no claim is made that the fallback works for every shape.
+
+The main proof now uses both the earlier completed prism regions and this
+new one. Its single `sorry` is restricted to the remaining strict curvature
+obstructions with **at least one narrow cap**. The outstanding geometric work
+is the Case A comparison at the copied vertices and the near-star alternatives,
+followed by the checked switch/cap selection and reflection arguments.
+**3/4 nonuniversal graph families** remain complete; this is a family count,
+not an estimate of work remaining. The interactive website is still the
+previous published snapshot.
+
+The next geometric bridge is to contain B and D in their cones **at the two
+copies of the cut vertex**, using the full quadrilateral corner angles. The
+common cap frame now fixes the copied-vertex coordinates. The existing
+`CutRays.caseA_wider_cones` supplies planar separation once that whole-face
+containment is proved; `PrismDiagonalCapAngles` supplies the cap-based angle
+bounds. This will complete the fallback when both cap-curvature sums are at
+least π, before constructing the near-star alternatives for the other shapes.
+
+**Verification:** the full incremental check passes **1,017 Lean files** and
+**4,755 audited project theorem declarations**. The audit permits only
+`propext`, `Classical.choice`, and `Quot.sound`; all seven new Lean modules
+are free of unfinished proofs. The separately checked main statement retains
+its one known `sorry`, now under the explicit residual hypotheses.
+
 ## Checking
 
 The project pins Lean **4.29.1** and Mathlib commit
